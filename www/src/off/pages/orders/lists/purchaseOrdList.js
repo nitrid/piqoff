@@ -163,12 +163,12 @@ export default class purchaseOrdList extends React.PureComponent
                                             App.instance.menuClick(
                                             {
                                                 id: 'sip_02_001',
-                                                text: this.t('menu.sip_02_001'),
+                                                text: this.t('menu'),
                                                 path: 'orders/documents/purchaseOrder.js',
                                             })
                                         }
                                     }    
-                                } />
+                                }/>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -295,7 +295,11 @@ export default class purchaseOrdList extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
+                                    <dialog open>
+                                        <p>
+                                            helloworld
+                                        </p>
+                                    </dialog>
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -344,7 +348,7 @@ export default class purchaseOrdList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.sip_01_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menu")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPurcOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPurcOrdList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcOrdList.clmOutputCode")} visible={false}/> 

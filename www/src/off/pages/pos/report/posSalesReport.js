@@ -25,6 +25,7 @@ export default class posSalesReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+        this.btnGetDetail = this.btnGetDetail.bind(this)
         
         this.core = App.instance.core;
     }
@@ -54,6 +55,66 @@ export default class posSalesReport extends React.PureComponent
         {
           this.popOpenTike.show()
         }  
+    }
+    async btnGetDetail(pGuid)
+    {
+        this.lastPosSaleDt.selectCmd = 
+        {
+            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        
+        await this.lastPosSaleDt.refresh()
+        await this.grdSaleTicketItems.dataRefresh({source:this.lastPosSaleDt});
+        
+        this.lastPosPayDt.selectCmd = 
+        {
+            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        this.lastPosPayDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@POS_GUID = @PPOS_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+            dataprm : ['CUSER','GUID','POS_GUID']
+        }
+        await this.lastPosPayDt.refresh()
+        await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+        await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
+
+        this.popDetail.show()
     }
     render()
     {
@@ -343,8 +404,8 @@ export default class posSalesReport extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
-                    {/* PDF cikti*/}
-                    {/* <Item>
+                    {/* PDF cikti
+                     <Item>
                         <NdGrid parent={this} id={"pdfExportGrid"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
