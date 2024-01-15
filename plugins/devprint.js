@@ -26,11 +26,6 @@ class devprint
         {
             let tmpData = ""
             let terminal = spawn(this.__dirname + "/devprint/lib/DevPrint")
-            
-            pData = pData.replace("TYPE",'"TYPE"')
-            pData = pData.replace("PATH",'"PATH"')
-            pData = pData.replace("DATA",'"DATA"')
-            pData = pData.replaceAll("'",'"')
 
             try 
             {
