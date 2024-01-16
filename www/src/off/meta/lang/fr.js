@@ -16863,7 +16863,14 @@ export const langFr =
     {
         cmbFirm : "Nom de l'entreprise",
         btnSave :"Enregistrer",
-        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz.." // BAK
+        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..", // BAK
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {
