@@ -65,7 +65,15 @@ export default class printDescription extends React.PureComponent
             param : ['PRINT_DESCRIPTION:string|max','GUID:string|50'],
             value : [this.txtDescription.value,this.cmbFirm.value]
         }
-        await this.core.sql.execute(tmpQuery) 
+        await this.core.sql.execute(tmpQuery)
+        let tmpConfObj =
+        {
+            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'before'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+        }
+        
+        await dialog(tmpConfObj);
     }
     render()
     {

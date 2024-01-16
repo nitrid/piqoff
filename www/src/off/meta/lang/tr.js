@@ -16594,7 +16594,14 @@ export const langTr =
     {
         cmbFirm : "Firma Seçimi",
         btnSave :"Kaydet",
-        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz.."
+        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..",
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {
