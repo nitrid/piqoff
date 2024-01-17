@@ -208,7 +208,7 @@ export default class expdateOperations extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.core.sql.execute(tmpUpdateQuery) 
         App.instance.setState({isExecute:false})
-        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpPrintData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpPrintData.result.recordset)+ "}",(pResult) => 
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpPrintData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpPrintData.result.recordset)+ '}',(pResult) => 
         {
             if(pResult.split('|')[0] != 'ERR')
             {

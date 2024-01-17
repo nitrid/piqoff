@@ -834,7 +834,7 @@ export default class purchaseInvoice extends DocBase
                             "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
                             "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
                             "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE DELETED = 0 AND ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
                             "FROM ITEMS_VW_01 AS ITEMS " +
                             "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
                             "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
@@ -891,14 +891,14 @@ export default class purchaseInvoice extends DocBase
             let tmpQuery = 
             { 
                 query : "SELECT " +
-                        "ITEM_GUID AS GUID," +
-                        "ITEM_CODE AS CODE," +
-                        "ITEM_NAME AS NAME," +
-                        "VAT_RATE AS VAT," +
-                        "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND DELETED = 0 AND ITEM = ITEM_GUID),'00000000-0000-0000-0000-000000000000') AS UNIT," +
+                        "GUID AS GUID," +
+                        "CODE AS CODE," +
+                        "NAME AS NAME," +
+                        "VAT AS VAT," +
+                        "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND DELETED = 0 AND ITEM_UNIT.ITEM = ITEMS.GUID),'00000000-0000-0000-0000-000000000000') AS UNIT," +
                         "0 AS ITEM_TYPE," +
-                        "ISNULL((SELECT TOP 1 COST_PRICE FROM ITEMS WHERE GUID = ITEM_GUID),0) AS COST_PRICE " +
-                        "FROM ITEM_MULTICODE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND MULTICODE = @VALUE" ,
+                        "COST_PRICE AS COST_PRICE " +
+                        "FROM ITEMS_VW_01 AS ITEMS WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = @CUSTOMER_GUID AND DELETED =0),'') = @VALUE AND STATUS = 1" ,
                 param : ['CUSTOMER_GUID:string|50','VALUE:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT,pdata[i][tmpShema.CODE]]
             }
@@ -2600,7 +2600,7 @@ export default class purchaseInvoice extends DocBase
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset))
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     App.instance.setState({isExecute:false})
                                                     if(pResult.split('|')[0] != 'ERR')
@@ -2645,7 +2645,7 @@ export default class purchaseInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         console.log(tmpData.result.recordset[0].PATH)
                                                         console.log(pResult.split('|')[0])
@@ -2816,7 +2816,7 @@ export default class purchaseInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]

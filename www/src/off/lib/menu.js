@@ -1137,6 +1137,11 @@ export const menu = (e) =>
                             id: 'pos_01_002',
                             text: e.t('menuOff.pos_01_002'),//'Plu Kopyalama',
                             path: 'pos/card/pluCopy'
+                        },
+                        {
+                            id: 'pos_01_003',
+                            text: e.t('menuOff.pos_01_003'),//'Fiş Sonu Açıklaması',
+                            path: 'pos/card/printDescription'
                         }
                     ]
                 },

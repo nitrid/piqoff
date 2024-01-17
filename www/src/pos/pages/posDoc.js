@@ -510,6 +510,7 @@ export default class posDoc extends React.PureComponent
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
+            this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }
         //********************************************* */
         this.cheqDt.selectCmd = 

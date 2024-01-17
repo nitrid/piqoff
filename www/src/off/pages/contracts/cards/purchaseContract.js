@@ -985,7 +985,7 @@ export default class purchaseContract extends React.PureComponent
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset)) //BAK
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
