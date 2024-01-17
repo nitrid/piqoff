@@ -118,7 +118,7 @@ export default class taxSugar extends React.PureComponent
                                             }}/>
                                     </Item>
                                     <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" 
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async(e)=>
                                     {
                                         let tmpConfObj =

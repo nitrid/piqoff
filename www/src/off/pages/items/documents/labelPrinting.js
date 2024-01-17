@@ -778,7 +778,7 @@ export default class labelPrinting extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" 
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async(e)=>
                                     {
                                         if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
@@ -820,7 +820,7 @@ export default class labelPrinting extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" validationGroup={"frmLabelQeueu" + this.tabIndex}
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="danger" validationGroup={"frmLabelQeueu" + this.tabIndex}
                                     onClick={async(e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -837,7 +837,7 @@ export default class labelPrinting extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             App.instance.setState({isExecute:false})
                                             console.log(JSON.stringify(tmpData.result.recordset))
-                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
+                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
                                             {                
                                                 App.instance.setState({isExecute:true})                                
                                                 if(pResult.split('|')[0] != 'ERR')

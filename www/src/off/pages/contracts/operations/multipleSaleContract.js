@@ -307,7 +307,7 @@ export default class salesContract extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmContract"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.save();
