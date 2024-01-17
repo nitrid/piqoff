@@ -35,6 +35,8 @@ export const prm =
         VALUE : 
         [
             '20XXXXXMMMCCF',
+            '20NNNNNMMMCCF',
+            '20NNNNMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
@@ -1143,7 +1145,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 600,
+        VALUE : 60000,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1159,7 +1161,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"ScreenTimeOut",
-        VALUE : 600000,
+        VALUE : 6000000,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
