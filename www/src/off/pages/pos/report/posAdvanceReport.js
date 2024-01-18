@@ -38,6 +38,7 @@ export default class enddayReport extends React.PureComponent
     }
     async Init()
     {
+         
     }
     async _btnGetClick()
     {

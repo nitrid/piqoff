@@ -17,6 +17,22 @@ export const prm =
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
     },
+    //LIMIT QUANTITY
+    {
+        TYPE : 0,
+        ID :"limitQuantity",
+        VALUE : 
+        {
+            value : 9_999
+        },
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Miktar 9 999 dan büyük olamaz!"
+        }
+    },
     {
         TYPE : 0,
         ID :"refForCustomerCode",

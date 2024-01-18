@@ -45,6 +45,22 @@ export const langDe =
     dtLastYear: "Letztes Jahr",
     txtTotalTicket: "Gesamtzahl der Belege",
     txtTicketAvg: "Durchschnittlicher Belegbetrag",
+    popUserList:
+    {
+        title: "Benutzerliste",
+        clmCode: "Code",
+        clmName: "Name"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Achtung",
+            btn01: "Ja",
+            btn02: "Nein",
+            msg: "Möchten Sie die vorgenommenen Änderungen speichern?"
+        },
+    },
     popPassword: 
     {
         title: "Benutzerpasswort eingeben!",

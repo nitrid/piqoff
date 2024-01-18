@@ -177,7 +177,7 @@ export default class Login extends React.PureComponent
                             </div>
                         </div>
                          <div className="dx-field">
-                            <div className="dx-field-value" style={{position:"fixed"}}>
+                            <div className="dx-field-value">
                             <NdCheckBox  text={this.lang.t("chkRememberMe")}id="chkRememberMe" parent={this} defaultValue={false} />
                             </div>
                         </div>

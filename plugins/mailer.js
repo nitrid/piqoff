@@ -28,7 +28,6 @@ class mailer
        
         return new Promise(resolve =>
         {
-            console.log(pData)
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
             {
@@ -41,7 +40,7 @@ class mailer
                     }
                 ]
             }
-            console.log(pData)
+
             let transporter = nodemailer.createTransport(
             {
 
@@ -64,8 +63,10 @@ class mailer
                 text:pData.text,
                 attachments: tmpAttach
               };
-              transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
+              transporter.sendMail(mailOptions, function(error, info)
+              {
+                if (error) 
+                {
                     console.log(error)
                     resolve(error);
                 }
