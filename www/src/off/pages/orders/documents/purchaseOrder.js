@@ -44,7 +44,7 @@ export default class purchaseOrder extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
 
         if(typeof this.pagePrm != 'undefined')
         {

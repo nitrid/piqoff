@@ -46,7 +46,7 @@ export default class purchaseInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -59,13 +59,13 @@ export default class purchaseInvoice extends DocBase
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
 
-        // let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        // tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        // tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        // tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        // tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        // tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        // this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
         
         this.docLocked = false
         
@@ -152,6 +152,7 @@ export default class purchaseInvoice extends DocBase
         if(tmpData.result.recordset.length > 0)
         {   
             this.txtDiffrentInv.value = '-' +tmpData.result.recordset[0].TOTAL
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
         else
         {
@@ -488,13 +489,13 @@ export default class purchaseInvoice extends DocBase
                                   }
                                   else
                                   {
-                                      let tmpConfObj1 =
-                                      {
-                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                      }
-                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                      await dialog(tmpConfObj1);
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    await dialog(tmpConfObj1);
                                   }
                                 });  
                             }
