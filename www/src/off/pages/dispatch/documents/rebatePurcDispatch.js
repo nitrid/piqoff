@@ -1793,8 +1793,8 @@ export default class rebateDispatch extends DocBase
                             </Form>
                         </NdPopUp>
                     </div>
-                                        {/* Mail Send PopUp */}
-                                        <div>
+                        {/* Mail Send PopUp */}
+                        <div>
                         <NdPopUp parent={this} id={"popMailSend"} 
                         visible={false}
                         showCloseButton={true}

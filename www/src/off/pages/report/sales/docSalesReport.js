@@ -29,7 +29,7 @@ export default class docSalesReport extends React.PureComponent
     }
     async init()
     {
-        console.log('0000000000000000')  
+        console.log('0000000000000100')  
     }
     render()
     {
@@ -94,7 +94,7 @@ export default class docSalesReport extends React.PureComponent
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
-                                {
+                                { 
                                     this.pvtData.setDataSource(tmpData.result.recordset)
                                 }
                                 else
