@@ -317,14 +317,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -334,14 +334,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -1057,7 +1057,7 @@ export default class DocBase extends React.PureComponent
                             {
                                 let tmpArr = []
                                 tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
-                                tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />)
+                                tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} dataType={'number'} defaultSortOrder="desc"/>)
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)

@@ -1127,8 +1127,6 @@ export default class salesInvoice extends DocBase
                                                     this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
                                                 }
                                             }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
                                             <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
@@ -2437,7 +2435,7 @@ export default class salesInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture "+this.docObj.dt()[0].REF+"-"+this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:""}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})

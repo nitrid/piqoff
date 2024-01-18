@@ -46,18 +46,18 @@ class mailer
             {
 
                 //service: 'imap.ionos.fr',
-                host: 'smtp.ionos.fr',
+                host: 'ssl0.ovh.net',
                 port: 465,
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                  user: "info@g2gourmet.fr",
+                  pass: "Sivas2022+"
                 },
-                //tls : { rejectUnauthorized: false }
+                tls : { rejectUnauthorized: false, ciphers:'SSLv3' }
               });
               var mailOptions = {
-                from: "vente.esseylesnancy@ppsupermarche.fr",
+                from: "info@g2gourmet.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
