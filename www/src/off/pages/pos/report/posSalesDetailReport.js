@@ -72,7 +72,7 @@ export default class posSalesDetailReport extends React.PureComponent
                                 App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
+                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
                                     {
                                         if(pResult.split('|')[0] != 'ERR')
                                         {

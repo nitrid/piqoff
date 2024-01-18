@@ -320,6 +320,7 @@ export const langTr =
         pos_01 : "Tanımlar",
         pos_01_001 : "Pos Cihaz Tanıtım",
         pos_01_002 : "Pos Plu Kopyalama",
+        pos_01_003 : "Fiş Sonu Açıklamaları",
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
@@ -16603,6 +16604,19 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen kullanıcı Seçiniz !"
+        },
+    },
+    pos_01_003 : // "Fiş sonu açıklamaları",
+    {
+        cmbFirm : "Firma Seçimi",
+        btnSave :"Kaydet",
+        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..",
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",

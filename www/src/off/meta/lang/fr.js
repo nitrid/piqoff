@@ -319,6 +319,7 @@ export const langFr =
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
         pos_01_002 : "Copier Pos Plu ",
+        pos_01_003 : "Descriptions des tickets",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -16872,6 +16873,19 @@ export const langFr =
             title: "Attention", 
             btn01: "D'accord", 
             msg: "S'il vous plaît , choissisez un utilisateur !"  
+        },
+    },
+    pos_01_003 : // "Fiş sonu açıklamaları",
+    {
+        cmbFirm : "Nom de l'entreprise",
+        btnSave :"Enregistrer",
+        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..", // BAK
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",
