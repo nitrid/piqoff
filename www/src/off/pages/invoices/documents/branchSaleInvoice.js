@@ -61,10 +61,10 @@ export default class branchSaleInvoice extends DocBase
 
         let tmpDocCustomer = {...this.docObj.docCustomer.empty}
         tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        // tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        // tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        // tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        // tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
@@ -80,7 +80,7 @@ export default class branchSaleInvoice extends DocBase
         if(tmpData.result.recordset.length > 0)
         {
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+            // this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
 
         this.pg_txtItemsCode.on('showing',()=>
@@ -841,7 +841,7 @@ export default class branchSaleInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="success"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)

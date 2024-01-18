@@ -69,14 +69,14 @@ export default class salesInvoice extends DocBase
         
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.VAT_ZERO = this.docObj.dt()[0].VAT_ZERO
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+        // let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+        // tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+        // tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        // tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        // tmpDocCustomer.VAT_ZERO = this.docObj.dt()[0].VAT_ZERO
+        // tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        // tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        // this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = true
@@ -92,7 +92,7 @@ export default class salesInvoice extends DocBase
         if(tmpData.result.recordset.length > 0)
         {
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+            // this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
 
         this.pg_txtItemsCode.on('showing',()=>

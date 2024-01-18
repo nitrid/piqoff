@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Form, { Label } from 'devextreme-react/form';  
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
@@ -29,7 +29,7 @@ export default class docSalesReport extends React.PureComponent
     }
     async init()
     {
-      
+        console.log('0000000000000000')  
     }
     render()
     {

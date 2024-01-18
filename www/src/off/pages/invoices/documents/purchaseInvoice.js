@@ -59,13 +59,13 @@ export default class purchaseInvoice extends DocBase
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
 
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+        // let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+        // tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+        // tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        // tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        // tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        // tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        // this.docObj.docCustomer.addEmpty(tmpDocCustomer)
         
         this.docLocked = false
         
@@ -78,6 +78,7 @@ export default class purchaseInvoice extends DocBase
 
         this.pg_txtItemsCode.on('showing',()=>
         {
+            console.log(this.pg_txtItemsCode.on)
             this.pg_txtItemsCode.setSource(
             {
                 source:
@@ -85,15 +86,17 @@ export default class purchaseInvoice extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE,STATUS " +
+                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
                 }
             })
+            
         })
+        
         this.pg_txtBarcode.on('showing',()=>
         {
             this.pg_txtBarcode.setSource(
