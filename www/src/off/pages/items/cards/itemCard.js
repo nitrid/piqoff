@@ -1154,263 +1154,299 @@ export default class itemCard extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">                        
-                        <div className="col-9">
-                            <Form colCount={2} id={"frmItems" + this.tabIndex}>
-                                {/* txtRef */}
-                                <Item>                                    
-                                    <Label text={this.t("txtRef")} alignment="right" />
-                                    <NdTextBox id="txtRef" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    button=
-                                    {
-                                        [
+                    <div className="row px-2 pt-2">
+                        <div className="col-10 pe-0">                        
+                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} cols={2}>
+                                {/* txtRefLy */}
+                                <NdLayoutItem key={"txtRefLy"} id={"txtRefLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtRefLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtRef") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdTextBox id="txtRef" parent={this} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} simple={true}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            button=
                                             {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtRef.show()
-                                                    this.pg_txtRef.onClick = (data) =>
+                                                [
                                                     {
-                                                        if(data.length > 0)
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()=>
                                                         {
-                                                            this.getItem(data[0].CODE)
+                                                            this.pg_txtRef.show()
+                                                            this.pg_txtRef.onClick = (data) =>
+                                                            {
+                                                                if(data.length > 0)
+                                                                {
+                                                                    this.getItem(data[0].CODE)
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        id:'02',
+                                                        icon:'arrowdown',
+                                                        onClick:()=>
+                                                        {
+                                                            this.txtRef.value = Math.floor(Date.now() / 1000)
                                                         }
                                                     }
-                                                }
-                                            },
-                                            {
-                                                id:'02',
-                                                icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtRef.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                ]
                                             }
-                                        ]
-                                    }
-                                    onChange={(async()=>
-                                    {
-                                        let tmpResult = await this.checkItem(this.txtRef.value)
-                                        if(tmpResult == 3)
-                                        {
-                                            this.txtRef.value = "";
-                                        }
-                                    }).bind(this)} 
-                                    param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
-                                    access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}     
-                                    selectAll={true}                           
-                                    >     
-                                    </NdTextBox>      
-                                    {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtRef.title")} 
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
+                                            onChange={(async()=>
                                             {
-                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'tst',
-                                                icon:'more',
-                                                onClick:()=>
+                                                let tmpResult = await this.checkItem(this.txtRef.value)
+                                                if(tmpResult == 3)
                                                 {
-                                                    console.log(1111)
+                                                    this.txtRef.value = "";
                                                 }
-                                            }
-                                        ]
-                                    }
-                                    deferRendering={true}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
-                                        <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
-                                    </NdPopGrid>
-                                </Item>
-                                {/* cmbItemGrp */}
-                                <Item>
-                                    <Label text={this.t("cmbItemGrp")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbItemGrp" tabIndex={this.tabIndex}
-                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GUID",display:"MAIN_GRP_NAME"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true} 
-                                    showClearButton={true}
-                                    pageSize ={50}
-                                    notRefresh={true}
-                                    param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.itemGrpForOrginsValidCheck()
-                                        this.taxSugarValidCheck()
-                                        this.itemGrpForMinMaxAccessCheck()
-                                    }}
-                                    />
-                                </Item>
-                                {/* txtCustomer */}
-                                <Item>
-                                    <Label text={this.t("txtCustomer")} alignment="right" />
-                                    <NdTextBox id="txtCustomer" parent={this} simple={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_NAME",display:"CUSTOMER_NAME"}}
-                                    readOnly={true}
-                                    //displayValue={""}
-                                    button={[
-                                    {
-                                        id:'001',
-                                        icon:'add',
-                                        onClick:async ()=>
-                                        {                                            
-                                            await this.popCustomer.show();
-                                            this.txtPopCustomerCode.value = "";
-                                            this.txtPopCustomerName.value = "";
-                                            this.txtPopCustomerItemCode.value = "";
-                                            this.txtPopCustomerPrice.value = 0;
-                                            setTimeout(async () => 
+                                            }).bind(this)} 
+                                            param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
+                                            selectAll={true}                           
+                                            >     
+                                            </NdTextBox>      
+                                            {/* STOK SEÇİM POPUP */}
+                                            <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
+                                            visible={false}
+                                            position={{of:'#root'}} 
+                                            showTitle={true} 
+                                            showBorders={true}
+                                            width={'90%'}
+                                            height={'90%'}
+                                            title={this.t("pg_txtRef.title")} 
+                                            search={true}
+                                            data = 
+                                            {{
+                                                source:
+                                                {
+                                                    select:
+                                                    {
+                                                        query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                        param : ['VAL:string|50']
+                                                    },
+                                                    sql:this.core.sql
+                                                }
+                                            }}
+                                            button=
                                             {
-                                               this.txtPopCustomerCode.focus()
-                                            }, 600)
-                                        }
-                                    }]}
-                                    param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}>
-                                    </NdTextBox>
-                                </Item>
-                                {/* cmbItemGenus */}
-                                <Item>
-                                    <Label text={this.t("cmbItemGenus")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbItemGenus" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    data={{source:[{ID:"0",VALUE:this.t("cmbItemGenusData.item")},{ID:"1",VALUE:this.t("cmbItemGenusData.service")},{ID:"2",VALUE:this.t("cmbItemGenusData.deposit")}]}}
-                                    param={this.param.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
-                                    />
-                                </Item>
-                                {/* txtBarcode */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.itemsObj.dt('ITEM_BARCODE'),field:"BARCODE"}}
-                                    button=
-                                    {
-                                        [
+                                                [
+                                                    {
+                                                        id:'tst',
+                                                        icon:'more',
+                                                        onClick:()=>
+                                                        {
+                                                            console.log(1111)
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                            deferRendering={true}
+                                            >
+                                                <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
+                                                <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
+                                            </NdPopGrid>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* cmbItemGrpLy */}
+                                <NdLayoutItem key={"cmbItemGrpLy"} id={"cmbItemGrpLy"} parent={this} data-grid={{x:0,y:1,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbItemGrpLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbItemGrp") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdSelectBox parent={this} id="cmbItemGrp" tabIndex={this.tabIndex} simple={true}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GUID",display:"MAIN_GRP_NAME"}}
+                                            displayExpr="NAME"                       
+                                            valueExpr="GUID"
+                                            value=""
+                                            searchEnabled={true} 
+                                            showClearButton={true}
+                                            pageSize ={50}
+                                            notRefresh={true}
+                                            param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
+                                            data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                            onValueChanged={(e)=>
+                                            {
+                                                this.itemGrpForOrginsValidCheck()
+                                                this.taxSugarValidCheck()
+                                                this.itemGrpForMinMaxAccessCheck()
+                                            }}
+                                            />
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* txtCustomerLy */}
+                                <NdLayoutItem key={"txtCustomerLy"} id={"txtCustomerLy"} parent={this} data-grid={{x:0,y:1,h:1,w:1}} access={this.access.filter({ELEMENT:'txtCustomerLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtCustomer") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdTextBox id="txtCustomer" parent={this} simple={true}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_NAME",display:"CUSTOMER_NAME"}}
+                                            readOnly={true}
+                                            button={[
                                             {
                                                 id:'001',
                                                 icon:'add',
-                                                onClick:async()=>
-                                                {
-                                                    
-                                                    await this.popBarcode.show();
-                                                    await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
-                                                    this.txtPopBarcode.value = "";
-                                                    this.cmbPopBarType.value = "0";
-                                                    this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-
+                                                onClick:async ()=>
+                                                {                                            
+                                                    await this.popCustomer.show();
+                                                    this.txtPopCustomerCode.value = "";
+                                                    this.txtPopCustomerName.value = "";
+                                                    this.txtPopCustomerItemCode.value = "";
+                                                    this.txtPopCustomerPrice.value = 0;
                                                     setTimeout(async () => 
                                                     {
-                                                        this.txtPopBarcode.focus()
-                                                    }, 600);
+                                                    this.txtPopCustomerCode.focus()
+                                                    }, 600)
                                                 }
+                                            }]}
+                                            param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}>
+                                            </NdTextBox>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* cmbItemGenusLy */}
+                                <NdLayoutItem key={"cmbItemGenusLy"} id={"cmbItemGenusLy"} parent={this} data-grid={{x:1,y:1,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbItemGenusLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbItemGenus") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdSelectBox parent={this} id="cmbItemGenus" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}} simple={true}
+                                            displayExpr="VALUE"                       
+                                            valueExpr="ID"
+                                            data={{source:[{ID:"0",VALUE:this.t("cmbItemGenusData.item")},{ID:"1",VALUE:this.t("cmbItemGenusData.service")},{ID:"2",VALUE:this.t("cmbItemGenusData.deposit")}]}}
+                                            param={this.param.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
+                                            />
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* txtBarcodeLy */}
+                                <NdLayoutItem key={"txtBarcodeLy"} id={"txtBarcodeLy"} parent={this} data-grid={{x:0,y:2,h:1,w:1}} access={this.access.filter({ELEMENT:'txtBarcodeLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1 '>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtBarcode") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdTextBox id="txtBarcode" parent={this} simple={true}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.itemsObj.dt('ITEM_BARCODE'),field:"BARCODE"}}
+                                            button=
+                                            {
+                                                [
+                                                    {
+                                                        id:'001',
+                                                        icon:'add',
+                                                        onClick:async()=>
+                                                        {
+                                                            
+                                                            await this.popBarcode.show();
+                                                            await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
+                                                            this.txtPopBarcode.value = "";
+                                                            this.cmbPopBarType.value = "0";
+                                                            this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
+
+                                                            setTimeout(async () => 
+                                                            {
+                                                                this.txtPopBarcode.focus()
+                                                            }, 600);
+                                                        }
+                                                    }
+                                                ]
                                             }
-                                        ]
-                                    }
-                                    onChange={(async()=>
-                                    {
-                                        await this.checkBarcode(this.txtBarcode.value)
-                                    }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </Item>  
-                                {/* cmbTax */}
-                                <Item>
-                                    <Label text={this.t("cmbTax")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbTax" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}}
-                                    displayExpr="VAT"                       
-                                    valueExpr="VAT"
-                                    data={{source:{select:{query:"SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}
-                                    />
-                                </Item>                              
-                                {/* cmbMainUnit */}
-                                <Item>
-                                    <Label text={this.t("cmbMainUnit")} alignment="right" />
-                                    <div className="row">
-                                        <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbMainUnit" height='fit-content' 
+                                            onChange={(async()=>
+                                            {
+                                                await this.checkBarcode(this.txtBarcode.value)
+                                            }).bind(this)}
+                                            param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                            >
+                                            </NdTextBox>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* cmbTaxLy */}
+                                <NdLayoutItem key={"cmbTaxLy"} id={"cmbTaxLy"} parent={this} data-grid={{x:1,y:2,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbTaxLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbTax") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdSelectBox parent={this} id="cmbTax" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}} simple={true}
+                                            displayExpr="VAT"                       
+                                            valueExpr="VAT"
+                                            data={{source:{select:{query:"SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
+                                            param={this.param.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}
+                                            />
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* cmbMainUnitLy */}
+                                <NdLayoutItem key={"cmbMainUnitLy"} id={"cmbMainUnitLy"} parent={this} data-grid={{x:0,y:3,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbMainUnitLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbMainUnit") + " :"}</label>
+                                        </div>
+                                        <div className="col-4 p-0">
+                                            <NdSelectBox parent={this} id="cmbMainUnit" height='fit-content' simple={true}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:0}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
                                             data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
                                             param={this.param.filter({ELEMENT:'cmbMainUnit',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'cmbMainUnit',USERS:this.user.CODE})}
                                             />
                                         </div>
-                                        <div className="col-4 ps-0">
+                                        <div className="col-4 p-0">
                                             <NdNumberBox id="txtMainUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={1.0} format={"###.000"}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
-                                            param={this.param.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                     </div>
-                                </Item>     
-                                {/* cmbOrigin */}
-                                <Item>
-                                    <Label text={this.t("cmbOrigin")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbOrigin"
-                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value=""
-                                    searchEnabled={true} showClearButton={true}
-                                    param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.btnSave.setState({disabled:false});
-                                        this.taxSugarValidCheck()
-                                    }}
-                                    >
-                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
-                                            <RequiredRule message={this.t("validOrigin")}   
-                                            />
-                                        </Validator>
-                                    </NdSelectBox>                                    
-                                </Item>                           
-                                {/* cmbUnderUnit */}
-                                <Item>
-                                    <Label text={this.t("cmbUnderUnit")} alignment="right" />
-                                    <div className="row">
-                                        <div className="col-4 pe-0">
+                                </NdLayoutItem>
+                                {/* cmbOriginLy */}
+                                <NdLayoutItem key={"cmbOriginLy"} id={"cmbOriginLy"} parent={this} data-grid={{x:1,y:3,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbOriginLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbOrigin") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
+                                            displayExpr="NAME"                       
+                                            valueExpr="CODE"
+                                            value=""
+                                            searchEnabled={true} showClearButton={true}
+                                            param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
+                                            data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                            onValueChanged={(e)=>
+                                            {
+                                                this.btnSave.setState({disabled:false});
+                                                this.taxSugarValidCheck()
+                                            }}
+                                            >
+                                                <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
+                                                    <RequiredRule message={this.t("validOrigin")}   
+                                                    />
+                                                </Validator>
+                                            </NdSelectBox>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* cmbUnderUnitLy */}
+                                <NdLayoutItem key={"cmbUnderUnitLy"} id={"cmbUnderUnitLy"} parent={this} data-grid={{x:0,y:4,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbUnderUnitLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("cmbUnderUnit") + " :"}</label>
+                                        </div>
+                                        <div className="col-3 p-0">
                                             <NdSelectBox simple={true} parent={this} id="cmbUnderUnit" height='fit-content' 
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:1}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
@@ -1418,80 +1454,92 @@ export default class itemCard extends React.PureComponent
                                             valueExpr="ID"
                                             data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
                                             param={this.param.filter({ELEMENT:'cmbUnderUnit',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'cmbUnderUnit',USERS:this.user.CODE})}
                                             />
+                                            
                                         </div>
-                                        <div className="col-4 ps-0">
+                                        <div className="col-2 p-0">
                                             <NdNumberBox id="txtUnderUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={0.1} format={"##0.000"}
                                             dt={{id:"txtUnderUnit",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
-                                            param={this.param.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
-                                        <div className="col-4 pe-0">
+                                        <div className="col-3 pe-0">
                                             <div className="dx-field-label" style={{width:"100%"}}>{this.state.underPrice}</div>
                                         </div>
-                                    </div>                                     
-                                </Item>   
-                                {/* TaxSugar */}
-                                <Item>
-                                    <Label text={this.t("txtTaxSugar")} alignment="right" />
-                                    <NdNumberBox id="txtTaxSugar" parent={this} simple={true} readOnly={true}
-                                     showSpinButtons={true} step={1.0} format={"###.00"} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"SUGAR_RATE"}} 
-                                    param={this.param.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
-                                    onChange={()=>
-                                    {
-                                        this.taxSugarCalculate()
-                                    }}>
-                                       <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
-                                            <RangeRule min={4.001} message={this.t("validTaxSucre")}   
-                                             />
-                                        </Validator>
-                                    </NdNumberBox>
-                                </Item>                          
-                                {/* txtItemName */}
-                                <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                    <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
-                                    param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onValueChanged={(e)=>
-                                    {
-                                        if(e.value.length <= 32)
-                                            this.txtShortName.value = e.value.toUpperCase()
-                                    }}
-                                    button={[
-                                    {
-                                        id:'001',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            this.popDescription.show()
-                                        }
-                                    }]}>
-                                    <Validator validationGroup={"frmItems" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validName")}   
-                                            />
-                                    </Validator> 
-                                    </NdTextBox>
-                                </Item>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* txtTaxSugarLy */}
+                                <NdLayoutItem key={"txtTaxSugarLy"} id={"txtTaxSugarLy"} parent={this} data-grid={{x:1,y:4,h:1,w:1}} access={this.access.filter({ELEMENT:'txtTaxSugarLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtTaxSugar") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdNumberBox id="txtTaxSugar" parent={this} simple={true} readOnly={true}
+                                            showSpinButtons={true} step={1.0} format={"###.00"} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"SUGAR_RATE"}} 
+                                            param={this.param.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
+                                            onChange={()=>
+                                            {
+                                                this.taxSugarCalculate()
+                                            }}>
+                                                <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
+                                                    <RangeRule min={4.001} message={this.t("validTaxSucre")} />
+                                                </Validator>
+                                            </NdNumberBox>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* txtItemNameLy */}
+                                <NdLayoutItem key={"txtItemNameLy"} id={"txtItemNameLy"} parent={this} data-grid={{x:0,y:5,h:1,w:1}} access={this.access.filter({ELEMENT:'txtItemNameLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtItemName") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
+                                            param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            onValueChanged={(e)=>
+                                            {
+                                                if(e.value.length <= 32)
+                                                    this.txtShortName.value = e.value.toUpperCase()
+                                            }}
+                                            button={[
+                                            {
+                                                id:'001',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.popDescription.show()
+                                                }
+                                            }]}>
+                                                <Validator validationGroup={"frmItems" + this.tabIndex}>
+                                                    <RequiredRule message={this.t("validName")}/>
+                                                </Validator> 
+                                            </NdTextBox>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
                                 {/* txtShortName */}
-                                <Item>
-                                    <Label text={this.t("txtShortName")} alignment="right" />
-                                    <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
-                                    />
-                                </Item>
-                            </Form>
+                                <NdLayoutItem key={"txtShortNameLy"} id={"txtShortNameLy"} parent={this} data-grid={{x:1,y:5,h:1,w:1}} access={this.access.filter({ELEMENT:'txtShortNameLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-4 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("txtShortName") + " :"}</label>
+                                        </div>
+                                        <div className="col-8 p-0">
+                                            <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            maxLength={32}
+                                            param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
+                                            />
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                            </NdLayout>
                         </div>
-                        <div className="col-3">
+                        <div className="col-2">
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} buttonTrigger={"#btnNewImg"}
@@ -1531,44 +1579,70 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={6} id={"frmChkBox" + this.tabIndex}>
+                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={6}>
                                 {/* chkActive */}
-                                <Item>
-                                    <Label text={this.t("chkActive")} alignment="right" />
-                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"STATUS"}}
-                                    param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
-                                </Item>
-                                {/* chkCaseWeighed */}
-                                <Item>
-                                    <Label text={this.t("chkCaseWeighed")} alignment="right" />
-                                    <NdCheckBox id="chkCaseWeighed" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"WEIGHING"}}
-                                    param={this.param.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}/>
-                                </Item>
+                                <NdLayoutItem key={"chkActiveLy"} id={"chkActiveLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkActiveLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkActive") + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"STATUS"}}
+                                            param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkCaseWeighedLy */}
+                                <NdLayoutItem key={"chkCaseWeighedLy"} id={"chkCaseWeighedLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkCaseWeighedLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkCaseWeighed") + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkCaseWeighed" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"WEIGHING"}}
+                                            param={this.param.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
                                 {/* chkLineMerged */}
-                                <Item>
-                                    <Label text={this.t("chkLineMerged")} alignment="right" />
-                                    <NdCheckBox id="chkLineMerged" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
-                                    //param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
-                                    />
-                                </Item>
-                                {/* chkTicketRest */}
-                                <Item>
-                                    <Label text={this.t("chkTicketRest")} alignment="right" />
-                                    <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
-                                    param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
-                                </Item>
-                                {/* chkInterfel */}
-                                <Item>
-                                    <Label text={this.t("chkInterfel")} alignment="right" />
-                                    <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
-                                     param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}
-                                     access={this.access.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}/>
-                                </Item>
-                            </Form>
+                                <NdLayoutItem key={"chkLineMergedLy"} id={"chkLineMergedLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkLineMergedLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkLineMerged") + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkLineMerged" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
+                                            param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
+                                            />
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkTicketRestLy */}
+                                <NdLayoutItem key={"chkTicketRestLy"} id={"chkTicketRestLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkTicketRestLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTicketRest") + " :"}</label>
+                                        </div>
+                                        <div className="col-1 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
+                                            param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkInterfelLy */}
+                                <NdLayoutItem key={"chkInterfelLy"} id={"chkInterfelLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkInterfelLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkInterfel") + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
+                                            param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                            </NdLayout>
                         </div>
                     </div>
                     <div className='row px-2 pt-2'>
@@ -1578,76 +1652,106 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitlePrice")} text={"tbPrice"}>
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
-                                            format={"#,##0.000"} step={0.1}
-                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
-                                            </NdNumberBox>
-                                        </div>                                        
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                            format={"#,##0.000"} readOnly={true}
-                                            param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
-                                            </NdNumberBox>
-                                        </div>
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
-                                            format={"#,##0.000"} step={0.1}
-                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
-                                            </NdNumberBox>
-                                        </div>
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
-                                            format={"#,##0.000"} step={0.1}
-                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
-                                            </NdNumberBox>
-                                        </div>
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
-                                            format={"#,##0.000"} step={0.1}
-                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
-                                        </div>
-                                        <div className='col-1'>
-                                            <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
-                                            format={"#,##0.000"} step={0.1} readOnly={true}
-                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
-                                        </div>
-                                        <div className='col-1 offset-5 py-3'>
-                                            <Toolbar>
-                                                <Item location="after">
-                                                        <Button icon="add"
-                                                        text={this.t("sellPriceAdd")}
-                                                        onClick={async()=>
-                                                        {   
-                                                            await this.popPrice.show();
+                                        <div className='col-12'>
+                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} cols={10}>
+                                                {/* txtCostPriceLy */}
+                                                <NdLayoutItem key={"txtCostPriceLy"} id={"txtCostPriceLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtCostPriceLy',USERS:this.user.CODE})}>
+                                                    <div className="row">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
+                                                            </NdNumberBox>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* txtTotalExtraCostLy */}
+                                                <NdLayoutItem key={"txtTotalExtraCostLy"} id={"txtTotalExtraCostLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtTotalExtraCostLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                            format={"#,##0.000"} readOnly={true}
+                                                            param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
+                                                            </NdNumberBox>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* txtMinSalePriceLy */}
+                                                <NdLayoutItem key={"txtMinSalePriceLy"} id={"txtMinSalePriceLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMinSalePriceLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            editable={this.state.isItemGrpForMinMaxAccess}
+                                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
+                                                            </NdNumberBox>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* txtMaxSalePriceLy */}
+                                                <NdLayoutItem key={"txtMaxSalePriceLy"} id={"txtMaxSalePriceLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMaxSalePriceLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            editable={this.state.isItemGrpForMinMaxAccess}
+                                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
+                                                            access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
+                                                            </NdNumberBox>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* txtLastBuyPriceLy */}
+                                                <NdLayoutItem key={"txtLastBuyPriceLy"} id={"txtLastBuyPriceLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastBuyPriceLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* txtLastSalePriceLy */}
+                                                <NdLayoutItem key={"txtLastSalePriceLy"} id={"txtLastSalePriceLy"} parent={this} data-grid={{x:5,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastSalePriceLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center">
+                                                            <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
+                                                            format={"#,##0.000"} step={0.1} readOnly={true}
+                                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                                {/* sellPriceAddLy */}
+                                                <NdLayoutItem key={"sellPriceAddLy"} id={"sellPriceAddLy"} parent={this} data-grid={{x:10,y:0,h:1,w:2}} access={this.access.filter({ELEMENT:'sellPriceAddLy',USERS:this.user.CODE})}>
+                                                    <div className="row ps-3">
+                                                        <div className="col-12 p-0 d-flex align-items-center d-flex justify-content-end">
+                                                            <Button icon="add"
+                                                            text={this.t("sellPriceAdd")}
+                                                            onClick={async()=>
+                                                            {   
+                                                                await this.popPrice.show();
 
-                                                            this.cmbPopPriListNo.value = 1
-                                                            this.dtPopPriStartDate.value = "1970-01-01"
-                                                            this.dtPopPriEndDate.value = "1970-01-01"
-                                                            this.txtPopPriQuantity.value = 1
-                                                            this.txtPopPriPrice.value = 0
-                                                            this.txtPopPriHT.value = 0
-                                                            this.txtPopPriTTC.value = 0
-                                                            this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+                                                                this.cmbPopPriListNo.value = 1
+                                                                this.dtPopPriStartDate.value = "1970-01-01"
+                                                                this.dtPopPriEndDate.value = "1970-01-01"
+                                                                this.txtPopPriQuantity.value = 1
+                                                                this.txtPopPriPrice.value = 0
+                                                                this.txtPopPriHT.value = 0
+                                                                this.txtPopPriTTC.value = 0
+                                                                this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
-                                                            setTimeout(async () => 
-                                                            {
-                                                               this.txtPopPriPrice.focus()
-                                                            }, 600)
-                                                        }}/>
-                                                </Item>
-                                            </Toolbar>
+                                                                setTimeout(async () => 
+                                                                {
+                                                                this.txtPopPriPrice.focus()
+                                                                }, 600)
+                                                            }}/>
+                                                        </div>
+                                                    </div>
+                                                </NdLayoutItem>
+                                            </NdLayout>
                                         </div>
                                     </div>
                                     <div className='row px-2 py-2'>

@@ -43,14 +43,14 @@ export default class NdAccessEdit extends Base
             {
                 item.editMode = false
             })
-
+            
             let tmpConfObj =
             {
                 id:'msgCloseAlert',showTitle:true,title:this.lang.t("acsEdit.msgCloseAlert.title"),showCloseButton:true,width:'500px',height:'200px',
                 button:[{id:"btn01",caption:this.lang.t("acsEdit.msgCloseAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("acsEdit.msgCloseAlert.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsEdit.msgCloseAlert.msg")}</div>)
             }
-
+            
             let tmpDialogResult = await dialog(tmpConfObj);
             
             if(tmpDialogResult == "btn01")
@@ -66,23 +66,50 @@ export default class NdAccessEdit extends Base
                             {
                                 if(typeof item.props.access != 'undefined' && typeof item.state.accessValue != 'undefined')
                                 {
-                                    console.log(item)
                                     let tmpData = {...item.props.access.meta[0]}
                                     tmpData.USERS = data[i].CODE
                                     tmpData.VALUE = JSON.stringify(item.state.accessValue)
-                                    
-                                    let tmpQuery = 
+
+                                    let tmpQuery = {}
+                                    let tmpCtrlQuery = 
                                     {
-                                        query : "EXEC [dbo].[PRD_ACCESS_INSERT] " + 
-                                                "@ID = @PID, " + 
-                                                "@VALUE = @PVALUE, " + 
-                                                "@SPECIAL = @PSPECIAL, " + 
-                                                "@USERS = @PUSERS, " + 
-                                                "@PAGE = @PPAGE, " + 
-                                                "@ELEMENT = @PELEMENT, " + 
-                                                "@APP = @PAPP ", 
-                                        param : ['PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
-                                        value : [tmpData.ID,tmpData.VALUE,tmpData.SPECIAL,tmpData.USERS,tmpData.PAGE,tmpData.ELEMENT,tmpData.APP]
+                                        query : "SELECT TOP 1 GUID FROM ACCESS WHERE ID = @ID AND USERS = @USERS AND PAGE = @PAGE AND APP = @APP",
+                                        param : ['ID:string|100','USERS:string|25','PAGE:string|25','APP:string|50'],
+                                        value : [tmpData.ID,tmpData.USERS,tmpData.PAGE,tmpData.APP]
+                                    }
+                                    let tmpCtrlResult = await this.core.sql.execute(tmpCtrlQuery)
+                                    if(tmpCtrlResult.result.recordset.length == 0)
+                                    {
+                                        tmpQuery = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_ACCESS_INSERT] " + 
+                                                    "@ID = @PID, " + 
+                                                    "@VALUE = @PVALUE, " + 
+                                                    "@SPECIAL = @PSPECIAL, " + 
+                                                    "@USERS = @PUSERS, " + 
+                                                    "@PAGE = @PPAGE, " + 
+                                                    "@ELEMENT = @PELEMENT, " + 
+                                                    "@APP = @PAPP ", 
+                                            param : ['PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+                                            value : [tmpData.ID,tmpData.VALUE,tmpData.SPECIAL,tmpData.USERS,tmpData.PAGE,tmpData.ELEMENT,tmpData.APP]
+                                        }
+                                    }
+                                    else
+                                    {
+                                        tmpQuery = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_ACCESS_UPDATE] " + 
+                                                    "@GUID = @PGUID, " + 
+                                                    "@ID = @PID, " + 
+                                                    "@VALUE = @PVALUE, " + 
+                                                    "@SPECIAL = @PSPECIAL, " + 
+                                                    "@USERS = @PUSERS, " + 
+                                                    "@PAGE = @PPAGE, " + 
+                                                    "@ELEMENT = @PELEMENT, " + 
+                                                    "@APP = @PAPP ", 
+                                            param : ['PGUID:string|50','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+                                            value : [tmpCtrlResult.result.recordset[0].GUID,tmpData.ID,tmpData.VALUE,tmpData.SPECIAL,tmpData.USERS,tmpData.PAGE,tmpData.ELEMENT,tmpData.APP]
+                                        }
                                     }
                                     await this.core.sql.execute(tmpQuery)
                                 }
@@ -94,8 +121,10 @@ export default class NdAccessEdit extends Base
                 {
                     this.parentObj(async(item)=>
                     {
-                        if(typeof item.state.accessValue != 'undefined')
+                        if(typeof item.state.accessValue != 'undefined' && typeof item.props.access != 'undefined')
                         {
+                            console.log(item.props.id)
+                            console.log(item.state.accessValue)
                             item.props.access.setValue(item.state.accessValue)
                             await item.props.access.save()
                         }
