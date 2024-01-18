@@ -16,6 +16,7 @@ export default class NdBase extends React.PureComponent
             data : typeof props.data == 'undefined' ? undefined : props.data,
             editMode : false
         }
+        this.isUnmounted = false;
         // GÖRÜNÜR DURUMU. YETKİLENDİRME.
         if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
         {   
@@ -214,13 +215,20 @@ export default class NdBase extends React.PureComponent
     }
     set editMode(pVal)
     {
-        this.setState({editMode:pVal},()=>
+        if (!this.isUnmounted) 
         {
-            if(typeof this.onEditMode != 'undefined')
+            this.setState({editMode:pVal},()=>
             {
-                this.onEditMode(pVal)
-            }
-        })
+                if(typeof this.onEditMode != 'undefined')
+                {
+                    this.onEditMode(pVal)
+                }
+            })
+        }
+    }
+    componentWillUnmount() 
+    {
+        this.isUnmounted = true;
     }
     get data()
     {

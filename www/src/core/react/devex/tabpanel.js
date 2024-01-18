@@ -28,8 +28,19 @@ export default class NdTabPanel extends Base
             }
             else
             {
-                this._accessApply()
+                if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue() != 'undefined')
+                {
+                    for (let i = 0; i < Object.keys(this.state.accessValue).length; i++) 
+                    {
+                        let tmpItem = this.itemData.find(x => x.text == Object.keys(this.state.accessValue)[i])
+                        if(typeof tmpItem != 'undefined')
+                        {
+                            tmpItem.visible = this.state.accessValue[tmpItem.text]
+                        }
+                    }
+                    this.devTab.repaint()
                 }
+            }
         }
     }    
     _onItemRendered(e)
@@ -95,24 +106,6 @@ export default class NdTabPanel extends Base
                 );
         }
     }
-    _accessApply()
-    {
-        if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue() != 'undefined')
-        {
-            this.setState({accessValue:this.props.access.getValue()},()=>
-            {
-                for (let i = 0; i < Object.keys(this.state.accessValue).length; i++) 
-                {
-                    let tmpItem = this.itemData.find(x => x.text == Object.keys(this.state.accessValue)[i])
-                    if(typeof tmpItem != 'undefined')
-                    {
-                        tmpItem.visible = this.state.accessValue[tmpItem.text]
-                    }
-                }
-                this.devTab.repaint()
-            })
-        }
-    }
     setItemVisible(pIndex,pStatus)
     {
         this.itemData[pIndex].visible = pStatus        
@@ -126,7 +119,22 @@ export default class NdTabPanel extends Base
             {
                 this.devTab = e.component
                 this.itemData = this.devTab.option('items')
-                this._accessApply()
+        
+                if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue() != 'undefined')
+                {
+                        this.setState({accessValue:this.props.access.getValue()},()=>
+                    {
+                        for (let i = 0; i < Object.keys(this.state.accessValue).length; i++) 
+                        {
+                            let tmpItem = this.itemData.find(x => x.text == Object.keys(this.state.accessValue)[i])
+                            if(typeof tmpItem != 'undefined')
+                            {
+                                tmpItem.visible = this.state.accessValue[tmpItem.text]
+                            }
+                        }
+                        this.devTab.repaint()
+                    })
+                }
             }}>
                 {this.props.children}
             </TabPanel>

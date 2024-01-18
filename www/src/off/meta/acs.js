@@ -1,14 +1,14 @@
 export const acs =
 [
     //#region Stok Tanıtım
-    //txtRef
+    //txtRefLy
     {
         TYPE : 2,
-        ID :"txtRef",
-        VALUE : {visible:true,editable:true},
+        ID :"txtRefLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtRef",
+        ELEMENT : "txtRefLy",
         APP : "OFF",
         VIEW : 
         {
@@ -28,14 +28,14 @@ export const acs =
             }
         }
     },
-    //cmbItemGrp
+    //cmbItemGrpLy
     {
         TYPE : 2,
-        ID :"cmbItemGrp",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbItemGrpLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbItemGrp",
+        ELEMENT : "cmbItemGrpLy",
         APP : "OFF",
         VIEW : 
         {
@@ -55,14 +55,14 @@ export const acs =
             }
         }
     },
-    //txtCustomer
+    //txtCustomerLy
     {
         TYPE : 2,
-        ID :"txtCustomer",
-        VALUE : {visible:true,editable:true},
+        ID :"txtCustomerLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtCustomer",
+        ELEMENT : "txtCustomerLy",
         APP : "OFF",
         VIEW : 
         {
@@ -82,14 +82,14 @@ export const acs =
             }
         }
     },
-    //cmbItemGenus
+    //cmbItemGenusLy
     {
         TYPE : 2,
-        ID :"cmbUrunCins",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbItemGenusLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbUrunCins",
+        ELEMENT : "cmbItemGenusLy",
         APP : "OFF",
         VIEW : 
         {
@@ -109,14 +109,14 @@ export const acs =
             }
         }
     },
-    //txtBarcode
+    //txtBarcodeLy
     {
         TYPE : 2,
-        ID :"txtBarcode",
-        VALUE : {visible:true,editable:true},
+        ID :"txtBarcodeLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:2}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtBarcode",
+        ELEMENT : "txtBarcodeLy",
         APP : "OFF",
         VIEW : 
         {
@@ -136,14 +136,14 @@ export const acs =
             }
         }
     },
-    //cmbTax
+    //cmbTaxLy
     {
         TYPE : 2,
-        ID :"cmbTax",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbTaxLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:2}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbTax",
+        ELEMENT : "cmbTaxLy",
         APP : "OFF",
         VIEW : 
         {
@@ -163,14 +163,14 @@ export const acs =
             }
         }
     },
-    //cmbMainUnit
+    //cmbMainUnitLy
     {
         TYPE : 2,
-        ID :"cmbMainUnit",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbMainUnitLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:3}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbMainUnit",
+        ELEMENT : "cmbMainUnitLy",
         APP : "OFF",
         VIEW : 
         {
@@ -190,14 +190,14 @@ export const acs =
             }
         }
     },
-    //txtMainUnit
+    //txtMainUnitLy
     {
         TYPE : 2,
-        ID :"txtMainUnit",
+        ID :"txtMainUnitLy",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMainUnit",
+        ELEMENT : "txtMainUnitLy",
         APP : "OFF",
         VIEW : 
         {
@@ -217,14 +217,14 @@ export const acs =
             }
         }
     },
-    //cmbOrigin
+    //cmbOriginLy
     {
         TYPE : 2,
-        ID :"cmbOrigin",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbOriginLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:3}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbOrigin",
+        ELEMENT : "cmbOriginLy",
         APP : "OFF",
         VIEW : 
         {
@@ -244,14 +244,14 @@ export const acs =
             }
         }
     },
-    //cmbUnderUnit
+    //cmbUnderUnitLy
     {
         TYPE : 2,
-        ID :"cmbUnderUnit",
-        VALUE : {visible:true,editable:true},
+        ID :"cmbUnderUnitLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:4}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbUnderUnit",
+        ELEMENT : "cmbUnderUnitLy",
         APP : "OFF",
         VIEW : 
         {
@@ -271,14 +271,14 @@ export const acs =
             }
         }
     },
-    //txtUnderUnit
+    //txtUnderUnitLy
     {
         TYPE : 2,
-        ID :"txtUnderUnit",
+        ID :"txtUnderUnitLy",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtUnderUnit",
+        ELEMENT : "txtUnderUnitLy",
         APP : "OFF",
         VIEW : 
         {
@@ -298,14 +298,41 @@ export const acs =
             }
         }
     },
-    //txtItemName
+    //txtTaxSugarLy
     {
         TYPE : 2,
-        ID :"txtItemName",
-        VALUE : {visible:true,editable:true},
+        ID :"txtTaxSugarLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:4}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtItemName",
+        ELEMENT : "txtTaxSugarLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Şeker Vergisi",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbSugarVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbSugarEditable"}
+                ]
+            }
+        }
+    },
+    //txtItemNameLy
+    {
+        TYPE : 2,
+        ID :"txtItemNameLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:5}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtItemNameLy",
         APP : "OFF",
         VIEW : 
         {
@@ -325,14 +352,14 @@ export const acs =
             }
         }
     },
-    //txtShortName
+    //txtItemNameLy
     {
         TYPE : 2,
-        ID :"txtShortName",
-        VALUE : {visible:true,editable:true},
+        ID :"txtShortNameLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:5}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtShortName",
+        ELEMENT : "txtShortNameLy",
         APP : "OFF",
         VIEW : 
         {
@@ -352,14 +379,14 @@ export const acs =
             }
         }
     },
-    //chkActive
+    //chkActiveLy
     {
         TYPE : 2,
-        ID :"chkActive",
-        VALUE : {visible:true,editable:true},
+        ID :"chkActiveLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkActive",
+        ELEMENT : "chkActiveLy",
         APP : "OFF",
         VIEW : 
         {
@@ -379,14 +406,14 @@ export const acs =
             }
         }
     },
-    //chkCaseWeighed
+    //chkCaseWeighedLy
     {
         TYPE : 2,
-        ID :"chkCaseWeighed",
-        VALUE : {visible:true,editable:true},
+        ID :"chkCaseWeighedLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkCaseWeighed",
+        ELEMENT : "chkCaseWeighedLy",
         APP : "OFF",
         VIEW : 
         {
@@ -406,14 +433,14 @@ export const acs =
             }
         }
     },
-    //chkLineMerged
+    //chkLineMergedLy
     {
         TYPE : 2,
-        ID :"chkLineMerged",
-        VALUE : {visible:true,editable:true},
+        ID :"chkLineMergedLy",
+        VALUE : {visible:true,editable:true,position:{x:2,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkLineMerged",
+        ELEMENT : "chkLineMergedLy",
         APP : "OFF",
         VIEW : 
         {
@@ -433,14 +460,14 @@ export const acs =
             }
         }
     },
-    //chkTicketRest
+    //chkTicketRestLy
     {
         TYPE : 2,
-        ID :"chkTicketRest",
-        VALUE : {visible:true,editable:true},
+        ID :"chkTicketRestLy",
+        VALUE : {visible:true,editable:true,position:{x:3,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkTicketRest",
+        ELEMENT : "chkTicketRestLy",
         APP : "OFF",
         VIEW : 
         {
@@ -460,14 +487,41 @@ export const acs =
             }
         }
     },
-    //txtCostPrice
+    //chkInterfelLy
     {
         TYPE : 2,
-        ID :"txtCostPrice",
-        VALUE : {visible:true,editable:true},
+        ID :"chkInterfelLy",
+        VALUE : {visible:true,editable:true,position:{x:4,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtCostPrice",
+        ELEMENT : "chkInterfelLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Interfel",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopChkInterfelVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopChkInterfelEditable"}
+                ]
+            }
+        }
+    },
+    //txtCostPriceLy
+    {
+        TYPE : 2,
+        ID :"txtCostPriceLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtCostPriceLy",
         APP : "OFF",
         VIEW : 
         {
@@ -476,14 +530,30 @@ export const acs =
             CAPTION : "Maliyet Fiyatı"
         }
     },
-    //txtMinSalePrice
+    //txtTotalExtraCostLy
     {
         TYPE : 2,
-        ID :"txtMinSalePrice",
-        VALUE : {visible:true,editable:false},
+        ID :"txtTotalExtraCostLy",
+        VALUE : {visible:true,editable:true,position:{x:1,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMinSalePrice",
+        ELEMENT : "txtTotalExtraCostLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ek Maliyetler"
+        }
+    },
+    //txtMinSalePriceLy
+    {
+        TYPE : 2,
+        ID :"txtMinSalePriceLy",
+        VALUE : {visible:true,editable:true,position:{x:2,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtMinSalePriceLy",
         APP : "OFF",
         VIEW : 
         {
@@ -492,14 +562,14 @@ export const acs =
             CAPTION : "Min. Satış Fiyatı"
         }
     },
-    //txtMaxSalePrice
+    //txtMaxSalePriceLy
     {
         TYPE : 2,
-        ID :"txtMaxSalePrice",
-        VALUE : {visible:true,editable:true},
+        ID :"txtMaxSalePriceLy",
+        VALUE : {visible:true,editable:true,position:{x:3,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMaxSalePrice",
+        ELEMENT : "txtMaxSalePriceLy",
         APP : "OFF",
         VIEW : 
         {
@@ -508,14 +578,14 @@ export const acs =
             CAPTION : "Max. Satış Fiyatı"
         }
     },
-    //txtLastBuyPrice
+    //txtLastBuyPriceLy
     {
         TYPE : 2,
-        ID :"txtLastBuyPrice",
-        VALUE : {visible:true,editable:true},
+        ID :"txtLastBuyPriceLy",
+        VALUE : {visible:true,editable:true,position:{x:4,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtLastBuyPrice",
+        ELEMENT : "txtLastBuyPriceLy",
         APP : "OFF",
         VIEW : 
         {
@@ -524,14 +594,14 @@ export const acs =
             CAPTION : "Son Alış Fiyatı"
         }
     },
-    //txtLastSalePrice
+    //txtLastSalePriceLy
     {
         TYPE : 2,
-        ID :"txtLastSalePrice",
-        VALUE : {visible:true,editable:true},
+        ID :"txtLastSalePriceLy",
+        VALUE : {visible:true,editable:true,position:{x:5,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtLastSalePrice",
+        ELEMENT : "txtLastSalePriceLy",
         APP : "OFF",
         VIEW : 
         {
@@ -561,6 +631,38 @@ export const acs =
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "tabPanel",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Son Satış Fiyatı"
+        }
+    },
+    //sellPriceAddLy
+    {
+        TYPE : 2,
+        ID :"sellPriceAddLy",
+        VALUE : {visible:true,editable:true,position:{x:10,y:0,h:1,w:2,minW:2,maxW:2}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "sellPriceAddLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Satış Fiyatı"
+        }
+    },
+    //grdPriceLy
+    {
+        TYPE : 2,
+        ID :"grdPriceLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "grdPriceLy",
         APP : "OFF",
         VIEW : 
         {
