@@ -116,24 +116,52 @@ export default class itemDetailSalesReport extends React.PureComponent
     }
     async _btnGetirClick()
     {
-       
-        let tmpSource =
-        {
-            source : 
+       if(this.chkItemCreated.value === false)
+       {
+           let tmpSource =
+           {
+               source : 
+               {
+                   groupBy : this.groupList,
+                   select : 
+                   {
+                       query : "SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL,(SELECT CDATE FROM ITEMS WHERE ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID) AS CDATE " +
+                               " FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY  ITEM_CODE,ITEM_NAME, ITEM_GUID",
+                       param : ['FIRST_DATE:date','LAST_DATE:date'],
+                       value : [this.dtDate.startDate,this.dtDate.endDate]
+                   },
+                   sql : this.core.sql
+               }
+           }
+           await this.grdListe.dataRefresh(tmpSource)
+       }else
+       {    
+            let tmpSource2 =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL " +
-                            " FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY  ITEM_CODE,ITEM_NAME",
-                    param : ['FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT POS_SALE_VW_01.ITEM_CODE, " +
+                                    "POS_SALE_VW_01.ITEM_NAME, " +
+                                    "SUM(POS_SALE_VW_01.QUANTITY) AS QUANTITY, " +
+                                    "ROUND(SUM(POS_SALE_VW_01.FAMOUNT),2) AS AMOUNT, " +
+                                    "ROUND(SUM(POS_SALE_VW_01.VAT),2) AS VAT, " +
+                                    "ROUND(SUM(POS_SALE_VW_01.TOTAL),2) AS TOTAL, " +
+                                    "ITEMS.CDATE " +
+                                "FROM POS_SALE_VW_01 " +
+                                "INNER JOIN ITEMS ON ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID " +
+                                "WHERE ITEMS.CDATE >= @FIRST_DATE AND  ITEMS.CDATE <= @LAST_DATE AND ITEMS.DELETED = 0 " +
+                                "GROUP BY  POS_SALE_VW_01.ITEM_CODE, POS_SALE_VW_01.ITEM_NAME, ITEMS.CDATE",
+                        param : ['FIRST_DATE:date','LAST_DATE:date'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate]
+                    },
+                    sql : this.core.sql
+                }
             }
-        }
-
-        await this.grdListe.dataRefresh(tmpSource)
+            await this.grdListe.dataRefresh(tmpSource2)
+       }
       
     }
     render()
@@ -192,10 +220,15 @@ export default class itemDetailSalesReport extends React.PureComponent
                             />
                         </div>
                         <div className="col-3">
-                      
+                            <Form>
+                                <Item>
+                                    <Label text={this.t("chkItemCreated")} alignment="left" />
+                                    <NdCheckBox id="chkItemCreated" parent={this} defaultValue={true} value={false} />
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
-                            
+
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
@@ -218,6 +251,7 @@ export default class itemDetailSalesReport extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_010")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="CDATE" caption={this.t("grdListe.clmDate")} visible={true} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true} defaultSortOrder="asc"/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /> 

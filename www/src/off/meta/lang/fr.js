@@ -17389,9 +17389,11 @@ export const langFr =
     },
     pos_02_010 : // "Ürün Detaylı Satış Raporu"
     {
+        chkItemCreated: "Récupérer en fonction de la date de création des produits",
         btnGet :"Apporter", 
         grdListe : 
         {
+            clmDate: "Date", 
             clmCode: "Code", 
             clmName : "Nom",             
             clmQuantity : "Quantité",  

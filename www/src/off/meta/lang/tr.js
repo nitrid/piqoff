@@ -17118,9 +17118,11 @@ export const langTr =
     },
     pos_02_010 : // "Ürün Detaylı Satış Raporu"
     {
+        chkItemCreated: "Ürünlerin oluşturulma tarihine göre getir",
         btnGet :"Getir",
         grdListe : 
         {
+            clmDate: "Tarih",
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Miktar",

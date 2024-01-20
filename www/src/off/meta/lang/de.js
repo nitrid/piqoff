@@ -17012,9 +17012,11 @@ export const langDe =
     },
     pos_02_010: // "Detaillierter Artikelverkaufsbericht"
     {
+        chkItemCreated: "Nach Erstellungsdatum der Produkte abrufen",
         btnGet: "Abrufen",
         grdListe:
         {
+            clmDate: "Dattum",
             clmCode: "Code",
             clmName: "Name",
             clmQuantity: "Menge",
