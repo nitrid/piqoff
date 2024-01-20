@@ -70,6 +70,23 @@ export default class specialPurcOrder extends React.PureComponent
         tmpDoc.DOC_TYPE = 60
         tmpDoc.REF = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'txtRef'}).getValue().value
         tmpDoc.INPUT = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
+        if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value != '')
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT * FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                param : ['CODE:string|50'],
+                value : [this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpDoc.OUTPUT = tmpData.result.recordset[0].GUID
+                tmpDoc.OUTPUT_CODE = tmpData.result.recordset[0].CODE
+                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].NAME
+                tmpDoc.REF = tmpData.result.recordset[0].CODE
+            }
+        }
 
         this.docObj.addEmpty(tmpDoc);
 

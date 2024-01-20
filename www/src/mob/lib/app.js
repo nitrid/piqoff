@@ -174,6 +174,13 @@ export default class App extends React.PureComponent
             obj.default.prototype.lang = App.instance.lang;
             obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.state.pageId)
 
+            console.log(obj.default.prototype.sysParam)
+            console.log(obj.default.prototype.sysParam.filter({ID:'deafultPage',USERS:obj.default.prototype.user}).getValue())
+            if(typeof obj.default.prototype.sysParam.filter({ID:'deafultPage',USERS:obj.default.prototype.user}).getValue() != 'undefined')
+            {
+                this.setState({page:obj.default.prototype.sysParam.filter({ID:'deafultPage',USERS:obj.default.prototype.user}).getValue().value})
+                this.setState({pageId:"sip_99"})
+            }
             obj.default.prototype.init = (function()
             {
                 let tmpCached = obj.default.prototype.init;
