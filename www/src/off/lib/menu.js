@@ -1137,6 +1137,11 @@ export const menu = (e) =>
                             id: 'pos_01_002',
                             text: e.t('menuOff.pos_01_002'),//'Plu Kopyalama',
                             path: 'pos/card/pluCopy'
+                        },
+                        {
+                            id: 'pos_01_003',
+                            text: e.t('menuOff.pos_01_003'),//'Fiş Sonu Açıklaması',
+                            path: 'pos/card/printDescription'
                         }
                     ]
                 },
@@ -1220,13 +1225,13 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_009'),
                             path: 'pos/report/itemGrpSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Detaylı Satış Raporu
                         {
                             id: 'pos_02_010',
                             text: e.t('menuOff.pos_02_010'),
-                            path: 'pos/report/itemSalesReport'
+                            path: 'pos/report/itemDetailSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Karşılaştırma Raporu
                         {
                             id: 'pos_02_011',
                             text: e.t('menuOff.pos_02_011'),
@@ -1244,7 +1249,7 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_012'),
                             path: 'pos/report/loyaltyReport'
                         },
-                        //Loyalty 
+                        //Discount 
                         {
                             id: 'pos_02_013',
                             text: e.t('menuOff.pos_02_013'),
@@ -1255,6 +1260,12 @@ export const menu = (e) =>
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
                             path: 'pos/report/balanceTicket'
+                        },
+                        //Okunmamış Terazi Fişleri Raporu 
+                        {
+                            id: 'pos_02_016',
+                            text: e.t('menuOff.pos_02_016'),
+                            path: 'pos/report/usingPointReport'
                         }
                     ]
                 },

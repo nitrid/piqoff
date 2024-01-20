@@ -178,8 +178,8 @@ export default class CustomerCard extends React.PureComponent
                                                     {
                                                         CUSER:this.core.auth.data.CODE,            
                                                         DEVICE:'',
-                                                        CODE:'128',
-                                                        NAME:"Changement d'assujetti utilisant le logiciel", //BAK
+                                                        CODE:'410',
+                                                        NAME:"Modification des informations de l'asujetti.", //BAK
                                                         DESCRIPTION:'',
                                                         APP_VERSION:this.core.appInfo.version
                                                     }
@@ -369,7 +369,12 @@ export default class CustomerCard extends React.PureComponent
                                                 await this.cmbCity.setData([])
                                             }
                                         }).bind(this)}
-                                    />
+                                    >
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                        
                                 </Item>
                                 {/* cmbZipCode */}
                                 <Item>
@@ -383,7 +388,11 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    />
+                                    >
+                                          <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdSelectBox>
                                 </Item>
                                 {/* cmbCity */}
                                 <Item>
@@ -397,24 +406,40 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    />
+                                    >
+                                          <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdSelectBox>
                                 </Item>
                                
                                 {/* txtPhone */}
                                 <Item>
                                     <Label text={this.t("txtPhone")} alignment="right" />
                                     <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TEL"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} maxLength={50}/>
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} maxLength={50}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtEmail */}
                                 <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={50} />
+                                    <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={50} >
+                                    <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtWeb */}
                                 <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
-                                    <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={50}/>
+                                    <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={50}>
+                                    <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtRSC */}
                                 <Item>
@@ -422,7 +447,11 @@ export default class CustomerCard extends React.PureComponent
                                     <NdTextBox id="txtRSC" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"RCS"}} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={50}
-                                    />
+                                    >
+                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtApeCode */}
                                 <Item>
@@ -430,17 +459,22 @@ export default class CustomerCard extends React.PureComponent
                                         <NdTextBox id="txtApeCode" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"APE_CODE"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={50}
-
-                                        />
+                                        >
+                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("validation.notValid")} />
+                                            </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtTaxOffice */}
                                 <Item>
                                     <Label text={this.t("txtTaxOffice")} alignment="right" />
                                         <NdTextBox id="txtTaxOffice" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_OFFICE"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={50}
-
-                                        />
+                                        maxLength={50}>
+                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtTaxNo */}
                                 <Item>
@@ -448,17 +482,22 @@ export default class CustomerCard extends React.PureComponent
                                         <NdTextBox id="txtTaxNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_NO"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={50}
-
-                                        />
+                                        >
+                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtIntVatNo */}
                                 <Item>
                                     <Label text={this.t("txtIntVatNo")} alignment="right" />
                                         <NdTextBox id="txtIntVatNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"INT_VAT_NO"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={50}
-
-                                        />
+                                        maxLength={50}>
+                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtSirenNo */}
                                 <Item>
@@ -466,7 +505,11 @@ export default class CustomerCard extends React.PureComponent
                                     <NdTextBox id="txtSirenNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIREN_NO"}} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={50}
-                                    />
+                                    >
+                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                   {/* txtSiretId */}
                                   <Item>
@@ -475,7 +518,11 @@ export default class CustomerCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={50}
 
-                                        />
+                                        >
+                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                
                                 {/* txtCapital */}

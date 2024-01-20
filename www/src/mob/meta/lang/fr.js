@@ -12,12 +12,12 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
-    btnBarcodeEntry: "Barkod Giriş",   // BAK
-    btnProcessLines: "İşlem Satırları",   // BAK
-    btnNewDoc: "Yeni Evrak",   // BAK
-    btnDocDelete: "Evrak Sil",   // BAK
-    btnLineDisc: "Satır İndirim",   // BAK
-    chkRememberMe : "Souviens-toi de moi", // BAK
+    btnBarcodeEntry: "Entrée du code-barres",   
+    btnProcessLines: "Traiter les lignes",   
+    btnNewDoc: "Nouveau document",   
+    btnDocDelete: "Supprimer le document",   
+    btnLineDisc: "Remise de ligne",       
+    chkRememberMe : "Souviens-toi de moi", 
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -92,7 +92,7 @@ export const langFr =
         stk_04 : "Groupe de produit",
         stk_05 : "Compter",
         stk_06 : "Imprimer étiquette",
-        stk_07 : "Imprimer étiquette spéciale",
+        stk_07 : "Etiquette spéciale",
         stk_08 : "Retour des Produits",
         dep_01 : "Transfert",
         dep_02 : "Commande dépôt",
@@ -122,6 +122,7 @@ export const langFr =
             title : "Attention",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre !",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgNotSave : "Echec de l'enregistrement",
         },
         grdPrice : 
@@ -145,6 +146,7 @@ export const langFr =
             title : "Attention",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgNotSave : "Echec de l'enregistrement",
         },
         grdCustomer : 
@@ -168,6 +170,7 @@ export const langFr =
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgDblBarcode : "Le code-barre saisi est déjà enregistré dans la base des données!",
             msgBarcodeCheck : "S'il vous plaît choissisez un produit.",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgSave : "Succès de l'enregistrement",
             msgNotSave : "Echec de l'enregistrement",
         },
@@ -191,6 +194,7 @@ export const langFr =
             msgBarcodeNotFound : "Code-barre inconu!",
             msgDblBarcode : "Le code-barre saisi est déjà enregistré dans la base des données!",
             msgBarcodeCheck : "S'il vous plaîot choissisez un produit.",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgSave : "Succès de l'enregistrement",
             msgNotSave : "Echec de l'enregistrement",
             
@@ -216,6 +220,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer!",
             msgRowNotUpdate : "Ce décompte est définitif et ne peut être modifié !",
@@ -255,6 +260,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgNotSave : "Echec de l'enregistrement",
         },
         grdList : 
@@ -268,6 +274,29 @@ export const langFr =
             title : "Choix du document",
             clmRef :  "Référence",
             clmRefNo : "Numéro de référence",
+        },
+    },
+    stk_07 : // "Özel Etiket Bas"  KOMPLE BAK
+    {
+        lblPrice : "Prix",
+        lblQuantity : "Quantité",
+        lblDescription : "Description",
+        lblAdd : "Ajouter",
+        msgAlert :
+        {
+            btn01 : "OK",
+            title : "Attention",
+            msgProcess : "Aucun produit n'a encore été saisi !",
+            msgBarcodeNotFound : "Code-barres introuvable !",
+            msgBarcodeCheck : "Veuillez scanner le code-barres !",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
+            msgNotSave : "Échec de l'enregistrement.",
+        },
+        grdList : 
+        {
+            clmBarcode : "code-barres",
+            clmName :  "Nom du produit",
+            clmPrice : "Prix"
         },
     },
     stk_08 : // "Transfert dépôt de retour"
@@ -297,6 +326,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer.!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -352,6 +382,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -407,6 +438,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer.!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -459,6 +491,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer.!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -514,6 +547,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer.!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -568,6 +602,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture ou en bon de livraison, vous ne pouvez pas la supprimer!",
             msgRowNotUpdate : "Étant donné que cette ligne provient de la facture ou du bon de livraison , le montant ne peut pas être modifié!",
@@ -623,6 +658,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer!",
             msgRowNotUpdate : "Le montant ne peut pas être modifié car cette ligne figure sur la facture!",
@@ -678,6 +714,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer!",
             msgRowNotUpdate : "Le montant ne peut pas être modifié car cette ligne figure sur la facture!",
@@ -733,6 +770,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !",
             msgRowNotUpdate : "Le montant ne peut pas être modifié car cette ligne figure sur la facture!",
@@ -788,6 +826,7 @@ export const langFr =
             msgProcess : "Aucun produit saisi actuellement!",
             msgBarcodeNotFound : "Code-barre inconnu!",
             msgBarcodeCheck : "Veuillez-lire le code-barre!",
+            msgLimitQuantityCheck :"La quantité ne peut pas être supérieure à 9 999 !",
             msgQuantityCheck : "Impossible d'entrer un produit sans saisi de prix!",
             msgRowNotDelete : "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !",
             msgRowNotUpdate : "Le montant ne peut pas être modifié car cette ligne figure sur la facture!",

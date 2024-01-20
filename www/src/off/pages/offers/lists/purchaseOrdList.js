@@ -6,14 +6,12 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
@@ -99,9 +97,9 @@ export default class purchaseOrdList extends React.PureComponent
                 }
 
                 this.setState(
-                    {
-                        columnListValue : e.value
-                    }
+                {
+                    columnListValue : e.value
+                }
                 )
             }
         }
@@ -133,7 +131,7 @@ export default class purchaseOrdList extends React.PureComponent
                     query : "SELECT * FROM DOC_VW_01 " +
                             "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ",
+                            " AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -222,21 +220,21 @@ export default class purchaseOrdList extends React.PureComponent
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 onEnterKey={(async()=>
-                                    {
-                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.show()
-                                        this.pg_txtCustomerCode.onClick = (data) =>
-                                        { 
+                                {
+                                    await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                    this.pg_txtCustomerCode.show()
+                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                    { 
+                                        if(data.length > 0)
+                                        {
                                             if(data.length > 0)
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                    this.txtCustomerCode.CODE = data[0].CODE
-                                                }
+                                                this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                this.txtCustomerCode.CODE = data[0].CODE
                                             }
                                         }
-                                    }).bind(this)}
+                                    }
+                                }).bind(this)}
                                 button=
                                 {
                                     [
@@ -335,15 +333,15 @@ export default class purchaseOrdList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
                                 {
-                                    App.instance.menuClick(
-                                        {
-                                            id: 'sip_02_001',
-                                            text: this.t('menu'),
-                                            path: 'orders/documents/purchaseOrder.js',
-                                            pagePrm:{GUID:e.data.GUID}
-                                        })
-                                }}
+                                    id: 'sip_02_001',
+                                    text: this.t('menu'),
+                                    path: 'orders/documents/purchaseOrder.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />

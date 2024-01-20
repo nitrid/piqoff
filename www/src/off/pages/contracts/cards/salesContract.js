@@ -1070,7 +1070,7 @@ export default class salesContract extends React.PureComponent
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset)) //BAK
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
@@ -1174,7 +1174,7 @@ export default class salesContract extends React.PureComponent
                                                 App.instance.setState({isExecute:true})
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 App.instance.setState({isExecute:false})
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     App.instance.setState({isExecute:true})
                                                     let tmpAttach = pResult.split('|')[1]
@@ -1186,7 +1186,7 @@ export default class salesContract extends React.PureComponent
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
                                                     }
-                                                    let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName: this.cmbDesignList.displayValue + ".pdf",attachData:tmpAttach,text:""}
+                                                    let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName: this.cmbDesignList.displayValue + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                     this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                     {
                                                         App.instance.setState({isExecute:false})

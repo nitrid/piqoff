@@ -7,7 +7,6 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -15,7 +14,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Button,Editing,Paging,Scrolling,KeyboardNavigation,Export,Pager} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -34,6 +33,7 @@ export default class privatePrinting extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.prilabelCls = new priLabelObj();
         this.labelMainObj = new labelMainCls();
+        this._btnGrdPrint = this._btnGrdPrint.bind(this)
 
         this.tabIndex = props.data.tabkey
     }
@@ -88,6 +88,42 @@ export default class privatePrinting extends React.PureComponent
         this.txtPrice.readOnly = false
         this.txtDescription.readOnly = false
         this.txtQuantity.readOnly = false
+    }
+    async _btnGrdPrint(e)
+    {
+        let tmpQuery = 
+        {
+            query:  "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = @PAGE),'') AS PATH " +
+                    "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
+            param:  ['GUID:string|50','PAGE:string|25'],
+            value:  [e.row.data.GUID,'02']
+        }
+        App.instance.setState({isExecute:true})
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        App.instance.setState({isExecute:false})
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
+        {
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                {
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            }
+        });
+        let tmpUpdateQuery = 
+        {
+            query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+            param:  ['GUID:string|50'],
+            value:  [e.row.data.GUID]
+        }
+        await this.core.sql.execute(tmpUpdateQuery) 
+        this.popUniqCodeList.hide()
+        this.btnList.props.onClick()
     }
     render()
     {
@@ -165,42 +201,43 @@ export default class privatePrinting extends React.PureComponent
                                             if(pResult == 'btn01')
                                             {
                                                 
-                                                    let tmpQuery = 
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT ISNULL(REPLACE(STR(SUBSTRING(MAX(CODE),0,8) + 1, 7), SPACE(1), '0'),'2700001') AS CODE FROM ITEM_UNIQ ",
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    let tmpdefCode = tmpData.result.recordset[0].CODE
+                                                    for (let i = 0; i < this.txtQuantity.value; i++) 
                                                     {
-                                                        query : "SELECT ISNULL(REPLACE(STR(SUBSTRING(MAX(CODE),0,8) + 1, 7), SPACE(1), '0'),'2700001') AS CODE FROM ITEM_UNIQ ",
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {   
-                                                        let tmpdefCode = tmpData.result.recordset[0].CODE
-                                                        for (let i = 0; i < this.txtQuantity.value; i++) 
-                                                        {
-                                                            tmpdefCode = tmpdefCode.toString()
-                                                            let tmpCode = ''
-                                                            let output = []
-                                                            for (var x = 0, len = tmpdefCode.length; x < len; x += 1) {
-                                                                output.push(+tmpdefCode.charAt(x));
-                                                            }
-                                                    
-                                                            var tek=(output[0]+output[2]+output[4]+output[6])*3
-                                                            var cift=output[1]+output[3]+output[5]
-                                                            var say = tek+cift
-                                                            let sonuc = (10 - (say %= 10))
-                                                            if(sonuc == 10)
-                                                            {
-                                                                sonuc = 0
-                                                            }
-                                                            tmpCode = tmpdefCode + sonuc.toString();
-                                                            let tmpEmpty = {...this.prilabelCls.empty};
-                                                            tmpEmpty.CODE = tmpCode
-                                                            tmpEmpty.ITEM = this.txtRef.GUID
-                                                            tmpEmpty.NAME = this.txtItemName.value
-                                                            tmpEmpty.PRICE = this.txtPrice.value
-                                                            tmpEmpty.DESCRIPTION = this.txtDescription.value
-                                                            this.prilabelCls.addEmpty(tmpEmpty);  
-                                                            tmpdefCode = Number(tmpdefCode) + 1
+                                                        tmpdefCode = tmpdefCode.toString()
+                                                        let tmpCode = ''
+                                                        let output = []
+                                                        for (var x = 0, len = tmpdefCode.length; x < len; x += 1) {
+                                                            output.push(+tmpdefCode.charAt(x));
                                                         }
+                                                
+                                                        var tek=(output[0]+output[2]+output[4]+output[6])*3
+                                                        var cift=output[1]+output[3]+output[5]
+                                                        var say = tek+cift
+                                                        let sonuc = (10 - (say %= 10))
+                                                        if(sonuc == 10)
+                                                        {
+                                                            sonuc = 0
+                                                        }
+                                                        tmpCode = tmpdefCode + sonuc.toString();
+                                                        let tmpEmpty = {...this.prilabelCls.empty};
+                                                        tmpEmpty.CODE = tmpCode
+                                                        tmpEmpty.ITEM = this.txtRef.GUID
+                                                        tmpEmpty.NAME = this.txtItemName.value
+                                                        tmpEmpty.PRICE = this.txtPrice.value
+                                                        tmpEmpty.PRICE_RATE = this.txtPriceRate.value
+                                                        tmpEmpty.DESCRIPTION = this.txtDescription.value
+                                                        this.prilabelCls.addEmpty(tmpEmpty);  
+                                                        tmpdefCode = Number(tmpdefCode) + 1
                                                     }
+                                                }
                                                 let tmpConfObj1 =
                                                 {
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -208,7 +245,7 @@ export default class privatePrinting extends React.PureComponent
                                                 }
                                                 if((await this.prilabelCls.save()) == 0)
                                                 {                  
-                                                   
+                                                
                                                     let Data = {data:this.prilabelCls.dt().toArray()}                                  
                                                     let tmpLbl = {...this.labelMainObj.empty}
                                                     tmpLbl.REF = 'SPECIAL'
@@ -251,30 +288,29 @@ export default class privatePrinting extends React.PureComponent
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {
-                                        let tmpQuery = 
+                                        this.popDesign.show()
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnList" parent={this} icon="bulletlist" type="default"
+                                    onClick={async()=>
+                                    {
+                                        let tmpSource =
                                         {
-                                            query:  "SELECT *, " +
-                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = @PAGE),'') AS PATH " +
-                                                    "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
-                                            param:  ['GUID:string|50','PAGE:string|25'],
-                                            value:  [this.labelMainObj.dt()[0].GUID,'02']
+                                            source : 
+                                            {
+                                                groupBy : this.groupList,
+                                                select : 
+                                                {
+                                                    query : "SELECT GUID,NAME,PRICE,DESCRIPTION,MAX(QUANTITY) AS QUANTITY from ITEM_LABEL_QUEUE_VW_01 WHERE REF = 'SPECIAL' AND (SELECT STATUS FROM LABEL_QUEUE WHERE LABEL_QUEUE.GUID = ITEM_LABEL_QUEUE_VW_01.GUID) = 0 GROUP BY GUID,NAME,PRICE,DESCRIPTION "
+                                                },
+                                                sql : this.core.sql
+                                            }
                                         }
                                         App.instance.setState({isExecute:true})
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        await this.grdUniqList.dataRefresh(tmpSource)
                                         App.instance.setState({isExecute:false})
-                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
-                                        {
-                                            if(pResult.split('|')[0] != 'ERR')
-                                            {
-                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                mywindow.onload = function() 
-                                                {
-                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                } 
-                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                            }
-                                        });
+                                       this.popUniqCodeList.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -433,16 +469,41 @@ export default class privatePrinting extends React.PureComponent
                                  {/* txtPrice */}
                                  <Item>
                                     <Label text={this.t("txtPrice")} alignment="right" />
-                                    <NdNumberBox id="txtPrice" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE"}}
-                                    param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                    onValueChanged={(e)=>
-                                    {
-                                    }}>
-                                        <Validator validationGroup={"frmPriLabel" + this.tabIndex}>
-                                            <RangeRule min={0.001} message={this.t("valPrice")} />
-                                        </Validator> 
-                                    </NdNumberBox>
+                                    <div className='row'>
+                                        <div className='col-4 pe-0'>
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE"}}
+                                            param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                            onValueChanged={(e)=>
+                                            {
+                                            }}>
+                                                <Validator validationGroup={"frmPriLabel" + this.tabIndex}>
+                                                    <RangeRule min={0.001} message={this.t("valPrice")} />
+                                                </Validator> 
+                                            </NdNumberBox>
+                                        </div>
+                                        <div className='col-8'>
+                                            <div className='row'>
+                                                <div className='col-6 p-0'>
+                                                    <label className="col-form-label d-flex justify-content-end">{this.t("txtPriceRate") + " :"}</label>
+                                                </div>
+                                                <div className='col-6'>
+                                                    <NdNumberBox id="txtPriceRate" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE_RATE"}}
+                                                    param={this.param.filter({ELEMENT:'txtPriceRate',USERS:this.user.CODE})}
+                                                    access={this.access.filter({ELEMENT:'txtPriceRate',USERS:this.user.CODE})}
+                                                    onValueChanged={(e)=>
+                                                    {
+                                                        // if(this.txtPrice.value != 0 && e.value != null)
+                                                        // {
+                                                        //     console.log(e)
+                                                        //     this.txtPrice.value = Number(this.txtPrice.value).rateInNum(e.value)
+                                                        // }
+                                                    }}>
+                                                    </NdNumberBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Item>
                                  {/* txtDescription */}
                                  <Item>
@@ -471,7 +532,121 @@ export default class privatePrinting extends React.PureComponent
                                 </Item>
                             </Form>
                         </div>
+                         {/* UNIQ CODE PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popUniqCodeList"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popUniqCodeList.title")}
+                            container={"#root"} 
+                            width={'800'}
+                            height={'800'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <NdGrid parent={this} id={"grdUniqList"} 
+                                        filterRow={{visible:true}} 
+                                        height={'700'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        loadPanel={{enabled:true}}
+                                        >
+                                            <Paging defaultPageSize={18} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart"/>
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                            <Column dataField="NAME" caption={this.t("grdUniqList.clmName")} width={250} dataType={'number'} defaultSortOrder="desc"/>
+                                            <Column dataField="PRICE" caption={this.t("grdUniqList.clmPrice")} width={70} allowEditing={false}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdUniqList.clmDescription")} width={200} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdUniqList.clmQuantity")} dataType={'number'} width={50}/>
+                                            <Column type="buttons" width={70}>
+                                                <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
+                                            </Column>
+                                        </NdGrid>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>  
                     </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'180'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '02'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                let tmpQuery = 
+                                                {
+                                                    query:  "SELECT *, " +
+                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @TAG),'') AS PATH " +
+                                                            "FROM ITEM_LABEL_QUEUE_VW_01 WHERE GUID = @GUID" ,
+                                                    param:  ['GUID:string|50','TAG:string|25'],
+                                                    value:  [this.labelMainObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                }
+                                                App.instance.setState({isExecute:true})
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                App.instance.setState({isExecute:false})
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
+                                                {
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                    }
+                                                });
+
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>                
             </div>
         )

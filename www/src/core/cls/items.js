@@ -454,6 +454,7 @@ export class itemPriceCls
             TYPE : 0,
             TYPE_NAME : '',
             LIST_NO : 0,
+            LIST_VAT_TYPE : 0,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
@@ -463,6 +464,8 @@ export class itemPriceCls
             START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             PRICE : 0,
+            PRICE_TTC : 0,
+            PRICE_HT : 0,
             QUANTITY : 0,
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
@@ -909,6 +912,7 @@ export class itemBarcodeCls
             resolve(this.ds.get('ITEM_BARCODE'));    
         });
     }
+
     save()
     {
         return new Promise(async resolve => 
@@ -1539,7 +1543,6 @@ export class depotCls
             NAME : '',
             TYPE : 0,
             STATUS : true,
-           
         }
 
         this._initDs();
@@ -1655,6 +1658,7 @@ export class depotCls
         });
     }
 }
+
 export class itemLogPriceCls
 {
     constructor()
@@ -1686,7 +1690,7 @@ export class itemLogPriceCls
         let tmpDt = new datatable('PRICE_HISTORY');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 ORDER BY CDATE DESC",
+            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 

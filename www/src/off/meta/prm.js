@@ -407,6 +407,52 @@ export const prm =
             CAPTION : "Sabit Birim"
         }
     },
+    //BarcodePattern
+    {
+        TYPE : 0,
+        ID :"BarcodePattern",
+        VALUE : 
+        [
+            '20XXXXXMMMCCF',
+            '21NNNNNMMMCCF',
+            '29NNNNMMMCCF',
+            '29NNNNNMMMCCF',
+            '020NNNNMMMCCF',
+            '27NNNNNKKGGGF',
+        ],
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popTextList",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Barkod Desenleri",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
+    //Terazi Fiyat Çarpanı
+    {
+        TYPE : 0,
+        ID :"ScalePriceFactory",
+        VALUE : 1,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Terazi Fiyat Çarpanı"
+        }
+    },
     //#endregion
     //#region Stok Tanıtım
     //txtRef

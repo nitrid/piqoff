@@ -46,6 +46,22 @@ export const langFr =
     dtLastYear : "Année Dernière",
     txtTotalTicket : "Total des tickets de caisses",   
     txtTicketAvg : "Montant moyen des tickets de caisses", 
+    popUserList:
+    {
+        title: "Liste des utilisateurs",
+        clmCode: "Code",
+        clmName: "Nom"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous enregistrer les modifications apportées ?"
+        },
+    },
     popDbList : 
     {
         title : "Choix de la base de donnée", 
@@ -303,6 +319,7 @@ export const langFr =
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
         pos_01_002 : "Copier Pos Plu ",
+        pos_01_003 : "Descriptions des tickets",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -319,6 +336,7 @@ export const langFr =
         pos_02_013 : "Rapport de remise",  
         pos_02_014 : "Tickets de balance", 
         pos_02_015 : "Rapport vente client",
+        pos_02_016 : "Puan Hareketleri Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
@@ -535,6 +553,13 @@ export const langFr =
             pos: "Pos", 
             invoice : "Facture"
         },
+        msgDateInvalid:
+        {
+            title: "Avertissement",
+            msg: "Mauvaise date",
+            btn01: "Ok"
+        },
+
         pg_txtRef :
         {
             title: "Sélectionner Produit",
@@ -556,8 +581,9 @@ export const langFr =
             dtPopPriEndDate: "Date Fin", 
             cmbPopPriDepot: "Depot",
             txtPopPriQuantity: "Quantité",
-            txtPopPriPrice: "Prix de Vente TTC",
-            txtPopPriPriceVatExt: "Prix de Vente HT"
+            txtPopPriPrice: "Prix de Vente",
+            txtPopPriHT: "Prix de Vente HT",
+            txtPopPriTTC : "Prix de Vente TTC"
         },
         popUnit:
         {
@@ -594,8 +620,9 @@ export const langFr =
             clmStartDate: "Date Début",
             clmFinishDate: "Date Fin",
             clmQuantity: "Quantité",
-            clmVatExt: "Prix HT",
-            clmPrice: "Prix TTC",
+            clmPriceTTC : "Prix TTC",
+            clmPriceHT: "Prix HT",
+            clmPrice: "Prix",
             clmGrossMargin: "Marge Brute",
             clmNetMargin: "Marge Nette",
         },
@@ -3156,6 +3183,7 @@ export const langFr =
         tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
         chkRebate :"Retour-Reprise",
+        chkVatZero :"Sans TVA",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -4085,7 +4113,8 @@ export const langFr =
     },
     ftr_01_005 : // "Şube Satış Fatura Listesi"
     {
-        txtCustomerCode : "Magasin",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         menu:"Liste Facture Vente interne",
         pg_txtCustomerCode : 
         {
@@ -4178,7 +4207,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection fournisseur",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -4256,7 +4285,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -4776,7 +4806,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -4849,7 +4879,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -5277,7 +5308,8 @@ export const langFr =
             title :"Envoyer E-Mail",   
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -5345,7 +5377,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -5719,7 +5751,8 @@ export const langFr =
             title :"Envoyer E-Mail",   
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -5828,7 +5861,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -6177,7 +6210,8 @@ export const langFr =
             title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -6286,7 +6320,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -6479,7 +6513,8 @@ export const langFr =
             title: "Envoyer un e-mail",
             txtMailSubject: "Objet de l'e-mail",
             txtSendMail: "Adresse e-mail",
-            btnSend: "Envoyer"
+            btnSend: "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },        
         msgDelete:
         {
@@ -6710,7 +6745,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -6781,8 +6817,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -7219,15 +7255,16 @@ export const langFr =
             title: "Envoyer un e-mail",
             txtMailSubject: "Objet de l'e-mail",
             txtSendMail: "Adresse e-mail",
-            btnSend: "Envoyer"
+            btnSend: "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         }     
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -7418,7 +7455,8 @@ export const langFr =
             title: "Envoyer un e-mail",
             txtMailSubject: "Objet de l'e-mail",
             txtSendMail: "Adresse e-mail",
-            btnSend: "Envoyer"
+            btnSend: "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },        
         msgSaveValid:
         {
@@ -7695,7 +7733,8 @@ export const langFr =
             title :"Envoyer E-Mail",   
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -7715,7 +7754,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -7781,7 +7820,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Sujet de l'e-mail",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -8143,7 +8183,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -8206,8 +8247,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -8273,7 +8314,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -8679,7 +8721,8 @@ export const langFr =
             title :"Envoyer E-Mail",   
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -8699,8 +8742,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Dépot",
-        txtCustomerCode : "Code Fournisseur",
-        txtCustomerName : "Nom Fournisseur",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total",
         txtDiscount : "Remise sur les lignes",    
@@ -8760,7 +8803,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgDiscount:
         {
@@ -9079,7 +9123,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -9134,7 +9178,8 @@ export const langFr =
             title: "Envoyer un e-mail",
             txtMailSubject: "Objet de l'e-mail",
             txtSendMail: "Adresse e-mail",
-            btnSend: "Envoyer"
+            btnSend: "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -9519,7 +9564,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -9592,7 +9637,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Sujet de l'e-mail",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -10054,7 +10100,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -10118,7 +10164,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -10449,7 +10496,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -10513,7 +10560,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -11187,11 +11235,11 @@ export const langFr =
     },
     irs_01_004 : //" Şube Satış İrsaliye Listesi" 
     {
-        cmbCustomer :"Magasin",
+        cmbCustomer :"Client",
         btnGet :"Recherche",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
-        txtCustomerCode : "Magasin",
+        txtCustomerCode : "Code du Client",
         menu:"Saisie Bon de livraison interne",
         pg_txtCustomerCode : 
         {
@@ -11219,7 +11267,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection fournisseur",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11264,7 +11312,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -11657,7 +11706,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11672,6 +11721,7 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
         getOrders : "Sélection Commande", 
+        getOffers : "Recherche Proposition", 
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
@@ -11707,7 +11757,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -12039,7 +12090,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -12091,8 +12143,7 @@ export const langFr =
         getRebate : "Cherche dépôt retour",
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtDocNo : "Numéro de document", 
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -12416,7 +12467,8 @@ export const langFr =
             title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -12453,8 +12505,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom Magasin",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
@@ -12502,7 +12554,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -12825,7 +12878,8 @@ export const langFr =
             title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -12864,8 +12918,8 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         validDesign : "Veuillez sélectionner le design.",  
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         LINE_NO: "Numéro de ligne",
         txtDocNo : "Numéro de document", 
         dtDocDate : "Date",
@@ -12907,7 +12961,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -13227,8 +13282,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom Magasin",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
@@ -13581,7 +13636,8 @@ export const langFr =
             title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -13683,6 +13739,19 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgConvertDispatch :
+        {  
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn01: "Vazgeç",   // BAK
+            msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"            // BAK
+        },
+        msgConvertSucces :
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Seçilen Evrakları İrsaliyeye çevrildi.."           // BAK
+        },
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
     },
@@ -13690,7 +13759,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -13733,7 +13802,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -14086,7 +14156,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -14446,7 +14516,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -14487,7 +14558,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -14536,7 +14607,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -14865,7 +14937,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -15013,7 +15086,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_txtCustomerCode : 
         {
@@ -15128,7 +15202,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgContractValid:
         {
@@ -15389,7 +15464,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -15589,7 +15665,8 @@ export const langFr =
             title :"Envoyer Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -16847,6 +16924,19 @@ export const langFr =
             msg: "S'il vous plaît , choissisez un utilisateur !"  
         },
     },
+    pos_01_003 : // "Fiş sonu açıklamaları",
+    {
+        cmbFirm : "Nom de l'entreprise",
+        btnSave :"Enregistrer",
+        txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..", // BAK
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
+    },
     pos_02_001 : // "Satış Fiş Raporu",
     {
         TicketId :"Ticket I.D",
@@ -16897,7 +16987,8 @@ export const langFr =
             clmName : "Nom du produit",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmTime: "Heure",
         },
         grdSaleTicketPays : 
         {
@@ -17240,7 +17331,8 @@ export const langFr =
         {
             title: "Choix Produit",   
             clmCode: "Code",   
-            clmName: "NOM",    
+            clmName: "nom",    
+            clmBarcode: "code-barres", 
             clmStatus : "Statut" 
         },
         cancel : "Abandonner", 
@@ -17406,6 +17498,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Veuillez choisir un client !"
+        },
+    },
+    pos_02_016 : // "Puan Hareketleri raporu"
+    {
+        btnGet :"Getir",  // BAK
+        chkTicket : "Sadece Manuel Girişler",  // BAK
+        grdUseingPointReport: 
+        {
+            clmDate : "Tarih-Saat",  // BAK
+            clmCustomerCode : "Müşteri Kodu",  // BAK
+            clmCustomerName: "Müşteri Adı",  // BAK
+            clmTicket: "Fiş ID",  // BAK
+            clmPoint: "Puan",  // BAK
+            clmDescription : "Açıklama",  // BAK
         },
     },
     pos_03_001 : // "Gün sonu"
@@ -17591,7 +17697,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         validDesign : "Veuillez sélectionner le design.",  
@@ -17633,7 +17739,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -17941,7 +18048,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document:",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -17983,7 +18090,8 @@ export const langFr =
             title :"Envoyer un e-mail",
             txtMailSubject : "Objet du courriel",
             txtSendMail : "Adresse e-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -18289,7 +18397,8 @@ export const langFr =
             title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
-            btnSend : "Envoyer"   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -18324,8 +18433,8 @@ export const langFr =
     {
         txtRefRefno : "Série-Numéro",
         cmbDepot: "Entrepôt",
-        txtCustomerCode : "Code Client",
-        txtCustomerName : "Nom Client",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Remise par Ligne",
@@ -18396,7 +18505,8 @@ export const langFr =
             title :"Envoyer un E-mail",
             txtMailSubject : "Objet de l'E-mail",
             txtSendMail : "Adresse E-mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         pg_Docs : 
         {
@@ -18728,7 +18838,8 @@ export const langFr =
             title :"Envoi d'E-Mail",
             txtMailSubject : "Objet de l'E-Mail",
             txtSendMail : "Adresse E-Mail",
-            btnSend : "Envoyer"
+            btnSend : "Envoyer",
+            cmbMailAddress : "Gönderilen Mail Adresi" // BAK
         },
         msgMailSendResult:
         {
@@ -18820,6 +18931,7 @@ export const langFr =
         txtBarkod: "Code-barres", 
         txtRef: "Référence",
         txtPrice : "Prix ",
+        txtPriceRate : "Taux de prix", //BAK
         txtDescription : "Motif",
         txtItemName : "Nom du produit",
         txtQuantity : "Quantité", 
@@ -18864,6 +18976,23 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Nom du produit trop long. Veuillez le corriger et le réssaisir !"
+        },
+        grdUniqList : 
+        { 
+            clmName : "Nom",  
+            clmPrice : "Prix",  
+            clmDescription : "Description", 
+            clmQuantity : "Quantité"  
+        },
+        popUniqCodeList : 
+        {
+            title : "Liste des tickets "  
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
     },
     pos_02_003 : // "Pos Satış Raporu"
@@ -18966,7 +19095,7 @@ export const langFr =
     slsRpt_01_003 : // "Tarih sıralı satış raporu"
     {
         chkZeroBalance : "Afficher Soldes O",    
-        txtCustomerCode : "Fournisseur ou Client", 
+        txtCustomerCode : "Client", 
         btnCheck : "Actif",  
         btnGet :"Rechercher", 
         grdListe :    
@@ -18985,7 +19114,7 @@ export const langFr =
     slsRpt_01_004 : // "Tarih sıralı satış raporu"
     {
         chkZeroBalance : "Afficher Soldes 0",
-        txtCustomerCode : "Fournisseur ou Client", 
+        txtCustomerCode : "Client", 
         btnCheck : "Actif", 
         btnGet :"Rechercher", 
         grdListe :  

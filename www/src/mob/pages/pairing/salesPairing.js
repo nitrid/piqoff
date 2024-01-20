@@ -142,6 +142,28 @@ export default class salesPairing extends React.PureComponent
         this.cmbDepot.readOnly = true
         this.dtDocDate.readOnly = true
     }
+    async getOrders()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
+                            "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
+                            "FROM DOC_ORDERS_VW_01 " + 
+                            "WHERE CLOSED = 0 AND QUANTITY > COMP_QUANTITY AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " + 
+                            "GROUP BY REF,REF_NO,DOC_GUID,DOC_DATE,INPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,OUTPUT",
+                    param : ['FIRST_DATE:date','LAST_DATE:date'],
+                    value : [this.dtFirstDate.value,this.dtLastDate.value]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdOrderList.dataRefresh(tmpSource)
+    }
     getItem(pCode)
     {
         return new Promise(async resolve => 
@@ -193,18 +215,40 @@ export default class salesPairing extends React.PureComponent
             resolve(0)
         });
     }
-    async calcEntry()
-    {
-        if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
-        {
+    async calcEntry() {
+        // Vérifie si l'une des propriétés a une valeur différente de zéro
+        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
+            
+            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-            if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
-            {
-                this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,this.docObj.dt()[0].INPUT))).round(2)
+     
+            // Récupère la limite de quantité depuis les paramètres système
+            let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
+    
+            // Vérifie si la quantité temporaire dépasse la limite définie
+            if (tmpQuantity > prmLimitQuantity) {
+                // Affiche un message d'alerte et limite la valeur de txtQuantity à la limite définie
+                this.alertContent.content = (
+                    <div style={{ textAlign: "center", fontSize: "20px" }}>
+                        {this.t("msgAlert.msgLimitQuantityCheck")}
+                    </div>
+                );
+                await dialog(this.alertContent);
+                this.txtQuantity.value = prmLimitQuantity;
+                return; // Sort de la fonction si la quantité est limitée
             }
-            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2)
-            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT,2)
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT,2)
+    
+            // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
+            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
+                this.txtPrice.value = Number(
+                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                ).round(2);
+            }
+    
+            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
+            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
+            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
+            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
         }
     }
     async addItem()
@@ -381,6 +425,31 @@ export default class salesPairing extends React.PureComponent
     {
         this.pageView.activePage('Orders')
     }
+    async ordersSelect()
+    {
+        if(this.grdOrderList.getSelectedData().length)
+        {
+            this.docObj.dt()[0].OUTPUT = this.grdOrderList.getSelectedData()[0].DEPOT,
+            this.docObj.dt()[0].INPUT_CODE = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
+            this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
+            this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                param : ['REF:string|25'],
+                value : [this.txtRef.value]
+            }
+
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
+            }
+            this.onClickBarcodeShortcut.bind(this)
+        }
+    }
     render()
     {
         return(
@@ -436,6 +505,13 @@ export default class salesPairing extends React.PureComponent
                         shortcuts :
                         [
                             {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
+                        ]
+                    },
+                    {
+                        name : 'Orders',isBack : true,isTitle : false,
+                        shortcuts :
+                        [
+                            {icon : "fa-barcode",onClick : this.onClickOrdersShortcut.bind(this)}
                         ]
                     }
                 ]}
@@ -1365,12 +1441,27 @@ export default class salesPairing extends React.PureComponent
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.getOrders.bind(this)}>{this.t("lblList")}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-12'>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.ordersSelect.bind(this)}>{this.t("lblSelect")}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-12'>
                                             <NdGrid parent={this} id={"grdOrderList"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
                                             allowColumnResizing={true} 
                                             headerFilter = {{visible:false}}
+                                            selection={{mode:"single"}}
                                             height={'350'} 
                                             width={'100%'}
                                             dbApply={false}
@@ -1380,14 +1471,10 @@ export default class salesPairing extends React.PureComponent
                                                 <Paging defaultPageSize={10} />
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
-                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
-                                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdList.clmDiscountRate")} dataType={'number'} width={80}/>
-                                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
-                                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
+                                                <Column dataField="REF" caption={this.t("grdList.clmItemName")} width={80} />
+                                                <Column dataField="REF_NO" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmAmount")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmPrice")} width={150}/>
                                             </NdGrid>
                                         </div>
                                     </div>
