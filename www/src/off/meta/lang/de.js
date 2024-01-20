@@ -18414,8 +18414,7 @@ export const langDe =
             quantity2: "Gesamtmenge der 2. Einheit",
             margin: "Marge"
         }
-    },
-    
+    }, 
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {
         txtItemName : "Artikelname",
@@ -18477,6 +18476,7 @@ export const langDe =
         txtBarkod: "Barcode",
         txtRef: "Referenz",
         txtPrice : "Preis",
+        txtPriceRate : "Preisverhältnis", //BAK
         txtDescription : "Beschreibung",
         txtItemName : "Artikelname",
         txtQuantity : "Menge",
@@ -18532,7 +18532,13 @@ export const langDe =
         popUniqCodeList : 
         {
             title : "Etiket Listesi"  // BAK
-        }
+        },
+        popDesign : 
+        {
+            title: "Designauswahl",
+            design : "Design",
+            lang : "Dokumentsprache"
+        },
     },
     pos_02_003 : // "POS-Verkaufsbericht"
     {
