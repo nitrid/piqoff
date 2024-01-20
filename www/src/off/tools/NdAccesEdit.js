@@ -123,8 +123,6 @@ export default class NdAccessEdit extends Base
                     {
                         if(typeof item.state.accessValue != 'undefined' && typeof item.props.access != 'undefined')
                         {
-                            console.log(item.props.id)
-                            console.log(item.state.accessValue)
                             item.props.access.setValue(item.state.accessValue)
                             await item.props.access.save()
                         }

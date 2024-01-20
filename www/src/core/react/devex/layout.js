@@ -230,9 +230,6 @@ class NdLayoutItemBase extends Base
                                                 if(typeof this.state.accessValue != 'undefined' && typeof this.state.accessValue.visible != 'undefined')
                                                 {
                                                     this.state.accessValue.visible = this.state.accessValue.visible ? false : true
-                                                    this.setState({accessValue : this.state.accessValue})
-                                                    console.log(this.props.id)
-                                                    console.log(this.state.accessValue)
                                                     let tmpElm = document.getElementById(this.props.id + 'ico');
                                                     if (tmpElm) 
                                                     {

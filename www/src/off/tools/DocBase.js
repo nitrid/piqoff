@@ -738,6 +738,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.VAT = data[i].VAT
                 tmpDocItems.AMOUNT = data[i].AMOUNT
                 tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.TOTALHT = data[i].TOTALHT
                 tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                 tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -810,6 +811,7 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -842,6 +844,7 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -965,7 +968,6 @@ export default class DocBase extends React.PureComponent
     }
     async checkDocNo(pDocNo)
     {
-        console.log(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         {
             if(pDocNo != '')
