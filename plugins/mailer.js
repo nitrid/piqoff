@@ -23,10 +23,10 @@ class mailer
         })
     }
 
-    mailSend(pData)
+    async mailSend(pData)
     {
        
-        return new Promise(resolve =>
+        return new Promise(async resolve =>
         {
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
@@ -40,23 +40,42 @@ class mailer
                     }
                 ]
             }
+            let tmpQuery
+            if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.mailGuid]
+                }
+            }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE MASTER = 1 ",
+                }
+            }
+           
 
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             let transporter = nodemailer.createTransport(
             {
 
                 //service: 'imap.ionos.fr',
-                host: 'smtp.ionos.fr',
-                port: 465,
+                host: tmpResult[0].MAIL_SMTP,
+                port: tmpResult[0].MAIL_PORT,
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                  user: tmpResult[0].MAIL_ADDRESS,
+                  pass: tmpResult[0].MAIL_PASSWORD
                 },
                 //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "vente.esseylesnancy@ppsupermarche.fr",
+                from: tmpResult[0].MAIL_ADDRESS,
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,

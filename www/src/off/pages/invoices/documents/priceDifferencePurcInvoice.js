@@ -1911,7 +1911,7 @@ export default class priceDifferenceInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"popMailSend.txtMailSubject"} alignment="right" />
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
