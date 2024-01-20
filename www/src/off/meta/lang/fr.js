@@ -18931,6 +18931,7 @@ export const langFr =
         txtBarkod: "Code-barres", 
         txtRef: "Référence",
         txtPrice : "Prix ",
+        txtPriceRate : "Taux de prix", //BAK
         txtDescription : "Motif",
         txtItemName : "Nom du produit",
         txtQuantity : "Quantité", 
@@ -18986,7 +18987,13 @@ export const langFr =
         popUniqCodeList : 
         {
             title : "Liste des tickets "  
-        }
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     pos_02_003 : // "Pos Satış Raporu"
     {

@@ -232,6 +232,7 @@ export default class privatePrinting extends React.PureComponent
                                                         tmpEmpty.ITEM = this.txtRef.GUID
                                                         tmpEmpty.NAME = this.txtItemName.value
                                                         tmpEmpty.PRICE = this.txtPrice.value
+                                                        tmpEmpty.PRICE_RATE = this.txtPriceRate.value
                                                         tmpEmpty.DESCRIPTION = this.txtDescription.value
                                                         this.prilabelCls.addEmpty(tmpEmpty);  
                                                         tmpdefCode = Number(tmpdefCode) + 1
@@ -287,36 +288,7 @@ export default class privatePrinting extends React.PureComponent
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {
-                                        let tmpQuery = 
-                                        {
-                                            query:  "SELECT *, " +
-                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = @PAGE),'') AS PATH " +
-                                                    "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
-                                            param:  ['GUID:string|50','PAGE:string|25'],
-                                            value:  [this.labelMainObj.dt()[0].GUID,'02']
-                                        }
-                                        App.instance.setState({isExecute:true})
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        App.instance.setState({isExecute:false})
-                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
-                                        {
-                                            if(pResult.split('|')[0] != 'ERR')
-                                            {
-                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                mywindow.onload = function() 
-                                                {
-                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                } 
-                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                            }
-                                        });
-                                        let tmpUpdateQuery = 
-                                        {
-                                            query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
-                                            param:  ['GUID:string|50'],
-                                            value:  [this.labelMainObj.dt()[0].GUID]
-                                        }
+                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -497,16 +469,41 @@ export default class privatePrinting extends React.PureComponent
                                  {/* txtPrice */}
                                  <Item>
                                     <Label text={this.t("txtPrice")} alignment="right" />
-                                    <NdNumberBox id="txtPrice" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE"}}
-                                    param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                    onValueChanged={(e)=>
-                                    {
-                                    }}>
-                                        <Validator validationGroup={"frmPriLabel" + this.tabIndex}>
-                                            <RangeRule min={0.001} message={this.t("valPrice")} />
-                                        </Validator> 
-                                    </NdNumberBox>
+                                    <div className='row'>
+                                        <div className='col-4 pe-0'>
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE"}}
+                                            param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                            onValueChanged={(e)=>
+                                            {
+                                            }}>
+                                                <Validator validationGroup={"frmPriLabel" + this.tabIndex}>
+                                                    <RangeRule min={0.001} message={this.t("valPrice")} />
+                                                </Validator> 
+                                            </NdNumberBox>
+                                        </div>
+                                        <div className='col-8'>
+                                            <div className='row'>
+                                                <div className='col-6 p-0'>
+                                                    <label className="col-form-label d-flex justify-content-end">{this.t("txtPriceRate") + " :"}</label>
+                                                </div>
+                                                <div className='col-6'>
+                                                    <NdNumberBox id="txtPriceRate" parent={this} simple={true} dt={{data:this.prilabelCls.dt('ITEM_UNIQ'),field:"PRICE_RATE"}}
+                                                    param={this.param.filter({ELEMENT:'txtPriceRate',USERS:this.user.CODE})}
+                                                    access={this.access.filter({ELEMENT:'txtPriceRate',USERS:this.user.CODE})}
+                                                    onValueChanged={(e)=>
+                                                    {
+                                                        // if(this.txtPrice.value != 0 && e.value != null)
+                                                        // {
+                                                        //     console.log(e)
+                                                        //     this.txtPrice.value = Number(this.txtPrice.value).rateInNum(e.value)
+                                                        // }
+                                                    }}>
+                                                    </NdNumberBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Item>
                                  {/* txtDescription */}
                                  <Item>
@@ -574,6 +571,82 @@ export default class privatePrinting extends React.PureComponent
                             </NdPopUp>
                         </div>  
                     </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'180'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '02'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                let tmpQuery = 
+                                                {
+                                                    query:  "SELECT *, " +
+                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @TAG),'') AS PATH " +
+                                                            "FROM ITEM_LABEL_QUEUE_VW_01 WHERE GUID = @GUID" ,
+                                                    param:  ['GUID:string|50','TAG:string|25'],
+                                                    value:  [this.labelMainObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                }
+                                                App.instance.setState({isExecute:true})
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                App.instance.setState({isExecute:false})
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
+                                                {
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                    }
+                                                });
+
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>                
             </div>
         )

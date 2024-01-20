@@ -173,14 +173,40 @@ export default class NdSelectBox extends Base
         }
         else
         {
-            return (
-                <div className="dx-field">
-                    <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
-                    <div className="dx-field-value">
-                        {this._selectBoxView()}
+            // TITLE POZISYONU LEFT,RIGHT,TOP,BOTTOM 
+            if(typeof this.state.titleAlign == 'undefined')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label" style={{textAlign:'right'}}>{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
                     </div>
-                </div>
-            )            
+                )
+            }
+            else if(this.state.titleAlign == 'left')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
+                    </div>
+                )
+            }
+            else if(this.state.titleAlign == 'right')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label" style={{textAlign:'right'}}>{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
+                    </div>
+                )
+            }
         }
     }
 }

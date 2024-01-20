@@ -18655,6 +18655,7 @@ export const langTr =
         txtBarkod: "Barkod",
         txtRef: "Referans",
         txtPrice : "Fiyat",
+        txtPriceRate : "Fiyat Oran",
         txtDescription : "Açıklama",
         txtItemName : "Ürün Adı",
         txtQuantity : "Adet",
@@ -18710,7 +18711,13 @@ export const langTr =
         popUniqCodeList : 
         {
             title : "Etiket Listesi"
-        }
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     pos_02_003 : // "Pos Satış Raporu"
     {

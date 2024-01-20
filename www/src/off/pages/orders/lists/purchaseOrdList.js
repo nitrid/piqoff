@@ -295,11 +295,7 @@ export default class purchaseOrdList extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    <dialog open>
-                                        <p>
-                                            helloworld
-                                        </p>
-                                    </dialog>
+                
                                 </NdPopGrid>
                                 </Item> 
                             </Form>

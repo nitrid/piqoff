@@ -44,7 +44,7 @@ export default class rebateDispatch extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -1793,8 +1793,8 @@ export default class rebateDispatch extends DocBase
                             </Form>
                         </NdPopUp>
                     </div>
-                                        {/* Mail Send PopUp */}
-                                        <div>
+                        {/* Mail Send PopUp */}
+                        <div>
                         <NdPopUp parent={this} id={"popMailSend"} 
                         visible={false}
                         showCloseButton={true}
