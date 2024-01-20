@@ -965,7 +965,6 @@ export default class DocBase extends React.PureComponent
     }
     async checkDocNo(pDocNo)
     {
-        console.log(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         {
             if(pDocNo != '')

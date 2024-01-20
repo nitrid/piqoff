@@ -599,6 +599,55 @@ export default class posSalesOrder extends DocBase
             this.popMultiItem.hide()
         }
     }
+    getBarPattern(pBarcode)
+    {
+        pBarcode = pBarcode.toString().trim()
+        let tmpPrm = this.sysParam.filter({ID:'BarcodePattern',TYPE:0}).getValue();
+        
+        if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+        {            
+            return {barcode:pBarcode}
+        }
+        //201234012550 0211234012550
+        for (let i = 0; i < tmpPrm.length; i++) 
+        {
+            let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+            if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
+            {
+                let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpCentFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+
+                let tmpSumFlag = ""
+                if(tmpPrm[i].indexOf('F') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                }
+                else if(tmpPrm[i].indexOf('E') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                }
+                
+                let tmpFactory = 1
+                if(tmpSumFlag == 'F')
+                {
+                    tmpFactory =  this.sysParam.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
+                }
+
+                return {
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                }
+            }
+        }
+        return {barcode : pBarcode}
+    }
     render()
     {
         return(
@@ -1250,18 +1299,31 @@ export default class posSalesOrder extends DocBase
                                                 this.txtBarcode.setState({value:""})
                                                 return
                                             }
+                                            
+                                            let tmpBarPattern = this.getBarPattern(this.txtBarcode.value)
+                                            let tmpPrice = typeof tmpBarPattern.price == 'undefined' ? 0 : tmpBarPattern.price
+                                            let tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' ? 0 : tmpBarPattern.quantity
+                                            let pCode = tmpBarPattern.barcode  
+                                            
                                             let tmpQuery = 
                                             {  
                                                 query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
                                                 param : ['CODE:string|50','CUSTOMER:string|50'],
-                                                value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
+                                                value : [pCode,this.docObj.dt()[0].INPUT]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                this.msgQuantity.tmpData = tmpData.result.recordset[0]
-                                                await this.msgQuantity.show()
-                                                this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
+                                                if(tmpPrice != 0 || tmpQuantity != 0)
+                                                {
+                                                    this.addItem(tmpData.result.recordset[0],null,tmpQuantity == 0 ? 1 : tmpQuantity,tmpPrice)
+                                                }
+                                                else
+                                                {
+                                                    this.msgQuantity.tmpData = tmpData.result.recordset[0]
+                                                    await this.msgQuantity.show()
+                                                    this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
+                                                }
                                                 this.txtBarcode.focus()
                                             }
                                             else
