@@ -26,6 +26,22 @@ class devprint
         {
             let tmpData = ""
             let terminal = spawn(this.__dirname + "/devprint/lib/DevPrint")
+            
+            pData = pData.replace("TYPE",'"TYPE"')
+            pData = pData.replace("PATH",'"PATH"')
+            pData = pData.replace("DATA",'"DATA"')
+            pData = pData.replaceAll("'",'"')
+
+            try 
+            {
+                let jsonObj = JSON.parse(pData);
+                jsonObj.PATH = this.__dirname + "/devprint/repx/" + jsonObj.PATH
+                pData = JSON.stringify(jsonObj)
+            } catch (error) 
+            {
+                console.error("JSON parse hatası:", error.message);
+            }
+
             terminal.stdin.write(pData + "\n");
 
             terminal.stdout.on('data', function (data) 

@@ -20,6 +20,7 @@ export const langFr =
     dtLastMount : "Mois Dernier",
     dtYear : "Année Courante",
     dtLastYear : "Année Dernière",
+    chkRememberMe : "Souviens-toi de moi", // BAK
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -57,6 +58,15 @@ export const langFr =
         purchasePriceDown : "Qte Prix d'Achat Diminué",
         salePriceDown : "Qte Prix de Vente Diminué",
         purchasePriceUp : "Qte Prix d'Achat Augmenté",
-        salePriceUp : "Qte Prix de Vente Augmenté"
+        salePriceUp : "Qte Prix de Vente Augmenté",
+        salesTotalDetail : "Détail des Ventes",
+        detail : "Détail",
+        grdSalesVatRate :
+        {
+            vatRate : "TVA %",
+            amount : "HT",
+            vat : "TVA",
+            total : "TTC"
+        }
     },
 }

@@ -334,6 +334,8 @@ export const langEs =
         }
     },
     txtPopLastRefPholder : "Por favor, lea el código de barras en el ticket...",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal : 
     {
         title : "Último Total de Ventas"

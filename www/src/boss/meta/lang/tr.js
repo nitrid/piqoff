@@ -20,6 +20,7 @@ export const langTr =
     dtLastMount : "Geçen Ay",
     dtYear : "Bu Yıl",
     dtLastYear : "Geçen Yıl",
+    chkRememberMe : "Beni Hatırla", 
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -58,6 +59,15 @@ export const langTr =
         purchasePriceDown : "Alış Fiyatı Düşen Ürün Adeti",
         salePriceDown : "Satış Fiyatı Düşen Ürün Adeti",
         purchasePriceUp : "Alış Fiyatı Artan Ürün Adeti",
-        salePriceUp : "Satış Fiyatı Artan Ürün Adeti"
+        salePriceUp : "Satış Fiyatı Artan Ürün Adeti",
+        salesTotalDetail : "Satış Detayı",
+        detail : "Detay",
+        grdSalesVatRate :
+        {
+            vatRate : "KDV %",
+            amount : "Vergisiz",
+            vat : "KDV",
+            total : "Vergili"
+        }
     },
 }

@@ -334,6 +334,8 @@ export const langDe =
         }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal: 
     {
         title: "Letzte Zahlung"
@@ -391,6 +393,7 @@ export const langDe =
         msg: "Bitte scannen Sie die Rückgabe-Ticketsrestorants ein!",
         btn01: "OK",
         btn02: "Abbrechen",
+        btn03 : "Fiş Seçimi" // BAK
     },
     msgItemReturnType: 
     {
