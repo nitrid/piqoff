@@ -44,7 +44,7 @@ export default class rebateDispatch extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -1793,8 +1793,8 @@ export default class rebateDispatch extends DocBase
                             </Form>
                         </NdPopUp>
                     </div>
-                                        {/* Mail Send PopUp */}
-                                        <div>
+                        {/* Mail Send PopUp */}
+                        <div>
                         <NdPopUp parent={this} id={"popMailSend"} 
                         visible={false}
                         showCloseButton={true}
@@ -1807,6 +1807,19 @@ export default class rebateDispatch extends DocBase
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
@@ -1860,7 +1873,7 @@ export default class rebateDispatch extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})

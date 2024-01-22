@@ -193,19 +193,40 @@ export default class rebateDispatch extends React.PureComponent
             resolve(0)
         });
     }
-    async calcEntry()
-    {
-        if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
-        {
-            console.log(this.txtDiscount.value)
+    async calcEntry() {
+        // Vérifie si l'une des propriétés a une valeur différente de zéro
+        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
+            
+            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-            if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
-            {
-                this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,this.docObj.dt()[0].INPUT))).round(2)
+     
+            // Récupère la limite de quantité depuis les paramètres système
+            let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
+    
+            // Vérifie si la quantité temporaire dépasse la limite définie
+            if (tmpQuantity > prmLimitQuantity) {
+                // Affiche un message d'alerte et limite la valeur de txtQuantity à la limite définie
+                this.alertContent.content = (
+                    <div style={{ textAlign: "center", fontSize: "20px" }}>
+                        {this.t("msgAlert.msgLimitQuantityCheck")}
+                    </div>
+                );
+                await dialog(this.alertContent);
+                this.txtQuantity.value = prmLimitQuantity;
+                return; // Sort de la fonction si la quantité est limitée
             }
-            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2)
-            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT,2)
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT,2)
+    
+            // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
+            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
+                this.txtPrice.value = Number(
+                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                ).round(2);
+            }
+    
+            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
+            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
+            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
+            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
         }
     }
     async addItem()
@@ -297,7 +318,6 @@ export default class rebateDispatch extends React.PureComponent
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
 
-        console.log(tmpDocItems)
         this.docObj.docItems.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -889,10 +909,8 @@ export default class rebateDispatch extends React.PureComponent
                                     <div className='col-12'>
                                         <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                             onClick={(() =>
-                                            {
-                                                
+                                            { 
                                                 this.calcEntry(false)
-                                                console.log(this.popDiscount)
                                                 this.popDiscount.hide()
                                             }).bind(this)
                                         }>{this.t("lblAdd")}
@@ -1045,9 +1063,6 @@ export default class rebateDispatch extends React.PureComponent
                                                         icon:'more',
                                                         onClick:()  =>
                                                         {
-                                                            console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                            console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                            console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                             if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                             {
                                                                 this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)

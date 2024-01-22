@@ -1260,6 +1260,12 @@ export const menu = (e) =>
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
                             path: 'pos/report/balanceTicket'
+                        },
+                        //Okunmamış Terazi Fişleri Raporu 
+                        {
+                            id: 'pos_02_016',
+                            text: e.t('menuOff.pos_02_016'),
+                            path: 'pos/report/usingPointReport'
                         }
                     ]
                 },

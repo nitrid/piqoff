@@ -19,11 +19,11 @@ import { PageBar } from '../../tools/pageBar.js';
 import { PageView,PageContent } from '../../tools/pageView.js';
 import moment from 'moment';
 
-export default class salesPairing extends React.PureComponent
+export default class specialPurcOrder extends React.PureComponent
 {
     constructor(props)
-    {
-        super(props)
+    { 
+        super(props) 
         this.core = App.instance.core;
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
@@ -31,39 +31,17 @@ export default class salesPairing extends React.PureComponent
         this.unitDt = new datatable();
         this.priceDt = new datatable();        
         this.orderDt = new datatable();
-
+        this.state = 
+        {
+            image:'../../css/img/noimage.jpg',
+            price : 0,
+            name :"",
+            factor : 1,
+        }
         this.itemDt.selectCmd = 
         {
-            query : "SELECT    "  +
-            "ITEMS.GUID AS GUID,   "  +
-            "ITEMS.TYPE AS TYPE,   "  +
-            "ITEMS.SPECIAL AS SPECIAL,   "  +
-            "ITEMS.CODE AS CODE,   "  +
-            "ITEMS.NAME AS NAME,   "  +
-            "ITEMS.VAT AS VAT,   "  +
-            "ITEMS.COST_PRICE AS COST_PRICE,   "  +
-            "ITEMS.STATUS AS STATUS,   "  +
-            "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
-            "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
-            "MAX(BARCODE) AS BARCODE,   "  +
-            "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
-            "ORDERS.GUID AS ORDER_LINE_GUID,   "  +
-            "ORDERS.DOC_GUID AS ORDER_DOC_GUID,   "  +
-            "ORDERS.QUANTITY AS QUANTITY,   "  +
-            "(ORDERS.QUANTITY - ORDERS.COMP_QUANTITY) AS PEND_QUANTITY,   "  +
-            "ORDERS.PRICE AS PRICE,   "  +
-            "ORDERS.DISCOUNT_1 AS DISCOUNT_1,   "  +
-            "ORDERS.DISCOUNT_2 AS DISCOUNT_2,   "  +
-            "ORDERS.DISCOUNT_3 AS DISCOUNT_3,   "  +
-            "ORDERS.DOC_DISCOUNT_1 AS DOC_DISCOUNT_1,   "  +
-            "ORDERS.DOC_DISCOUNT_2 AS DOC_DISCOUNT_2,   "  +
-            "ORDERS.DOC_DISCOUNT_3 AS DOC_DISCOUNT_3,   "  +
-            "ORDERS.VAT AS VAT,   "  +
-            "ORDERS.VAT_RATE AS VAT_RATE   "  +
-            "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
-            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM   "  +
-            "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
-            param : ['CODE:string|25'],
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER_GUID)) OR (@CODE = '')",
+            param : ['CODE:string|25','CUSTOMER_GUID:string|50'],
         }
         this.unitDt.selectCmd = 
         {
@@ -72,7 +50,7 @@ export default class salesPairing extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 
@@ -87,30 +65,47 @@ export default class salesPairing extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
-
+        
         this.dtDocDate.value = moment(new Date())
 
         await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
-
+        
         let tmpDoc = {...this.docObj.empty}
 
-        tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 40
+        tmpDoc.TYPE = 0
+        tmpDoc.DOC_TYPE = 60
         tmpDoc.REF = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'txtRef'}).getValue().value
-        tmpDoc.OUTPUT = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
+        tmpDoc.INPUT = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
+        if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value != '')
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT * FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                param : ['CODE:string|50'],
+                value : [this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpDoc.OUTPUT = tmpData.result.recordset[0].GUID
+                tmpDoc.OUTPUT_CODE = tmpData.result.recordset[0].CODE
+                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].NAME
+                tmpDoc.REF = tmpData.result.recordset[0].CODE
+            }
+        }
 
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
         this.txtRefNo.readOnly = false
         this.cmbDepot.readOnly = false
-        this.dtDocDate.readOnly = false
+        this.dtDocDate.readOnly = false        
 
         this.clearEntry();
 
         this.txtRef.props.onChange(tmpDoc.REF)
 
-        await this.grdList.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdList.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.cmbUnit.dataRefresh({source : this.unitDt})
     }
     async componentDidMount()
@@ -129,40 +124,21 @@ export default class salesPairing extends React.PureComponent
         this.orderDt.push({UNIT:"",FACTOR:0,QUANTITY:0,PRICE:0,AMOUNT:0,DISCOUNT:0,DISCOUNT_RATE:0,VAT:0,SUM_AMOUNT:0})
 
         this.lblItemName.value = ""
-        this.lblDepotQuantity.value = 0
+        this.setState({price:0})
+        this.setState({factor:1})
+        this.setState({image:"../../css/img/noimage.jpg"})
         this.cmbUnit.setData([])
+        this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:60});
         
         this.txtRef.readOnly = true
         this.txtRefNo.readOnly = true
         this.cmbDepot.readOnly = true
         this.dtDocDate.readOnly = true
-    }
-    async getOrders()
-    {
-        let tmpSource =
-        {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
-                            "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
-                            "FROM DOC_ORDERS_VW_01 " + 
-                            "WHERE CLOSED = 0 AND QUANTITY > COMP_QUANTITY AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " + 
-                            "GROUP BY REF,REF_NO,DOC_GUID,DOC_DATE,INPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,OUTPUT",
-                    param : ['FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.dtFirstDate.value,this.dtLastDate.value]
-                },
-                sql : this.core.sql
-            }
-        }
-        await this.grdOrderList.dataRefresh(tmpSource)
     }
     getItem(pCode)
     {
@@ -170,7 +146,7 @@ export default class salesPairing extends React.PureComponent
         {
             this.clearEntry();
             
-            this.itemDt.selectCmd.value = [pCode]
+            this.itemDt.selectCmd.value = [pCode,this.docObj.dt()[0].OUTPUT]
             await this.itemDt.refresh();  
             
             if(this.itemDt.length > 0)
@@ -184,8 +160,7 @@ export default class salesPairing extends React.PureComponent
                 if(this.unitDt.length > 0)
                 {
                     this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
-                    this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onValueChanged()
+                    this.setState({factor:this.unitDt.where({TYPE:0})[0].FACTOR})
                 }
 
                 this.txtBarcode.value = ""
@@ -199,6 +174,7 @@ export default class salesPairing extends React.PureComponent
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
+            this.setState({price:await this.getPrice(this.itemDt[0].GUID, 1, this.docObj.dt()[0].OUTPUT)})
             resolve();
         });
     }
@@ -217,10 +193,10 @@ export default class salesPairing extends React.PureComponent
     }
     async calcEntry() {
         // Vérifie si l'une des propriétés a une valeur différente de zéro
-        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
+        if (this.state.factor !== 0 || this.txtQuantity.value !== 0 || this.state.price !== 0) {
             
             // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
-            let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
+            let tmpQuantity = this.state.factor * this.txtQuantity.value;
      
             // Récupère la limite de quantité depuis les paramètres système
             let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
@@ -240,15 +216,14 @@ export default class salesPairing extends React.PureComponent
     
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
             if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
-                this.txtPrice.value = Number(
+                let price = Number(
                     (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
-                ).round(2);
+                ).round(3);
             }
     
             // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
-            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
-            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
+            this.state.amount = Number(this.state.price * tmpQuantity).round(2);
+            this.state.vat = Number(this.state.amount).rateInc(this.itemDt[0].VAT, 2);
         }
     }
     async addItem()
@@ -272,17 +247,18 @@ export default class salesPairing extends React.PureComponent
         {     
             let tmpFnMergeRow = async (i) =>
             {
-                let tmpQuantity = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
-                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + tmpQuantity
-                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
-                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                let tmpQuantity = this.orderDt[0].QUANTITY *this.state.factor
+                this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + tmpQuantity
+                this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
+                this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
+                this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
                 this.clearEntry()
                 await this.save()
-            }
-            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+            }       
+
+            for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
             {
-                if(this.docObj.docItems.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
+                if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
                 {
                     if(prmRowMerge == 2)
                     {
@@ -312,8 +288,8 @@ export default class salesPairing extends React.PureComponent
                 }
             }
         }
-
-        let tmpDocItems = {...this.docObj.docItems.empty}
+        
+        let tmpDocItems = {...this.docObj.docOrders.empty}
 
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
@@ -323,24 +299,24 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+        tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
         tmpDocItems.UNIT = this.orderDt[0].UNIT
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpDocItems.DISCOUNT = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_1 = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_RATE = this.orderDt[0].DISCOUNT_RATE
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.DISCOUNT = 0
+        tmpDocItems.DISCOUNT_1 = 0
+        tmpDocItems.DISCOUNT_RATE = 0
+        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
+        tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.state.factor
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT
-        tmpDocItems.PRICE = this.orderDt[0].PRICE
-        tmpDocItems.VAT = this.orderDt[0].VAT
-        tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
-        tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
-        tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
+        tmpDocItems.PRICE = this.state.price
+        tmpDocItems.VAT = this.state.vat
+        tmpDocItems.AMOUNT = this.state.amount
+        tmpDocItems.TOTALHT = Number(this.state.amount).round(2)
+        tmpDocItems.TOTAL =  this.state.amount + this.state.vat
 
         console.log(tmpDocItems)
-        this.docObj.docItems.addEmpty(tmpDocItems)
+        this.docObj.docOrders.addEmpty(tmpDocItems)
         this.clearEntry()
 
         await this.save()
@@ -352,22 +328,21 @@ export default class salesPairing extends React.PureComponent
             if(this.docObj.dt().length > 0)
             {
                 let tmpVat = 0
-                for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                for (let i = 0; i < this.docObj.docOrders.dt().groupBy('VAT_RATE').length; i++) 
                 {
-                    tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                    tmpVat = tmpVat + parseFloat(this.docObj.docOrders.dt().where({'VAT_RATE':this.docObj.docOrders.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                 }
-                this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-                this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))).round(2)
-                this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_1",4)
-                this.docObj.dt()[0].DOC_DISCOUNT_2 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_2",4)
-                this.docObj.dt()[0].DOC_DISCOUNT_3 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_3",4)
-                this.docObj.dt()[0].DOC_DISCOUNT = Number((parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
+                this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
+                this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docOrders.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2))).round(2)
+                this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_1",4)
+                this.docObj.dt()[0].DOC_DISCOUNT_2 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_2",4)
+                this.docObj.dt()[0].DOC_DISCOUNT_3 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_3",4)
+                this.docObj.dt()[0].DOC_DISCOUNT = Number((parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
                 this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
-                this.docObj.dt()[0].SUBTOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
-                this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
+                this.docObj.dt()[0].SUBTOTAL = parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2))
+                this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT",2))).round(2)
                 this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
             }
-            
             let tmpConfObj1 =
             {
                 id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -395,13 +370,13 @@ export default class salesPairing extends React.PureComponent
     }
     async onClickBarcodeShortcut()
     {
-        if(this.docObj.dt()[0].OUTPUT == '')
+        if(this.docObj.dt()[0].INPUT == '')
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDepot")}</div>)
             await dialog(this.alertContent);
             return
         }
-        if(this.docObj.dt()[0].INPUT == '')
+        if(this.docObj.dt()[0].OUTPUT == '')
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgCustomer")}</div>)
             await dialog(this.alertContent);
@@ -412,7 +387,7 @@ export default class salesPairing extends React.PureComponent
     }
     async onClickProcessShortcut()
     {
-        if(this.docObj.dt("DOC_ITEMS").length == 0)
+        if(this.docObj.dt("DOC_ORDERS").length == 0)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgProcess")}</div>)
             await dialog(this.alertContent);
@@ -421,101 +396,65 @@ export default class salesPairing extends React.PureComponent
 
         this.pageView.activePage('Process')
     }
-    async onClickOrdersShortcut()
-    {
-        this.pageView.activePage('Orders')
-    }
-    async ordersSelect()
-    {
-        if(this.grdOrderList.getSelectedData().length)
-        {
-            this.docObj.dt()[0].OUTPUT = this.grdOrderList.getSelectedData()[0].DEPOT,
-            this.docObj.dt()[0].INPUT_CODE = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
-            this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
-            this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
-            this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER
-            let tmpQuery = 
-            {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
-                param : ['REF:string|25'],
-                value : [this.txtRef.value]
-            }
-
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-            if(tmpData.result.recordset.length > 0)
-            {
-                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
-            }
-            this.onClickBarcodeShortcut.bind(this)
-        }
-    }
     render()
     {
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.irs_02")} content=
-                {[
-                    {
-                        name : 'Main',isBack : false,isTitle : true,
-                        menu :
-                        [
-                            {
-                                icon : "fa-file",
-                                text : this.lang.t("btnNewDoc"),
-                                onClick : ()=>
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_99")} content=
+                    {[
+                        {
+                            name : 'Main',isBack : false,isTitle : true,
+                            menu :
+                            [
                                 {
-                                    this.init()
-                                }
-                            },
-                            {
-                                icon : "fa-trash",
-                                text : this.lang.t("btnDocDelete"),
-                                onClick : ()=>
-                                {
-                                    if(this.docObj.dt().length > 0)
+                                    icon : "fa-file",
+                                    text : this.lang.t("btnNewDoc"),
+                                    onClick : ()=>
                                     {
-                                        this.deleteAll();
+                                        this.init()
+                                    }
+                                },
+                                {
+                                    icon : "fa-trash",
+                                    text : this.lang.t("btnDocDelete"),
+                                    onClick : ()=>
+                                    {
+                                        if(this.docObj.dt().length > 0)
+                                        {
+                                            this.deleteAll();
+                                        }
                                     }
                                 }
-                            }
-                        ]
-                    },
-                    {
-                        name : 'Entry',isBack : true,isTitle : false,
-                        menu :
-                        [
-                            {
-                                icon : "fa-percent",
-                                text : this.lang.t("btnLineDisc"),
-                                onClick : ()=>
+                            ]
+                        },
+                        {
+                            name : 'Entry',isBack : true,isTitle : false,
+                            menu :
+                            [
                                 {
-                                    this.popDiscount.show()
+                                    icon : "fa-percent",
+                                    text : this.lang.t("btnLineDisc"),
+                                    onClick : ()=>
+                                    {
+                                        this.popDiscount.show()
+                                    }
                                 }
-                            }
-                        ],
-                        shortcuts :
-                        [
-                            {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
-                        ]
-                    },
-                    {
-                        name : 'Process',isBack : true,isTitle : false,
-                        shortcuts :
-                        [
-                            {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
-                        ]
-                    },
-                    {
-                        name : 'Orders',isBack : true,isTitle : false,
-                        shortcuts :
-                        [
-                            {icon : "fa-barcode",onClick : this.onClickOrdersShortcut.bind(this)}
-                        ]
-                    }
-                ]}
-                onBackClick={()=>{this.pageView.activePage('Main')}}/>
+                            ],
+                            shortcuts :
+                            [
+                                {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
+                            ]
+                        },
+                        {
+                            name : 'Process',isBack : true,isTitle : false,
+                            shortcuts :
+                            [
+                                {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
+                            ]
+                        }
+                    ]}
+                    onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'50px',height:'100%'}}>
                     <PageView id={"pageView"} parent={this} 
@@ -538,7 +477,7 @@ export default class salesPairing extends React.PureComponent
                                                         {
                                                             let tmpQuery = 
                                                             {
-                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
                                                                 param : ['REF:string|25'],
                                                                 value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
                                                             }
@@ -604,7 +543,7 @@ export default class salesPairing extends React.PureComponent
                                                         {
                                                             select:
                                                             {
-                                                                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                                                                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
                                                             },
                                                             sql:this.core.sql
                                                         }
@@ -613,8 +552,8 @@ export default class salesPairing extends React.PureComponent
                                                         <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
                                                         <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
                                                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
-                                                        <Column dataField="INPUT_NAME" caption={this.t("popDoc.clmInputName")} width={200}  />
-                                                        <Column dataField="INPUT_CODE" caption={this.t("popDoc.clmInputCode")} width={150}  />
+                                                        <Column dataField="OUTPUT_NAME" caption={this.t("popDoc.clmOutputName")} width={200}  />
+                                                        <Column dataField="OUTPUT_CODE" caption={this.t("popDoc.clmOutputCode")} width={150}  />
                                                     </NdPopGrid>
                                                 </div>
                                             </div>
@@ -624,14 +563,14 @@ export default class salesPairing extends React.PureComponent
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot")}</div>
                                         <div className='col-9'>
                                             <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                            dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
+                                            dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblCustomerCode")}</div>
                                         <div className='col-9'>
                                             <NdTextBox id="txtCustomerCode" parent={this} simple={true} readOnly={true} maxLength={32}
-                                            dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                            dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                             button=
                                             {
                                                 [
@@ -645,9 +584,9 @@ export default class salesPairing extends React.PureComponent
                                                             { 
                                                                 if(data.length > 0)
                                                                 {
-                                                                    this.docObj.dt()[0].INPUT = data[0].GUID
-                                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                                    this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                                    this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                                    this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                                 
                                                                     if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()?.value ==  true)
                                                                     {
@@ -698,33 +637,13 @@ export default class salesPairing extends React.PureComponent
                                     <div className='row pb-2'>
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblCustomerName")}</div>
                                         <div className='col-9'>
-                                            <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}}/>
+                                            <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
                                         <div className='col-9'>
                                             <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.onClickOrdersShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-list"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
-                                                    </div>
-                                                </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnOrderSelect")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
-                                        </div>
-                                        <div className='col-6'>
-                                           
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -864,92 +783,80 @@ export default class salesPairing extends React.PureComponent
                                             </h6>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                <label className='text-purple-light'>{this.t("lblDepotQuantity")}</label>
-                                                <NbLabel id="lblDepotQuantity" parent={this} value={0}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblUnit")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                             dt={{data:this.orderDt,field:"UNIT"}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null && e.value != "")
-                                                {
-                                                    let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                    if(tmpFactor.length > 0)
+                                    <div className="card shadow-sm">
+                                        <img src={this.state.image} className="card-img-top" height={'220px'} 
+                                        onClick={()=>
+                                        {
+                                            
+                                        }}/>
+                                        <div className="card-body">
+                                            <div className='row pb-2'>
+                                                <div className='col-6'>
+                                                    <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
+                                                </div>
+                                                <div className='col-6'>
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
+                                                    dt={{data:this.orderDt,field:"UNIT"}}
+                                                    onValueChanged={(e)=>
                                                     {
-                                                        this.txtFactor.value = tmpFactor[0].FACTOR
-                                                        this.txtFactor.props.onValueChanged()
-                                                    }
-                                                }
-                                            }}/>
+                                                        if(e.value != null && e.value != "")
+                                                        {
+                                                            let tmpFactor = this.unitDt.where({GUID:e.value});
+                                                            if(tmpFactor.length > 0)
+                                                            {
+                                                                this.state.factor = tmpFactor[0].FACTOR
+                                                            }
+                                                        }
+                                                    }}/>
+                                                </div>
+                                            </div>
+                                            <div className='row pb-1'>
+                                                <div className='col-12'>
+                                                    <div className="overflow-hidden" style={{height:'75px'}}>{ this.state.name}</div>
+                                                </div>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-12'>
+                                                    <NdTextBox id={"txtQuantity" } readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                    selectAll={false}
+                                                    value={0}
+                                                    onChange={(async(e)=>
+                                                    {
+                                                        console.log(e)
+                                                    }).bind(this)}
+                                                    onValueChanged={this.calcEntry.bind(this)}
+                                                    button={
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'minus',
+                                                            location:'before',
+                                                            onClick:async()=>
+                                                            {
+                                                                if(this.txtQuantity.value > 0)
+                                                                {
+                                                                    this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                                }
+                                                                
+                                                            }
+                                                        },
+                                                        {
+                                                            id:'02',
+                                                            icon:'plus',
+                                                            location:'after',
+                                                            onClick:async()=>
+                                                            {
+                                                                this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
+                                                            }
+                                                        }                                                    
+                                                    ]}>
+                                                    </NdTextBox>
+                                                </div>                                            
+                                            </div>
+                                            {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblQuantity")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                        <div className='col-1 d-flex align-items-center justify-content-center'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblAmount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtAmount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"AMOUNT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblDiscount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtDiscount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"DISCOUNT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblVat")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtVat" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"VAT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblSumAmount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtSumAmount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"SUM_AMOUNT"}}/>
-                                        </div>
-                                    </div>
+                                  
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
@@ -959,60 +866,6 @@ export default class salesPairing extends React.PureComponent
                                     </div>
                                 </div>
                             </div>
-                            {/* İNDİRİM POPUP */}
-                            <NdPopUp parent={this} id={"popDiscount"} 
-                            visible={false}                        
-                            showCloseButton={false}
-                            showTitle={true}
-                            title={this.lang.t("popDiscount.title")}
-                            container={"#root"} 
-                            width={"250"}
-                            height={"190"}
-                            position={{of:"#root"}}
-                            >
-                                <div className='row p-1'>
-                                    <div className='col-4 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDisc")}</label>                                            
-                                    </div>
-                                    <div className='col-8'>
-                                        <NdTextBox id="txtPopDisc" parent={this} simple={true} maxLength={32} 
-                                        onValueChanged={() =>
-                                        {
-                                            this.txtPopDiscRate.value = Number(this.txtPrice.value * this.txtQuantity.value).rate2Num(this.txtPopDisc.value)
-                                        }} 
-                                        dt={{data:this.orderDt,field:"DISCOUNT"}} 
-                                        onEnterKey={{}}/>
-                                    </div>
-                                </div>
-                                <div className='row p-1'>
-                                    <div className='col-4 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDiscRate")}</label>                                            
-                                    </div>
-                                    <div className='col-8'>
-                                        <NdTextBox id="txtPopDiscRate" parent={this} simple={true} maxLength={32} 
-                                        onValueChanged={() =>
-                                        {
-                                            this.txtPopDisc.value = Number(this.txtPrice.value * this.txtQuantity.value).rateInc(this.txtPopDiscRate.value,4)
-                                        }}
-                                        dt={{data:this.orderDt,field:"DISCOUNT_RATE"}} 
-                                        onEnterKey={{}}/>
-                                    </div>
-                                </div>
-                                <div className="row p-1">
-                                    <div className='col-12'>
-                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={(() =>
-                                            {
-                                                
-                                                this.calcEntry(false)
-                                                console.log(this.popDiscount)
-                                                this.popDiscount.hide()
-                                            }).bind(this)
-                                        }>{this.t("lblAdd")}
-                                        </NbButton>
-                                    </div>
-                                </div>
-                            </NdPopUp>
                         </PageContent>
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
@@ -1040,7 +893,7 @@ export default class salesPairing extends React.PureComponent
                                             }}
                                             onRowRemoved={async (e)=>
                                             {
-                                                if(this.docObj.docItems.dt().length == 0)
+                                                if(this.docObj.docOrders.dt().length == 0)
                                                 {
                                                     this.deleteAll()
                                                 }
@@ -1052,7 +905,7 @@ export default class salesPairing extends React.PureComponent
                                             }}
                                             onRowUpdating={async (e)=>
                                             {
-                                                if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                                 {
                                                     e.cancel = true
                                                     this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
@@ -1065,7 +918,7 @@ export default class salesPairing extends React.PureComponent
                                                 if(typeof e.data.QUANTITY != 'undefined')
                                                 {
                                                     e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].INPUT))).round(2)
+                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].OUTPUT))).round(2)
                                                     await this.save()
                                                 }
                                                 if(typeof e.data.PRICE != 'undefined')
@@ -1396,9 +1249,9 @@ export default class salesPairing extends React.PureComponent
                                         <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                             onClick={(async () =>
                                             {
-                                                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                                 {
-                                                    let tmpDocData = this.docObj.docItems.dt()[i]
+                                                    let tmpDocData = this.docObj.docOrders.dt()[i]
                                                     
                                                     tmpDocData.DOC_DISCOUNT_1 = Number(tmpDocData.TOTALHT).rateInc(this.txtDocDiscountPercent1.value,4)
                                                     tmpDocData.DOC_DISCOUNT_2 = Number(((tmpDocData.TOTALHT) - tmpDocData.DOC_DISCOUNT_1)).rateInc(this.txtDocDiscountPercent2.value,4)
@@ -1423,63 +1276,6 @@ export default class salesPairing extends React.PureComponent
                                     </div>
                                 </div>
                             </NdPopUp> 
-                        </PageContent>
-                        <PageContent id={"Orders"}>
-                            <div className='row px-2'>
-                                <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
-                                        <div className='col-9'>
-                                            <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"} pickerType={"rollers"}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
-                                        <div className='col-9'>
-                                            <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.getOrders.bind(this)}>{this.t("lblList")}
-                                            </NbButton>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.ordersSelect.bind(this)}>{this.t("lblSelect")}
-                                            </NbButton>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdOrderList"} 
-                                            showBorders={true} 
-                                            columnsAutoWidth={true} 
-                                            allowColumnReordering={true} 
-                                            allowColumnResizing={true} 
-                                            headerFilter = {{visible:false}}
-                                            selection={{mode:"single"}}
-                                            height={'350'} 
-                                            width={'100%'}
-                                            dbApply={false}
-                                            >
-                                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                                <Scrolling mode="standart" />
-                                                <Paging defaultPageSize={10} />
-                                                {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
-                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                                <Column dataField="REF" caption={this.t("grdList.clmItemName")} width={80} />
-                                                <Column dataField="REF_NO" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmAmount")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmPrice")} width={150}/>
-                                            </NdGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </PageContent>
                     </PageView>
                 </div>
