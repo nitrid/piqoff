@@ -27,7 +27,10 @@ export default class salesInvoice extends DocBase
     constructor(props)
     {
         super(props)
-
+        this.state = 
+        {
+            allowDeleting: true,
+        };
         this.type = 1;
         this.docType = 20;
         this.rebate = 0;
@@ -885,7 +888,7 @@ export default class salesInvoice extends DocBase
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
-                                            
+                                            this.setState({ allowDeleting: false })
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -975,6 +978,7 @@ export default class salesInvoice extends DocBase
                                             }
                                             
                                             await dialog(tmpConfObj);
+                                            
                                         }                                                 
                                     }}/>
                                 </Item>
