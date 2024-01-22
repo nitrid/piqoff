@@ -56,7 +56,7 @@ export const prm =
         ID :"deafultPage",
         VALUE : 
         {
-            value : "order/specialPurcOrder"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "",
@@ -64,7 +64,7 @@ export const prm =
         APP : "MOB",
         VIEW : 
         {
-            TYPE : "checkbox",
+            TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Otomatik Açılacak Sayfa"
         }
