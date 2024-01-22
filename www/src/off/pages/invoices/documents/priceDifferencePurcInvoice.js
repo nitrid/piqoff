@@ -1801,7 +1801,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         App.instance.setState({isExecute:true})
                                                         let tmpData = await this.core.sql.execute(tmpQuery)
                                                         App.instance.setState({isExecute:false})
-                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                         {
                                                             if(pResult.split('|')[0] != 'ERR')
                                                             {
@@ -1847,7 +1847,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         console.log(tmpData.result.recordset[0].PATH)
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -1974,7 +1974,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     console.log(1)
                                                     let tmpMailAdress = await this.core.sql.execute(tmpMailQuery) 
                                                     console.log(tmpMailAdress)
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                     console.log(2)
                                                     console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
