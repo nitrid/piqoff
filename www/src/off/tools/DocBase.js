@@ -221,8 +221,16 @@ export default class DocBase extends React.PureComponent
                     {
                         tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
                     }
-
-                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,this.type == 0 ? 1 : 0,0)
+                    let priceType = 0
+                    if(this.docObj.dt()[0].REBATE == 0)
+                    {
+                        priceType = this.type == 0 ? 1 : 0
+                    }
+                    else
+                    {
+                        priceType = this.type == 0 ? 0 : 1
+                    }
+                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(2)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
