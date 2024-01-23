@@ -1294,7 +1294,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "checkbox",
+            TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Müşteri Puan Katsayısı"
         }

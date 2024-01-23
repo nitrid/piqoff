@@ -732,6 +732,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.REF = this.docObj.dt()[0].REF
                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
                 tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
