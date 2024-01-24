@@ -89,7 +89,7 @@ export default class specialPurcOrder extends React.PureComponent
             {
                 tmpDoc.OUTPUT = tmpData.result.recordset[0].GUID
                 tmpDoc.OUTPUT_CODE = tmpData.result.recordset[0].CODE
-                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].NAME
+                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].TITLE
                 tmpDoc.REF = tmpData.result.recordset[0].CODE
             }
         }
@@ -174,6 +174,7 @@ export default class specialPurcOrder extends React.PureComponent
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
+            this.setState({image:this.itemDt[0].IMAGE})
             this.setState({price:await this.getPrice(this.itemDt[0].GUID, 1, this.docObj.dt()[0].OUTPUT)})
             resolve();
         });
@@ -778,17 +779,25 @@ export default class specialPurcOrder extends React.PureComponent
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
-                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
+                                            <h4 style={{height:'90px',textAlign:"center",overflow:"hidden"}}>
                                                 <NbLabel id="lblItemName" parent={this} value={""}/>
-                                            </h6>
+                                            </h4>
                                         </div>
                                     </div>
                                     <div className="card shadow-sm">
-                                        <img src={this.state.image} className="card-img-top" height={'220px'} 
-                                        onClick={()=>
-                                        {
-                                            
-                                        }}/>
+                                        <div className='row'>
+                                            <div className='col-3'>
+
+                                            </div>
+                                            <div className='col-6'>
+                                                <img src={this.state.image} className="card-img-top" height={'160px'} 
+                                                onClick={()=>
+                                                {
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                       
                                         <div className="card-body">
                                             <div className='row pb-2'>
                                                 <div className='col-6'>
@@ -817,7 +826,7 @@ export default class specialPurcOrder extends React.PureComponent
                                             </div>
                                             <div className='row'>
                                                 <div className='col-12'>
-                                                    <NdTextBox id={"txtQuantity" } readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                    <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
                                                     selectAll={false}
                                                     value={0}
                                                     onChange={(async(e)=>
