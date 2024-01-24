@@ -89,7 +89,7 @@ export default class specialPurcOrder extends React.PureComponent
             {
                 tmpDoc.OUTPUT = tmpData.result.recordset[0].GUID
                 tmpDoc.OUTPUT_CODE = tmpData.result.recordset[0].CODE
-                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].NAME
+                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].TITLE
                 tmpDoc.REF = tmpData.result.recordset[0].CODE
             }
         }
@@ -174,6 +174,7 @@ export default class specialPurcOrder extends React.PureComponent
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
+            this.setState({image:this.itemDt[0].IMAGE})
             this.setState({price:await this.getPrice(this.itemDt[0].GUID, 1, this.docObj.dt()[0].OUTPUT)})
             resolve();
         });
@@ -395,6 +396,78 @@ export default class specialPurcOrder extends React.PureComponent
         }
 
         this.pageView.activePage('Process')
+    }
+    async mailSend()
+    {
+
+        if(this.docObj.docOrders.dt().length == 0)
+        {
+            return
+        }
+        let tmpConfObj = 
+        {
+            id:'msgMailsend',showTitle:true,title:this.lang.t("msgMailsend.title"),showCloseButton:true,width:'350px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgMailsend.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailsend.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailsend.msg")}</div>)
+        }
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn02')
+        {                   
+            return
+        }
+        let tmpMail = ''
+        let tmpMailQuery = 
+        {
+            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+            param:  ['GUID:string|50'],
+            value:  [this.docObj.dt()[0].OUTPUT]
+        }
+        let tmpMailData = await this.core.sql.execute(tmpMailQuery) 
+        if(tmpMailData.result.recordset.length > 0)
+        {
+            tmpMail = tmpMailData.result.recordset[0].EMAIL
+        }
+
+        let tmpQuery = 
+        {
+            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID)ORDER BY DOC_DATE,LINE_NO " ,
+            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+            value:  [this.docObj.dt()[0].GUID,'21','FR']
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        console.log(tmpData)
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+        {
+            let tmpAttach = pResult.split('|')[1]
+            let tmpHtml = ''
+            if(pResult.split('|')[0] != 'ERR')
+            {
+            }
+            console.log(tmpMail)
+            let tmpMailData = {html:tmpHtml,subject:'Commande',sendMail:tmpMail,attachName:"commande " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:""}
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            {
+                let tmpConfObj1 =
+                {
+                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                }
+                
+                if((pResult1) == 0)
+                {  
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                    await dialog(tmpConfObj1);
+                    
+                   
+
+                }
+                else
+                {
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+            });
+        });
     }
     render()
     {
@@ -687,7 +760,7 @@ export default class specialPurcOrder extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
+                                    <div className='row pb-1'>
                                         <div className='col-12'>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
                                             onKeyUp={(async(e)=>
@@ -776,21 +849,29 @@ export default class specialPurcOrder extends React.PureComponent
                                             </NdPopGrid>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
+                                    <div className='row pb-1'>
                                         <div className='col-12'>
-                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
+                                            <h4 style={{height:'30px',textAlign:"center",overflow:"hidden"}}>
                                                 <NbLabel id="lblItemName" parent={this} value={""}/>
-                                            </h6>
+                                            </h4>
                                         </div>
                                     </div>
                                     <div className="card shadow-sm">
-                                        <img src={this.state.image} className="card-img-top" height={'220px'} 
-                                        onClick={()=>
-                                        {
-                                            
-                                        }}/>
+                                        <div className='row'>
+                                            <div className='col-3'>
+
+                                            </div>
+                                            <div className='col-6'>
+                                                <img src={this.state.image} className="card-img-top" height={'160px'} 
+                                                onClick={()=>
+                                                {
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                       
                                         <div className="card-body">
-                                            <div className='row pb-2'>
+                                            <div className='row pb-1'>
                                                 <div className='col-6'>
                                                     <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                                                 </div>
@@ -810,14 +891,9 @@ export default class specialPurcOrder extends React.PureComponent
                                                     }}/>
                                                 </div>
                                             </div>
-                                            <div className='row pb-1'>
+                                            <div className='row '>
                                                 <div className='col-12'>
-                                                    <div className="overflow-hidden" style={{height:'75px'}}>{ this.state.name}</div>
-                                                </div>
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col-12'>
-                                                    <NdTextBox id={"txtQuantity" } readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                    <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
                                                     selectAll={false}
                                                     value={0}
                                                     onChange={(async(e)=>
@@ -878,7 +954,7 @@ export default class specialPurcOrder extends React.PureComponent
                                             allowColumnReordering={true} 
                                             allowColumnResizing={true} 
                                             headerFilter = {{visible:false}}
-                                            height={'350'} 
+                                            height={'300'} 
                                             width={'100%'}
                                             dbApply={false}
                                             onRowRemoving={async (e)=>
@@ -982,6 +1058,13 @@ export default class specialPurcOrder extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
+                                        <div className='col-12'>
+                                            <NbButton className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.mailSend.bind(this)}>{this.lang.t("btnMailsend")}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row'>
                                         <div className='col-8 d-flex align-items-center justify-content-end'>
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblAmount")}</label>                                            
                                         </div>

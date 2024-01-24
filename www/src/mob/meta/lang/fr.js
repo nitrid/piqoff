@@ -18,6 +18,14 @@ export const langFr =
     btnDocDelete: "Supprimer le document",   
     btnLineDisc: "Remise de ligne",       
     chkRememberMe : "Souviens-toi de moi", 
+    btnMailsend : "Mail Gönder", // BAK
+    msgMailsend:
+    {
+        title: "Dikkat",  // BAK
+        btn01: "Evet",  // BAK
+        btn02: "Iptal",  // BAK
+        msg: "Mail göndermek istediğinize emin misiniz ?"  // BAK
+    },
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -105,6 +113,7 @@ export const langFr =
         sip_02 : "Commande d'achat",
         sip_03 : "Commande regroupée",
         sip_04 : "Commande POS",
+        sip_99 : "Özel Alış Sipariş",
         kar_01 : "Vente", 
         kar_02 : "Achat" 
     },
@@ -573,6 +582,69 @@ export const langFr =
             clmDate : "Date",
             clmInputName : "Nom actuel",
             clmInputCode : "Code actuel",
+        },
+    },
+    sip_99 : // "Özel Alış Siparişi"  // BAK
+    {
+        lblRef : "Seri - Sıra :",
+        lblDepot : "Depo :",
+        lblCustomerCode : "Cari Kodu :",
+        lblCustomerName : "Cari Adı :",
+        lblDate : "Tarih :",
+        lblDepotQuantity : "Depo Miktar :",
+        lblUnit : "Birim :",
+        lblQuantity : "Miktar :",
+        lblPrice : "Fiyat :",
+        lblAmount : "Tutar :",
+        lblDiscount : "Satır İndirim :",
+        lblDocDiscount : "Evrak İndirim :",
+        lblTotalHt: "Ara Toplam :",
+        lblVat : "Kdv :",
+        lblSumAmount : "Toplam Tutar :",
+        lblGenAmount : "Genel Toplam :",
+        lblAdd: "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgDepot : "Lütfen depo seçiniz !",
+            msgCustomer : "Lütfen cari seçiniz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
+            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
+            msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+            clmPrice : "Fiyat",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "Kdv",
+            clmTotal : "Tutar"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmOutputName : "Cari Adı",
+            clmOutputCode : "Cari Kodu",
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     dep_01 : // "Transfert entre les dépôts"
