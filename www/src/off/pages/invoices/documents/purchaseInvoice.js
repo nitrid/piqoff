@@ -21,6 +21,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDocAi from '../../../tools/NdDocAi';
 
 export default class purchaseInvoice extends DocBase
 {
@@ -78,7 +79,6 @@ export default class purchaseInvoice extends DocBase
 
         this.pg_txtItemsCode.on('showing',()=>
         {
-            console.log(this.pg_txtItemsCode.on)
             this.pg_txtItemsCode.setSource(
             {
                 source:
@@ -1232,6 +1232,79 @@ export default class purchaseInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDocAi.show()
+                                        this.popDocAi.onImport = async(e) =>
+                                        {
+                                            if(typeof e != 'undefined')
+                                            {
+                                                if(e.CustomerCode != '')
+                                                {
+                                                    this.docObj.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.docCustomer.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.dt()[0].OUTPUT_CODE = e.CustomerCode
+                                                    this.docObj.dt()[0].OUTPUT_NAME = e.CustomerName
+                                                    this.docObj.dt()[0].VAT_ZERO = e.CustomerVatZero
+
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.value = e.CustomerCode
+                                                    }
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [e.CustomerGuid]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            }
+                                                        }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                    }
+                                                }
+                                                this.dtDocDate.value = moment(e.InvoiceDate)
+                                                this.dtShipDate.value = moment(e.DueDate)
+
+                                                for (let i = 0; i < e.Item.length; i++) 
+                                                {
+                                                    if(e.Item[i].ProductCode != '')
+                                                    {
+                                                        let tmpItem =
+                                                        {
+                                                            GUID : e.Item[i].ItemGuid,
+                                                            CODE : e.Item[i].ItemCode,
+                                                            NAME : e.Item[i].ItemName,
+                                                            ITEM_TYPE : e.Item[i].ItemType,
+                                                            UNIT : e.Item[i].ItemUnit,
+                                                            COST_PRICE : e.Item[i].ItemCost,
+                                                            VAT : e.Item[i].ItemVat
+                                                        }
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
+                                                    }
+                                                }
+                                            }
+                                            console.log(e)
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>
@@ -2888,6 +2961,10 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Document AI PopUp */}
+                    <div>
+                        <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>     

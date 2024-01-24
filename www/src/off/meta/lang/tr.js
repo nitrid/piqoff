@@ -491,6 +491,26 @@ export const langTr =
         txtPopQteReservQty: "Reserve Miktarı",
         txtPopQteInputQty: "Gelecek Miktar",
     },
+    popDocAi:
+    {
+        title : "Dosya üzerinden import",
+        btnUpload : "Upload",
+        btnImport : "Import",
+        txtTaxId : "Vergi No",
+        txtCustomerName : "Tedarikçi Adı",
+        dtDocDate : "Tarih",
+        dtShipDate : "Sevk Tarihi",
+        txtHT : "Ara Toplam",
+        txtTax : "Vergi",
+        txtTTC : "Genel Toplam",
+        clmItemCode : "Kodu",
+        clmMulticode : "T.Kodu",
+        clmItemName : "Adı",
+        clmQuantity : "Adet",
+        clmPrice : "Fiyat",
+        clmDiscount : "İndirim",
+        clmAmount : "Tutar",
+    },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
         txtRef: "Referans",

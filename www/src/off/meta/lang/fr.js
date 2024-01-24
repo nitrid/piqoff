@@ -490,6 +490,26 @@ export const langFr =
         txtPopQteReservQty: "Quantité réservée",
         txtPopQteInputQty: "Quantité à venir"
     },
+    popDocAi: //BAK
+    {
+        title : "Import via File",
+        btnUpload : "Upload",
+        btnImport : "Import",
+        txtTaxId : "Numéro de TVA",
+        txtCustomerName : "Nom du fournisseur",
+        dtDocDate : "Date",
+        dtShipDate : "Date d'expédition",
+        txtHT : "Total HT",
+        txtTax : "Taxe",
+        txtTTC : "Total TTC",
+        clmItemCode : "Code",
+        clmMulticode : "Code multiple",
+        clmItemName : "Nom de l'article",
+        clmQuantity : "Quantité",
+        clmPrice : "Prix",
+        clmDiscount : "Remise",
+        clmAmount : "Montant",
+    },
     stk_01_001:  // "Identification du nouveau stock" 
     {
         txtRef: "Référence",
