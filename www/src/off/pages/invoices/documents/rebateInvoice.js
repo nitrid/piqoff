@@ -52,7 +52,7 @@ export default class rebateInvoice extends DocBase
     }
     async init()
     {
-        await super.init()
+        await super.init() 
 
         this.grdRebtInv.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
@@ -548,6 +548,7 @@ export default class rebateInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
+            
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
             this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
             this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
