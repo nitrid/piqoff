@@ -855,7 +855,7 @@ export default class specialPurcOrder extends React.PureComponent
                                     </div>
                                     <div className='row pb-1'>
                                             <div className='col-12'>
-                                                <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                <NdTextBox id={"txtQuantity" }  height={200} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
                                                 selectAll={false}
                                                 value={0}
                                                 onChange={(async(e)=>
@@ -891,47 +891,6 @@ export default class specialPurcOrder extends React.PureComponent
                                                 </NdTextBox>
                                             </div>                                            
                                         </div>
-                                    <div className="card shadow-sm">
-                                       
-                                        <div className='row'>
-                                            <div className='col-3'>
-
-                                            </div>
-                                            <div className='col-6'>
-                                                <img src={this.state.image} className="card-img-top" height={'160px'} 
-                                                onClick={()=>
-                                                {
-                                                    
-                                                }}/>
-                                            </div>
-                                        </div>
-                                       
-                                        <div className="card-body">
-                                            <div className='row pb-1'>
-                                                <div className='col-6'>
-                                                    <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
-                                                </div>
-                                                <div className='col-6'>
-                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
-                                                    dt={{data:this.orderDt,field:"UNIT"}}
-                                                    onValueChanged={(e)=>
-                                                    {
-                                                        if(e.value != null && e.value != "")
-                                                        {
-                                                            let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                            if(tmpFactor.length > 0)
-                                                            {
-                                                                this.state.factor = tmpFactor[0].FACTOR
-                                                            }
-                                                        }
-                                                    }}/>
-                                                </div>
-                                            </div>
-                                           
-                                            {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-                                        </div>
-                                    </div>
-                                  
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
