@@ -221,10 +221,7 @@ export default class specialPurcOrder extends React.PureComponent
                     (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
                 ).round(3);
             }
-    
-            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
-            this.state.amount = Number(this.state.price * tmpQuantity).round(2);
-            this.state.vat = Number(this.state.amount).rateInc(this.itemDt[0].VAT, 2);
+
         }
     }
     async addItem()
@@ -311,10 +308,10 @@ export default class specialPurcOrder extends React.PureComponent
         tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.state.factor
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT
         tmpDocItems.PRICE = this.state.price
-        tmpDocItems.VAT = this.state.vat
-        tmpDocItems.AMOUNT = this.state.amount
-        tmpDocItems.TOTALHT = Number(this.state.amount).round(2)
-        tmpDocItems.TOTAL =  this.state.amount + this.state.vat
+        tmpDocItems.AMOUNT = tmpDocItems.PRICE * tmpDocItems.QUANTITY
+        tmpDocItems.VAT =  Number(tmpDocItems.AMOUNT).rateInc(this.itemDt[0].VAT, 2);
+        tmpDocItems.TOTALHT = Number(tmpDocItems.AMOUNT).round(2)
+        tmpDocItems.TOTAL =  tmpDocItems.AMOUNT + this.state.vat
 
         console.log(tmpDocItems)
         this.docObj.docOrders.addEmpty(tmpDocItems)
@@ -856,7 +853,46 @@ export default class specialPurcOrder extends React.PureComponent
                                             </h4>
                                         </div>
                                     </div>
+                                    <div className='row pb-1'>
+                                            <div className='col-12'>
+                                                <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                selectAll={false}
+                                                value={0}
+                                                onChange={(async(e)=>
+                                                {
+                                                    console.log(e)
+                                                }).bind(this)}
+                                                onValueChanged={this.calcEntry.bind(this)}
+                                                button={
+                                                [
+                                                    {
+                                                        id:'01',
+                                                        icon:'minus',
+                                                        location:'before',
+                                                        onClick:async()=>
+                                                        {
+                                                            if(this.txtQuantity.value > 0)
+                                                            {
+                                                                this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                            }
+                                                            
+                                                        }
+                                                    },
+                                                    {
+                                                        id:'02',
+                                                        icon:'plus',
+                                                        location:'after',
+                                                        onClick:async()=>
+                                                        {
+                                                            this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
+                                                        }
+                                                    }                                                    
+                                                ]}>
+                                                </NdTextBox>
+                                            </div>                                            
+                                        </div>
                                     <div className="card shadow-sm">
+                                       
                                         <div className='row'>
                                             <div className='col-3'>
 
@@ -891,44 +927,7 @@ export default class specialPurcOrder extends React.PureComponent
                                                     }}/>
                                                 </div>
                                             </div>
-                                            <div className='row '>
-                                                <div className='col-12'>
-                                                    <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
-                                                    selectAll={false}
-                                                    value={0}
-                                                    onChange={(async(e)=>
-                                                    {
-                                                        console.log(e)
-                                                    }).bind(this)}
-                                                    onValueChanged={this.calcEntry.bind(this)}
-                                                    button={
-                                                    [
-                                                        {
-                                                            id:'01',
-                                                            icon:'minus',
-                                                            location:'before',
-                                                            onClick:async()=>
-                                                            {
-                                                                if(this.txtQuantity.value > 0)
-                                                                {
-                                                                    this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                                }
-                                                                
-                                                            }
-                                                        },
-                                                        {
-                                                            id:'02',
-                                                            icon:'plus',
-                                                            location:'after',
-                                                            onClick:async()=>
-                                                            {
-                                                                this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
-                                                            }
-                                                        }                                                    
-                                                    ]}>
-                                                    </NdTextBox>
-                                                </div>                                            
-                                            </div>
+                                           
                                             {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                                         </div>
                                     </div>
