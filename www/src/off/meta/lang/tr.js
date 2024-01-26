@@ -3,6 +3,8 @@ export const langTr =
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     loading : "Yükleniyor",
+    phoneIsInvalid : "Boşluk bırakmadan sadece '+' ve rakam kullanmalısınız.",
+    mailIsInvalid : "Geçerli bir e-posta adresi girin. '@' ve uzantıyı kontrol edin (Örn: .com, .fr, ...)",
     btnSave: "Kaydet",
     btnCancel: "İptal",
     btnPrint :"Yazdır",
