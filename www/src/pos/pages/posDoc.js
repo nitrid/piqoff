@@ -1044,7 +1044,7 @@ export default class posDoc extends React.PureComponent
 
                         tmpPrice = tmpResult
                         //FİYAT GİRİLMİŞ İSE TERAZİYE İSTEK YAPILIYOR.
-                        let tmpWResult = await this.getWeighing()
+                        let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
                             tmpQuantity = tmpWResult
