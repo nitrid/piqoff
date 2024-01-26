@@ -5,7 +5,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"MoneySymbol",
-        VALUE : {code:"EUR",sign:"€"},
+        VALUE : {code:"CHF",sign:"CHF"},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

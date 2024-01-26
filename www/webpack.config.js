@@ -99,7 +99,7 @@ module.exports =
                 directory: path.join(__dirname, "public/boss")
             }
         ],
-        port: 3000,
+        port: 3001,
         proxy: 
         {
             "/socket.io": 
