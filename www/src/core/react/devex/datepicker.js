@@ -12,7 +12,7 @@ export default class NdDatePicker extends Base
         
         this.state.value = typeof props.param == 'undefined' ? new Date(0) : new Date(props.param.getValue().toString())
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
-        this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
+        this.state.titleAlign = typeof props.titleAlign == 'undefined' ? undefined : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
         this.state.pickerType = typeof props.pickerType == 'undefined' ? 'calendar' : props.pickerType
         this.state.type = typeof props.type == 'undefined' ? 'date' : props.type
@@ -158,7 +158,9 @@ export default class NdDatePicker extends Base
                 return (
                     <div className="dx-field">
                         <div className="dx-field-label" style={{textAlign:'right'}}>{this.state.title}</div>
-                        {this._dateView()}
+                        <div className="dx-field-value">
+                            {this._dateView()}
+                        </div>
                     </div>
                 )
             }

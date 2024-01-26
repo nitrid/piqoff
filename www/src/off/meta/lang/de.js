@@ -3,6 +3,8 @@ export const langDe =
     popGrid: {btnSelection: "Auswählen", btnSearch: "Auflisten"},
     serverConnection: "Verbindung zum Server wird hergestellt.",
     loading: "Wird geladen!",
+    phoneIsInvalid: "Sie dürfen nur '+' und Ziffern ohne Leerzeichen verwenden.",
+    mailIsInvalid: "Geben Sie bitte eine gültige E-Mail-Adresse ein. Überprüfen Sie '@' und die Erweiterung (z.B. .com, .fr, ...)",
     btnSpeichern: "Speichern",
     btnAbbrechen: "Abbrechen",
     btnPrint: "Drucken",
@@ -482,6 +484,32 @@ export const langDe =
         txtPopQteDepotQty : "Lagermenge",
         txtPopQteReservQty : "Reservierte Menge",
         txtPopQteInputQty : "Kommende Menge"
+    },
+    popDocAi: //BAK
+    {
+        title : "Import über Datei",
+        btnUpload : "Hochladen",
+        btnImport : "Importieren",
+        txtTaxId : "Umsatzsteuer-Identifikationsnummer",
+        txtCustomerName : "Lieferantenname",
+        dtDocDate : "Datum",
+        dtShipDate : "Versanddatum",
+        txtHT : "Gesamt ohne Steuern",
+        txtTax : "Steuer",
+        txtTTC : "Gesamt inkl. Steuern",
+        clmItemCode : "Code",
+        clmMulticode : "Mehrfachcode",
+        clmItemName : "Artikelname",
+        clmQuantity : "Menge",
+        clmPrice : "Preis",
+        clmDiscount : "Rabatt",
+        clmAmount : "Betrag",
+        msgCustomerNotFound :
+        {
+            title : "Achtung",
+            btn01 : "OK",
+            msg : "Importvorgang kann nicht durchgeführt werden, da der Lieferant nicht gefunden wurde!"
+        }
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {

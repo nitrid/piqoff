@@ -3,6 +3,8 @@ export const langFr =
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     serverConnection : "Établissement de la connexion avec le serveur",
     loading : "Connexion En Cours",
+    phoneIsInvalid: "Vous devez utiliser uniquement '+' et des chiffres sans espace.",
+    mailIsInvalid: "Veuillez saisir une adresse e-mail valide. Vérifiez '@' et l'extension (ex : .com, .fr, ...)",
     btnSave: "Enregistrer",
     btnCancel: "Supprimer",
     btnPrint :"Imprimer",
@@ -489,6 +491,32 @@ export const langFr =
         txtPopQteDepotQty: "Quantité d'entrepôt",
         txtPopQteReservQty: "Quantité réservée",
         txtPopQteInputQty: "Quantité à venir"
+    },
+    popDocAi: //BAK
+    {
+        title : "Import via File",
+        btnUpload : "Upload",
+        btnImport : "Import",
+        txtTaxId : "Numéro de TVA",
+        txtCustomerName : "Nom du fournisseur",
+        dtDocDate : "Date",
+        dtShipDate : "Date d'expédition",
+        txtHT : "Total HT",
+        txtTax : "Taxe",
+        txtTTC : "Total TTC",
+        clmItemCode : "Code",
+        clmMulticode : "Code multiple",
+        clmItemName : "Nom de l'article",
+        clmQuantity : "Quantité",
+        clmPrice : "Prix",
+        clmDiscount : "Remise",
+        clmAmount : "Montant",
+        msgCustomerNotFound :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
+        }
     },
     stk_01_001:  // "Identification du nouveau stock" 
     {
