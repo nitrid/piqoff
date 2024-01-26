@@ -22,24 +22,61 @@ class mailer
             pCallback(await this.mailSend(pParam))
         })
     }
-    mailSend(pData)
+
+    async mailSend(pData)
     {
-        return new Promise(resolve =>
+       
+        return new Promise(async resolve =>
         {
-            var transporter = nodemailer.createTransport({
-                service: 'outlook',
-                host: 'smtp-mail.outlook.com',
-                port: 587,
-                secureConnection: true,
+            let tmpAttach = [];
+            if(typeof pData.attachName != 'undefined')
+            {
+                tmpAttach = 
+                [
+                    {
+                        filename: pData.attachName,
+                        content: pData.attachData,
+                        encoding: 'base64'
+                    }
+                ]
+            }
+            let tmpQuery
+            if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.mailGuid]
+                }
+            }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE MASTER = 1 ",
+                }
+            }
+           
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            console.log(tmpResult)
+            let transporter = nodemailer.createTransport(
+            {
+
+                //service: 'imap.ionos.fr',
+                host: tmpResult[0].MAIL_SMTP,
+                port: tmpResult[0].MAIL_PORT,
+                secure: true,
                 auth: 
                 {
-                  user: "boucherie.saray@outlook.fr",
-                  pass: "Saray1905"
+                  user: tmpResult[0].MAIL_ADDRESS,
+                  pass: tmpResult[0].MAIL_PASSWORD
                 },
                 //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "boucherie.saray@outlook.fr",
+                from: tmpResult[0].MAIL_ADDRESS,
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
@@ -53,8 +90,10 @@ class mailer
                   
                 ]
               };
-              transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
+              transporter.sendMail(mailOptions, function(error, info)
+              {
+                if (error) 
+                {
                     console.log(error)
                     resolve(error);
                 } else {

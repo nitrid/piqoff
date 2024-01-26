@@ -123,6 +123,15 @@
     color: white;
     font-size: 20pt;
 }
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-shift 
+{
+    height: 60px;
+    min-width: 150px;
+    max-width: none;
+    background-color: #0d6efd;
+    color: white;
+    font-size: 20pt;
+}
 .simple-keyboard .hg-button.hg-functionBtn.hg-button-space.hg-activeButton
 {
     background-color: #ecf0f1;

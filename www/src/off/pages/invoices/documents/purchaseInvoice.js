@@ -46,7 +46,7 @@ export default class purchaseInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -78,6 +78,7 @@ export default class purchaseInvoice extends DocBase
 
         this.pg_txtItemsCode.on('showing',()=>
         {
+            console.log(this.pg_txtItemsCode.on)
             this.pg_txtItemsCode.setSource(
             {
                 source:
@@ -85,15 +86,17 @@ export default class purchaseInvoice extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE,STATUS " +
+                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
                 }
             })
+            
         })
+        
         this.pg_txtBarcode.on('showing',()=>
         {
             this.pg_txtBarcode.setSource(
@@ -149,6 +152,7 @@ export default class purchaseInvoice extends DocBase
         if(tmpData.result.recordset.length > 0)
         {   
             this.txtDiffrentInv.value = '-' +tmpData.result.recordset[0].TOTAL
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
         else
         {
@@ -485,13 +489,13 @@ export default class purchaseInvoice extends DocBase
                                   }
                                   else
                                   {
-                                      let tmpConfObj1 =
-                                      {
-                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                      }
-                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                      await dialog(tmpConfObj1);
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    await dialog(tmpConfObj1);
                                   }
                                 });  
                             }
@@ -2220,7 +2224,6 @@ export default class purchaseInvoice extends DocBase
                                                 e.key.VAT_RATE = 0
                                             }
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
-                                            
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)
@@ -2777,6 +2780,19 @@ export default class purchaseInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -2829,7 +2845,7 @@ export default class purchaseInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})

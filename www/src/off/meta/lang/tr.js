@@ -46,7 +46,23 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
-    passChange :"Şifre Değiştir",
+    passChange : "Şifre Değiştir",
+    popUserList :
+    {
+        title : "Kullanıcı Listesi",
+        clmCode : "Kodu",
+        clmName : "Adı"
+    },
+    acsEdit : 
+    {
+        msgCloseAlert : 
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
+        },
+    },
     popDbList :
     {
         title : "Database Seçimi",
@@ -321,6 +337,7 @@ export const langTr =
         pos_02_013 : "Pos İndirim Raporu",
         pos_02_014 : "Terazi Fişleri",
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
+        pos_02_016 : "Puan Hareketleri Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",
@@ -4261,7 +4278,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -4851,7 +4869,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -5272,7 +5291,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -5714,7 +5734,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -6164,7 +6185,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -6460,7 +6482,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDelete:
         {
@@ -6691,7 +6714,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -7193,7 +7217,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
     },
     ftr_02_007 : // "İade Alış Faturası"
@@ -7399,7 +7424,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDelete:
         {
@@ -7670,7 +7696,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -7755,7 +7782,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -8115,7 +8143,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8129,7 +8158,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8249,7 +8279,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -8653,7 +8684,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8734,7 +8766,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDiscount:
         {
@@ -9550,7 +9583,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -10069,7 +10103,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -10463,7 +10498,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -11244,7 +11280,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -11682,7 +11719,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -12014,7 +12052,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12385,7 +12424,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12470,7 +12510,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -12793,7 +12834,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12873,7 +12915,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -13541,7 +13584,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -13639,6 +13683,19 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgConvertDispatch :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn01: "Vazgeç",
+            msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"         
+        },
+        msgConvertSucces :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçilen Evrakları İrsaliyeye çevrildi.."         
+        },
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
     },
@@ -13688,7 +13745,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -14396,7 +14454,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -14485,7 +14544,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -14814,7 +14874,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -15178,7 +15239,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -15376,7 +15438,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -17055,9 +17118,11 @@ export const langTr =
     },
     pos_02_010 : // "Ürün Detaylı Satış Raporu"
     {
+        chkItemCreated: "Ürünlerin oluşturulma tarihine göre getir",
         btnGet :"Getir",
         grdListe : 
         {
+            clmDate: "Tarih",
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Miktar",
@@ -17164,6 +17229,20 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Müşteri Seçiniz !"
+        },
+    },
+    pos_02_016 : // "Puan Hareketleri raporu"
+    {
+        btnGet :"Getir",
+        chkTicket : "Sadece Manuel Girişler",
+        grdUseingPointReport: 
+        {
+            clmDate : "Tarih-Saat",
+            clmCustomerCode : "Müşteri Kodu",
+            clmCustomerName: "Müşteri Adı",
+            clmTicket: "Fiş ID",
+            clmPoint: "Puan",
+            clmDescription : "Açıklama",
         },
     },
     pos_03_001 : // "Gün Sonu",
@@ -17386,7 +17465,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -17736,7 +17816,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -18043,7 +18124,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -18150,7 +18232,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -18481,7 +18564,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -18573,6 +18657,7 @@ export const langTr =
         txtBarkod: "Barkod",
         txtRef: "Referans",
         txtPrice : "Fiyat",
+        txtPriceRate : "Fiyat Oran",
         txtDescription : "Açıklama",
         txtItemName : "Ürün Adı",
         txtQuantity : "Adet",
@@ -18628,7 +18713,13 @@ export const langTr =
         popUniqCodeList : 
         {
             title : "Etiket Listesi"
-        }
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     pos_02_003 : // "Pos Satış Raporu"
     {

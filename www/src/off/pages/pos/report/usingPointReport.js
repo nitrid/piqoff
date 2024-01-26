@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -17,14 +17,16 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
+import {  Chart, Series, CommonSeriesSettings,  Format, Legend } from 'devextreme-react/chart';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class enddayReport extends React.PureComponent
+export default class useingPointReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-        
+        this.state = {dataSource : {}} 
         this.core = App.instance.core;
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
@@ -38,42 +40,50 @@ export default class enddayReport extends React.PureComponent
     }
     async Init()
     {
-         
+
     }
     async _btnGetClick()
     {
-        if(this.cmbDevice.value == '')
+        if(this.chkTicket.value == true)
         {
-            let tmpConfObj =
+            let tmpSource =
             {
-              id:'msgDeviceSelect',showTitle:true,title:this.t("msgDeviceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
-              button:[{id:"btn01",caption:this.t("msgDeviceSelect.btn01"),location:'before'}],
-              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDeviceSelect.msg")}</div>)
-            }
-            
-            await dialog(tmpConfObj);
-            return
-        }
-        console.log(this.dtFirst.value)
-        let tmpSource =
-        {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 WHERE REF= 'POS' AND PAY_TYPE =20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) " +
-                            "AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC",
-                    param : ['INPUT_CODE:string|50','START_DATE:date','FINISH_DATE:date'],
-                    value : [this.cmbDevice.value,this.dtFirst.value,this.dtLast.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT *,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET,CASE WHEN TYPE = 0 THEN POINT WHEN TYPE = 1 THEN POINT * -1 END AS USE_POINT FROM CUSTOMER_POINT_VW_01 WHERE DOC = '00000000-0000-0000-0000-000000000000' AND CONVERT(NVARCHAR,CDATE,112) >= @FISRT_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE ORDER BY CDATE DESC",
+                        param : ['FISRT_DATE:date','LAST_DATE:date'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate]
+                    },
+                    sql : this.core.sql
+                }
             }
+            App.instance.setState({isExecute:true})
+            await this.grdUseingPointReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
-        App.instance.setState({isExecute:true})
-        await this.grdAdvanceData.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
-
+        else
+        {
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT *,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET,CASE WHEN TYPE = 0 THEN POINT WHEN TYPE = 1 THEN POINT * -1 END AS USE_POINT FROM CUSTOMER_POINT_VW_01 WHERE CONVERT(NVARCHAR,CDATE,112) >= @FISRT_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE ORDER BY CDATE DESC",
+                        param : ['FISRT_DATE:date','LAST_DATE:date'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdUseingPointReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
+        }
     }
     render()
     {
@@ -114,45 +124,22 @@ export default class enddayReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmCriter">
-                            {/* cmbDevice */}
-                            <Item>
-                                <Label text={this.t("cmbDevice")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbDevice"
-                                displayExpr="DISPLAY"                       
-                                valueExpr="CODE"
-                                showClearButton={true}
-                                notRefresh={true}
-                                data={{source:{select:{query:"SELECT CODE + '-' + NAME AS DISPLAY,CODE,NAME FROM SAFE_VW_01 WHERE TYPE = 2 ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                param={this.param.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
-                                />
-                            </Item>
-                            {/* dtFirst */}
-                            <Item>
-                                <Label text={this.t("dtFirst")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                >
-                                </NdDatePicker>
-                            </Item>
-                            {/* dtLast */}
-                            <Item>
-                                <Label text={this.t("dtLast")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                >
-                                </NdDatePicker>
-                            </Item>
-                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-3">
+                        <div className="col-6">
+                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                         <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            
+                            <Form>
+                                <Item>
+                                    <Label text={this.t("chkTicket")} alignment="right" />
+                                    <NdCheckBox id="chkTicket" parent={this} defaultValue={false}
+                                    onValueChanged={(e)=>
+                                    {
+                                    }}/>
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
@@ -160,26 +147,31 @@ export default class enddayReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdAdvanceData" parent={this} 
+                            <NdGrid id="grdUseingPointReport" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
+                            height={'700'} 
+                            width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            loadPanel={{enabled:true}}
                             onRowDblClick={async(e)=>
                                 {
-                                    this.getPointDetail(e.data.CODE)
+                                    this.getDetail(e.data.ITEM_GRP_NAME)
                                 }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE_FORMAT" caption={this.t("grdAdvanceData.clmDate")} visible={true}/> 
-                                <Column dataField="CUSER_NAME" caption={this.t("grdAdvanceData.clmUser")} visible={true}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdAdvanceData.clmSafe")} visible={true} /> 
-                                <Column dataField="AMOUNT" caption={this.t("grdAdvanceData.clmCash")} visible={true} /> 
+                                <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="CDATE" caption={this.t("grdUseingPointReport.clmDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} visible={true} width={100}/> 
+                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdUseingPointReport.clmCustomerCode")} visible={true} width={100}/> 
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdUseingPointReport.clmCustomerName")} visible={true} width={300}/> 
+                                <Column dataField="TICKET" caption={this.t("grdUseingPointReport.clmTicket")} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="USE_POINT" caption={this.t("grdUseingPointReport.clmPoint")} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="DESCRIPTION" caption={this.t("grdUseingPointReport.clmDescription")} visible={true} width={150} allowHeaderFiltering={false}/> 
                             </NdGrid>
                         </div>
                     </div>
