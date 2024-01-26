@@ -502,6 +502,12 @@ export const langDe =
         clmPrice : "Preis",
         clmDiscount : "Rabatt",
         clmAmount : "Betrag",
+        msgCustomerNotFound :
+        {
+            title : "Achtung",
+            btn01 : "OK",
+            msg : "Importvorgang kann nicht durchgeführt werden, da der Lieferant nicht gefunden wurde!"
+        }
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {

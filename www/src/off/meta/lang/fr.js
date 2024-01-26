@@ -509,6 +509,12 @@ export const langFr =
         clmPrice : "Prix",
         clmDiscount : "Remise",
         clmAmount : "Montant",
+        msgCustomerNotFound :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
+        }
     },
     stk_01_001:  // "Identification du nouveau stock" 
     {

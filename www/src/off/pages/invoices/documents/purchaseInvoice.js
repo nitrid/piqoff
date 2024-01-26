@@ -1236,7 +1236,7 @@ export default class purchaseInvoice extends DocBase
                                     <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
                                     onClick={async()=>
                                     {
-                                        this.popDocAi.show()
+                                        this.popDocAi.show(this.docObj.dt()[0].OUTPUT)
                                         this.popDocAi.onImport = async(e) =>
                                         {
                                             if(typeof e != 'undefined')
@@ -1283,6 +1283,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.dtDocDate.value = moment(e.InvoiceDate)
                                                 this.dtShipDate.value = moment(e.DueDate)
 
+                                                this.grdPurcInv.devGrid.beginUpdate()
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
                                                     if(e.Item[i].ProductCode != '')
@@ -1300,6 +1301,7 @@ export default class purchaseInvoice extends DocBase
                                                         await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
                                                     }
                                                 }
+                                                this.grdPurcInv.devGrid.endUpdate()
                                             }
                                             console.log(e)
                                         }

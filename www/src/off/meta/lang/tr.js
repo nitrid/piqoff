@@ -510,6 +510,12 @@ export const langTr =
         clmPrice : "Fiyat",
         clmDiscount : "İndirim",
         clmAmount : "Tutar",
+        msgCustomerNotFound :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msg : "Tedarikçi bulunamadığından import işlemini yapamazsınız !"
+        }
     },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
