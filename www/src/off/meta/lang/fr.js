@@ -3,6 +3,8 @@ export const langFr =
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     serverConnection : "Établissement de la connexion avec le serveur",
     loading : "Connexion En Cours",
+    phoneIsInvalid: "Vous devez utiliser uniquement '+' et des chiffres sans espace.",
+    mailIsInvalid: "Veuillez saisir une adresse e-mail valide. Vérifiez '@' et l'extension (ex : .com, .fr, ...)",
     btnSave: "Enregistrer",
     btnCancel: "Supprimer",
     btnPrint :"Imprimer",
