@@ -12,3 +12,4 @@ www/public--
 archiveFiscal/
 plugins/mailer.js
 www/src/pos/resources
+plugins/devprint
