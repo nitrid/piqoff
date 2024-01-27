@@ -20,23 +20,56 @@ export default class NdDocAi extends Base
         this.core = this.props.parent.core
         this.files = []
         this.importData = undefined
+        this.customer = '00000000-0000-0000-0000-000000000000'
     }
-    async show()
+    async show(pCustomer)
     {
+        this.customer = pCustomer
         this.popDocAi.show()
+    }
+    getValue(pData)
+    {
+        let tmpValue = undefined
+        if(typeof pData != 'undefined')
+        {
+            if(typeof pData.content != 'undefined')
+            {
+                tmpValue = pData.content
+            }
+            if(typeof pData.value != 'undefined')
+            {
+                tmpValue = pData.value
+            }
+            if(typeof pData.value != 'undefined' && typeof pData.value.amount != 'undefined')
+            {
+                tmpValue = pData.value.amount
+            }
+
+            if(typeof pData.kind != 'undefined' && pData.kind == 'number')
+            {
+                tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
+            } 
+        }
+
+        return tmpValue
     }
     async getDoc(pData)
     {
         this.importData = undefined
         App.instance.setState({isExecute:true})
-        this.txtTaxId.value = typeof pData.VendorTaxId != 'undefined' ? pData.VendorTaxId.replaceAll(' ','') : ''
-        this.dtDocDate.value = typeof pData.InvoiceDate != 'undefined' ? moment(pData.InvoiceDate) : ''
-        this.dtShipDate.value = typeof pData.DueDate != 'undefined' ? moment(pData.DueDate) : ''
+        
+        pData.VendorTaxId = typeof pData.VendorTaxId != 'undefined' ? pData.VendorTaxId.replaceAll(' ','') : ''
+        pData.InvoiceDate = typeof pData.InvoiceDate != 'undefined' ? moment(pData.InvoiceDate) : moment(new Date())
+        pData.DueDate = typeof pData.DueDate != 'undefined' ? moment(pData.DueDate) : moment(new Date())
+
+        this.txtTaxId.value = pData.VendorTaxId
+        this.dtDocDate.value = pData.InvoiceDate
+        this.dtShipDate.value = pData.DueDate
         this.txtHT.value = typeof pData.HT != 'undefined' ? pData.HT : 0
         this.txtTax.value = typeof pData.VAT != 'undefined' ? pData.VAT : 0
         this.txtTTC.value = typeof pData.TTC != 'undefined' ? pData.TTC : 0
 
-        let tmpCustomer = await this.getCustomer(this.txtTaxId.value)
+        let tmpCustomer = await this.getCustomer(pData.VendorTaxId)
 
         if(typeof tmpCustomer != 'undefined')
         {
@@ -44,6 +77,7 @@ export default class NdDocAi extends Base
             pData.CustomerName = tmpCustomer.TITLE
             pData.CustomerGuid = tmpCustomer.GUID
             pData.CustomerVatZero = tmpCustomer.VAT_ZERO
+            pData.CustomerTaxNo = tmpCustomer.TAX_NO
         }
         else
         {
@@ -51,50 +85,88 @@ export default class NdDocAi extends Base
             pData.CustomerName = ''
             pData.CustomerGuid = '00000000-0000-0000-0000-000000000000'
             pData.CustomerVatZero = 0
+            pData.CustomerTaxNo = ''
         }
-        
+        this.txtTaxId.value = pData.CustomerTaxNo
         this.txtCustomerName.value = pData.CustomerName
 
-        for (let i = 0; i < pData.Item.length; i++) 
+        if(pData.CustomerGuid != '00000000-0000-0000-0000-000000000000')
         {
-            let tmpItem = await this.getItem(pData.Item[i].ProductCode)
-            if(typeof tmpItem != 'undefined')
+            pData.Items = []
+            for (let i = 0; i < pData.Item.length; i++) 
             {
-                pData.Item[i].ItemCode = tmpItem.ITEM_CODE
-                pData.Item[i].ItemName = tmpItem.ITEM_NAME
-                pData.Item[i].Discount = 0
-                pData.Item[i].ItemGuid = tmpItem.ITEM_GUID
-                pData.Item[i].ItemType = tmpItem.ITEM_TYPE
-                pData.Item[i].ItemUnit = tmpItem.UNIT
-                pData.Item[i].ItemCost = tmpItem.COST_PRICE
-                pData.Item[i].ItemVat = tmpItem.VAT
-            }
-            else
-            {
-                pData.Item[i].ItemCode = ''
-                pData.Item[i].ItemName = ''
-                pData.Item[i].Discount = 0
-                pData.Item[i].ItemGuid = '00000000-0000-0000-0000-000000000000'
-                pData.Item[i].ItemType = 0
-                pData.Item[i].ItemUnit = '00000000-0000-0000-0000-000000000000'
-                pData.Item[i].ItemCost = 0
-                pData.Item[i].ItemVat = 0
-            }
-        }
+                pData.Items.push({...pData.Item[i]})
+                pData.Item[i].ProductCode = this.getValue(pData.Item[i].ProductCode)
+                pData.Item[i].Description = this.getValue(pData.Item[i].Description)
+                pData.Item[i].Quantity = typeof this.getValue(pData.Item[i].Quantity) == 'undefined' ? 0 : this.getValue(pData.Item[i].Quantity)
+                pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
+                pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
+                pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
 
-        await this.grdList.dataRefresh({source:pData.Item});
-        this.importData = pData
+                let tmpItem = await this.getItem(pData.Item[i].ProductCode,pData.CustomerGuid)
+                if(typeof tmpItem != 'undefined')
+                {
+                    pData.Item[i].ItemCode = tmpItem.ITEM_CODE
+                    pData.Item[i].ItemName = tmpItem.ITEM_NAME
+                    pData.Item[i].Discount = 0
+                    pData.Item[i].ItemGuid = tmpItem.ITEM_GUID
+                    pData.Item[i].ItemType = tmpItem.ITEM_TYPE
+                    pData.Item[i].ItemUnit = tmpItem.UNIT
+                    pData.Item[i].ItemCost = tmpItem.COST_PRICE
+                    pData.Item[i].ItemVat = tmpItem.VAT
+                }
+                else
+                {
+                    pData.Item[i].ItemCode = ''
+                    pData.Item[i].ItemName = typeof pData.Item[i].Description == 'undefined' ? '' : pData.Item[i].Description
+                    pData.Item[i].Discount = 0
+                    pData.Item[i].ItemGuid = '00000000-0000-0000-0000-000000000000'
+                    pData.Item[i].ItemType = 0
+                    pData.Item[i].ItemUnit = '00000000-0000-0000-0000-000000000000'
+                    pData.Item[i].ItemCost = 0
+                    pData.Item[i].ItemVat = 0
+                }
+            }
+
+            await this.grdList.dataRefresh({source:pData.Item});
+            this.importData = pData    
+        }
+        else
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerNotFound',showTitle:true,title:this.lang.t("popDocAi.msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("popDocAi.msgCustomerNotFound.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgCustomerNotFound.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+        }
         App.instance.setState({isExecute:false})
     }
     getCustomer(pVatId)
     {
         return new Promise(async resolve => 
         {
-            let tmpQuery = 
+            let tmpQuery = undefined
+
+            if(this.customer != '' && this.customer != '00000000-0000-0000-0000-000000000000')
             {
-                query : "SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMER_VW_01 WHERE TAX_NO = @TAX_NO",
-                param : ['TAX_NO:string|100'],
-                value : [pVatId]
+                tmpQuery = 
+                {
+                    query : "SELECT GUID,CODE,TITLE,VAT_ZERO,TAX_NO FROM CUSTOMER_VW_01 WHERE GUID = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [this.customer]
+                }
+            }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT GUID,CODE,TITLE,VAT_ZERO,TAX_NO FROM CUSTOMER_VW_01 WHERE TAX_NO = @TAX_NO",
+                    param : ['TAX_NO:string|100'],
+                    value : [pVatId]
+                }
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery)
@@ -107,36 +179,62 @@ export default class NdDocAi extends Base
             resolve()
         })
     }
-    getItem(pItem)
+    getItem(pItem,pCustomer)
     {
         return new Promise(async resolve => 
         {
-            let tmpQuery = 
+            if(typeof pItem != 'undefined')
             {
-                query : "SELECT " +
-                        "ITEM_MULTICODE.ITEM_GUID AS ITEM_GUID, " +
-                        "ITEM_MULTICODE.ITEM_CODE AS ITEM_CODE, " +
-                        "ITEM_MULTICODE.ITEM_NAME AS ITEM_NAME, " +
-                        "0 AS ITEM_TYPE, " +
-                        "ITEMS.UNIT AS UNIT, " +
-                        "ITEMS.COST_PRICE AS COST_PRICE, " +
-                        "ITEMS.VAT AS VAT " +
-                        "FROM ITEM_MULTICODE_VW_01 AS ITEM_MULTICODE " +
-                        "INNER JOIN ITEMS_VW_01 AS ITEMS ON " +
-                        "ITEMS.CODE = ITEM_MULTICODE.ITEM_CODE " +
-                        "WHERE MULTICODE = @MULTICODE",
-                param : ['MULTICODE:string|25'],
-                value : [pItem]
-            }
+                let tmpQuery = 
+                {
+                    query : "SELECT " +
+                            "ITEM_MULTICODE.ITEM_GUID AS ITEM_GUID, " +
+                            "ITEM_MULTICODE.ITEM_CODE AS ITEM_CODE, " +
+                            "ITEM_MULTICODE.ITEM_NAME AS ITEM_NAME, " +
+                            "0 AS ITEM_TYPE, " +
+                            "ITEMS.UNIT AS UNIT, " +
+                            "ITEMS.COST_PRICE AS COST_PRICE, " +
+                            "ITEMS.VAT AS VAT " +
+                            "FROM ITEM_MULTICODE_VW_01 AS ITEM_MULTICODE " +
+                            "INNER JOIN ITEMS_VW_01 AS ITEMS ON " +
+                            "ITEMS.CODE = ITEM_MULTICODE.ITEM_CODE " +
+                            "WHERE MULTICODE = @MULTICODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    param : ['MULTICODE:string|25','CUSTOMER_GUID:string|50'],
+                    value : [pItem,pCustomer]
+                }
 
-            let tmpData = await this.core.sql.execute(tmpQuery)
-            if(tmpData.result.recordset.length > 0)
-            {
-                resolve(tmpData.result.recordset[0])
-                return
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if(typeof tmpData.result.err == 'undefined')
+                {
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                        resolve(tmpData.result.recordset[0])
+                        return
+                    }
+                }
+                else
+                {
+                    console.log(tmpQuery)
+                    console.log(tmpData.result.err)
+                }
             }
             resolve()
         })
+    }
+    sum(pArr,pField)
+    {
+        let tmpVal = 0;
+
+        tmpVal = pArr.reduce((a,b) =>
+        {
+            return {[pField] : Number(a[pField]) + Number(b[pField])}
+        },{[pField]:0})[pField]
+
+        tmpVal = Number(tmpVal).round(2);
+        tmpVal = tmpVal.toFixed(2)
+        
+        return tmpVal;
     }
     render()
     {
@@ -252,6 +350,22 @@ export default class NdDocAi extends Base
                                 onCellPrepared={(e) =>
                                 {
                                     if(e.rowType === "data" && e.column.dataField === "ItemCode" && e.data.ItemCode == '')
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "ItemName" && e.data.ItemCode == '')
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "Quantity" && e.data.Quantity == 0)
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "UnitPrice" && e.data.UnitPrice == 0)
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "Amount" && e.data.Amount == 0)
                                     {
                                         e.cellElement.style.backgroundColor = "red"
                                     }
