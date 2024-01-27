@@ -1327,7 +1327,9 @@ export default class CustomerCard extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" 
+                                    acceptCustomValue={true}
+                                   
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
@@ -1335,7 +1337,16 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize={50}
                                     notRefresh={true}
-                                    />
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text)
+                                        {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                    }}
+                                    >
+                                    </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />

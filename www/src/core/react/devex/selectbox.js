@@ -17,6 +17,7 @@ export default class NdSelectBox extends Base
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
+        this._onCustomItemCreating = this._onCustomItemCreating.bind(this);
         this.setData = this.setData.bind(this);
     }
     //#region Private
@@ -46,6 +47,7 @@ export default class NdSelectBox extends Base
             minSearchLength={0}
             onValueChanged={this._onValueChanged}
             onChange={this._onChange}
+            onCustomItemCreating = {this._onCustomItemCreating}
             onInitialized={this._onInitialized}
             height={this.props.height}
             style={this.props.style}
@@ -69,6 +71,35 @@ export default class NdSelectBox extends Base
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
+        }
+    }
+    _onCustomItemCreating(e)
+    {
+        if (!e.text) {
+            e.customItem = null;
+            return;
+        }
+     
+        const { component, text } = e;
+        const currentItems = component.option('items');
+     
+        const newItem = {
+            ZIPCODE: text.trim(),
+            ZIPNAME: text.trim(),
+        };
+     
+        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+        if (itemInDataSource) {
+            e.customItem = itemInDataSource;
+        } else {    
+            currentItems.push(newItem);
+            component.option('items', currentItems);
+            e.customItem = newItem;
+        }
+        if(typeof this.props.onCustomItemCreating != 'undefined')
+        {
+            let tmptext = this.props.onCustomItemCreating(e);
+            return tmptext
         }
     }
     _onChange() 

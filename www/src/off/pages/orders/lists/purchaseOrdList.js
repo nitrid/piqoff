@@ -12,6 +12,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
@@ -120,27 +121,65 @@ export default class purchaseOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        
-        let tmpSource =
+        if(this.chkItemCreated.value == false)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
-                    param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT * FROM DOC_VW_01 " +
+                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
+                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                                " AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                    },
+                    sql : this.core.sql
+                }
             }
+            App.instance.setState({isExecute:true})
+            await this.grdPurcOrdList.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
-        App.instance.setState({isExecute:true})
-        await this.grdPurcOrdList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        else
+        {
+            let tmpSource2 =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT DOC_GUID AS GUID, " +
+                                    "REF, " +
+                                    "REF_NO, " +
+                                    "DOC_DATE, " +
+                                    "OUTPUT_NAME, " +
+                                    "OUTPUT_CODE, " +
+                                    "INPUT_CODE, " +
+                                    "INPUT_NAME, " +
+                                    "SUM(TOTAL) as TOTAL, " +
+                                    "SUM(VAT) as VAT, " +
+                                    "SUM(AMOUNT) as AMOUNT " +
+                                "FROM DOC_ORDERS_VW_01 " +
+                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND  " +
+                                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) " +
+                                    "AND TYPE = 0 AND PEND_QUANTITY > 0 AND CLOSED = 0 " +
+                                "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE " +
+                                "ORDER BY DOC_DATE DESC,REF_NO DESC " ,
+                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdPurcOrdList.dataRefresh(tmpSource2)
+            App.instance.setState({isExecute:false})
+        }
     }
     render()
     {
@@ -312,7 +351,12 @@ export default class purchaseOrdList extends React.PureComponent
                             />
                         </div>
                         <div className="col-3">
-                            
+                            <Form>
+                                <Item>
+                                    <Label text={("fatura veya irsaliyeye çevrilen gelmesin")} alignment="left" />
+                                    <NdCheckBox id="chkItemCreated" parent={this} defaultValue={true} value={false} />
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             
@@ -350,7 +394,7 @@ export default class purchaseOrdList extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcOrdList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdPurcOrdList.clmOutputName")} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdPurcOrdList.clmInputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdPurcOrdList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdPurcOrdList.clmDate")} visible={true} width={200} format={'dd/MM/yyyy'}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdPurcOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdPurcOrdList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdPurcOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
