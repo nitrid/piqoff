@@ -13567,6 +13567,7 @@ export const langDe =
     {
         cmbCustomer :"Kunde",
         btnGet :"Abrufen",
+        chkInvOrDisp: "Nur offene Bestellungen anzeigen",
         dtFirst : "Erstes Datum",
         dtLast : "Letztes Datum",
         txtCustomerCode : "Kunde",
@@ -13597,6 +13598,7 @@ export const langDe =
     {
         cmbCustomer :"Kunde",
         btnGet :"Abrufen",
+        chkInvOrDisp: "Nur offene Bestellungen anzeigen",
         dtFirst : "Erstes Datum",
         dtLast : "Letztes Datum",
         txtCustomerCode : "Kunde",

@@ -13650,6 +13650,7 @@ export const langTr =
     {
         cmbCustomer :"Müşteri",
         btnGet :"Getir",
+        chkInvOrDisp :"Sadece açık siparişleri göster",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Müşteri",
@@ -13680,6 +13681,7 @@ export const langTr =
     {
         cmbCustomer :"Müşteri",
         btnGet :"Getir",
+        chkInvOrDisp :"Sadece açık siparişleri göster",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Müşteri",
