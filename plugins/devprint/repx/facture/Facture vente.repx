@@ -365,7 +365,7 @@
     </Item5>
     <Item6 Ref="187" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="192.166779" KeepTogether="true">
       <Controls>
-        <Item1 Ref="188" ControlType="XRLabel" Name="label38" Multiline="true" Text="Titulaire du compte: BP Alsace lorraine champagne  &#xA;Iban FR76 1470 7508 2833 5214 5295 429 Bic ccbpfrppmt2" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="3.62170529, 149.004745" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
+        <Item1 Ref="188" ControlType="XRLabel" Name="label38" Multiline="true" Text="Titulaire du compte: --------------------------------------&#xD;&#xA;" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="3.62170529, 149.004745" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
           <StylePriority Ref="189" UseFont="false" UseTextAlignment="false" />
         </Item1>
         <Item2 Ref="190" ControlType="XRLabel" Name="label36" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.3717041, 133.631638" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
