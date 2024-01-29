@@ -24,7 +24,7 @@ export default class purchaseOrdList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -35,7 +35,7 @@ export default class purchaseOrdList extends React.PureComponent
             {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcOrdList.clmOutputCode")},                                   
             {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcOrdList.clmOutputName")},
             {CODE : "INPUT_NAME",NAME : this.t("grdPurcOrdList.clmInputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdPurcOrdList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdPurcOrdList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdPurcOrdList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdPurcOrdList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdPurcOrdList.clmTotal")},
@@ -76,9 +76,9 @@ export default class purchaseOrdList extends React.PureComponent
                 {
                     this.groupList.push('OUTPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -121,7 +121,7 @@ export default class purchaseOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        if(this.chkItemCreated.value == false)
+        if(this.chkInvOrDisp.value == false)
         {
             let tmpSource =
             {
@@ -353,8 +353,8 @@ export default class purchaseOrdList extends React.PureComponent
                         <div className="col-3">
                             <Form>
                                 <Item>
-                                    <Label text={("fatura veya irsaliyeye çevrilen gelmesin")} alignment="left" />
-                                    <NdCheckBox id="chkItemCreated" parent={this} defaultValue={true} value={false} />
+                                    <Label text={this.t("chkInvOrDisp")} alignment="left" />
+                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={false} />
                                 </Item>
                             </Form>
                         </div>
@@ -394,7 +394,7 @@ export default class purchaseOrdList extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcOrdList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdPurcOrdList.clmOutputName")} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdPurcOrdList.clmInputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdPurcOrdList.clmDate")} visible={true} width={200} format={'dd/MM/yyyy'}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdPurcOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdPurcOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdPurcOrdList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdPurcOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              

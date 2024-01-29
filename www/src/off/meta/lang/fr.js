@@ -13703,6 +13703,7 @@ export const langFr =
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Rechercher",
+        chkInvOrDisp: "Afficher uniquement les commandes ouvertes",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         txtCustomerCode : "Fournisseur",
@@ -13737,6 +13738,7 @@ export const langFr =
     {
         cmbCustomer :"Client",
         btnGet :"Rechercher",
+        chkInvOrDisp: "Afficher uniquement les commandes ouvertes",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         txtCustomerCode : "Client",

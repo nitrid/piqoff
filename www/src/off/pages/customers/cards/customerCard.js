@@ -1339,10 +1339,26 @@ export default class CustomerCard extends React.PureComponent
                                     notRefresh={true}
                                     onCustomItemCreating={async(e)=>
                                     {
-                                        if (!e.text)
-                                        {
+                                        if (!e.text) {
                                             e.customItem = null;
                                             return;
+                                        }
+                                     
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                     
+                                        const newItem = {
+                                            ZIPCODE: text.trim(),
+                                            ZIPNAME: text.trim(),
+                                        };
+                                     
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
                                         }
                                     }}
                                     >
@@ -1354,10 +1370,35 @@ export default class CustomerCard extends React.PureComponent
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            PLACE: text.trim(),
+                                            PLACE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     />
                                 </Item>
                               

@@ -23,7 +23,7 @@ export default class rebateDisList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -34,7 +34,7 @@ export default class rebateDisList extends React.PureComponent
             {CODE : "INPUT_CODE",NAME : this.t("grdSlsDisList.clmInputCode")},                                   
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsDisList.clmInputName")},
             {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsDisList.clmOutputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdSlsDisList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdSlsDisList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdSlsDisList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdSlsDisList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdSlsDisList.clmTotal")},
@@ -75,9 +75,9 @@ export default class rebateDisList extends React.PureComponent
                 {
                     this.groupList.push('INPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -349,7 +349,7 @@ export default class rebateDisList extends React.PureComponent
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsDisList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsDisList.clmInputName")} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsDisList.clmOutputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsDisList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
