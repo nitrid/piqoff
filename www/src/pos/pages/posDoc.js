@@ -315,6 +315,8 @@ export default class posDoc extends React.PureComponent
         {
             this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
         }
+
+        console.log(this.prmObj)
     }
     async init()
     {

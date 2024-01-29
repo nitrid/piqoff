@@ -420,11 +420,14 @@ export default class Login extends React.PureComponent
                             </div>
                         </div>         */}
                         <div className="row">
-                            <div className="col-5">
+                            <div className="col-3">
                                 
                             </div>
-                            <div className="col-4">
+                            <div className="col-3">
                                 <img src="./css/img/LogoNF525.jpg" height="70px"/>
+                            </div>
+                            <div className="col-4">
+                                <img src="./css/img/nf203.jpg" height="70px"/>
                             </div>
                         </div>     
                         <div className="row">
