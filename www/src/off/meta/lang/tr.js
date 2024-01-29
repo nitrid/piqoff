@@ -188,11 +188,12 @@ export const langTr =
         stk_01_008: "Ürün Grubu Tanımlama",
         stk_01_009: "Ürün Alt Grup Tanımlama",
         stk_01_010: "Birim Tanımlama",
-        stk_01_011 : "Vergi Tanımlama",
-        stk_01_012 : "Bağlı Ürün Tanımlama",
-        stk_01_013 : "Ürün Resim Tanımlama",
-        stk_01_014 : "Ürün Cinsi Tanımlama",
-        stk_01_015 : "Fiyat Listesi Tanımlama",
+        stk_01_011: "Vergi Tanımlama",
+        stk_01_012: "Bağlı Ürün Tanımlama",
+        stk_01_013: "Ürün Resim Tanımlama",
+        stk_01_014: "Ürün Cinsi Tanımlama",
+        stk_01_015: "Fiyat Listesi Tanımlama",
+        stk_01_016: "Ürün Recete Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -200,22 +201,22 @@ export const langTr =
         stk_02_005: "İade Ürünü Toplama",
         stk_02_006: "Özel Etiket Basım",
         stk_02_007: "SKT Girişi",
-        stk_02_008 : "Ürün Giriş Fişi",
-        stk_02_009 : "Ürün Çıkış Fişi",
+        stk_02_008: "Ürün Giriş Fişi",
+        stk_02_009: "Ürün Çıkış Fişi",
         stk_03_001: "Ürün Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
-        stk_03_006 : "Depo Ürün Miktarları Listesi",
+        stk_03_006: "Depo Ürün Miktarları Listesi",
         stk_04_001: "Toplu Ürün Düzenleme",
         stk_04_002: "İade Operasyonları",
-        stk_04_003 : "Sayım Kesinleştirme",
-        stk_04_004 :"SKT Operasyonu",
-        stk_05_001 : "Depo Envanter Raporu",
-        stk_05_002 : "Değişen Alış Fiyatları Raporu",
-        stk_05_003 : "Sayım Envanter Raporu",
-        stk_05_004 : "Kayıp Ürün Raporu",
+        stk_04_003: "Sayım Kesinleştirme",
+        stk_04_004:"SKT Operasyonu",
+        stk_05_001: "Depo Envanter Raporu",
+        stk_05_002: "Değişen Alış Fiyatları Raporu",
+        stk_05_003: "Sayım Envanter Raporu",
+        stk_05_004: "Kayıp Ürün Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -230,11 +231,11 @@ export const langTr =
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
         cri_03_001: "Toplu Müşteri Ekleme",
-        cri_04_001 : "Müşteri Ekstre Raporu",
-        cri_04_002 : 'Müşteri Bakiye Raporu',
-        cri_04_003 : "Müşteri Puanı Raporu",
-        cri_04_004 : "Müşteri Bakiyeli Ekstre Raporu",
-        cri_04_005 : "Satış Faturası Yaşlandırma Raporu",
+        cri_04_001: "Müşteri Ekstre Raporu",
+        cri_04_002: 'Müşteri Bakiye Raporu',
+        cri_04_003: "Müşteri Puanı Raporu",
+        cri_04_004: "Müşteri Bakiyeli Ekstre Raporu",
+        cri_04_005: "Satış Faturası Yaşlandırma Raporu",
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
@@ -1422,6 +1423,54 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz liste no sistem de kayıtlı !"
         }
+    },
+    stk_01_016 : // "Ürün Recetesi Tanımları"
+    {
+        txtItemCode : "Ürün Kodu",
+        txtItemName : "Ürün Adı",
+        dtDate : "Tarih",
+        txtQuantity : "Miktar",
+        pg_txtItemCode : 
+        {
+            title : "Ürün Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmStatus : "DURUM"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        validDate : "Tarih Seçmelisiniz",
+        grdList : 
+        {
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmQuantity : "MIKTAR"
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {

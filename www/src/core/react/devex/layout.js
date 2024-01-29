@@ -124,10 +124,14 @@ export class NdLayout extends Base
                             if(typeof child.props.access.getValue().position.h != 'undefined')
                             {
                                 tmpH = child.props.access.getValue().position.h
+                                tmpMinH = child.props.access.getValue().position.h
+                                tmpMaxH = child.props.access.getValue().position.h
                             }
                             if(typeof child.props.access.getValue().position.w != 'undefined')
                             {
                                 tmpW = child.props.access.getValue().position.w
+                                tmpMinW = child.props.access.getValue().position.w
+                                tmpMaxW = child.props.access.getValue().position.w
                             }
                             if(typeof child.props.access.getValue().position.minH != 'undefined')
                             {
