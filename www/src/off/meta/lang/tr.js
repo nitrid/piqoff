@@ -5450,6 +5450,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilat Girişi",
         getDispatch : "İrsaliye Getir",
+        getRebate : "Faturaya bağla",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -5512,6 +5513,18 @@ export const langTr =
         pg_dispatchGrid : 
         {
             title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
+        },
+        pg_getRebate : 
+        {
+            title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
@@ -7315,6 +7328,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilat Girişi",
         getDispatch : "İrsaliye Getir",
+        getRebate : "Faturaya bağla",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -7377,6 +7391,18 @@ export const langTr =
         pg_dispatchGrid : 
         {
             title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
+        },
+        pg_getRebate : 
+        {
+            title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",

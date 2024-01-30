@@ -37,7 +37,7 @@ export default class rebateInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getProforma")}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getProforma")},{ text: this.t("getRebate")}]
     }
     async componentDidMount()
     {
@@ -557,6 +557,22 @@ export default class rebateInvoice extends DocBase
         }
         super.getProforma(tmpQuery)
     }
+    async getRebate()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
+                    " FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND REBATE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND " + 
+                    "TYPE = 1 AND (DOC_TYPE IN(20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND REBATE = 0",
+            param : ['INPUT:string|50','SUB_FACTOR:string|50'],
+            value : [this.docObj.dt()[0].OUTPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+        }
+        super.getRebate(tmpQuery)
+    }
     async multiItemAdd()
     {
         let tmpMissCodes = []
@@ -881,7 +897,6 @@ export default class rebateInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1639,6 +1654,10 @@ export default class rebateInvoice extends DocBase
                                             else if(e.itemData.text == this.t("getProforma"))
                                             {
                                                 this.getProforma()
+                                            }
+                                            else if(e.itemData.text == this.t("getRebate"))
+                                            {
+                                                this.getRebate()
                                             }
                                         }).bind(this)} />
                                     </React.Fragment>    

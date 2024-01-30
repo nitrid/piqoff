@@ -5387,6 +5387,7 @@ export const langDe =
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
         getDispatch : "Lieferschein abrufen",
+        getRebate: "Mit der Rechnung verbinden",
         cash : "Betrag",
         description :"Beschreibung",
         checkReference : "Referenz",
@@ -5452,6 +5453,18 @@ export const langDe =
             clmCode : "Code",
             clmName : "Name",
             clmQuantity : "Anzahl",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
+        },
+        pg_getRebate : 
+        {
+            title : "Rechnung verbinden",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
@@ -7244,6 +7257,7 @@ export const langDe =
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
         getDispatch : "Lieferschein abrufen",
+        getRebate: "Mit der Rechnung verbinden",
         cash : "Betrag",
         description :"Beschreibung",
         checkReference : "Referenz",
@@ -7306,6 +7320,18 @@ export const langDe =
         pg_dispatchGrid : 
         {
             title : "Lieferscheinauswahl",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
+        },
+        pg_getRebate : 
+        {
+            title : "Rechnung verbinden",
             clmReferans : "Seriennummer-Folge",
             clmCode : "Code",
             clmName : "Name",

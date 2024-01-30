@@ -5419,6 +5419,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         getPayment : "Encaissement",
         getDispatch : "Recherche BL",
+        getRebate: "Lier à la facture",
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
@@ -5489,7 +5490,18 @@ export const langFr =
             clmTotal : "Total",
             clmDate : "Date",
             clmDocNo : "N° de Document",
-        
+        },
+        pg_getRebate : 
+        {
+            title : "Sélectionner Facture" ,
+            clmReferans : "Références",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total",
+            clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         grdRebtInv: 
         {
@@ -7305,6 +7317,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         getPayment : "Encaissement",
         getDispatch : "Recherche BL",
+        getRebate: "Lier à la facture",
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
@@ -7369,6 +7382,18 @@ export const langFr =
         pg_dispatchGrid : 
         {
             title : "Sélectionner Bon De Livraison" ,
+            clmReferans : "Références",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total" ,
+            clmDate : "Date",
+            clmDocNo : "N° de Document",
+        },
+        pg_getRebate : 
+        {
+            title : "Sélectionner Facture" ,
             clmReferans : "Références",
             clmCode : "Code",
             clmName : "Nom",
