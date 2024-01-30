@@ -495,7 +495,7 @@ export default class collection extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
                                             {
@@ -590,8 +590,8 @@ export default class collection extends React.PureComponent
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -708,7 +708,7 @@ export default class collection extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                
+
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -935,7 +935,7 @@ export default class collection extends React.PureComponent
                                             onClick={async (e)=>
                                             {       
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
-                                                this.numCash.value = this.deptCreditMatchingObj.popUpList.sum('REMAINDER').round(2)
+                                                this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
                                             }}/>
                                         </div>
                                     </div>
