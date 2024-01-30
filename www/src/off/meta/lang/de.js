@@ -187,6 +187,7 @@ export const langDe =
         stk_01_013: "Artikelbild bearbeiten",  // BAK
         stk_01_014: "Produktartdefinition",  // BAK
         stk_01_015: "Preisliste Definition",  // BAK
+        stk_01_016: "Produktrezeptdefinition", //BAK
         stk_02_001: "Bestandsdokument",
         stk_02_002: "Lager/Geschäftsstellen-Transfer",
         stk_02_003: "Verlust von Artikelaustritt",
