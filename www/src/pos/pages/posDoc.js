@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
