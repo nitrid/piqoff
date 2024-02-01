@@ -428,6 +428,7 @@ export const langTr =
         slsRpt_01_006 : "Müşteri Bazlı Satış ve İade Raporu",
         slsRpt_01_007 : "İade Faturaları Raporu",
         slsRpt_01_008 : "Ürün Detaylı Satış Raporu",
+        slsRpt_01_009 : "Açık Fatura Rapru",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
@@ -19036,6 +19037,32 @@ export const langTr =
             clmAmount : "Tutar",
             clmVat : "Vergi",
             clmTotal : "Toplam",
+        },
+    },
+
+    slsRpt_01_009:
+    {
+        btnGet: "Getir",
+        txtCustomerCode : "Müşteri", 
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmTotalHt : "Vergisiz Fiyat",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
         },
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"

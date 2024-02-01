@@ -996,6 +996,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_008'),//'İade Fatura raporu',
                             path: 'report/sales/itemInvoiceSalesReport'
                         },
+                        {
+                            id: 'slsRpt_01_009',
+                            text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
+                            path: 'report/sales/openInvoiceSalesReport'
+                        },
                     ]
                 }
             ]
