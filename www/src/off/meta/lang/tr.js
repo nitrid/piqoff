@@ -428,13 +428,14 @@ export const langTr =
         slsRpt_01_006 : "Müşteri Bazlı Satış ve İade Raporu",
         slsRpt_01_007 : "İade Faturaları Raporu",
         slsRpt_01_008 : "Ürün Detaylı Satış Raporu",
-        slsRpt_01_009 : "Açık Fatura Rapru",
+        slsRpt_01_009 : "Açık Satış Fatura Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
         slsRpt_02_003 : "Şeker Vergisi Raporu",
         slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
-        slsRpt_02_005 : "DEB Detay Raporu"
+        slsRpt_02_005 : "DEB Detay Raporu",
+        slsRpt_02_006 : "Açık Alış Fatura Raporu",
     },
     login:
     {
@@ -19076,9 +19077,8 @@ export const langTr =
             clmCode: "Kodu",
             clmName : "Adı",           
             clmAmount : "Tutar",
-            clmDiscount : "İndirim",
-            clmTotalHt : "Vergisiz Fiyat",
-            clmVat : "Vergi",
+            clmRefNo: "Sıra",
+            clmRemainder : "Kalan",
             clmTotal : "Toplam",
             clmRef : "Seri-Sıra"
         },
@@ -19186,4 +19186,28 @@ export const langTr =
             clmItemName : "Ürün Adı"
         },
     },
+    slsRpt_02_006 :
+    {
+        btnGet: "Getir",
+        txtCustomerCode : "Müşteri", 
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmRefNo: "Sıra",
+            clmRemainder : "Kalan",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+    }
 }

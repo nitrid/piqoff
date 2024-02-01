@@ -693,6 +693,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_02_005'),//'DEB Detay Raporu',
                             path: 'report/purchase/debDetailReport'
                         },
+                        {
+                            id: 'slsRpt_02_006',
+                            text: e.t('menuOff.slsRpt_02_006'),//'Açik Alis Fatura Raporu',
+                            path: 'report/purchase/openInvoicePurchaseReport'
+                        },
                     ]
                 }
             ]

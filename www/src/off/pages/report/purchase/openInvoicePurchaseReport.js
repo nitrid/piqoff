@@ -25,7 +25,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
-export default class openInvoiceSalesReport extends React.PureComponent
+export default class openInvoicePurchaseReport extends React.PureComponent
 {
     constructor(props)
     {
@@ -145,17 +145,17 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                 "TYPE," +
                                 "DOC_DATE," +
                                 "DOC_TYPE," +
-                                "INPUT_CODE," +
-                                "INPUT_NAME," +
+                                "OUTPUT_CODE," +
+                                "OUTPUT_NAME," +
                                 "DOC_REF," +
                                 "DOC_REF_NO," +
                                 "DOC_TOTAL," +
                                 "PAYING_AMOUNT, " +
                                 "ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER " +
                             "FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                            "WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
-                            "GROUP BY DOC_TYPE,TYPE,DOC_DATE,INPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,INPUT_CODE,DOC_TOTAL",
-                    param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
+                            "WHERE TYPE = 0 AND DOC_TYPE = 20 AND ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
+                            "GROUP BY DOC_TYPE,TYPE,DOC_DATE,OUTPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,OUTPUT_CODE,DOC_TOTAL",
+                    param : ['FIRST_DATE:date','LAST_DATE:date','OUTPUT_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
                 },
                 sql : this.core.sql
@@ -362,8 +362,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmCode")} width={120} visible={true}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmCode")} width={120} visible={true}/> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="DOC_REF" caption={this.t("grdListe.clmRef")} visible={true}/> 
                                 <Column dataField="DOC_REF_NO" caption={this.t("grdListe.clmRefNo")} width={120} visible={true}/> 
                                 <Column dataField="REMAINDER" caption={this.t("grdListe.clmRemainder")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
