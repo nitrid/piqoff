@@ -14,6 +14,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class productRecipeCard extends React.PureComponent
 {
@@ -62,7 +63,6 @@ export default class productRecipeCard extends React.PureComponent
                 
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
             }
         })
         this.productObj.ds.on('onEdit',(pTblName,pData) =>
@@ -73,10 +73,9 @@ export default class productRecipeCard extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
-            }    
+            }
         })
         this.productObj.ds.on('onRefresh',(pTblName) =>
         {        
@@ -85,7 +84,6 @@ export default class productRecipeCard extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
         })
         this.productObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -93,10 +91,7 @@ export default class productRecipeCard extends React.PureComponent
             this.btnNew.setState({disabled:true});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-        })        
-
-        // this.productObj.addEmpty();
+        })
     }
     _cellRoleRender(e)
     {
@@ -131,15 +126,13 @@ export default class productRecipeCard extends React.PureComponent
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :"SELECT * FROM ITEMS_VW_01 WHERE CODE = @CODE",
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {
-                            this.combineControl = true
-                            this.combineNew = false
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                         }
                         else
@@ -150,7 +143,6 @@ export default class productRecipeCard extends React.PureComponent
                                 button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
                             }
-                
                             await dialog(tmpConfObj);
                         }
                     }
@@ -165,9 +157,6 @@ export default class productRecipeCard extends React.PureComponent
                             {
                                 this.pg_txtItemCode.onClick = async(data) =>
                                 {
-                                    this.combineControl = true
-                                    this.combineNew = false
-                                    
                                     this.grdList.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
@@ -202,6 +191,41 @@ export default class productRecipeCard extends React.PureComponent
                 resolve(tmpData.result.recordset)
             }
         })
+    }
+    async getDoc(pCode)
+    {
+        await this.productObj.load({PRODUCED_ITEM_CODE:pCode})
+        if(this.productObj.dt().length > 0)
+        {
+            this.txtItemCode.GUID = this.productObj.dt()[0].GUID
+            this.txtItemCode.value = this.productObj.dt()[0].CODE
+            this.txtItemName.value = this.productObj.dt()[0].NAME
+            this.txtQuantity.value = this.productObj.dt()[0].PRODUCED_QTY
+            this.dtDate.value = this.productObj.dt()[0].PRODUCED_DATE
+        }
+    }
+    async addItem(pData,pRowIndex)
+    {
+        let tmpIndex = 0
+        if(typeof pRowIndex == 'undefined')
+        {
+            this.productObj.addEmpty();
+            tmpIndex = this.productObj.dt().length - 1
+        }
+        else
+        {
+            tmpIndex = pRowIndex
+        }
+
+        this.productObj.dt()[pRowIndex].PRODUCED_DATE = this.dtDate.value
+        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_GUID = this.txtItemCode.GUID
+        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_CODE = this.txtItemCode.value
+        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_NAME = this.txtItemName.value
+        this.productObj.dt()[pRowIndex].PRODUCED_QTY = this.txtQuantity.value
+        this.productObj.dt()[pRowIndex].RAW_ITEM_GUID = pData.GUID
+        this.productObj.dt()[pRowIndex].RAW_ITEM_CODE = pData.CODE
+        this.productObj.dt()[pRowIndex].RAW_ITEM_NAME = pData.NAME
+        this.productObj.dt()[pRowIndex].RAW_QTY = 0
     }
     render()
     {
@@ -243,7 +267,7 @@ export default class productRecipeCard extends React.PureComponent
                                             {
                                                 return;
                                             }    
-                                            this.getItem(this.prevCode); 
+                                            this.getDoc(this.prevCode); 
                                         }
                                     }}/>
                                 </Item>
@@ -251,7 +275,6 @@ export default class productRecipeCard extends React.PureComponent
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={async()=>
                                     {
-                                       
                                         let tmpConfObj =
                                         {
                                             id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -271,40 +294,8 @@ export default class productRecipeCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmHeader" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        this.core.util.writeLog("Kaydet butonuna basıldı. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME)
                                         if(e.validationGroup.validate().status == "valid")
-                                        {                                            
-                                            if(typeof this.itemsObj.itemBarcode.dt()[0] != 'undefined')
-                                            {
-                                                if(this.itemsObj.itemBarcode.dt()[0].BARCODE == '')
-                                                {
-                                                    this.itemsObj.itemBarcode.clearAll()
-                                                }
-                                            }
-                                           
-                                            //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
-                                            let tmpData = this.prmObj.filter({ID:'ItemGrpForNotPriceSave'}).getValue()
-                                            if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
-                                            {
-                                                
-                                            }
-                                            else
-                                            {
-                                                if(this.itemsObj.dt('ITEM_PRICE').length == 0)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPriceSave',showTitle:true,title:this.t("msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPriceSave.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceSave.msg")}</div>)
-                                                    }
-                                                    
-                                                    await dialog(tmpConfObj);
-    
-                                                    return;
-                                                }
-                                            }
-                                            //************************************ */
+                                        {
                                             let tmpConfObj =
                                             {
                                                 id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -321,9 +312,8 @@ export default class productRecipeCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.productObj.save()) == 0)
                                                 {         
-                                                    this.core.util.writeLog("Kaydet başarılı. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME)                                           
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -331,19 +321,13 @@ export default class productRecipeCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    this.core.util.writeLog("Kaydet başarısız. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
-                                            else
-                                            {
-                                                this.core.util.writeLog("Kayıtdan vazgeçildi. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
-                                            }
                                         }                              
                                         else
                                         {
-                                            this.core.util.writeLog("Kaydet validasyon başarısız. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
                                             let tmpConfObj =
                                             {
                                                 id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -359,26 +343,6 @@ export default class productRecipeCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        let tmpQuery = 
-                                        {
-                                            query : "SELECT TOP 1 * FROM POS_SALE_VW_01 WHERE ITEM_GUID = @CODE ",
-                                            param : ['CODE:string|50'],
-                                            value : [this.itemsObj.dt()[0].GUID]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        console.log(tmpData)
-                                        if(tmpData.result.recordset.length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotDelete',showTitle:true,title:this.t("msgNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgNotDelete.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotDelete.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj); 
-                                            return
-                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -389,74 +353,11 @@ export default class productRecipeCard extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.itemsObj.dt('ITEMS').removeAt(0)
-                                            await this.itemsObj.dt('ITEMS').delete();
+                                            this.productObj.dt().removeAll()
+                                            
+                                            await this.productObj.dt().delete();
                                             this.init(); 
                                         }
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={async()=>
-                                    {
-                                        
-                                        let tmpItem = {...this.itemsObj.dt()[0]}
-                                        this.itemsObj.clearAll();
-
-                                        this.txtRef.value = Math.floor(Date.now() / 1000)
-                                        this.txtCustomer.value = "";
-                                        this.txtCustomer.displayValue = "";   
-                                        this.txtBarcode.displayValue = ""; 
-                                        this.txtBarcode.value = ""; 
-                                        this.txtBarcode.readOnly = true;   
-                                        this.imgFile.value = ""; 
-                                        this.itemsPriceLogObj.clearAll();     
-                                        this.salesPriceLogObj.clear()   
-                                        this.salesContractObj.clear()   
-                                        this.otherShopObj.clear()
-
-                                        this.core.util.waitUntil(0)
-                                        this.itemsObj.addEmpty(); 
-                                        this.itemsObj.dt()[0].VAT = tmpItem.VAT
-                                        this.itemsObj.dt()[0].NAME = tmpItem.NAME
-                                        this.itemsObj.dt()[0].MAIN_GRP = tmpItem.MAIN_GRP
-                                        this.itemsObj.dt()[0].MAIN_GUID = tmpItem.MAIN_GUID
-                                        this.itemsObj.dt()[0].TYPE = tmpItem.TYPE
-                                        this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
-                                        this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
-                                        this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
-                                        this.itemsObj.dt()[0].INTERFEL = tmpItem.INTERFEL
-                                        this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
-                                        this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
-                                        let tmpUnit = new unitCls();
-                                        await tmpUnit.load()
-                                        
-                                        let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
-                                        tmpMainUnitObj.TYPE = 0
-                                        tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
-                                        tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                        
-                                        if(tmpUnit.dt(0).length > 0)
-                                        {
-                                            tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
-                                        }
-                                        
-                                        let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
-                                        tmpUnderUnitObj.TYPE = 1,
-                                        tmpUnderUnitObj.TYPE_NAME =this.t("underUnitName")   
-                                        tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
-                                        tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
-                                        tmpUnderUnitObj.FACTOR = 0
-                                        
-                                        let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
-                                        tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                        this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
-                                
-                                        this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
-                                        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
-                                
-                                        this.itemGrpForOrginsValidCheck();   
-                                        this.itemGrpForMinMaxAccessCheck();  
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto"
@@ -513,6 +414,7 @@ export default class productRecipeCard extends React.PureComponent
                                                                 this.txtItemCode.GUID = data[0].GUID
                                                                 this.txtItemCode.value = data[0].CODE
                                                                 this.txtItemName.value = data[0].NAME
+                                                                this.getDoc(data[0].CODE)
                                                             }
                                                         }
                                                     }
@@ -581,7 +483,10 @@ export default class productRecipeCard extends React.PureComponent
                                             <NdDatePicker parent={this} id={"dtDate"} tabIndex={this.tabIndex} simple={true}
                                             onValueChanged={(async()=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
+                                                for (let i = 0; i < this.productObj.dt().length; i++) 
+                                                {
+                                                    this.productObj.dt()[i].PRODUCED_DATE = this.dtDate.value
+                                                }
                                             }).bind(this)}
                                             >
                                                 <Validator validationGroup={"frmHeader"  + this.tabIndex}>
@@ -601,6 +506,13 @@ export default class productRecipeCard extends React.PureComponent
                                             <NdTextBox id="txtQuantity" parent={this} tabIndex={this.tabIndex} simple={true}
                                             param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})} 
                                             selectAll={true}
+                                            onValueChanged={(async()=>
+                                            {
+                                                for (let i = 0; i < this.productObj.dt().length; i++) 
+                                                {
+                                                    this.productObj.dt()[i].PRODUCED_QTY = this.txtQuantity.value
+                                                }
+                                            }).bind(this)}
                                             >
                                                 <Validator validationGroup={"frmHeader"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validQuantity")} />
@@ -613,16 +525,29 @@ export default class productRecipeCard extends React.PureComponent
                                 <NdLayoutItem key={"ButtonBarLy"} id={"ButtonBarLy"} parent={this} data-grid={{x:0,y:2,h:1,w:2}} access={this.access.filter({ELEMENT:'ButtonBarLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
                                         <div className='col-1 p-0 pe-1'>
-                                            <NdButton id="btnEdit" parent={this} icon="edit" type="default"
+                                            <NdButton id="btnAdd" parent={this} icon="plus" type="normal"
                                             onClick={async()=>
                                             {
-                                                if(!this.accesComp.editMode)
+                                                if(this.txtItemCode.GUID != '00000000-0000-0000-0000-000000000000' && this.txtQuantity.value > 0)
                                                 {
-                                                    this.accesComp.openEdit()
+                                                    this.pg_txtItemCode.show()
+                                                    this.pg_txtItemCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.addItem(data[0])
+                                                        }
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    this.accesComp.closeEdit()
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAddItemWarning',showTitle:true,title:this.t("msgAddItemWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgAddItemWarning.btnOk"),location:'before'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItemWarning.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
                                                 }
                                             }}/>
                                         </div>
