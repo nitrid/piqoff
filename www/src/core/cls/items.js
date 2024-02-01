@@ -2703,12 +2703,12 @@ export class productRecipeCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@PRODUCED_DATE = @PPRODUCED_DATE, " + 
-                    "@PRODUCED_ITEM = @PPRODUCED_ITEM, " + 
+                    "@PRODUCED_ITEM = @PPRODUCED_ITEM_GUID, " + 
                     "@PRODUCED_QTY = @PPRODUCED_QTY, " + 
-                    "@RAW_ITEM = @PRAW_ITEM, " + 
+                    "@RAW_ITEM = @PRAW_ITEM_GUID, " + 
                     "@RAW_QTY = @PRAW_QTY " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM:string|50','PPRODUCED_QTY:float','PRAW_ITEM:string|50','PRAW_QTY:float'],
-            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM','PRODUCED_QTY','RAW_ITEM','RAW_QTY']
+            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM_GUID:string|50','PPRODUCED_QTY:float','PRAW_ITEM_GUID:string|50','PRAW_QTY:float'],
+            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM_GUID','PRODUCED_QTY','RAW_ITEM_GUID','RAW_QTY']
         } 
         tmpDt.updateCmd = 
         {
@@ -2716,12 +2716,12 @@ export class productRecipeCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@PRODUCED_DATE = @PPRODUCED_DATE, " + 
-                    "@PRODUCED_ITEM = @PPRODUCED_ITEM, " + 
+                    "@PRODUCED_ITEM = @PPRODUCED_ITEM_GUID, " + 
                     "@PRODUCED_QTY = @PPRODUCED_QTY, " + 
-                    "@RAW_ITEM = @PRAW_ITEM, " + 
+                    "@RAW_ITEM = @PRAW_ITEM_GUID, " + 
                     "@RAW_QTY = @PRAW_QTY " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM:string|50','PPRODUCED_QTY:float','PRAW_ITEM:string|50','PRAW_QTY:float'],
-            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM','PRODUCED_QTY','RAW_ITEM','RAW_QTY']
+            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM_GUID:string|50','PPRODUCED_QTY:float','PRAW_ITEM_GUID:string|50','PRAW_QTY:float'],
+            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM_GUID','PRODUCED_QTY','RAW_ITEM_GUID','RAW_QTY']
         } 
         tmpDt.deleteCmd = 
         {

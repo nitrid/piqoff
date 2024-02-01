@@ -1465,6 +1465,32 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        msgAddItemWarning:
+        {
+            title: "Dikkat",
+            btnOk: "Tamam",
+            msg: "Ürün eklemek için lütfen üst bilgileri tam olarak giriniz !"
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Bulunmadı !!"
+        },
+        msgItemBack:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+        },
         validDate : "Tarih Seçmelisiniz",
         grdList : 
         {
