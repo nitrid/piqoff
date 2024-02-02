@@ -139,14 +139,14 @@ export const menu = (e) =>
                         },
                         {
                             id: 'stk_02_008',
-                            text: e.t('menuOff.stk_02_008'),//'Stok Giriş  ',
+                            text: e.t('menuOff.stk_02_008'), //'Stok Giriş',
                             path: 'items/documents/itemEntryDoc'
                         },
                         {
                             id: 'stk_02_009',
-                            text: e.t('menuOff.stk_02_009'),//'Stok  Çıkış ',
+                            text: e.t('menuOff.stk_02_009'), //'Stok Çıkış',
                             path: 'items/documents/itemOutDoc'
-                        }
+                        },
                     ]
                 },
                 {
@@ -213,6 +213,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_04_004'),//'SKT Operasyonu',
                             path: 'items/operations/expdateOperations'
                         },
+                        {
+                            id: 'stk_04_005',
+                            text: e.t('menuOff.stk_04_005'), //'Stok Giriş Çıkış Operasyonu',
+                            path: 'items/operations/itemEntryOutDoc'
+                        }
                     ]
                 },
                 {

@@ -227,7 +227,7 @@ class NdLayoutItemBase extends Base
                                         <div style={{flex:12}}>
                                             {this.props.children}
                                         </div>
-                                        <div style={{flex:0,paddingLeft:'2px',zIndex:1000}}>
+                                        <div style={{flex:0,paddingLeft:'15px',zIndex:1000}}>
                                             <button className={"form-group btn btn-primary"} style={{alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', padding: '0px'}}
                                             onClick={()=>
                                             {

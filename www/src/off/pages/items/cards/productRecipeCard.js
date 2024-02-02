@@ -217,15 +217,15 @@ export default class productRecipeCard extends React.PureComponent
             tmpIndex = pRowIndex
         }
 
-        this.productObj.dt()[pRowIndex].PRODUCED_DATE = this.dtDate.value
-        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_GUID = this.txtItemCode.GUID
-        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_CODE = this.txtItemCode.value
-        this.productObj.dt()[pRowIndex].PRODUCED_ITEM_NAME = this.txtItemName.value
-        this.productObj.dt()[pRowIndex].PRODUCED_QTY = this.txtQuantity.value
-        this.productObj.dt()[pRowIndex].RAW_ITEM_GUID = pData.GUID
-        this.productObj.dt()[pRowIndex].RAW_ITEM_CODE = pData.CODE
-        this.productObj.dt()[pRowIndex].RAW_ITEM_NAME = pData.NAME
-        this.productObj.dt()[pRowIndex].RAW_QTY = 0
+        this.productObj.dt()[tmpIndex].PRODUCED_DATE = this.dtDate.value
+        this.productObj.dt()[tmpIndex].PRODUCED_ITEM_GUID = this.txtItemCode.GUID
+        this.productObj.dt()[tmpIndex].PRODUCED_ITEM_CODE = this.txtItemCode.value
+        this.productObj.dt()[tmpIndex].PRODUCED_ITEM_NAME = this.txtItemName.value
+        this.productObj.dt()[tmpIndex].PRODUCED_QTY = this.txtQuantity.value
+        this.productObj.dt()[tmpIndex].RAW_ITEM_GUID = pData.GUID
+        this.productObj.dt()[tmpIndex].RAW_ITEM_CODE = pData.CODE
+        this.productObj.dt()[tmpIndex].RAW_ITEM_NAME = pData.NAME
+        this.productObj.dt()[tmpIndex].RAW_QTY = 0
     }
     render()
     {

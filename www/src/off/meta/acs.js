@@ -1353,4 +1353,168 @@ export const acs =
         }
     },
     //#endregion
+    //#region Ürün Giriş Çıkış Operasyonu
+    //txtRefLy
+    {
+        TYPE : 2,
+        ID :"txtRefLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "txtRefLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Ref No",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtRefVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtRefEditable"}
+                ]
+            }
+        }
+    },
+    //cmbDepotLy
+    {
+        TYPE : 2,
+        ID :"cmbDepotLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:1,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "cmbDepotLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Depo",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbDepotVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbDepotEditable"}
+                ]
+            }
+        }
+    },
+    //dtDocDateLy
+    {
+        TYPE : 2,
+        ID :"dtDocDateLy",
+        VALUE : {visible:true,editable:true,position:{x:3,y:1,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "dtDocDateLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Tarih",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopDtDateVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopDtDateEditable"}
+                ]
+            }
+        }
+    },
+    //txtBarcodeLy
+    {
+        TYPE : 2,
+        ID :"txtBarcodeLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:2,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "txtBarcodeLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Barkod",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtBarcodeVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtBarcodeEditable"}
+                ]
+            }
+        }
+    },
+    //ButtonBarLy
+    {
+        TYPE : 2,
+        ID :"ButtonBarLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:3,h:1,w:2,h:1,w:4}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "ButtonBarLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Recete Tanımları",
+            CAPTION : "Button Bar",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdListLy
+    {
+        TYPE : 2,
+        ID :"grdListLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:4,h:11,w:4}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "grdListLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Recete Tanımları",
+            CAPTION : "Liste",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //#endregion
 ]
