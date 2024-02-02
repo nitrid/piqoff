@@ -398,7 +398,8 @@ export const langTr =
         title : "Uyarı",
         msg :"İade Tipini Seçiniz !",
         btn01 : "Espece",
-        btn02 :"Bon D'avoir",
+        btn02 : "Bon D'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {

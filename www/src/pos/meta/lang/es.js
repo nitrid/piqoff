@@ -400,6 +400,7 @@ export const langEs =
         msg: "¡Por favor, seleccione el tipo de devolución!",
         btn01: "Efectivo",
         btn02: "Bon d'avoir",
+        btn03 : "CB",
     },
     msgWeighing:
     {

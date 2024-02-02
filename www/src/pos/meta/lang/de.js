@@ -401,6 +401,7 @@ export const langDe =
         msg: "Bitte wählen Sie den Rückgabetyp aus!",
         btn01: "Bar",
         btn02: "Gutschein",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
