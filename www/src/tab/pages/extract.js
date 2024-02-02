@@ -12,6 +12,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
+import NdPopUp from '../../core/react/devex/popup.js';
 
 
 export default class extract extends React.PureComponent
@@ -54,7 +55,7 @@ export default class extract extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT " +
+                        query : "SELECT 0 AS DOC_TYPE,'00000000-0000-0000-0000-000000000000' AS DOC_GUID," +
                         "CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  " +
                         "'' AS REF,  " +
                         "0 AS REF_NO,  " +
@@ -63,7 +64,8 @@ export default class extract extends React.PureComponent
                         "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  " +
                         "(SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE  " +
                         "UNION ALL " +
-                        "SELECT  " +
+                        "SELECT DOC_TYPE,  " +
+                        "DOC_GUID, " +
                         "DOC_DATE, " +
                         "REF, " +
                         "REF_NO, " +
@@ -127,6 +129,25 @@ export default class extract extends React.PureComponent
         await this.grdCustomer.dataRefresh(tmpSource)
         this.setState({isExecute:false})
     }
+    async btnGetDetail(pGuid)
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT ITEM_CODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID" ,
+                    param : ['DOC_GUID:string|50'],
+                    value : [pGuid]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdDetail.dataRefresh(tmpSource)
+        this.popDetail.show()
+    }
     render()
     {
         return(
@@ -172,13 +193,20 @@ export default class extract extends React.PureComponent
                             selection={{mode:"single"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
+                            headerFilter={{visible:false}}
                             height={'800'} 
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            onRowDblClick={async(e)=>
+                            {
+                                if(e.data.DOC_TYPE >= 20 && e.data.DOC_TYPE <= 39)
+                                {
+                                    this.btnGetDetail(e.data.DOC_GUID)
+                                }
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,30,50]} showPageSizeSelector={true} />
@@ -191,7 +219,6 @@ export default class extract extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={100}/> 
@@ -217,8 +244,7 @@ export default class extract extends React.PureComponent
                                 <EmptyItem colSpan={1}></EmptyItem>
                                 <Item>
                                     <Label text={this.t("txtTotalBalance")} alignment="right" />
-                                        <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}
-                                        />
+                                        <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}/>
                                 </Item>
                             </Form>    
                         </div>
@@ -292,7 +318,44 @@ export default class extract extends React.PureComponent
                                 </div>
                             </div>
                         </NbPopUp>
-                    </div>                                     
+                    </div>     
+                    {/* Detail PopUp      */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}                        
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'100%'}
+                        height={'100%'}
+                        position={{of:'#root'}}
+                        >
+                          <div className="row">
+                          <div className="col-1 pe-0"></div>
+                            <div className="col-12 pe-0">
+                            <NdGrid id="grdDetail" parent={this} 
+                                selection={{mode:"single"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="ITEM_CODE" caption={this.t("grdDetail.clmCode")} visible={true} width={120}/> 
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdDetail.clmName")} visible={true} width={250}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdDetail.clmQuantity")} visible={true} width={100}/> 
+                                    <Column dataField="PRICE" caption={this.t("grdDetail.clmPrice")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    <Column dataField="TOTAL" caption={this.t("grdDetail.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                            </NdGrid>
+                            </div>
+                            </div>
+                        </NdPopUp>
+                    </div>                           
                 </div>
             </div>
         )

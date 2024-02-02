@@ -11,6 +11,7 @@ import { posPluCls } from "../../core/cls/pos.js";
 import { datatable } from "../../core/core.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 import App from "../lib/app.js";
+import NdNumberBox from "../../core/react/devex/numberbox.js";
 
 export default class NbPluButtonGrp extends NbBase
 {
@@ -486,7 +487,7 @@ export default class NbPluButtonGrp extends NbBase
                 }
                 else if(pData.TYPE == 1)
                 {
-                    this._onSelection(pData.LINK_CODE);
+                    this._onSelection(pData.LINK_CODE,pData.QUANTITY);
                 }
                 else if(pData.TYPE == 2)
                 {
@@ -495,11 +496,11 @@ export default class NbPluButtonGrp extends NbBase
             }
         }                
     }
-    _onSelection(pItem)
+    _onSelection(pItem,pQuantity)
     {
         if(typeof this.props.onSelection != 'undefined')
         {            
-            this.props.onSelection(pItem);
+            this.props.onSelection(pItem,pQuantity);
         }
     }
     render()
@@ -537,6 +538,7 @@ export default class NbPluButtonGrp extends NbBase
                             this.clickData.data = pData[0]
                             this["popNameEntry" + this.props.id].show()
                             this["txtNameEntry" + this.props.id].value = pData[0].NAME
+                            this["txtQuantityEntry" + this.props.id].value = 1
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={150} />
@@ -602,13 +604,29 @@ export default class NbPluButtonGrp extends NbBase
                     showTitle={true}
                     title={this.lang.t("nbPluButtonGrp.popNameEntry")}
                     container={"#root"} 
-                    width={"700"}
-                    height={"460"}
+                    width={"750"}
+                    height={"500"}
                     position={{of:"#root"}}
                     >
                         <div className="row pb-1">
                             <div className="col-12">
-                                <NdTextBox id={"txtNameEntry" + this.props.id} parent={this} simple={true} onValueChanging={(e)=>{this.keyNameEntry.setInput(e)}} />     
+                                <NdTextBox id={"txtNameEntry" + this.props.id} parent={this} simple={true} onValueChanging={(e)=>{this.keyNameEntry.setInput(e)}} 
+                                  onFocusIn={()=>
+                                    {
+                                        this.keyNameEntry.inputName = ["txtNameEntry" + this.props.id]
+                                        this.keyNameEntry.setInput(this["txtNameEntry" + this.props.id].value)
+                                    }}/>     
+                            </div>                            
+                        </div>
+                        <div className="row pb-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txtQuantityEntry" + this.props.id} type={"number"} parent={this} simple={true} onValueChanging={(e)=>{this.keyNameEntry.setInput(e)}} 
+                                onFocusIn={()=>
+                                    {
+                                        this.keyNameEntry.inputName = ["txtQuantityEntry" + this.props.id]
+                                        this.keyNameEntry.setInput(this["txtQuantityEntry" + this.props.id].value)
+                                    }}
+                                />     
                             </div>                            
                         </div>
                         <div className="row py-1">
@@ -622,6 +640,7 @@ export default class NbPluButtonGrp extends NbBase
                                         this.pluObj.addEmpty()
                                         this.pluObj.dt()[this.pluObj.dt().length-1].TYPE = this.clickData.type
                                         this.pluObj.dt()[this.pluObj.dt().length-1].NAME = this["txtNameEntry" + this.props.id].value
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].QUANTITY = this["txtQuantityEntry" + this.props.id].value
                                         this.pluObj.dt()[this.pluObj.dt().length-1].LINK = this.clickData.data.GUID
                                         this.pluObj.dt()[this.pluObj.dt().length-1].LOCATION = this.clickData.index
                                         this.pluObj.dt()[this.pluObj.dt().length-1].GROUP_INDEX = this.isCategory
@@ -633,6 +652,7 @@ export default class NbPluButtonGrp extends NbBase
                                         if(tmpData.length > 0)
                                         {
                                             tmpData[0].NAME = this["txtNameEntry" + this.props.id].value
+                                            tmpData[0].QUANTITY = this["txtQuantityEntry" + this.props.id].value
                                             tmpData[0].LINK = this.clickData.data.GUID                                            
                                         }                                        
                                         this.refresh();

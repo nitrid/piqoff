@@ -8,6 +8,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Carousel from 'react-bootstrap/Carousel';
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
 
 export default class NbItemPopUp extends NbBase
 {
@@ -25,9 +26,13 @@ export default class NbItemPopUp extends NbBase
         }
         this.data = []
     }
-    async open(pData)
+    async open(pData,pDt)
     {        
         this.data = pData.data
+        console.log(this.data.GUID)
+        console.log(this.data)
+        console.log(pDt[0].INPUT)
+        console.log(pDt)
         let tmpQuery = 
         {
             query :"SELECT IMAGE AS IMAGE1,  " +
@@ -66,6 +71,22 @@ export default class NbItemPopUp extends NbBase
             this.setState({images:[]})
             this.popCard.show();
         }                
+
+        let tmpItemsSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query :  "SELECT TOP 5 DOC_DATE,REF + '-' + CONVERT(NVARCHAR,REF_NO) AS REF,PRICE,QUANTITY,TOTALHT FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND ITEM = @ITEM AND TYPE = 1 AND REBATE = 0 ORDER BY DOC_DATE DESC ",
+                    param : ['INPUT:string|50','ITEM:string|50'],
+                    value : [pDt[0].INPUT,this.data.GUID]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdLastSales.dataRefresh(tmpItemsSource)
     }
     _onValueChange(e)
     {
@@ -123,7 +144,7 @@ export default class NbItemPopUp extends NbBase
                     <div className='row pt-2'>
                         <div className='col-12'>
                             <div className='row'>
-                                <div className='col-12' style={{height:'390px'}}>
+                                <div className='col-12' style={{height:'350px'}}>
                                     <Carousel onSelect={(e)=>
                                     {
                                         for (let i = 0; i < 4; i++) 
@@ -177,11 +198,6 @@ export default class NbItemPopUp extends NbBase
                             <div className='col-12'>
                                 <h5 className="overflow-hidden"></h5>
                             </div>                            
-                        </div>
-                        <div className='row pt-2'>
-                            <div className='col-12'>
-                                <div className="overflow-hidden" style={{height:'75px'}}></div>
-                            </div>
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
@@ -260,6 +276,25 @@ export default class NbItemPopUp extends NbBase
                                     </Item>
                                 </Form>
                                
+                            </div>                                            
+                        </div>
+                        <div className='row pt-2'>
+                            <div className='col-12'>
+                                <NdGrid id="grdLastSales" parent={this} 
+                                    selection={{mode:"single"}} 
+                                    showBorders={true}
+                                    headerFilter={{visible:false}}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    >                            
+                                        <Paging defaultPageSize={5} />
+                                        <Column dataField="DOC_DATE" caption={this.t("grdLastSales.clmDocDate")} visible={true} width={150} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                        <Column dataField="REF" caption={this.t("grdLastSales.clmRef")} visible={true} width={250}/> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdLastSales.clmQuantity")} visible={true} width={100}/> 
+                                        <Column dataField="PRICE" caption={this.t("grdLastSales.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                        <Column dataField="TOTALHT" caption={this.t("grdLastSales.clmTotal")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                </NdGrid>
                             </div>                                            
                         </div>
                     </div>

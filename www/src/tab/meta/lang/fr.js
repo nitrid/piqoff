@@ -16,7 +16,8 @@ export const langFr =
         dashboard : "Tableau de bord",
         sale : "Vente",
         customerAccount : "Extrait client",
-        itemDetail : "Détail du produit"
+        itemDetail : "Détail du produit",
+        collection: "TAHSİLAT"
     },
     msgAnotherUserAlert: 
     {
@@ -189,6 +190,21 @@ export const langFr =
             btnView : "Aperçu", 
             btnMailsend : "Envoyer Mail", 
         },
+        msgCollection:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Evet",   // BAK
+            btn02: "Hayır",   // BAK
+            msg: "Faturanıza tahsilat girmek istermisiniz ?"   // BAK
+        },
+        grdLastSales : 
+        {
+            clmDocDate: "Tarih",  // BAK
+            clmRef : "Evrak No",  // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmTotal : "Tutar",  // BAK
+        },
     },
     extract :
     {
@@ -218,6 +234,14 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             msg: "S'il vous plaît choisissez un client"
+        },
+        grdDetail : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Ürün Adı",  // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmTotal : "Toplam",  // BAK
         },
     },
     itemDetail :
@@ -251,5 +275,86 @@ export const langFr =
         mountSales : "Total des commandes de ce mois", 
         yearSales : "Total des commandes de cette année", 
         sale : "Montant des ventes",        
+    },
+    collection:  // KOMPLE BAK
+    {
+        txtCustomer: "Müşteri",
+        dtDocDate : "Tarih",
+        btnCash: "Tahilat Girişi",
+        txtTotal : "Toplam Tutar",
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
+        grdDocPayments: 
+        {
+            clmCreateDate: "Kayıt Tarihi",
+            clmAmount : "Tutar",
+            clmInputName : "Kasa/Banka",
+            clmDescription : "Açıklama",
+            clmInvoice : "Ödenen Fatura",
+            clmFacDate : "Fatura Tarihi "
+        },
+        popCash : 
+        {
+            title: "Tahsilat Girişi",
+            btnApprove : "Ekle",
+            cash : "Tutar",
+            description : "Açıklama",
+            btnCancel : "Vazgeç",
+            cmbCashSafe: "Kasa/Banka",
+            invoiceSelect : "Fatura Seçimi",
+        },
+        ValidCash : "0'dan büyük bir tutar giriniz",
+        msgNew:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize emin misiniz?"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        pg_invoices : 
+        {
+            title : "Fatura Seçimi",
+            clmReferans : "REFERANS",
+            clmInputName : "CARİ ADI",
+            clmDate : "TARIH",
+            clmTotal : "TOPLAM",
+            clmRemaining  : "KALAN",
+        },
+        popCustomer:
+        {
+            title : "Müşteri Seçimi",
+            btn01 : "Ara",
+            btn02 : "Seç",
+            clmCode : "KODU",
+            clmName : "ADI"
+        },
     }
 }
