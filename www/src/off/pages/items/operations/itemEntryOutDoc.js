@@ -992,11 +992,11 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                     <Scrolling mode="standart"/>
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                                     <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
-                                                    <Column dataField="TYPE" caption={this.t("grdList.clmCreateDate")} width={200}>
+                                                    <Column dataField="TYPE" caption={this.t("grdList.clmType")} width={100}>
                                                         <Lookup dataSource={[{ID:0,VALUE:this.t("cmbType.input")},{ID:1,VALUE:this.t("cmbType.output")}]} displayExpr="VALUE"valueExpr="ID"/>
                                                     </Column>
                                                     <Column dataField="ITEM_CODE" caption={this.t("grdList.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                                    <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={300} />
+                                                    <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={500} />
                                                     <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={150}/>
                                                     <Column dataField="DESCRIPTION" caption={this.t("grdList.clmDescription")} />
                                                 </NdGrid>
@@ -1006,7 +1006,55 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                 target="#grdList"
                                                 onItemClick={(async(e)=>
                                                 {
-                                                    
+                                                    if(e.itemData.text == this.t("getRecipe"))
+                                                    {
+                                                        await this.popRecipe.show()
+                                                        this.popRecipe.onClick = async(pRData) =>
+                                                        {
+                                                            await this.popRecipeDetail.show()
+
+                                                            let tmpQuery = 
+                                                            {
+                                                                query : "SELECT 0 AS TYPE,'" + this.t("cmbType.input") + "' AS TYPE_NAME, PRODUCED_ITEM_GUID AS ITEM_GUID,PRODUCED_ITEM_CODE AS ITEM_CODE,PRODUCED_ITEM_NAME AS ITEM_NAME,PRODUCED_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 " +
+                                                                        "WHERE PRODUCED_ITEM_GUID = @ITEM " +
+                                                                        "GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY " +
+                                                                        "UNION ALL " +
+                                                                        "SELECT 1 AS TYPE,'" + this.t("cmbType.output") + "' AS TYPE_NAME, RAW_ITEM_GUID AS ITEM_GUID,RAW_ITEM_CODE AS ITEM_CODE,RAW_ITEM_NAME AS ITEM_NAME,RAW_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 " +
+                                                                        "WHERE PRODUCED_ITEM_GUID = @ITEM",
+                                                                param : ['ITEM:string|50'],
+                                                                value : [pRData[0].PRODUCED_ITEM_GUID]
+                                                            }
+                                                            
+                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                            if(tmpData.result.recordset.length > 0)
+                                                            {   
+                                                                await this.popRecipeDetail.setData(tmpData.result.recordset)
+                                                            }
+                                                            else
+                                                            {
+                                                                await this.popRecipeDetail.setData([])
+                                                            }
+                                                            this.popRecipeDetail.onClick = async(pRdData)=>
+                                                            {
+                                                                for (let i = 0; i < pRdData.length; i++) 
+                                                                {
+                                                                    if(pRdData[i].INPUT > 0)
+                                                                    {
+                                                                        let tmpEmpty = 
+                                                                        {
+                                                                            TYPE : pRdData[i].TYPE,
+                                                                            GUID : pRdData[i].ITEM_GUID,
+                                                                            CODE : pRdData[i].ITEM_CODE,
+                                                                            NAME : pRdData[i].ITEM_NAME,
+                                                                            COST_PRICE : 0,
+                                                                        }
+                                                                        
+                                                                        await this.addItem(tmpEmpty,undefined,pRdData[i].INPUT)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }).bind(this)} />
                                             </React.Fragment>
                                         </div>
@@ -1309,6 +1357,73 @@ export default class itemEntryOutDoc extends React.PureComponent
                                 </div>
                             </div>
                         </NdDialog>
+                    </div>
+                    {/* Urun Recete PopUp */}
+                    <div>
+                        <NdPopGrid id={"popRecipe"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"single"}}
+                        title={this.t("popRecipe.title")} //
+                        deferRendering={true}
+                        data = 
+                        {{
+                            source:
+                            {
+                                select:
+                                {
+                                    query : "SELECT PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY FROM PRODUCT_RECIPE_VW_01 GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY",
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        >
+                            <Column dataField="PRODUCED_DATE" caption={this.t("popRecipe.clmDate")}  width={110} dataType={'date'} format={'dd/MM/yyyy'} defaultSortOrder="asc"/>
+                            <Column dataField="PRODUCED_ITEM_CODE" caption={this.t("popRecipe.clmCode")} width={200}/>
+                            <Column dataField="PRODUCED_ITEM_NAME" caption={this.t("popRecipe.clmName")} width={450} />
+                            <Column dataField="PRODUCED_QTY" caption={this.t("popRecipe.clmQuantity")} width={200} />
+                        </NdPopGrid>
+                    </div>
+                    {/* Urun Recete Detay PopUp */}
+                    <div>
+                        <NdPopGrid id={"popRecipeDetail"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("popRecipeDetail.title")} //
+                        deferRendering={true}
+                        dbApply={false}
+                        onRowUpdated={async(e)=>
+                        {
+                            let tmpIndex = e.component.getRowIndexByKey(e.key)
+                            let tmpData = e.component.getDataSource().items()
+                            let tmpX =  e.data.INPUT / tmpData[tmpIndex].QUANTITY
+
+                            for (let i = 0; i < tmpData.length; i++) 
+                            {
+                                if(tmpIndex != i)
+                                {
+                                    tmpData[i].INPUT = Number(tmpX * tmpData[i].QUANTITY).round(3)
+                                }
+                            }
+                            e.component.refresh()
+                        }}
+                        >
+                            <Editing mode="cell" allowUpdating={true}/>
+                            <Column dataField="TYPE_NAME" caption={this.t("popRecipeDetail.clmType")} width={80} allowEditing={false}/>
+                            <Column dataField="ITEM_CODE" caption={this.t("popRecipeDetail.clmCode")} width={200} allowEditing={false}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("popRecipeDetail.clmName")} width={600} allowEditing={false}/>
+                            <Column dataField="QUANTITY" caption={this.t("popRecipeDetail.clmQuantity")} width={100} allowEditing={false}/>
+                            <Column dataField="INPUT" caption={this.t("popRecipeDetail.clmEntry")} width={100} allowEditing={true}/>
+                        </NdPopGrid>
                     </div>
                 </ScrollView>                
             </div>

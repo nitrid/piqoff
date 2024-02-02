@@ -3204,13 +3204,11 @@ export const langFr =
         },
         grdList: 
         {
+            clmType: "Type",
             clmItemCode: "Code",
             clmItemName: "Nom",
             clmQuantity : "Quantité",
-            clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmCostPrice : "Prix de Revient" ,
-            clmCuser : "Utilisateur",
         },
         popPassword : 
         {
@@ -3330,6 +3328,23 @@ export const langFr =
         {
             input: "Entrée",
             output: "Sortie"
+        },
+        popRecipe: 
+        {
+            title: "Sélection de la recette du produit",
+            clmDate: "Date",
+            clmCode: "Code du produit",
+            clmName: "Nom du produit",
+            clmQuantity: "Quantité"
+        },
+        popRecipeDetail: 
+        {
+            title: "Saisie détaillée de la recette du produit",
+            clmType: "Type",
+            clmCode: "Code du produit",
+            clmName: "Nom du produit",
+            clmQuantity: "Quantité de recette",
+            clmEntry: "Quantité d'entrée"
         }
     },
     stk_05_001 : // "Depo Envanter Raporu"
