@@ -428,12 +428,14 @@ export const langFr =
         slsRpt_01_006 : "Rapport actuel sur les ventes et les retours", //BAK
         slsRpt_01_007 : "Rapport factures retours",   
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
+        slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
         slsRpt_02_003 : "Rapport du taux de sucre", 
         slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
-        slsRpt_02_005 : "Rapport détaillé DEB"
+        slsRpt_02_005 : "Rapport détaillé DEB",
+        slsRpt_02_006 : "Rapport de facturation des achats ouvertes",
     },
     login:
     {
@@ -19493,6 +19495,30 @@ export const langFr =
             clmTotal : "Montant total",  
         },
     },
+    slsRpt_01_009:
+    {
+        btnGet: "Rechercher",
+        txtCustomerCode : "Client", 
+        grdListe : 
+        {
+            clmDate : "Date",
+            clmCode: "Code",
+            clmName : "Nom",           
+            clmAmount : "Montant",
+            clmRefNo: "Numéro de référence",
+            clmRemainder : "Restant",
+            clmTotal : "Total",
+            clmRef : "Série-Numéro"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Sélection du client",
+            clmCode :  "CODE CLIENT",
+            clmTitle : "NOM DU CLIENT",
+            clmTypeName : "TYPE",
+            clmGenusName : "GENRE"
+        },
+    },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
         chkZeroBalance : "Afficher Soldes 0",    
@@ -19588,4 +19614,29 @@ export const langFr =
             clmItemCode: "Référence Produit"
         },
     },
+    slsRpt_02_006:
+    {
+        btnGet: "Rechercher",
+        txtCustomerCode : "Client", 
+        grdListe : 
+        {
+            clmDate : "Date",
+            clmCode: "Code",
+            clmName : "Nom",           
+            clmAmount : "Montant",
+            clmRefNo: "Numéro de référence",
+            clmRemainder : "Restant",
+            clmTotal : "Total",
+            clmRef : "Série-Numéro"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Sélection du client",
+            clmCode :  "CODE CLIENT",
+            clmTitle : "NOM DU CLIENT",
+            clmTypeName : "TYPE",
+            clmGenusName : "GENRE"
+        },
+    }
+
 }
