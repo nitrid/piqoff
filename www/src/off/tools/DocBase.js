@@ -45,7 +45,7 @@ export default class DocBase extends React.PureComponent
         this.getDispatch = this.getDispatch.bind(this)
         this.calculateTotalMargin = this.calculateTotalMargin.bind(this)
         this.calculateMargin = this.calculateMargin.bind(this)
-
+        
         this.multiItemData = new datatable()
         this.unitDetailData = new datatable()
         this.newPrice = new datatable()
@@ -92,6 +92,7 @@ export default class DocBase extends React.PureComponent
             return this.docObj.docDemand
         }
     }
+      
     init()
     {
         return new Promise(async resolve =>

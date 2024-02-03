@@ -1352,22 +1352,21 @@ export const acs =
             }
         }
     },
-    //#endregion
-    //#region Ürün Giriş Çıkış Operasyonu
-    //txtRefLy
+
+    //grdSlsInv
     {
         TYPE : 2,
-        ID :"txtRefLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:0,h:1,w:2}},
+        ID :"grdSlsInvState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "txtRefLy",
+        PAGE : "ftr_02_002",
+        ELEMENT : "grdSlsInvState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
-            CAPTION : "Ref No",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1375,26 +1374,26 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtRefVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtRefEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }
     },
-    //cmbDepotLy
+    //grdContractsState
     {
         TYPE : 2,
-        ID :"cmbDepotLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:1,h:1,w:2}},
+        ID :"grdContractsState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "cmbDepotLy",
+        PAGE : "cnt_04_001",
+        ELEMENT : "grdContractsState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
-            CAPTION : "Depo",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1402,26 +1401,26 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbDepotVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbDepotEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }
     },
-    //dtDocDateLy
+    //grdListesState
     {
         TYPE : 2,
-        ID :"dtDocDateLy",
-        VALUE : {visible:true,editable:true,position:{x:3,y:1,h:1,w:2}},
+        ID :"grdListesState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "dtDocDateLy",
+        PAGE : "cnt_04_001",
+        ELEMENT : "grdListesState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
-            CAPTION : "Tarih",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1429,26 +1428,26 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopDtDateVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopDtDateEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }
     },
-    //txtBarcodeLy
+    //grdSlsDispatchState
     {
         TYPE : 2,
-        ID :"txtBarcodeLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:2,h:1,w:2}},
+        ID :"grdSlsDispatchState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "txtBarcodeLy",
+        PAGE : "irs_02_006",
+        ELEMENT : "grdSlsDispatchState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
-            CAPTION : "Barkod",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1456,26 +1455,26 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtBarcodeVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtBarcodeEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }
     },
-    //ButtonBarLy
+    //grdSlsDispatchState
     {
         TYPE : 2,
-        ID :"ButtonBarLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:3,h:1,w:2,h:1,w:4}},
+        ID :"grdSlsDispatchState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "ButtonBarLy",
+        PAGE : "irs_02_004",
+        ELEMENT : "grdSlsDispatchState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Recete Tanımları",
-            CAPTION : "Button Bar",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1483,26 +1482,26 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }
     },
-    //grdListLy
+    //grdPurcDispatchState
     {
         TYPE : 2,
-        ID :"grdListLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:4,h:11,w:4}},
+        ID :"grdPurcDispatchState",
+        VALUE : {},
         SPECIAL : "",
-        PAGE : "stk_04_005",
-        ELEMENT : "grdListLy",
+        PAGE : "irs_02_001",
+        ELEMENT : "grdPurcDispatchState",
         APP : "OFF",
         VIEW : 
         {
             TYPE : "popInput",
-            PAGE_NAME : "Ürün Recete Tanımları",
-            CAPTION : "Liste",
+            PAGE_NAME : "",
+            CAPTION : "",
             DISPLAY : "visible",
             FORM: 
             {
@@ -1510,8 +1509,386 @@ export const acs =
                 height:"180",
                 item:
                 [
-                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
-                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdRebtDispatchState
+    {
+        TYPE : 2,
+        ID :"grdRebtDispatchState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "irs_02_003",
+        ELEMENT : "grdRebtDispatchState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdSlsInvState
+    {
+        TYPE : 2,
+        ID :"grdSlsInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_008",
+        ELEMENT : "grdSlsInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdRebtDispatchState
+    {
+        TYPE : 2,
+        ID :"grdRebtDispatchState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "irs_02_005",
+        ELEMENT : "grdRebtDispatchState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdSlsInvState
+    {
+        TYPE : 2,
+        ID :"grdSlsInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "grdSlsInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdRebtInvState
+    {
+        TYPE : 2,
+        ID :"grdRebtInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "grdRebtInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdDiffInvState
+    {
+        TYPE : 2,
+        ID :"grdDiffInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_004",
+        ELEMENT : "grdDiffInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdDiffInvState
+    {
+        TYPE : 2,
+        ID :"grdDiffInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_006",
+        ELEMENT : "grdDiffInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdPurcInvState
+    {
+        TYPE : 2,
+        ID :"grdPurcInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "grdPurcInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdRebtInvState
+    {
+        TYPE : 2,
+        ID :"grdRebtInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_003",
+        ELEMENT : "grdRebtInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdRebtInvState
+    {
+        TYPE : 2,
+        ID :"grdRebtInvState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "ftr_02_007",
+        ELEMENT : "grdRebtInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdDiffOffState
+    {
+        TYPE : 2,
+        ID :"grdDiffOffState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "tkf_02_003",
+        ELEMENT : "grdDiffOffState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdSlsOrderState
+    {
+        TYPE : 2,
+        ID :"grdSlsOrderState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "sip_02_003",
+        ELEMENT : "grdSlsOrderState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdPurcOrdersState
+    {
+        TYPE : 2,
+        ID :"grdPurcOrdersState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "sip_02_001",
+        ELEMENT : "grdPurcOrdersState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdSlsOrderState
+    {
+        TYPE : 2,
+        ID :"grdSlsOrderState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "sip_02_002",
+        ELEMENT : "grdSlsOrderState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
                 ]
             }
         }

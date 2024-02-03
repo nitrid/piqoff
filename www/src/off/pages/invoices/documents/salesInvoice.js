@@ -3,6 +3,8 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import { access } from '../../../../core/core.js';
+import { acs } from '../../../meta/acs.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -37,6 +39,8 @@ export default class salesInvoice extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -44,8 +48,9 @@ export default class salesInvoice extends DocBase
         this.combineNew = false
 
         this.loading = React.createRef();
-        this.rightItems = [{ text: this.t("getDispatch"),},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
+    
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
@@ -56,10 +61,20 @@ export default class salesInvoice extends DocBase
         }
         
     }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+      
     async init()
     {
         await super.init()
-       
 
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
@@ -1671,7 +1686,8 @@ export default class salesInvoice extends DocBase
                                         <NdGrid parent={this} id={"grdSlsInv"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
-                                        allowColumnReordering={true} 
+                                        allowColumnReordering={true}
+                                        onColumnReorder={this.handleColumnReorder}
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
                                         height={'400'} 
@@ -1917,7 +1933,7 @@ export default class salesInvoice extends DocBase
                                             await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
