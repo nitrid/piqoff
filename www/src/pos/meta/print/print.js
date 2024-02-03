@@ -498,7 +498,7 @@ export function print()
 
                     tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                     tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
+                    tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE + " / " + data.pos[0].CUSTOMER_NAME).space(64)});
                     tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
                     tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
 
