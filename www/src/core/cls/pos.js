@@ -2,7 +2,6 @@ import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
 import { jsPDF } from "jspdf";
 import "jspdf-barcode";
-import io from "socket.io-client";
 
 export class posCls
 {
@@ -1404,7 +1403,7 @@ export class posDeviceCls
             }
         });
     }
-    async cardPayment(pAmount,pType) //pType = (0 => İade)
+    async cardPayment(pAmount,pType) //pType = (0 => İade) 
     {
         let tmpSerialPort = null
         if(!core.instance.util.isElectron())
@@ -1557,6 +1556,16 @@ export class posDeviceCls
                     }
                 }
             })
+            
+            setTimeout(async()=>
+            { 
+                if(this.payPort.isOpen)
+                {
+                    console.log("Payment port timeout closed")
+                    this.core.util.writeLog("Payment port timeout closed")
+                    await this.payPort.close(); 
+                }
+            }, 60000);
             // this.payPort.on('data',async(data)=> 
             // {
             //     console.log("1454 - " + data.toString() + " - " + data[0])              
