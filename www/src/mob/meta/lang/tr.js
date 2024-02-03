@@ -18,6 +18,14 @@ export const langTr =
     btnDocDelete: "Evrak Sil",
     btnLineDisc: "Satır İndirim",
     chkRememberMe : "Beni Hatırla", // BAK
+    btnMailsend : "Mail Gönder",
+    msgMailsend:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Mail göndermek istediğinize emin misiniz ?"
+    },
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -631,6 +639,13 @@ export const langTr =
             clmDate : "Tarih",
             clmOutputName : "Cari Adı",
             clmOutputCode : "Cari Kodu",
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     dep_01 : // "Depolar Arası Sevk"

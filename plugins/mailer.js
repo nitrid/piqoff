@@ -60,6 +60,7 @@ class mailer
            
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            console.log(tmpResult)
             let transporter = nodemailer.createTransport(
             {
 

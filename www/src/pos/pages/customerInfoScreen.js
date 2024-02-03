@@ -164,11 +164,11 @@ export default class customerInfoScreen extends React.PureComponent
                     </div>
                 </div>
                 {/* Grand Total */}
-                <div className="row g-0" style={{height:"15%"}}>
+                <div className="row g-0" style={{height:"50%"}}>
                     <div className="col-12">
                         <div className="row p-2 g-0">
                             <div className="col-12">
-                                <p className="fs-1 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00"} format={"currency"}/></p>
+                                <p className="h1 fs-1 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00"} format={"currency"}/></p>
                             </div>
                         </div>
                     </div>

@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -4404,9 +4405,13 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     <div className="col-10">
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
-                                        onSelection={(pItem)=>
+                                        onSelection={(pItem,pQuantity)=>
                                         {
-                                            this.getItem(this.txtBarcode.value + pItem)
+                                            if(typeof pQuantity == 'undefined')
+                                            {
+                                                pQuantity = 1
+                                            }
+                                            this.getItem(pQuantity + '*' + pItem)
                                         }}/>
                                     </div>
                                 </div>  

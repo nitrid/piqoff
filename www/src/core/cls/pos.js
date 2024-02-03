@@ -801,14 +801,15 @@ export class posPluCls
                     "@TYPE = @PTYPE, " +
                     "@NAME = @PNAME, " +
                     "@LINK = @PLINK, " +
+                    "@QUANTITY = @PQUANTITY, " +
                     "@LOCATION = @PLOCATION, " + 
                     "@GROUP_INDEX = @PGROUP_INDEX ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
-            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PQUANTITY:float','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','QUANTITY','LOCATION','GROUP_INDEX'],
             local : 
             {
                 type : "insert",
-                query : `INSERT INTO PLU (GUID, CUSER, TYPE, NAME, LINK, LOCATION, GROUP_INDEX) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                query : `INSERT INTO PLU (GUID, CUSER, TYPE, NAME, LINK,QUANTITY = ?, LOCATION, GROUP_INDEX) VALUES (?, ?, ?, ?, ?, ?, ?);`,
                 values : 
                 [
                     {
@@ -817,6 +818,7 @@ export class posPluCls
                         TYPE : {map:'TYPE'},
                         NAME : {map:'NAME'},
                         LINK : {map:'LINK'},
+                        QUANTITY : {map:'QUANTITY'},
                         LOCATION : {map:'LOCATION'},
                         GROUP_INDEX : {map:'GROUP_INDEX'}
                     }
@@ -831,20 +833,22 @@ export class posPluCls
                     "@TYPE = @PTYPE, " +
                     "@NAME = @PNAME, " +
                     "@LINK = @PLINK, " +
+                    "@QUANTITY = @PQUANTITY, " +
                     "@LOCATION = @PLOCATION, " + 
                     "@GROUP_INDEX = @PGROUP_INDEX ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
-            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PQUANTITY:float','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','QUANTITY','LOCATION','GROUP_INDEX'],
             local : 
             {
                 type : "update",
-                query : `UPDATE PLU SET CUSER = ?, TYPE = ?, NAME = ?, LINK = ?, LOCATION = ?, GROUP_INDEX = ? WHERE GUID = ?;`,
+                query : `UPDATE PLU SET CUSER = ?, TYPE = ?, NAME = ?, LINK = ?,QUANTITY = ?, LOCATION = ?, GROUP_INDEX = ? WHERE GUID = ?;`,
                 values : 
                 [{
                     CUSER : {map:'CUSER'},
                     TYPE : {map:'TYPE'},
                     NAME : {map:'NAME'},
                     LINK : {map:'LINK'},
+                    QUANTITY : {map:'QUANTITY'},
                     LOCATION : {map:'LOCATION'},
                     GROUP_INDEX : {map:'GROUP_INDEX'},
                     GUID : {map:'GUID'}
