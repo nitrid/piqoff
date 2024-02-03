@@ -40,6 +40,12 @@ export default class NdPopGrid extends Base
         this._onRowPrepared = this._onRowPrepared.bind(this);
         this._onRowRemoving = this._onRowRemoving.bind(this);
         this._onRowRemoved = this._onRowRemoved.bind(this);
+        this._onRowUpdated = this._onRowUpdated.bind(this);
+        this._onRowUpdating = this._onRowUpdating.bind(this);
+        this._onEditorPrepared = this._onEditorPrepared.bind(this);
+        this._onEditorPreparing = this._onEditorPreparing.bind(this);
+        this._onCellPrepared = this._onCellPrepared.bind(this);
+        this._onCellPreparing = this._onCellPreparing.bind(this);
         this.setSource = this.setSource.bind(this);
         this.setData = this.setData.bind(this);
         this.setVal = this.setVal.bind(this);
@@ -231,6 +237,48 @@ export default class NdPopGrid extends Base
             this.props.onRowRemoved(e);
         }
     }
+    _onRowUpdated(e)
+    {
+        if(typeof this.props.onRowUpdated != 'undefined')
+        {
+            this.props.onRowUpdated(e);
+        }
+    }
+    _onRowUpdating(e)
+    {
+        if(typeof this.props.onRowUpdating != 'undefined')
+        {
+            this.props.onRowUpdating(e);
+        }
+    }
+    _onEditorPrepared(e)
+    {
+        if(typeof this.props.onEditorPrepared != 'undefined')
+        {
+            this.props.onEditorPrepared(e);
+        }
+    }
+    _onEditorPreparing(e)
+    {
+        if(typeof this.props.onEditorPreparing != 'undefined')
+        {
+            this.props.onEditorPreparing(e);
+        }
+    }
+    _onCellPrepared(e)
+    {
+        if(typeof this.props.onCellPrepared != 'undefined')
+        {
+            this.props.onCellPrepared(e);
+        }
+    }
+    _onCellPreparing(e)
+    {
+        if(typeof this.props.onCellPreparing != 'undefined')
+        {
+            this.props.onCellPreparing(e);
+        }
+    }
     on(pEvt, pCallback) 
     {
         if (!this.listeners.hasOwnProperty(pEvt))
@@ -381,6 +429,12 @@ export default class NdPopGrid extends Base
                             onRowPrepared={this._onRowPrepared}
                             onRowRemoving={this._onRowRemoving}
                             onRowRemoved={this._onRowRemoved}
+                            onRowUpdated={this._onRowUpdated}
+                            onRowUpdating={this._onRowUpdating}
+                            onEditorPrepared={this._onEditorPrepared}
+                            onEditorPreparing={this._onEditorPreparing}
+                            onCellPrepared={this._onCellPrepared}
+                            onCellPreparing={this._onCellPreparing}
                             columns={this.state.columns}
                             filterRow={this.state.filterRow}
                             headerFilter={this.state.headerFilter}
@@ -392,6 +446,7 @@ export default class NdPopGrid extends Base
                             access={this.access.grid}
                             notRefresh={this.props.notRefresh}
                             loadPanel={{enabled:true}}
+                            dbApply={typeof this.props.dbApply == 'undefined' ? false : this.props.dbApply}
                             >                            
                             {this.props.children}
                             </NdGrid>

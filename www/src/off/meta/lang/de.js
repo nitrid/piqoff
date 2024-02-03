@@ -3192,12 +3192,11 @@ export const langDe =
         },
         grdList:
         {
+            clmType: "Typ",
             clmItemCode: "Code",
             clmItemName: "Name",
             clmQuantity: "Anzahl",
-            clmCreateDate: "Erstellungsdatum",
             clmDescription: "Beschreibung",
-            clmCuser: "Benutzer"
         },
         popPassword:
         {
@@ -3317,6 +3316,23 @@ export const langDe =
         {
             input: "Eingang",
             output: "Ausgang"
+        },
+        popRecipe: 
+        {
+            title: "Auswahl des Produktrezepts",
+            clmDate: "Datum",
+            clmCode: "Produktcode",
+            clmName: "Produktname",
+            clmQuantity: "Menge"
+        },
+        popRecipeDetail: 
+        {
+            title: "Detailierte Eingabe des Produktrezepts",
+            clmType: "Typ",
+            clmCode: "Produktcode",
+            clmName: "Produktname",
+            clmQuantity: "Rezeptmenge",
+            clmEntry: "Eingangsmenge"
         }
     },
     stk_05_001 : // "Lagerbestandsbericht"

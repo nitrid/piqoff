@@ -2150,7 +2150,7 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    payCard(pAmount)
+    payCard(pAmount,pType)
     {
         return new Promise(async resolve => 
         {
@@ -2167,7 +2167,7 @@ export default class posDoc extends React.PureComponent
                             await this.posDevice.payPort.close()
                         }
                         this.msgCardPayment.hide();
-                        resolve(await this.payCard(pAmount)) // Tekrar
+                        resolve(await this.payCard(pAmount,pType)) // Tekrar
                     }
                     else if(e == 'btn02')
                     {
@@ -2207,7 +2207,7 @@ export default class posDoc extends React.PureComponent
 
             tmpFn()
             
-            let tmpCardPay = await this.posDevice.cardPayment(pAmount)
+            let tmpCardPay = await this.posDevice.cardPayment(pAmount,pType)
             
             if(typeof tmpCardPay != 'undefined')
             {
@@ -7321,6 +7321,37 @@ export default class posDoc extends React.PureComponent
 
                                 await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                             }
+                            else if(tmpResult == 'btn03') //CB
+                            {
+                                let tmpPayCard = await this.payCard(Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2)),0)
+
+                                if(tmpPayCard == 1) //Başarılı
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 2) //Zorla
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 3) //iptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return                    
+                                }
+                                else //Başarısız veya İptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return
+                                }
+
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 1
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CB'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
 
                             if(this.txtItemReturnTicket.value != "")
                             {
@@ -7386,7 +7417,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">

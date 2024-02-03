@@ -1404,7 +1404,7 @@ export class posDeviceCls
             }
         });
     }
-    async cardPayment(pAmount)
+    async cardPayment(pAmount,pType) //pType = (0 => İade)
     {
         let tmpSerialPort = null
         if(!core.instance.util.isElectron())
@@ -1476,7 +1476,7 @@ export class posDeviceCls
                         'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
                         'answer_flag': '0',
                         'payment_mode': payMethod  == 'check' ? 'C' : '1',  
-                        'transaction_type': '0',
+                        'transaction_type': typeof pType != 'undefined' && pType == 0 ? '1' : '0',
                         'currency_numeric': 978, 
                         'private': '          ',
                         'delay': 'A010',
@@ -1535,7 +1535,7 @@ export class posDeviceCls
                         'currency_numeric'  : str.substr(12, 3),
                         'private'           : str.substr(15, 11)
                     };
-                    this.core.util.writeLog("response : " + response)
+                    this.core.util.writeLog("response : " + JSON.stringify(response))
                     // setTimeout(async() => 
                     // {
                     //     if(this.payPort.isOpen)

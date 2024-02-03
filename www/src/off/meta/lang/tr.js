@@ -3203,12 +3203,11 @@ export const langTr =
         },
         grdList: 
         {
+            clmType: "Tip",
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmQuantity : "Adet",
-            clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama",
-            clmCuser : "Kullanıcı"
+            clmDescription :"Açıklama"
         },
         popPassword : 
         {
@@ -3328,6 +3327,23 @@ export const langTr =
         {
             input : "Giriş",
             output : "Çıkış"
+        },
+        popRecipe : 
+        {
+            title: "Ürün Recetesi Seçim",
+            clmDate: "Tarih",
+            clmCode: "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmQuantity: "Miktar"
+        },
+        popRecipeDetail : 
+        {
+            title: "Ürün Recetesi Detay Giriş",
+            clmType: "Tip",
+            clmCode: "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmQuantity: "Recete Miktarı",
+            clmEntry: "Giriş Miktarı"
         },
     },
     stk_05_001 : // "Depo Envanter Raporu"
