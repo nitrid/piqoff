@@ -40,9 +40,9 @@ export const langDe =
     price: "Preis",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Achtung!", 
+        msg : "Dieser Beleg enthält eine aktuelle Zahlung. Transaktion an der Kasse fortsetzen, wo die Zahlung eingegangen ist! Kassencode: ",   // BAK
+        btn01 : "OK",   
     },
     msgCustomerNotFound:
     {
@@ -157,7 +157,7 @@ export const langDe =
     msgInvalidSafeTicket: 
     {
         title: "Achtung",
-        msg: "Ungültiges Kassenbeleg!",
+        msg: "Ungültiger Kassenbeleg!",
         btn01: "OK",
     },
     msgPriceNotDoesZero: 
@@ -175,7 +175,7 @@ export const langDe =
     msgCostPrice: 
     {
         title: "Achtung",
-        msg: "Der Preis darf nicht unter dem Kostenpreis liegen!",
+        msg: "Der Preis darf nicht unter dem Selbstkostenpreis liegen!",
         btn01: "OK",
     },
     totalLine: "Gesamtzeile: ",
@@ -244,13 +244,13 @@ export const langDe =
     msgPreLottery:
     {
         title: "Warnung",
-        msg: "EINE MINUTE...",
+        msg: "BITTE WARTEN...",
         btn01: "WEITER",
     },
     msgPostLottery:
     {
         title: "Warnung",
-        msg: "DIESER KUNDE HAT DIE ZIEHUNG GEWONNEN !!!",
+        msg: "DIESER KUNDE HAT DIE AUSLOSUNG GEWONNEN !!!",
         btn01: "Ja",
     },    
     msgCustomerMail:
@@ -326,16 +326,16 @@ export const langDe =
         cmbPopLastSalePayType : 
         {
             optionAll : "Alle",
-            optionEspece : "Espece",
-            optionTPE : "Carte Bancaire TPE",
-            optionCheque1 : "Cheque",
-            optionCheque2 : "CHEQue",
-            optionAvoir : "Bon D'Avoir"
+            optionEspece : "Barhlung",
+            optionTPE : "Kartenzahlung",
+            optionCheque1 : "Scheck",
+            optionCheque2 : "Scheck",
+            optionAvoir : "Gutschein"
         }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
-    txtPopLastRefNoPholder : "Ref No",  // BAK
-    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
+    txtPopLastRefNoPholder : "Referenznummer",  
+    txtPopLastCustomerPholder : "Kundennummer", 
     popLastTotal: 
     {
         title: "Letzte Zahlung"
@@ -364,12 +364,12 @@ export const langDe =
     },
     popDeleteDesc: 
     {
-        head: "Löschbeschreibung",
+        head: "Löschgrund",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     popRowDeleteDesc: 
     {
-        head: "Beschreibung für Zeilenlöschung",
+        head: "Grund für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     PopBalanceCounterDesc :
@@ -379,12 +379,12 @@ export const langDe =
     },
     popItemReturnDesc: 
     {
-        head: "Rückgabe-Beschreibung",
+        head: "Rückgabegrund",
         title: "Bitte geben Sie einen Grund für die Rückgabe ein."
     },
     popRePrintDesc: 
     {
-        head: "Beschreibung für erneuten Druck",
+        head: "Grund für erneuten Druck",
         title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
     msgItemReturnTicket: 
@@ -393,7 +393,7 @@ export const langDe =
         msg: "Bitte scannen Sie die Rückgabe-Ticketsrestorants ein!",
         btn01: "OK",
         btn02: "Abbrechen",
-        btn03 : "Fiş Seçimi" // BAK
+        btn03 : "Belegwahl" 
     },
     msgItemReturnType: 
     {
@@ -405,13 +405,13 @@ export const langDe =
     msgWeighing: 
     {
         title: "Achtung",
-        msg: "Bitte warten Sie auf die Antwort von der Waage.",
+        msg: "Warten Sie bitte auf die Antwort von der Waage.",
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
     msgCardPayment: {
         title: "Achtung",
-        msg: "Warte auf die Antwort des Kartenterminals.",
+        msg: "Warten Sie bitte auf die Antwort des Kartenterminals.",
         msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
@@ -428,12 +428,12 @@ export const langDe =
     popAdvance: 
     {
         title: "Vorschuss",
-        in: "Eingang",
-        out: "Ausgang"
+        in: "Einzahlung",
+        out: "Auszahlung"
     },
     popAdvanceDesc: 
     {
-        head: "Vorschussbeschreibung",
+        head: "Vorschussgrund",
         title: "Bitte geben Sie den Grund für den Vorschuss ein",
     },
     msgSave: 
@@ -453,7 +453,7 @@ export const langDe =
     popParkList:
     {
         title: "Vorgänge im Park",
-        btnParkAll: "Alle im Park"
+        btnParkAll: "Alle Vorgänge im Park"
     },
     popBarcodeList:
     {
@@ -598,7 +598,7 @@ export const langDe =
     msgDbTransferAlert : 
     {
         title : "Achtung",
-        msg : "Möchten Sie die lokale Datenbank aktualisieren?",
+        msg : "Möchten Sie lokalen Datenbank aktualisieren?",
         btn01 : "OK",
         btn02 : "Abbrechen",
     },
@@ -621,7 +621,7 @@ export const langDe =
     msgDisconnectWarning: 
     {
       title: "Achtung",
-      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      msg: "Sind Sie sicher, dass Sie den Vorgang verlassen möchten?",
       btn01: "JA",
       btn02: "NEIN"
     },
@@ -706,13 +706,13 @@ export const langDe =
         msgRef:
         {
             title : "Achtung",
-            msg : "Was möchten Sie mit dem Button tun?",
+            msg : "Was möchten Sie mit dieser Taste machen?",
             btn01 : "Bearbeiten",
             btn02 : "Löschen",
         },
         popSelectItem : "Artikel auswählen",
         popSelectItemGrp : "Produktgruppe auswählen",
-        popNameEntry : "Button-Name"
+        popNameEntry : "TastenName"
     },
     popOrderList :
     {
@@ -826,8 +826,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port",
-        printerPort: "Printer port"
+        scannerPort : "Scanneranschluss",
+        printerPort: "Druckeranschluss"
     },
     msgNotBarcodeWeighing: 
     {
@@ -844,7 +844,7 @@ export const langDe =
     {
         title: "Achtung",
         msg: "Gescannte Zeile : {0} - Gesamtbetrag : {1}",
-        btn01: "Okay"
+        btn01: "OK"
     },
     msgBarcodeWeighingUnit: 
     {
@@ -856,7 +856,7 @@ export const langDe =
     {
         title: "Achtung",
         msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
-        btn01: "Okay"
+        btn01: "OK"
     },
     msgMacIdFailed:
     {
@@ -870,10 +870,10 @@ export const langDe =
     },
     popPasswordChange : 
     {
-        title:"Şifre Değiştir",  // BAK
-        NewPassword : "Yeni Şifre",  // BAK
-        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
-        btnApprove : "Onayla"  // BAK
+        title:"Passwort ändern!",  
+        NewPassword : "Neues Passwort eingeben!",  
+        NewPassword2 : "Neues Passwort wiederholen!",  
+        btnApprove : "Bestätigen"  
     },
-    passChange :"Şifre Değiştir", // BAK
+    passChange :"Passwort ändern!", 
 }

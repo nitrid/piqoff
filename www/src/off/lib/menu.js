@@ -1137,6 +1137,11 @@ export const menu = (e) =>
                             id: 'pos_01_002',
                             text: e.t('menuOff.pos_01_002'),//'Plu Kopyalama',
                             path: 'pos/card/pluCopy'
+                        },
+                        {
+                            id: 'pos_01_003',
+                            text: e.t('menuOff.pos_01_003'),//'Fiş Sonu Açıklaması',
+                            path: 'pos/card/printDescription'
                         }
                     ]
                 },
@@ -1255,6 +1260,12 @@ export const menu = (e) =>
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
                             path: 'pos/report/balanceTicket'
+                        },
+                        //Okunmamış Terazi Fişleri Raporu 
+                        {
+                            id: 'pos_02_016',
+                            text: e.t('menuOff.pos_02_016'),
+                            path: 'pos/report/usingPointReport'
                         }
                     ]
                 },

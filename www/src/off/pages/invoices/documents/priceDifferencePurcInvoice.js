@@ -42,7 +42,7 @@ export default class priceDifferenceInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -1802,7 +1802,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
                                                     App.instance.setState({isExecute:false})
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -1848,7 +1848,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         console.log(tmpData.result.recordset[0].PATH)
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -1911,7 +1911,7 @@ export default class priceDifferenceInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"popMailSend.txtMailSubject"} alignment="right" />
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
@@ -1975,7 +1975,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     console.log(1)
                                                     let tmpMailAdress = await this.core.sql.execute(tmpMailQuery) 
                                                     console.log(tmpMailAdress)
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                     console.log(2)
                                                     console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
@@ -1990,20 +1990,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                         }
                                                         
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:"",
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",
                                                                         service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
                                                                         host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
                                                                         port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
                                                                         userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
                                                                         password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
-                                                                        console.log('ggg')
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SERVICE)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PORT)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_ADDRESS)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PASSWORD)
-                                                                        console.log(tmpMailData)
-                                                                        console.log('ttt')
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                          console.log(4)

@@ -221,8 +221,16 @@ export default class DocBase extends React.PureComponent
                     {
                         tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
                     }
-
-                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,this.type == 0 ? 1 : 0,0)
+                    let priceType = 0
+                    if(this.docObj.dt()[0].REBATE == 0)
+                    {
+                        priceType = this.type == 0 ? 1 : 0
+                    }
+                    else
+                    {
+                        priceType = this.type == 0 ? 0 : 1
+                    }
+                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(2)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
@@ -317,14 +325,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -334,14 +342,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -724,6 +732,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.REF = this.docObj.dt()[0].REF
                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
                 tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
@@ -738,6 +747,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.VAT = data[i].VAT
                 tmpDocItems.AMOUNT = data[i].AMOUNT
                 tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.TOTALHT = data[i].TOTALHT
                 tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                 tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -810,6 +820,7 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -842,6 +853,7 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -965,7 +977,6 @@ export default class DocBase extends React.PureComponent
     }
     async checkDocNo(pDocNo)
     {
-        console.log(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         {
             if(pDocNo != '')

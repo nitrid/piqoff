@@ -119,8 +119,8 @@ export default class salesOrdList extends React.PureComponent
                     "PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
                     " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
                     " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),103) AS DATE,   "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),103) AS DATE,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),108) AS TIME,   "  +
                     " MAX(SALE.DEVICE) AS DEVICE,  "  +
                     " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
                     " SALE.TYPE AS SALE_TYPE,  "  +
@@ -1279,7 +1279,7 @@ export default class salesOrdList extends React.PureComponent
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset))
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:false})
                                                         if(pResult.split('|')[0] != 'ERR')

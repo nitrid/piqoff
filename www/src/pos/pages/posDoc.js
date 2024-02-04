@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -510,6 +511,7 @@ export default class posDoc extends React.PureComponent
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
+            this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }
         //********************************************* */
         this.cheqDt.selectCmd = 
@@ -1043,7 +1045,7 @@ export default class posDoc extends React.PureComponent
 
                         tmpPrice = tmpResult
                         //FİYAT GİRİLMİŞ İSE TERAZİYE İSTEK YAPILIYOR.
-                        let tmpWResult = await this.getWeighing()
+                        let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
                             tmpQuantity = tmpWResult
@@ -4403,9 +4405,13 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     <div className="col-10">
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
-                                        onSelection={(pItem)=>
+                                        onSelection={(pItem,pQuantity)=>
                                         {
-                                            this.getItem(this.txtBarcode.value + pItem)
+                                            if(typeof pQuantity == 'undefined')
+                                            {
+                                                pQuantity = 1
+                                            }
+                                            this.getItem(pQuantity + '*' + pItem)
                                         }}/>
                                     </div>
                                 </div>  
