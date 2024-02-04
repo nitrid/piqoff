@@ -106,7 +106,6 @@ export default class specialPurcOrder extends React.PureComponent
         this.txtRef.props.onChange(tmpDoc.REF)
 
         await this.grdList.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-        await this.cmbUnit.dataRefresh({source : this.unitDt})
     }
     async componentDidMount()
     {
@@ -127,7 +126,6 @@ export default class specialPurcOrder extends React.PureComponent
         this.setState({price:0})
         this.setState({factor:1})
         this.setState({image:"../../css/img/noimage.jpg"})
-        this.cmbUnit.setData([])
         this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -155,11 +153,10 @@ export default class specialPurcOrder extends React.PureComponent
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
 
                 if(this.unitDt.length > 0)
                 {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
+                    this.orderDt[0].UNIT = this.unitDt.where({TYPE:0})[0].GUID
                     this.setState({factor:this.unitDt.where({TYPE:0})[0].FACTOR})
                 }
 
@@ -211,7 +208,8 @@ export default class specialPurcOrder extends React.PureComponent
                     </div>
                 );
                 await dialog(this.alertContent);
-                this.txtQuantity.value = prmLimitQuantity;
+                this.txtQuantity.value = 1;
+                this.txtBarcode.focus()
                 return; // Sort de la fonction si la quantité est limitée
             }
     
@@ -848,92 +846,57 @@ export default class specialPurcOrder extends React.PureComponent
                                     </div>
                                     <div className='row pb-1'>
                                         <div className='col-12'>
-                                            <h4 style={{height:'30px',textAlign:"center",overflow:"hidden"}}>
+                                            <h4 style={{height:'50px',textAlign:"center",overflow:"hidden"}}>
                                                 <NbLabel id="lblItemName" parent={this} value={""}/>
                                             </h4>
                                         </div>
                                     </div>
-                                    <div className='row pb-1'>
-                                            <div className='col-12'>
-                                                <NdTextBox id={"txtQuantity" }  height={200} readOnly ={true} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
-                                                selectAll={false}
-                                                value={0}
-                                                onChange={(async(e)=>
-                                                {
-                                                    console.log(e)
-                                                }).bind(this)}
-                                                onValueChanged={this.calcEntry.bind(this)}
-                                                button={
-                                                [
-                                                    {
-                                                        id:'01',
-                                                        icon:'minus',
-                                                        location:'before',
-                                                        onClick:async()=>
-                                                        {
-                                                            if(this.txtQuantity.value > 0)
-                                                            {
-                                                                this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                            }
-                                                            
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'plus',
-                                                        location:'after',
-                                                        onClick:async()=>
-                                                        {
-                                                            this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
-                                                        }
-                                                    }                                                    
-                                                ]}>
-                                                </NdTextBox>
-                                            </div>                                            
-                                        </div>
-                                    <div className="card shadow-sm">
-                                       
-                                        <div className='row'>
-                                            <div className='col-3'>
+                                    <div className='row pb-4'>
+                                        <div className='col-2'>
 
-                                            </div>
-                                            <div className='col-6'>
-                                                <img src={this.state.image} className="card-img-top" height={'160px'} 
-                                                onClick={()=>
+                                        </div>
+                                        <div className='col-8'>
+                                            <NdTextBox id={"txtQuantity" }  height={200} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                            selectAll={false}
+                                            value={0}
+                                            onChange={(async(e)=>
+                                            {
+                                                console.log(e)
+                                            }).bind(this)}
+                                            onValueChanged={this.calcEntry.bind(this)}
+                                            button={
+                                            [
                                                 {
-                                                    
-                                                }}/>
-                                            </div>
-                                        </div>
-                                       
-                                        <div className="card-body">
-                                            <div className='row pb-1'>
-                                                <div className='col-6'>
-                                                    <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
-                                                </div>
-                                                <div className='col-6'>
-                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
-                                                    dt={{data:this.orderDt,field:"UNIT"}}
-                                                    onValueChanged={(e)=>
+                                                    id:'01',
+                                                    icon:'minus',
+                                                    location:'before',
+                                                    onClick:async()=>
                                                     {
-                                                        if(e.value != null && e.value != "")
+                                                        if(this.txtQuantity.value > 0)
                                                         {
-                                                            let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                            if(tmpFactor.length > 0)
-                                                            {
-                                                                this.state.factor = tmpFactor[0].FACTOR
-                                                            }
+                                                            this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
                                                         }
-                                                    }}/>
-                                                </div>
-                                            </div>
-                                           
-                                            {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-                                        </div>
+                                                        
+                                                    }
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'plus',
+                                                    location:'after',
+                                                    onClick:async()=>
+                                                    {
+                                                        this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
+                                                    }
+                                                }                                                    
+                                            ]}>
+                                            </NdTextBox>
+                                        </div>                                            
                                     </div>
-                                  
                                     <div className='row pb-2'>
-                                        <div className='col-12'>
+                                        <div className='col-2'>
+                                            
+                                        </div>
+                                        <div className='col-8'>
                                             <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                             onClick={this.addItem.bind(this)}>{this.t("lblAdd")}
                                             </NbButton>

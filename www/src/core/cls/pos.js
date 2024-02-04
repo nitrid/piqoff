@@ -1550,12 +1550,6 @@ export class posDeviceCls
                 {
                     await this.core.util.waitUntil(100);
                     this.core.util.writeLog("signal : 8")
-                    let response = 
-                    {
-                        'transaction_result': 1,
-                    };
-                    resolve({tag:"response",msg:JSON.stringify(response)}); 
-
                     if(this.payPort.isOpen)
                     {
                         this.core.util.writeLog("signal : 9")
