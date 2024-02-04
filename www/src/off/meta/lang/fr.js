@@ -17133,11 +17133,15 @@ export const langFr =
         grdMailSettings:
         {
             clmDate:"Date",
-            clmUser : "Utilisateur",
-            clmMail: "E-mail",
+            clmUser : "Utilistauer",
+            clmMail: "Mail",
+            clmMailService: "Service",
+            clmMailPassword: "Mot de passe",
+            clmSMTP : "SMTP",
+            clmMaster : "Master",
             clmSMTP : "SMTP",
             clmPORT : "N° de port",
-            clmID : "MAIL_ID",
+            clmID : "Mail ID",
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

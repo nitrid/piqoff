@@ -16869,6 +16869,7 @@ export const langTr =
             clmSMTP : "SMTP",
             clmPORT : "Port No",
             clmID : "MAIL_ID",
+            clmMaster : "Master"
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
