@@ -116,11 +116,85 @@ export default class posSalesReport extends React.PureComponent
 
         this.popDetail.show()
     }
+    async printReport()
+    {
+        let tmpQuery = 
+        {
+            query: "SELECT DOC_DATE,ROUND(SUM(FAMOUNT),2) AS FAMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2)  AS TOTAL,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 72),'') AS PATH, " +
+            "ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 WHERE POS_PAYMENT_VW_01.DOC_DATE =  POS_SALE_VW_01.DOC_DATE AND STATUS = 1 AND PAY_TYPE =0),0) AS ESC,  " +
+            "ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 WHERE POS_PAYMENT_VW_01.DOC_DATE =  POS_SALE_VW_01.DOC_DATE AND STATUS = 1 AND PAY_TYPE =1),0) AS CB,   " +
+            "ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 WHERE POS_PAYMENT_VW_01.DOC_DATE =  POS_SALE_VW_01.DOC_DATE AND STATUS = 1 AND PAY_TYPE =3),0) AS TICKET,  " +
+            "ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 WHERE POS_PAYMENT_VW_01.DOC_DATE =  POS_SALE_VW_01.DOC_DATE AND STATUS = 1 AND PAY_TYPE NOT IN(0,1)),0) AS OTHER  " +
+            "FROM POS_SALE_VW_01   " +
+            "WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1  " +
+            "GROUP BY DOC_DATE " +
+            "ORDER BY DOC_DATE " ,
+            param : ['FISRT_DATE:date','LAST_DATE:date'],
+            value : [this.dtDate.startDate,this.dtDate.endDate]
+        }
+        App.instance.setState({isExecute:true})
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        App.instance.setState({isExecute:false})
+        console.log(tmpData)
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+        {
+            console.log(tmpData.result.recordset[0].PATH)
+            console.log(pResult.split('|')[0])
+            console.log(tmpData.result.recordset)
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                console.log(mywindow)
+                mywindow.onload = function() 
+                {
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+            }
+        });
+    }
     render()
     {
         return(
             <div>
                 <ScrollView>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Toolbar>
+                            <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
+                                    onClick={async()=>
+                                    {
+                                      this.printReport()
+                                    }}/>
+                                </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
+                            </Toolbar>
+                        </div>
+                    </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>

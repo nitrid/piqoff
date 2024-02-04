@@ -42,6 +42,8 @@ export default class customerBalanceReport extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -49,6 +51,16 @@ export default class customerBalanceReport extends React.PureComponent
         {
             this.txtCustomerCode.GUID = ''
         }, 500);
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     _columnListBox(e)
     {
@@ -344,7 +356,7 @@ export default class customerBalanceReport extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >                            
-                                <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                 <ColumnChooser enabled={true} />
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />

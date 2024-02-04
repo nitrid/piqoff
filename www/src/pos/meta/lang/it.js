@@ -400,6 +400,7 @@ export const langIt =
         msg: "Seleziona il tipo di reso!",
         btn01: "Contanti",
         btn02: "Buono d'acquisto",
+        btn03 : "CB",
     },
     msgWeighing: 
     {

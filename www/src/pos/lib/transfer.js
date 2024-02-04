@@ -517,6 +517,7 @@ export default class transferCls
                         LINK TEXT,
                         LINK_CODE TEXT,
                         LINK_NAME TEXT,
+                        QUANTITY INTEGER,
                         LOCATION INTEGER,
                         GROUP_INDEX INTEGER);`
             },
