@@ -3,6 +3,8 @@ export const langDe =
     popGrid: {btnSelection: "Auswählen", btnSearch: "Auflisten"},
     serverConnection: "Verbindung zum Server wird hergestellt.",
     loading: "Wird geladen!",
+    phoneIsInvalid: "Sie dürfen nur '+' und Ziffern ohne Leerzeichen verwenden.",
+    mailIsInvalid: "Geben Sie bitte eine gültige E-Mail-Adresse ein. Überprüfen Sie '@' und die Erweiterung (z.B. .com, .fr, ...)",
     btnSpeichern: "Speichern",
     btnAbbrechen: "Abbrechen",
     btnPrint: "Drucken",
@@ -182,9 +184,10 @@ export const langDe =
         stk_01_010: "Einheiten bestimmen",
         stk_01_011: "Steuern festlegen",
         stk_01_012: "Verbundene Artikeldefinition",
-        stk_01_013: "Artikelbild bearbeiten",  
-        stk_01_014: "Produktartdefinition",  
-        stk_01_015: "Preisliste Definition",  
+        stk_01_013: "Artikelbild bearbeiten",  // BAK
+        stk_01_014: "Produktartdefinition",  // BAK
+        stk_01_015: "Preisliste Definition",  // BAK
+        stk_01_016: "Produktrezeptdefinition", //BAK
         stk_02_001: "Bestandsdokument",
         stk_02_002: "Lager/Geschäftsstellen-Transfer",
         stk_02_003: "Verlust von Artikelaustritt",
@@ -204,6 +207,7 @@ export const langDe =
         stk_04_002: "Rücknahmeoperationen",
         stk_04_003: "Bestandszählung abschließen",
         stk_04_004: "Haltbarkeitsdatum-Operation",
+        stk_04_005: "Produktein- und -ausgang", //BAK
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
@@ -417,12 +421,15 @@ export const langDe =
         slsRpt_01_006: "Verkaufs- und Rückgabebericht nach Kunden",
         slsRpt_01_007: "Retourerechnungsbericht",
         slsRpt_01_008: "Artikeldetailierter Verkaufsbericht",
+        slsRpt_01_009: "Bericht über offene Verkaufsrechnungen",
         purchaseReport: "Berichte",
         slsRpt_02_001: "Alle Rechnungen nach Datum sortiert",
         slsRpt_02_002: "DEB-Bericht",
         slsRpt_02_003: "Zuckersteuerbericht",
         slsRpt_02_004: "Detailierter Artikel Einkaufsbericht",
-        slsRpt_02_005 : "DEB Detaillebericht" 
+        slsRpt_02_005 : "DEB Detaillebericht",
+        slsRpt_02_006: "Bericht über offene Einkaufsrechnungen",
+
     },
     login:
     {
@@ -482,6 +489,32 @@ export const langDe =
         txtPopQteDepotQty : "Lagermenge",
         txtPopQteReservQty : "Reservierte Menge",
         txtPopQteInputQty : "Kommende Menge"
+    },
+    popDocAi: //BAK
+    {
+        title : "Import über Datei",
+        btnUpload : "Hochladen",
+        btnImport : "Importieren",
+        txtTaxId : "Umsatzsteuer-Identifikationsnummer",
+        txtCustomerName : "Lieferantenname",
+        dtDocDate : "Datum",
+        dtShipDate : "Versanddatum",
+        txtHT : "Gesamt ohne Steuern",
+        txtTax : "Steuer",
+        txtTTC : "Gesamt inkl. Steuern",
+        clmItemCode : "Code",
+        clmMulticode : "Mehrfachcode",
+        clmItemName : "Artikelname",
+        clmQuantity : "Menge",
+        clmPrice : "Preis",
+        clmDiscount : "Rabatt",
+        clmAmount : "Betrag",
+        msgCustomerNotFound :
+        {
+            title : "Achtung",
+            btn01 : "OK",
+            msg : "Importvorgang kann nicht durchgeführt werden, da der Lieferant nicht gefunden wurde!"
+        }
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {
@@ -1384,7 +1417,81 @@ export const langDe =
             msg: "Die von Ihnen eingegebene Listennummer ist im System registriert!"
         }
     },
-    stk_02_001: // "Sayim Belegi"
+    stk_01_016: // "Ürün Recetesi Tanımları" //BAK
+    {
+        txtItemCode: "Produktcode",
+        txtItemName: "Produktname",
+        dtDate: "Datum",
+        txtQuantity: "Menge",
+        pg_txtItemCode:
+        {
+            title: "Produktauswahl",
+            clmCode: "KODE",
+            clmName: "NAME",
+            clmStatus: "STATUS"
+        },
+        msgSave:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            btn02: "Abbrechen",
+            msg: "Möchten Sie den Eintrag wirklich speichern?"
+        },
+        msgSaveResult:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msgSuccess: "Ihr Eintrag war erfolgreich!",
+            msgFailed: "Ihr Eintrag war nicht erfolgreich!"
+        },
+        msgSaveValid:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msg: "Bitte füllen Sie die erforderlichen Felder aus!"
+        },
+        msgDelete:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            btn02: "Abbrechen",
+            msg: "Möchten Sie den Eintrag wirklich löschen?"
+        },
+        msgAddItemWarning:
+        {
+            title: "Achtung",
+            btnOk: "Ok",
+            msg: "Bitte geben Sie die Hauptinformationen korrekt ein, um ein Produkt hinzuzufügen!"
+        },
+        msgNewItem:
+        {
+            title: "Achtung",
+            btn01: "Ja",
+            btn02: "Abbrechen",
+            msg: "Möchten Sie wirklich zu einem neuen Produkt wechseln?"
+        },
+        msgItemNotFound:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msg: "Produkt nicht gefunden!"
+        },
+        msgItemBack:
+        {
+            title: "Achtung",
+            btn01: "Ja",
+            btn02: "Abbrechen",
+            msg: "Möchten Sie das Produkt wirklich zurückholen?"
+        },
+        validDate: "Sie müssen ein Datum auswählen",
+        grdList:
+        {
+            clmCode: "CODE",
+            clmName: "NAME",
+            clmQuantity: "MENGE"
+        },
+    },
+    stk_02_001: // "Sayim Evraki"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Artikellager",
@@ -3059,6 +3166,174 @@ export const langDe =
             btn01: "OK",  
             msg: "Sie können nicht mehr als die verbleibende Artikelmenge an Etiketten drucken." 
         },
+    },
+    stk_04_005: // "Ürün Giriş Çıkış Fişi"
+    {
+        txtRef: "Seriennummer-Reihenfolge",
+        cmbDepot: "Ausgangslager",
+        dtDocDate: "Datum",
+        txtBarcode: "Barcode hinzufügen",
+        getRecipe : "Produktrezept",
+        pg_Docs:
+        {
+            title: "Dokumentauswahl",
+            clmDate: "DATUM",
+            clmRef: "SERIE",
+            clmRefNo: "REIHENFOLGE",
+            clmDocDate: "DATUM",
+            clmInputName: "EINGABE",
+            clmOutputName: "AUSGABE",
+        },
+        pg_txtItemsCode:
+        {
+            title: "Artikelauswahl",
+            clmCode: "ARTIKELNUMMER",
+            clmName: "ARTIKELNAME",
+        },
+        grdList:
+        {
+            clmType: "Typ",
+            clmItemCode: "Code",
+            clmItemName: "Name",
+            clmQuantity: "Anzahl",
+            clmDescription: "Beschreibung",
+        },
+        popPassword:
+        {
+            title: "Sie müssen das Administratorpasswort eingeben, um das Dokument zu öffnen",
+            Password: "Passwort",
+            btnApprove: "Bestätigen"
+        },
+        msgDocValid:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msg: "Die Oberen Dokumentinformationen müssen ausgefüllt sein, bevor Sie Artikel hinzufügen können!"
+        },
+        msgEmpDescription:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msg: "Beschreibungen dürfen nicht leer sein!"
+        },
+        msgSpeichern:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie speichern möchten!"
+        },
+        msgSpeichernResult:
+        {
+            title: "Achtung",
+            btn01: "Ok",
+            msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
+            msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
+        },
+        msgSpeichernValid:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Bitte füllen Sie die erforderlichen Felder aus!"
+        },
+        msgDelete:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        },
+        msgPasswordSucces:
+        {
+            title: "Erfolgreich",
+            btn01: "OK",
+            msg: "Die Dokumentsperre wurde aufgehoben!",
+        },
+        msgPasswordWrong:
+        {
+            title: "Fehlgeschlagen",
+            btn01: "OK",
+            msg: "Das Passwort ist falsch!"
+        },
+        msgItemNotFound:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Artikel nicht gefunden!"
+        },
+        msgCombineItem:
+        {
+            title: "Achtung",
+            btn01: "Zusammenführen",
+            btn02: "Neu hinzufügen",
+            msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+        },
+        validRef: "Die Seriennummer darf nicht leer sein",
+        validRefNo: "Die Reihenfolge darf nicht leer sein",
+        validDepot: "Sie müssen ein Lager auswählen",
+        validCustomerCode: "Der Kundencode darf nicht leer sein",
+        validDocDate: "Sie müssen ein Datum auswählen",
+        pg_quickDesc:
+        {
+            title: "Kurzbeschreibungsauswahl",
+            clmDesc: "BESCHREIBUNG"
+        },
+        popQDescAdd:
+        {
+            title: "Kurzbeschreibung hinzufügen",
+            description: "Neue Beschreibung",
+            btnApprove: "Speichern"
+        },
+        msgNotQuantity:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Lagerbestand darf nicht ins Minus fallen! Höchstmenge, die hinzugefügt werden kann:"
+        },
+        pg_txtBarcode:
+        {
+            title: "Barcode-Auswahl",
+            clmCode: "Artikelnummer",
+            clmName: "Artikelname",
+            clmMulticode: "Lieferantennummer",
+            clmBarcode: "Barcode"
+        },
+        msgCode:
+        {
+            title: "Achtung",
+            btn01: "Zum Dokument gehen",
+            msg: "Dokument gefunden"
+        },
+        msgQuantity:
+        {
+            title: "Achtung",
+            btn01: "Hinzufügen",
+            btn02: "Abbrechen",
+            msg: "Bitte Menge eingeben!"
+        },
+        txtQuantity: "Menge",
+        cmbType: 
+        {
+            input: "Eingang",
+            output: "Ausgang"
+        },
+        popRecipe: 
+        {
+            title: "Auswahl des Produktrezepts",
+            clmDate: "Datum",
+            clmCode: "Produktcode",
+            clmName: "Produktname",
+            clmQuantity: "Menge"
+        },
+        popRecipeDetail: 
+        {
+            title: "Detailierte Eingabe des Produktrezepts",
+            clmType: "Typ",
+            clmCode: "Produktcode",
+            clmName: "Produktname",
+            clmQuantity: "Rezeptmenge",
+            clmEntry: "Eingangsmenge"
+        }
     },
     stk_05_001 : // "Lagerbestandsbericht"
     {
@@ -5357,7 +5632,8 @@ export const langDe =
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
-        getDispatch : "Lieferschein Suchen",
+        getDispatch : "Lieferschein abrufen",
+        getRebate: "Mit der Rechnung verbinden",
         cash : "Betrag",
         description :"Beschreibung",
         checkReference : "Referenz",
@@ -5423,6 +5699,18 @@ export const langDe =
             clmCode : "Code",
             clmName : "Name",
             clmQuantity : "Anzahl",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
+        },
+        pg_getRebate : 
+        {
+            title : "Rechnung verbinden",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
@@ -7214,7 +7502,8 @@ export const langDe =
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
-        getDispatch : "Lieferschein Suchen",
+        getDispatch : "Lieferschein abrufen",
+        getRebate: "Mit der Rechnung verbinden",
         cash : "Betrag",
         description :"Beschreibung",
         checkReference : "Referenz",
@@ -7277,6 +7566,18 @@ export const langDe =
         pg_dispatchGrid : 
         {
             title : "Lieferscheinauswahl",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
+        },
+        pg_getRebate : 
+        {
+            title : "Rechnung verbinden",
             clmReferans : "Seriennummer-Folge",
             clmCode : "Code",
             clmName : "Name",
@@ -13568,9 +13869,10 @@ export const langDe =
     sip_01_002 : // "Verkaufsbestellungsliste"
     {
         cmbCustomer :"Kunde",
-        btnGet :"Suchen",
-        dtFirst : "Anfangsdatum",
-        dtLast : "Enddatum",
+        btnGet :"Abrufen",
+        chkInvOrDisp: "Nur offene Bestellungen anzeigen",
+        dtFirst : "Erstes Datum",
+        dtLast : "Letztes Datum",
         txtCustomerCode : "Kunde",
         menu:"Verkaufsbestellung",
         pg_txtCustomerCode : 
@@ -18802,6 +19104,30 @@ export const langDe =
             clmTotal : "Gesamt",
         },
     },
+    slsRpt_01_009:
+    {
+        btnGet: "Holen",
+        txtCustomerCode : "Kunde", 
+        grdListe : 
+        {
+            clmDate : "Datum",
+            clmCode: "Code",
+            clmName : "Name",           
+            clmAmount : "Betrag",
+            clmRefNo: "Referenznummer",
+            clmRemainder : "Restbetrag",
+            clmTotal : "Gesamt",
+            clmRef : "Serie-Nummer"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Auswahl des Kunden",
+            clmCode :  "KUNDENCODE",
+            clmTitle : "NAME DES KUNDEN",
+            clmTypeName : "TYP",
+            clmGenusName : "ART"
+        },
+    },
     slsRpt_02_001 : // "Einkaufsbericht nach Datum sortiert"
     {
         chkZeroBalance : "Nullsalden anzeigen!",   
@@ -18897,4 +19223,29 @@ export const langDe =
             clmItemName : "Artikelname"
         },
     },
+    slsRpt_02_006:
+    {
+        btnGet: "Holen",
+        txtCustomerCode : "Kunde", 
+        grdListe : 
+        {
+            clmDate : "Datum",
+            clmCode: "Code",
+            clmName : "Name",           
+            clmAmount : "Betrag",
+            clmRefNo: "Referenznummer",
+            clmRemainder : "Restbetrag",
+            clmTotal : "Gesamt",
+            clmRef : "Serie-Nummer"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Auswahl des Kunden",
+            clmCode :  "KUNDENCODE",
+            clmTitle : "NAME DES KUNDEN",
+            clmTypeName : "TYP",
+            clmGenusName : "ART"
+        },
+    }
+
 }

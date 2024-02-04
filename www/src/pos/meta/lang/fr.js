@@ -399,6 +399,7 @@ export const langFr =
         msg :"Veuillez sélectionner le mode de remboursement  ! ",
         btn01 : "Espèce",
         btn02 :"Bon d'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {

@@ -31,6 +31,8 @@ export default class priceDifferenceInvoice extends DocBase
         this.rebate = 0
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -42,11 +44,21 @@ export default class priceDifferenceInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -1525,7 +1537,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdDiffInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdDiffInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1911,7 +1923,7 @@ export default class priceDifferenceInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"popMailSend.txtMailSubject"} alignment="right" />
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
@@ -1990,20 +2002,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                         }
                                                         
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:"",
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",
                                                                         service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
                                                                         host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
                                                                         port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
                                                                         userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
                                                                         password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
-                                                                        console.log('ggg')
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SERVICE)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PORT)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_ADDRESS)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PASSWORD)
-                                                                        console.log(tmpMailData)
-                                                                        console.log('ttt')
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                          console.log(4)

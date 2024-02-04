@@ -67,6 +67,13 @@ export default class NbKeyboard extends NbBase
                             layoutName: this.state.layoutName === "default" ? "shift" : "default"
                         });
                     }
+                    if (button === "{capslock}") 
+                    {
+                        this.setState(
+                        {
+                            layoutName: this.state.layoutName === "mail" ? "mailShift" : "mail"
+                        });
+                    }
                     if (button === "{numbers}" || button === "{abc}") 
                     {
                         this.setState(
@@ -82,21 +89,30 @@ export default class NbKeyboard extends NbBase
                     [
                     "q w e r t y u i o p ü .",
                     "a s d f g h j k l ş - ,",
-                    "z x c v b n m ö ç * _ %",
+                    "z x c v b n m ö ç * _ % {shift}",
                     "{numbers} {space} {backspace} @"
                     ],
                     default: 
                     [
                     "Q W E R T Y U I O P Ü .",
                     "A S D F G H J K L Ş - ,",
-                    "Z X C V B N M Ö Ç * _ %",
+                    "Z X C V B N M Ö Ç * _ % {shift}",
                     "{numbers} {space} {backspace} @"
                     ],
                     mail: 
                     [
                     "q w e r t y u i o p ü .",
                     "a s d f g h j k l ş - ,",
-                    "z x c v b n m ö ç * _ %",
+                    "z x c v b n m ö ç * _ % {capslock}",
+                    "{numbers} {space} {backspace} @",
+                    "hotmail gmail outlook .com",
+                    "outlook orange yahoo .fr"
+                    ],
+                    mailShift: 
+                    [
+                    "Q W E R T Y U I O P Ü .",
+                    "A S D F G H J K L Ş - ,",
+                    "Z X C V B N M Ö Ç * _ % {capslock}",
                     "{numbers} {space} {backspace} @",
                     "hotmail gmail outlook .com",
                     "outlook orange yahoo .fr"
@@ -121,7 +137,7 @@ export default class NbKeyboard extends NbBase
                 }}
                 buttonTheme={[
                 {
-                    class: "simple-keyboard-rate",
+                    class: "simple-keyboard-ratea",
                     buttons: "%"
                 }]}
                 mergeDisplay={true}

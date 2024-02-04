@@ -279,6 +279,7 @@ export class priLabelObj
             NAME : '',
             QUANTITY : 1,
             PRICE : 0,
+            PRICE_RATE : 0,
             DESCRIPTION : '',
             STATUS : 0,
         }
@@ -304,11 +305,12 @@ export class priLabelObj
                     "@NAME = @PNAME, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@PRICE = @PPRICE, " +
+                    "@PRICE_RATE = @PPRICE_RATE, " +
                     "@DESCRIPTION = @PDESCRIPTION, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PITEM:string|50','PNAME:string|50',
-                     'PQUANTITY:float','PPRICE:float','PDESCRIPTION:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','CODE','ITEM','NAME','QUANTITY','PRICE','DESCRIPTION','STATUS']
+                     'PQUANTITY:float','PPRICE:float','PPRICE_RATE:float','PDESCRIPTION:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','CODE','ITEM','NAME','QUANTITY','PRICE','PRICE_RATE','DESCRIPTION','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -320,11 +322,12 @@ export class priLabelObj
                     "@NAME = @PNAME, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@PRICE = @PPRICE, " +
+                    "@PRICE_RATE = @PPRICE_RATE, " +
                     "@DESCRIPTION = @PDESCRIPTION, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PITEM:string|50','PNAME:string|50',
-                     'PQUANTITY:float','PPRICE:float','PDESCRIPTION:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','CODE','ITEM','NAME','QUANTITY','PRICE','DESCRIPTION','STATUS']
+                     'PQUANTITY:float','PPRICE:float','PPRICE_RATE:float','PDESCRIPTION:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','CODE','ITEM','NAME','QUANTITY','PRICE','PRICE_RATE','DESCRIPTION','STATUS']
         } 
 
         this.ds.add(tmpDt);

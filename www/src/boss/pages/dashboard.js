@@ -817,6 +817,7 @@ export default class Dashboard extends React.PureComponent
                       width={"100%"}
                       dbApply={false}
                       >
+                          <Column dataField="LUSER_NAME" width={80} alignment={"center"}/>
                           <Column dataField="NAME" width={250} alignment={"center"}/>
                           <Column dataField="DATA" width={50} alignment={"center"} format={"#,##0.00€"}/>
                           <Column dataField="LAST_PRICE" width={50} alignment={"center"} format={"#,##0.00€"}/>
@@ -843,6 +844,7 @@ export default class Dashboard extends React.PureComponent
                       width={"100%"}
                       dbApply={false}
                       >
+                          <Column dataField="LUSER_NAME" width={80} alignment={"center"}/>
                           <Column dataField="NAME" width={200} alignment={"center"}/>
                           <Column dataField="DESCRIPTION" width={200} />                                                
                       </NdGrid>
@@ -867,6 +869,7 @@ export default class Dashboard extends React.PureComponent
                       width={"100%"}
                       dbApply={false}
                       >
+                          <Column dataField="LUSER_NAME" width={80} alignment={"center"}/>
                           <Column dataField="DESCRIPTION" width={200} alignment={"center"}/>
                           <Column dataField="TOTAL" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
@@ -891,6 +894,7 @@ export default class Dashboard extends React.PureComponent
                       width={"100%"}
                       dbApply={false}
                       >
+                          <Column dataField="LUSER_NAME" width={80} alignment={"center"}/>
                           <Column dataField="ITEM_NAME" width={120}/>
                           <Column dataField="QUANTITY" width={60} alignment={"center"}/>
                           <Column dataField="TOTAL" width={40} format={"#,##0.00€"}/>                                                
