@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -2150,7 +2151,7 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    payCard(pAmount)
+    payCard(pAmount,pType)
     {
         return new Promise(async resolve => 
         {
@@ -2167,7 +2168,7 @@ export default class posDoc extends React.PureComponent
                             await this.posDevice.payPort.close()
                         }
                         this.msgCardPayment.hide();
-                        resolve(await this.payCard(pAmount)) // Tekrar
+                        resolve(await this.payCard(pAmount,pType)) // Tekrar
                     }
                     else if(e == 'btn02')
                     {
@@ -2207,7 +2208,7 @@ export default class posDoc extends React.PureComponent
 
             tmpFn()
             
-            let tmpCardPay = await this.posDevice.cardPayment(pAmount)
+            let tmpCardPay = await this.posDevice.cardPayment(pAmount,pType)
             
             if(typeof tmpCardPay != 'undefined')
             {
@@ -3749,7 +3750,7 @@ export default class posDoc extends React.PureComponent
                                 columnsAutoWidth={false} 
                                 allowColumnResizing={true} 
                                 allowColumnReordering={false}
-                                height={"200px"} 
+                                height={"278px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
@@ -3835,7 +3836,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Scrolling mode="standard" />
-                                    <Paging defaultPageSize={5} />
+                                    <Paging defaultPageSize={8} />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                     <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                     {
@@ -3901,7 +3902,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Total */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3934,7 +3935,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Credit Card */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {                  
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3967,27 +3968,27 @@ export default class posDoc extends React.PureComponent
                                     {/* 7 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey7"} parent={this} keyBtn={{textbox:"txtBarcode",key:"7"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-7" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 8 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey8"} parent={this} keyBtn={{textbox:"txtBarcode",key:"8"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-8" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 9 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey9"} parent={this} keyBtn={{textbox:"txtBarcode",key:"9"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-9" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Check */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             this.getItem(this.txtBarcode.dev.option("value"))
@@ -4000,7 +4001,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnSafeOpen',USERS:this.user.CODE})}
                                         onClick={async ()=>
                                         {
@@ -4012,7 +4013,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cash */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {           
                                             if(this.posObj.posSale.dt().length == 0)
@@ -4045,28 +4046,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 4 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey4"} parent={this} keyBtn={{textbox:"txtBarcode",key:"4"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-4" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 5 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey5"} parent={this} keyBtn={{textbox:"txtBarcode",key:"5"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-5" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 6 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey6"} parent={this} keyBtn={{textbox:"txtBarcode",key:"6"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-6" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Backspace */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyBs"} parent={this} keyBtn={{textbox:"txtBarcode",key:"Backspace"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-delete-left" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4075,7 +4076,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Discount */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={async()=>
                                         {   
@@ -4087,7 +4088,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cheqpay */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
@@ -4132,28 +4133,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 1 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey1"} parent={this} keyBtn={{textbox:"txtBarcode",key:"1"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-1" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 2 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey2"} parent={this} keyBtn={{textbox:"txtBarcode",key:"2"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-2" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 3 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey3"} parent={this} keyBtn={{textbox:"txtBarcode",key:"3"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-3" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* X */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyX"} parent={this} keyBtn={{textbox:"txtBarcode",key:"*"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4162,7 +4163,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Customer Point */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.customerName.value == '')
@@ -4194,16 +4195,16 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             if(this.btnInfo.lock)
                                             {
-                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"50px",width:"100%"})
                                             }
                                             else
                                             {
-                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
+                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"50px",width:"100%"})
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: "24px"}} />
@@ -4212,18 +4213,18 @@ export default class posDoc extends React.PureComponent
                                     {/* . */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyDot"} parent={this} keyBtn={{textbox:"txtBarcode",key:"."}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"26pt"}}>.</NbButton>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"26pt"}}><div style={{height:"50px",lineHeight:'18px'}}>.</div></NbButton>
                                     </div>
                                     {/* 0 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey0"} parent={this} keyBtn={{textbox:"txtBarcode",key:"0"}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-0" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* -1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4238,11 +4239,11 @@ export default class posDoc extends React.PureComponent
                                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                                 }
                                             }
-                                        }}>-1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>-1</div></NbButton>
                                     </div>
                                     {/* +1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4254,7 +4255,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                             }
-                                        }}>+1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                     </div>
                                 </div> 
                             </div>
@@ -4404,9 +4405,13 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     <div className="col-10">
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
-                                        onSelection={(pItem)=>
+                                        onSelection={(pItem,pQuantity)=>
                                         {
-                                            this.getItem(this.txtBarcode.value + pItem)
+                                            if(typeof pQuantity == 'undefined')
+                                            {
+                                                pQuantity = 1
+                                            }
+                                            this.getItem(pQuantity + '*' + pItem)
                                         }}/>
                                     </div>
                                 </div>  
@@ -7321,6 +7326,37 @@ export default class posDoc extends React.PureComponent
 
                                 await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                             }
+                            else if(tmpResult == 'btn03') //CB
+                            {
+                                let tmpPayCard = await this.payCard(Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2)),0)
+
+                                if(tmpPayCard == 1) //Başarılı
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 2) //Zorla
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 3) //iptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return                    
+                                }
+                                else //Başarısız veya İptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return
+                                }
+
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 1
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CB'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
 
                             if(this.txtItemReturnTicket.value != "")
                             {
@@ -7386,7 +7422,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8817,8 +8853,8 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
-                  {/* Last Sale List Popup */} 
-                  <div>
+                {/* Last Sale List Popup */} 
+                <div>
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
                     showTitle={true}

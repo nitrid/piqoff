@@ -3063,6 +3063,46 @@ export const prm =
         }
     },
     //#endregion
+    //#region Ürün Giriş Çıkış Fişi
+    //negativeQuantity
+    {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "00000000-0000-0000-0000-000000000000"
+        },
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Ürün Giriş Çıkış Fişi",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
     //#region Toplu Tahsilat Giriş
     //txtRef
     {

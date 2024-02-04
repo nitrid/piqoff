@@ -1944,6 +1944,7 @@ export class access extends datatable
                     {
                         tmpMeta = tmpMeta.filter(x => x[tmpKey] === tmpValue)
                     }
+
                 }
             }
             //DATA FİLİTRELENİYOR.
@@ -1954,6 +1955,7 @@ export class access extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+
                 }                
             }
             //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
@@ -2001,6 +2003,7 @@ export class access extends datatable
     }
     setValue()
     {
+
         // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
         if(this.length > 0)
         {
@@ -2027,6 +2030,7 @@ export class access extends datatable
             {
                 let tmpData = {...this.meta[0]}
                 tmpData.VALUE = JSON.stringify(arguments[0])
+                
                 this.push(tmpData)
             }
         }

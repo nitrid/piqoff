@@ -47,7 +47,7 @@ export default class NbItemView extends NbBase
         {
             this.props.onClick();
         }
-        this.itemPopUp.open(e)
+        this.itemPopUp.open(e,this.props.dt)
     }
     render()
     {

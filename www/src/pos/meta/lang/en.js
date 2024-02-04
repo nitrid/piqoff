@@ -400,6 +400,7 @@ export const langEn =
         msg :"Please select the refund mode!",
         btn01 : "Cash",
         btn02 :"Credit Voucher",
+        btn03 : "CB",
     },
     msgWeighing: 
     {

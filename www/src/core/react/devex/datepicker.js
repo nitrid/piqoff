@@ -142,7 +142,7 @@ export default class NdDatePicker extends Base
         {
             return this._dateView()
         }
-        if(typeof this.state.title == 'undefined')
+        if(this.state.title == '')
         {
             return (
                 <div className="dx-field">
