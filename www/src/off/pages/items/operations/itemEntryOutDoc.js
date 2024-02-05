@@ -137,7 +137,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpEmpty.REF_NO = this.docInObj.docItems.dt()[i].REF_NO
             tmpEmpty.DOC_TYPE = this.docInObj.docItems.dt()[i].DOC_TYPE
             tmpEmpty.DOC_DATE = this.docInObj.docItems.dt()[i].DOC_DATE
-            tmpEmpty.DEPOT = this.docInObj.docItems.dt()[i].OUTPUT
+            tmpEmpty.DEPOT = this.docInObj.docItems.dt()[i].INPUT
             tmpEmpty.QUANTITY = this.docInObj.docItems.dt()[i].QUANTITY
             tmpEmpty.COST_PRICE = this.docInObj.docItems.dt()[i].COST_PRICE
             tmpEmpty.DEPOT_QUANTITY = this.docInObj.docItems.dt()[i].DEPOT_QUANTITY
@@ -157,7 +157,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpEmpty.REF_NO = this.docOutObj.docItems.dt()[i].REF_NO
             tmpEmpty.DOC_TYPE = this.docOutObj.docItems.dt()[i].DOC_TYPE
             tmpEmpty.DOC_DATE = this.docOutObj.docItems.dt()[i].DOC_DATE
-            tmpEmpty.DEPOT = this.docOutObj.docItems.dt()[i].INPUT
+            tmpEmpty.DEPOT = this.docOutObj.docItems.dt()[i].OUTPUT
             tmpEmpty.QUANTITY = this.docOutObj.docItems.dt()[i].QUANTITY
             tmpEmpty.COST_PRICE = this.docOutObj.docItems.dt()[i].COST_PRICE
             tmpEmpty.DEPOT_QUANTITY = this.docOutObj.docItems.dt()[i].DEPOT_QUANTITY
@@ -400,8 +400,8 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpDocIn.DOC_TYPE = 0
             tmpDocIn.REBATE = 0
             tmpDocIn.DOC_DATE = tmpInDt[0].DOC_DATE
-            tmpDocIn.INPUT = '00000000-0000-0000-0000-000000000000'
-            tmpDocIn.OUTPUT = tmpInDt[0].DEPOT
+            tmpDocIn.INPUT = tmpInDt[0].DEPOT
+            tmpDocIn.OUTPUT = '00000000-0000-0000-0000-000000000000'
             this.docInObj.addEmpty(tmpDocIn);
         }
         for (let i = 0; i < tmpInDt.length; i++) 
@@ -425,7 +425,8 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpItem.REF = tmpInDt[i].REF
             tmpItem.REF_NO = tmpInDt[i].REF_NO
             tmpItem.DOC_DATE = tmpInDt[i].DOC_DATE
-            tmpItem.OUTPUT = tmpInDt[i].DEPOT
+            tmpItem.INPUT = tmpInDt[i].DEPOT
+            tmpItem.OUTPUT = '00000000-0000-0000-0000-000000000000'
             tmpItem.ITEM_CODE = tmpInDt[i].ITEM_CODE
             tmpItem.ITEM = tmpInDt[i].ITEM
             tmpItem.ITEM_NAME = tmpInDt[i].ITEM_NAME
@@ -443,8 +444,8 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpDocOut.DOC_TYPE = 0
             tmpDocOut.REBATE = 0
             tmpDocOut.DOC_DATE = tmpOutDt[0].DOC_DATE
-            tmpDocOut.INPUT = tmpOutDt[0].DEPOT
-            tmpDocOut.OUTPUT = '00000000-0000-0000-0000-000000000000'
+            tmpDocOut.INPUT = '00000000-0000-0000-0000-000000000000'
+            tmpDocOut.OUTPUT = tmpOutDt[0].DEPOT
             this.docOutObj.addEmpty(tmpDocOut);
         }
         for (let i = 0; i < tmpOutDt.length; i++) 
@@ -468,7 +469,8 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpItem.REF = tmpOutDt[i].REF
             tmpItem.REF_NO = tmpOutDt[i].REF_NO
             tmpItem.DOC_DATE = tmpOutDt[i].DOC_DATE
-            tmpItem.INPUT = tmpOutDt[i].DEPOT
+            tmpItem.INPUT = '00000000-0000-0000-0000-000000000000'
+            tmpItem.OUTPUT = tmpOutDt[i].DEPOT
             tmpItem.ITEM_CODE = tmpOutDt[i].ITEM_CODE
             tmpItem.ITEM = tmpOutDt[i].ITEM
             tmpItem.ITEM_NAME = tmpOutDt[i].ITEM_NAME
