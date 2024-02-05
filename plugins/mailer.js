@@ -23,10 +23,10 @@ class mailer
         })
     }
 
-    mailSend(pData)
+    async mailSend(pData)
     {
        
-        return new Promise(resolve =>
+        return new Promise(async resolve =>
         {
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
@@ -40,23 +40,43 @@ class mailer
                     }
                 ]
             }
+            let tmpQuery
+            if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.mailGuid]
+                }
+            }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE MASTER = 1 ",
+                }
+            }
+           
 
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            console.log(tmpResult)
             let transporter = nodemailer.createTransport(
             {
 
                 //service: 'imap.ionos.fr',
-                host: 'ssl0.ovh.net',
-                port: 465,
+                host: tmpResult[0].MAIL_SMTP,
+                port: tmpResult[0].MAIL_PORT,
                 secure: true,
                 auth: 
                 {
-                  user: "info@g2gourmet.fr",
-                  pass: "Sivas2022+"
+                  user: tmpResult[0].MAIL_ADDRESS,
+                  pass: tmpResult[0].MAIL_PASSWORD
                 },
                 tls : { rejectUnauthorized: false, ciphers:'SSLv3' }
               });
               var mailOptions = {
-                from: "info@g2gourmet.fr",
+                from: tmpResult[0].MAIL_ADDRESS,
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,

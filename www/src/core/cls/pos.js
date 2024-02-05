@@ -2,7 +2,6 @@ import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
 import { jsPDF } from "jspdf";
 import "jspdf-barcode";
-import io from "socket.io-client";
 
 export class posCls
 {
@@ -802,14 +801,15 @@ export class posPluCls
                     "@TYPE = @PTYPE, " +
                     "@NAME = @PNAME, " +
                     "@LINK = @PLINK, " +
+                    "@QUANTITY = @PQUANTITY, " +
                     "@LOCATION = @PLOCATION, " + 
                     "@GROUP_INDEX = @PGROUP_INDEX ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
-            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PQUANTITY:float','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','QUANTITY','LOCATION','GROUP_INDEX'],
             local : 
             {
                 type : "insert",
-                query : `INSERT INTO PLU (GUID, CUSER, TYPE, NAME, LINK, LOCATION, GROUP_INDEX) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                query : `INSERT INTO PLU (GUID, CUSER, TYPE, NAME, LINK,QUANTITY = ?, LOCATION, GROUP_INDEX) VALUES (?, ?, ?, ?, ?, ?, ?);`,
                 values : 
                 [
                     {
@@ -818,6 +818,7 @@ export class posPluCls
                         TYPE : {map:'TYPE'},
                         NAME : {map:'NAME'},
                         LINK : {map:'LINK'},
+                        QUANTITY : {map:'QUANTITY'},
                         LOCATION : {map:'LOCATION'},
                         GROUP_INDEX : {map:'GROUP_INDEX'}
                     }
@@ -832,20 +833,22 @@ export class posPluCls
                     "@TYPE = @PTYPE, " +
                     "@NAME = @PNAME, " +
                     "@LINK = @PLINK, " +
+                    "@QUANTITY = @PQUANTITY, " +
                     "@LOCATION = @PLOCATION, " + 
                     "@GROUP_INDEX = @PGROUP_INDEX ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
-            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PQUANTITY:float','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','QUANTITY','LOCATION','GROUP_INDEX'],
             local : 
             {
                 type : "update",
-                query : `UPDATE PLU SET CUSER = ?, TYPE = ?, NAME = ?, LINK = ?, LOCATION = ?, GROUP_INDEX = ? WHERE GUID = ?;`,
+                query : `UPDATE PLU SET CUSER = ?, TYPE = ?, NAME = ?, LINK = ?,QUANTITY = ?, LOCATION = ?, GROUP_INDEX = ? WHERE GUID = ?;`,
                 values : 
                 [{
                     CUSER : {map:'CUSER'},
                     TYPE : {map:'TYPE'},
                     NAME : {map:'NAME'},
                     LINK : {map:'LINK'},
+                    QUANTITY : {map:'QUANTITY'},
                     LOCATION : {map:'LOCATION'},
                     GROUP_INDEX : {map:'GROUP_INDEX'},
                     GUID : {map:'GUID'}
@@ -1404,7 +1407,7 @@ export class posDeviceCls
             }
         });
     }
-    async cardPayment(pAmount)
+    async cardPayment(pAmount,pType) //pType = (0 => İade) 
     {
         let tmpSerialPort = null
         if(!core.instance.util.isElectron())
@@ -1476,7 +1479,7 @@ export class posDeviceCls
                         'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
                         'answer_flag': '0',
                         'payment_mode': payMethod  == 'check' ? 'C' : '1',  
-                        'transaction_type': '0',
+                        'transaction_type': typeof pType != 'undefined' && pType == 0 ? '1' : '0',
                         'currency_numeric': 978, 
                         'private': '          ',
                         'delay': 'A010',
@@ -1535,7 +1538,7 @@ export class posDeviceCls
                         'currency_numeric'  : str.substr(12, 3),
                         'private'           : str.substr(15, 11)
                     };
-                    this.core.util.writeLog("response : " + response)
+                    this.core.util.writeLog("response : " + JSON.stringify(response))
                     // setTimeout(async() => 
                     // {
                     //     if(this.payPort.isOpen)
@@ -1557,6 +1560,16 @@ export class posDeviceCls
                     }
                 }
             })
+            
+            setTimeout(async()=>
+            { 
+                if(this.payPort.isOpen)
+                {
+                    console.log("Payment port timeout closed")
+                    this.core.util.writeLog("Payment port timeout closed")
+                    await this.payPort.close(); 
+                }
+            }, 60000);
             // this.payPort.on('data',async(data)=> 
             // {
             //     console.log("1454 - " + data.toString() + " - " + data[0])              

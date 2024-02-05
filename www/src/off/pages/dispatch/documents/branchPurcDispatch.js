@@ -30,6 +30,8 @@ export default class branchSaleDispatch extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
         
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -41,13 +43,23 @@ export default class branchSaleDispatch extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
         }
     }
 
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
     async init()
     {
         await super.init()
@@ -1586,7 +1598,7 @@ export default class branchSaleDispatch extends DocBase
                                             await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsDispatch"}/>
+                                           <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatch"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1936,6 +1948,19 @@ export default class branchSaleDispatch extends DocBase
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}

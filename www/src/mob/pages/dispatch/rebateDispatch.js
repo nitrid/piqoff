@@ -44,7 +44,7 @@ export default class rebateDispatch extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,1,0) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 
@@ -121,14 +121,14 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.clearEntry();
             
-            this.itemDt.selectCmd.value = [pCode,this.docObj.dt()[0].OUTPUT]
+            this.itemDt.selectCmd.value = [pCode,this.docObj.dt()[0].INPUT]
             await this.itemDt.refresh();  
             
             if(this.itemDt.length > 0)
             {
                 for (let i = 0; i < this.itemDt.length; i++) 
                 {
-                    if(this.itemDt[i].CUSTOMER_GUID == this.docObj.dt()[0].OUTPUT)
+                    if(this.itemDt[i].CUSTOMER_GUID == this.docObj.dt()[0].INPUT)
                     {
                         break
                     }
@@ -219,14 +219,14 @@ export default class rebateDispatch extends React.PureComponent
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
             if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
                 this.txtPrice.value = Number(
-                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity,this.docObj.dt()[0].INPUT))
                 ).round(2);
             }
     
             // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
             this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
             this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
+            this.txtSumAmount.value = Number(Number(this.txtAmount.value) + Number(this.txtVat.value)).round(2);
         }
     }
     async addItem()
@@ -935,7 +935,7 @@ export default class rebateDispatch extends React.PureComponent
                                             dbApply={false}
                                             onRowRemoving={async (e)=>
                                             {
-                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                                if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                                 {
                                                     e.cancel = true
                                                     this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotDelete")}</div>)

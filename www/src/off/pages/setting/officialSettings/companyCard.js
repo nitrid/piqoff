@@ -384,10 +384,35 @@ export default class CustomerCard extends React.PureComponent
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            ZIPNAME: text.trim(),
+                                            ZIPCODE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     >
                                           <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
@@ -402,10 +427,35 @@ export default class CustomerCard extends React.PureComponent
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            PLACE: text.trim(),
+                                            PLACE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     >
                                           <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
