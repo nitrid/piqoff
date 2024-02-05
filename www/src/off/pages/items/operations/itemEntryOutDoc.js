@@ -137,7 +137,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpEmpty.REF_NO = this.docInObj.docItems.dt()[i].REF_NO
             tmpEmpty.DOC_TYPE = this.docInObj.docItems.dt()[i].DOC_TYPE
             tmpEmpty.DOC_DATE = this.docInObj.docItems.dt()[i].DOC_DATE
-            tmpEmpty.DEPOT = this.docInObj.docItems.dt()[i].OUTPUT
+            tmpEmpty.DEPOT = this.docInObj.docItems.dt()[i].INPUT
             tmpEmpty.QUANTITY = this.docInObj.docItems.dt()[i].QUANTITY
             tmpEmpty.COST_PRICE = this.docInObj.docItems.dt()[i].COST_PRICE
             tmpEmpty.DEPOT_QUANTITY = this.docInObj.docItems.dt()[i].DEPOT_QUANTITY
@@ -157,7 +157,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpEmpty.REF_NO = this.docOutObj.docItems.dt()[i].REF_NO
             tmpEmpty.DOC_TYPE = this.docOutObj.docItems.dt()[i].DOC_TYPE
             tmpEmpty.DOC_DATE = this.docOutObj.docItems.dt()[i].DOC_DATE
-            tmpEmpty.DEPOT = this.docOutObj.docItems.dt()[i].INPUT
+            tmpEmpty.DEPOT = this.docOutObj.docItems.dt()[i].OUTPUT
             tmpEmpty.QUANTITY = this.docOutObj.docItems.dt()[i].QUANTITY
             tmpEmpty.COST_PRICE = this.docOutObj.docItems.dt()[i].COST_PRICE
             tmpEmpty.DEPOT_QUANTITY = this.docOutObj.docItems.dt()[i].DEPOT_QUANTITY
