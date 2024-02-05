@@ -75,7 +75,7 @@ export default class salesInvoice extends DocBase
     async init()
     {
         await super.init()
-
+        console.log(localStorage.getItem('lang'))
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
         this.grdSlsInv.devGrid.clearFilter("row")
@@ -2175,12 +2175,12 @@ export default class salesInvoice extends DocBase
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
+                                            {<RequiredRule message={this.t("validDesign")} />}
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>

@@ -962,7 +962,7 @@ export default class purchaseContract extends React.PureComponent
                                         <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                             displayExpr="VALUE"                       
                                             valueExpr="ID"
-                                            value=""
+                                            value={localStorage.getItem('lang').toUpperCase()}
                                             searchEnabled={true}
                                             onValueChanged={(async()=>
                                                 {
