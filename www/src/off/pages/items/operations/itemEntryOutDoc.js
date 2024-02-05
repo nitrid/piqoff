@@ -809,7 +809,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                     </div>
                                 </NdLayoutItem>
                                 {/* dtDocDate */}
-                                <NdLayoutItem key={"dtDocDateLy"} id={"dtDocDateLy"} parent={this} data-grid={{x:1,y:1,h:1,w:2}} access={this.access.filter({ELEMENT:'dtDocDateLy',USERS:this.user.CODE})}>
+                                <NdLayoutItem key={"dtDocDateLy"} id={"dtDocDateLy"} parent={this} data-grid={{x:2,y:0,h:1,w:2}} access={this.access.filter({ELEMENT:'dtDocDateLy',USERS:this.user.CODE})}>
                                     <div className="row">
                                         <div className='col-4 p-0 pe-1'>
                                             <label className="col-form-label d-flex justify-content-end">{this.t("dtDocDate") + " :"}</label>
