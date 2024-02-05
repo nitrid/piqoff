@@ -18,31 +18,28 @@ export default class NbPopDescboard extends NbBase
             title:this.props.title,
             width:this.props.width,
             height:this.props.height,
-            position:this.props.position
-        }
-        if(typeof this.props.param != 'undefined')
-        {
-            this.button = this.props.param.getValue().buttons
+            position:this.props.position,
+            buttons:typeof this.props.param != 'undefined' ? this.props.param.getValue().buttons : []
         }
         this._onClick = this._onClick.bind(this)
     }
     _buttonView1()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 0; i < 4; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -53,21 +50,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView2()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 4; i < 8; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -78,21 +75,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView3()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 8; i < 12; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -176,6 +173,10 @@ export default class NbPopDescboard extends NbBase
     setText(e)
     {
         this["txt" + this.props.id].value = e
+    }
+    setButtons(e)
+    {
+        this.setState({buttons:e})
     }
     render()
     {

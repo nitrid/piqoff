@@ -329,7 +329,16 @@ export default class posDoc extends React.PureComponent
 
         await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-
+        // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
+        this.popPriceDesc.setButtons(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue().buttons)
+        this.popParkDesc.setButtons(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons)
+        this.popDeleteDesc.setButtons(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons)
+        this.popRowDeleteDesc.setButtons(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons)
+        this.popItemReturnDesc.setButtons(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue().buttons)
+        this.popAdvanceDesc.setButtons(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue().buttons)
+        this.popRePrintDesc.setButtons(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue().buttons)
+        this.popBalanceCounterDesc.setButtons(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue().buttons)
+        //********************************************************* */
         if(this.state.isFormation)
         {
             this.posObj.dt().selectCmd.query = "SELECT * FROM [dbo].[POS_FRM_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))"
