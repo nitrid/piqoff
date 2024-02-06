@@ -877,4 +877,11 @@ export const langDe =
         btnApprove : "Bestätigen"  
     },
     passChange :"Passwort ändern!", 
+    msgMultipleLineSelect:
+    {
+        title: "Achtung",
+        btn: "OK",
+        msg: "Sie müssen eine einzelne Zeile für den Rabatt auswählen.",
+    },
+    applyDiscountText: "Rabatt anwenden"
 }

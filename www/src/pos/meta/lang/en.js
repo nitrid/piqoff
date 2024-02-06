@@ -867,5 +867,12 @@ export const langEn =
     itemInfo:
     {
         msgSplash: "PLEASE SCAN THE BARCODE"
-    }
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Attention",
+        btn: "OK",
+        msg: "You must select a single line to apply the discount.",
+    },
+    applyDiscountText: "Apply Discount"
 }
