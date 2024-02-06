@@ -16234,6 +16234,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Fatura seçmeden işlem yapamazsınız !"
         },
+        msgRowNotUpdate:
+        {
+            title:"Dikkat",
+            btn01:"Tamam",
+            msg:"Bu işlemi yapabilmeniz için ilgili bağlantıyı koparın.",
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım",
     {
