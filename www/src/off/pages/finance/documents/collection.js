@@ -773,7 +773,7 @@ export default class collection extends React.PureComponent
                                             <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                             <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
                                             <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
