@@ -75,7 +75,7 @@ export default class salesInvoice extends DocBase
     async init()
     {
         await super.init()
-        console.log(localStorage.getItem('lang'))
+
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
         this.grdSlsInv.devGrid.clearFilter("row")
