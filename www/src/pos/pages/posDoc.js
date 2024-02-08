@@ -1750,7 +1750,7 @@ export default class posDoc extends React.PureComponent
                                 width:'500px',
                                 height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
+                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " " + Number.money.sign}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }

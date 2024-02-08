@@ -44,7 +44,7 @@ export default class transferCls
             //USERS
             {
                 name : "USERS",
-                query : `CREATE TABLE IF NOT EXISTS USERS (GUID TEXT PRIMARY KEY, CDATE DATETIME, CUSER TEXT, LDATE DATETIME, LUSER TEXT, CODE TEXT, NAME TEXT, PWD TEXT, ROLE TEXT, SHA TEXT, CARDID TEXT, STATUS INTEGER);`
+                query : `CREATE TABLE IF NOT EXISTS USERS (GUID TEXT PRIMARY KEY, CDATE DATETIME, CUSER TEXT, LDATE DATETIME, LUSER TEXT, CODE TEXT, NAME TEXT, PWD TEXT, ROLE TEXT, SHA TEXT, CARDID TEXT, USER_APP TEXT, STATUS INTEGER);`
             },
             //ACCESS
             {
@@ -623,9 +623,9 @@ export default class transferCls
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO USERS (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,PWD,ROLE,SHA,CARDID,STATUS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+                    query : `INSERT OR REPLACE INTO USERS (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,PWD,ROLE,SHA,CARDID,USER_APP,STATUS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},CODE : {map:'CODE'},NAME : {map:'NAME'},
-                    PWD : {map:'PWD'},ROLE : {map:'ROLE'},SHA : {map:'SHA'},CARDID : {map:'CARDID'},STATUS : {map:'STATUS'}}]
+                    PWD : {map:'PWD'},ROLE : {map:'ROLE'},SHA : {map:'SHA'},CARDID : {map:'CARDID'},USER_APP : {map:'USER_APP'},STATUS : {map:'STATUS'}}]
                 },
             },
             //ACCESS
