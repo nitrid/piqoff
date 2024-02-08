@@ -1756,7 +1756,6 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                
                 if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
@@ -2738,6 +2737,8 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
+        this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
         {
             let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
@@ -4415,11 +4416,6 @@ export default class posDoc extends React.PureComponent
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
                                         onSelection={(pItem,pQuantity)=>
                                         {
-                                            console.log(this)
-                                            console.log(this.txtBarcode)
-                                            console.log(this.txtBarcode.value)
-                                            console.log(pItem)
-                                            console.log(pQuantity)
                                             if(this.txtBarcode.value != '')
                                             {
                                                 this.getItem(this.txtBarcode.value + pItem)

@@ -324,7 +324,6 @@ export default class NbPluButtonGrp extends NbBase
     }
     async _onClick(pIndex,pType,pData)
     {
-        console.log(pData)
         this.clickData = {index:pIndex,type:pType,data:pData,status:typeof pData == 'undefined' ? 0 : 1} //status : 0 = new, 1 = update
         if(this.edit)
         {    
@@ -501,7 +500,6 @@ export default class NbPluButtonGrp extends NbBase
         if(typeof this.props.onSelection != 'undefined')
         {            
             this.props.onSelection(pItem,pQuantity);
-            console.log('props:' + this.props)
         }
     }
     render()

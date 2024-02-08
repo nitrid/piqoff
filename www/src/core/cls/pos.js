@@ -532,7 +532,7 @@ export class posSaleCls
     }
     subTotalBuild()
     {
-        let tmpData = this.ds.get('POS_SALE');
+        let tmpData = arguments.length == 0 ? this.ds.get('POS_SALE') : arguments[0]
         let tmpArr = [];
         let tmpSubIndex = -1;
 
@@ -1561,15 +1561,6 @@ export class posDeviceCls
                 }
             })
             
-            setTimeout(async()=>
-            { 
-                if(this.payPort.isOpen)
-                {
-                    console.log("Payment port timeout closed")
-                    this.core.util.writeLog("Payment port timeout closed")
-                    await this.payPort.close(); 
-                }
-            }, 60000);
             // this.payPort.on('data',async(data)=> 
             // {
             //     console.log("1454 - " + data.toString() + " - " + data[0])              
