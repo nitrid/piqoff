@@ -906,5 +906,12 @@ export const langTr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Telefon",
     txtNewCustomerLastName : "Soyisim",
-    txtNewCustomerName : "İsim"
+    txtNewCustomerName : "İsim",
+    msgMultipleLineSelect:
+    {
+        title: "Dikkat",
+        btn: "Tamam",
+        msg: "İndirim uygulamak için tek bir satır seçmelisiniz",
+    },
+    applyDiscountText: "İndirim Uygula"
 }

@@ -16135,6 +16135,12 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keine Vorgänge durchführen, ohne eine Rechnung auszuwählen!"
         },
+        msgRowNotUpdate:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Trennen Sie die entsprechende Verbindung, um diese Aktion auszuführen.",
+        },
     },
     fns_03_001 : // "Kassenstammdaten"
     {

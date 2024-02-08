@@ -907,6 +907,13 @@ export const langFr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Numéro de téléphone",
     txtNewCustomerLastName : "Nom",
-    txtNewCustomerName : "Prenom"
-    
+    txtNewCustomerName : "Prenom",
+    msgMultipleLineSelect:
+    {
+        title: "Attention",
+        btn: "OK",
+        msg: "Vous devez sélectionner une seule ligne pour appliquer la remise.",
+    },
+    applyDiscountText: "Appliquer la remise"
+        
 }

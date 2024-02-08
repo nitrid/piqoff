@@ -1705,7 +1705,6 @@ export default class posDoc extends React.PureComponent
                     {
                         return
                     }
-                    console.log(this.posUsbTSE.lastTransaction)
                 }
                 //***************************************/
                 
@@ -5950,7 +5949,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                         <div className="row pb-1">
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountRate"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -6018,7 +6017,7 @@ export default class posDoc extends React.PureComponent
                                     <div>{this.lang.t("applyDiscountPercent")}</div>
                                 </NbButton>
                             </div>
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -6085,6 +6084,78 @@ export default class posDoc extends React.PureComponent
                                     }                               
                                 }}>
                                     <div>{this.lang.t("applyDiscountAmount") + Number.money.sign} </div>
+                                </NbButton>
+                            </div>
+                            <div className="col-4">
+                                <NbButton id={"btnPopDiscountText"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    if(this.grdDiscList.getSelectedData().length == 1)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
+                                        console.log(tmpResult)
+                                        console.log(Number.money.sign)
+
+                                        let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
+                                        
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                           
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 17")
+                                        await this.calcGrandTotal();
+                                    }  
+                                    else if(this.grdDiscList.getSelectedData().length == 0)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    } 
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgMultipleLineSelect',showTitle:true,title:this.lang.t("msgMultipleLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgMultipleLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMultipleLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }                            
+                                }}>
+                                    <div>{this.lang.t("applyDiscountText") + Number.money.sign} </div>
                                 </NbButton>
                             </div>
                         </div>
@@ -9048,7 +9119,7 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
                                     <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
                                     <Column dataField="LOYALTY" caption={this.lang.t("grdLastPos.LOYALTY")} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                                             
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                        
                                 </NdGrid>
                             </div>
                         </div>

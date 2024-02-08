@@ -16448,6 +16448,12 @@ export const langFr =
             btn01: "OK",    
             msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"   
         },
+        msgRowNotUpdate:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Déconnectez la connexion associée pour effectuer cette opération.",
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım"
     {

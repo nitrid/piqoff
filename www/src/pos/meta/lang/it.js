@@ -869,5 +869,12 @@ export const langIt =
     itemInfo:
     {
         msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
-    }
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Attenzione",
+        btn: "OK",
+        msg: "Devi selezionare una sola riga per applicare lo sconto.",
+    },
+    applyDiscountText: "Applica Sconto"
 }

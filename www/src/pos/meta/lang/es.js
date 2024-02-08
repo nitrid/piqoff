@@ -868,5 +868,12 @@ export const langEs =
     itemInfo:
     {
         msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
-    }
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Atención",
+        btn: "Aceptar",
+        msg: "Debe seleccionar una sola línea para aplicar el descuento.",
+    },
+    applyDiscountText: "Aplicar Descuento"
 }
