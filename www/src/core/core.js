@@ -1608,12 +1608,16 @@ export class datatable
     {
         if(typeof pKey != 'undefined')
         {
+            
+            
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
+                console.log(b[pKey])
                 return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
             }
             else
             {
+                console.log(a[pKey])
                 return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
             }
         }

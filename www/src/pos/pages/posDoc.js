@@ -4415,6 +4415,11 @@ export default class posDoc extends React.PureComponent
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
                                         onSelection={(pItem,pQuantity)=>
                                         {
+                                            console.log(this)
+                                            console.log(this.txtBarcode)
+                                            console.log(this.txtBarcode.value)
+                                            console.log(pItem)
+                                            console.log(pQuantity)
                                             if(this.txtBarcode.value != '')
                                             {
                                                 this.getItem(this.txtBarcode.value + pItem)

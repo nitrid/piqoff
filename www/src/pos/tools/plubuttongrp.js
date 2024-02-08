@@ -324,8 +324,8 @@ export default class NbPluButtonGrp extends NbBase
     }
     async _onClick(pIndex,pType,pData)
     {
+        console.log(pData)
         this.clickData = {index:pIndex,type:pType,data:pData,status:typeof pData == 'undefined' ? 0 : 1} //status : 0 = new, 1 = update
-        
         if(this.edit)
         {    
             if(pType == 0)
@@ -410,7 +410,7 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1 ",
+                            query : "SELECT GUID,CODE,NAME,ROUND((SELECT dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)), 2) AS PRICE FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1 ",
                             param : ['VAL:string|50']
                         },
                         sql:this.props.parent.core.sql
@@ -501,6 +501,7 @@ export default class NbPluButtonGrp extends NbBase
         if(typeof this.props.onSelection != 'undefined')
         {            
             this.props.onSelection(pItem,pQuantity);
+            console.log('props:' + this.props)
         }
     }
     render()
@@ -543,6 +544,7 @@ export default class NbPluButtonGrp extends NbBase
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={150} />
                         <Column dataField="NAME" caption={"NAME"} width={250} />
+                        <Column dataField="PRICE" caption={"PRICE"} width={250} />
                     </NbPosPopGrid>
                 </div> 
                 {/* Group Entry Popup */}
