@@ -16980,7 +16980,13 @@ export const langTr =
     {
         cmbDevice : "Cihaz",
         txtMsg : "Mesaj",
-        btnSend : "Gönder"
+        btnSend : "Gönder",
+        msgResult:
+        {
+            title: "Uyarı",
+            btn01: "Tamam",
+            msg: "Mesaj gönderiminiz başarılı",
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {

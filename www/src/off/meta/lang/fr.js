@@ -17253,7 +17253,13 @@ export const langFr =
     {
         cmbDevice: "Appareil",
         txtMsg: "Message",
-        btnSend: "Envoyer"
+        btnSend: "Envoyer",
+        msgResult:
+        {
+            title: "Avertissement",
+            btn01: "D'accord",
+            msg: "Votre message a été envoyé avec succès",
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {

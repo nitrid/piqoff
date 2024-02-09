@@ -7,7 +7,7 @@ import NdDropDownBox from '../../../../core/react/devex/dropdownbox';
 import NdTextArea from '../../../../core/react/devex/textarea';
 import NdButton from '../../../../core/react/devex/button';
 import NdListBox from '../../../../core/react/devex/listbox';
-
+import NdDialog,{ dialog } from "../../../../core/react/devex/dialog.js";
 export default class posDeviceCard extends React.PureComponent
 {
     constructor(props)
@@ -100,7 +100,7 @@ export default class posDeviceCard extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className='col-12'>
                             <NdButton  id={"btnSend"} text={this.t('btnSend')} width={'100%'} type={"default"}
-                            onClick={()=>
+                            onClick={async()=>
                             {
                                 let tmpData = 
                                 {
@@ -109,6 +109,15 @@ export default class posDeviceCard extends React.PureComponent
                                     msg : this.txtMsg.value
                                 }
                                 this.core.socket.emit('msgService',tmpData)
+
+                                let tmpConfObj =
+                                {
+                                    id:'msgResult',showTitle:true,title:this.t("msgResult.title"),showCloseButton:true,width:'500px',height:'250px',
+                                    button:[{id:"btn01",caption:this.t("msgResult.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgResult.msg")}</div>)
+                                }
+                                
+                                await dialog(tmpConfObj);
                             }}
                             >
                             </NdButton>
