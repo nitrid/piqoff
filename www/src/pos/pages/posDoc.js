@@ -961,17 +961,21 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " +
+                        "ISNULL((SELECT APP_AMOUNT " +
+                        "FROM PROMO_COND_APP_VW_01  " +
+                        "WHERE COND_ITEM_GUID = @GUID1 AND APP_TYPE = 0),0) AS PROMO",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
                     type : "select",
-                    query : "SELECT * FROM ITEMS_POS_VW_01 WHERE GUID = ? LIMIT 1;",
+                    query : "SELECT *, 0 AS PROMO " +
+                            "FROM ITEMS_POS_VW_01 AS ITEM " + 
+                            "WHERE ITEM.GUID = ? LIMIT 1;",
                     values : [tmpItemsDt[0].GUID]
                 }
             }
-            
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo,tmpItemsDt[0].GUID]
             await tmpPriceDt.refresh();  
             
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
@@ -989,7 +993,7 @@ export default class posDoc extends React.PureComponent
                         width:'500px',
                         height:'250px',
                         button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
-                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
+                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpPrice).rateInNum(tmpPriceDt[0].PROMO,2) + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
                     this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
@@ -2180,7 +2184,6 @@ export default class posDoc extends React.PureComponent
             let tmpFn = () =>
             {
                 this.txtPaymentPopTotal.value = pAmount
-                console.log(pAmount)
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
@@ -4352,7 +4355,6 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
-                                                        console.log(this.posObj.posPay.dt())
                                                         if(this.posObj.posPay.dt().length > 0)
                                                         {
                                                             let tmpConfObj =
@@ -6078,8 +6080,6 @@ export default class posDoc extends React.PureComponent
                                         tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
                                         let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
-                                        console.log(tmpResult)
-                                        console.log(Number.money.sign)
 
                                         let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
                                         
