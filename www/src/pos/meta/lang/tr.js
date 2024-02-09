@@ -913,5 +913,10 @@ export const langTr =
         btn: "Tamam",
         msg: "İndirim uygulamak için tek bir satır seçmelisiniz",
     },
-    applyDiscountText: "İndirim Uygula"
+    applyDiscountText: "İndirim Uygula",
+    msgAdminMessage:
+    {
+        title: "Yönetici Mesajı",
+        btn01: "Tamam",
+    },
 }

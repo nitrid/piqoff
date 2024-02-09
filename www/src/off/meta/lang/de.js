@@ -317,6 +317,7 @@ export const langDe =
         pos_01: "Definitionen",
         pos_01_001: "POS-Gerätepräsentation",
         pos_01_002: "Pos Plu kopieren",  
+        pos_01_004: "POS Nachricht",
         pos_02: "Berichte",
         pos_02_001: "Verkaufsbeleg-Bericht",
         pos_02_002: "Kundenpunkte-Bericht",
@@ -16870,6 +16871,12 @@ export const langDe =
             btn01: "OK", 
             msg: "Bitte Benutzer wählen"  
         },
+    },
+    pos_01_004: // "Pos Mesaj"
+    {
+        cmbDevice: "Gerät",
+        txtMsg: "Nachricht",
+        btnSend: "Senden"
     },
     pos_02_001 : // "Belegbericht"
     {

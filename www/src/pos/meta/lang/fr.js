@@ -914,6 +914,10 @@ export const langFr =
         btn: "OK",
         msg: "Vous devez sélectionner une seule ligne pour appliquer la remise.",
     },
-    applyDiscountText: "Appliquer la remise"
-        
+    applyDiscountText: "Appliquer la remise",
+    msgAdminMessage:
+    {
+        title: "Message de l'administrateur",
+        btn01: "OK",
+    },
 }

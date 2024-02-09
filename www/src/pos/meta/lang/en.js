@@ -874,5 +874,10 @@ export const langEn =
         btn: "OK",
         msg: "You must select a single line to apply the discount.",
     },
-    applyDiscountText: "Apply Discount"
+    applyDiscountText: "Apply Discount",
+    msgAdminMessage:
+    {
+        title: "Administrator Message",
+        btn01: "OK",
+    },
 }

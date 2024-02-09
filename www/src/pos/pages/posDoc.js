@@ -130,9 +130,7 @@ export default class posDoc extends React.PureComponent
                 this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
-
-        this.init();
-        
+        this.init();        
         this.core.socket.on('connect',async () => 
         {   
             if(!this.state.isConnected)
@@ -310,6 +308,23 @@ export default class posDoc extends React.PureComponent
 
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
+        })
+        this.core.socket.on('msgService',async(pParam,pCallback) =>
+        {
+            if(pParam.tag == 'msgPosDevice')
+            {
+                if(pParam.devices.length > 0 && typeof pParam.devices.find((item) => item == this.device.value) != 'undefined')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAdminMessage',showTitle:true,title:this.lang.t("msgAdminMessage.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgAdminMessage.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{pParam.msg}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                }
+            }
         })
 
         if(this.core.offline)

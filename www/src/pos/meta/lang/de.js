@@ -883,5 +883,10 @@ export const langDe =
         btn: "OK",
         msg: "Sie müssen eine einzelne Zeile für den Rabatt auswählen.",
     },
-    applyDiscountText: "Rabatt anwenden"
+    applyDiscountText: "Rabatt anwenden",
+    msgAdminMessage:
+    {
+        title: "Administratornachricht",
+        btn01: "OK",
+    },
 }

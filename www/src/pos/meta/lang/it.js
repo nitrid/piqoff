@@ -876,5 +876,10 @@ export const langIt =
         btn: "OK",
         msg: "Devi selezionare una sola riga per applicare lo sconto.",
     },
-    applyDiscountText: "Applica Sconto"
+    applyDiscountText: "Applica Sconto",
+    msgAdminMessage:
+    {
+        title: "Messaggio dell'amministratore",
+        btn01: "OK",
+    },
 }
