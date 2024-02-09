@@ -19,7 +19,9 @@ export default class NbPopDescboard extends NbBase
             width:this.props.width,
             height:this.props.height,
             position:this.props.position,
-            buttons:typeof this.props.param != 'undefined' ? this.props.param.getValue().buttons : []
+            buttons:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().buttons ? this.props.param.getValue().buttons : [],
+            disable:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().disable != 'undefined' ? this.props.param.getValue().disable : false,
+            minCharSize:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().minCharSize != 'undefined' ? this.props.param.getValue().minCharSize : 25
         }
         this._onClick = this._onClick.bind(this)
     }
@@ -111,13 +113,13 @@ export default class NbPopDescboard extends NbBase
             await dialog(tmpConfObj);
             return;
         }
-        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().minCharSize != 'undefined' && this["txt" + this.props.id].value.length < this.props.param.getValue().minCharSize)
+        if(this["txt" + this.props.id].value.length < this.state.minCharSize)
         {
             let tmpConfObj =
             {
                 id:'popDescbordValidation2',showTitle:true,title:this.lang.t("popDescbordValidation2.title"),showCloseButton:true,width:'500px',height:'200px',
                 button:[{id:"btn01",caption:this.lang.t("popDescbordValidation2.title"),location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.props.param.getValue().minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.state.minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
             }
             await dialog(tmpConfObj);
             return;
@@ -137,7 +139,7 @@ export default class NbPopDescboard extends NbBase
     async show()
     {
         //EĞER PARAMETEREDEN DISABLE AKTİF İSE AÇIKLAMA EKRANI ÇIKMIYOR
-        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().disable != 'undefined' && this.props.param.getValue().disable)
+        if(this.state.disable)
         {
             if(typeof this.props.onClick != 'undefined')
             {
@@ -174,9 +176,9 @@ export default class NbPopDescboard extends NbBase
     {
         this["txt" + this.props.id].value = e
     }
-    setButtons(e)
+    setParam(e)
     {
-        this.setState({buttons:e})
+        this.setState({disable:e.disable,minCharSize:e.minCharSize,buttons:e.buttons})
     }
     render()
     {
