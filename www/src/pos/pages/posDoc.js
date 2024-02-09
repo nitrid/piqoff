@@ -3283,75 +3283,41 @@ export default class posDoc extends React.PureComponent
     }
     async ZReport()
     {
-        let tmpArr = 
-        [
-            {align:"ct",logo:"./resources/logop.png"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : 03 83 52 62 34"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
-            {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
-            {font:"a",style:"b",align:"lt",data:" ".space(48)},
-            {font:"a",style:"bu",align:"rt",data:" ".space(5) + " " + "Taux".space(8) + " " + "HT".space(10) + " " + "TVA".space(10) + " " + "TTC".space(10)}
-        ]
-
-        let tmpSaleDt = new datatable()
-        tmpSaleDt.selectCmd = 
+        import("../meta/print/" + this.prmObj.filter({ID:'ZReportPrintDesign',TYPE:0}).getValue()).then(async(e)=>
         {
-            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpSaleDt.refresh()
-
-        if(tmpSaleDt.length > 0)
-        {
-            let tmpVatLst = tmpSaleDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
-            for (let i = 0; i < tmpVatLst.length; i++) 
+            let tmpSaleDt = new datatable()
+            tmpSaleDt.selectCmd = 
             {
-                tmpArr.push(
-                {
-                    font: "a",
-                    align: "rt",
-                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
-                        (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
-                })
+                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
-            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + tmpSaleDt.sum('FAMOUNT',2).space(10) + " " + tmpSaleDt.sum('VAT',2).space(10) + " " + tmpSaleDt.sum('TOTAL',2).space(10)})
-            tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
-        }
+            await tmpSaleDt.refresh()
+            
+            let tmpPayDt = new datatable()
+            tmpPayDt.selectCmd = 
+            {
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+            }
+            await tmpPayDt.refresh()
 
-        let tmpPayDt = new datatable()
-        tmpPayDt.selectCmd = 
-        {
-            query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpPayDt.refresh()
+            let tmpData =
+            {
+                firm : this.firm,
+                possale : tmpSaleDt,
+                pospay : tmpPayDt,
+                special : 
+                {
+                    user : this.user.CODE,
+                    device : window.localStorage.getItem('device')
+                }
+            }
 
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-
-        for (let i = 0; i < tmpPayDt.length; i++) 
-        {
-            tmpArr.push({font: "b",align: "lt",size : [1,1],data: tmpPayDt[i].PAY_TYPE_NAME.space(16) + " " + Number(tmpPayDt[i].AMOUNT).toFixed(2).space(10)})
-            tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        }
-        tmpArr.push({font: "b",align: "lt",size : [1,1],data: ("Total : ").space(16) + " " + tmpPayDt.sum('AMOUNT',2).space(10)})
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        //console.log(tmpArr)
-        await this.posDevice.escPrinter(tmpArr)
+            let tmpPrint = e.print(tmpData)
+            await this.posDevice.escPrinter(tmpPrint)
+        })
     }
     checkSaleClose(pGuid)
     {

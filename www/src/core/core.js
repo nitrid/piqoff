@@ -1608,17 +1608,33 @@ export class datatable
     {
         if(typeof pKey != 'undefined')
         {
-            
-            
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                console.log(b[pKey])
-                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof b[pKey] == 'number')
+                    {
+                        return b[pKey] - a[pKey]
+                    }
+                    else if(typeof b[pKey] == 'string')
+                    {
+                        return b[pKey].localeCompare(a[pKey])
+                    }
+                })
             }
             else
             {
-                console.log(a[pKey])
-                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof a[pKey] == 'number')
+                    {
+                        return a[pKey] - b[pKey]
+                    }
+                    else if(typeof a[pKey] == 'string')
+                    {
+                        return a[pKey].localeCompare(b[pKey])
+                    }
+                })
             }
         }
         return this
