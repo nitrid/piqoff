@@ -345,14 +345,14 @@ export default class posDoc extends React.PureComponent
         await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
-        this.popPriceDesc.setButtons(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue().buttons)
-        this.popParkDesc.setButtons(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons)
-        this.popDeleteDesc.setButtons(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons)
-        this.popRowDeleteDesc.setButtons(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons)
-        this.popItemReturnDesc.setButtons(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue().buttons)
-        this.popAdvanceDesc.setButtons(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue().buttons)
-        this.popRePrintDesc.setButtons(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue().buttons)
-        this.popBalanceCounterDesc.setButtons(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue().buttons)
+        this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
+        this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
+        this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
+        this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
+        this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
+        this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
+        this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
+        this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
         //********************************************************* */
         if(this.state.isFormation)
         {
@@ -7288,28 +7288,29 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        if(typeof e != 'undefined')
-                        {
-                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                            {   
-                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                if(!tmpResult)
-                                {
-                                    return
-                                }
+                        if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                            if(!tmpResult)
+                            {
+                                return
                             }
-                            
-                            let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
-                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                        }
+                        
+                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                        if(typeof tmpResult != 'undefined' && tmpResult != '')
+                        {
+                            if(typeof e != 'undefined')
                             {
                                 this.sendJet({CODE:"323",NAME:"Prix de l'article modifie .",DESCRIPTION:e}) 
-                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
-                                if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
-                                {
-                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
-                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
-                                }
-                            }                            
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)
+                            }
+                            
+                            if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
+                            {
+                                let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
+                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
+                            }
                         }
                     }}></NbPopDescboard>
                 </div>

@@ -16876,7 +16876,13 @@ export const langDe =
     {
         cmbDevice: "Gerät",
         txtMsg: "Nachricht",
-        btnSend: "Senden"
+        btnSend: "Senden",
+        msgResult:
+        {
+            title: "Warnung",
+            btn01: "Ok",
+            msg: "Ihre Nachricht wurde erfolgreich gesendet",
+        },
     },
     pos_02_001 : // "Belegbericht"
     {
