@@ -106,6 +106,12 @@ export const langEs =
         msg: "El pago no se realizó",
         btn01: "Aceptar",
     },
+    msgPayProcessFailed :
+    {
+        title : "Información",
+        msg : "Se ha introducido un monto en el dispositivo de la tarjeta. ¡Por favor, cancele la transacción en el dispositivo de la tarjeta antes de enviar un nuevo monto!",
+        btn01 : "Okay"
+    },
     msgBonDavoir:
     {
         title: "Advertencia",
@@ -868,5 +874,17 @@ export const langEs =
     itemInfo:
     {
         msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
-    }
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Atención",
+        btn: "Aceptar",
+        msg: "Debe seleccionar una sola línea para aplicar el descuento.",
+    },
+    applyDiscountText: "Aplicar Descuento",
+    msgAdminMessage:
+    {
+        title: "Mensaje del administrador",
+        btn01: "OK",
+    },
 }

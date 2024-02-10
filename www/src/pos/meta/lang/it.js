@@ -106,6 +106,12 @@ export const langIt =
         msg: "Pagamento non riuscito",
         btn01: "Ok",
     },
+    msgPayProcessFailed :
+    {
+        title : "Informazione",
+        msg : "È stato inserito un importo sul dispositivo della carta. Si prega di annullare la transazione sul dispositivo della carta prima di inviare un nuovo importo!",
+        btn01 : "Okay"
+    },
     msgBonDavoir: 
     {
         title: "Avviso",
@@ -869,5 +875,17 @@ export const langIt =
     itemInfo:
     {
         msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
-    }
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Attenzione",
+        btn: "OK",
+        msg: "Devi selezionare una sola riga per applicare lo sconto.",
+    },
+    applyDiscountText: "Applica Sconto",
+    msgAdminMessage:
+    {
+        title: "Messaggio dell'amministratore",
+        btn01: "OK",
+    },
 }
