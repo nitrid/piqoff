@@ -91,8 +91,7 @@ export default class DocBase extends React.PureComponent
         {
             return this.docObj.docDemand
         }
-    }
-      
+    }      
     init()
     {
         return new Promise(async resolve =>

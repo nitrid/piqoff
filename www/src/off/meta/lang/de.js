@@ -317,6 +317,7 @@ export const langDe =
         pos_01: "Definitionen",
         pos_01_001: "POS-Gerätepräsentation",
         pos_01_002: "Pos Plu kopieren",  
+        pos_01_004: "POS Nachricht",
         pos_02: "Berichte",
         pos_02_001: "Verkaufsbeleg-Bericht",
         pos_02_002: "Kundenpunkte-Bericht",
@@ -16135,6 +16136,12 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keine Vorgänge durchführen, ohne eine Rechnung auszuwählen!"
         },
+        msgRowNotUpdate:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Trennen Sie die entsprechende Verbindung, um diese Aktion auszuführen.",
+        },
     },
     fns_03_001 : // "Kassenstammdaten"
     {
@@ -16863,6 +16870,18 @@ export const langDe =
             title: "Achtung", 
             btn01: "OK", 
             msg: "Bitte Benutzer wählen"  
+        },
+    },
+    pos_01_004: // "Pos Mesaj"
+    {
+        cmbDevice: "Gerät",
+        txtMsg: "Nachricht",
+        btnSend: "Senden",
+        msgResult:
+        {
+            title: "Warnung",
+            btn01: "Ok",
+            msg: "Ihre Nachricht wurde erfolgreich gesendet",
         },
     },
     pos_02_001 : // "Belegbericht"

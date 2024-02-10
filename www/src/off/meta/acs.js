@@ -1352,7 +1352,171 @@ export const acs =
             }
         }
     },
-
+    //#endregion
+    //#region Ürün Giriş Çıkış Operasyonu
+    //txtRefLy
+    {
+        TYPE : 2,
+        ID :"txtRefLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:0,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "txtRefLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Ref",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtRefVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtRefEditable"}
+                ]
+            }
+        }
+    },
+    //cmbDepotLy
+    {
+        TYPE : 2,
+        ID :"cmbDepotLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:1,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "cmbDepotLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Depo",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbDepotVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbDepotEditable"}
+                ]
+            }
+        }
+    },
+    //dtDocDateLy
+    {
+        TYPE : 2,
+        ID :"dtDocDateLy",
+        VALUE : {visible:true,editable:true,position:{x:2,y:0,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "dtDocDateLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Tarih",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopDtDocDateVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopDtDocDateEditable"}
+                ]
+            }
+        }
+    },
+    //txtBarcodeLy
+    {
+        TYPE : 2,
+        ID :"txtBarcodeLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:2,h:1,w:2}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "txtBarcodeLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Barkod",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtBarcodeVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtBarcodeEditable"}
+                ]
+            }
+        }
+    },
+    //ButtonBarLy
+    {
+        TYPE : 2,
+        ID :"ButtonBarLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:3,h:1,w:4}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "ButtonBarLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Buton Bar",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopButtonBarVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopButtonBarEditable"}
+                ]
+            }
+        }
+    },
+    //grdListLy
+    {
+        TYPE : 2,
+        ID :"grdListLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:4,h:10,w:4}},
+        SPECIAL : "",
+        PAGE : "stk_04_005",
+        ELEMENT : "grdListLy",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Ürün Giriş Çıkış Operasyonu",
+            CAPTION : "Grid List",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //#endregion
     //grdSlsInv
     {
         TYPE : 2,
@@ -1893,5 +2057,4 @@ export const acs =
             }
         }
     },
-    //#endregion
 ]
