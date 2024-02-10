@@ -106,6 +106,12 @@ export const langFr =
         msg : "Encaissement non effectué  ",
         btn01 : "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Un montant a été saisi sur le terminal de carte. Veuillez annuler la transaction sur le terminal de carte avant d'envoyer un nouveau montant !",
+        btn01 : "D'accord"
+    },
     msgBonDavoir : 
     {
         title : "Attention",

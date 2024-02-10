@@ -2048,64 +2048,72 @@ export default class posDoc extends React.PureComponent
                 this.popCardPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
 
-                if(tmpPayCard == 1) //Başarılı
+                if(typeof tmpPayCard != 'undefined')
                 {
-                    this.msgCardPayment.hide()
-                }
-                else if(tmpPayCard == 2) //Zorla
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
-                    }
-                    let tmpResult = await dialog(tmpConfObj);
-                    if(tmpResult == "btn01")
+                    if(tmpPayCard == 1) //Başarılı
                     {
                         this.msgCardPayment.hide()
-                        //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
-                        if((Number(this.payRest.value) - pAmount) > 0)
+                    }
+                    else if(tmpPayCard == 2) //Zorla
+                    {
+                        let tmpConfObj =
                         {
-                            let tmpResult2 = await this.msgRePaymentType.show()
-                            if(tmpResult2 == "btn01")
+                            id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
+                        }
+                        let tmpResult = await dialog(tmpConfObj);
+                        if(tmpResult == "btn01")
+                        {
+                            this.msgCardPayment.hide()
+                            //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
+                            if((Number(this.payRest.value) - pAmount) > 0)
                             {
-                                this.msgCardPayment.hide()
-                                this.popCashPay.show();
-                                this.txtPopCashPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn02")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCardPay.show();
-                                this.txtPopCardPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn03")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popTotal.show();
-                                this.rbtnPayType.value = 2
-                            }
-                            else if(tmpResult2 == "btn04")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCheqpay.show();
-                                this.txtPopCheqpay.focus()
+                                let tmpResult2 = await this.msgRePaymentType.show()
+                                if(tmpResult2 == "btn01")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCashPay.show();
+                                    this.txtPopCashPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn02")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCardPay.show();
+                                    this.txtPopCardPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn03")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popTotal.show();
+                                    this.rbtnPayType.value = 2
+                                }
+                                else if(tmpResult2 == "btn04")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCheqpay.show();
+                                    this.txtPopCheqpay.focus()
+                                }
                             }
                         }
+                        else
+                        {
+                            this.payAdd(pType,pAmount)
+                            return
+                        }
                     }
-                    else
+                    else if(tmpPayCard == 3) //iptal
                     {
-                        this.payAdd(pType,pAmount)
+                        this.msgCardPayment.hide()
+                        return                    
+                    }
+                    else //Başarısız veya İptal
+                    {
+                        this.msgCardPayment.hide()
                         return
                     }
                 }
-                else if(tmpPayCard == 3) //iptal
-                {
-                    this.msgCardPayment.hide()
-                    return                    
-                }
-                else //Başarısız veya İptal
+                else
                 {
                     this.msgCardPayment.hide()
                     return
@@ -2180,12 +2188,12 @@ export default class posDoc extends React.PureComponent
             let tmpFn = () =>
             {
                 this.txtPaymentPopTotal.value = pAmount
-                console.log(pAmount)
+                
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
                     {
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
@@ -2203,7 +2211,7 @@ export default class posDoc extends React.PureComponent
 
                             if(tmpResult)
                             {
-                                if(this.posDevice.payPort.isOpen)
+                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                                 {
                                     await this.posDevice.payPort.close()
                                 }
@@ -2218,7 +2226,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else if(e == 'btn03')
                     {       
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
@@ -2227,12 +2235,12 @@ export default class posDoc extends React.PureComponent
                     }
                 })
             }
-
+            
             tmpFn()
             
             let tmpCardPay = await this.posDevice.cardPayment(pAmount,pType)
             
-            if(typeof tmpCardPay != 'undefined')
+            if(typeof tmpCardPay != 'undefined' && this.msgCardPayment.isShowed)
             {
                 if(tmpCardPay.tag == "response")
                 {
@@ -2253,10 +2261,24 @@ export default class posDoc extends React.PureComponent
                         resolve(1) // Başarılı
                     }
                 }
+                else if(tmpCardPay.tag == "net_error")
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgPayProcessFailed',showTitle:true,title:this.lang.t("msgPayProcessFailed.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPayProcessFailed.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayProcessFailed.msg")}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
                 else
                 {
                     resolve(0) // Başarısız
                 }
+            }
+            else
+            {
+                resolve()
             }
         });
     }

@@ -106,6 +106,12 @@ export const langEs =
         msg: "El pago no se realizó",
         btn01: "Aceptar",
     },
+    msgPayProcessFailed :
+    {
+        title : "Información",
+        msg : "Se ha introducido un monto en el dispositivo de la tarjeta. ¡Por favor, cancele la transacción en el dispositivo de la tarjeta antes de enviar un nuevo monto!",
+        btn01 : "Okay"
+    },
     msgBonDavoir:
     {
         title: "Advertencia",

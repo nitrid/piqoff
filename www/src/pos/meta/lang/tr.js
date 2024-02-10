@@ -106,6 +106,12 @@ export const langTr =
         msg : "Ödeme Gerçekleşmedi",
         btn01 : "Tamam"
     },
+    msgPayProcessFailed :
+    {
+        title : "Bilgi",
+        msg : "Kart cihazı üzerinde girilmiş tutar var. Yeni bir tutar gönderimi yapmadan önce lütfen kart cihazı üzerindeki işlemi iptal edin!",
+        btn01 : "Tamam"
+    },
     msgBonDavoir : 
     {
         title : "Uyarı",

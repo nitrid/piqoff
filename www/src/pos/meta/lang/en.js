@@ -106,6 +106,12 @@ export const langEn =
         msg : "Payment not completed",
         btn01 : "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "An amount has been entered on the card device. Please cancel the transaction on the card device before sending a new amount!",
+        btn01 : "Okay"
+    },
     msgBonDavoir : 
     {
         title : "Attention",

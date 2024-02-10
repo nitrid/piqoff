@@ -106,6 +106,12 @@ export const langDe =
         msg: "Die Zahlung ist fehlgeschlagen",
         btn01: "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Ein Betrag wurde auf dem Kartengerät eingegeben. Bitte brechen Sie die Transaktion auf dem Kartengerät ab, bevor Sie einen neuen Betrag senden!",
+        btn01 : "Okay"
+    },
     msgBonDavoir:
     {
         title: "Achtung",
