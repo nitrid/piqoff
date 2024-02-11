@@ -374,7 +374,7 @@ export default class posSalesReport extends React.PureComponent
                                     summaryType: "sum",
                                     format: 
                                     {
-                                        style: "currency", currency: Number.money.sign,
+                                        style: "currency", currency: Number.money.code,
                                     },
                                     area: "data",
                                 }
