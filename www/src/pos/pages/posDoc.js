@@ -961,16 +961,12 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " +
-                        "ISNULL((SELECT APP_AMOUNT " +
-                        "FROM PROMO_COND_APP_VW_01  " +
-                        "WHERE COND_ITEM_GUID = @GUID1 AND APP_TYPE = 0),0) AS PROMO",
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
                     type : "select",
-                    query : "SELECT *, 0 AS PROMO " +
-                            "FROM ITEMS_POS_VW_01 AS ITEM " + 
+                    query : "SELECT * FROM ITEMS_POS_VW_01 AS ITEM " + 
                             "WHERE ITEM.GUID = ? LIMIT 1;",
                     values : [tmpItemsDt[0].GUID]
                 }
@@ -984,6 +980,18 @@ export default class posDoc extends React.PureComponent
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
+                    //PROMOSYON FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
+                    let tmpInfoPrice = tmpPrice
+                    let tmpPromoCond = this.promoObj.cond.dt().where({ITEM_GUID : tmpItemsDt[0].GUID})
+                    if(tmpPromoCond.length > 0)
+                    {
+                        let tmpPromoApp = this.promoObj.app.dt().where({PROMO : tmpPromoCond[0].PROMO}).where({TYPE:5})
+                        if(tmpPromoApp.length > 0)
+                        {
+                            tmpInfoPrice = tmpPromoApp[0].AMOUNT
+                        }
+                    }
+                    //************************************************************************************************ */
                     let tmpConfObj =
                     {
                         id:'msgAlert',
@@ -993,7 +1001,7 @@ export default class posDoc extends React.PureComponent
                         width:'500px',
                         height:'250px',
                         button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
-                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpPrice).rateInNum(tmpPriceDt[0].PROMO,2) + " EUR"}</h3></div>)
+                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpInfoPrice).round(2) + " " + Number.money.sign}</h3></div>)
                     }
                     await dialog(tmpConfObj);
                     this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
