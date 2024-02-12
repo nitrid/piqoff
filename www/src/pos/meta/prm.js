@@ -99,7 +99,7 @@ export const prm =
         ID :"PriceDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:5,
             buttons:
             [
