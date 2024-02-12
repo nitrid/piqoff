@@ -1347,5 +1347,21 @@ export const prm =
             CAPTION : "Fiyat Liste No"
         }
     },
+    //Butonlarin ses cikarma islemi
+    {
+        TYPE : 0,
+        ID :"buttonsSound",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Liste No"
+        }
+    },
     //#endregion
 ]
