@@ -29,6 +29,7 @@ import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
 import * as appInfo from '../../../package.json'
 import '../plugins/balanceCounter.js'
+import '../plugins/gunmarket.js'
 
 export default class App extends React.PureComponent
 {

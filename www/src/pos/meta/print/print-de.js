@@ -32,7 +32,7 @@ export function print()
         // ÜST BİLGİ
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ADDRESS1 : "Bahnhofstrasse 13"}},
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + " " + data.firm[0].COUNTRY_NAME : "6020 EMMENBRUCKE"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 076 260 38 66"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 076 456 14 53"}},
         // ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "info@piqsoft.fr"}},
         // ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].WEB : "www.piqsoft.fr"}},
         // ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Siret " + data.firm[0].SIRET_ID + " - APE " + data.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"}},
@@ -57,10 +57,10 @@ export function print()
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('ch').format('dddd DD.MM.YYYY HH:mm:ss')}},
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:("Kassierer: " + data.pos[0].CUSER).space(32,'e') + ("Kasse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
-        // ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
-        // ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
-        // ()=>{return {font:"a",style:"b",align:"ct",data:"****** " + data.pos[0].REF + " ******"}},
-        // ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
+        ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"****** Kassenzettelnummer ******"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"****** " + data.pos[0].REF + " ******"}},
+        ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
         {
             if(data.special.reprint > 1)
@@ -77,7 +77,7 @@ export function print()
             }   
             return
         },
-        ()=>
+        // ()=>
         // {
         //     let tmpArr = []
         //     if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
@@ -518,10 +518,10 @@ export function print()
             }
             else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'>':0}}).length > 0)
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Restlicher Bertag : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
+                //tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
@@ -561,7 +561,7 @@ export function print()
         //         return {font:"b",style:"b",align:"ct",data:"Nombre d'impression " + data.special.reprint}
         //     }
         // },
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "MWST: " + data.firm[0].INT_VAT_NO : "MWST: 142.312.457"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "MWST: " + data.firm[0].INT_VAT_NO : "CHE-184.926.731"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:" "}},
     ]
 }

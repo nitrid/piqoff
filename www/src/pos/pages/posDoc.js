@@ -1737,7 +1737,7 @@ export default class posDoc extends React.PureComponent
                                 width:'500px',
                                 height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
+                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " " + Number.money.code}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }
@@ -3273,13 +3273,13 @@ export default class posDoc extends React.PureComponent
         [
             {align:"ct",logo:"./resources/logop.png"},
             {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : 03 83 52 62 34"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "Bahnhafstrasse 13"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "6020 EMMENBRUCKE"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : +41 76 260 38 66"},
+            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
+            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
+            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
+            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
             {font:"a",style:"b",size : [1,1],align:"ct",data:""},
             {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
             {font:"a",style:"b",size : [1,1],align:"ct",data:""},
@@ -3300,7 +3300,7 @@ export default class posDoc extends React.PureComponent
 
         if(tmpSaleDt.length > 0)
         {
-            let tmpVatLst = tmpSaleDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
+            let tmpVatLst = tmpSaleDt.groupBy('VAT_TYPE').orderBy('VAT_TYPE','asc')
             for (let i = 0; i < tmpVatLst.length; i++) 
             {
                 tmpArr.push(
@@ -3925,7 +3925,7 @@ export default class posDoc extends React.PureComponent
                                             this.popTotal.show();
                                             this.txtPopTotal.newStart = true;
                                         }}>
-                                            <i className="text-white fa-solid fa-euro-sign" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-hand-holding-dollar" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Credit Card */}

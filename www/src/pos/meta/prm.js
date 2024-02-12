@@ -105,63 +105,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Pas identique.",
-                    text:"Le prix affiché en rayon et celle du système n'est pas identique."
+                    title: "Nicht identisch.",
+                    text: "Der Preis am Regal und der Preis im System sind nicht identisch."
                 },
                 {
                     id:"btn02",
-                    title:"Accord responsable.",
-                    text:"Avec accord du responsable, il y a eu une baisse du prix pour le client."
+                    title: "Vereinbarung mit dem Verantwortlichen.",
+                    text: "Mit Zustimmung des Managers gab es eine Preissenkung für den Kunden."
                 },
                 {
                     id:"btn03",
-                    title:"Erreur Prix boucherie.",
-                    text:"L'etiquette de boucherie est fausse."
+                    title: "Fehler Metzgereipreis.",
+                    text: "Das Metzgerei-Etikett ist falsch."
                 },
                 {
                     id:"btn04",
-                    title:"Prix pour quantité.",
-                    text:"Un prix a été fait pour une quantité importante."
+                    title: "Preis für Menge.",
+                    text: "Es wurde ein Preis für eine große Menge gemacht."
                 },
                 {
                     id:"btn05",
-                    title:"Etiquette est illisible",
-                    text:"L'etiquette du produit est illisible. Saisir manuellement."
+                    title: "Etikett ist unleserlich",
+                    text: "Das Etikett des Produkts ist unleserlich. Manuell eingeben."
                 },
                 {
                     id:"btn06",
-                    title:"Produit defectueux.",
-                    text:"Un prix a été fait car le produit etait defectueux."
+                    title: "Produkt war defekt.",
+                    text: "Ein Preis wurde gemacht, weil das Produkt fehlerhaft war."
                 },
                 {
                     id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 }
             ]
         },
@@ -206,69 +206,69 @@ export const prm =
         ID :"RebateDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
                 {
                     id:"btn01",
-                    title:"Double du code barre.",
-                    text:"Erreur de saisie lecture double du code barre."
+                    title: "Doppelter Barcode.",
+                    text: "Eingabefehler beim Lesen des doppelten Barcodes."
                 },
                 {
                     id:"btn02",
-                    title:"Défectueux ou en panne.",
-                    text:"Le client a fait un retour, le produit est défectueux ou en panne."
+                    title: "Defekt oder defekt.",
+                    text: "Der Kunde hat eine Rücksendung gemacht, das Produkt ist defekt oder ausgefallen."
                 },
                 {
                     id:"btn03",
-                    title:"Retour du produit.",
-                    text:"Le client fait retour du produit car il ne lui a pas plu."
+                    title: "Rücksendung des Produkts.",
+                    text: "Der Kunde schickt das Produkt zurück, weil es ihm nicht gefallen hat."
                 },
                 {
                     id:"btn04",
-                    title:"Erreur d'achat.",
-                    text:"Le client s´est trompé sur son achat il souhaite faire un retour."
+                    title: "Fehler beim Kauf.",
+                    text: "Der Kunde hat sich beim Kauf geirrt und möchte eine Rücksendung machen."
                 },
                 {
                     id:"btn05",
-                    title:"Scanné 2 fois le produit",
-                    text:"La caissière a scanné 2 fois le produit."
+                    title: "Hat das Produkt zweimal gescannt",
+                    text: "Die Kassiererin hat das Produkt zweimal gescannt."
                 },
                 {
                     id:"btn06",
-                    title:"Oublié de Supprimer.",
-                    text:"La caissière a oublié de supprimer le produit non voulu."
+                    title: "Vergessen zu löschen.",
+                    text: "Die Kassiererin hat vergessen, den unerwünschten Artikel zu löschen."
                 },
                 {
                     id:"btn07",
-                    title:"Pas sélectionné le bon produit.",
-                    text:"La caissière n’a pas sélectionné le bon produit."
+                    title: "Nicht das richtige Produkt ausgewählt.",
+                    text: "Die Kassiererin hat nicht das richtige Produkt ausgewählt."
                 },
                 {
                     id:"btn08",
-                    title:"Pas vu l’étiquette jaune.",
-                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit."
+                    title: "Gelbes Etikett nicht gesehen.",
+                    text: "Die Kassiererin hat das gelbe Etikett auf dem Produkt nicht gesehen."
                 },
                 {
                     id:"btn09",
-                    title:"Erreur d’étiquetage.",
-                    text:"Le client a retourné le produit car erreur d’étiquetage."
+                    title: "Etikettenfehler.",
+                    text: "Der Kunde hat das Produkt wegen eines Etikettenfehlers zurückgegeben."
                 },
                 {
                     id:"btn10",
-                    title:"Trop cher.",
-                    text:"Le client a retourné le produit car trop cher."
+                    title: "Zu teuer.",
+                    text: "Der Kunde hat das Produkt zurückgegeben, weil es zu teuer war."
                 },
                 {
                     id:"btn11",
-                    title:"Mauvaise étiquette jaune.",
-                    text:"Mauvaise étiquette jaune sur le produit."
+                    title: "Falsches gelbes Etikett.",
+                    text: "Falsches gelbes Etikett auf dem Produkt."
                 },
                 {
                     id:"btn12",
-                    title:"Boucherie s’est trompée.",
-                    text:"La boucherie s’est trompée d’étiquette."
+                    title: "Metzgerei hat sich geirrt.",
+                    text: "Die Metzgerei hat sich in der Etikette geirrt."
                 }
             ]
         },
@@ -313,69 +313,69 @@ export const prm =
         ID :"DocDelDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
                 {
                     id:"btn01",
-                    title:"Course annulé.",
-                    text:"Le client ne veux plus son produit."
+                    title: "Rennen abgebrochen.",
+                    text: "Der Kunde will sein Produkt nicht mehr."
                 },
                 {
                     id:"btn02",
-                    title:"Montant insuffisant!",
-                    text:"Le client n'a pas le montant requis pour payer ses produits."
+                    title: "Unzureichender Betrag!",
+                    text: "Der Kunde hat nicht genug Geld, um seine Waren zu bezahlen."
                 },
                 {
                     id:"btn03",
-                    title:"Refus CB.",
-                    text:"Paiement Refusée de la banque CB du client."
+                    title: "CB-Verweigerung.",
+                    text: "Zahlung von der CB-Bank des Kunden abgelehnt."
                 },
                 {
                     id:"btn04",
-                    title:"La responsable teste.",
-                    text:"La responsable teste des produits."
+                    title: "Die Leiterin testet.",
+                    text: "Die Leiterin testet Produkte."
                 },
                 {
                     id:"btn05",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title: "Beschreibung nicht eingegeben.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
                     id:"btn12",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title: "TEST.",
+                    text: "Produkt wurde gescannt, um auf ein Update zu testen."
                 }
             ]
         },
@@ -420,69 +420,69 @@ export const prm =
         ID :"DocRowDelDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
                 {
                     id:"btn01",
-                    title:"A cause du prix.",
-                    text:"Le client ne veux plus le produit, le prix ne lui convient plus."
+                    title: "Wegen des Preises.",
+                    text: "Der Kunde will das Produkt nicht mehr, weil ihm der Preis nicht mehr passt."
                 },
                 {
                     id:"btn02",
-                    title:"Erreur du prix affiché.",
-                    text:"Le prix du rayon et celle du systhème n'est pas identique."
+                    title: "Fehler beim angezeigten Preis.",
+                    text: "Der Preis im Regal und im System ist nicht identisch."
                 },
                 {
                     id:"btn03",
-                    title:"Scanné 2 fois.",
-                    text:"La caissière a scanné 2 fois le produit."
+                    title: "Zweimal gescannt.",
+                    text: "Die Kassiererin hat das Produkt zweimal gescannt."
                 },
                 {
                     id:"btn04",
-                    title:"Erreur Saisie dans la liste.",
-                    text:"Caissière a fait une erreur dans la saisie de la liste du produit."
+                    title: "Fehler bei der Eingabe der Liste.",
+                    text: "Kassiererin hat einen Fehler bei der Eingabe der Produktliste gemacht."
                 },
                 {
                     id:"btn05",
-                    title:"Saisie fruits et légumes.",
-                    text:"Caissière a fait une erreur dans la saisie de la liste des fruits et légumes. "
+                    title: "Eingabe von Obst und Gemüse.",
+                    text: "Kassiererin hat einen Fehler bei der Eingabe der Obst- und Gemüseliste gemacht. "
                 },
                 {
                     id:"btn06",
-                    title:"Client s'est Tromper",
-                    text:"Le client s'est tromper sur le produit."
+                    title: "Kunde hat sich getäuscht",
+                    text: "Der Kunde hat sich über das Produkt getäuscht."
                 },
                 {
                     id:"btn07",
-                    title:"Vu l’étiquette jaune.",
-                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit ."
+                    title: "Das gelbe Etikett gesehen.", 
+                    text: "Die Kassiererin hat das gelbe Etikett auf dem Produkt nicht gesehen."
                 },
                 {
                     id:"btn08",
-                    title:"Produit cher.",
-                    text:"Le client ne veut pas le produit car produit cher."
+                    title: "Teures Produkt.",
+                    text: "Der Kunde will das Produkt nicht, weil das Produkt teuer ist."
                 },
                 {
-                    id:"btn09",
-                    title:"Mauvaise étiquette jaune.",
-                    text:"Mauvaise étiquette jaune sur le produit ."
+                    id: "btn09",
+                    title: "Falsches gelbes Etikett.",
+                    text: "Falsches gelbes Etikett auf dem Produkt."
                 },
                 {
-                    id:"btn10",
-                    title:"La boucherie trompée.",
-                    text:"La boucherie s’est trompée d’étiquette."
+                    id: "btn10",
+                    title: "Die Metzgerei hat sich geirrt.",
+                    text: "Die Metzgerei hat das Etikett verwechselt."
                 },
                 {
-                    id:"btn11",
-                    title:"La responsable teste.",
-                    text:"La responsable teste des produits."
+                    id: "btn11",
+                    title: "Die Managerin testet.",
+                    text: "Die Leiterin testet Produkte."
                 },
                 {
-                    id:"btn12",
-                    title:"Le client ne veut plus",
-                    text:"Le client ne ne veut plus du produit."
+                    id: "btn12",
+                    title: "Der Kunde will nicht mehr",
+                    text: "Der Kunde will das Produkt nicht mehr."
                 }
             ]
         },
@@ -531,65 +531,65 @@ export const prm =
             minCharSize:25,
             buttons:
             [
-                {
-                    id:"btn01",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                { 
+                    id: "btn01",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn02",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn02",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn03",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn03",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn04",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn04",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn05",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description. "
+                    id: "btn05",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an. "
+                },
+                { 
+                    id: "btn06",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn06",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn07",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn07",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn08",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn08",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn09",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn09",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn10",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an. "
+                },
+                { 
+                    id: "btn11",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 },
                 {
-                    id:"btn10",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
-                },
-                {
-                    id:"btn11",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
-                },
-                {
-                    id:"btn12",
-                    title:"Veuillez indiquer une description.",
-                    text:"Veuillez indiquer une description."
+                    id: "btn12",
+                    title: "Bitte geben Sie eine Beschreibung an.",
+                    text: "Bitte geben Sie eine Beschreibung an."
                 }
             ]
         },
@@ -634,69 +634,69 @@ export const prm =
         ID :"ParkDelDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
-                {
-                    id:"btn01",
-                    title:"Montant insuffisent retour du client.",
-                    text:"Le client n'a pas le montant requis, il va venir payer et récupérer ses courses."
+                { 
+                    id: "btn01",
+                    title: "Unzureichender Betrag, wenn der Kunde zurückkommt.",
+                    text: "Der Kunde hat nicht den erforderlichen Betrag, er wird kommen, um zu bezahlen und seine Einkäufe abzuholen."
                 },
                 {
-                    id:"btn02",
-                    title:"Rajout d´achat...",
-                    text:"Produit manquant retour du client instantannée."
+                    id: "btn02",
+                    title: "Nachkauf ...",
+                    text: "Fehlende Ware wird sofort an den Kunden zurückgeschickt."
                 },
                 {
-                    id:"btn03",
-                    title:"Personnel du magasin.",
-                    text:"Mise en attente achat du personnel."
+                    id: "btn03",
+                    title: "Mitarbeiter im Geschäft.",
+                    text: "Warten auf Personalkauf."
                 },
                 {
-                    id:"btn04",
-                    title:"Refus CB.",
-                    text:"Refus CB client ... retour journée.."
+                    id: "btn04",
+                    title: "Verweigerte Kreditkarte.",
+                    text: "Verweigerung der Bankkarte ... zurück Tag ..."
                 },
                 {
-                    id:"btn05",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    id: "btn05",
+                    title: "TEST.",
+                    text: "Produkt wurde gescannt, um für ein Update getestet zu werden."
+                },
+                { 
+                    id: "btn06",
+                    title: "Beschreibung leer.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn07",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn08",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn09",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn10",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn11",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 },
                 {
-                    id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
-                },
-                {
-                    id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    id: "btn12",
+                    title: "Leere Beschreibung.",
+                    text: "Beschreibung nicht eingegeben."
                 }
             ]
         },
@@ -741,7 +741,7 @@ export const prm =
         ID :"AdvanceDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
@@ -848,7 +848,7 @@ export const prm =
         ID :"RePrintDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [
@@ -1207,7 +1207,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"SaleClosePrint",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
