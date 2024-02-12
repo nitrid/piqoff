@@ -50,6 +50,9 @@ export function print()
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ADRESS.toString().substring(0,48)})
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ZIPCODE.toString().substring(0,5) + " - " + data.pos[0].CUSTOMER_CITY.toString().substring(0,48)})
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_COUNTRY.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"NO TVA : "+ data.pos[0].CUSTOMER_TAX_NO.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"SIRET : "+ data.pos[0].CUSTOMER_SIRET.toString().substring(0,48)})
+
                 tmpArr.push({font:"a",style:"b",align:"ct",data: " ".space(64)})
             }   
             return tmpArr.length > 0 ? tmpArr : undefined
@@ -269,19 +272,33 @@ export function print()
                     }
                     else
                     {
-                        tmpArr.push( 
+                        if(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000") //SUB TOTAL SATIRI
                         {
-                            font: "b",
-                            style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
-                            align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
-                            pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
-                            data: tmpSaleItem.VAT_TYPE + " " +
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
-                                //(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
-                                (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
-                        }) 
+                            tmpArr.push( 
+                            {
+                                font: "b",
+                                style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
+                                align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
+                                data: ("Sub Total").space(55,'e') + " " + (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
+                            }) 
+                        }
+                        else //NORMAL SATIŞ SATIRLARI
+                        {
+                            tmpArr.push( 
+                            {
+                                font: "b",
+                                style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
+                                align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
+                                data: tmpSaleItem.VAT_TYPE + " " +
+                                    (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
+                                    (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
+                                    (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
+                                    //(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
+                                    (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
+                            }) 
+                        }
                     }
                 }) 
             } 
@@ -495,7 +512,7 @@ export function print()
 
                     tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                     tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
+                    tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE + " / " + data.pos[0].CUSTOMER_NAME).space(64)});
                     tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
                     tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
 
@@ -541,17 +558,32 @@ export function print()
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
-        ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d'achat."}},
-        ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
-        ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 EURO depensé beneficiez d'1 point fidelité."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
+        ()=>
+        {
+            let tmpArr = [];
+            let tmpDesription = data.pos[0].PRINT_DESCRIPTION.split('\n')
+            for (let i = 0; i < tmpDesription.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "b",
+                    align: "ct",
+                    data: tmpDesription[i]
+                })
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        // ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
+        // ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
+        // ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d'achat."}},
+        // ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
+        // ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 EURO depensé beneficiez d'1 point fidelité."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
         ()=>
         {
             if(data.special.type == 'Fatura')

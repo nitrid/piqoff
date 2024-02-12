@@ -106,6 +106,12 @@ export const langTr =
         msg : "Ödeme Gerçekleşmedi",
         btn01 : "Tamam"
     },
+    msgPayProcessFailed :
+    {
+        title : "Bilgi",
+        msg : "Kart cihazı üzerinde girilmiş tutar var. Yeni bir tutar gönderimi yapmadan önce lütfen kart cihazı üzerindeki işlemi iptal edin!",
+        btn01 : "Tamam"
+    },
     msgBonDavoir : 
     {
         title : "Uyarı",
@@ -391,13 +397,15 @@ export const langTr =
         msg :"İade Alınan Ticketı Okutunuz !",
         btn01 : "Tamam",
         btn02 : "İptal",
+        btn03 : "Fiş Seçimi" // BAK
     },
     msgItemReturnType: 
     {
         title : "Uyarı",
         msg :"İade Tipini Seçiniz !",
         btn01 : "Espece",
-        btn02 :"Bon D'avoir",
+        btn02 : "Bon D'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -758,6 +766,8 @@ export const langTr =
         txtPopCustomerZipCode : "Posta Kodu",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Telefon",
+        txtPopCustomerTva : "Vergi No",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.",
         msgCustomerSaveResult:
         {
@@ -772,7 +782,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Siret No ve Vergi No Giriniz !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual : "Bireysel",
+        company : "Firma",
+        association : "Dernek"
+    },
+    cmbType: "Tip",
     popCustomerAddList : 
     {
         title : "Müşteri Seçim",
@@ -889,5 +912,17 @@ export const langTr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Telefon",
     txtNewCustomerLastName : "Soyisim",
-    txtNewCustomerName : "İsim"
+    txtNewCustomerName : "İsim",
+    msgMultipleLineSelect:
+    {
+        title: "Dikkat",
+        btn: "Tamam",
+        msg: "İndirim uygulamak için tek bir satır seçmelisiniz",
+    },
+    applyDiscountText: "İndirim Uygula",
+    msgAdminMessage:
+    {
+        title: "Yönetici Mesajı",
+        btn01: "Tamam",
+    },
 }

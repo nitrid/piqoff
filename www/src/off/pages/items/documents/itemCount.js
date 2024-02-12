@@ -1370,7 +1370,7 @@ export default class itemCount extends React.PureComponent
                             <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                 displayExpr="VALUE"                       
                                 valueExpr="ID"
-                                value=""
+                                value={localStorage.getItem('lang').toUpperCase()}
                                 searchEnabled={true}
                                 onValueChanged={(async()=>
                                     {
@@ -1398,7 +1398,7 @@ export default class itemCount extends React.PureComponent
                                                 value:  [this.countObj.dt()[0].REF,this.countObj.dt()[0].REF_NO,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {

@@ -44,7 +44,8 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
-            txtDescription : "Açıklama"
+            txtDescription : "Açıklama",
+            cmbPricingList : "Fiyat Liste No"
         },
         itemPopup : 
         {
@@ -196,6 +197,14 @@ export const langTr =
             btn02: "Hayır",
             msg: "Faturanıza tahsilat girmek istermisiniz ?"
         },
+        grdLastSales : 
+        {
+            clmDocDate: "Tarih",
+            clmRef : "Evrak No",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+        },
     },
     extract :
     {
@@ -225,6 +234,14 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Müşteri Seçiniz..!"
+        },
+        grdDetail : 
+        {
+            clmCode: "Kodu",
+            clmName : "Ürün Adı",           
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Toplam",
         },
     },
     itemDetail :

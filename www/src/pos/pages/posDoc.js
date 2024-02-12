@@ -2,7 +2,7 @@ import React from "react";
 import App from "../lib/app.js";
 import moment from 'moment';
 
-import Form, { Label,Item } from "devextreme-react/form";
+import Form, { Label,Item, EmptyItem } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
 import { Button } from "react-bootstrap";
 import { LoadPanel } from 'devextreme-react/load-panel';
@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -72,6 +73,9 @@ export default class posDoc extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
         this.customerObj = new customersCls();
+        this.rebatePosSaleDt = new datatable()
+        this.rebatePosPayDt = new datatable()
+        this.rebatePosDt = new datatable()
         
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -126,9 +130,7 @@ export default class posDoc extends React.PureComponent
                 this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
-
-        this.init();
-        
+        this.init();        
         this.core.socket.on('connect',async () => 
         {   
             if(!this.state.isConnected)
@@ -307,6 +309,23 @@ export default class posDoc extends React.PureComponent
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
         })
+        this.core.socket.on('msgService',async(pParam,pCallback) =>
+        {
+            if(pParam.tag == 'msgPosDevice')
+            {
+                if(pParam.devices.length > 0 && typeof pParam.devices.find((item) => item == this.device.value) != 'undefined')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAdminMessage',showTitle:true,title:this.lang.t("msgAdminMessage.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgAdminMessage.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{pParam.msg}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                }
+            }
+        })
 
         if(this.core.offline)
         {
@@ -325,7 +344,16 @@ export default class posDoc extends React.PureComponent
 
         await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-
+        // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
+        this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
+        this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
+        this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
+        this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
+        this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
+        this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
+        this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
+        this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
+        //********************************************************* */
         if(this.state.isFormation)
         {
             this.posObj.dt().selectCmd.query = "SELECT * FROM [dbo].[POS_FRM_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))"
@@ -507,6 +535,7 @@ export default class posDoc extends React.PureComponent
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
+            this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }
         //********************************************* */
         this.cheqDt.selectCmd = 
@@ -933,16 +962,16 @@ export default class posDoc extends React.PureComponent
             tmpPriceDt.selectCmd = 
             {
                 query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
                     type : "select",
-                    query : "SELECT * FROM ITEMS_POS_VW_01 WHERE GUID = ? LIMIT 1;",
+                    query : "SELECT * FROM ITEMS_POS_VW_01 AS ITEM " + 
+                            "WHERE ITEM.GUID = ? LIMIT 1;",
                     values : [tmpItemsDt[0].GUID]
                 }
             }
-            
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo,tmpItemsDt[0].GUID]
             await tmpPriceDt.refresh();  
             
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
@@ -951,6 +980,18 @@ export default class posDoc extends React.PureComponent
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
+                    //PROMOSYON FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
+                    let tmpInfoPrice = tmpPrice
+                    let tmpPromoCond = this.promoObj.cond.dt().where({ITEM_GUID : tmpItemsDt[0].GUID})
+                    if(tmpPromoCond.length > 0)
+                    {
+                        let tmpPromoApp = this.promoObj.app.dt().where({PROMO : tmpPromoCond[0].PROMO}).where({TYPE:5})
+                        if(tmpPromoApp.length > 0)
+                        {
+                            tmpInfoPrice = tmpPromoApp[0].AMOUNT
+                        }
+                    }
+                    //************************************************************************************************ */
                     let tmpConfObj =
                     {
                         id:'msgAlert',
@@ -960,7 +1001,7 @@ export default class posDoc extends React.PureComponent
                         width:'500px',
                         height:'250px',
                         button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
-                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
+                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpInfoPrice).round(2) + " " + Number.money.sign}</h3></div>)
                     }
                     await dialog(tmpConfObj);
                     this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
@@ -1040,7 +1081,7 @@ export default class posDoc extends React.PureComponent
 
                         tmpPrice = tmpResult
                         //FİYAT GİRİLMİŞ İSE TERAZİYE İSTEK YAPILIYOR.
-                        let tmpWResult = await this.getWeighing()
+                        let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
                             tmpQuantity = tmpWResult
@@ -1691,7 +1732,6 @@ export default class posDoc extends React.PureComponent
                     {
                         return
                     }
-                    console.log(this.posUsbTSE.lastTransaction)
                 }
                 //***************************************/
                 
@@ -1737,13 +1777,12 @@ export default class posDoc extends React.PureComponent
                                 width:'500px',
                                 height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " " + Number.money.code}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
+                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " " + Number.money.sign}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }
                     }
                 } 
-                
                 if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
@@ -2021,64 +2060,72 @@ export default class posDoc extends React.PureComponent
                 this.popCardPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
 
-                if(tmpPayCard == 1) //Başarılı
+                if(typeof tmpPayCard != 'undefined')
                 {
-                    this.msgCardPayment.hide()
-                }
-                else if(tmpPayCard == 2) //Zorla
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
-                    }
-                    let tmpResult = await dialog(tmpConfObj);
-                    if(tmpResult == "btn01")
+                    if(tmpPayCard == 1) //Başarılı
                     {
                         this.msgCardPayment.hide()
-                        //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
-                        if((Number(this.payRest.value) - pAmount) > 0)
+                    }
+                    else if(tmpPayCard == 2) //Zorla
+                    {
+                        let tmpConfObj =
                         {
-                            let tmpResult2 = await this.msgRePaymentType.show()
-                            if(tmpResult2 == "btn01")
+                            id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
+                        }
+                        let tmpResult = await dialog(tmpConfObj);
+                        if(tmpResult == "btn01")
+                        {
+                            this.msgCardPayment.hide()
+                            //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
+                            if((Number(this.payRest.value) - pAmount) > 0)
                             {
-                                this.msgCardPayment.hide()
-                                this.popCashPay.show();
-                                this.txtPopCashPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn02")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCardPay.show();
-                                this.txtPopCardPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn03")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popTotal.show();
-                                this.rbtnPayType.value = 2
-                            }
-                            else if(tmpResult2 == "btn04")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCheqpay.show();
-                                this.txtPopCheqpay.focus()
+                                let tmpResult2 = await this.msgRePaymentType.show()
+                                if(tmpResult2 == "btn01")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCashPay.show();
+                                    this.txtPopCashPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn02")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCardPay.show();
+                                    this.txtPopCardPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn03")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popTotal.show();
+                                    this.rbtnPayType.value = 2
+                                }
+                                else if(tmpResult2 == "btn04")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCheqpay.show();
+                                    this.txtPopCheqpay.focus()
+                                }
                             }
                         }
+                        else
+                        {
+                            this.payAdd(pType,pAmount)
+                            return
+                        }
                     }
-                    else
+                    else if(tmpPayCard == 3) //iptal
                     {
-                        this.payAdd(pType,pAmount)
+                        this.msgCardPayment.hide()
+                        return                    
+                    }
+                    else //Başarısız veya İptal
+                    {
+                        this.msgCardPayment.hide()
                         return
                     }
                 }
-                else if(tmpPayCard == 3) //iptal
-                {
-                    this.msgCardPayment.hide()
-                    return                    
-                }
-                else //Başarısız veya İptal
+                else
                 {
                     this.msgCardPayment.hide()
                     return
@@ -2146,24 +2193,24 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    payCard(pAmount)
+    payCard(pAmount,pType)
     {
         return new Promise(async resolve => 
         {
             let tmpFn = () =>
             {
                 this.txtPaymentPopTotal.value = pAmount
-                console.log(pAmount)
+                
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
                     {
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
                         this.msgCardPayment.hide();
-                        resolve(await this.payCard(pAmount)) // Tekrar
+                        resolve(await this.payCard(pAmount,pType)) // Tekrar
                     }
                     else if(e == 'btn02')
                     {
@@ -2176,7 +2223,7 @@ export default class posDoc extends React.PureComponent
 
                             if(tmpResult)
                             {
-                                if(this.posDevice.payPort.isOpen)
+                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                                 {
                                     await this.posDevice.payPort.close()
                                 }
@@ -2191,7 +2238,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else if(e == 'btn03')
                     {       
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
@@ -2200,12 +2247,12 @@ export default class posDoc extends React.PureComponent
                     }
                 })
             }
-
+            
             tmpFn()
             
-            let tmpCardPay = await this.posDevice.cardPayment(pAmount)
+            let tmpCardPay = await this.posDevice.cardPayment(pAmount,pType)
             
-            if(typeof tmpCardPay != 'undefined')
+            if(typeof tmpCardPay != 'undefined' && this.msgCardPayment.isShowed)
             {
                 if(tmpCardPay.tag == "response")
                 {
@@ -2226,10 +2273,24 @@ export default class posDoc extends React.PureComponent
                         resolve(1) // Başarılı
                     }
                 }
+                else if(tmpCardPay.tag == "net_error")
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgPayProcessFailed',showTitle:true,title:this.lang.t("msgPayProcessFailed.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPayProcessFailed.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayProcessFailed.msg")}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
                 else
                 {
                     resolve(0) // Başarısız
                 }
+            }
+            else
+            {
+                resolve()
             }
         });
     }
@@ -2407,7 +2468,7 @@ export default class posDoc extends React.PureComponent
             tmpAmount = Number(parseFloat(tmpTicket / 100).round(2))
             tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)
 
-            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
+            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 416 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
             {
                 this.txtPopCheqpay.value = "";
                 document.getElementById("Sound").play(); 
@@ -2725,6 +2786,8 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
+        this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
         {
             let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
@@ -3269,75 +3332,41 @@ export default class posDoc extends React.PureComponent
     }
     async ZReport()
     {
-        let tmpArr = 
-        [
-            {align:"ct",logo:"./resources/logop.png"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "Bahnhafstrasse 13"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "6020 EMMENBRUCKE"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : +41 76 260 38 66"},
-            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
-            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
-            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
-            //{font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
-            {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
-            {font:"a",style:"b",align:"lt",data:" ".space(48)},
-            {font:"a",style:"bu",align:"rt",data:" ".space(5) + " " + "Taux".space(8) + " " + "HT".space(10) + " " + "TVA".space(10) + " " + "TTC".space(10)}
-        ]
-
-        let tmpSaleDt = new datatable()
-        tmpSaleDt.selectCmd = 
+        import("../meta/print/" + this.prmObj.filter({ID:'ZReportPrintDesign',TYPE:0}).getValue()).then(async(e)=>
         {
-            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpSaleDt.refresh()
-
-        if(tmpSaleDt.length > 0)
-        {
-            let tmpVatLst = tmpSaleDt.groupBy('VAT_TYPE').orderBy('VAT_TYPE','asc')
-            for (let i = 0; i < tmpVatLst.length; i++) 
+            let tmpSaleDt = new datatable()
+            tmpSaleDt.selectCmd = 
             {
-                tmpArr.push(
-                {
-                    font: "a",
-                    align: "rt",
-                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
-                        (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
-                })
+                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
-            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + tmpSaleDt.sum('FAMOUNT',2).space(10) + " " + tmpSaleDt.sum('VAT',2).space(10) + " " + tmpSaleDt.sum('TOTAL',2).space(10)})
-            tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
-        }
+            await tmpSaleDt.refresh()
+            
+            let tmpPayDt = new datatable()
+            tmpPayDt.selectCmd = 
+            {
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+            }
+            await tmpPayDt.refresh()
 
-        let tmpPayDt = new datatable()
-        tmpPayDt.selectCmd = 
-        {
-            query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpPayDt.refresh()
+            let tmpData =
+            {
+                firm : this.firm,
+                possale : tmpSaleDt,
+                pospay : tmpPayDt,
+                special : 
+                {
+                    user : this.user.CODE,
+                    device : window.localStorage.getItem('device')
+                }
+            }
 
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-
-        for (let i = 0; i < tmpPayDt.length; i++) 
-        {
-            tmpArr.push({font: "b",align: "lt",size : [1,1],data: tmpPayDt[i].PAY_TYPE_NAME.space(16) + " " + Number(tmpPayDt[i].AMOUNT).toFixed(2).space(10)})
-            tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        }
-        tmpArr.push({font: "b",align: "lt",size : [1,1],data: ("Total : ").space(16) + " " + tmpPayDt.sum('AMOUNT',2).space(10)})
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        //console.log(tmpArr)
-        await this.posDevice.escPrinter(tmpArr)
+            let tmpPrint = e.print(tmpData)
+            await this.posDevice.escPrinter(tmpPrint)
+        })
     }
     checkSaleClose(pGuid)
     {
@@ -3745,7 +3774,7 @@ export default class posDoc extends React.PureComponent
                                 columnsAutoWidth={false} 
                                 allowColumnResizing={true} 
                                 allowColumnReordering={false}
-                                height={"200px"} 
+                                height={"278px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
@@ -3831,7 +3860,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Scrolling mode="standard" />
-                                    <Paging defaultPageSize={5} />
+                                    <Paging defaultPageSize={8} />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                     <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                     {
@@ -3897,7 +3926,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Total */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3930,7 +3959,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Credit Card */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {                  
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3963,27 +3992,27 @@ export default class posDoc extends React.PureComponent
                                     {/* 7 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey7"} parent={this} keyBtn={{textbox:"txtBarcode",key:"7"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-7" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 8 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey8"} parent={this} keyBtn={{textbox:"txtBarcode",key:"8"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-8" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 9 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey9"} parent={this} keyBtn={{textbox:"txtBarcode",key:"9"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-9" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Check */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             this.getItem(this.txtBarcode.dev.option("value"))
@@ -3996,7 +4025,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnSafeOpen',USERS:this.user.CODE})}
                                         onClick={async ()=>
                                         {
@@ -4008,7 +4037,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cash */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {           
                                             if(this.posObj.posSale.dt().length == 0)
@@ -4041,28 +4070,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 4 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey4"} parent={this} keyBtn={{textbox:"txtBarcode",key:"4"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-4" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 5 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey5"} parent={this} keyBtn={{textbox:"txtBarcode",key:"5"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-5" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 6 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey6"} parent={this} keyBtn={{textbox:"txtBarcode",key:"6"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-6" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Backspace */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyBs"} parent={this} keyBtn={{textbox:"txtBarcode",key:"Backspace"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-delete-left" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4071,7 +4100,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Discount */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={async()=>
                                         {   
@@ -4083,7 +4112,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cheqpay */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
@@ -4128,28 +4157,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 1 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey1"} parent={this} keyBtn={{textbox:"txtBarcode",key:"1"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-1" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 2 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey2"} parent={this} keyBtn={{textbox:"txtBarcode",key:"2"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-2" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 3 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey3"} parent={this} keyBtn={{textbox:"txtBarcode",key:"3"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-3" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* X */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyX"} parent={this} keyBtn={{textbox:"txtBarcode",key:"*"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4158,7 +4187,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Customer Point */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.customerName.value == '')
@@ -4190,16 +4219,16 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             if(this.btnInfo.lock)
                                             {
-                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"50px",width:"100%"})
                                             }
                                             else
                                             {
-                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
+                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"50px",width:"100%"})
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: "24px"}} />
@@ -4208,18 +4237,18 @@ export default class posDoc extends React.PureComponent
                                     {/* . */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyDot"} parent={this} keyBtn={{textbox:"txtBarcode",key:"."}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"26pt"}}>.</NbButton>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"26pt"}}><div style={{height:"50px",lineHeight:'18px'}}>.</div></NbButton>
                                     </div>
                                     {/* 0 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey0"} parent={this} keyBtn={{textbox:"txtBarcode",key:"0"}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-0" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* -1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4234,11 +4263,11 @@ export default class posDoc extends React.PureComponent
                                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                                 }
                                             }
-                                        }}>-1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>-1</div></NbButton>
                                     </div>
                                     {/* +1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4250,7 +4279,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                             }
-                                        }}>+1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                     </div>
                                 </div> 
                             </div>
@@ -4357,7 +4386,6 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
-                                                        console.log(this.posObj.posPay.dt())
                                                         if(this.posObj.posPay.dt().length > 0)
                                                         {
                                                             let tmpConfObj =
@@ -4400,9 +4428,20 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     <div className="col-10">
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
-                                        onSelection={(pItem)=>
+                                        onSelection={(pItem,pQuantity)=>
                                         {
-                                            this.getItem(this.txtBarcode.value + pItem)
+                                            if(this.txtBarcode.value != '')
+                                            {
+                                                this.getItem(this.txtBarcode.value + pItem)
+                                            }
+                                            else
+                                            {
+                                                if(typeof pQuantity == 'undefined')
+                                                {
+                                                    pQuantity = 1
+                                                }
+                                                this.getItem(pQuantity + '*' + pItem)
+                                            }
                                         }}/>
                                     </div>
                                 </div>  
@@ -4441,6 +4480,13 @@ export default class posDoc extends React.PureComponent
                                                     if(e == 'btn01')
                                                     {
                                                         this.ticketCheck(this.txtItemReturnTicket.value)
+                                                    }
+                                                    else if(e == 'btn03')
+                                                    {
+                                                        this.dtpopRebateTicletStartDate.value = moment(new Date()).format("YYYY-MM-DD")
+                                                        this.dtpopRebateTicletFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
+                                                        this.cmbpopRebateTicletUser.value = this.core.auth.data.CODE
+                                                        this.rebateTicketPopup.show()
                                                     }
                                                 })                                                
                                             }
@@ -5918,7 +5964,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                         <div className="row pb-1">
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountRate"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -5986,7 +6032,7 @@ export default class posDoc extends React.PureComponent
                                     <div>{this.lang.t("applyDiscountPercent")}</div>
                                 </NbButton>
                             </div>
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -6053,6 +6099,76 @@ export default class posDoc extends React.PureComponent
                                     }                               
                                 }}>
                                     <div>{this.lang.t("applyDiscountAmount") + Number.money.sign} </div>
+                                </NbButton>
+                            </div>
+                            <div className="col-4">
+                                <NbButton id={"btnPopDiscountText"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    if(this.grdDiscList.getSelectedData().length == 1)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
+
+                                        let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
+                                        
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                           
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 17")
+                                        await this.calcGrandTotal();
+                                    }  
+                                    else if(this.grdDiscList.getSelectedData().length == 0)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    } 
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgMultipleLineSelect',showTitle:true,title:this.lang.t("msgMultipleLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgMultipleLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMultipleLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }                            
+                                }}>
+                                    <div>{this.lang.t("applyDiscountText") + Number.money.sign} </div>
                                 </NbButton>
                             </div>
                         </div>
@@ -6245,27 +6361,8 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 p-1">
                                     
                                     </div>
-                                    {/* btnLastSaleRebate */}
                                     <div className="col-2 p-1">
-                                    <NbButton id={"btnLastSaleRebate"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                        onClick={async()=>
-                                        {
-                                            let tmpAcsVal = this.acsObj.filter({ID:'btnReturnEntry',TYPE:2,USERS:this.user.CODE})
-                                        
-                                            if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
-                                            {   
-                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
-                                                if(!tmpResult)
-                                                {
-                                                    return
-                                                }
-                                            }
-
-                                            this.ticketCheck(this.grdLastPos.devGrid.getSelectedRowKeys()[0].REF_NO)
-                                            this.popLastSaleList.hide();
-                                        }}>
-                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
-                                        </NbButton>
+                                    
                                     </div>
                                     {/* btnLastSaleSendMail */}
                                     <div className="col-2 p-1">
@@ -7222,27 +7319,29 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        if(typeof e != 'undefined')
+                        if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                            if(!tmpResult)
+                            {
+                                return
+                            }
+                        }
+                        
+                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                        if(typeof tmpResult != 'undefined' && tmpResult != '')
                         {
-                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                            {   
-                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                if(!tmpResult)
-                                {
-                                    return
-                                }
+                            if(typeof e != 'undefined')
+                            {
+                                this.sendJet({CODE:"323",NAME:"Prix de l'article modifie .",DESCRIPTION:e}) 
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)
                             }
                             
-                            let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
-                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                            if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                             {
-                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
-                                if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
-                                {
-                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
-                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
-                                }
-                            }                            
+                                let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
+                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
+                            }
                         }
                     }}></NbPopDescboard>
                 </div>
@@ -7281,7 +7380,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"323",NAME:"Ligne supprimé sur ticket en attente.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
+                        this.sendJet({CODE:"323",NAME:"Ligne de article supprimé.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
@@ -7328,6 +7427,37 @@ export default class posDoc extends React.PureComponent
 
                                 await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                             }
+                            else if(tmpResult == 'btn03') //CB
+                            {
+                                let tmpPayCard = await this.payCard(Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2)),0)
+
+                                if(tmpPayCard == 1) //Başarılı
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 2) //Zorla
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 3) //iptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return                    
+                                }
+                                else //Başarısız veya İptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return
+                                }
+
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 1
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CB'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
 
                             if(this.txtItemReturnTicket.value != "")
                             {
@@ -7352,7 +7482,7 @@ export default class posDoc extends React.PureComponent
                         showCloseButton={false}
                         width={"500px"}
                         height={"250px"}
-                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
+                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
                         onShowed={()=>
                         {
                             this.txtItemReturnTicket.value = ""
@@ -7393,7 +7523,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8062,8 +8192,20 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             <div className="col-12">
                                 <Form colCount={2} height={'fit-content'} id={"frmCustomerAdd"}>
+                                     {/* cmbType */}
+                                    <Item>
+                                        <Label text={this.lang.t("cmbType")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TYPE"}}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        data={{source:[{ID:0,VALUE:this.lang.t("cmbTypeData.individual")},{ID:1,VALUE:this.lang.t("cmbTypeData.company")},{ID:2,VALUE:this.lang.t("cmbTypeData.association")}]}}
+                                        
+                                        />
+                                    </Item>       
+                                    <EmptyItem/>
                                     {/* txtPopCustomerCode */}
                                     <Item>
+                                        
                                         <Label text={this.lang.t("popCustomerAdd.txtPopCustomerCode")} alignment="right" />
                                         <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true} valueChangeEvent="keyup" 
                                         dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}
@@ -8095,7 +8237,6 @@ export default class posDoc extends React.PureComponent
                                         {                         
                                             this.customerObj.clearAll()
                                             await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
-                                            console.log(this.customerObj)
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
@@ -8132,7 +8273,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerSurname"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerSurname.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerAddress */}
                                     <Item>
@@ -8143,7 +8288,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerAddress"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerAddress.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerCountry */}
                                     <Item>
@@ -8165,7 +8314,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopSettingsLcd"
                                             this.keyPopCustomerAdd.setInput(this.txtPopSettingsLcd.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerCity */}            
                                     <Item>
@@ -8187,7 +8340,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerCity"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCity.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerZipCode */}
                                     <Item>
@@ -8209,7 +8366,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerZipCode"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerZipCode.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* <Item>
                                         <Label text={"Doğum Tarihi"} alignment="right" />
@@ -8237,6 +8398,28 @@ export default class posDoc extends React.PureComponent
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerTel.value)
                                         }}/>
                                     </Item>
+                                    {/* txtPopCustomerTel */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerTva")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerTva"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TAX_NO"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerTva"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerTva.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerTel */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerSiret")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerSiret"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SIRET"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerSiret"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerSiret.value)
+                                        }}/>
+                                    </Item>
                                 </Form>
                             </div>
                         </div>
@@ -8247,9 +8430,20 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(e.validationGroup.validate().status == "valid")
                                     {
+                                        if(this.cmbType.value == 1 && (this.txtPopCustomerTva.value == '' || this.txtPopCustomerSiret.value == ''))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgFirmSaveValid',showTitle:true,title:this.lang.t("popCustomerAdd.msgFirmSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgFirmSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popCustomerAdd.msgFirmSaveValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
                                         this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-    
                                         if(this.txtPopCustomerFirmName.value != '')
                                         {
                                             this.customerObj.dt()[0].TYPE = 1
@@ -8262,7 +8456,7 @@ export default class posDoc extends React.PureComponent
                                             button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveResult.btn01"),location:'after'}],
                                         }
                                         if((await this.customerObj.save()) == 0)
-                                        {                                                    
+                                        {                                  
                                             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgSuccess")}</div>)
                                             await dialog(tmpConfObj1);
                                         }
@@ -8760,6 +8954,256 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
+                {/* Last Sale List Popup */} 
+                <div>
+                    <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
+                    showCloseButton={true}
+                    showTitle={true}
+                    >
+                        {/* Tool Button Group */} 
+                        <div className="row pb-1">
+                            <div className="offset-8 col-4">
+                                <div className="row px-2">
+                                    {/* btnLastSaleRebate */}
+                                    <div className="col-12 p-1">
+                                    <NbButton id={"btnLastSaleRebate"} title={'Seç'} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            this.ticketCheck(this.grdRebatePos.devGrid.getSelectedRowKeys()[0].REF_NO)
+                                            this.rebateTicketPopup.hide();
+                                        }}>
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Filter */}
+                        <div className="row py-1">
+                            {/* dtpopRebateTicletStartDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true} parent={this} id={"dtpopRebateTicletStartDate"}/>
+                            </div>
+                            {/* dtpopRebateTicletFinishDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true} parent={this} id={"dtpopRebateTicletFinishDate"}/>
+                            </div>
+                            {/* cmbpopRebateTicletPayType */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbpopRebateTicletPayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
+                                data={{source : 
+                                [
+                                    {ID:-1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAll")},
+                                    {ID:0,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionEspece")},
+                                    {ID:1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionTPE")},
+                                    {ID:2,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque1")},
+                                    {ID:3,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque2")},
+                                    {ID:4,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAvoir")}
+                                ]}}/>
+                            </div>
+                            {/* cmbpopRebateTicletUser */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbpopRebateTicletUser" displayExpr={'NAME'} valueExpr={'CODE'}
+                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS WHERE STATUS = 1",local:{type : "select",query:"SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS;"}},sql:this.core.sql}}}/>
+                            </div>
+                            {/* txtPopLastRef */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateRef" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefPholder")}
+                                onKeyUp={(e)=>
+                                {
+                                    if(e.event.key == 'Enter')
+                                    {
+                                        this.btnpopRebateTicletSearch._onClick()
+                                    }
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* btnpopRebateTicletSearch */} 
+                            <div className="col-2">
+                                <NbButton id={"btnpopRebateTicletSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    if(this.txtPopRebateRefNo.value == "" && this.txtPopRebateRef.value == '')
+                                    {
+                                        this.rebatePosDt.selectCmd = 
+                                        {
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
+                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
+                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY LDATE DESC",
+                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25","CUSTOMER_CODE:string|50"],
+                                            value:  [this.dtpopRebateTicletStartDate.value,this.dtpopRebateTicletFinishDate.value,this.cmbpopRebateTicletPayType.value,this.cmbpopRebateTicletUser.value,this.txtPopRebateCustomer.value]
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.rebatePosDt.selectCmd = 
+                                        {
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE (SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF OR REF = @REF_NO)  AND STATUS = 1",
+                                            param:  ["REF:string|25","REF_NO:int"],
+                                            value:  [this.txtPopRebateRef.value,this.txtPopRebateRefNo.value]
+                                        }
+                                    }
+                                    
+                                    await this.rebatePosDt.refresh()
+                                    await this.grdRebatePos.dataRefresh({source:this.rebatePosDt});   
+                                    this.txtPopLastRef.value = ""                                 
+                                }}>
+                                    <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div className="row pb-1">
+                            {/* txtPopLastRefNo */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* txtPopLastCustomer */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
+                                 onChange={async(e)=>
+                                {                         
+                                   this.cmbpopRebateTicletUser.value = ''
+                                   this.dtpopRebateTicletStartDate.value = '19700101'
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div>
+                        {/* grdLastPos */}
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NdGrid parent={this} id={"grdRebatePos"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                sorting={{ mode: 'single' }}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={async(e)=>
+                                {
+                                    if(e.selectedRowKeys.length > 0)
+                                    {
+                                        this.rebatePosSaleDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        
+                                        await this.rebatePosSaleDt.refresh()
+                                        await this.grdRebateSale.dataRefresh({source:this.rebatePosSaleDt});
+
+                                        this.rebatePosPayDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                    
+                                        await this.rebatePosPayDt.refresh()
+                                        await this.grdRebatePay.dataRefresh({source:this.rebatePosPayDt});                                   
+                                    }
+                                }}
+                                >
+                                    <Column dataField="CONVERT_DATE" caption={this.lang.t("grdLastPos.LDATE")} width={150} alignment={"center"}  />
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={60}/>
+                                    <Column dataField="REF_NO" caption={this.lang.t("grdLastPos.REF")} width={150}/>
+                                    <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
+                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
+                                    <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="LOYALTY" caption={this.lang.t("grdLastPos.LOYALTY")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                        
+                                </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* grdRebateSale */}
+                            <div className="col-7">
+                                <NdGrid parent={this} id={"grdRebateSale"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                >
+                                    <Column dataField="BARCODE" caption={this.lang.t("grdLastSale.BARCODE")} width={120}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdLastSale.ITEM_NAME")} width={200}/>    
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdLastSale.QUANTITY")} width={50}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdLastSale.PRICE")} width={50} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastSale.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                </NdGrid>
+                            </div>
+                            {/* grdRebatePay */}
+                            <div className="col-5">
+                                <NdGrid parent={this} id={"grdRebatePay"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}                          
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                >
+                                    <Column dataField="PAY_TYPE_NAME" caption={this.lang.t("grdLastPay.PAY_TYPE_NAME")} width={150}/>
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastPay.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>    
+                                    <Column dataField="CHANGE" caption={this.lang.t("grdLastPay.CHANGE")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                </NdGrid>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
             </div>
         )
     }

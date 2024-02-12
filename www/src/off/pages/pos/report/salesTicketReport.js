@@ -83,6 +83,18 @@ export default class salesOrdList extends React.PureComponent
         {
           this.popOpenTike.show()
         }
+         //** FIRMA GETIR ******************************/
+         this.firm.selectCmd = 
+         {
+             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                 values : []
+             }
+         }
+         await this.firm.refresh();
     }
     async _btnGetClick()
     {
@@ -292,6 +304,7 @@ export default class salesOrdList extends React.PureComponent
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
             await this.lastPosPayDt.refresh()
+            console.log(this.firm)
             let tmpData = 
             {
                 pos : tmpLastPos,
@@ -1253,7 +1266,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
@@ -1279,7 +1292,7 @@ export default class salesOrdList extends React.PureComponent
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset))
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:false})
                                                         if(pResult.split('|')[0] != 'ERR')

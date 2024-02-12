@@ -130,7 +130,7 @@ export class customersCls
                     "@INSURANCE_NO = @PINSURANCE_NO, " +
                     "@TAX_TYPE = @PTAX_TYPE, " +
                     "@CAPITAL = @PCAPITAL, " +
-                    "@VAT_ZERO = @PVAT_ZERO, " +
+                    "@VAT_ZERO = @PVAT_ZERO," +
                     "@REBATE = @PREBATE, " +
                     "@TAX_SUCRE = @PTAX_SUCRE, " +
                     "@DEB = @PDEB, " +

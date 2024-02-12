@@ -45,7 +45,7 @@ export default class DocBase extends React.PureComponent
         this.getDispatch = this.getDispatch.bind(this)
         this.calculateTotalMargin = this.calculateTotalMargin.bind(this)
         this.calculateMargin = this.calculateMargin.bind(this)
-
+        
         this.multiItemData = new datatable()
         this.unitDetailData = new datatable()
         this.newPrice = new datatable()
@@ -91,7 +91,7 @@ export default class DocBase extends React.PureComponent
         {
             return this.docObj.docDemand
         }
-    }
+    }      
     init()
     {
         return new Promise(async resolve =>
@@ -221,8 +221,16 @@ export default class DocBase extends React.PureComponent
                     {
                         tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
                     }
-
-                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,this.type == 0 ? 1 : 0,0)
+                    let priceType = 0
+                    if(this.docObj.dt()[0].REBATE == 0)
+                    {
+                        priceType = this.type == 0 ? 1 : 0
+                    }
+                    else
+                    {
+                        priceType = this.type == 0 ? 0 : 1
+                    }
+                    let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(2)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
@@ -317,14 +325,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -334,14 +342,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -724,6 +732,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.REF = this.docObj.dt()[0].REF
                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
                 tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
@@ -738,6 +747,7 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.VAT = data[i].VAT
                 tmpDocItems.AMOUNT = data[i].AMOUNT
                 tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.TOTALHT = data[i].TOTALHT
                 tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                 tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
@@ -786,37 +796,75 @@ export default class DocBase extends React.PureComponent
             App.instance.setState({isExecute:true})
             for (let i = 0; i < data.length; i++) 
             {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.OFFER_LINE_GUID = data[i].GUID
-                tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                if(this.docType == 60)
+                {
+                    let tmpDocItems = {...this.docObj.docOrders.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    await this.docObj.docOrders.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                else
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
 
-                await this.docObj.docItems.addEmpty(tmpDocItems)
-                await this.core.util.waitUntil(100)
+                
             }
             this.calculateTotal()
             App.instance.setState({isExecute:false})
@@ -892,6 +940,85 @@ export default class DocBase extends React.PureComponent
             }, 500);
         }
     }
+    async getRebate() 
+    {
+        await this.pg_getRebate.show()
+        
+        let tmpQuery = arguments[0]
+
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        console.log(tmpData)
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_getRebate.setData(tmpData.result.recordset)
+        }
+        else
+        {
+            await this.pg_getRebate.setData([])
+        }
+
+        this.pg_getRebate.onClick = async(data) =>
+        {
+            App.instance.setState({isExecute:true})
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = data[i].LINE_NO
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                tmpDocItems.ITEM = data[i].ITEM
+                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                tmpDocItems.PRICE = data[i].PRICE
+                tmpDocItems.QUANTITY = data[i].QUANTITY
+                tmpDocItems.VAT = data[i].VAT
+                tmpDocItems.AMOUNT = data[i].AMOUNT
+                tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.TOTALHT = data[i].TOTALHT
+                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                tmpDocItems.REBATE_LINE_GUID = data[i].GUID
+                tmpDocItems.REBATE_DOC_GUID = data[i].DOC_GUID
+                tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+                tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+                tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
+                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+                tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
+                tmpDocItems.COST_PRICE = data[i].COST_PRICE
+                tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+
+            
+                await this.docObj.docItems.addEmpty(tmpDocItems)
+                await this.core.util.waitUntil(100)
+            }
+            this.calculateTotal()
+            App.instance.setState({isExecute:false})
+        }
+    }
     async mergeItem(pCode)
     {
         return new Promise(async resolve =>
@@ -929,7 +1056,6 @@ export default class DocBase extends React.PureComponent
     }
     async checkDocNo(pDocNo)
     {
-        console.log(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         {
             if(pDocNo != '')
@@ -1805,6 +1931,7 @@ export default class DocBase extends React.PureComponent
                                                 for (let i = 0; i < this.docDetailObj.dt().length; i++) 
                                                 {
                                                     this.docDetailObj.dt()[i].VAT = 0  
+                                                    this.docDetailObj.dt()[i].VAT_ZERO = 1 
                                                     this.docDetailObj.dt()[i].VAT_RATE = 0  
                                                     this.docDetailObj.dt()[i].TOTAL = (this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)
                                                     this.calculateTotal()
@@ -2245,6 +2372,28 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={200} />
                         <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                         <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                    </NdPopGrid>
+                </div>
+                {/* Iade Grid */}
+                <div>
+                    <NdPopGrid id={"pg_getRebate"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_getRebate.title")} //
+                    deferRendering={true}
+                    >
+                        <Paging defaultPageSize={22} />
+                        <Column dataField="REFERANS" caption={this.t("pg_getRebate.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_getRebate.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_getRebate.clmName")} width={500} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_getRebate.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_getRebate.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.t("pg_getRebate.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                     </NdPopGrid>
                 </div>
                 {/* Excel PopUp */}

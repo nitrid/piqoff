@@ -106,6 +106,12 @@ export const langFr =
         msg : "Encaissement non effectué  ",
         btn01 : "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Un montant a été saisi sur le terminal de carte. Veuillez annuler la transaction sur le terminal de carte avant d'envoyer un nouveau montant !",
+        btn01 : "D'accord"
+    },
     msgBonDavoir : 
     {
         title : "Attention",
@@ -391,6 +397,7 @@ export const langFr =
         msg :"Veuillez scanner le ticket pour le remboursement ! ",
         btn01 : "OK",
         btn02 : "Annuler",
+        btn03 : "Choix le Ticket" // BAK
     },
     msgItemReturnType: 
     {
@@ -398,6 +405,7 @@ export const langFr =
         msg :"Veuillez sélectionner le mode de remboursement  ! ",
         btn01 : "Espèce",
         btn02 :"Bon d'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -759,6 +767,8 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
+        txtPopCustomerTva : "No TVA",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
@@ -773,7 +783,20 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir le NR SIRET et le NR TVA !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual :  "Particulier",
+        company :  "Entreprise",
+        association : "Association"
+    },
+    cmbType :"Type",
     popCustomerAddList :
     {
         title : "Recherche Client",
@@ -890,6 +913,17 @@ export const langFr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Numéro de téléphone",
     txtNewCustomerLastName : "Nom",
-    txtNewCustomerName : "Prenom"
-    
+    txtNewCustomerName : "Prenom",
+    msgMultipleLineSelect:
+    {
+        title: "Attention",
+        btn: "OK",
+        msg: "Vous devez sélectionner une seule ligne pour appliquer la remise.",
+    },
+    applyDiscountText: "Appliquer la remise",
+    msgAdminMessage:
+    {
+        title: "Message de l'administrateur",
+        btn01: "OK",
+    },
 }

@@ -106,6 +106,12 @@ export const langDe =
         msg: "Die Zahlung ist fehlgeschlagen",
         btn01: "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Ein Betrag wurde auf dem Kartengerät eingegeben. Bitte brechen Sie die Transaktion auf dem Kartengerät ab, bevor Sie einen neuen Betrag senden!",
+        btn01 : "Okay"
+    },
     msgBonDavoir:
     {
         title: "Achtung",
@@ -157,7 +163,7 @@ export const langDe =
     msgInvalidSafeTicket: 
     {
         title: "Achtung",
-        msg: "Ungültiges Kassenbeleg!",
+        msg: "Ungültiger Kassenbeleg!",
         btn01: "OK",
     },
     msgPriceNotDoesZero: 
@@ -175,7 +181,7 @@ export const langDe =
     msgCostPrice: 
     {
         title: "Achtung",
-        msg: "Der Preis darf nicht unter dem Kostenpreis liegen!",
+        msg: "Der Preis darf nicht unter dem Selbstkostenpreis liegen!",
         btn01: "OK",
     },
     totalLine: "Gesamtzeile: ",
@@ -244,13 +250,13 @@ export const langDe =
     msgPreLottery:
     {
         title: "Warnung",
-        msg: "EINE MINUTE...",
+        msg: "BITTE WARTEN...",
         btn01: "WEITER",
     },
     msgPostLottery:
     {
         title: "Warnung",
-        msg: "DIESER KUNDE HAT DIE ZIEHUNG GEWONNEN !!!",
+        msg: "DIESER KUNDE HAT DIE AUSLOSUNG GEWONNEN !!!",
         btn01: "Ja",
     },    
     msgCustomerMail:
@@ -326,11 +332,11 @@ export const langDe =
         cmbPopLastSalePayType : 
         {
             optionAll : "Alle",
-            optionEspece : "Espece",
-            optionTPE : "Carte Bancaire TPE",
-            optionCheque1 : "Cheque",
-            optionCheque2 : "CHEQue",
-            optionAvoir : "Bon D'Avoir"
+            optionEspece : "Barhlung",
+            optionTPE : "Kartenzahlung",
+            optionCheque1 : "Scheck",
+            optionCheque2 : "Scheck",
+            optionAvoir : "Gutschein"
         }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
@@ -364,12 +370,12 @@ export const langDe =
     },
     popDeleteDesc: 
     {
-        head: "Löschbeschreibung",
+        head: "Löschgrund",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     popRowDeleteDesc: 
     {
-        head: "Beschreibung für Zeilenlöschung",
+        head: "Grund für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     PopBalanceCounterDesc :
@@ -379,12 +385,12 @@ export const langDe =
     },
     popItemReturnDesc: 
     {
-        head: "Rückgabe-Beschreibung",
+        head: "Rückgabegrund",
         title: "Bitte geben Sie einen Grund für die Rückgabe ein."
     },
     popRePrintDesc: 
     {
-        head: "Beschreibung für erneuten Druck",
+        head: "Grund für erneuten Druck",
         title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
     msgItemReturnTicket: 
@@ -393,6 +399,7 @@ export const langDe =
         msg: "Bitte scannen Sie die Rückgabe-Ticketsrestorants ein!",
         btn01: "OK",
         btn02: "Abbrechen",
+        btn03 : "Belegwahl" 
     },
     msgItemReturnType: 
     {
@@ -400,17 +407,18 @@ export const langDe =
         msg: "Bitte wählen Sie den Rückgabetyp aus!",
         btn01: "Bar",
         btn02: "Gutschein",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
         title: "Achtung",
-        msg: "Bitte warten Sie auf die Antwort von der Waage.",
+        msg: "Warten Sie bitte auf die Antwort von der Waage.",
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
     msgCardPayment: {
         title: "Achtung",
-        msg: "Warte auf die Antwort des Kartenterminals.",
+        msg: "Warten Sie bitte auf die Antwort des Kartenterminals.",
         msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
@@ -427,12 +435,12 @@ export const langDe =
     popAdvance: 
     {
         title: "Vorschuss",
-        in: "Eingang",
-        out: "Ausgang"
+        in: "Einzahlung",
+        out: "Auszahlung"
     },
     popAdvanceDesc: 
     {
-        head: "Vorschussbeschreibung",
+        head: "Vorschussgrund",
         title: "Bitte geben Sie den Grund für den Vorschuss ein",
     },
     msgSave: 
@@ -452,7 +460,7 @@ export const langDe =
     popParkList:
     {
         title: "Vorgänge im Park",
-        btnParkAll: "Alle im Park"
+        btnParkAll: "Alle Vorgänge im Park"
     },
     popBarcodeList:
     {
@@ -597,7 +605,7 @@ export const langDe =
     msgDbTransferAlert : 
     {
         title : "Achtung",
-        msg : "Möchten Sie die lokale Datenbank aktualisieren?",
+        msg : "Möchten Sie lokalen Datenbank aktualisieren?",
         btn01 : "OK",
         btn02 : "Abbrechen",
     },
@@ -620,7 +628,7 @@ export const langDe =
     msgDisconnectWarning: 
     {
       title: "Achtung",
-      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      msg: "Sind Sie sicher, dass Sie den Vorgang verlassen möchten?",
       btn01: "JA",
       btn02: "NEIN"
     },
@@ -705,13 +713,13 @@ export const langDe =
         msgRef:
         {
             title : "Achtung",
-            msg : "Was möchten Sie mit dem Button tun?",
+            msg : "Was möchten Sie mit dieser Taste machen?",
             btn01 : "Bearbeiten",
             btn02 : "Löschen",
         },
         popSelectItem : "Artikel auswählen",
         popSelectItemGrp : "Produktgruppe auswählen",
-        popNameEntry : "Button-Name"
+        popNameEntry : "TastenName"
     },
     popOrderList :
     {
@@ -825,8 +833,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port",
-        printerPort: "Printer port"
+        scannerPort : "Scanneranschluss",
+        printerPort: "Druckeranschluss"
     },
     msgNotBarcodeWeighing: 
     {
@@ -843,7 +851,7 @@ export const langDe =
     {
         title: "Achtung",
         msg: "Gescannte Zeile : {0} - Gesamtbetrag : {1}",
-        btn01: "Okay"
+        btn01: "OK"
     },
     msgBarcodeWeighingUnit: 
     {
@@ -855,7 +863,7 @@ export const langDe =
     {
         title: "Achtung",
         msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
-        btn01: "Okay"
+        btn01: "OK"
     },
     msgMacIdFailed:
     {
@@ -869,10 +877,22 @@ export const langDe =
     },
     popPasswordChange : 
     {
-        title:"Passwort ändern",
-        NewPassword : "Neues Kennwort",
-        NewPassword2 : "Neues Kennwort erneut",
-        btnApprove : "Bestätigen"
+        title:"Passwort ändern!",  
+        NewPassword : "Neues Passwort eingeben!",  
+        NewPassword2 : "Neues Passwort wiederholen!",  
+        btnApprove : "Bestätigen"  
     },
-    passChange :"Kennwort wechseln",
+    passChange :"Passwort ändern!", 
+    msgMultipleLineSelect:
+    {
+        title: "Achtung",
+        btn: "OK",
+        msg: "Sie müssen eine einzelne Zeile für den Rabatt auswählen.",
+    },
+    applyDiscountText: "Rabatt anwenden",
+    msgAdminMessage:
+    {
+        title: "Administratornachricht",
+        btn01: "OK",
+    },
 }
