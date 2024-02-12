@@ -26,13 +26,9 @@ export default class NbItemPopUp extends NbBase
         }
         this.data = []
     }
-    async open(pData,pDt)
+    async open(pData)
     {        
         this.data = pData.data
-        console.log(this.data.GUID)
-        console.log(this.data)
-        console.log(pDt[0].INPUT)
-        console.log(pDt)
         let tmpQuery = 
         {
             query :"SELECT IMAGE AS IMAGE1,  " +
@@ -79,9 +75,9 @@ export default class NbItemPopUp extends NbBase
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :  "SELECT TOP 5 DOC_DATE,REF + '-' + CONVERT(NVARCHAR,REF_NO) AS REF,PRICE,QUANTITY,TOTALHT FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND ITEM = @ITEM AND TYPE = 1 AND REBATE = 0 ORDER BY DOC_DATE DESC ",
+                    query :  "SELECT TOP 5 DOC_DATE,REF + '-' + CONVERT(NVARCHAR,REF_NO) AS REF,PRICE,QUANTITY,TOTALHT FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND TYPE = 1 AND REBATE = 0 ORDER BY DOC_DATE DESC ",
                     param : ['INPUT:string|50','ITEM:string|50'],
-                    value : [pDt[0].INPUT,this.data.GUID]
+                    value : [this.data.GUID]
                 },
                 sql : this.core.sql
             }
