@@ -1393,8 +1393,8 @@ export default class posDoc extends React.PureComponent
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
                             let tmpLcdStr = ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3).toFixed(3)).toString().space(7) + "kg" +
-                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR/kg").space(11,"s") +
-                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s")
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + Number.money.code + "/kg").space(11,"s") +
+                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -1402,8 +1402,8 @@ export default class posDoc extends React.PureComponent
                         else
                         {
                             let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
-                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR").space(9,"s") +
-                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR")).space(20,"s")
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + Number.money.code).space(9,"s") +
+                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -1411,8 +1411,8 @@ export default class posDoc extends React.PureComponent
 
                         this.scaleTimeout = setTimeout(() => 
                         {
-                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") + 
-                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s") + 
+                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -2373,8 +2373,8 @@ export default class posDoc extends React.PureComponent
                 this.core.util.writeLog("calcGrandTotal : 10")
                 await this.calcGrandTotal(true)
 
-                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") +
-                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + "EUR").space(20,"s")
+                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s") +
+                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + Number.money.code).space(20,"s")
 
                 this.posLcd.print({blink : 0,text : tmpLcdStr})
                 App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -3946,7 +3946,7 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink:0,text:tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -3979,7 +3979,7 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink : 0,text : tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -4057,7 +4057,7 @@ export default class posDoc extends React.PureComponent
                                                         
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink : 0,text : tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -7568,7 +7568,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row">
                             <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
-                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00€"} format={"currency"}/>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00" + Number.money.sign} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>
