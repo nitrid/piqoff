@@ -7568,7 +7568,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row">
                             <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
-                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00CHF"} format={"currency"}/>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00" + Number.money.sign} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>
