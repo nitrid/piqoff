@@ -4841,13 +4841,13 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }
                                            
-                                            if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
                                             { 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
                                                     param:  ['GUID:string|50'],
-                                                    value:  [pPosDt[0].CUSTOMER_GUID]
+                                                    value:  [this.posObj.dt()[0].CUSTOMER_GUID]
                                                 }
                                                 let tmpMailData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpMailData.result.recordset.length > 0)
