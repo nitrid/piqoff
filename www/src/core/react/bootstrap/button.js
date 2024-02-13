@@ -50,8 +50,11 @@ export default class NbButton extends NbBase
         }
     }
     async _onClick()
-    {      
-        document.getElementById("Sound1").play(); 
+    {   
+        if(document.getElementById("Sound1") != null)
+        {
+            document.getElementById("Sound1").play(); 
+        }
         
         if(typeof this.props.onClick != 'undefined')
         {
