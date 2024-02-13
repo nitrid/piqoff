@@ -634,7 +634,7 @@ export const prm =
         ID :"ParkDelDescription",
         VALUE : 
         {
-            disable:true,
+            disable:false,
             minCharSize:25,
             buttons:
             [

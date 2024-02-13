@@ -40,7 +40,6 @@ export default class NbPluButtonGrp extends NbBase
 
         this._onClick = this._onClick.bind(this);
         this._onSelection = this._onSelection.bind(this);
-        console.log(this.props)
     }
     async init()
     {        
