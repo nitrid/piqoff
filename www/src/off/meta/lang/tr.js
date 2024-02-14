@@ -3665,6 +3665,7 @@ export const langTr =
             clmCode : "KODU",
             clmName : "ADI",
         },
+        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -16691,6 +16692,10 @@ export const langTr =
         {
             notValid: "Boş geçemezsiniz !",
         },
+        clmBankCode: "Banka kodu",
+        clmAccountNo: "Hesap numarası",
+        clmIBAN: "IBAN",
+        clmBIC: "Banka Tanımlayıcı Kodu",
     },
     set_03_001 : // Silinmiş Evraklar
     {

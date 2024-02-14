@@ -3654,6 +3654,7 @@ export const langDe =
             clmCode : "CODE",
             clmName : "NAME",
         },
+        
     },
     cri_01_002: // "Adressdefinitionen"
     {
@@ -16587,6 +16588,10 @@ export const langDe =
         {
             notValid: "Dieses Feld darf nicht leer sein!",
         },
+        clmBankCode: "BLZ",
+        clmAccountNo: "Konto Nr",
+        clmIBAN: "IBAN",
+        clmBIC: "BIC",
     },
     set_03_001 : // "Gelöschte Dokumente"
     {
