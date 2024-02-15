@@ -38,6 +38,7 @@ export default class enddayReport extends React.PureComponent
     }
     async Init()
     {
+         
     }
     async _btnGetClick()
     {
@@ -167,10 +168,6 @@ export default class enddayReport extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
-                            onRowDblClick={async(e)=>
-                                {
-                                    this.getPointDetail(e.data.CODE)
-                                }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />

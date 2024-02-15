@@ -32,11 +32,23 @@ export default class salesContract extends React.PureComponent
         this.grdData = new datatable()
 
         this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init();
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdContractsState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdContractsState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -485,7 +497,7 @@ export default class salesContract extends React.PureComponent
                                         await this.grdContracts.dataRefresh({source:this.grdData});
                                     }}
                                     >
-                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "grdContracts"}/>
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "grdContracts"}/>
                                         <ColumnChooser enabled={true} />
                                         <ColumnChooser enabled={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />

@@ -21,6 +21,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDocAi from '../../../tools/NdDocAi';
 
 export default class purchaseInvoice extends DocBase
 {
@@ -33,6 +34,8 @@ export default class purchaseInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -46,11 +49,21 @@ export default class purchaseInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -85,15 +98,17 @@ export default class purchaseInvoice extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE,STATUS " +
+                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
                 }
             })
+            
         })
+        
         this.pg_txtBarcode.on('showing',()=>
         {
             this.pg_txtBarcode.setSource(
@@ -149,6 +164,7 @@ export default class purchaseInvoice extends DocBase
         if(tmpData.result.recordset.length > 0)
         {   
             this.txtDiffrentInv.value = '-' +tmpData.result.recordset[0].TOTAL
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
         else
         {
@@ -485,13 +501,13 @@ export default class purchaseInvoice extends DocBase
                                   }
                                   else
                                   {
-                                      let tmpConfObj1 =
-                                      {
-                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                      }
-                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                      await dialog(tmpConfObj1);
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    await dialog(tmpConfObj1);
                                   }
                                 });  
                             }
@@ -1228,6 +1244,81 @@ export default class purchaseInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                                {/* <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDocAi.show(this.docObj.dt()[0].OUTPUT)
+                                        this.popDocAi.onImport = async(e) =>
+                                        {
+                                            if(typeof e != 'undefined')
+                                            {
+                                                if(e.CustomerCode != '')
+                                                {
+                                                    this.docObj.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.docCustomer.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.dt()[0].OUTPUT_CODE = e.CustomerCode
+                                                    this.docObj.dt()[0].OUTPUT_NAME = e.CustomerName
+                                                    this.docObj.dt()[0].VAT_ZERO = e.CustomerVatZero
+
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.value = e.CustomerCode
+                                                    }
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [e.CustomerGuid]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            }
+                                                        }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                    }
+                                                }
+                                                this.dtDocDate.value = moment(e.InvoiceDate)
+                                                this.dtShipDate.value = moment(e.DueDate)
+
+                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < e.Item.length; i++) 
+                                                {
+                                                    if(e.Item[i].ProductCode != '')
+                                                    {
+                                                        let tmpItem =
+                                                        {
+                                                            GUID : e.Item[i].ItemGuid,
+                                                            CODE : e.Item[i].ItemCode,
+                                                            NAME : e.Item[i].ItemName,
+                                                            ITEM_TYPE : e.Item[i].ItemType,
+                                                            UNIT : e.Item[i].ItemUnit,
+                                                            COST_PRICE : e.Item[i].ItemCost,
+                                                            VAT : e.Item[i].ItemVat
+                                                        }
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
+                                                    }
+                                                }
+                                                this.grdPurcInv.devGrid.endUpdate()
+                                            }
+                                            console.log(e)
+                                        }
+                                    }}/>
+                                </Item> */}
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>
@@ -2220,7 +2311,6 @@ export default class purchaseInvoice extends DocBase
                                                 e.key.VAT_RATE = 0
                                             }
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
-                                            
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)
@@ -2246,7 +2336,7 @@ export default class purchaseInvoice extends DocBase
                                             await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2580,7 +2670,7 @@ export default class purchaseInvoice extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
@@ -2777,6 +2867,19 @@ export default class purchaseInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -2829,7 +2932,7 @@ export default class purchaseInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})
@@ -2872,6 +2975,10 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Document AI PopUp */}
+                    <div>
+                        <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>     

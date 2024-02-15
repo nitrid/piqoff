@@ -15,7 +15,7 @@ export default class mailSettings extends React.PureComponent
         this.mailDt = new datatable();
         this.mailDt.selectCmd = 
         {
-            query: "SELECT * FROM MAIL_SETTINGS ORDER BY MAIL_ID DESC",
+            query: "SELECT * FROM MAIL_SETTINGS",
         }
         this.mailDt.insertCmd = 
         {
@@ -26,10 +26,11 @@ export default class mailSettings extends React.PureComponent
                     "@MAIL_ADDRESS = @PMAIL_ADDRESS," +
                     "@MAIL_PASSWORD = @PMAIL_PASSWORD," +
                     "@MAIL_SMTP = @PMAIL_SMTP," +
-                    "@MAIL_PORT = @PMAIL_PORT ",
+                    "@MAIL_PORT = @PMAIL_PORT, " +
+                    "@MASTER = @PMASTER ",
             param : ['PGUID:string|50','PCUSER:string|25','PMAIL_SERVICE:string|40','PMAIL_ADDRESS:string|70','PMAIL_PASSWORD:string|70',
-                    'PMAIL_SMTP:string|25','PMAIL_PORT:int'],
-            dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT']   
+                    'PMAIL_SMTP:string|25','PMAIL_PORT:int','PMASTER:int'],
+            dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT','MASTER']   
         }
         this.mailDt.updateCmd = 
         {
@@ -40,10 +41,11 @@ export default class mailSettings extends React.PureComponent
                     "@MAIL_ADDRESS = @PMAIL_ADDRESS," +
                     "@MAIL_PASSWORD = @PMAIL_PASSWORD," +
                     "@MAIL_SMTP = @PMAIL_SMTP," +
-                    "@MAIL_PORT = @PMAIL_PORT ",
+                    "@MAIL_PORT = @PMAIL_PORT, " +
+                    "@MASTER = @PMASTER ",
             param : ['PGUID:string|50','PCUSER:string|25','PMAIL_SERVICE:string|40','PMAIL_ADDRESS:string|70','PMAIL_PASSWORD:string|70',
-                    'PMAIL_SMTP:string|25','PMAIL_PORT:int'],
-            dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT']
+                    'PMAIL_SMTP:string|25','PMAIL_PORT:int','PMASTER:int'],
+            dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT','MASTER']   
         }
         this.mailDt.deleteCmd = 
         {
@@ -117,6 +119,7 @@ export default class mailSettings extends React.PureComponent
                                         <Item dataField="MAIL_PASSWORD" />
                                         <Item dataField="MAIL_SMTP" />
                                         <Item dataField="MAIL_PORT"/>
+                                        <Item dataField="MASTER"/>
                                     </Form>
                                 </Editing>
                                 <Column dataField="MAIL_SERVICE" caption={this.t("grdMailSettings.clmMailService")} visible={true} allowEditing={true}>
@@ -125,7 +128,8 @@ export default class mailSettings extends React.PureComponent
                                 <Column dataField="MAIL_ADDRESS" caption={this.t("grdMailSettings.clmMail")} visible={true}/> 
                                 <Column dataField="MAIL_PASSWORD" editorOptions={{mode:"password"}} caption={this.t("grdMailSettings.clmMailPassword")} visible={true}/>
                                 <Column dataField="MAIL_SMTP" caption={this.t("grdMailSettings.clmSMTP")}  width={180}/>
-                                <Column dataField="MAIL_PORT" caption={this.t("grdMailSettings.clmPORT")}  width={80}/>
+                                <Column dataField="MAIL_PORT" caption={this.t("grdMailSettings.clmPORT")}  width={120}/>
+                                <Column dataField="MASTER" caption={this.t("grdMailSettings.clmMaster")}   width={120}/>
                             </NdGrid>
                         </div>
                     </div>

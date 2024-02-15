@@ -3,6 +3,8 @@ export const langTr =
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     loading : "Yükleniyor",
+    phoneIsInvalid : "Boşluk bırakmadan sadece '+' ve rakam kullanmalısınız.",
+    mailIsInvalid : "Geçerli bir e-posta adresi girin. '@' ve uzantıyı kontrol edin (Örn: .com, .fr, ...)",
     btnSave: "Kaydet",
     btnCancel: "İptal",
     btnPrint :"Yazdır",
@@ -46,7 +48,23 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
-    passChange :"Şifre Değiştir",
+    passChange : "Şifre Değiştir",
+    popUserList :
+    {
+        title : "Kullanıcı Listesi",
+        clmCode : "Kodu",
+        clmName : "Adı"
+    },
+    acsEdit : 
+    {
+        msgCloseAlert : 
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
+        },
+    },
     popDbList :
     {
         title : "Database Seçimi",
@@ -170,11 +188,12 @@ export const langTr =
         stk_01_008: "Ürün Grubu Tanımlama",
         stk_01_009: "Ürün Alt Grup Tanımlama",
         stk_01_010: "Birim Tanımlama",
-        stk_01_011 : "Vergi Tanımlama",
-        stk_01_012 : "Bağlı Ürün Tanımlama",
-        stk_01_013 : "Ürün Resim Tanımlama",
-        stk_01_014 : "Ürün Cinsi Tanımlama",
-        stk_01_015 : "Fiyat Listesi Tanımlama",
+        stk_01_011: "Vergi Tanımlama",
+        stk_01_012: "Bağlı Ürün Tanımlama",
+        stk_01_013: "Ürün Resim Tanımlama",
+        stk_01_014: "Ürün Cinsi Tanımlama",
+        stk_01_015: "Fiyat Listesi Tanımlama",
+        stk_01_016: "Ürün Recete Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -182,22 +201,23 @@ export const langTr =
         stk_02_005: "İade Ürünü Toplama",
         stk_02_006: "Özel Etiket Basım",
         stk_02_007: "SKT Girişi",
-        stk_02_008 : "Ürün Giriş Fişi",
-        stk_02_009 : "Ürün Çıkış Fişi",
+        stk_02_008: "Ürün Giriş Fişi",
+        stk_02_009: "Ürün Çıkış Fişi",
         stk_03_001: "Ürün Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
-        stk_03_006 : "Depo Ürün Miktarları Listesi",
+        stk_03_006: "Depo Ürün Miktarları Listesi",
         stk_04_001: "Toplu Ürün Düzenleme",
         stk_04_002: "İade Operasyonları",
-        stk_04_003 : "Sayım Kesinleştirme",
-        stk_04_004 :"SKT Operasyonu",
-        stk_05_001 : "Depo Envanter Raporu",
-        stk_05_002 : "Değişen Alış Fiyatları Raporu",
-        stk_05_003 : "Sayım Envanter Raporu",
-        stk_05_004 : "Kayıp Ürün Raporu",
+        stk_04_003: "Sayım Kesinleştirme",
+        stk_04_004: "SKT Operasyonu",
+        stk_04_005: "Ürün Giriş Çıkış Operasyonu",
+        stk_05_001: "Depo Envanter Raporu",
+        stk_05_002: "Değişen Alış Fiyatları Raporu",
+        stk_05_003: "Sayım Envanter Raporu",
+        stk_05_004: "Kayıp Ürün Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -212,11 +232,11 @@ export const langTr =
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
         cri_03_001: "Toplu Müşteri Ekleme",
-        cri_04_001 : "Müşteri Ekstre Raporu",
-        cri_04_002 : 'Müşteri Bakiye Raporu',
-        cri_04_003 : "Müşteri Puanı Raporu",
-        cri_04_004 : "Müşteri Bakiyeli Ekstre Raporu",
-        cri_04_005 : "Satış Faturası Yaşlandırma Raporu",
+        cri_04_001: "Müşteri Ekstre Raporu",
+        cri_04_002: 'Müşteri Bakiye Raporu',
+        cri_04_003: "Müşteri Puanı Raporu",
+        cri_04_004: "Müşteri Bakiyeli Ekstre Raporu",
+        cri_04_005: "Satış Faturası Yaşlandırma Raporu",
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
@@ -305,6 +325,7 @@ export const langTr =
         pos_01_001 : "Pos Cihaz Tanıtım",
         pos_01_002 : "Pos Plu Kopyalama",
         pos_01_003 : "Fiş Sonu Açıklamaları",
+        pos_01_004 : "Pos Mesaj",
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
@@ -321,6 +342,7 @@ export const langTr =
         pos_02_013 : "Pos İndirim Raporu",
         pos_02_014 : "Terazi Fişleri",
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
+        pos_02_016 : "Puan Hareketleri Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",
@@ -408,12 +430,14 @@ export const langTr =
         slsRpt_01_006 : "Müşteri Bazlı Satış ve İade Raporu",
         slsRpt_01_007 : "İade Faturaları Raporu",
         slsRpt_01_008 : "Ürün Detaylı Satış Raporu",
+        slsRpt_01_009 : "Açık Satış Fatura Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
         slsRpt_02_003 : "Şeker Vergisi Raporu",
         slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
-        slsRpt_02_005 : "DEB Detay Raporu"
+        slsRpt_02_005 : "DEB Detay Raporu",
+        slsRpt_02_006 : "Açık Alış Fatura Raporu",
     },
     login:
     {
@@ -473,6 +497,32 @@ export const langTr =
         txtPopQteDepotQty: "Depo Miktarı",
         txtPopQteReservQty: "Reserve Miktarı",
         txtPopQteInputQty: "Gelecek Miktar",
+    },
+    popDocAi:
+    {
+        title : "Dosya üzerinden import",
+        btnUpload : "Upload",
+        btnImport : "Import",
+        txtTaxId : "Vergi No",
+        txtCustomerName : "Tedarikçi Adı",
+        dtDocDate : "Tarih",
+        dtShipDate : "Sevk Tarihi",
+        txtHT : "Ara Toplam",
+        txtTax : "Vergi",
+        txtTTC : "Genel Toplam",
+        clmItemCode : "Kodu",
+        clmMulticode : "T.Kodu",
+        clmItemName : "Adı",
+        clmQuantity : "Adet",
+        clmPrice : "Fiyat",
+        clmDiscount : "İndirim",
+        clmAmount : "Tutar",
+        msgCustomerNotFound :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msg : "Tedarikçi bulunamadığından import işlemini yapamazsınız !"
+        }
     },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
@@ -1377,6 +1427,80 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz liste no sistem de kayıtlı !"
         }
+    },
+    stk_01_016 : // "Ürün Recetesi Tanımları"
+    {
+        txtItemCode : "Ürün Kodu",
+        txtItemName : "Ürün Adı",
+        dtDate : "Tarih",
+        txtQuantity : "Miktar",
+        pg_txtItemCode : 
+        {
+            title : "Ürün Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmStatus : "DURUM"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgAddItemWarning:
+        {
+            title: "Dikkat",
+            btnOk: "Tamam",
+            msg: "Ürün eklemek için lütfen üst bilgileri tam olarak giriniz !"
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Bulunmadı !!"
+        },
+        msgItemBack:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+        },
+        validDate : "Tarih Seçmelisiniz",
+        grdList : 
+        {
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmQuantity : "MIKTAR"
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {
@@ -3055,6 +3179,174 @@ export const langTr =
             msg: "Kalan üründen fazla etiket basamazsınız.." 
         },
     },
+    stk_04_005 : // "Ürün Giriş Çıkış Operasyonu"
+    {
+        txtRef : "Seri-Sıra",
+        cmbDepot: "Depo",
+        dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
+        getRecipe : "Ürün Recetesi",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmDate : "TARIH",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmDocDate : "TARIH",
+            clmInputName : "GİRİŞ",
+            clmOutputName : "ÇIKIŞ",
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Ürün Seçimi",
+            clmCode :  "ÜRÜN KODU",
+            clmName : "ÜRÜN ADI",
+        },
+        grdList: 
+        {
+            clmType: "Tip",
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmQuantity : "Adet",
+            clmDescription :"Açıklama"
+        },
+        popPassword : 
+        {
+            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
+            Password : "Şifre",
+            btnApprove : "Onayla"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
+        },
+        msgEmpDescription:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Satır Açıklamaları Boş Geçilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Müşteri Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+        pg_quickDesc : 
+        {
+            title : "Hızlı Açıklama Seçimi",
+            clmDesc:  "AÇIKLAMA"
+        },
+        popQDescAdd : 
+        {
+            title : "Hızlı Açıklama Ekle",
+            description : "Yeni Açılama",
+            btnApprove : "Kaydet"
+        },
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "Ürün Kodu",
+            clmName : "Ürün Adi",
+            clmMulticode : "Tedarikçi Kodu",
+            clmBarcode : "Barkod"
+        },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
+        msgQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Lütfen Miktar Giriniz !"
+        },
+        txtQuantity : "Miktar",
+        cmbType : 
+        {
+            input : "Giriş",
+            output : "Çıkış"
+        },
+        popRecipe : 
+        {
+            title: "Ürün Recetesi Seçim",
+            clmDate: "Tarih",
+            clmCode: "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmQuantity: "Miktar"
+        },
+        popRecipeDetail : 
+        {
+            title: "Ürün Recetesi Detay Giriş",
+            clmType: "Tip",
+            clmCode: "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmQuantity: "Recete Miktarı",
+            clmEntry: "Giriş Miktarı"
+        },
+    },
     stk_05_001 : // "Depo Envanter Raporu"
     {
         chkZeroQuantity : "0 Miktarlar Gösterilsin",
@@ -4261,7 +4553,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -4851,7 +5144,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -5272,7 +5566,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -5353,6 +5648,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilat Girişi",
         getDispatch : "İrsaliye Getir",
+        getRebate : "Faturaya bağla",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -5415,6 +5711,18 @@ export const langTr =
         pg_dispatchGrid : 
         {
             title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
+        },
+        pg_getRebate : 
+        {
+            title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
@@ -5714,7 +6022,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -6164,7 +6473,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -6460,7 +6770,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDelete:
         {
@@ -6691,7 +7002,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -7193,7 +7505,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
     },
     ftr_02_007 : // "İade Alış Faturası"
@@ -7213,6 +7526,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilat Girişi",
         getDispatch : "İrsaliye Getir",
+        getRebate : "Faturaya bağla",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -7275,6 +7589,18 @@ export const langTr =
         pg_dispatchGrid : 
         {
             title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
+        },
+        pg_getRebate : 
+        {
+            title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
@@ -7399,7 +7725,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDelete:
         {
@@ -7670,7 +7997,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -7755,7 +8083,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -8115,7 +8444,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8129,7 +8459,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8249,7 +8580,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -8653,7 +8985,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -8734,7 +9067,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgDiscount:
         {
@@ -9550,7 +9884,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -10069,7 +10404,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -10463,7 +10799,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -11244,7 +11581,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -11682,7 +12020,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -12014,7 +12353,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12385,7 +12725,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12470,7 +12811,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -12793,7 +13135,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -12873,7 +13216,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -13541,7 +13885,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -13578,6 +13923,7 @@ export const langTr =
     {
         cmbCustomer :"Müşteri",
         btnGet :"Getir",
+        chkInvOrDisp :"Sadece açık siparişleri göster",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Müşteri",
@@ -13608,6 +13954,7 @@ export const langTr =
     {
         cmbCustomer :"Müşteri",
         btnGet :"Getir",
+        chkInvOrDisp :"Sadece açık siparişleri göster",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Müşteri",
@@ -13638,6 +13985,19 @@ export const langTr =
             title: "Dizayn seçimi",
             design : "Dizayn",
             lang : "Evrak Dili"
+        },
+        msgConvertDispatch :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn01: "Vazgeç",
+            msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"         
+        },
+        msgConvertSucces :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçilen Evrakları İrsaliyeye çevrildi.."         
         },
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
@@ -13688,7 +14048,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -14396,7 +14757,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -14485,7 +14847,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -14814,7 +15177,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -15178,7 +15542,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -15376,7 +15741,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -15868,6 +16234,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Fatura seçmeden işlem yapamazsınız !"
+        },
+        msgRowNotUpdate:
+        {
+            title:"Dikkat",
+            btn01:"Tamam",
+            msg:"Bu işlemi yapabilmeniz için ilgili bağlantıyı koparın.",
         },
     },
     fns_03_001 : //  "Kasa Tanıtım",
@@ -16504,6 +16876,7 @@ export const langTr =
             clmSMTP : "SMTP",
             clmPORT : "Port No",
             clmID : "MAIL_ID",
+            clmMaster : "Master"
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
@@ -16601,6 +16974,18 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Kayıt işleminiz başarılı !",
             msgFailed: "Kayıt işleminiz başarısız !"
+        },
+    },
+    pos_01_004 : // "Pos Mesaj",
+    {
+        cmbDevice : "Cihaz",
+        txtMsg : "Mesaj",
+        btnSend : "Gönder",
+        msgResult:
+        {
+            title: "Uyarı",
+            btn01: "Tamam",
+            msg: "Mesaj gönderiminiz başarılı",
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",
@@ -17055,9 +17440,11 @@ export const langTr =
     },
     pos_02_010 : // "Ürün Detaylı Satış Raporu"
     {
+        chkItemCreated: "Ürünlerin oluşturulma tarihine göre getir",
         btnGet :"Getir",
         grdListe : 
         {
+            clmDate: "Tarih",
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Miktar",
@@ -17164,6 +17551,20 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Müşteri Seçiniz !"
+        },
+    },
+    pos_02_016 : // "Puan Hareketleri raporu"
+    {
+        btnGet :"Getir",
+        chkTicket : "Sadece Manuel Girişler",
+        grdUseingPointReport: 
+        {
+            clmDate : "Tarih-Saat",
+            clmCustomerCode : "Müşteri Kodu",
+            clmCustomerName: "Müşteri Adı",
+            clmTicket: "Fiş ID",
+            clmPoint: "Puan",
+            clmDescription : "Açıklama",
         },
     },
     pos_03_001 : // "Gün Sonu",
@@ -17386,7 +17787,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -17736,7 +18138,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -18043,7 +18446,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -18150,7 +18554,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         pg_Docs : 
         {
@@ -18481,7 +18886,8 @@ export const langTr =
             title :"E-Mail Gönder",
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
+            btnSend : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
         {
@@ -18573,6 +18979,7 @@ export const langTr =
         txtBarkod: "Barkod",
         txtRef: "Referans",
         txtPrice : "Fiyat",
+        txtPriceRate : "Fiyat Oran",
         txtDescription : "Açıklama",
         txtItemName : "Ürün Adı",
         txtQuantity : "Adet",
@@ -18628,7 +19035,13 @@ export const langTr =
         popUniqCodeList : 
         {
             title : "Etiket Listesi"
-        }
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     pos_02_003 : // "Pos Satış Raporu"
     {
@@ -18842,6 +19255,31 @@ export const langTr =
             clmTotal : "Toplam",
         },
     },
+
+    slsRpt_01_009:
+    {
+        btnGet: "Getir",
+        txtCustomerCode : "Müşteri", 
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmRefNo: "Sıra",
+            clmRemainder : "Kalan",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+    },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
         chkZeroBalance : "0 Bakiyeler Gösterilsin",   
@@ -18937,4 +19375,28 @@ export const langTr =
             clmItemName : "Ürün Adı"
         },
     },
+    slsRpt_02_006 :
+    {
+        btnGet: "Getir",
+        txtCustomerCode : "Müşteri", 
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmRefNo: "Sıra",
+            clmRemainder : "Kalan",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+    }
 }
