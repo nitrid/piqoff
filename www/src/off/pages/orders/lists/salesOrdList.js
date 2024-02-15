@@ -1,20 +1,22 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdGrid,{Column,Button,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
@@ -26,7 +28,7 @@ export default class salesOrdList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
         }
         this.printGuid = ''
         
@@ -38,7 +40,7 @@ export default class salesOrdList extends React.PureComponent
             {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
             {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOrdList.clmOutputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdSlsOrdList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdSlsOrdList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdSlsOrdList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdSlsOrdList.clmTotal")},
@@ -57,6 +59,7 @@ export default class salesOrdList extends React.PureComponent
     }
     async Init()
     {
+        console.log('0000060000')
         this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
@@ -80,9 +83,9 @@ export default class salesOrdList extends React.PureComponent
                 {
                     this.groupList.push('INPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -125,34 +128,180 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        
-        let tmpSource =
+        if(this.chkInvOrDisp.value == false)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ",
-                    param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT * FROM DOC_VW_01 " +
+                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
+                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                                " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC", 
+                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                    },
+                    sql : this.core.sql
+                }
             }
+            App.instance.setState({isExecute:true})
+            await this.grdSlsOrdList.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
-        App.instance.setState({isExecute:true})
-        await this.grdSlsOrdList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
-
+        else
+        {
+            let tmpSource2 =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT DOC_GUID AS GUID, " +
+                                    "REF, " +
+                                    "REF_NO, " +
+                                    "DOC_DATE, " +
+                                    "OUTPUT_NAME, " +
+                                    "OUTPUT_CODE, " +
+                                    "INPUT_CODE, " +
+                                    "INPUT_NAME, " +
+                                    "SUM(TOTAL) as TOTAL, " +
+                                    "SUM(VAT) as VAT, " +
+                                    "SUM(AMOUNT) as AMOUNT " +
+                                "FROM DOC_ORDERS_VW_01 " +
+                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND  " +
+                                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) " +
+                                    "AND TYPE = 0 AND PEND_QUANTITY > 0 AND CLOSED = 0 " +
+                                "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE " +
+                                "ORDER BY DOC_DATE DESC,REF_NO DESC " ,
+                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdSlsOrdList.dataRefresh(tmpSource2)
+            App.instance.setState({isExecute:false})
+        }
     }
     async _btnGrdPrint(e)
     {
         this.printGuid = e.row.data.GUID
         this.popDesign.show() 
         console.log(e.row.data.GUID)
+    }
+    async convertDispatch()
+    {
+        let tmpConfObj =
+        {
+            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgConvertDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertDispatch.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertDispatch.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn02')
+        {
+            return
+        }
+        for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
+        {
+            let tmpDocCls =  new docCls
+
+            let tmpDoc = {...tmpDocCls.empty}
+            tmpDoc.TYPE = 1
+            tmpDoc.DOC_TYPE = 40
+            tmpDoc.REBATE = 0
+            tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
+            tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
+            tmpDoc.AMOUNT = this.grdSlsOrdList.getSelectedData()[i].AMOUNT
+            tmpDoc.VAT = this.grdSlsOrdList.getSelectedData()[i].VAT
+            tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
+            tmpDoc.TOTALHT = this.grdSlsOrdList.getSelectedData()[i].TOTALHT
+            tmpDoc.TOTAL = this.grdSlsOrdList.getSelectedData()[i].TOTAL
+            tmpDoc.DOC_DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT
+            tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
+            tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
+            tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
+            tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
+            tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+            tmpDocCls.addEmpty(tmpDoc);     
+            let tmpLineQuery = 
+            {
+                query :"SELECT * FROM DOC_ORDERS WHERE DOC_GUID = @DOC_GUID ",
+                param : ['DOC_GUID:string|50'],
+                value : [this.grdSlsOrdList.getSelectedData()[i].GUID]
+            }
+            let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
+            if(tmpLineData.result.recordset.length > 0)
+            {
+                for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
+                {
+                    let tmpdocItems = {...tmpDocCls.docItems.empty}
+                    tmpdocItems.DOC_GUID = tmpDocCls.dt()[0].GUID
+                    tmpdocItems.TYPE = tmpDocCls.dt()[0].TYPE
+                    tmpdocItems.DOC_TYPE = tmpDocCls.dt()[0].DOC_TYPE
+                    tmpdocItems.LINE_NO = tmpDocCls.docItems.dt().length
+                    tmpdocItems.REF = tmpDocCls.dt()[0].REF
+                    tmpdocItems.REF_NO = tmpDocCls.dt()[0].REF_NO
+                    tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+                    tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
+                    tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+                    tmpdocItems.LINE_NO = tmpDocCls.docOrders.dt().length
+                    tmpdocItems.ITEM = tmpLineData.result.recordset[x].ITEM
+                    tmpdocItems.ITEM_NAME = tmpLineData.result.recordset[x].ITEM_NAME
+                    tmpdocItems.UNIT = tmpLineData.result.recordset[x].UNIT
+                    tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+                    tmpdocItems.DISCOUNT = tmpLineData.result.recordset[x].DISCOUNT
+                    tmpdocItems.DISCOUNT_1 = tmpLineData.result.recordset[x].DISCOUNT_1
+                    tmpdocItems.DISCOUNT_2 = tmpLineData.result.recordset[x].DISCOUNT_2
+                    tmpdocItems.DISCOUNT_3 = tmpLineData.result.recordset[x].DISCOUNT_3
+                    tmpdocItems.DOC_DISCOUNT_1 = tmpLineData.result.recordset[x].DOC_DISCOUNT_1
+                    tmpdocItems.DOC_DISCOUNT_2 = tmpLineData.result.recordset[x].DOC_DISCOUNT_2
+                    tmpdocItems.DOC_DISCOUNT_3 = tmpLineData.result.recordset[x].DOC_DISCOUNT_3
+                    tmpdocItems.DISCOUNT_RATE = tmpLineData.result.recordset[x].DISCOUNT_RATE
+                    tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
+                    tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+                    tmpdocItems.QUANTITY = tmpLineData.result.recordset[x].QUANTITY
+                    tmpdocItems.VAT_RATE = tmpLineData.result.recordset[x].VAT_RATE
+                    tmpdocItems.PRICE = tmpLineData.result.recordset[x].PRICE
+                    tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
+                    tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
+                    tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
+                    tmpdocItems.TOTAL = tmpLineData.result.recordset[x].SUM_AMOUNT
+                    tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
+                    tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
+
+                    tmpDocCls.docItems.addEmpty(tmpdocItems)
+                }
+            }
+            if(tmpDocCls.docItems.dt().length > 0)
+            {
+                let tmptest = await tmpDocCls.save()
+                console.log(tmptest)
+            }
+            let tmpConfObj =
+            {
+                id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+        }
     }
     render()
     {
@@ -181,6 +330,20 @@ export default class salesOrdList extends React.PureComponent
                                         }
                                     }    
                                 } />
+                                 <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'detailslayout',
+                                        onClick: async () => 
+                                        {
+                                            this.convertDispatch()
+                                        }
+                                    }    
+                                } />
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -197,7 +360,6 @@ export default class salesOrdList extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -306,8 +468,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
+                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>       
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -327,7 +488,12 @@ export default class salesOrdList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            
+                            <Form>
+                                <Item>
+                                    <Label text={this.t("chkInvOrDisp")} alignment="left" />
+                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={false} />
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
@@ -344,15 +510,15 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
                                 {
-                                    App.instance.menuClick(
-                                        {
-                                            id: 'sip_02_002',
-                                            text: this.t('menu'),
-                                            path: 'orders/documents/salesOrder.js',
-                                            pagePrm:{GUID:e.data.GUID}
-                                        })
-                                }}
+                                    id: 'sip_02_002',
+                                    text: this.t('menu'),
+                                    path: 'orders/documents/salesOrder.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -362,7 +528,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsOrdList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsOrdList.clmOutputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/>
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
@@ -393,9 +559,6 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
@@ -410,11 +573,8 @@ export default class salesOrdList extends React.PureComponent
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>

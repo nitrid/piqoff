@@ -1048,7 +1048,7 @@ export default class salesContract extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
@@ -1186,7 +1186,7 @@ export default class salesContract extends React.PureComponent
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
                                                     }
-                                                    let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName: this.cmbDesignList.displayValue + ".pdf",attachData:tmpAttach,text:""}
+                                                    let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName: this.cmbDesignList.displayValue + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                     this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                     {
                                                         App.instance.setState({isExecute:false})

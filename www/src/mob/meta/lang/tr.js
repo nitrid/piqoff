@@ -18,6 +18,14 @@ export const langTr =
     btnDocDelete: "Evrak Sil",
     btnLineDisc: "Satır İndirim",
     chkRememberMe : "Beni Hatırla", // BAK
+    btnMailsend : "Mail Gönder",
+    msgMailsend:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Mail göndermek istediğinize emin misiniz ?"
+    },
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -105,6 +113,7 @@ export const langTr =
         sip_02 : "Alış Siparişi",
         sip_03 : "Toplu Sipariş",
         sip_04 : "Pos Sipariş",
+        sip_99 : "Özel Alış Sipariş",
         kar_01 : "Sipariş Eşleştirme",
         kar_02 : "Sipariş Mal Kabul"
     },
@@ -122,6 +131,8 @@ export const langTr =
             title : "Uyarı",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
+            
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdPrice : 
@@ -145,6 +156,7 @@ export const langTr =
             title : "Uyarı",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdCustomer : 
@@ -168,6 +180,7 @@ export const langTr =
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgDblBarcode : "Okuttuğunuz barkod sistemde mevcut tekrar kayıt edilemez !",
             msgBarcodeCheck : "Lütfen Ürün Seçiniz.",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgSave : "Kayıt Başarılı",
             msgNotSave : "Kayıt Başarısız",
         },
@@ -191,6 +204,7 @@ export const langTr =
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgDblBarcode : "Okuttuğunuz barkod sistemde mevcut tekrar kayıt edilemez !",
             msgBarcodeCheck : "Lütfen Ürün Seçiniz.",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgSave : "Kayıt Başarılı",
             msgNotSave : "Kayıt Başarısız",
             
@@ -216,6 +230,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu sayım kesinleşmiştir değiştirilemez!",
@@ -255,6 +270,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
@@ -283,6 +299,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
@@ -319,6 +336,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
@@ -374,6 +392,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
@@ -429,6 +448,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
@@ -481,6 +501,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
@@ -536,6 +557,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
@@ -561,6 +583,69 @@ export const langTr =
             clmDate : "Tarih",
             clmInputName : "Cari Adı",
             clmInputCode : "Cari Kodu",
+        },
+    },
+    sip_99 : // "Özel Alış Siparişi"
+    {
+        lblRef : "Seri - Sıra :",
+        lblDepot : "Depo :",
+        lblCustomerCode : "Cari Kodu :",
+        lblCustomerName : "Cari Adı :",
+        lblDate : "Tarih :",
+        lblDepotQuantity : "Depo Miktar :",
+        lblUnit : "Birim :",
+        lblQuantity : "Miktar :",
+        lblPrice : "Fiyat :",
+        lblAmount : "Tutar :",
+        lblDiscount : "Satır İndirim :",
+        lblDocDiscount : "Evrak İndirim :",
+        lblTotalHt: "Ara Toplam :",
+        lblVat : "Kdv :",
+        lblSumAmount : "Toplam Tutar :",
+        lblGenAmount : "Genel Toplam :",
+        lblAdd: "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgDepot : "Lütfen depo seçiniz !",
+            msgCustomer : "Lütfen cari seçiniz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
+            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
+            msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+            clmPrice : "Fiyat",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "Kdv",
+            clmTotal : "Tutar"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmOutputName : "Cari Adı",
+            clmOutputCode : "Cari Kodu",
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     dep_01 : // "Depolar Arası Sevk"
@@ -590,6 +675,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
@@ -645,6 +731,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaye geldiği için miktarı değiştirilemez!",
@@ -700,6 +787,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
@@ -755,6 +843,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
@@ -810,6 +899,7 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
