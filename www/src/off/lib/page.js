@@ -30,7 +30,8 @@ export default class Page extends React.PureComponent
       obj.default.prototype.lang = App.instance.lang;
       obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.props.data.id)
       obj.default.prototype.pagePrm = this.props.data.pagePrm;
-
+      
+      Number.money = obj.default.prototype.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
       obj.default.prototype.init = (function()
       {
         let tmpCached = obj.default.prototype.init;

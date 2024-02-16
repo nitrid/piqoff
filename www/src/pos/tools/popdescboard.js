@@ -18,31 +18,30 @@ export default class NbPopDescboard extends NbBase
             title:this.props.title,
             width:this.props.width,
             height:this.props.height,
-            position:this.props.position
-        }
-        if(typeof this.props.param != 'undefined')
-        {
-            this.button = this.props.param.getValue().buttons
+            position:this.props.position,
+            buttons:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().buttons ? this.props.param.getValue().buttons : [],
+            disable:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().disable != 'undefined' ? this.props.param.getValue().disable : false,
+            minCharSize:typeof this.props.param != 'undefined' && typeof this.props.param.getValue().minCharSize != 'undefined' ? this.props.param.getValue().minCharSize : 25
         }
         this._onClick = this._onClick.bind(this)
     }
     _buttonView1()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 0; i < 4; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -53,21 +52,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView2()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 4; i < 8; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -78,21 +77,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView3()
     {
-        if(typeof this.button != 'undefined')
+        if(typeof this.state.buttons != 'undefined')
         {
             let tmp = []
             for (let i = 8; i < 12; i++) 
             {
-                if(typeof this.button[i] != 'undefined')
+                if(typeof this.state.buttons[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.button[i].id}>
-                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.state.buttons[i].id}>
+                            <NbButton id={this.state.buttons[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.button[i].text
+                                this["txt" + this.props.id].value = this.state.buttons[i].text
                             }}>
-                                {this.button[i].title}
+                                {this.state.buttons[i].title}
                             </NbButton>
                         </div>
                     )
@@ -114,13 +113,13 @@ export default class NbPopDescboard extends NbBase
             await dialog(tmpConfObj);
             return;
         }
-        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().minCharSize != 'undefined' && this["txt" + this.props.id].value.length < this.props.param.getValue().minCharSize)
+        if(this["txt" + this.props.id].value.length < this.state.minCharSize)
         {
             let tmpConfObj =
             {
                 id:'popDescbordValidation2',showTitle:true,title:this.lang.t("popDescbordValidation2.title"),showCloseButton:true,width:'500px',height:'200px',
                 button:[{id:"btn01",caption:this.lang.t("popDescbordValidation2.title"),location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.props.param.getValue().minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.state.minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
             }
             await dialog(tmpConfObj);
             return;
@@ -140,7 +139,7 @@ export default class NbPopDescboard extends NbBase
     async show()
     {
         //EĞER PARAMETEREDEN DISABLE AKTİF İSE AÇIKLAMA EKRANI ÇIKMIYOR
-        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().disable != 'undefined' && this.props.param.getValue().disable)
+        if(this.state.disable)
         {
             if(typeof this.props.onClick != 'undefined')
             {
@@ -176,6 +175,10 @@ export default class NbPopDescboard extends NbBase
     setText(e)
     {
         this["txt" + this.props.id].value = e
+    }
+    setParam(e)
+    {
+        this.setState({disable:e.disable,minCharSize:e.minCharSize,buttons:e.buttons})
     }
     render()
     {
