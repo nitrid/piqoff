@@ -1055,10 +1055,8 @@ export default class DocBase extends React.PureComponent
     }
     async checkDocNo(pDocNo)
     {
-        console.log(1)
         if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
         {
-            console.log(pDocNo)
             if(pDocNo != '')
             {
                 let tmpQuery = 
@@ -1067,12 +1065,7 @@ export default class DocBase extends React.PureComponent
                     param : ['DOC_NO:string|50','TYPE:int','DOC_TYPE:int','REBATE:bit'],
                     value : [pDocNo,this.type,this.docType,this.rebate]
                 }
-                console.log(pDocNo + "2")
-                console.log(this.type)
-                console.log(this.docType)
-                console.log(this.rebate)
                 let tmpResult = await this.core.sql.execute(tmpQuery) 
-                console.log(tmpResult)
                 if(tmpResult.result.recordset.length > 0)
                 {
                     let tmpConfObj =
