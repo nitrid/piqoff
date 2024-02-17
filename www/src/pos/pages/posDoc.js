@@ -327,6 +327,11 @@ export default class posDoc extends React.PureComponent
             }
         })
 
+        document.body.addEventListener('touchmove', function(e) 
+        {
+            e.preventDefault(); // Dokunmatik kaydırma olayını önle
+        }, { passive: false });
+        
         if(this.core.offline)
         {
             this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
@@ -7863,7 +7868,7 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     title={this.lang.t("popSettings.title")}
                     container={"#root"} 
-                    width={"600"}
+                    width={"900"}
                     height={"580"}
                     position={{of:"#root"}}
                     >
