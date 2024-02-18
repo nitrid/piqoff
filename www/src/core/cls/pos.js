@@ -1561,15 +1561,15 @@ export class posDeviceCls
                 }
             })
             
-            setTimeout(async()=>
-            { 
-                if(this.payPort.isOpen)
-                {
-                    console.log("Payment port timeout closed")
-                    this.core.util.writeLog("Payment port timeout closed")
-                    await this.payPort.close(); 
-                }
-            }, 60000);
+            // setTimeout(async()=>
+            // { 
+            //     if(this.payPort.isOpen)
+            //     {
+            //         console.log("Payment port timeout closed")
+            //         this.core.util.writeLog("Payment port timeout closed")
+            //         await this.payPort.close(); 
+            //     }
+            // }, 60000);
             // this.payPort.on('data',async(data)=> 
             // {
             //     console.log("1454 - " + data.toString() + " - " + data[0])              
