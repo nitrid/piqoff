@@ -130,7 +130,7 @@ export default class posDoc extends React.PureComponent
                 this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
-        this.init();        
+        
         this.core.socket.on('connect',async () => 
         {   
             if(!this.state.isConnected)
@@ -337,8 +337,13 @@ export default class posDoc extends React.PureComponent
             this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
         }
     }
+    async componentDidMount()
+    {
+        this.init();
+    }
     async init()
     {
+        this.loadingPay.current.instance.show()
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -347,18 +352,6 @@ export default class posDoc extends React.PureComponent
         
         this.posObj.clearAll()        
 
-        await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-        await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-        // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
-        this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
-        this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
-        this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
-        this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
-        this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
-        this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
-        this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
-        this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
-        //********************************************************* */
         if(this.state.isFormation)
         {
             this.posObj.dt().selectCmd.query = "SELECT * FROM [dbo].[POS_FRM_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))"
@@ -406,11 +399,64 @@ export default class posDoc extends React.PureComponent
         this.posDevice.scanner();
 
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
-        await this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
-        await this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
+        this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
+        this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
         if(!this.isFirstOpen)
         {
+            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
+            this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
+            this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
+            this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
+            this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
+            this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
+            this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
+            this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
+            this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
+            //********************************************************* */
+            //** FIRMA GETIR ********************************************/
+            this.firm.selectCmd = 
+            {
+                query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+                local : 
+                {
+                    type : "select",
+                    query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                    values : []
+                }
+            }
+            await this.firm.refresh();
+            //******************************************************** */
+            //** CHEQ GETIR ********************************************/
+            this.cheqDt.selectCmd = 
+            {
+                query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+                param : ['DOC:string|50'], 
+                value : [this.posObj.dt()[0].GUID],
+                local : 
+                {
+                    type : "select",
+                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                    values : [this.posObj.dt()[0].GUID]
+                }
+            }
+            this.cheqDt.deleteCmd = 
+            {
+                query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+                param : ['PGUID:string|50','PDOC:string|50'], 
+                dataprm : ['GUID','DOC'],
+                local : 
+                {
+                    type : "delete",
+                    query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                    values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+                }
+            }
+            await this.cheqDt.refresh();  
+            //******************************************************** */
+
             this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
             if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
@@ -518,57 +564,18 @@ export default class posDoc extends React.PureComponent
                 }
             }
             //***************************************************************************** */
+            this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"
+            
+            await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+            await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+            await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         }
-
-        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
-        await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
-        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
-
-        //** FIRMA GETIR ******************************/
-        this.firm.selectCmd = 
-        {
-            query : "SELECT TOP 1 * FROM COMPANY_VW_01",
-            local : 
-            {
-                type : "select",
-                query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
-                values : []
-            }
-        }
-        await this.firm.refresh();
         
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
             this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
-        }
-        //********************************************* */
-        this.cheqDt.selectCmd = 
-        {
-            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-            param : ['DOC:string|50'], 
-            value : [this.posObj.dt()[0].GUID],
-            local : 
-            {
-                type : "select",
-                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                values : [this.posObj.dt()[0].GUID]
-            }
-        }
-        this.cheqDt.deleteCmd = 
-        {
-            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-            param : ['PGUID:string|50','PDOC:string|50'], 
-            dataprm : ['GUID','DOC'],
-            local : 
-            {
-                type : "delete",
-                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-            }
-        }
-
-        await this.cheqDt.refresh();         
+        }      
 
         this.parkDt.selectCmd =
         {
@@ -584,7 +591,6 @@ export default class posDoc extends React.PureComponent
                 values : [0,this.core.auth.data.CODE,0]
             }
         }
-        
         await this.parkDt.refresh();     
         
         setTimeout(() => 
@@ -597,8 +603,6 @@ export default class posDoc extends React.PureComponent
         }, 1000);
         this.core.util.writeLog("calcGrandTotal : 01")
         await this.calcGrandTotal(false) 
-        
-        this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
 
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
         {
@@ -607,6 +611,7 @@ export default class posDoc extends React.PureComponent
         //PROMOSYON GETİR.
         await this.getPromoDb()
         //************************************************** */        
+        this.loadingPay.current.instance.hide()
         for (let i = 0; i < this.parkDt.length; i++) 
         {            
             if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == null || this.parkDt[i].DESCRIPTION == '')
@@ -2137,7 +2142,7 @@ export default class posDoc extends React.PureComponent
                 }
             }
 
-            this.loadingPay.current.instance.show()
+            this.loading.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
@@ -2153,7 +2158,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
-            this.loadingPay.current.instance.hide()
+            this.loading.current.instance.hide()
         }        
     }
     payRowAdd(pPayData)

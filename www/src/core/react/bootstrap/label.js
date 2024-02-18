@@ -26,6 +26,6 @@ export default class NbLabel extends NbBase
     }
     render()
     {
-        return this.state.text
+        return <span id={this.props.id}>{this.state.text}</span>
     }
 }
