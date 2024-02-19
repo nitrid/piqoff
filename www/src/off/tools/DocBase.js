@@ -91,8 +91,7 @@ export default class DocBase extends React.PureComponent
         {
             return this.docObj.docDemand
         }
-    }
-      
+    }      
     init()
     {
         return new Promise(async resolve =>
@@ -948,7 +947,6 @@ export default class DocBase extends React.PureComponent
         let tmpQuery = arguments[0]
 
         let tmpData = await this.core.sql.execute(tmpQuery)
-        console.log(tmpData)
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_getRebate.setData(tmpData.result.recordset)

@@ -50,7 +50,6 @@ export default class salesInvoice extends DocBase
         this.loading = React.createRef();
         this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
-    
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
@@ -65,13 +64,11 @@ export default class salesInvoice extends DocBase
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
     saveState(e){
         let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
-    }
-      
+    }      
     async init()
     {
         await super.init()
@@ -949,7 +946,6 @@ export default class salesInvoice extends DocBase
                                                         App.instance.setState({isExecute:false})
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                         {
-                                                            
                                                             let tmpAttach = pResult.split('|')[1]
                                                             let tmpHtml = this.htmlEditor.value
                                                             if(this.htmlEditor.value.length == 0)
@@ -2175,12 +2171,12 @@ export default class salesInvoice extends DocBase
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
+                                            {<RequiredRule message={this.t("validDesign")} />}
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
@@ -2229,7 +2225,7 @@ export default class salesInvoice extends DocBase
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
-                                                        {
+                                                        { 
                                                             // var a = document.createElement('a');
                                                             // a.href = "data:application/pdf;base64," + pResult.split('|')[1];
                                                             // a.setAttribute('target', '_blank');

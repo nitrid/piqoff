@@ -113,7 +113,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
                         "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
@@ -139,7 +139,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT FROM ITEMS_VW_02 " +
                         "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
                         "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
@@ -365,8 +365,9 @@ export default class Sale extends React.PureComponent
             if(e.QUANTITY > 0)
             {
                 tmpLine[0].QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+                tmpLine[0].DISCOUNT = e.DISCOUNT
                 tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
-                tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
+                tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR))) - tmpLine[0].DISCOUNT).round(2)
                 tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
                 tmpLine[0].TOTAL = parseFloat(((tmpLine[0].TOTALHT) + tmpLine[0].VAT)).round(2)
                 tmpLine[0].UNIT_FACTOR = e.UNIT_FACTOR
@@ -1520,26 +1521,26 @@ export default class Sale extends React.PureComponent
                                     <Item>
                                         <Label text={this.t("popDiscount.Price1")} alignment="right" />
                                         <NdNumberBox id="txtDiscountPrice1" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
+                                        maxLength={32}
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
+                                            {
+                                                let tmpConfObj =
                                                 {
-                                                    if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                        }
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDiscountPercent1.value = 0;
+                                                this.txtDiscountPrice1.value = 0;
+                                                return
+                                            }
                                             
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDiscountPercent1.value = 0;
-                                                        this.txtDiscountPrice1.value = 0;
-                                                        return
-                                                    }
-                                                    
-                                                    this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
-                                            }).bind(this)}
+                                            this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
+                                        }).bind(this)}
                                         ></NdNumberBox>
                                     </Item>
                                     <Item>
@@ -1924,7 +1925,7 @@ export default class Sale extends React.PureComponent
                                         <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                         displayExpr="VALUE"                       
                                         valueExpr="ID"
-                                        value=""
+                                        value={localStorage.getItem('lang').toUpperCase()}
                                         searchEnabled={true}
                                         onValueChanged={(async()=>
                                         {
