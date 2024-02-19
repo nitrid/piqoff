@@ -7,7 +7,7 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import FileUploader from 'devextreme-react/file-uploader';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdButton from "../../core/react/devex/button";
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling} from '../../core/react/devex/grid';
+import NdGrid,{Column,Editing,Paging,Pager,KeyboardNavigation,Scrolling} from '../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
@@ -373,10 +373,11 @@ export default class NdDocAi extends Base
                                     }
                                 }}
                                 >
+                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Paging defaultPageSize={10} />
                                     <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                    <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                     <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={false} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                     <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} allowEditing={false} width={120} allowHeaderFiltering={false}/>
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
