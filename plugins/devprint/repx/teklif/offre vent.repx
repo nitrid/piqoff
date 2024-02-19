@@ -398,6 +398,43 @@
           </ExpressionBindings>
           <StylePriority Ref="210" UseFont="false" UseTextAlignment="false" />
         </Item19>
+        <Item20 Ref="202" ControlType="XRLine" Name="line2" SizeF="807.5576,6" LocationFloat="0, 2.87501025" />
+        <Item21 Ref="203" ControlType="XRLabel" Name="label57" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 66.8334045" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="204" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_VAT]" />
+          </ExpressionBindings>
+          <StylePriority Ref="205" UseFont="false" UseTextAlignment="false" />
+        </Item21>
+        <Item22 Ref="206" ControlType="XRLabel" Name="label58" Multiline="true" Text="Total de Proposition TVA :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.245636, 66.8334045" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="207" UseFont="false" UseTextAlignment="false" />
+        </Item22>
+        <Item23 Ref="208" ControlType="XRLabel" Name="label59" Multiline="true" Text="Total de Remisse :" TextAlignment="TopRight" SizeF="315.253235,18.0000286" LocationFloat="348.0374, 27.8333035" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="209" UseFont="false" UseTextAlignment="false" />
+        </Item23>
+        <Item24 Ref="210" ControlType="XRLabel" Name="label60" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.2804, 27.833334" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="211" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_AMOUNT]-[DOC_TOTALHT]" />
+          </ExpressionBindings>
+          <StylePriority Ref="212" UseFont="false" UseTextAlignment="false" />
+        </Item24>
+        <Item25 Ref="213" ControlType="XRLabel" Name="label61" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.280334, 46.8333664" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="214" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTALHT]" />
+          </ExpressionBindings>
+          <StylePriority Ref="215" UseFont="false" UseTextAlignment="false" />
+        </Item25>
+        <Item26 Ref="216" ControlType="XRLabel" Name="label62" Multiline="true" Text="Total de Proposition Apree Remisse HT :" TextAlignment="TopRight" SizeF="315.04483,18.00003" LocationFloat="348.245819, 46.833374" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="217" UseFont="false" UseTextAlignment="false" />
+        </Item26>
+        <Item27 Ref="218" ControlType="XRLabel" Name="label65" Multiline="true" Text="Total Proposition TTC :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.688019, 85.8334351" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="219" UseFont="false" UseTextAlignment="false" />
+        </Item27>
+        <Item28 Ref="220" ControlType="XRLabel" Name="label66" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.514343, 85.8334351" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="221" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTAL]" />
+          </ExpressionBindings>
+          <StylePriority Ref="222" UseFont="false" UseTextAlignment="false" />
+        </Item28>
       </Controls>
     </Item5>
     <Item6 Ref="211" ControlType="PageHeaderBand" Name="PageHeader" HeightF="23">

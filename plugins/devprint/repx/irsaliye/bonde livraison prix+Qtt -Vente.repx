@@ -310,7 +310,7 @@
       <SubBands>
         <Item1 Ref="158" ControlType="SubBand" Name="SubBand1" HeightF="192.635284">
           <Controls>
-            <Item1 Ref="159" ControlType="XRLabel" Name="label58" Multiline="true" Text="Titulaire du compte: BP Alsace lorraine champagne  &#xA;Iban FR76 1470 7508 2833 5214 5295 429 Bic ccbpfrppmt2" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="0, 153.624084" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
+            <Item1 Ref="159" ControlType="XRLabel" Name="label58" Multiline="true" Text="Titulaire du compte: -----------------&#xD;&#xA;" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="0, 153.624084" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
               <StylePriority Ref="160" UseFont="false" UseTextAlignment="false" />
             </Item1>
             <Item2 Ref="161" ControlType="XRLabel" Name="label49" Multiline="true" CanGrow="false" Text="Signature / imza..........................................." TextAlignment="TopLeft" SizeF="291.33316,20.8749161" LocationFloat="0, 131.749176" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">

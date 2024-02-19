@@ -324,6 +324,7 @@ export const langFr =
         pos_01_001 : "Identifier Caisse",
         pos_01_002 : "Copier Pos Plu ",
         pos_01_003 : "Descriptions des tickets",
+        pos_01_004 : "Message POS",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -3665,7 +3666,7 @@ export const langFr =
             title : "Choix du groupe",
             clmCode : "Code",
             clmName : "Nom",
-        },
+        },        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -16448,6 +16449,12 @@ export const langFr =
             btn01: "OK",    
             msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"   
         },
+        msgRowNotUpdate:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Déconnectez la connexion associée pour effectuer cette opération.",
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım"
     {
@@ -16955,6 +16962,10 @@ export const langFr =
         {
             notValid: "Veuillez remplir les champs obligatoires !",
         },
+        clmBankCode: "Code banque",
+        clmAccountNo: "Numéro de compte",
+        clmIBAN: "IBAN",
+        clmBIC: "Code d'identification de la banque",
     },
     set_03_001 : // Silinmiş Evraklar
     {
@@ -17133,11 +17144,15 @@ export const langFr =
         grdMailSettings:
         {
             clmDate:"Date",
-            clmUser : "Utilisateur",
-            clmMail: "E-mail",
+            clmUser : "Utilistauer",
+            clmMail: "Mail",
+            clmMailService: "Service",
+            clmMailPassword: "Mot de passe",
+            clmSMTP : "SMTP",
+            clmMaster : "Master",
             clmSMTP : "SMTP",
             clmPORT : "N° de port",
-            clmID : "MAIL_ID",
+            clmID : "Mail ID",
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
@@ -17236,6 +17251,18 @@ export const langFr =
             btn01: "OK",
             msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
+        },
+    },
+    pos_01_004: // "Pos Mesaj"
+    {
+        cmbDevice: "Appareil",
+        txtMsg: "Message",
+        btnSend: "Envoyer",
+        msgResult:
+        {
+            title: "Avertissement",
+            btn01: "D'accord",
+            msg: "Votre message a été envoyé avec succès",
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",

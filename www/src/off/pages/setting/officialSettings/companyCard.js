@@ -5,6 +5,7 @@ import { companyCls } from '../../../../core/cls/company.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
+import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -14,12 +15,13 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,ColumnChooser,Export,Pager,Popup} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import { data } from 'jquery';
 
 export default class CustomerCard extends React.PureComponent
 {
@@ -33,6 +35,7 @@ export default class CustomerCard extends React.PureComponent
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+
     }
     async componentDidMount()
     {
@@ -40,7 +43,6 @@ export default class CustomerCard extends React.PureComponent
         this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm.GUID)
             this.companyObj.clearAll()
             await this.companyObj.load({GUID:this.pagePrm.GUID});            
         }
@@ -89,9 +91,7 @@ export default class CustomerCard extends React.PureComponent
             this.btnSave.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
-
         await this.companyObj.load()
-        
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
@@ -171,7 +171,6 @@ export default class CustomerCard extends React.PureComponent
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
-                                                
                                                 if((await this.companyObj.save()) == 0)
                                                 {          
                                                     let tmpJetData =
@@ -461,8 +460,7 @@ export default class CustomerCard extends React.PureComponent
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                               
+                                </Item>      
                                 {/* txtPhone */}
                                 <Item>
                                     <Label text={this.t("txtPhone")} alignment="right" />
@@ -561,24 +559,70 @@ export default class CustomerCard extends React.PureComponent
                                         </Validator> 
                                     </NdTextBox>
                                 </Item>
-                                  {/* txtSiretId */}
-                                  <Item>
-                                    <Label text={this.t("txtSiretId")} alignment="right" />
-                                        <NdTextBox id="txtSiretId" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIRET_ID"}} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={50}
-
-                                        >
-                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                {/* txtSiretId */}
+                                <Item>
+                                <Label text={this.t("txtSiretId")} alignment="right" />
+                                    <NdTextBox id="txtSiretId" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIRET_ID"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={50}
+                                    >
+                                            <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                               
+                                </Item>                              
                                 {/* txtCapital */}
                                 <Item>
                                     <Label text={this.t("txtCapital")} alignment="right" />
                                     <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} maxLength={50}/>
+                                </Item>
+                                {/* clmBankCode */}
+                                <Item>
+                                    <Label text={this.t("clmBankCode")} alignment="right" />
+                                    <NdTextBox id="clmBankCode" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"BANK_CODE"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={50}
+                                    >
+                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                {/* clmAccountNo */}
+                                <Item>
+                                    <Label text={this.t("clmAccountNo")} alignment="right" />
+                                    <NdTextBox id="clmAccountNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"ACCOUNT_NO"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={50}
+                                    >
+                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                {/* clmBIC */}
+                                <Item>
+                                    <Label text={this.t("clmBIC")} alignment="right" />
+                                    <NdTextBox id="clmBIC" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"BIC"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={50}
+                                    >
+                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                {/* clmIBAN */}
+                                <Item colSpan={2}>
+                                    <Label text={this.t("clmIBAN")} alignment="right" />
+                                    <NdTextBox id="clmIBAN" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"IBAN"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={50}
+                                    >
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                             </Form>
                         </div>

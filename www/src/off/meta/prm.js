@@ -111,7 +111,7 @@ export const prm =
         ID :"invoicesForPayment",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         ELEMENT : "",
@@ -1820,7 +1820,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"checkDocNo",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "ftr_02_002",
         ELEMENT : "",

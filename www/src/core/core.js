@@ -683,6 +683,7 @@ export class util
     {
         this.core = core.instance;
         this.logPath = ""
+        this.logStatus = false
     }
     folder_list(pPath)
     {
@@ -741,6 +742,12 @@ export class util
     {
         return new Promise(resolve => 
         {
+            if(!this.logStatus)
+            {
+                resolve(false)
+                return
+            }
+            
             let tmpPath = this.logPath
             if(typeof pPath != 'undefined')
             {
@@ -1610,11 +1617,31 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof b[pKey] == 'number')
+                    {
+                        return b[pKey] - a[pKey]
+                    }
+                    else if(typeof b[pKey] == 'string')
+                    {
+                        return b[pKey].localeCompare(a[pKey])
+                    }
+                })
             }
             else
             {
-                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof a[pKey] == 'number')
+                    {
+                        return a[pKey] - b[pKey]
+                    }
+                    else if(typeof a[pKey] == 'string')
+                    {
+                        return a[pKey].localeCompare(b[pKey])
+                    }
+                })
             }
         }
         return this

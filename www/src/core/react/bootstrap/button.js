@@ -2,6 +2,7 @@ import React from 'react';
 import NbBase from './base.js';
 import {acsDialog} from '../devex/acsdialog.js';
 
+
 export default class NbButton extends NbBase
 {
     constructor(props)
@@ -10,7 +11,7 @@ export default class NbButton extends NbBase
         this.state.disabled = this.props.disabled
         this.state.style = this.props.style
         this.state.lock = typeof this.props.lock == 'undefined' ? false : this.props.lock        
-
+        // this.prmObj = this.param.filter({TYPE:0, ID :"buttonsSound"});
         this._onClick = this._onClick.bind(this);
     }
     get disabled()
@@ -49,7 +50,12 @@ export default class NbButton extends NbBase
         }
     }
     async _onClick()
-    {
+    {   
+        if(document.getElementById("Sound1") != null)
+        {
+            document.getElementById("Sound1").play(); 
+        }
+        
         if(typeof this.props.onClick != 'undefined')
         {
             if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().dialog != 'undefined' && this.props.access.getValue().dialog.type != -1)

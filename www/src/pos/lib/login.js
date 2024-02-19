@@ -240,6 +240,7 @@ export default class Login extends React.Component
                                 <div className="col-6">
                                     <div className="dx-field">
                                         <Button
+                                        id={"btnEntry"}
                                         width={'100%'}
                                         height='fit-content'
                                         text={this.lang.t("btnLogin")}

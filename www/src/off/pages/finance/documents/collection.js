@@ -48,6 +48,7 @@ export default class collection extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.init()
     }
+    
     async init()
     {
         this.docObj.clearAll()
@@ -755,9 +756,22 @@ export default class collection extends React.PureComponent
                                         height={'500'} 
                                         width={'100%'}
                                         dbApply={false}
-                                        onRowUpdated={async(e)=>{
-                                            let rowIndex = e.component.getRowIndexByKey(e.key)
-
+                                        onRowUpdating={async(e)=>{      
+                                            
+                                            if(this.deptCreditMatchingObj.popUpList.length > 0)
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                            }                                            
+                                            
                                             this._calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>{

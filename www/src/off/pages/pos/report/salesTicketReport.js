@@ -83,6 +83,18 @@ export default class salesOrdList extends React.PureComponent
         {
           this.popOpenTike.show()
         }
+         //** FIRMA GETIR ******************************/
+         this.firm.selectCmd = 
+         {
+             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                 values : []
+             }
+         }
+         await this.firm.refresh();
     }
     async _btnGetClick()
     {
@@ -119,8 +131,8 @@ export default class salesOrdList extends React.PureComponent
                     "PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
                     " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
                     " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),103) AS DATE,   "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),108) AS TIME,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),103) AS DATE,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
                     " MAX(SALE.DEVICE) AS DEVICE,  "  +
                     " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
                     " SALE.TYPE AS SALE_TYPE,  "  +
@@ -292,6 +304,7 @@ export default class salesOrdList extends React.PureComponent
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
             await this.lastPosPayDt.refresh()
+            console.log(this.firm)
             let tmpData = 
             {
                 pos : tmpLastPos,
@@ -1253,7 +1266,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
