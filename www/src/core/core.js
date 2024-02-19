@@ -683,6 +683,7 @@ export class util
     {
         this.core = core.instance;
         this.logPath = ""
+        this.logStatus = false
     }
     folder_list(pPath)
     {
@@ -741,6 +742,12 @@ export class util
     {
         return new Promise(resolve => 
         {
+            if(!this.logStatus)
+            {
+                resolve(false)
+                return
+            }
+            
             let tmpPath = this.logPath
             if(typeof pPath != 'undefined')
             {

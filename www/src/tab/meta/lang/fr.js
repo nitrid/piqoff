@@ -47,11 +47,13 @@ export const langFr =
             txtDescription : "Information",
             cmbPricingList : "Numéro de tarif"
         },
-        itemPopup : 
+        itemPopup: // BAK
         {
-            txtFactor : "Katsayı", // BAK
-            txtPrice  :"Fiyat",
-            cmbUnit : "Birim"
+            txtFactor: "Coefficient", 
+            txtPrice: "Prix",
+            cmbUnit: "Unité",
+            txtQuantity: "Quantité",
+            txtDiscount: "Remise"
         },
         popCustomer:
         {
@@ -204,6 +206,18 @@ export const langFr =
             clmQuantity : "Miktar",  // BAK
             clmPrice : "Fiyat",  // BAK
             clmTotal : "Tutar",  // BAK
+        },
+        msgDiscountPrice:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
+        },
+        msgDiscountPercent:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
     },
     extract :
