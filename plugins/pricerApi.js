@@ -17,6 +17,7 @@ class devprint
     {
         pSocket.on('sql',async (pParam,pCallback) =>
         {
+            return
             if(typeof pParam.length != 'undefined')
             {
                 for (let i = 0; i < pParam.length; i++) 
