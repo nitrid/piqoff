@@ -2468,7 +2468,7 @@ export default class posDoc extends React.PureComponent
             tmpAmount = Number(parseFloat(tmpTicket / 100).round(2))
             tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)
 
-            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 416 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
+            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 410 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
             {
                 this.txtPopCheqpay.value = "";
                 document.getElementById("Sound").play(); 
