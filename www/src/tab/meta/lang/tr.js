@@ -49,9 +49,11 @@ export const langTr =
         },
         itemPopup : 
         {
-            txtFactor : "Katsayı", // BAK
+            txtFactor : "Katsayı",
             txtPrice  :"Fiyat",
-            cmbUnit : "Birim"
+            cmbUnit : "Birim",
+            txtQuantity : "Miktar",
+            txtDiscount : "İndirim"
         },
         popCustomer:
         {
@@ -204,6 +206,18 @@ export const langTr =
             clmQuantity : "Miktar",
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
+        },
+        msgDiscountPercent:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        msgDiscountPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
         },
     },
     extract :

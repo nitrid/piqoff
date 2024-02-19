@@ -3666,7 +3666,7 @@ export const langFr =
             title : "Choix du groupe",
             clmCode : "Code",
             clmName : "Nom",
-        },
+        },        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -16962,6 +16962,10 @@ export const langFr =
         {
             notValid: "Veuillez remplir les champs obligatoires !",
         },
+        clmBankCode: "Code banque",
+        clmAccountNo: "Numéro de compte",
+        clmIBAN: "IBAN",
+        clmBIC: "Code d'identification de la banque",
     },
     set_03_001 : // Silinmiş Evraklar
     {
