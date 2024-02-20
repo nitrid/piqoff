@@ -34,9 +34,9 @@ export default class NdDocAi extends Base
         {
             if(typeof pData.content != 'undefined')
             {
-                tmpValue = pData.content
+                tmpValue = pData.content.replaceAll(',','.')
             }
-            if(typeof pData.value != 'undefined')
+            else if(typeof pData.value != 'undefined')
             {
                 tmpValue = pData.value
             }
@@ -96,8 +96,6 @@ export default class NdDocAi extends Base
             for (let i = 0; i < pData.Item.length; i++) 
             {
                 pData.Items.push({...pData.Item[i]})
-                console.log(pData.Item[i].Quantity)
-                console.log(pData.Item[i].UnitPrice)
                 pData.Item[i].ProductCode = this.getValue(pData.Item[i].ProductCode)
                 pData.Item[i].Description = this.getValue(pData.Item[i].Description)
                 pData.Item[i].Quantity = typeof this.getValue(pData.Item[i].Quantity) == 'undefined' ? 0 : this.getValue(pData.Item[i].Quantity)

@@ -402,6 +402,33 @@ export default class posDoc extends React.PureComponent
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
+         //** CHEQ GETIR ********************************************/
+         this.cheqDt.selectCmd = 
+         {
+             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+             param : ['DOC:string|50'], 
+             value : [this.posObj.dt()[0].GUID],
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                 values : [this.posObj.dt()[0].GUID]
+             }
+         }
+         this.cheqDt.deleteCmd = 
+         {
+             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+             param : ['PGUID:string|50','PDOC:string|50'], 
+             dataprm : ['GUID','DOC'],
+             local : 
+             {
+                 type : "delete",
+                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+             }
+         }
+         await this.cheqDt.refresh();  
+         //******************************************************** */
         if(!this.isFirstOpen)
         {
             await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
@@ -429,33 +456,7 @@ export default class posDoc extends React.PureComponent
             }
             await this.firm.refresh();
             //******************************************************** */
-            //** CHEQ GETIR ********************************************/
-            this.cheqDt.selectCmd = 
-            {
-                query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-                param : ['DOC:string|50'], 
-                value : [this.posObj.dt()[0].GUID],
-                local : 
-                {
-                    type : "select",
-                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                    values : [this.posObj.dt()[0].GUID]
-                }
-            }
-            this.cheqDt.deleteCmd = 
-            {
-                query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-                param : ['PGUID:string|50','PDOC:string|50'], 
-                dataprm : ['GUID','DOC'],
-                local : 
-                {
-                    type : "delete",
-                    query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                    values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-                }
-            }
-            await this.cheqDt.refresh();  
-            //******************************************************** */
+           
 
             this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
