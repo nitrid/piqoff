@@ -401,6 +401,10 @@ export default class posDoc extends React.PureComponent
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
+        
+        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+        await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         //*********************************************************/
         if(!this.isFirstOpen)
         {
@@ -566,9 +570,7 @@ export default class posDoc extends React.PureComponent
             //***************************************************************************** */
             this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"
             
-            await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
-            await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
-            await this.grdLastPos.dataRefresh({source:this.lastPosDt});
+           
         }
         
         if(this.firm.length > 0)
