@@ -401,11 +401,34 @@ export default class posDoc extends React.PureComponent
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
-        
-        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
-        await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
-        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         //*********************************************************/
+         //** CHEQ GETIR ********************************************/
+         this.cheqDt.selectCmd = 
+         {
+             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+             param : ['DOC:string|50'], 
+             value : [this.posObj.dt()[0].GUID],
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                 values : [this.posObj.dt()[0].GUID]
+             }
+         }
+         this.cheqDt.deleteCmd = 
+         {
+             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+             param : ['PGUID:string|50','PDOC:string|50'], 
+             dataprm : ['GUID','DOC'],
+             local : 
+             {
+                 type : "delete",
+                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+             }
+         }
+         await this.cheqDt.refresh();  
+         //******************************************************** */
         if(!this.isFirstOpen)
         {
             await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
@@ -433,33 +456,7 @@ export default class posDoc extends React.PureComponent
             }
             await this.firm.refresh();
             //******************************************************** */
-            //** CHEQ GETIR ********************************************/
-            this.cheqDt.selectCmd = 
-            {
-                query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-                param : ['DOC:string|50'], 
-                value : [this.posObj.dt()[0].GUID],
-                local : 
-                {
-                    type : "select",
-                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                    values : [this.posObj.dt()[0].GUID]
-                }
-            }
-            this.cheqDt.deleteCmd = 
-            {
-                query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-                param : ['PGUID:string|50','PDOC:string|50'], 
-                dataprm : ['GUID','DOC'],
-                local : 
-                {
-                    type : "delete",
-                    query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                    values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-                }
-            }
-            await this.cheqDt.refresh();  
-            //******************************************************** */
+           
 
             this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
@@ -570,7 +567,9 @@ export default class posDoc extends React.PureComponent
             //***************************************************************************** */
             this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"
             
-           
+            await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+            await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+            await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         }
         
         if(this.firm.length > 0)
