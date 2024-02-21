@@ -88,6 +88,7 @@ export default class mailSettings extends React.PureComponent
                             onRowInserting={(e)=>
                             {
                                 e.data.CUSER = this.core.auth.data.CODE
+                                e.data.GUID =  datatable.uuidv4()
                                 if(e.data.MAIL_SERVICE === 'gmail') 
                                 {
                                     e.data.MAIL_SMTP = 'smtp.mail.gmail.com'
