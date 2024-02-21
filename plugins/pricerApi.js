@@ -21,12 +21,12 @@ class devprint
             {
                 for (let i = 0; i < pParam.length; i++) 
                 {
-                    if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
-                    {
-                        setTimeout(() => {
-                            this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                        }, 5000);
-                    }
+                    // if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
+                    // {
+                    //     setTimeout(() => {
+                    //         this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                    //     }, 5000);
+                    // }
                     // else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
                     // {
                     //     setTimeout(() => {
