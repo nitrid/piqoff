@@ -262,6 +262,7 @@ export class posCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
+            //DEPO MIKTARLARININ GÜNCELLENMESİ İÇİN YAPILDI.
             this.depotQtyUpdate()
             resolve(await this.ds.update()); 
             this.posSale.subTotalBuild();
