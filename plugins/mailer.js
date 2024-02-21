@@ -60,11 +60,14 @@ class mailer
            
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-            console.log(tmpResult)
+            let tmpservice = ''
+            if(tmpResult[0].MAIL_SERVICE == 'gmail')
+            {
+                tmpservice = 'gmail'
+            }
             let transporter = nodemailer.createTransport(
             {
-
-                //service: 'imap.ionos.fr',
+                service: tmpservice,
                 host: tmpResult[0].MAIL_SMTP,
                 port: tmpResult[0].MAIL_PORT,
                 secure: true,
