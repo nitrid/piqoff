@@ -1985,13 +1985,13 @@ export default class posDoc extends React.PureComponent
                 }
                 //***************************************************/
                 //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                if (!this.core.offline)
-                {
-                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                    {
-                        Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
-                    }
-                }
+                // if (!this.core.offline)
+                // {
+                //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                //     {
+                //         Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
+                //     }
+                // }
                 resolve(true)
             }
             else

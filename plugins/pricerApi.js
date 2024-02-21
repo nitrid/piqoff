@@ -83,7 +83,11 @@ class devprint
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        console.log(tmpResult)
+        let tmpBarcodes =[]
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            tmpBarcodes.push(tmpResult[i].BARCODE)
+        }
         fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
         {
             method: 'PATCH',
@@ -98,8 +102,7 @@ class devprint
                   "itemId": tmpResult[0].GUID,
                   "itemName": tmpResult[0].NAME,
                   "price": tmpResult[0].PRICE_SALE,
-                  "sics": [
-                  ],
+                  "sics":tmpBarcodes,
                   "properties": 
                   {
                     "BARCODE": tmpResult[0].BARCODE,
