@@ -683,6 +683,7 @@ export class util
     {
         this.core = core.instance;
         this.logPath = ""
+        this.logStatus = false
     }
     folder_list(pPath)
     {
@@ -741,6 +742,12 @@ export class util
     {
         return new Promise(resolve => 
         {
+            if(!this.logStatus)
+            {
+                resolve(false)
+                return
+            }
+            
             let tmpPath = this.logPath
             if(typeof pPath != 'undefined')
             {
@@ -1610,11 +1617,31 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof b[pKey] == 'number')
+                    {
+                        return b[pKey] - a[pKey]
+                    }
+                    else if(typeof b[pKey] == 'string')
+                    {
+                        return b[pKey].localeCompare(a[pKey])
+                    }
+                })
             }
             else
             {
-                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof a[pKey] == 'number')
+                    {
+                        return a[pKey] - b[pKey]
+                    }
+                    else if(typeof a[pKey] == 'string')
+                    {
+                        return a[pKey].localeCompare(b[pKey])
+                    }
+                })
             }
         }
         return this
@@ -1908,7 +1935,6 @@ export class access extends datatable
                 param : ['PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
                 dataprm : ['ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
             } 
-
             this.updateCmd = 
             {
                 query : "EXEC [dbo].[PRD_ACCESS_UPDATE] " + 
@@ -1945,6 +1971,7 @@ export class access extends datatable
                     {
                         tmpMeta = tmpMeta.filter(x => x[tmpKey] === tmpValue)
                     }
+
                 }
             }
             //DATA FİLİTRELENİYOR.
@@ -1955,9 +1982,17 @@ export class access extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+
                 }                
             }
-
+            //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
+            if(typeof Object.keys(arguments[0]).filter(key => key.includes('USERS')) != 'undefined')
+            {
+                for (let i = 0; i < tmpMeta.length; i++) 
+                {
+                    tmpMeta[i].USERS = arguments[0].USERS
+                }
+            }
             let tmpAcs = new access(tmpMeta)
             tmpAcs.import(tmpData)
             return tmpAcs;
@@ -1986,15 +2021,16 @@ export class access extends datatable
                 }
             }                    
         }
-         // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
-         else if(this.length == 0 && this.meta != null && this.meta.length > 0)
-         {
+        // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
+        else if(this.length == 0 && this.meta != null && this.meta.length > 0)
+        {
             return JSON.parse(JSON.stringify(this.meta[0].VALUE))
-         }
+        }
         return '';
     }
     setValue()
     {
+
         // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
         if(this.length > 0)
         {
@@ -2013,6 +2049,16 @@ export class access extends datatable
                 {
                     console.log('error param.toValue() : ' + error)
                 }
+            }
+        }
+        else
+        {
+            if(this.meta.length == 1)
+            {
+                let tmpData = {...this.meta[0]}
+                tmpData.VALUE = JSON.stringify(arguments[0])
+                
+                this.push(tmpData)
             }
         }
     }

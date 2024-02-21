@@ -23,12 +23,11 @@ class mailer
         })
     }
 
-    mailSend(pData)
+    async mailSend(pData)
     {
        
-        return new Promise(resolve =>
+        return new Promise(async resolve =>
         {
-            console.log(pData)
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
             {
@@ -41,27 +40,55 @@ class mailer
                     }
                 ]
             }
+            let tmpQuery
+            if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.mailGuid]
+                }
+            }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT * FROM MAIL_SETTINGS WHERE MASTER = 1 ",
+                }
+            }
+           
 
-            var transporter = nodemailer.createTransport({
-                service: "gmail",
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false,
-                auth: {
-                  user: "yellyz.vente@gmail.com",
-                  pass: "ewiosnmqocuddwsl",
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            let tmpservice = ''
+            if(tmpResult[0].MAIL_SERVICE == 'gmail')
+            {
+                tmpservice = 'gmail'
+            }
+            let transporter = nodemailer.createTransport(
+            {
+                service: tmpservice,
+                host: tmpResult[0].MAIL_SMTP,
+                port: tmpResult[0].MAIL_PORT,
+                secure: true,
+                auth: 
+                {
+                  user: tmpResult[0].MAIL_ADDRESS,
+                  pass: tmpResult[0].MAIL_PASSWORD
                 },
               });
               var mailOptions = {
-                from: "yellyz.vente@gmail.com",
+                from: tmpResult[0].MAIL_ADDRESS,
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
                 text:pData.text,
                 attachments: tmpAttach
               };
-              transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
+              transporter.sendMail(mailOptions, function(error, info)
+              {
+                if (error) 
+                {
                     console.log(error)
                     resolve(error);
                 }

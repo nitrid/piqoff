@@ -32,7 +32,6 @@ class customerpoint
                 {
                     for (let i = 0; i < tmpResultCustomer.result.recordset.length; i++) 
                     {
-                        console.log(tmpResultCustomer.result.recordset[i].GUID)
                         let tmpQuery = 
                         {
                             query : "SELECT ISNULL(SUM(CASE WHEN TYPE = 0 THEN POINT ELSE POINT * -1 END),0) AS POINT FROM CUSTOMER_POINT WHERE CUSTOMER = '" + tmpResultCustomer.result.recordset[i].GUID + "' AND DELETED = 0 " +

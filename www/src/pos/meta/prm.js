@@ -1144,7 +1144,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 600,
+        VALUE : 6000,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1284,6 +1284,22 @@ export const prm =
             CAPTION : "Z Raporu"
         }
     },
+    //Z Raporu Yazdırma Dizaynı
+    {
+        TYPE : 0,
+        ID :"ZReportPrintDesign",
+        VALUE : "zreport.js",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Z Raporu Dizaynı"
+        }
+    },
     //Müşteri Puan Çarpanı
     {
         TYPE : 0,
@@ -1295,7 +1311,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "checkbox",
+            TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Müşteri Puan Katsayısı"
         }
@@ -1321,6 +1337,22 @@ export const prm =
         TYPE : 0,
         ID :"PricingListNo",
         VALUE : 1,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Liste No"
+        }
+    },
+    //Butonlarin ses cikarma islemi
+    {
+        TYPE : 0,
+        ID :"buttonsSound",
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

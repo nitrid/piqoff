@@ -6,13 +6,11 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -25,7 +23,7 @@ export default class PriceDiffInvList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -35,7 +33,7 @@ export default class PriceDiffInvList extends React.PureComponent
             {CODE : "REF_NO",NAME : this.t("grdSlsIvcList.clmRefNo")},
             {CODE : "INPUT_CODE",NAME : this.t("grdSlsIvcList.clmInputCode")},                                   
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsIvcList.clmInputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdSlsIvcList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdSlsIvcList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdSlsIvcList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdSlsIvcList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdSlsIvcList.clmTotal")},
@@ -76,9 +74,9 @@ export default class PriceDiffInvList extends React.PureComponent
                 {
                     this.groupList.push('INPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -132,7 +130,7 @@ export default class PriceDiffInvList extends React.PureComponent
                     query : "SELECT * FROM DOC_VW_01 " +
                             "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 21  AND REBATE = 0 ",
+                            " AND TYPE = 1 AND DOC_TYPE = 21  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -351,7 +349,7 @@ export default class PriceDiffInvList extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdSlsIvcList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsIvcList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsIvcList.clmInputName")} visible={true}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdSlsIvcList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsIvcList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsIvcList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsIvcList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsIvcList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
