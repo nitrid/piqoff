@@ -3,6 +3,8 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import { access } from '../../../../core/core.js';
+import { acs } from '../../../meta/acs.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -27,13 +29,18 @@ export default class salesInvoice extends DocBase
     constructor(props)
     {
         super(props)
-
+        this.state = 
+        {
+            allowDeleting: true,
+        };
         this.type = 1;
         this.docType = 20;
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -41,25 +48,30 @@ export default class salesInvoice extends DocBase
         this.combineNew = false
 
         this.loading = React.createRef();
-        this.rightItems = [{ text: this.t("getDispatch"),},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            await this.init()
             await this.getDoc(this.pagePrm.GUID,'',0)
         }
-        else
-        {
-            await this.init()
-        }
+        
     }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }      
     async init()
     {
         await super.init()
-       
 
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
@@ -119,7 +131,8 @@ export default class salesInvoice extends DocBase
                 source:
                 {
                     select:
-                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                    {   
+                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                 "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                         param : ['BARCODE:string|50'],
@@ -887,7 +900,7 @@ export default class salesInvoice extends DocBase
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
-                                            
+                                            this.setState({ allowDeleting: false })
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -933,7 +946,6 @@ export default class salesInvoice extends DocBase
                                                         App.instance.setState({isExecute:false})
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                         {
-                                                            
                                                             let tmpAttach = pResult.split('|')[1]
                                                             let tmpHtml = this.htmlEditor.value
                                                             if(this.htmlEditor.value.length == 0)
@@ -943,7 +955,7 @@ export default class salesInvoice extends DocBase
                                                             if(pResult.split('|')[0] != 'ERR')
                                                             {
                                                             }
-                                                            let tmpMailData = {html:tmpHtml,subject:'',sendMail:this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                            let tmpMailData = {html:tmpHtml,subject:'',sendMail:this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().value,attachName:"facture.pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                             {   
                                                              
@@ -977,6 +989,7 @@ export default class salesInvoice extends DocBase
                                             }
                                             
                                             await dialog(tmpConfObj);
+                                            
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -1669,7 +1682,8 @@ export default class salesInvoice extends DocBase
                                         <NdGrid parent={this} id={"grdSlsInv"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
-                                        allowColumnReordering={true} 
+                                        allowColumnReordering={true}
+                                        onColumnReorder={this.handleColumnReorder}
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
                                         height={'400'} 
@@ -1915,7 +1929,7 @@ export default class salesInvoice extends DocBase
                                             await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2157,12 +2171,12 @@ export default class salesInvoice extends DocBase
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
+                                            {<RequiredRule message={this.t("validDesign")} />}
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
@@ -2211,7 +2225,7 @@ export default class salesInvoice extends DocBase
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
-                                                        {
+                                                        { 
                                                             // var a = document.createElement('a');
                                                             // a.href = "data:application/pdf;base64," + pResult.split('|')[1];
                                                             // a.setAttribute('target', '_blank');
@@ -2385,6 +2399,19 @@ export default class salesInvoice extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -2437,7 +2464,7 @@ export default class salesInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})

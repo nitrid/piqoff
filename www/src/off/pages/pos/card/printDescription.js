@@ -121,7 +121,7 @@ export default class printDescription extends React.PureComponent
                                         valueExpr="GUID"
                                         value="00000000-0000-0000-0000-000000000000"
                                         searchEnabled={true}
-                                        showClearButton={true}
+                                        showClearButton={false}
                                         pageSize ={50}
                                         notRefresh={true}
                                         data={{source:{select:{query : "SELECT  '00000000-0000-0000-0000-000000000000' AS GUID,'ALL' AS NAME  UNION ALL SELECT GUID,NAME FROM COMPANY_VW_01"},sql:this.core.sql}}}

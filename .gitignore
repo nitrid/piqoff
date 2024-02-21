@@ -1,5 +1,4 @@
 /config.js
-gitignore
 plugins/lic
 tmp/
 node_modules/
@@ -11,7 +10,7 @@ www/log
 log/
 www/public--
 archiveFiscal/
-plugins/devprint/repx
 plugins/mailer.js
-plugins/devprint
 www/src/pos/resources
+plugins/devprint
+.clinic/

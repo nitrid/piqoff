@@ -17,6 +17,7 @@ export default class NdSelectBox extends Base
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
+        this._onCustomItemCreating = this._onCustomItemCreating.bind(this);
         this.setData = this.setData.bind(this);
     }
     //#region Private
@@ -46,6 +47,7 @@ export default class NdSelectBox extends Base
             minSearchLength={0}
             onValueChanged={this._onValueChanged}
             onChange={this._onChange}
+            onCustomItemCreating = {this._onCustomItemCreating}
             onInitialized={this._onInitialized}
             height={this.props.height}
             style={this.props.style}
@@ -69,6 +71,14 @@ export default class NdSelectBox extends Base
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
+        }
+    }
+    _onCustomItemCreating(e)
+    {
+       
+        if(typeof this.props.onCustomItemCreating != 'undefined')
+        {
+            this.props.onCustomItemCreating(e)
         }
     }
     _onChange() 
@@ -173,14 +183,40 @@ export default class NdSelectBox extends Base
         }
         else
         {
-            return (
-                <div className="dx-field">
-                    <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
-                    <div className="dx-field-value">
-                        {this._selectBoxView()}
+            // TITLE POZISYONU LEFT,RIGHT,TOP,BOTTOM 
+            if(typeof this.state.titleAlign == 'undefined')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label" style={{textAlign:'right'}}>{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
                     </div>
-                </div>
-            )            
+                )
+            }
+            else if(this.state.titleAlign == 'left')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
+                    </div>
+                )
+            }
+            else if(this.state.titleAlign == 'right')
+            {
+                return (
+                    <div className="dx-field">
+                        <div className="dx-field-label" style={{textAlign:'right'}}>{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._selectBoxView()}
+                        </div>
+                    </div>
+                )
+            }
         }
     }
 }

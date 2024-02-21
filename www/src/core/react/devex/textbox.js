@@ -21,7 +21,7 @@ export default class NdTextBox extends Base
         this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode
         this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
-        this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
+        this.state.titleAlign = typeof props.titleAlign == 'undefined' ? undefined : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
         this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly   
         
@@ -347,7 +347,9 @@ export default class NdTextBox extends Base
                 return (
                     <div className="dx-field">
                         <div className="dx-field-label" style={{textAlign:'right'}}>{this.state.title}</div>
-                        {this._txtView()}
+                        <div className="dx-field-value">
+                            {this._txtView()}
+                        </div>
                     </div>
                 )
             }
@@ -373,17 +375,21 @@ export default class NdTextBox extends Base
             {
                 return (
                     <div className="dx-field">
-                        <div className="dx-field-label" style={{textAlign:'right'}}>{this.state.title}</div>
-                        {this._txtView()}
+                        <div className="dx-field-label">{this.state.title}</div>
+                        <div className="dx-field-value">
+                            {this._txtView()}
+                        </div>
                     </div>
                 )
             }
             else if(this.state.titleAlign == 'right')
             {
                 return (
-                    <div className="dx-field">                        
-                        {this._txtView()}
-                        <div className="dx-field-label" style={{float:'right',paddingLeft:'15px'}}>{this.state.title}</div>
+                    <div className="dx-field">
+                        <div className="dx-field-label" style={{textAlign:'right'}}>{this.state.title}</div>
+                        <div className="dx-field-value">
+                            {this._txtView()}
+                        </div>
                     </div>
                 )
             }

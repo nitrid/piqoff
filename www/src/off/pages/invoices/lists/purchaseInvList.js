@@ -6,13 +6,11 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -25,7 +23,7 @@ export default class purchaseInvList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -36,7 +34,7 @@ export default class purchaseInvList extends React.PureComponent
             {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcIvcList.clmOutputCode")},                                   
             {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcIvcList.clmOutputName")},
             {CODE : "INPUT_NAME",NAME : this.t("grdPurcIvcList.clmInputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdPurcIvcList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdPurcIvcList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdPurcIvcList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdPurcIvcList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdPurcIvcList.clmTotal")},
@@ -77,9 +75,9 @@ export default class purchaseInvList extends React.PureComponent
                 {
                     this.groupList.push('OUTPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -132,7 +130,7 @@ export default class purchaseInvList extends React.PureComponent
                     query : "SELECT * FROM DOC_VW_01 " +
                             "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC",
+                            " AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -142,7 +140,6 @@ export default class purchaseInvList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdPurcIvcList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-
     }
     render()
     {
@@ -359,15 +356,15 @@ export default class purchaseInvList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
                                 {
-                                    App.instance.menuClick(
-                                        {
-                                            id: 'ftr_02_001',
-                                            text: this.t('menu'),
-                                            path: 'invoices/documents/purchaseInvoice.js',
-                                            pagePrm:{GUID:e.data.GUID}
-                                        })
-                                }}
+                                    id: 'ftr_02_001',
+                                    text: this.t('menu'),
+                                    path: 'invoices/documents/purchaseInvoice.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -377,7 +374,7 @@ export default class purchaseInvList extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcIvcList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdPurcIvcList.clmOutputName")} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdPurcIvcList.clmInputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdPurcIvcList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdPurcIvcList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdPurcIvcList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdPurcIvcList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdPurcIvcList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              

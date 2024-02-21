@@ -29,6 +29,8 @@ export default class salesOrder extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -40,11 +42,21 @@ export default class salesOrder extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -851,7 +863,6 @@ export default class salesOrder extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                      onClick={async ()=>
                                     {       
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1182,7 +1193,6 @@ export default class salesOrder extends DocBase
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        console.log(pdata[0].TYPE)
                                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
@@ -1644,7 +1654,7 @@ export default class salesOrder extends DocBase
                                             await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsOrder"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrder"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1932,7 +1942,7 @@ export default class salesOrder extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     > 
@@ -1953,7 +1963,6 @@ export default class salesOrder extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -1998,7 +2007,6 @@ export default class salesOrder extends DocBase
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -2058,6 +2066,20 @@ export default class salesOrder extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={this.t(this.t("popMailSend.cmbMailAddress"))} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                    >
+                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -2111,7 +2133,7 @@ export default class salesOrder extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"commande.pdf",attachData:tmpAttach,text:""}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"commande "+ this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})
