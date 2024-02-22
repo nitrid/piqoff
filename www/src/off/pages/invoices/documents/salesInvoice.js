@@ -949,7 +949,6 @@ export default class salesInvoice extends DocBase
                                                         App.instance.setState({isExecute:false})
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                         {
-                                                            
                                                             let tmpAttach = pResult.split('|')[1]
                                                             let tmpHtml = this.htmlEditor.value
                                                             if(this.htmlEditor.value.length == 0)
@@ -2229,7 +2228,7 @@ export default class salesInvoice extends DocBase
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
-                                                        {
+                                                        { 
                                                             // var a = document.createElement('a');
                                                             // a.href = "data:application/pdf;base64," + pResult.split('|')[1];
                                                             // a.setAttribute('target', '_blank');

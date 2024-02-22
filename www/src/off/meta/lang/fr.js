@@ -3666,7 +3666,7 @@ export const langFr =
             title : "Choix du groupe",
             clmCode : "Code",
             clmName : "Nom",
-        },
+        },        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -4326,7 +4326,11 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     ftr_01_003 : // "İade Fatura Listesi"
     {
@@ -16066,6 +16070,7 @@ export const langFr =
     {
         txtCustomerCode : "Fournisseur",
         txtTotal : "Total",
+        validDesign : "Veuillez choisir le design",
         menu : "Encaissement",
         pg_txtCustomerCode : 
         {
@@ -16089,7 +16094,11 @@ export const langFr =
             clmTotal : "Total" ,
             clmInputName :"Caisse/Banque",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {
@@ -16962,6 +16971,10 @@ export const langFr =
         {
             notValid: "Veuillez remplir les champs obligatoires !",
         },
+        clmBankCode: "Code banque",
+        clmAccountNo: "Numéro de compte",
+        clmIBAN: "IBAN",
+        clmBIC: "Code d'identification de la banque",
     },
     set_03_001 : // Silinmiş Evraklar
     {

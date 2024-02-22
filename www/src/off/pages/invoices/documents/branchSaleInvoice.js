@@ -202,7 +202,6 @@ export default class branchSaleInvoice extends DocBase
                                 value : [r.component._changedValue]
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                            console.log(tmpData)
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.combineControl = true
@@ -729,8 +728,6 @@ export default class branchSaleInvoice extends DocBase
                 App.instance.setState({isExecute:true})
                 let tmpData = await this.core.sql.execute(tmpQuery)
                 App.instance.setState({isExecute:false})
-                console.log(tmpData)
-                console.log(txtSendMail)
                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                 {
                     App.instance.setState({isExecute:true})
@@ -974,8 +971,7 @@ export default class branchSaleInvoice extends DocBase
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
-                                    {
-                                        console.log(this.docObj.isSaved)                             
+                                    {                        
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1615,7 +1611,6 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0

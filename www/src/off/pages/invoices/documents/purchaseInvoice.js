@@ -1244,7 +1244,7 @@ export default class purchaseInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                {/* <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
                                     onClick={async()=>
                                     {
@@ -1296,9 +1296,10 @@ export default class purchaseInvoice extends DocBase
                                                 this.dtShipDate.value = moment(e.DueDate)
 
                                                 this.grdPurcInv.devGrid.beginUpdate()
+                                                let tmpMissCodes = []
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
-                                                    if(e.Item[i].ProductCode != '')
+                                                    if(e.Item[i].ItemCode != '')
                                                     {
                                                         let tmpItem =
                                                         {
@@ -1312,13 +1313,28 @@ export default class purchaseInvoice extends DocBase
                                                         }
                                                         await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
                                                     }
+                                                    else
+                                                    {
+                                                        tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
+                                                    }
                                                 }
                                                 this.grdPurcInv.devGrid.endUpdate()
+                                                if(tmpMissCodes.length > 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                                                    }
+                                                
+                                                    await dialog(tmpConfObj);
+                                                }
                                             }
                                             console.log(e)
                                         }
                                     }}/>
-                                </Item> */}
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>

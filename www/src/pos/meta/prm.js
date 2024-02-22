@@ -1143,7 +1143,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 600,
+        VALUE : 6000,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1336,6 +1336,22 @@ export const prm =
         TYPE : 0,
         ID :"PricingListNo",
         VALUE : 1,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Liste No"
+        }
+    },
+    //Butonlarin ses cikarma islemi
+    {
+        TYPE : 0,
+        ID :"buttonsSound",
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
