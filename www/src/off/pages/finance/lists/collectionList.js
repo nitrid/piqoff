@@ -7,8 +7,6 @@ import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -16,6 +14,9 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 
 export default class collectionList extends React.PureComponent
 {
@@ -119,7 +120,6 @@ export default class collectionList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        
         let tmpSource =
         {
             source : 
@@ -171,7 +171,14 @@ export default class collectionList extends React.PureComponent
                                         }
                                     }    
                                 } />
-                                 <Item location="after"
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDesign.show()
+                                    }}/>
+                                </Item>
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -361,6 +368,86 @@ export default class collectionList extends React.PureComponent
                                 </Item>
                             </Form>
                         </div>
+                    </div>
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'180'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1200'"},sql:this.core.sql}}}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE, " +
+                                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " + 
+                                                                    "ISNULL((SELECT TOP 1 DOC_REF + ' - '+ CONVERT(NVARCHAR,DOC_REF_NO) FROM DEPT_CREDIT_MATCHING_VW_03 WHERE CUS.GUID = PAYING_DOC),'') AS PAYING_DOC " + 
+                                                                "FROM DOC_CUSTOMER_VW_01 AS CUS " +
+                                                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
+                                                                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                                                                    " AND TYPE = 0 AND DOC_TYPE = 200 ",
+                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
+                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery)
+                                                    console.log(JSON.stringify(tmpData.result.recordset)) 
+                                                    App.instance.setState({isExecute:true})
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:false})
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            {
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        }
+                                                    });
+                                                    this.popDesign.hide();  
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
                     </div>
                 </ScrollView>
             </div>
