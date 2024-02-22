@@ -412,7 +412,7 @@ export default class collectionList extends React.PureComponent
                                                                 "FROM DOC_CUSTOMER_VW_01 AS CUS " +
                                                                 "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                                                                     "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                                                    " AND TYPE = 0 AND DOC_TYPE = 200 ",
+                                                                    " AND TYPE = 0 AND DOC_TYPE = 200 ORDER BY DOC_DATE DESC",
                                                         param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
