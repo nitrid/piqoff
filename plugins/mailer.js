@@ -64,7 +64,7 @@ class mailer
             let transporter = nodemailer.createTransport(
             {
 
-                //service: 'imap.ionos.fr',
+                service: 'outlook',
                 host: tmpResult[0].MAIL_SMTP,
                 port: tmpResult[0].MAIL_PORT,
                 secure: true,
@@ -73,7 +73,7 @@ class mailer
                   user: tmpResult[0].MAIL_ADDRESS,
                   pass: tmpResult[0].MAIL_PASSWORD
                 },
-                //tls : { rejectUnauthorized: false }
+                tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
                 from: tmpResult[0].MAIL_ADDRESS,
