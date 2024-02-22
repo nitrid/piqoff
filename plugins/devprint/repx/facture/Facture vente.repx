@@ -19,7 +19,7 @@
         <Item3 Ref="10" ControlType="XRLabel" Name="label3" Multiline="true" Text="BIC:" SizeF="34.3427658,23.0000153" LocationFloat="1.66331923, 83.86402" Padding="2,2,0,0,100" />
         <Item4 Ref="11" ControlType="XRLabel" Name="label4" Multiline="true" Text="Code banque:" SizeF="100.855377,24.16782" LocationFloat="335.723236, 49.4167328" Padding="2,2,0,0,100" />
         <Item5 Ref="12" ControlType="XRLabel" Name="label5" Multiline="true" Text="Numéro de compte:" SizeF="131.739014,23.00002" LocationFloat="1.24999678, 48.2489281" Padding="2,2,0,0,100" />
-        <Item6 Ref="13" ControlType="XRLabel" Name="label6" Multiline="true" Text="label68" SizeF="374.1735,23" LocationFloat="380.4042, 83.86402" Padding="2,2,0,0,100">
+        <Item6 Ref="13" ControlType="XRLabel" Name="label6" Multiline="true" Text="label68" SizeF="374.1735,23" LocationFloat="375.077057, 83.86402" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="14" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_IBAN]" />
           </ExpressionBindings>
