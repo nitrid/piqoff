@@ -59,6 +59,7 @@ export default class posDoc extends React.PureComponent
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -129,8 +130,6 @@ export default class posDoc extends React.PureComponent
                 this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
-
-        this.init();
         
         this.core.socket.on('connect',async () => 
         {   
@@ -310,14 +309,41 @@ export default class posDoc extends React.PureComponent
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
         })
+        this.core.socket.on('msgService',async(pParam,pCallback) =>
+        {
+            if(pParam.tag == 'msgPosDevice')
+            {
+                if(pParam.devices.length > 0 && typeof pParam.devices.find((item) => item == this.device.value) != 'undefined')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAdminMessage',showTitle:true,title:this.lang.t("msgAdminMessage.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgAdminMessage.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{pParam.msg}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                }
+            }
+        })
 
+        document.body.addEventListener('touchmove', function(e) 
+        {
+            e.preventDefault(); // Dokunmatik kaydırma olayını önle
+        }, { passive: false });
+        
         if(this.core.offline)
         {
             this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
         }
     }
+    async componentDidMount()
+    {
+        this.init();
+    }
     async init()
     {
+        this.loadingPay.current.instance.show()
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -325,9 +351,6 @@ export default class posDoc extends React.PureComponent
         },1000)
         
         this.posObj.clearAll()        
-
-        await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-        await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 
         if(this.state.isFormation)
         {
@@ -376,11 +399,65 @@ export default class posDoc extends React.PureComponent
         this.posDevice.scanner();
 
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
-        await this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
-        await this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
+        this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
+        this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
+         //** CHEQ GETIR ********************************************/
+         this.cheqDt.selectCmd = 
+         {
+             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+             param : ['DOC:string|50'], 
+             value : [this.posObj.dt()[0].GUID],
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                 values : [this.posObj.dt()[0].GUID]
+             }
+         }
+         this.cheqDt.deleteCmd = 
+         {
+             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+             param : ['PGUID:string|50','PDOC:string|50'], 
+             dataprm : ['GUID','DOC'],
+             local : 
+             {
+                 type : "delete",
+                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+             }
+         }
+         await this.cheqDt.refresh();  
+         //******************************************************** */
         if(!this.isFirstOpen)
         {
+            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
+            this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
+            this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
+            this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
+            this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
+            this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
+            this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
+            this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
+            this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
+            //********************************************************* */
+            //** FIRMA GETIR ********************************************/
+            this.firm.selectCmd = 
+            {
+                query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+                local : 
+                {
+                    type : "select",
+                    query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                    values : []
+                }
+            }
+            await this.firm.refresh();
+            //******************************************************** */
+           
+
             this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
             if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
@@ -488,57 +565,18 @@ export default class posDoc extends React.PureComponent
                 }
             }
             //***************************************************************************** */
+            this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"
+            
+            await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+            await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+            await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         }
-
-        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
-        await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
-        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
-
-        //** FIRMA GETIR ******************************/
-        this.firm.selectCmd = 
-        {
-            query : "SELECT TOP 1 * FROM COMPANY_VW_01",
-            local : 
-            {
-                type : "select",
-                query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
-                values : []
-            }
-        }
-        await this.firm.refresh();
         
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
             this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
-        }
-        //********************************************* */
-        this.cheqDt.selectCmd = 
-        {
-            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-            param : ['DOC:string|50'], 
-            value : [this.posObj.dt()[0].GUID],
-            local : 
-            {
-                type : "select",
-                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                values : [this.posObj.dt()[0].GUID]
-            }
-        }
-        this.cheqDt.deleteCmd = 
-        {
-            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-            param : ['PGUID:string|50','PDOC:string|50'], 
-            dataprm : ['GUID','DOC'],
-            local : 
-            {
-                type : "delete",
-                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-            }
-        }
-
-        await this.cheqDt.refresh();         
+        }      
 
         this.parkDt.selectCmd =
         {
@@ -554,7 +592,6 @@ export default class posDoc extends React.PureComponent
                 values : [0,this.core.auth.data.CODE,0]
             }
         }
-        
         await this.parkDt.refresh();     
         
         setTimeout(() => 
@@ -567,8 +604,6 @@ export default class posDoc extends React.PureComponent
         }, 1000);
         this.core.util.writeLog("calcGrandTotal : 01")
         await this.calcGrandTotal(false) 
-        
-        this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
 
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
         {
@@ -577,6 +612,7 @@ export default class posDoc extends React.PureComponent
         //PROMOSYON GETİR.
         await this.getPromoDb()
         //************************************************** */        
+        this.loadingPay.current.instance.hide()
         for (let i = 0; i < this.parkDt.length; i++) 
         {            
             if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == null || this.parkDt[i].DESCRIPTION == '')
@@ -937,16 +973,16 @@ export default class posDoc extends React.PureComponent
             tmpPriceDt.selectCmd = 
             {
                 query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
                     type : "select",
-                    query : "SELECT * FROM ITEMS_POS_VW_01 WHERE GUID = ? LIMIT 1;",
+                    query : "SELECT * FROM ITEMS_POS_VW_01 AS ITEM " + 
+                            "WHERE ITEM.GUID = ? LIMIT 1;",
                     values : [tmpItemsDt[0].GUID]
                 }
             }
-            
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo,tmpItemsDt[0].GUID]
             await tmpPriceDt.refresh();  
             
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
@@ -955,6 +991,18 @@ export default class posDoc extends React.PureComponent
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
+                    //PROMOSYON FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
+                    let tmpInfoPrice = tmpPrice
+                    let tmpPromoCond = this.promoObj.cond.dt().where({ITEM_GUID : tmpItemsDt[0].GUID})
+                    if(tmpPromoCond.length > 0)
+                    {
+                        let tmpPromoApp = this.promoObj.app.dt().where({PROMO : tmpPromoCond[0].PROMO}).where({TYPE:5})
+                        if(tmpPromoApp.length > 0)
+                        {
+                            tmpInfoPrice = tmpPromoApp[0].AMOUNT
+                        }
+                    }
+                    //************************************************************************************************ */
                     let tmpConfObj =
                     {
                         id:'msgAlert',
@@ -964,7 +1012,7 @@ export default class posDoc extends React.PureComponent
                         width:'500px',
                         height:'250px',
                         button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
-                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
+                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpInfoPrice).round(2) + " " + Number.money.sign}</h3></div>)
                     }
                     await dialog(tmpConfObj);
                     this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
@@ -1356,8 +1404,8 @@ export default class posDoc extends React.PureComponent
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
                             let tmpLcdStr = ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3).toFixed(3)).toString().space(7) + "kg" +
-                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR/kg").space(11,"s") +
-                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s")
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + Number.money.code + "/kg").space(11,"s") +
+                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -1365,8 +1413,8 @@ export default class posDoc extends React.PureComponent
                         else
                         {
                             let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
-                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR").space(9,"s") +
-                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR")).space(20,"s")
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + Number.money.code).space(9,"s") +
+                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -1374,8 +1422,8 @@ export default class posDoc extends React.PureComponent
 
                         this.scaleTimeout = setTimeout(() => 
                         {
-                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") + 
-                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s") + 
+                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -1695,7 +1743,6 @@ export default class posDoc extends React.PureComponent
                     {
                         return
                     }
-                    console.log(this.posUsbTSE.lastTransaction)
                 }
                 //***************************************/
                 
@@ -1741,13 +1788,12 @@ export default class posDoc extends React.PureComponent
                                 width:'500px',
                                 height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
+                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " " + Number.money.sign}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }
                     }
                 } 
-                
                 if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
@@ -1939,13 +1985,13 @@ export default class posDoc extends React.PureComponent
                 }
                 //***************************************************/
                 //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                if (!this.core.offline)
-                {
-                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                    {
-                        Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
-                    }
-                }
+                // if (!this.core.offline)
+                // {
+                //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                //     {
+                //         Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
+                //     }
+                // }
                 resolve(true)
             }
             else
@@ -2025,71 +2071,79 @@ export default class posDoc extends React.PureComponent
                 this.popCardPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
 
-                if(tmpPayCard == 1) //Başarılı
+                if(typeof tmpPayCard != 'undefined')
                 {
-                    this.msgCardPayment.hide()
-                }
-                else if(tmpPayCard == 2) //Zorla
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
-                    }
-                    let tmpResult = await dialog(tmpConfObj);
-                    if(tmpResult == "btn01")
+                    if(tmpPayCard == 1) //Başarılı
                     {
                         this.msgCardPayment.hide()
-                        //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
-                        if((Number(this.payRest.value) - pAmount) > 0)
+                    }
+                    else if(tmpPayCard == 2) //Zorla
+                    {
+                        let tmpConfObj =
                         {
-                            let tmpResult2 = await this.msgRePaymentType.show()
-                            if(tmpResult2 == "btn01")
+                            id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
+                        }
+                        let tmpResult = await dialog(tmpConfObj);
+                        if(tmpResult == "btn01")
+                        {
+                            this.msgCardPayment.hide()
+                            //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
+                            if((Number(this.payRest.value) - pAmount) > 0)
                             {
-                                this.msgCardPayment.hide()
-                                this.popCashPay.show();
-                                this.txtPopCashPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn02")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCardPay.show();
-                                this.txtPopCardPay.newStart = true;
-                            }
-                            else if(tmpResult2 == "btn03")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popTotal.show();
-                                this.rbtnPayType.value = 2
-                            }
-                            else if(tmpResult2 == "btn04")
-                            {
-                                this.msgCardPayment.hide()
-                                this.popCheqpay.show();
-                                this.txtPopCheqpay.focus()
+                                let tmpResult2 = await this.msgRePaymentType.show()
+                                if(tmpResult2 == "btn01")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCashPay.show();
+                                    this.txtPopCashPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn02")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCardPay.show();
+                                    this.txtPopCardPay.newStart = true;
+                                }
+                                else if(tmpResult2 == "btn03")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popTotal.show();
+                                    this.rbtnPayType.value = 2
+                                }
+                                else if(tmpResult2 == "btn04")
+                                {
+                                    this.msgCardPayment.hide()
+                                    this.popCheqpay.show();
+                                    this.txtPopCheqpay.focus()
+                                }
                             }
                         }
+                        else
+                        {
+                            this.payAdd(pType,pAmount)
+                            return
+                        }
                     }
-                    else
+                    else if(tmpPayCard == 3) //iptal
                     {
-                        this.payAdd(pType,pAmount)
+                        this.msgCardPayment.hide()
+                        return                    
+                    }
+                    else //Başarısız veya İptal
+                    {
+                        this.msgCardPayment.hide()
                         return
                     }
                 }
-                else if(tmpPayCard == 3) //iptal
-                {
-                    this.msgCardPayment.hide()
-                    return                    
-                }
-                else //Başarısız veya İptal
+                else
                 {
                     this.msgCardPayment.hide()
                     return
                 }
             }
 
-            this.loadingPay.current.instance.show()
+            this.loading.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
@@ -2105,7 +2159,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
-            this.loadingPay.current.instance.hide()
+            this.loading.current.instance.hide()
         }        
     }
     payRowAdd(pPayData)
@@ -2150,24 +2204,24 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    payCard(pAmount)
+    payCard(pAmount,pType)
     {
         return new Promise(async resolve => 
         {
             let tmpFn = () =>
             {
                 this.txtPaymentPopTotal.value = pAmount
-                console.log(pAmount)
+                
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
                     {
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
                         this.msgCardPayment.hide();
-                        resolve(await this.payCard(pAmount)) // Tekrar
+                        resolve(await this.payCard(pAmount,pType)) // Tekrar
                     }
                     else if(e == 'btn02')
                     {
@@ -2180,7 +2234,7 @@ export default class posDoc extends React.PureComponent
 
                             if(tmpResult)
                             {
-                                if(this.posDevice.payPort.isOpen)
+                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                                 {
                                     await this.posDevice.payPort.close()
                                 }
@@ -2195,7 +2249,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else if(e == 'btn03')
                     {       
-                        if(this.posDevice.payPort.isOpen)
+                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
                         {
                             await this.posDevice.payPort.close()
                         }
@@ -2204,12 +2258,12 @@ export default class posDoc extends React.PureComponent
                     }
                 })
             }
-
+            
             tmpFn()
             
-            let tmpCardPay = await this.posDevice.cardPayment(pAmount)
+            let tmpCardPay = await this.posDevice.cardPayment(pAmount,pType)
             
-            if(typeof tmpCardPay != 'undefined')
+            if(typeof tmpCardPay != 'undefined' && this.msgCardPayment.isShowed)
             {
                 if(tmpCardPay.tag == "response")
                 {
@@ -2230,10 +2284,24 @@ export default class posDoc extends React.PureComponent
                         resolve(1) // Başarılı
                     }
                 }
+                else if(tmpCardPay.tag == "net_error")
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgPayProcessFailed',showTitle:true,title:this.lang.t("msgPayProcessFailed.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPayProcessFailed.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayProcessFailed.msg")}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
                 else
                 {
                     resolve(0) // Başarısız
                 }
+            }
+            else
+            {
+                resolve()
             }
         });
     }
@@ -2316,8 +2384,8 @@ export default class posDoc extends React.PureComponent
                 this.core.util.writeLog("calcGrandTotal : 10")
                 await this.calcGrandTotal(true)
 
-                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") +
-                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + "EUR").space(20,"s")
+                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s") +
+                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + Number.money.code).space(20,"s")
 
                 this.posLcd.print({blink : 0,text : tmpLcdStr})
                 App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
@@ -2411,7 +2479,7 @@ export default class posDoc extends React.PureComponent
             tmpAmount = Number(parseFloat(tmpTicket / 100).round(2))
             tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)
 
-            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
+            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 416 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
             {
                 this.txtPopCheqpay.value = "";
                 document.getElementById("Sound").play(); 
@@ -2729,6 +2797,8 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
+        this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
         {
             let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
@@ -3273,75 +3343,41 @@ export default class posDoc extends React.PureComponent
     }
     async ZReport()
     {
-        let tmpArr = 
-        [
-            {align:"ct",logo:"./resources/logop.png"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : 03 83 52 62 34"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
-            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
-            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-            {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
-            {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
-            {font:"a",style:"b",align:"lt",data:" ".space(48)},
-            {font:"a",style:"bu",align:"rt",data:" ".space(5) + " " + "Taux".space(8) + " " + "HT".space(10) + " " + "TVA".space(10) + " " + "TTC".space(10)}
-        ]
-
-        let tmpSaleDt = new datatable()
-        tmpSaleDt.selectCmd = 
+        import("../meta/print/" + this.prmObj.filter({ID:'ZReportPrintDesign',TYPE:0}).getValue()).then(async(e)=>
         {
-            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpSaleDt.refresh()
-
-        if(tmpSaleDt.length > 0)
-        {
-            let tmpVatLst = tmpSaleDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
-            for (let i = 0; i < tmpVatLst.length; i++) 
+            let tmpSaleDt = new datatable()
+            tmpSaleDt.selectCmd = 
             {
-                tmpArr.push(
-                {
-                    font: "a",
-                    align: "rt",
-                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
-                        (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
-                })
+                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
-            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + tmpSaleDt.sum('FAMOUNT',2).space(10) + " " + tmpSaleDt.sum('VAT',2).space(10) + " " + tmpSaleDt.sum('TOTAL',2).space(10)})
-            tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
-        }
+            await tmpSaleDt.refresh()
+            
+            let tmpPayDt = new datatable()
+            tmpPayDt.selectCmd = 
+            {
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                param : ['DEVICE:string|10','DOC_DATE:date'],
+                value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+            }
+            await tmpPayDt.refresh()
 
-        let tmpPayDt = new datatable()
-        tmpPayDt.selectCmd = 
-        {
-            query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
-            param : ['DEVICE:string|10','DOC_DATE:date'],
-            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
-        }
-        await tmpPayDt.refresh()
+            let tmpData =
+            {
+                firm : this.firm,
+                possale : tmpSaleDt,
+                pospay : tmpPayDt,
+                special : 
+                {
+                    user : this.user.CODE,
+                    device : window.localStorage.getItem('device')
+                }
+            }
 
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-
-        for (let i = 0; i < tmpPayDt.length; i++) 
-        {
-            tmpArr.push({font: "b",align: "lt",size : [1,1],data: tmpPayDt[i].PAY_TYPE_NAME.space(16) + " " + Number(tmpPayDt[i].AMOUNT).toFixed(2).space(10)})
-            tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        }
-        tmpArr.push({font: "b",align: "lt",size : [1,1],data: ("Total : ").space(16) + " " + tmpPayDt.sum('AMOUNT',2).space(10)})
-        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
-        //console.log(tmpArr)
-        await this.posDevice.escPrinter(tmpArr)
+            let tmpPrint = e.print(tmpData)
+            await this.posDevice.escPrinter(tmpPrint)
+        })
     }
     checkSaleClose(pGuid)
     {
@@ -3749,7 +3785,7 @@ export default class posDoc extends React.PureComponent
                                 columnsAutoWidth={false} 
                                 allowColumnResizing={true} 
                                 allowColumnReordering={false}
-                                height={"200px"} 
+                                height={"278px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
@@ -3835,7 +3871,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Scrolling mode="standard" />
-                                    <Paging defaultPageSize={5} />
+                                    <Paging defaultPageSize={8} />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                     <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                     {
@@ -3901,7 +3937,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Total */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3921,7 +3957,7 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink:0,text:tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -3934,7 +3970,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Credit Card */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {                  
                                             if(this.posObj.posSale.dt().length == 0)
@@ -3954,7 +3990,7 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink : 0,text : tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -3967,27 +4003,27 @@ export default class posDoc extends React.PureComponent
                                     {/* 7 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey7"} parent={this} keyBtn={{textbox:"txtBarcode",key:"7"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-7" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 8 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey8"} parent={this} keyBtn={{textbox:"txtBarcode",key:"8"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-8" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 9 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey9"} parent={this} keyBtn={{textbox:"txtBarcode",key:"9"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-9" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Check */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             this.getItem(this.txtBarcode.dev.option("value"))
@@ -4000,7 +4036,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnSafeOpen',USERS:this.user.CODE})}
                                         onClick={async ()=>
                                         {
@@ -4012,7 +4048,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cash */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {           
                                             if(this.posObj.posSale.dt().length == 0)
@@ -4032,7 +4068,7 @@ export default class posDoc extends React.PureComponent
                                                         
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink : 0,text : tmpLcdStr})
                                             App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
@@ -4045,28 +4081,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 4 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey4"} parent={this} keyBtn={{textbox:"txtBarcode",key:"4"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-4" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 5 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey5"} parent={this} keyBtn={{textbox:"txtBarcode",key:"5"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-5" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 6 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey6"} parent={this} keyBtn={{textbox:"txtBarcode",key:"6"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-6" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Backspace */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyBs"} parent={this} keyBtn={{textbox:"txtBarcode",key:"Backspace"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-delete-left" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4075,7 +4111,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Discount */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={async()=>
                                         {   
@@ -4087,7 +4123,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cheqpay */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
@@ -4132,28 +4168,28 @@ export default class posDoc extends React.PureComponent
                                     {/* 1 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey1"} parent={this} keyBtn={{textbox:"txtBarcode",key:"1"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-1" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 2 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey2"} parent={this} keyBtn={{textbox:"txtBarcode",key:"2"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-2" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* 3 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey3"} parent={this} keyBtn={{textbox:"txtBarcode",key:"3"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-3" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* X */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyX"} parent={this} keyBtn={{textbox:"txtBarcode",key:"*"}} 
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4162,7 +4198,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Customer Point */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.customerName.value == '')
@@ -4194,16 +4230,16 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"50px",width:"100%"}}
                                         onClick={()=>
                                         {
                                             if(this.btnInfo.lock)
                                             {
-                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"50px",width:"100%"})
                                             }
                                             else
                                             {
-                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
+                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"50px",width:"100%"})
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: "24px"}} />
@@ -4212,18 +4248,18 @@ export default class posDoc extends React.PureComponent
                                     {/* . */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKeyDot"} parent={this} keyBtn={{textbox:"txtBarcode",key:"."}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"26pt"}}>.</NbButton>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"26pt"}}><div style={{height:"50px",lineHeight:'18px'}}>.</div></NbButton>
                                     </div>
                                     {/* 0 */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnKey0"} parent={this} keyBtn={{textbox:"txtBarcode",key:"0"}}
-                                        className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%"}}>
                                             <i className="text-white fa-solid fa-0" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* -1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4238,11 +4274,11 @@ export default class posDoc extends React.PureComponent
                                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                                 }
                                             }
-                                        }}>-1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>-1</div></NbButton>
                                     </div>
                                     {/* +1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"50px",width:"100%",fontSize:"20pt"}}
                                         onClick={async ()=>
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData().length > 0)
@@ -4254,7 +4290,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                             }
-                                        }}>+1</NbButton>
+                                        }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                     </div>
                                 </div> 
                             </div>
@@ -4361,7 +4397,6 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
-                                                        console.log(this.posObj.posPay.dt())
                                                         if(this.posObj.posPay.dt().length > 0)
                                                         {
                                                             let tmpConfObj =
@@ -4404,9 +4439,20 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     <div className="col-10">
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
-                                        onSelection={(pItem)=>
+                                        onSelection={(pItem,pQuantity)=>
                                         {
-                                            this.getItem(this.txtBarcode.value + pItem)
+                                            if(this.txtBarcode.value != '')
+                                            {
+                                                this.getItem(this.txtBarcode.value + pItem)
+                                            }
+                                            else
+                                            {
+                                                if(typeof pQuantity == 'undefined')
+                                                {
+                                                    pQuantity = 1
+                                                }
+                                                this.getItem(pQuantity + '*' + pItem)
+                                            }
                                         }}/>
                                     </div>
                                 </div>  
@@ -4806,13 +4852,13 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }
                                            
-                                            if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
                                             { 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
                                                     param:  ['GUID:string|50'],
-                                                    value:  [pPosDt[0].CUSTOMER_GUID]
+                                                    value:  [this.posObj.dt()[0].CUSTOMER_GUID]
                                                 }
                                                 let tmpMailData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpMailData.result.recordset.length > 0)
@@ -5929,7 +5975,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                         <div className="row pb-1">
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountRate"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -5997,7 +6043,7 @@ export default class posDoc extends React.PureComponent
                                     <div>{this.lang.t("applyDiscountPercent")}</div>
                                 </NbButton>
                             </div>
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
@@ -6064,6 +6110,76 @@ export default class posDoc extends React.PureComponent
                                     }                               
                                 }}>
                                     <div>{this.lang.t("applyDiscountAmount") + Number.money.sign} </div>
+                                </NbButton>
+                            </div>
+                            <div className="col-4">
+                                <NbButton id={"btnPopDiscountText"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    if(this.grdDiscList.getSelectedData().length == 1)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
+
+                                        let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
+                                        
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                           
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 17")
+                                        await this.calcGrandTotal();
+                                    }  
+                                    else if(this.grdDiscList.getSelectedData().length == 0)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    } 
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgMultipleLineSelect',showTitle:true,title:this.lang.t("msgMultipleLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgMultipleLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMultipleLineSelect.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }                            
+                                }}>
+                                    <div>{this.lang.t("applyDiscountText") + Number.money.sign} </div>
                                 </NbButton>
                             </div>
                         </div>
@@ -7214,28 +7330,29 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        if(typeof e != 'undefined')
-                        {
-                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                            {   
-                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                if(!tmpResult)
-                                {
-                                    return
-                                }
+                        if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                            if(!tmpResult)
+                            {
+                                return
                             }
-                            
-                            let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
-                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                        }
+                        
+                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                        if(typeof tmpResult != 'undefined' && tmpResult != '')
+                        {
+                            if(typeof e != 'undefined')
                             {
                                 this.sendJet({CODE:"323",NAME:"Prix de l'article modifie .",DESCRIPTION:e}) 
-                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
-                                if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
-                                {
-                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
-                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
-                                }
-                            }                            
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)
+                            }
+                            
+                            if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
+                            {
+                                let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
+                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
+                            }
                         }
                     }}></NbPopDescboard>
                 </div>
@@ -7321,6 +7438,37 @@ export default class posDoc extends React.PureComponent
 
                                 await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                             }
+                            else if(tmpResult == 'btn03') //CB
+                            {
+                                let tmpPayCard = await this.payCard(Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2)),0)
+
+                                if(tmpPayCard == 1) //Başarılı
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 2) //Zorla
+                                {
+                                    this.msgCardPayment.hide()
+                                }
+                                else if(tmpPayCard == 3) //iptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return                    
+                                }
+                                else //Başarısız veya İptal
+                                {
+                                    this.msgCardPayment.hide()
+                                    return
+                                }
+
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 1
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CB'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
 
                             if(this.txtItemReturnTicket.value != "")
                             {
@@ -7386,7 +7534,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -7431,7 +7579,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row">
                             <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
-                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00€"} format={"currency"}/>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00" + Number.money.sign} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>
@@ -7726,7 +7874,7 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     title={this.lang.t("popSettings.title")}
                     container={"#root"} 
-                    width={"600"}
+                    width={"900"}
                     height={"580"}
                     position={{of:"#root"}}
                     >
@@ -8817,8 +8965,8 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
-                  {/* Last Sale List Popup */} 
-                  <div>
+                {/* Last Sale List Popup */} 
+                <div>
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
                     showTitle={true}
@@ -8996,7 +9144,7 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
                                     <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
                                     <Column dataField="LOYALTY" caption={this.lang.t("grdLastPos.LOYALTY")} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                                             
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                        
                                 </NdGrid>
                             </div>
                         </div>

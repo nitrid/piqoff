@@ -86,6 +86,7 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
+            localStorage.setItem('lang',localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
             // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
             let tmpDt = new datatable()
             tmpDt.import([this.core.auth.data])
@@ -159,7 +160,7 @@ export default class Login extends React.PureComponent
                     items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
-                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
                     onValueChanged: (args) => 
                     {
                         localStorage.setItem('lang',args.value)
@@ -420,11 +421,14 @@ export default class Login extends React.PureComponent
                             </div>
                         </div>         */}
                         <div className="row">
-                            <div className="col-5">
+                            <div className="col-3">
                                 
                             </div>
-                            <div className="col-4">
+                            <div className="col-3">
                                 <img src="./css/img/LogoNF525.jpg" height="70px"/>
+                            </div>
+                            <div className="col-4">
+                                <img src="./css/img/nf203.jpg" height="70px"/>
                             </div>
                         </div>     
                         <div className="row">

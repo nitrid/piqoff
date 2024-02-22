@@ -8,7 +8,9 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Carousel from 'react-bootstrap/Carousel';
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
-
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
+import NdButton from '../../core/react/devex/button.js';
+import NdNumberBox from '../../core/react/devex/numberbox.js'
 export default class NbItemPopUp extends NbBase
 {
     constructor(props)
@@ -66,6 +68,22 @@ export default class NbItemPopUp extends NbBase
             this.setState({images:[]})
             this.popCard.show();
         }                
+
+        let tmpItemsSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query :  "SELECT TOP 5 DOC_DATE,REF + '-' + CONVERT(NVARCHAR,REF_NO) AS REF,PRICE,QUANTITY,TOTALHT FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND TYPE = 1 AND REBATE = 0 ORDER BY DOC_DATE DESC ",
+                    param : ['INPUT:string|50','ITEM:string|50'],
+                    value : [this.data.GUID]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdLastSales.dataRefresh(tmpItemsSource)
     }
     _onValueChange(e)
     {
@@ -123,7 +141,7 @@ export default class NbItemPopUp extends NbBase
                     <div className='row pt-2'>
                         <div className='col-12'>
                             <div className='row'>
-                                <div className='col-12' style={{height:'390px'}}>
+                                <div className='col-12' style={{height:'350px'}}>
                                     <Carousel onSelect={(e)=>
                                     {
                                         for (let i = 0; i < 4; i++) 
@@ -180,11 +198,6 @@ export default class NbItemPopUp extends NbBase
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <div className="overflow-hidden" style={{height:'75px'}}></div>
-                            </div>
-                        </div>
-                        <div className='row pt-2'>
-                            <div className='col-12'>
                                 <Form colCount={2}>
                                     <Item>
                                         <Label text={this.t("itemPopup.txtPrice")} alignment="right" />
@@ -192,34 +205,58 @@ export default class NbItemPopUp extends NbBase
                                     </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.cmbUnit")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
-                                        displayExpr="NAME"                       
-                                        valueExpr="GUID"
-                                        searchEnabled={true}
-                                        onValueChanged={(async(e)=>
+                                        <div className="row">
+                                            <div className="col-8">
+                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
+                                            displayExpr="NAME"                       
+                                            valueExpr="GUID"
+                                            searchEnabled={true}
+                                            onValueChanged={(async(e)=>
+                                            {
+                                                if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                                {                                                
+                                                    this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                    this.data.UNIT = e.value
+                                                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                                                    this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                    this._onValueChange(this.data)
+                                                }
+                                            }).bind(this)}
+                                            />
+                                            </div>
+                                            <div className="col-4">
+                                                <NdTextBox id={"txtFactor"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.UNIT_FACTOR} readOnly={true}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("itemPopup.txtDiscount")} alignment="right" />
+                                        <NdTextBox id={"txtDiscount"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.DISCOUNT}
+                                        onChange={(async(e)=>
                                         {
-                                            if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
-                                            {                                                
-                                                this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                this.data.UNIT = e.value
-                                                this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                                this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                this._onValueChange(this.data)
-                                            }
+                                            console.log(1)
+                                            this.data.DISCOUNT = this.txtDiscount.value
+                                            this._onValueChange(this.data)
                                         }).bind(this)}
-                                        />
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                location:'after',
+                                                onClick:async()=>
+                                                {
+                                                    this.popDiscount.show()
+                                                    
+                                                    await this.core.util.waitUntil(200)
+                                                    this.txtDiscountPrice1.value = Number(this.data.DISCOUNT).round(2)
+                                                    this.txtDiscountPercent1.value = Number(this.data.QUANTITY * this.data.PRICE).rate2Num(this.data.DISCOUNT,3)
+                                                }
+                                            } 
+                                        ]}/>
                                     </Item>
-                                </Form>
-                            </div>
-                        </div>
-                        <div className='row pt-2'>
-                            <div className='col-12'>
-                            <Form colCount={2}>
                                     <Item>
-                                        <Label text={this.t("itemPopup.txtFactor")} alignment="right" />
-                                        <NdTextBox id={"txtFactor"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.UNIT_FACTOR}/>
-                                    </Item>
-                                    <Item>
+                                        <Label text={this.t("itemPopup.txtQuantity")} alignment="right" />
                                         <NdTextBox id={"txtQuantity"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
                                         value={this.data.QUANTITY}
                                         onChange={(async(e)=>
@@ -259,7 +296,106 @@ export default class NbItemPopUp extends NbBase
                                         </NdTextBox>
                                     </Item>
                                 </Form>
-                               
+                                {/* İNDİRİM POPUP */}
+                                <div>
+                                    <NbPopUp parent={this} id={"popDiscount"} 
+                                    centered={true}
+                                    title={this.t("popDiscount.title")}
+                                    >
+                                        <Form colCount={1} height={'fit-content'}>
+                                            <Item>
+                                                <Label text={this.t("popDiscount.Percent1")} alignment="right" />
+                                                <NdNumberBox id="txtDiscountPercent1" parent={this} simple={true}
+                                                maxLength={32}
+                                                onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPercent1.value > 100)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent1.value = 0;
+                                                        this.txtDiscountPrice1.value = 0;
+                                                        return
+                                                    }
+
+                                                    this.txtDiscountPrice1.value =  Number(this.data.QUANTITY * this.data.PRICE).rateInc(this.txtDiscountPercent1.value,2)
+                                                }).bind(this)}
+                                                ></NdNumberBox>
+                                            </Item>
+                                            <Item>
+                                                <Label text={this.t("popDiscount.Price1")} alignment="right" />
+                                                <NdNumberBox id="txtDiscountPrice1" parent={this} simple={true}
+                                                maxLength={32}
+                                                onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPrice1.value > this.data.AMOUNT)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent1.value = 0;
+                                                        this.txtDiscountPrice1.value = 0;
+                                                        return
+                                                    }
+                                                    
+                                                    this.txtDiscountPercent1.value = Number(this.data.QUANTITY * this.data.PRICE).rate2Num(this.txtDiscountPrice1.value,3)
+                                                }).bind(this)}
+                                                ></NdNumberBox>
+                                            </Item>
+                                            <Item>
+                                                <div className='row'>
+                                                    <div className='col-6'>
+                                                        <NdButton text={this.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                                        onClick={async ()=>
+                                                        {
+                                                            this.txtDiscount.value = this.txtDiscountPrice1.value
+                                                            this.data.DISCOUNT = this.txtDiscountPrice1.value
+                                                            this._onValueChange(this.data)
+                                                            this.popDiscount.hide();
+                                                        }}/>
+                                                    </div>
+                                                    <div className='col-6'>
+                                                        <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                        onClick={()=>
+                                                        {
+                                                            this.popDiscount.hide();  
+                                                        }}/>
+                                                    </div>
+                                                </div>
+                                            </Item>
+                                        </Form>
+                                    </NbPopUp>
+                                </div> 
+                            </div>
+                        </div>
+                        <div className='row pt-2'>
+                            <div className='col-12'>
+                                <NdGrid id="grdLastSales" parent={this} 
+                                    selection={{mode:"single"}} 
+                                    showBorders={true}
+                                    headerFilter={{visible:false}}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    >                            
+                                        <Paging defaultPageSize={5} />
+                                        <Column dataField="DOC_DATE" caption={this.t("grdLastSales.clmDocDate")} visible={true} width={150} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                        <Column dataField="REF" caption={this.t("grdLastSales.clmRef")} visible={true} width={250}/> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdLastSales.clmQuantity")} visible={true} width={100}/> 
+                                        <Column dataField="PRICE" caption={this.t("grdLastSales.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                        <Column dataField="TOTALHT" caption={this.t("grdLastSales.clmTotal")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                </NdGrid>
                             </div>                                            
                         </div>
                     </div>

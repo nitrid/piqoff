@@ -683,6 +683,7 @@ export class util
     {
         this.core = core.instance;
         this.logPath = ""
+        this.logStatus = false
     }
     folder_list(pPath)
     {
@@ -741,6 +742,12 @@ export class util
     {
         return new Promise(resolve => 
         {
+            if(!this.logStatus)
+            {
+                resolve(false)
+                return
+            }
+            
             let tmpPath = this.logPath
             if(typeof pPath != 'undefined')
             {
@@ -1610,11 +1617,31 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof b[pKey] == 'number')
+                    {
+                        return b[pKey] - a[pKey]
+                    }
+                    else if(typeof b[pKey] == 'string')
+                    {
+                        return b[pKey].localeCompare(a[pKey])
+                    }
+                })
             }
             else
             {
-                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof a[pKey] == 'number')
+                    {
+                        return a[pKey] - b[pKey]
+                    }
+                    else if(typeof a[pKey] == 'string')
+                    {
+                        return a[pKey].localeCompare(b[pKey])
+                    }
+                })
             }
         }
         return this
@@ -1944,6 +1971,7 @@ export class access extends datatable
                     {
                         tmpMeta = tmpMeta.filter(x => x[tmpKey] === tmpValue)
                     }
+
                 }
             }
             //DATA FİLİTRELENİYOR.
@@ -1954,6 +1982,7 @@ export class access extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+
                 }                
             }
             //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
@@ -2001,6 +2030,7 @@ export class access extends datatable
     }
     setValue()
     {
+
         // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
         if(this.length > 0)
         {
@@ -2027,6 +2057,7 @@ export class access extends datatable
             {
                 let tmpData = {...this.meta[0]}
                 tmpData.VALUE = JSON.stringify(arguments[0])
+                
                 this.push(tmpData)
             }
         }

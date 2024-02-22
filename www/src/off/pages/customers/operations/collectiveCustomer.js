@@ -184,56 +184,94 @@ export default class collectiveCustomer extends React.PureComponent
                                  {/* txtPhone1 */}
                                  <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
-                                        <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtPhone1" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
-                                       />
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtPhone2 */}
                                  <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
-                                        <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtPhone2" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
-                                        />
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtGsmPhone */}
                                  <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
-                                        <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtGsmPhone" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
-                                        />
+                                        access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtOtherPhone */}
                                  <Item>
                                     <Label text={this.t("txtOtherPhone")} alignment="right" />
-                                        <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtOtherPhone"  
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
-                                        />
+                                        access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtEmail */}
                                  <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtEmail" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
-                                        />
+                                        access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
+                                    >
+                                        <Validator>
+                                            <EmailRule message={this.lang.t("mailIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtWeb */}
                                  <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
-                                        <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
+                                    <NdTextBox id="txtWeb" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
-                                        />
+                                        access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />

@@ -21,6 +21,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDocAi from '../../../tools/NdDocAi';
 
 export default class purchaseInvoice extends DocBase
 {
@@ -33,6 +34,8 @@ export default class purchaseInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -51,6 +54,16 @@ export default class purchaseInvoice extends DocBase
         {
             this.getDoc(this.pagePrm.GUID,'',0)
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -78,7 +91,6 @@ export default class purchaseInvoice extends DocBase
 
         this.pg_txtItemsCode.on('showing',()=>
         {
-            console.log(this.pg_txtItemsCode.on)
             this.pg_txtItemsCode.setSource(
             {
                 source:
@@ -1233,6 +1245,97 @@ export default class purchaseInvoice extends DocBase
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDocAi.show(this.docObj.dt()[0].OUTPUT)
+                                        this.popDocAi.onImport = async(e) =>
+                                        {
+                                            if(typeof e != 'undefined')
+                                            {
+                                                if(e.CustomerCode != '')
+                                                {
+                                                    this.docObj.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.docCustomer.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.dt()[0].OUTPUT_CODE = e.CustomerCode
+                                                    this.docObj.dt()[0].OUTPUT_NAME = e.CustomerName
+                                                    this.docObj.dt()[0].VAT_ZERO = e.CustomerVatZero
+
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.value = e.CustomerCode
+                                                    }
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [e.CustomerGuid]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            }
+                                                        }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                    }
+                                                }
+                                                this.dtDocDate.value = moment(e.InvoiceDate)
+                                                this.dtShipDate.value = moment(e.DueDate)
+
+                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                let tmpMissCodes = []
+                                                for (let i = 0; i < e.Item.length; i++) 
+                                                {
+                                                    if(e.Item[i].ItemCode != '')
+                                                    {
+                                                        let tmpItem =
+                                                        {
+                                                            GUID : e.Item[i].ItemGuid,
+                                                            CODE : e.Item[i].ItemCode,
+                                                            NAME : e.Item[i].ItemName,
+                                                            ITEM_TYPE : e.Item[i].ItemType,
+                                                            UNIT : e.Item[i].ItemUnit,
+                                                            COST_PRICE : e.Item[i].ItemCost,
+                                                            VAT : e.Item[i].ItemVat
+                                                        }
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
+                                                    }
+                                                }
+                                                this.grdPurcInv.devGrid.endUpdate()
+                                                if(tmpMissCodes.length > 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                                                    }
+                                                
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                            console.log(e)
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>
                                     {
@@ -2249,7 +2352,7 @@ export default class purchaseInvoice extends DocBase
                                             await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2583,7 +2686,7 @@ export default class purchaseInvoice extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
@@ -2888,6 +2991,10 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Document AI PopUp */}
+                    <div>
+                        <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>     

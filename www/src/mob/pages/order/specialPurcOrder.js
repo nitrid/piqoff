@@ -106,7 +106,6 @@ export default class specialPurcOrder extends React.PureComponent
         this.txtRef.props.onChange(tmpDoc.REF)
 
         await this.grdList.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-        await this.cmbUnit.dataRefresh({source : this.unitDt})
     }
     async componentDidMount()
     {
@@ -127,7 +126,6 @@ export default class specialPurcOrder extends React.PureComponent
         this.setState({price:0})
         this.setState({factor:1})
         this.setState({image:"../../css/img/noimage.jpg"})
-        this.cmbUnit.setData([])
         this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -155,11 +153,10 @@ export default class specialPurcOrder extends React.PureComponent
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
 
                 if(this.unitDt.length > 0)
                 {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
+                    this.orderDt[0].UNIT = this.unitDt.where({TYPE:0})[0].GUID
                     this.setState({factor:this.unitDt.where({TYPE:0})[0].FACTOR})
                 }
 

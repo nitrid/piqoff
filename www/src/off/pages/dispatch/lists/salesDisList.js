@@ -24,7 +24,7 @@ export default class salesDisList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -35,7 +35,7 @@ export default class salesDisList extends React.PureComponent
             {CODE : "INPUT_CODE",NAME : this.t("grdSlsDisList.clmInputCode")},                                   
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsDisList.clmInputName")},
             {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsDisList.clmOutputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdSlsDisList.clmDate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdSlsDisList.clmDate")},
             {CODE : "AMOUNT",NAME : this.t("grdSlsDisList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdSlsDisList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdSlsDisList.clmTotal")},
@@ -76,9 +76,9 @@ export default class salesDisList extends React.PureComponent
                 {
                     this.groupList.push('INPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE_CONVERT')
+                    this.groupList.push('DOC_DATE')
                 }
                 if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
                 {
@@ -153,7 +153,7 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL FROM DOC_ITEMS_VW_01 " +
+                        query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL FROM DOC_ITEMS_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                                 " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND ITEM_TYPE IN (0,2) GROUP BY REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE,INPUT_NAME ORDER BY DOC_DATE DESC,REF_NO DESC",
@@ -380,7 +380,7 @@ export default class salesDisList extends React.PureComponent
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsDisList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsDisList.clmInputName")} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsDisList.clmOutputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsDisList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              

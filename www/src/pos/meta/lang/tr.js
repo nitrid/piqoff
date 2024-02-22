@@ -106,6 +106,12 @@ export const langTr =
         msg : "Ödeme Gerçekleşmedi",
         btn01 : "Tamam"
     },
+    msgPayProcessFailed :
+    {
+        title : "Bilgi",
+        msg : "Kart cihazı üzerinde girilmiş tutar var. Yeni bir tutar gönderimi yapmadan önce lütfen kart cihazı üzerindeki işlemi iptal edin!",
+        btn01 : "Tamam"
+    },
     msgBonDavoir : 
     {
         title : "Uyarı",
@@ -398,7 +404,8 @@ export const langTr =
         title : "Uyarı",
         msg :"İade Tipini Seçiniz !",
         btn01 : "Espece",
-        btn02 :"Bon D'avoir",
+        btn02 : "Bon D'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -905,5 +912,17 @@ export const langTr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Telefon",
     txtNewCustomerLastName : "Soyisim",
-    txtNewCustomerName : "İsim"
+    txtNewCustomerName : "İsim",
+    msgMultipleLineSelect:
+    {
+        title: "Dikkat",
+        btn: "Tamam",
+        msg: "İndirim uygulamak için tek bir satır seçmelisiniz",
+    },
+    applyDiscountText: "İndirim Uygula",
+    msgAdminMessage:
+    {
+        title: "Yönetici Mesajı",
+        btn01: "Tamam",
+    },
 }

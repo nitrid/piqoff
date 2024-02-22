@@ -20,7 +20,7 @@ export default class NdAccessEdit extends Base
                 let tmpObjArr = Object.keys(this.props.parent)
                 for (let i = 0; i < tmpObjArr.length; i++) 
                 {
-                    if(typeof this.props.parent[tmpObjArr[i]].editMode != 'undefined' )
+                    if(this.props.parent[tmpObjArr[i]] != null && typeof this.props.parent[tmpObjArr[i]].editMode != 'undefined' )
                     {
                         pCallback(this.props.parent[tmpObjArr[i]])
                     }

@@ -550,16 +550,41 @@ export default class customerAddressCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
-                                    displayExpr="ZIPCODE"                       
+                                    displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
+                                    {
                                            
                                     }).bind(this)}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            ZIPNAME: text.trim(),
+                                            ZIPCODE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     />
                                 </Item>
                                 <Item>
@@ -568,9 +593,34 @@ export default class customerAddressCard extends React.PureComponent
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            PLACE: text.trim(),
+                                            PLACE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     />
                                 </Item>
                                 <Item>
