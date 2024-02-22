@@ -1737,7 +1737,7 @@ export default class DocBase extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_service.title")} //
-                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
+                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE,'00000000-0000-0000-0000-000000000000' AS UNIT FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
                     deferRendering={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>

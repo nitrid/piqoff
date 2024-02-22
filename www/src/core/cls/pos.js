@@ -262,9 +262,30 @@ export class posCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
+            //DEPO MIKTARLARININ GÜNCELLENMESİ İÇİN YAPILDI.
+            this.depotQtyUpdate()
             resolve(await this.ds.update()); 
             this.posSale.subTotalBuild();
         });
+    }
+    async depotQtyUpdate()
+    {
+        if(this.ds.get('POS').length > 0 && this.ds.get('POS')[0].STATUS == 1)
+        {
+            let tmpPos = {...this.ds.get('POS')}
+            let tmpPosSale = {...this.ds.get('POS_SALE')}
+            
+            for (let i = 0; i < tmpPosSale.length; i++) 
+            {
+                let tmpQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_ITEM_QUANTITY_INPUT] @ITEM = @PITEM,@DEPOT = @PDEPOT,@QUANTITY = @PQUANTITY,@TYPE = @PTYPE",
+                    param : ['PITEM:string|50','PDEPOT:string|50','PQUANTITY:float','PTYPE:int'],
+                    value : [tmpPosSale[i].ITEM_GUID,tmpPos[0].DEPOT_GUID,tmpPosSale[i].QUANTITY,tmpPos[0].TYPE == 0 ? 1 : 0]
+                }
+                await this.core.sql.execute(tmpQuery)
+            }
+        }
     }
 }
 export class posSaleCls
