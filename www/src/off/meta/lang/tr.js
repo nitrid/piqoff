@@ -4324,7 +4324,11 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+        },
     },
     ftr_01_003 : // "İade Fatura Listesi"
     {
@@ -15864,6 +15868,12 @@ export const langTr =
             clmTotal : "Tutar",
             clmInputName :"Kasa/Banka",
         },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+        },
+        validDesign : "Lütfen Dizayn seçiniz.",
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {

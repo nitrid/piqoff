@@ -4313,7 +4313,11 @@ export const langDe =
             clmTotal : "Gesamt",
             clmOutputName :"Lager",
         },
-    
+        popDesign:
+        {
+            title: "Designauswahl",
+            design: "Design",
+        },
     },
     ftr_01_003 : // "Retourerechnungsliste"
     {

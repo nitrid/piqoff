@@ -50,6 +50,7 @@ export default class salesInvoice extends DocBase
         this.loading = React.createRef();
         this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
+    
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
@@ -64,11 +65,13 @@ export default class salesInvoice extends DocBase
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
+
     saveState(e){
         let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
-    }      
+    }
+      
     async init()
     {
         await super.init()
