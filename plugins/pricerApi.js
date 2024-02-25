@@ -30,7 +30,7 @@ class devprint
 
         pSocket.on('sql',async (pParam,pCallback) =>
         {
-            if(this.active ==  true)
+            if(this.active == true)
             {
                 if(typeof pParam.length != 'undefined')
                 {
