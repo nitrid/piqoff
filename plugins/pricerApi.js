@@ -37,52 +37,76 @@ class devprint
                     for (let i = 0; i < pParam.length; i++) 
                     {
                         if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
-                        {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                        { 
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEMS_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEMS_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_UNIT_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_UNIT_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('PRD_INVOICE_PRICE_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
                         }
                     }
                 }
