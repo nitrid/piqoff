@@ -2284,16 +2284,16 @@ export default class posDoc extends React.PureComponent
                         resolve(1) // Başarılı
                     }
                 }
-                else if(tmpCardPay.tag == "net_error")
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgPayProcessFailed',showTitle:true,title:this.lang.t("msgPayProcessFailed.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgPayProcessFailed.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayProcessFailed.msg")}</div>)
-                    }
-                    await dialog(tmpConfObj);
-                }
+                // else if(tmpCardPay.tag == "net_error")
+                // {
+                //     let tmpConfObj =
+                //     {
+                //         id:'msgPayProcessFailed',showTitle:true,title:this.lang.t("msgPayProcessFailed.title"),showCloseButton:true,width:'500px',height:'250px',
+                //         button:[{id:"btn01",caption:this.lang.t("msgPayProcessFailed.btn01"),location:'after'}],
+                //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayProcessFailed.msg")}</div>)
+                //     }
+                //     await dialog(tmpConfObj);
+                // }
                 else
                 {
                     resolve(0) // Başarısız
@@ -5497,7 +5497,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT CODE,NAME,dbo.FN_PRICE(GUID,1,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000'," + this.pricingListNo + ",0,1) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
+                            query : "SELECT CODE,NAME,dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.pricingListNo + ",0,1) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
                             param : ['VAL:string|50','CUSTOMER:string|50'],
                             local : 
                             {
