@@ -406,14 +406,14 @@ export default class collectionList extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE, " +
+                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE,AMOUNT, " +
                                                                     "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " + 
                                                                     "ISNULL((SELECT TOP 1 DOC_REF + ' - '+ CONVERT(NVARCHAR,DOC_REF_NO) FROM DEPT_CREDIT_MATCHING_VW_03 WHERE CUS.GUID = PAYING_DOC),'') AS PAYING_DOC " + 
                                                                 "FROM DOC_CUSTOMER_VW_01 AS CUS " +
                                                                 "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                                                                     "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                                                                     " AND TYPE = 0 AND DOC_TYPE = 200 ORDER BY DOC_DATE DESC",
-                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
+                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
