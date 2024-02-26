@@ -133,7 +133,10 @@ export default class openInvoiceSalesReport extends React.PureComponent
     }
     async _btnGetirClick()
     {
-       
+        if(this.txtCustomerCode.value == '')
+        {
+            this.txtCustomerCode.CODE = ''
+        }
         let tmpSource =
         {
             source : 
