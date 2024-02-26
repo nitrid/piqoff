@@ -925,4 +925,20 @@ export const langTr =
         title: "Yönetici Mesajı",
         btn01: "Tamam",
     },
+    popUserList :
+    {
+        title : "Kullanıcı Listesi",
+        clmCode : "Kodu",
+        clmName : "Adı"
+    },
+    acsEdit : 
+    {
+        msgCloseAlert : 
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
+        },
+    },
 }

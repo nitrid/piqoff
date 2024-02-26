@@ -888,4 +888,20 @@ export const langIt =
         title: "Messaggio dell'amministratore",
         btn01: "OK",
     },
+    popUserList: 
+    {
+        title: "Elenco Utenti",
+        clmCode: "Codice",
+        clmName: "Nome"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Attenzione",
+            btn01: "Sì",
+            btn02: "No",
+            msg: "Vuoi salvare le modifiche apportate?"
+        }
+    }
 }

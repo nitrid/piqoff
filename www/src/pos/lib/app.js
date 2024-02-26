@@ -9,7 +9,7 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import React from 'react';
-import {core, datatable} from '../../core/core.js'
+import {core, datatable,param,access} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
@@ -26,6 +26,9 @@ import CustomerInfoScreen from '../pages/customerInfoScreen.js'
 import ItemInfoScreen from '../pages/itemInfoScreen.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
+
+import {prm} from '../meta/prm.js'
+import {acs} from '../meta/acs.js'
 
 import * as appInfo from '../../../package.json'
 import '../plugins/balanceCounter.js'
@@ -121,7 +124,9 @@ export default class App extends React.PureComponent
         this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
         this.transfer = new transferCls()
         this.core.appInfo = appInfo
-
+        this.prmObj = new param(prm)
+        this.acsObj = new access(acs);
+        
         this.textValueChanged = this.textValueChanged.bind(this)
         
         if(!App.instance)
@@ -183,6 +188,9 @@ export default class App extends React.PureComponent
         //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
         if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
         {
+            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            
             App.instance.setState({logined:true,splash:false});
         }
         else
@@ -286,7 +294,7 @@ export default class App extends React.PureComponent
         {
             return <Login />
         }
-        
+
         return (
             <div>
                 <LoadPanel

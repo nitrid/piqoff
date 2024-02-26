@@ -887,4 +887,20 @@ export const langEs =
         title: "Mensaje del administrador",
         btn01: "OK",
     },
+    popUserList: 
+    {
+        title: "Lista de Usuarios",
+        clmCode: "Código",
+        clmName: "Nombre"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Atención",
+            btn01: "Sí",
+            btn02: "No",
+            msg: "¿Desea guardar los cambios que realizó?"
+        }
+    }
 }

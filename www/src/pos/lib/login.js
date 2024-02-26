@@ -85,6 +85,9 @@ export default class Login extends React.Component
             }
             else
             {
+                await App.instance.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+                await App.instance.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+                
                 App.instance.setState({logined:true});
             }
         }
@@ -144,6 +147,9 @@ export default class Login extends React.Component
                     }
                     else
                     {
+                        await App.instance.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+                        await App.instance.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+                        
                         App.instance.setState({logined:true});
                         idCheck = true
                     }

@@ -12,7 +12,7 @@ import { datatable } from "../../core/core.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 import App from "../lib/app.js";
 import NdNumberBox from "../../core/react/devex/numberbox.js";
-
+import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
 export default class NbPluButtonGrp extends NbBase
 {
     constructor(props)
@@ -101,7 +101,7 @@ export default class NbPluButtonGrp extends NbBase
     _btnCategoryView()
     {
         let tmpView = []
-        for (let i = 0; i < 5; i++) 
+        for (let i = 0; i < 6; i++) 
         {
             let tmpData = []
             if(typeof this.state.btnCategory != 'undefined' && this.state.btnCategory instanceof datatable)
@@ -112,27 +112,27 @@ export default class NbPluButtonGrp extends NbBase
             {
                 tmpView.push
                 (
-                    <div key={"btnCategory" + this.props.id  + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnCategory" + this.props.id + i} 
-                        parent={this} className="form-group btn btn-info btn-block my-1 text-white" 
-                        style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                        onClick={()=>{this._onClick(i,0)}}>
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnCategory" + this.props.id + i + "Ly"} id={"btnCategory" + this.props.id + i + "Ly"} data-grid={{x:i,y:2,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnCategory" + this.props.id + i} parent={this} className="form-group btn btn-info btn-block text-white" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,0)}}>
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )    
             }
             else
             {                
                 tmpView.push
                 (
-                    <div key={"btnCategory" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnCategory" + this.props.id + i} 
-                        parent={this} className="form-group btn btn-info btn-block my-1 text-white" 
-                        style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                        onClick={()=>{this._onClick(i,0,tmpData[0])}}>
-                        {tmpData[0].NAME}
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnCategory" + this.props.id + i + "Ly"} id={"btnCategory" + this.props.id + i + "Ly"} data-grid={{x:i,y:2,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnCategory" + this.props.id + i} parent={this} className="form-group btn btn-info btn-block text-white" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"    }}
+                            onClick={()=>{this._onClick(i,0,tmpData[0])}}>
+                            {tmpData[0].NAME}
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )
             }
         }
@@ -141,7 +141,7 @@ export default class NbPluButtonGrp extends NbBase
     _btnGroupView()
     {
         let tmpView = []
-        for (let i = 0; i < 5; i++) 
+        for (let i = 0; i < 6; i++) 
         {
             let tmpData = []
             if(typeof this.state.btnGroup != 'undefined' && this.state.btnGroup instanceof datatable)
@@ -152,25 +152,27 @@ export default class NbPluButtonGrp extends NbBase
             {
                 tmpView.push
                 (
-                    <div key={"btnGroup" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block my-1" 
-                        style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,2)}}>
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnGroup" + this.props.id + i + "Ly"} id={"btnGroup" + this.props.id + i + "Ly"} data-grid={{x:i,y:3,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,2)}}>
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )    
             }
             else
             {                
                 tmpView.push
                 (
-                    <div key={"btnGroup" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block my-1" 
-                        style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,2,tmpData[0])}}>
-                        {tmpData[0].NAME}
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnGroup" + this.props.id + i + "Ly"} id={"btnGroup" + this.props.id + i + "Ly"} data-grid={{x:i,y:3,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,2,tmpData[0])}}>
+                            {tmpData[0].NAME}
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )
             }
         }
@@ -179,7 +181,7 @@ export default class NbPluButtonGrp extends NbBase
     _btnPluView1()
     {
         let tmpView = []
-        for (let i = 0; i < 5; i++) 
+        for (let i = 0; i < 6; i++) 
         {   
             let tmpData = []
             if(typeof this.state.btnPlu != 'undefined' && this.state.btnPlu instanceof datatable)
@@ -190,23 +192,27 @@ export default class NbPluButtonGrp extends NbBase
             {
                 tmpView.push
                 (
-                    <div key={"btnPlu" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,1)}}>
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:i,y:0,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1)}}>
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )  
             }
             else
             {
                 tmpView.push
                 (
-                    <div key={"btnPlu" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,1,tmpData[0])}}>
-                        {tmpData[0].NAME}
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:i,y:0,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1,tmpData[0])}}>
+                            {tmpData[0].NAME}
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )
             }
         }
@@ -215,7 +221,7 @@ export default class NbPluButtonGrp extends NbBase
     _btnPluView2()
     {
         let tmpView = []
-        for (let i = 5; i < 10; i++) 
+        for (let i = 6; i < 12; i++) 
         {
             let tmpData = []
             if(typeof this.state.btnPlu != 'undefined' && this.state.btnPlu instanceof datatable)
@@ -226,23 +232,67 @@ export default class NbPluButtonGrp extends NbBase
             {
                 tmpView.push
                 (
-                    <div key={"btnPlu" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,1)}}>
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:(i-6),y:1,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1)}}>
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )  
             }
             else
             {
                 tmpView.push
                 (
-                    <div key={"btnPlu" + this.props.id + i} className="col-2 px-1" style={{width:"20%"}}>
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px"}}
-                        onClick={()=>{this._onClick(i,1,tmpData[0])}}>
-                        {tmpData[0].NAME}
-                        </NbButton>
-                    </div>
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:(i-6),y:1,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1,tmpData[0])}}>
+                            {tmpData[0].NAME}
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
+                )
+            }
+        }
+        return tmpView;
+    }
+    _btnPluView3()
+    {
+        let tmpView = []
+        for (let i = 12; i < 18; i++) 
+        {
+            let tmpData = []
+            if(typeof this.state.btnPlu != 'undefined' && this.state.btnPlu instanceof datatable)
+            {
+                tmpData = this.state.btnPlu.where({LOCATION:i})
+            }
+            if(tmpData.length == 0)
+            {
+                tmpView.push
+                (
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:(i-12),y:1,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1)}}>
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
+                )  
+            }
+            else
+            {
+                tmpView.push
+                (
+                    <NdLayoutItem key={"btnPlu" + this.props.id + i + "Ly"} id={"btnPlu" + this.props.id + i + "Ly"} data-grid={{x:(i-12),y:1,h:1,w:1}}>
+                        <div>
+                            <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",fontSize:"10px",padding:"0px"}}
+                            onClick={()=>{this._onClick(i,1,tmpData[0])}}>
+                            {tmpData[0].NAME}
+                            </NbButton>
+                        </div>
+                    </NdLayoutItem>
                 )
             }
         }
@@ -510,23 +560,14 @@ export default class NbPluButtonGrp extends NbBase
         }
 
         return(
-            <div>
-                {/* PLU (Line 1)  */}
-                <div className="row">
+            <div style={{width:'101.3%'}}>
+                <NdLayout parent={this} id={"frmPluBtnGrp"} cols={6} rowHeight={60} margin={[4,4]}>
                     {this._btnPluView1()}
-                </div>                
-                {/* PLU (Line 2) */}
-                <div className="row">
                     {this._btnPluView2()}
-                </div>
-                {/* PLU Group (Line 3) */}
-                <div className="row">
+                    {this._btnPluView3()}
                     {this._btnCategoryView()}
-                </div>
-                {/* PLU Image Group (Line 4) */}
-                <div className="row">
                     {this._btnGroupView()}
-                </div>
+                </NdLayout>
                 {/* Selection List Popup */}
                 <div>
                     <NbPosPopGrid id={"popSelect" + this.props.id} parent={this} width={"100%"} height={"100%"} position={"#root"}

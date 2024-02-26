@@ -19,7 +19,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
-import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
 
 export default class itemEntryOutDoc extends React.PureComponent
 {

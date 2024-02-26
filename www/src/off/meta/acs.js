@@ -518,7 +518,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtCostPriceLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:0,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtCostPriceLy",
@@ -534,7 +534,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtTotalExtraCostLy",
-        VALUE : {visible:true,editable:true,position:{x:1,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:1,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtTotalExtraCostLy",
@@ -550,7 +550,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtMinSalePriceLy",
-        VALUE : {visible:true,editable:true,position:{x:2,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:2,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMinSalePriceLy",
@@ -566,7 +566,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtMaxSalePriceLy",
-        VALUE : {visible:true,editable:true,position:{x:3,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:3,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMaxSalePriceLy",
@@ -582,7 +582,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtLastBuyPriceLy",
-        VALUE : {visible:true,editable:true,position:{x:4,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:4,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtLastBuyPriceLy",
@@ -598,7 +598,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtLastSalePriceLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:5,y:0,h:2,w:1}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtLastSalePriceLy",

@@ -24,7 +24,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdTabPanel from '../../../../core/react/devex/tabpanel';
-import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
 
 import { datatable } from '../../../../core/core.js';
@@ -1156,7 +1156,7 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-10 pe-0">                        
-                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} cols={2}>
+                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} rowHeight={42} margin={[2,2]} cols={2}>
                                 {/* txtRefLy */}
                                 <NdLayoutItem key={"txtRefLy"} id={"txtRefLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtRefLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1653,102 +1653,88 @@ export default class itemCard extends React.PureComponent
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} cols={10}>
+                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} rowHeight={30} cols={10}>
                                                 {/* txtCostPriceLy */}
                                                 <NdLayoutItem key={"txtCostPriceLy"} id={"txtCostPriceLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtCostPriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtTotalExtraCostLy */}
                                                 <NdLayoutItem key={"txtTotalExtraCostLy"} id={"txtTotalExtraCostLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtTotalExtraCostLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            format={"#,##0.000"} readOnly={true}
-                                                            param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        format={"#,##0.000"} readOnly={true}
+                                                        param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMinSalePriceLy */}
                                                 <NdLayoutItem key={"txtMinSalePriceLy"} id={"txtMinSalePriceLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMinSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        editable={this.state.isItemGrpForMinMaxAccess}
+                                                        param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMaxSalePriceLy */}
                                                 <NdLayoutItem key={"txtMaxSalePriceLy"} id={"txtMaxSalePriceLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMaxSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
-                                                            access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        editable={this.state.isItemGrpForMinMaxAccess}
+                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
+                                                        access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastBuyPriceLy */}
                                                 <NdLayoutItem key={"txtLastBuyPriceLy"} id={"txtLastBuyPriceLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastBuyPriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastSalePriceLy */}
                                                 <NdLayoutItem key={"txtLastSalePriceLy"} id={"txtLastSalePriceLy"} parent={this} data-grid={{x:5,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
-                                                            format={"#,##0.000"} step={0.1} readOnly={true}
-                                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
+                                                        format={"#,##0.000"} step={0.1} readOnly={true}
+                                                        param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* sellPriceAddLy */}
                                                 <NdLayoutItem key={"sellPriceAddLy"} id={"sellPriceAddLy"} parent={this} data-grid={{x:10,y:0,h:1,w:2}} access={this.access.filter({ELEMENT:'sellPriceAddLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center d-flex justify-content-end">
-                                                            <Button icon="add"
-                                                            text={this.t("sellPriceAdd")}
-                                                            onClick={async()=>
-                                                            {   
-                                                                await this.popPrice.show();
+                                                    <div>
+                                                        <Button icon="add"
+                                                        text={this.t("sellPriceAdd")}
+                                                        onClick={async()=>
+                                                        {   
+                                                            await this.popPrice.show();
 
-                                                                this.cmbPopPriListNo.value = 1
-                                                                this.dtPopPriStartDate.value = "1970-01-01"
-                                                                this.dtPopPriEndDate.value = "1970-01-01"
-                                                                this.txtPopPriQuantity.value = 1
-                                                                this.txtPopPriPrice.value = 0
-                                                                this.txtPopPriHT.value = 0
-                                                                this.txtPopPriTTC.value = 0
-                                                                this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+                                                            this.cmbPopPriListNo.value = 1
+                                                            this.dtPopPriStartDate.value = "1970-01-01"
+                                                            this.dtPopPriEndDate.value = "1970-01-01"
+                                                            this.txtPopPriQuantity.value = 1
+                                                            this.txtPopPriPrice.value = 0
+                                                            this.txtPopPriHT.value = 0
+                                                            this.txtPopPriTTC.value = 0
+                                                            this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
-                                                                setTimeout(async () => 
-                                                                {
-                                                                this.txtPopPriPrice.focus()
-                                                                }, 600)
-                                                            }}/>
-                                                        </div>
+                                                            setTimeout(async () => 
+                                                            {
+                                                            this.txtPopPriPrice.focus()
+                                                            }, 600)
+                                                        }}/>
                                                     </div>
                                                 </NdLayoutItem>
                                             </NdLayout>
