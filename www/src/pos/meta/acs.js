@@ -164,7 +164,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"lblTotalLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:100,h:10,w:35,minH:10,maxH:30,minW:5,maxW:35}},
+        VALUE : {visible:true,editable:true,position:{x:0,y:95,h:10,w:35,minH:10,maxH:30,minW:5,maxW:35}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "lblTotalLy",
@@ -174,7 +174,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnTotalLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:109,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:0,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnTotalLy",
@@ -184,7 +184,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCreditCardLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:5,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCreditCardLy",
@@ -194,7 +194,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey7Ly",
-        VALUE : {visible:true,editable:true,position:{x:10,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:10,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey7Ly",
@@ -204,7 +204,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey8Ly",
-        VALUE : {visible:true,editable:true,position:{x:15,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:15,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey8Ly",
@@ -214,7 +214,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey9Ly",
-        VALUE : {visible:true,editable:true,position:{x:20,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:20,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey9Ly",
@@ -224,7 +224,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCheckLy",
-        VALUE : {visible:true,editable:true,position:{x:25,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:25,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCheckLy",
@@ -234,7 +234,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnSafeOpenLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:5,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnSafeOpenLy",
@@ -244,7 +244,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCashLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:5,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCashLy",
@@ -254,7 +254,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey4Ly",
-        VALUE : {visible:true,editable:true,position:{x:10,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:10,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey4Ly",
@@ -264,7 +264,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey5Ly",
-        VALUE : {visible:true,editable:true,position:{x:15,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:15,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey5Ly",
@@ -274,7 +274,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey6Ly",
-        VALUE : {visible:true,editable:true,position:{x:20,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:20,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey6Ly",
@@ -284,7 +284,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKeyBsLy",
-        VALUE : {visible:true,editable:true,position:{x:25,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:25,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKeyBsLy",
@@ -294,7 +294,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnDiscountLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:0,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnDiscountLy",
@@ -304,7 +304,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCheqpayLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:5,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCheqpayLy",
@@ -314,7 +314,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey1Ly",
-        VALUE : {visible:true,editable:true,position:{x:10,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:10,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey1Ly",
@@ -324,7 +324,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey2Ly",
-        VALUE : {visible:true,editable:true,position:{x:15,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:15,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey2Ly",
@@ -334,7 +334,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey3Ly",
-        VALUE : {visible:true,editable:true,position:{x:20,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:20,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey3Ly",
@@ -344,7 +344,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKeyXLy",
-        VALUE : {visible:true,editable:true,position:{x:25,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:25,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKeyXLy",
@@ -354,7 +354,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCustomerPointLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:0,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCustomerPointLy",
@@ -364,7 +364,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnInfoLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:35,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnInfoLy",
@@ -374,7 +374,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKeyDotLy",
-        VALUE : {visible:true,editable:true,position:{x:10,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:10,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKeyDotLy",
@@ -384,7 +384,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnKey0Ly",
-        VALUE : {visible:true,editable:true,position:{x:15,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:15,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnKey0Ly",
@@ -394,7 +394,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnNegative1Ly",
-        VALUE : {visible:true,editable:true,position:{x:20,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:20,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnNegative1Ly",
@@ -404,7 +404,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnPlus1Ly",
-        VALUE : {visible:true,editable:true,position:{x:25,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:25,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnPlus1Ly",
@@ -474,7 +474,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"pluBtnGrpLy",
-        VALUE : {visible:true,editable:true,position:{x:40,y:3,h:80,w:30,minH:80,maxH:80,minW:30,maxW:30}},
+        VALUE : {visible:true,editable:true,position:{x:40,y:10,h:80,w:30,minH:80,maxH:80,minW:30,maxW:30}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "pluBtnGrpLy",
@@ -494,7 +494,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnItemSearchLy",
-        VALUE : {visible:true,editable:true,position:{x:40,y:82,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:40,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnItemSearchLy",
@@ -504,7 +504,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnZReportLy",
-        VALUE : {visible:true,editable:true,position:{x:45,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:50,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnZReportLy",
@@ -514,7 +514,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnGrdListLy",
-        VALUE : {visible:true,editable:true,position:{x:50,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:50,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnGrdListLy",
@@ -524,7 +524,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnFormationLy",
-        VALUE : {visible:true,editable:true,position:{x:55,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:55,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnFormationLy",
@@ -534,7 +534,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnOrderListLy",
-        VALUE : {visible:true,editable:true,position:{x:60,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:60,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnOrderListLy",
@@ -544,7 +544,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnAdvanceLy",
-        VALUE : {visible:true,editable:true,position:{x:65,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:45,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnAdvanceLy",
@@ -564,7 +564,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnSubtotalLy",
-        VALUE : {visible:true,editable:true,position:{x:40,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:30,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnSubtotalLy",
@@ -574,7 +574,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCustomerAddLy",
-        VALUE : {visible:true,editable:true,position:{x:45,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:45,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCustomerAddLy",
@@ -584,7 +584,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCustomerListLy",
-        VALUE : {visible:true,editable:true,position:{x:50,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:40,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCustomerListLy",
@@ -594,7 +594,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnGetCustomerLy",
-        VALUE : {visible:true,editable:true,position:{x:55,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:30,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnGetCustomerLy",
@@ -604,7 +604,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCalculatorLy",
-        VALUE : {visible:true,editable:true,position:{x:60,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:35,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCalculatorLy",
@@ -614,7 +614,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnOfflineLy",
-        VALUE : {visible:true,editable:true,position:{x:65,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:65,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnOfflineLy",
@@ -634,7 +634,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnPrintLy",
-        VALUE : {visible:true,editable:true,position:{x:40,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:30,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnPrintLy",
@@ -644,7 +644,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnLastPrintLy",
-        VALUE : {visible:true,editable:true,position:{x:45,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:true,editable:true,position:{x:30,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnLastPrintLy",

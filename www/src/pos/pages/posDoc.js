@@ -3906,12 +3906,12 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'grandTotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <div className="row">
-                                        <div className="col-6">
+                                        <div className="col-7 pe-1">
                                             <div className="row">
-                                                <div className="col-6">
+                                                <div className="col-5 pe-1">
                                                     <p className="text-primary text-start m-0">{this.lang.t("totalLine")}<span className="text-dark"><NbLabel id="totalRowCount" parent={this} value={"0"}/></span></p>    
                                                 </div>
-                                                <div className="col-6">
+                                                <div className="col-7 ps-1">
                                                     <p className="text-primary text-start m-0">{this.lang.t("totalQuantity")}<span className="text-dark"><NbLabel id="totalItemCount" parent={this} value={"0"}/></span></p>    
                                                 </div>
                                             </div>
@@ -3926,7 +3926,7 @@ export default class posDoc extends React.PureComponent
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-5 ps-1">
                                             <div className="row">
                                                 <div className="col-12">
                                                     <p className="text-primary text-end m-0">{this.lang.t("amount")}<span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
