@@ -737,7 +737,6 @@ export default class posDoc extends React.PureComponent
         if(this.btnItemSearch.lock)
         {
             let tmpItemSrcData = this.posObj.posSale.dt().where({INPUT:pCode})
-
             if(tmpItemSrcData.length > 0)
             {
                 this.grdList.devGrid.navigateToRow(tmpItemSrcData[0])
@@ -746,7 +745,7 @@ export default class posDoc extends React.PureComponent
             }
 
             this.txtBarcode.value = "";
-            this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+            this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
             return
         }
 
@@ -893,7 +892,7 @@ export default class posDoc extends React.PureComponent
 
                 this.core.util.writeLog("calcGrandTotal : 03")
                 await this.calcGrandTotal(true);
-                this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
             }
             else
             {
@@ -1011,7 +1010,7 @@ export default class posDoc extends React.PureComponent
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpInfoPrice).round(2) + " " + Number.money.sign}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                    this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
                     this.loading.current.instance.hide()
                     return;
                 }
@@ -1580,7 +1579,7 @@ export default class posDoc extends React.PureComponent
         {            
             pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).round(3))
             this.saleRowAdd(pItemData)                  
-        }                
+        }
     }
     async saleRowAdd(pItemData)
     {                
@@ -3577,7 +3576,7 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(this.btnGetCustomer.lock)
                                     {
-                                        this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+                                        this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
                                     }
                                     else
                                     {
