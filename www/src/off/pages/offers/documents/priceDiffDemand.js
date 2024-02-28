@@ -45,7 +45,9 @@ export default class priceDiffDemand extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getPriceDiff(this.pagePrm.GUID)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     async getPriceDiff(pGuid) 
