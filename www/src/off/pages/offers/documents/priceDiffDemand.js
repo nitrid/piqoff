@@ -1231,6 +1231,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 this.txtRef.value=data[0].CODE;
                                                 this.txtRef.props.onValueChanged()
+                                                this.checkRow()
                                             }
                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                             {
@@ -1298,6 +1299,7 @@ export default class priceDiffDemand extends DocBase
                                                         {
                                                             this.txtRef.value=data[0].CODE
                                                             this.txtRef.props.onValueChanged()
+                                                            this.checkRow()
                                                         }
                                                         if(this.cmbDepot.value != '' && this.docLocked == false)
                                                         {

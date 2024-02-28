@@ -1113,6 +1113,7 @@ export default class salesOrder extends DocBase
                                                 {
                                                     this.txtRef.value=data[0].CODE;
                                                     this.txtRef.props.onChange()
+                                                    this.checkRow()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1175,6 +1176,7 @@ export default class salesOrder extends DocBase
                                                             {
                                                                 this.txtRef.value=data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                                this.checkRow()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

@@ -1048,6 +1048,7 @@ export default class salesOffer extends DocBase
                                                 {
                                                     this.txtRef.value = data[0].CODE;
                                                     this.txtRef.props.onChange()
+                                                    this.checkRow()
                                                 }
                                                 if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1080,6 +1081,7 @@ export default class salesOffer extends DocBase
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                                this.checkRow()
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
