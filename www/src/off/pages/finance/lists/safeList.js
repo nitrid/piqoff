@@ -165,7 +165,7 @@ export default class safeList extends React.PureComponent
         if(tmpData.result.recordset.length > 0)
         {
             let txtTotal = tmpData.result.recordset[0].TOTAL
-            this.txtAmount.setState({value:txtTotal + ' €'});
+            this.txtAmount.setState({value:txtTotal + ' ' + Number.money.sign});
         }
       
     }
@@ -300,7 +300,7 @@ export default class safeList extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdSafeList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSafeList.clmOutputName")} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSafeList.clmInputName")} visible={true}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdSafeList.clmAmount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdSafeList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdSafeList.clmDate")} visible={true} width={200}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 

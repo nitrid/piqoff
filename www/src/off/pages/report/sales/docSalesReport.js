@@ -151,7 +151,7 @@ export default class docSalesReport extends React.PureComponent
                                     summaryType: "sum",
                                     format: 
                                     {
-                                        style: "currency", currency: "EUR",
+                                        style: "currency", currency: Number.money.code,
                                     },
                                     area: "data",
                                 }

@@ -240,12 +240,12 @@ export default class loyaltyReport extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                <Column dataField="LOYALTY" caption={this.t("grdListe.clmLoyalty")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="LOYALTY" caption={this.t("grdListe.clmLoyalty")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Summary>
                                     <TotalItem
                                     column="LOYALTY"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

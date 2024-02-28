@@ -165,7 +165,7 @@ export default class virement extends React.PureComponent
         if(tmpData.result.recordset.length > 0)
         {
             let txtTotal = tmpData.result.recordset[0].TOTAL
-            this.txtAmount.setState({value:txtTotal + ' €'});
+            this.txtAmount.setState({value:txtTotal + ' ' + Number.money.sign});
         }
       
     }
@@ -300,7 +300,7 @@ export default class virement extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdBankList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdBankList.clmOutputName")} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdBankList.clmInputName")} visible={true}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdBankList.clmAmount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdBankList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdBankList.clmDate")} visible={true} width={200}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 

@@ -246,32 +246,32 @@ export default class rebateInvoiceReport extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdListe.clmDiscount")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTALHT" caption={this.t("grdListe.clmTotalHt")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="DISCOUNT" caption={this.t("grdListe.clmDiscount")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="TOTALHT" caption={this.t("grdListe.clmTotalHt")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
                                 <Summary>
                                     <TotalItem
                                     column="AMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="DISCOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                        <TotalItem
                                     column="TOTALHT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                       <TotalItem
                                     column="VAT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

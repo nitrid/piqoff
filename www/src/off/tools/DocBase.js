@@ -513,7 +513,7 @@ export default class DocBase extends React.PureComponent
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
         let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
-        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
     }
     async calculateMargin()
     {
@@ -521,7 +521,7 @@ export default class DocBase extends React.PureComponent
         {
             let tmpMargin = Number(this.docDetailObj.dt()[i].TOTAL - this.docDetailObj.dt()[i].VAT).round(4) - Number(this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY).round(4)
             let tmpMarginRate = Number((this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY)).rate2Num(tmpMargin,2)
-            this.docDetailObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            this.docDetailObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
     itemRelated(pGuid,pQuantity)
@@ -1140,7 +1140,7 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_NAME"} dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_CODE"} dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />)
-                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />)
+                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />)
                                 return tmpArr
                             }
                             else if(this.type == 1)
@@ -1151,7 +1151,7 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)
-                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />)
+                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />)
                                 return tmpArr
                             }
                         })()}
@@ -1678,8 +1678,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
                         <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
                         <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
-                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                     </NdPopGrid>
                 </div>
                 {/* Stok Grid */}
@@ -1714,7 +1714,7 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
                                 tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
                                 tmpArr.push(<Column key={"MULTICODE"} dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>)
-                                tmpArr.push(<Column key={"PURC_PRICE"} dataField="PURC_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/>)
+                                tmpArr.push(<Column key={"PURC_PRICE"} dataField="PURC_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
                                 return tmpArr
                             }
                             else
@@ -1722,7 +1722,7 @@ export default class DocBase extends React.PureComponent
                                 let tmpArr = []
                                 tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
                                 tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
-                                tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/>)
+                                tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
                                 return tmpArr
                             }
                         })()}
@@ -1908,8 +1908,8 @@ export default class DocBase extends React.PureComponent
                                     <Scrolling mode="standart" />
                                     <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                     <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
-                                    <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
-                                    <Column dataField="TOTALHT" caption={this.lang.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                    <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                    <Column dataField="TOTALHT" caption={this.lang.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                 </NdGrid>
                             </Item>
                             <Item>
@@ -2083,11 +2083,11 @@ export default class DocBase extends React.PureComponent
                                             let tmpExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
                                             let tmpMargin = tmpExVat -  e.key.PRICE;
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
-                                            e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                            e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
                                             let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
-                                            e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
+                                            e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -2098,7 +2098,7 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="COST_PRICE" caption={this.t("grdNewPrice.clmCostPrice")} width={130} allowEditing={false}/>
                                             <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130} allowEditing={false}/>
                                             <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70} allowEditing={false}/>
-                                            <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                            <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100} allowEditing={false}/>
                                             <Column dataField="NET_MARGIN" caption={this.t("grdNewPrice.clmNetMargin")}width={100} allowEditing={false}/>
                                         </NdGrid>
@@ -2144,11 +2144,11 @@ export default class DocBase extends React.PureComponent
                                             let tmpExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
                                             let tmpMargin = tmpExVat -  e.key.PRICE;
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
-                                            e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                            e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
                                             let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
-                                            e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
+                                            e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -2348,8 +2348,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_NAME" caption={this.lang.t("pg_ordersGrid.clmName")} width={400} />
                         <Column dataField="QUANTITY" caption={this.lang.t("pg_ordersGrid.clmQuantity")} width={100} />
                         <Column dataField="PEND_QUANTITY" caption={this.lang.t("pg_ordersGrid.clmPendQuantity")} width={100} />
-                        <Column dataField="PRICE" caption={this.lang.t("pg_ordersGrid.clmPrice")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                        <Column dataField="TOTAL" caption={this.lang.t("pg_ordersGrid.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="PRICE" caption={this.lang.t("pg_ordersGrid.clmPrice")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.lang.t("pg_ordersGrid.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                     </NdPopGrid>
                 </div>
                 {/* Teklif Grid */}
@@ -2370,8 +2370,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                        <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                     </NdPopGrid>
                 </div>
                 {/* Iade Grid */}
@@ -2392,8 +2392,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_getRebate.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_getRebate.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_getRebate.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_getRebate.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                        <Column dataField="TOTAL" caption={this.t("pg_getRebate.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="PRICE" caption={this.t("pg_getRebate.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.t("pg_getRebate.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                     </NdPopGrid>
                 </div>
                 {/* Excel PopUp */}
@@ -2730,8 +2730,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                     </NdPopGrid>
                 </div>
                 {/* Origins PopUp */}

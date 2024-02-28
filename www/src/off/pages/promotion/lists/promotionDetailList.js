@@ -119,7 +119,7 @@ export default class promotionList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE APP_TYPE WHEN 0 THEN CONVERT(NVARCHAR,APP_AMOUNT) + ' %' WHEN 5 THEN CONVERT(NVARCHAR,APP_AMOUNT) + ' €' ELSE '' END AS APP_VALUE FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
+                    query : "SELECT *,CASE APP_TYPE WHEN 0 THEN CONVERT(NVARCHAR,APP_AMOUNT) + ' %' WHEN 5 THEN CONVERT(NVARCHAR,APP_AMOUNT) + ' " + Number.money.sign + "' ELSE '' END AS APP_VALUE FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
                             "(COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND " + 
                             "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND ((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101'))",
                     param : ['CODE:string|25','NAME:string|250','START_DATE:date','FINISH_DATE:date'],

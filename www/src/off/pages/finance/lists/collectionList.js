@@ -142,7 +142,7 @@ export default class collectionList extends React.PureComponent
         App.instance.setState({isExecute:false})
 
         let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
-        this.txtTotal.setState({value:tmpTotal + ' €'});
+        this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
     }
     render()
     {
@@ -349,7 +349,7 @@ export default class collectionList extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdColList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdColList.clmOutputName")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdColList.clmDate")} visible={true} width={200}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>

@@ -220,13 +220,13 @@ export default class debReport extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true} /> 
-                                <Column dataField="TOTALHT" caption={this.t("grdListe.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} /> 
+                                <Column dataField="TOTALHT" caption={this.t("grdListe.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} /> 
                                 <Column dataField="KG" caption={this.t("grdListe.clmKg")}  visible={true} /> 
                                 <Summary>
                                     <TotalItem
                                     column="TOTALHT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="KG"
                                     summaryType="sum" valueFormat={'##0.00'}/>

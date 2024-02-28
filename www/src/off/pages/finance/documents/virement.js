@@ -704,7 +704,7 @@ export default class virement extends React.PureComponent
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDocVirement.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="OUTPUT_NAME" caption={this.t("grdDocVirement.clmOutputName")} allowEditing={false}/>
                                         <Column dataField="INPUT_NAME" caption={this.t("grdDocVirement.clmInputName")} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocVirement.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="AMOUNT" caption={this.t("grdDocVirement.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdDocVirement.clmDescription")} />
                                     </NdGrid>
                                     <ContextMenu

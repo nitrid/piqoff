@@ -276,7 +276,7 @@ export default class customerBalanceReport extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                    <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                    <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -321,7 +321,7 @@ export default class customerBalanceReport extends React.PureComponent
                                 <Export fileName={this.lang.t("menu.cri_04_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
-                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                 <Column dataField="UPDATE_DATE" caption={this.t("grdListe.clmUpdate")} visible={true} dataType="date" 
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 

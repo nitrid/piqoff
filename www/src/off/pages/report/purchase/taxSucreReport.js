@@ -255,12 +255,12 @@ export default class taxSucreReport extends React.PureComponent
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="UNIT_LITRE" caption={this.t("grdListe.clmLitre")} visible={true}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /> 
-                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} /> 
+                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} /> 
                                 <Summary>
                                     <TotalItem
                                     column="AMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

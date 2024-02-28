@@ -142,7 +142,7 @@ export default class paymentList extends React.PureComponent
         App.instance.setState({isExecute:false})
 
         let tmpTotal =  this.grdPayList.data.datatable.sum("AMOUNT",2)
-        this.txtTotal.setState({value:tmpTotal + ' €'});
+        this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
     }
     render()
     {
@@ -342,7 +342,7 @@ export default class paymentList extends React.PureComponent
                                 <Column dataField="INPUT_CODE" caption={this.t("grdPayList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdPayList.clmInputName")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdPayList.clmDate")} visible={true} width={200}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdPayList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="TOTAL" caption={this.t("grdPayList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>

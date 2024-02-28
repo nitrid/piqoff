@@ -522,11 +522,11 @@ export default class itemCard extends React.PureComponent
 
             if(tmpPrice > 0 && tmpFactor > 0)
             {
-                this.setState({underPrice: (tmpExVat / tmpFactor).toFixed(2) + " € HT / " + (tmpPrice / tmpFactor).toFixed(2) + " € TTC"});
+                this.setState({underPrice: (tmpExVat / tmpFactor).toFixed(2) + Number.money.sign + " HT / " + (tmpPrice / tmpFactor).toFixed(2) + Number.money.sign + " TTC"});
             }
             else
             {
-                this.setState({underPrice: "0 € HT / 0 € TTC" });
+                this.setState({underPrice: "0 " + Number.money.sign + " HT / 0 " + Number.money.sign + " TTC" });
             }
         }
     }
@@ -547,7 +547,7 @@ export default class itemCard extends React.PureComponent
                 this.itemsObj.itemPrice.dt()[i].VAT_EXT = this.itemsObj.itemPrice.dt()[i].PRICE
             }
 
-            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
+            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -559,7 +559,7 @@ export default class itemCard extends React.PureComponent
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
-            this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
+            this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -1866,11 +1866,11 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
-                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2065,7 +2065,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
                                                 <Column dataField="LUSER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} editCellRender={this._cellRoleRender}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={'€#,##0.000'}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={Number.money.sign + '#,##0.000'}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2086,8 +2086,8 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} width={247} />
                                                 <Column dataField="SHOP" caption={this.t("grdOtherShop.clmShop")}  width={247}/>
                                                 <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")}  width={247}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} width={247}/>
-                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={247}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} width={247}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={247}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2110,7 +2110,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
                                                 <Column dataField="CDATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2131,7 +2131,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
                                                 <Column dataField="CDATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2152,7 +2152,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
-                                                <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2174,8 +2174,8 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
                                                 <Column dataField="DESCRIPTION" caption={this.t("grdExtraCost.clmDescription")} />
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 €"}/>
-                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 €"}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 " + Number.money.sign}/>
+                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 " + Number.money.sign }/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2325,8 +2325,8 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")} />
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
                                                 <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} />
                                                 <Column dataField="NAME" caption={this.t("grdOtherShop.clmName")}  width={250}/>

@@ -332,7 +332,7 @@ export default class purchaseContList extends React.PureComponent
                                 <Column dataField="ITEM_CODE" caption={this.t("grdPurcContList.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdPurcContList.clmName")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPurcContList.clmCustomerName")} visible={true}/> 
-                                <Column dataField="PRICE" caption={this.t("grdPurcContList.clmPrıce")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}} width={150}/> 
+                                <Column dataField="PRICE" caption={this.t("grdPurcContList.clmPrıce")} visible={true} format={{ style: "currency", currency:Number.money.code,precision: 2}} width={150}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdPurcContList.clmQuantity")} visible={true} width={150}/> 
                                 <Column dataField="START_DATE" caption={this.t("grdPurcContList.clmStartDate")} visible={false} 
                                 editorOptions={{value:null}}

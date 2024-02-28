@@ -340,7 +340,7 @@ export default class customerPointReport extends React.PureComponent
                                 <Column dataField="CODE" caption={this.t("grdCustomerPointReport.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="TITLE" caption={this.t("grdCustomerPointReport.clmTitle")} visible={true} width={300}/> 
                                 <Column dataField="POINT" caption={this.t("grdCustomerPointReport.clmPoint")} visible={true} width={200}/> 
-                                <Column dataField="EURO" caption={this.t("grdCustomerPointReport.clmEur")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={200}/> 
+                                <Column dataField="EURO" caption={this.t("grdCustomerPointReport.clmEur")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} width={200}/> 
                                 <Column dataField="LDATE_FORMAT" caption={this.t("grdCustomerPointReport.clmLdate")} visible={true} /> 
                             </NdGrid>
                         </div>
@@ -462,8 +462,8 @@ export default class customerPointReport extends React.PureComponent
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                             </NdGrid>
                             </div>
                             <div className="col-3 ps-0">
@@ -484,7 +484,7 @@ export default class customerPointReport extends React.PureComponent
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
-                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>
                             </div>
                             </div>

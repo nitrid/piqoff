@@ -509,13 +509,13 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
                                         <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")} width={110} allowEditing={false}/>
                                         <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
-                                        <Column dataField="P0" caption={this.t("grdContracts.clmPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PA0" caption={this.t("grdContracts.clmUnderPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}
-                                        cellRender={(e)=>{return "€" + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}
+                                        <Column dataField="P0" caption={this.t("grdContracts.clmPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                        <Column dataField="PA0" caption={this.t("grdContracts.clmUnderPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}
+                                        cellRender={(e)=>{return Number.money.sign + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}
                                         />
-                                        <Column dataField="P1" caption={this.t("grdContracts.clmPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PA1" caption={this.t("grdContracts.clmUnderPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}
-                                        cellRender={(e)=>{return "€" + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}/>
+                                        <Column dataField="P1" caption={this.t("grdContracts.clmPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                        <Column dataField="PA1" caption={this.t("grdContracts.clmUnderPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}
+                                        cellRender={(e)=>{return  Number.money.sign + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}/>
                                         <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
                                     </NdGrid>

@@ -464,7 +464,7 @@ export default class salesOffer extends DocBase
                 {
                     let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE
                     let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
-                    this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                    this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                     this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
                     this.docObj.docOffers.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(6)
                     this.docObj.docOffers.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
@@ -854,7 +854,7 @@ export default class salesOffer extends DocBase
                                         let tmpExVat = Number(this.docObj.docOffers.dt().sum("PRICE",2))
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docOffers.dt().sum("COST_PRICE",2)) 
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docOffers.dt().sum("COST_PRICE",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);
+                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1480,7 +1480,7 @@ export default class salesOffer extends DocBase
 
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                        e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                         if(e.key.DISCOUNT == 0)
                                         {
                                             e.key.DISCOUNT_RATE = 0
@@ -1516,15 +1516,15 @@ export default class salesOffer extends DocBase
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOffer.clmBarcode")} width={110} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MARGIN" caption={this.t("grdSlsOffer.clmMargin")} width={80} allowEditing={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdSlsOffer.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsOffer.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdSlsOffer.clmVatRate")} width={50} allowEditing={false}/>
-                                        <Column dataField="TOTALHT" caption={this.t("grdSlsOffer.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsOffer.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdSlsOffer.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsOffer.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsOffer.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>

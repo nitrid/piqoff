@@ -227,27 +227,27 @@ export default class docComparisonReport extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="ORDERS" caption={this.t("grdListe.clmOrders")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
-                                <Column dataField="DISPATCH" caption={this.t("grdListe.clmDispatch")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
-                                <Column dataField="INVOICE" caption={this.t("grdListe.clmInvoice")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
-                                <Column dataField="COLLECTION" caption={this.t("grdListe.clmCollection")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="ORDERS" caption={this.t("grdListe.clmOrders")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="DISPATCH" caption={this.t("grdListe.clmDispatch")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="INVOICE" caption={this.t("grdListe.clmInvoice")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="COLLECTION" caption={this.t("grdListe.clmCollection")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                 <Summary>
                                     <TotalItem
                                     column="ORDERS"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="DISPATCH"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                        <TotalItem
                                     column="INVOICE"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                       <TotalItem
                                     column="COLLECTION"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

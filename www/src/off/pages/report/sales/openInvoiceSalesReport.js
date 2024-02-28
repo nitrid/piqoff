@@ -369,24 +369,24 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                 <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="DOC_REF" caption={this.t("grdListe.clmRef")} visible={true}/> 
                                 <Column dataField="DOC_REF_NO" caption={this.t("grdListe.clmRefNo")} width={120} visible={true}/> 
-                                <Column dataField="REMAINDER" caption={this.t("grdListe.clmRemainder")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="DOC_TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="REMAINDER" caption={this.t("grdListe.clmRemainder")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="DOC_TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
                             
                                 <Summary>
                                     <TotalItem
                                     column="AMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                         
                                        <TotalItem
                                     column="TOTALHT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                         
                                         <TotalItem
                                     column="TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>
