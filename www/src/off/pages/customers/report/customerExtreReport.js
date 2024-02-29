@@ -52,12 +52,13 @@ export default class customerBalanceReport extends React.PureComponent
             this.txtCustomerCode.GUID = ''
         }, 500);
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()

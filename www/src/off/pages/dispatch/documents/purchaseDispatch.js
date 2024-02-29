@@ -53,12 +53,13 @@ export default class purchaseDispatch extends DocBase
             this.getDoc(this.pagePrm.GUID,'',0)
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdPurcDispatchState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdPurcDispatchState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
@@ -1973,7 +1974,7 @@ export default class purchaseDispatch extends DocBase
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdPurcDispatch.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcDispatch.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdPurcDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + "/ " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdPurcDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcDispatch.clmCustomerPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
                                         <Column dataField="DIFF_PRICE" caption={this.t("grdPurcDispatch.clmDiffPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcDispatch.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>

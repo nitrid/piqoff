@@ -53,12 +53,13 @@ export default class purchaseOrder extends DocBase
             this.getDoc(this.pagePrm.GUID,'',0)
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdPurcOrdersState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdPurcOrdersState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
@@ -85,9 +86,9 @@ export default class purchaseOrder extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
-                        "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),COST_PRICE) AS PURC_PRICE,"+
-                        "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                        " FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE,"+
+                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE"+
+                                " FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -141,7 +142,7 @@ export default class purchaseOrder extends DocBase
         if(e.column.dataField == "ITEM_CODE")
         {
             return (
-                <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
+                <NdTextBox id={"txtGrdItemsCode" + e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
@@ -324,7 +325,6 @@ export default class purchaseOrder extends DocBase
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
                                 e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                 this.calculateTotal()
-                                
                             }
                         },
                     ]
@@ -336,7 +336,7 @@ export default class purchaseOrder extends DocBase
         if(e.column.dataField == "DISCOUNT_RATE")
         {
             return 
-(
+            (
                 <NdTextBox id={"txtGrdDiscountRate"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
@@ -1644,7 +1644,7 @@ export default class purchaseOrder extends DocBase
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdPurcOrders.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + "/ " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdPurcOrders.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>

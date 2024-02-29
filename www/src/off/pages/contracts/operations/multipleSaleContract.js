@@ -40,12 +40,13 @@ export default class salesContract extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.init();
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdContractsState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdContractsState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()

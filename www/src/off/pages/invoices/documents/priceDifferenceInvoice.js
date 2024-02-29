@@ -53,12 +53,13 @@ export default class priceDifferenceInvoice extends DocBase
             this.getDoc(this.pagePrm.GUID,'',0)
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()

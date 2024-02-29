@@ -131,12 +131,13 @@ export default class priceDiffDemand extends DocBase
             this.calculateTotal()
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdDiffOffState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdDiffOffState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
