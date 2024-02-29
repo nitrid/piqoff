@@ -2663,6 +2663,10 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                     this.popBarcode.hide(); 
                                                 }
+                                                else if(tmpResult == 3 && tmpEmptyStat == false)
+                                                {
+                                                    this.itemsObj.itemBarcode.dt()[0].BARCODE = ''
+                                                }
                                     })}
                                     onValueChanged={(e)=>
                                     {
@@ -2721,6 +2725,7 @@ export default class itemCard extends React.PureComponent
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
                                                 let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
+                                                console.log(tmpResult)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
                                                     this.popBarcode.hide(); 
@@ -2732,6 +2737,10 @@ export default class itemCard extends React.PureComponent
                                                         this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
                                                     }
                                                     this.popBarcode.hide(); 
+                                                }
+                                                else if(tmpResult == 3 && tmpEmptyStat == false)
+                                                {
+                                                    this.itemsObj.itemBarcode.dt()[0].BARCODE = ''
                                                 }
                                             }}/>
                                         </div>

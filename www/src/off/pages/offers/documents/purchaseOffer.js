@@ -42,7 +42,9 @@ export default class purchaseOffer extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     async init()
@@ -1058,6 +1060,7 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     this.txtRef.value = data[0].CODE;
                                                     this.txtRef.props.onChange()
+                                                    this.checkRow()
                                                 }
                                                 if(this.docLocked == false)
                                                 {
@@ -1088,6 +1091,7 @@ export default class purchaseOffer extends DocBase
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                                this.checkRow()
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

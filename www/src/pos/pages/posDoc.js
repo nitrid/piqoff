@@ -595,7 +595,7 @@ export default class posDoc extends React.PureComponent
             this.posLcd.print
             ({
                 blink : 0,
-                text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
+                text :  "Bonjour".space(20) + (moment(new Date()).format("DD.MM.YYYY") + '-' + 'PIQSOFT').space(20)
             })    
         }, 1000);
         this.core.util.writeLog("calcGrandTotal : 01")
@@ -1705,7 +1705,7 @@ export default class posDoc extends React.PureComponent
                     this.posLcd.print
                     ({
                         blink : 0,
-                        text :  "A tres bientot".space(20)
+                        text :  "A tres bientot".space(20) + "PIQSOFT".space(20)
                     })
                 }, 500);
                 

@@ -45,7 +45,9 @@ export default class priceDiffDemand extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getPriceDiff(this.pagePrm.GUID)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     async getPriceDiff(pGuid) 
@@ -1232,6 +1234,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 this.txtRef.value=data[0].CODE;
                                                 this.txtRef.props.onValueChanged()
+                                                this.checkRow()
                                             }
                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                             {
@@ -1299,6 +1302,7 @@ export default class priceDiffDemand extends DocBase
                                                         {
                                                             this.txtRef.value=data[0].CODE
                                                             this.txtRef.props.onValueChanged()
+                                                            this.checkRow()
                                                         }
                                                         if(this.cmbDepot.value != '' && this.docLocked == false)
                                                         {
