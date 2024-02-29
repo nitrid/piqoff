@@ -259,7 +259,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.PURC_PRICE) * 100
                                         // e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                         // e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                        e.values[8] =   tmpNetMargin.toFixed(2) + Number.money.sign + "/  %" +  tmpNetMarginRate.toFixed(2);
+                                        e.values[8] =   tmpNetMargin.toFixed(2) + Number.money.sign + " /  %" +  tmpNetMarginRate.toFixed(2);
                                     }
                                 }}
                             >                            

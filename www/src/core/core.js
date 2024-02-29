@@ -2330,7 +2330,7 @@ String.prototype.space = function(pLen,pType)
 //* FORMAT CURRENCY */
 Number.prototype.currency = function()
 {
-    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money == 'undefined' ? 'EUR' : typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
 }
 //* FORMAT DECIMAL */
 Number.prototype.decimal = function()

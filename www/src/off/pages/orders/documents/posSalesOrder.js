@@ -43,15 +43,18 @@ export default class posSalesOrder extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
@@ -1684,7 +1687,7 @@ export default class posSalesOrder extends DocBase
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOrder.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOrder.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsOrder.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + "/ " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsOrder.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>

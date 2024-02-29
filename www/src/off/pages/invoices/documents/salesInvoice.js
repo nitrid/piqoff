@@ -50,115 +50,122 @@ export default class salesInvoice extends DocBase
         this.loading = React.createRef();
         this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
-    
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            await this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
         
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
     }
-      
     async init()
     {
-        await super.init()
+        return new Promise(async resolve =>
+        {
+            await super.init()
 
-        this.docObj.dt()[0].TYPE_NAME = 'FAC'
+            this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
-        this.grdSlsInv.devGrid.clearFilter("row")
-        this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
+            this.grdSlsInv.devGrid.clearFilter("row")
+            this.dtDocDate.value = moment(new Date())
+            this.dtShipDate.value = moment(new Date())
+            
+            this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
+
+            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+
+            this.txtRef.readOnly = false
+            this.txtRefno.readOnly = true
+            this.docLocked = false
+            
+            this.frmDocItems.option('disabled',true)
+
+            setTimeout(async() => {
+                let tmpQuery = 
+                {
+                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                }
+            }, 1000);
         
-        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.VAT_ZERO = this.docObj.dt()[0].VAT_ZERO
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = true
-        this.docLocked = false
-        
-        this.frmDocItems.option('disabled',true)
-
-        let tmpQuery = 
-        {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-        }
-
-        this.pg_txtItemsCode.on('showing',()=>
-        {
-            this.pg_txtItemsCode.setSource(
+            this.pg_txtItemsCode.on('showing',()=>
             {
-                source:
+                this.pg_txtItemsCode.setSource(
                 {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE] " +
-                                "(GUID,1,GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE " +
-                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))" ,
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE] " +
+                                    "(GUID,1,GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE " +
+                                    "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))" ,
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
             })
-        })
-        this.pg_txtBarcode.on('showing',()=>
-        {
-            this.pg_txtBarcode.setSource(
+            this.pg_txtBarcode.on('showing',()=>
             {
-                source:
+                this.pg_txtBarcode.setSource(
                 {
-                    select:
-                    {   
-                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
-                        param : ['BARCODE:string|50'],
-                    },
-                    sql:this.core.sql
-                }
-            })
-        })
-        this.pg_txtCustomerCode.on('showing',()=>
-        {
-            this.pg_txtCustomerCode.setSource(
-            {
-                source:
-                {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,VAT_ZERO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {   
+                            query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                            param : ['BARCODE:string|50'],
+                        },
+                        sql:this.core.sql
+                    }
+                })
             })
-        })
+            this.pg_txtCustomerCode.on('showing',()=>
+            {
+                this.pg_txtCustomerCode.setSource(
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,VAT_ZERO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+            })
+            resolve()
+        });
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -1909,7 +1916,7 @@ export default class salesInvoice extends DocBase
 
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                            e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + "/ %" +  tmpMarginRate.toFixed(2)
+                                            e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             if(e.key.DISCOUNT == 0)
                                             {
                                                 e.key.DISCOUNT_RATE = 0
@@ -1949,7 +1956,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + "/ " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
