@@ -481,6 +481,10 @@ export const langFr =
     {
         title :"Paiement carte bancaire ",
     },
+    popExchangePay :
+    {
+        title :"Paiement en Devises en Espèces",
+    },
     popTotal :
     {
         title :"Sous total ",

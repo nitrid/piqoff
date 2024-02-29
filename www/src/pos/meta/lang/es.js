@@ -482,6 +482,10 @@ export const langEs =
     {
         title: "Pago con Tarjeta",
     },
+    popExchangePay :
+    {
+        title :"Pago en Divisas en Efectivo",
+    },
     popTotal:
     {
         title: "Total Parcial",

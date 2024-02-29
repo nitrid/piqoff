@@ -482,6 +482,10 @@ export const langDe =
     {
         title: "Kartenzahlung"
     },
+    popExchangePay :
+    {
+        title :"Bargeld Devisenzahlung",
+    },
     popTotal:
     {
         title: "Zwischensumme"

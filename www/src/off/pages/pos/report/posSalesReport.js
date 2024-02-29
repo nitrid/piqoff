@@ -267,20 +267,12 @@ export default class posSalesReport extends React.PureComponent
                                             "POS.DEVICE AS DEVICE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
                                             "'PAYMENT' AS TITLE, " +
-                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC' " +
-                                            "WHEN PAY_TYPE = 1 THEN 'CB' " +
-                                            "WHEN PAY_TYPE = 2 THEN 'CHQ' " +
-                                            "WHEN PAY_TYPE = 3 THEN 'CHQe' " +
-                                            "WHEN PAY_TYPE = 4 THEN 'BON D''AVOIR' " +
-                                            "WHEN PAY_TYPE = 5 THEN 'AVOIR' " +
-                                            "WHEN PAY_TYPE = 6 THEN 'VIRMENT' " +
-                                            "WHEN PAY_TYPE = 7 THEN 'PRLV' " +
-                                            "END AS TYPE, " +
+                                            "PAY_TYPE_NAME AS TYPE, " +
                                             "0 AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
                                             "FROM POS_PAYMENT_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
-                                            "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE " , 
+                                            "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE " , 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }

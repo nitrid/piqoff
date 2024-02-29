@@ -481,6 +481,10 @@ export const langEn =
     {
         title: "Credit Card Payment",
     },
+    popExchangePay :
+    {
+        title :"Cash Foreign Exchange Payment",
+    },
     popTotal:
     {
         title: "Subtotal",

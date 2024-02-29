@@ -53,6 +53,7 @@ export default class posDoc extends React.PureComponent
         this.user = this.core.auth.data
         this.prmObj = App.instance.prmObj
         this.acsObj = App.instance.acsObj
+        this.payType = App.instance.payType
         this.nf525 = new nf525Cls();
         this.isFirstOpen = false
         this.pricingListNo = 1
@@ -429,15 +430,6 @@ export default class posDoc extends React.PureComponent
          //******************************************************** */
         if(!this.isFirstOpen)
         {
-            // ACIKLAMA POPUP BUTON PARAMETREDEN GÜNCELLEMEK İÇİN YAPILDI
-            this.popPriceDesc.setParam(this.prmObj.filter({ID:'PriceDescription',TYPE:0}).getValue())
-            this.popParkDesc.setParam(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue())
-            this.popDeleteDesc.setParam(this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue())
-            this.popRowDeleteDesc.setParam(this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue())
-            this.popItemReturnDesc.setParam(this.prmObj.filter({ID:'RebateDescription',TYPE:0}).getValue())
-            this.popAdvanceDesc.setParam(this.prmObj.filter({ID:'AdvanceDescription',TYPE:0}).getValue())
-            this.popRePrintDesc.setParam(this.prmObj.filter({ID:'RePrintDescription',TYPE:0}).getValue())
-            this.popBalanceCounterDesc.setParam(this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0}).getValue())
             //********************************************************* */
             //** FIRMA GETIR ********************************************/
             this.firm.selectCmd = 
@@ -1388,6 +1380,7 @@ export default class posDoc extends React.PureComponent
                 this.payRest1.value = tmpPayRest
                 this.payRest2.value = tmpPayRest
                 this.payRest3.value = tmpPayRest
+
                 this.cheqTotalAmount.value = this.cheqDt.sum('AMOUNT',2)
                 this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.cheqTotalAmount.value).round(2) + ' ' + Number.money.sign
                 this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
@@ -1753,8 +1746,10 @@ export default class posDoc extends React.PureComponent
                 
                 this.popTotal.hide();
                 this.popCashPay.hide();
+                this.popExchangePay.hide();
                 this.popCardPay.hide();
-                this.popCheqpay.hide();                
+                this.popCheqpay.hide();
+                this.popCardTicketPay.hide()
                 //PROMOSYONDA HEDİYE ÇEKİ VARSA UYGULANIYOR
                 if(this.posPromoObj.dt().where({APP_TYPE:2}).length > 0)
                 {
@@ -1771,7 +1766,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else if(this.posObj.posPay.dt().where({TYPE:0}).length > 0)
                     {
-                        if(this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 0)
+                        if(this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 0 || this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 8)
                         {
                             let tmpConfObj =
                             {
@@ -2033,7 +2028,7 @@ export default class posDoc extends React.PureComponent
         this.init()
     }
     async payAdd(pType,pAmount)
-    {       
+    {
         if(Number(this.payRest.value) > 0)
         {                    
             if(isNaN(Number(pAmount)) || Number(pAmount) == 0)
@@ -2047,8 +2042,8 @@ export default class posDoc extends React.PureComponent
                 await dialog(tmpConfObj);
                 return
             }
-            //KREDİ KARTI İSE
-            if(pType == 1)
+            //KREDİ KARTI YADA TICKET REST. KARTI İSE
+            if(pType == 1 || pType == 9)
             {
                 if(pAmount > Number(this.payRest.value))
                 {
@@ -2063,7 +2058,9 @@ export default class posDoc extends React.PureComponent
                     this.txtPopCardPay.focus()
                     return
                 }
+
                 this.popCardPay.hide()
+                this.popCardTicketPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
 
                 if(typeof tmpPayCard != 'undefined')
@@ -2141,7 +2138,7 @@ export default class posDoc extends React.PureComponent
             this.loading.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
-            if(pType == 0)
+            if(pType == 0 || pType == 8)
             {
                 this.posDevice.caseOpen();
             }            
@@ -2164,16 +2161,10 @@ export default class posDoc extends React.PureComponent
             let tmpTypeName = ""
             let tmpMaxLine = this.posObj.posPay.dt().max('LINE_NO')
 
-            if(pPayData.PAY_TYPE == 0)
-                tmpTypeName = "ESC"
-            else if(pPayData.PAY_TYPE == 1)
-                tmpTypeName = "CB"
-            else if(pPayData.PAY_TYPE == 2)
-                tmpTypeName = "CHQ"
-            else if(pPayData.PAY_TYPE == 3)
-                tmpTypeName = "T.R"
-            else if(pPayData.PAY_TYPE == 4)
-                tmpTypeName = "BON D'AVOIR"
+            if(this.payType.where({TYPE:pPayData.PAY_TYPE}).length > 0)
+            {
+                tmpTypeName = this.payType.where({TYPE:pPayData.PAY_TYPE})[0].NAME
+            }
             
             this.posObj.posPay.addEmpty()
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
@@ -3988,7 +3979,7 @@ export default class posDoc extends React.PureComponent
                                         this.popTotal.show();
                                         this.txtPopTotal.newStart = true;
                                     }}>
-                                        <i className="text-white fa-solid fa-euro-sign" style={{fontSize: "24px"}} />
+                                        <i className="text-white fa-solid fa-sack-dollar" style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
@@ -4023,7 +4014,7 @@ export default class posDoc extends React.PureComponent
                                         this.popCardPay.show();
                                         this.txtPopCardPay.newStart = true;
                                     }}>
-                                        <i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}} />
+                                        <i className={"text-white fa-solid " + (this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].ICON : "")} style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
@@ -4113,7 +4104,95 @@ export default class posDoc extends React.PureComponent
                                         this.popCashPay.show();
                                         this.txtPopCashPay.newStart = true;
                                     }}>
-                                        <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}} />
+                                        <i className={"text-white fa-solid " + (this.payType.where({TYPE:0}).length > 0 ? this.payType.where({TYPE:0})[0].ICON : "")} style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                            </NdLayoutItem>
+                            {/* btnExchangeLy */}
+                            <NdLayoutItem key={"btnExchangeLy"} id={"btnExchangeLy"} parent={this} data-grid={{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            access={this.acsObj.filter({ELEMENT:'btnExchangeLy',USERS:this.user.CODE})}>
+                                <div>
+                                    <NbButton id={"btnExchange"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    onClick={async ()=>
+                                    {           
+                                        if(this.posObj.posSale.dt().length == 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+                                            }
+                                            let tmpMsgResult = await dialog(tmpConfObj);
+                                            if(tmpMsgResult == 'btn01')
+                                            {
+                                                return
+                                            }
+                                        }   
+                                                    
+                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+                                        
+                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+                                        this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
+                                        let tmpExchangeRate = 1
+                                        let tmpTotalGrand = this.posObj.dt()[0].TOTAL
+                                        let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))
+                                        
+                                        if(this.payType.where({TYPE:8}).length > 0 && typeof this.payType.where({TYPE:8})[0].RATE != 'undefined')
+                                        {
+                                            tmpExchangeRate = Number(this.payType.where({TYPE:8})[0].RATE).round(2)
+                                        }
+
+                                        this.popExchangeTotalGrand.value = Number(Number(tmpTotalGrand) * Number(tmpExchangeRate)).round(2)
+                                        this.payExchangeRest.value = Number(Number(tmpRest) * Number(tmpExchangeRate)).round(2)
+                                        
+                                        this.popExchangePay.show();
+                                        this.txtPopExchangePay.newStart = true;
+                                    }}>
+                                        <i className={"text-white fa-solid " + (this.payType.where({TYPE:8}).length > 0 ? this.payType.where({TYPE:8})[0].ICON : "")} style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                            </NdLayoutItem>
+                            {/* btnCardTicketLy */}
+                            <NdLayoutItem key={"btnCardTicketLy"} id={"btnCardTicketLy"} parent={this} data-grid={{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            access={this.acsObj.filter({ELEMENT:'btnCardTicketLy',USERS:this.user.CODE})}>
+                                <div>
+                                    <NbButton id={"btnCardTicket"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    onClick={async ()=>
+                                    {           
+                                        if(this.posObj.posSale.dt().length == 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+                                            }
+                                            let tmpMsgResult = await dialog(tmpConfObj);
+                                            if(tmpMsgResult == 'btn01')
+                                            {
+                                                return
+                                            }
+                                        }   
+                                                    
+                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+                                        
+                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+                                        this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
+                                        let tmpTotalGrand = this.posObj.dt()[0].TOTAL
+                                        let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))                                        
+
+                                        this.popCardTotalGrand.value = Number(tmpTotalGrand).round(2)
+                                        this.payCardTotalRest.value = Number(tmpRest).round(2)
+                                        
+                                        this.popCardTicketPay.show();
+                                        this.txtPopCardTicketPay.newStart = true;
+                                    }}>
+                                        <i className={"text-white fa-solid " + (this.payType.where({TYPE:9}).length > 0 ? this.payType.where({TYPE:9})[0].ICON : "")} style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
@@ -4211,7 +4290,7 @@ export default class posDoc extends React.PureComponent
                                         
                                         this.popCheqpay.show();
                                     }}>
-                                        <i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} />
+                                        <i className={"text-white fa-solid " + (this.payType.where({TYPE:3}).length > 0 ? this.payType.where({TYPE:3})[0].ICON : "")} style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
@@ -5116,36 +5195,18 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 pe-1">
                                         <NbRadioButton id={"rbtnPayType"} parent={this} 
                                         button={
-                                            [
+                                            (()=>
+                                            {
+                                                let tmpArr = []
+                                                for (let i = 0; i < this.payType.length; i++) 
                                                 {
-                                                    id:"btn01",
-                                                    style:{height:'50px',width:'100%'},
-                                                    icon:"fa-money-bill-1",
-                                                    text:"ESC",
-                                                    index:0,
-                                                },
-                                                {
-                                                    id:"btn02",
-                                                    style:{height:'50px',width:'100%'},
-                                                    icon:"fa-credit-card",
-                                                    text:"CB",
-                                                    index:1,
-                                                },
-                                                {
-                                                    id:"btn03",
-                                                    style:{height:'50px',width:'100%'},
-                                                    icon:"fa-rectangle-list",
-                                                    text:"CHQ",
-                                                    index:2,
-                                                },
-                                                {
-                                                    id:"btn04",
-                                                    style:{height:'50px',width:'100%'},
-                                                    icon:"fa-file-invoice-dollar",
-                                                    text:"VIRM",
-                                                    index:6,
+                                                    if(this.payType[i].TOTAL_VISIBLE)
+                                                    {
+                                                        tmpArr.push({id:"btn0" + i,style:{height:'50px',width:'100%'},icon:this.payType[i].ICON,text:this.payType[i].NAME,index:this.payType[i].TYPE})
+                                                    }
                                                 }
-                                            ]
+                                                return tmpArr
+                                            })()
                                         }/>
                                     </div>
                                     {/* Payment Grid */}
@@ -5376,6 +5437,63 @@ export default class posDoc extends React.PureComponent
                         </div>
                     </NdPopUp>
                 </div>
+                {/* Card Ticket Pay Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popCardTicketPay"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popCardTicketPay.title")}
+                    container={"#root"} 
+                    width={"300"}
+                    height={"510"}
+                    position={{of:"#root"}}
+                    >
+                        {/* Top Total Indicator */}
+                        <div className="row">
+                            <div className="col-12">
+                               <div className="row">
+                                    <div className="col-6">
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")}<span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                    </div>
+                                    <div className="col-6">
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payCardTotalRest" parent={this} value={""} format={"currency"}/></span></p>    
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        {/* txtPopCardTicketPay */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtPopCardTicketPay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        {/* numPopCardTicketPay */}
+                        <div className="row pt-2">                            
+                            <div className="col-12">
+                                <NbNumberboard id={"numPopCardTicketPay"} parent={this} textobj="txtPopCardTicketPay" span={1} buttonHeight={"60px"}/>
+                            </div>
+                        </div>
+                        {/* btnPopCardTicketPaySend */}
+                        <div className="row pt-2">
+                            <div className="col-12">
+                                <NbButton id={"btnPopCardTicketPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.payAdd(9,this.txtPopCardTicketPay.value)
+                                    let tmpTotalGrand = this.posObj.dt()[0].TOTAL
+                                    let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))
+                                    
+                                    this.popCardTotalGrand.value = Number(tmpTotalGrand).round(2)
+                                    this.payCardTotalRest.value = Number(tmpRest).round(2)
+                                }}>
+                                    {this.lang.t("send")}
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
                 {/* Cash Pay Popup */}
                 <div>
                     <NdPopUp parent={this} id={"popCashPay"} 
@@ -5481,6 +5599,70 @@ export default class posDoc extends React.PureComponent
                                                 onClick={()=>{this.payAdd(0,100)}}/>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                
+                    </NdPopUp>
+                </div>
+                {/* Exchange Pay Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popExchangePay"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popExchangePay.title")}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"570"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row">
+                            <div className="col-12">
+                                {/* Top Total Indicator */}
+                                <div className="row pb-3">
+                                    <div className="col-6">
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popExchangeTotalGrand" parent={this} value={"0.00"}/></span></p>    
+                                    </div>
+                                    <div className="col-6">
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payExchangeRest" parent={this} value={"0.00"}/></span></p>
+                                    </div>
+                                </div>
+                                {/* txtPopExchangePay */}
+                                <div className="row pt-5">
+                                    <div className="col-12">
+                                        <NdTextBox id="txtPopExchangePay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                        </NdTextBox> 
+                                    </div>
+                                </div>
+                                {/* numPopExchangePay */}
+                                <div className="row pt-2">                            
+                                    <div className="col-12">
+                                        <NbNumberboard id={"numPopExchangePay"} parent={this} textobj="txtPopExchangePay" span={1} buttonHeight={"60px"}/>
+                                    </div>
+                                </div>
+                                {/* btnPopExchangePayOk */}
+                                <div className="row pt-2">
+                                    <div className="col-12">
+                                        <NbButton id={"btnPopExchangePayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            let tmpExchangeRate = 1
+                                            if(this.payType.where({TYPE:8}).length > 0 && typeof this.payType.where({TYPE:8})[0].RATE != 'undefined')
+                                            {
+                                                tmpExchangeRate = Number(this.payType.where({TYPE:8})[0].RATE).round(2)
+                                            }
+
+                                            this.payAdd(8,Number(this.txtPopExchangePay.value / tmpExchangeRate).round(2))
+
+                                            let tmpTotalGrand = this.posObj.dt()[0].TOTAL
+                                            let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))
+                                            
+                                            this.popExchangeTotalGrand.value = Number(Number(tmpTotalGrand) * Number(tmpExchangeRate)).round(2)
+                                            this.payExchangeRest.value = Number(Number(tmpRest) * Number(tmpExchangeRate)).round(2)
+                                        }}>
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                 </div>
                             </div>
@@ -7068,43 +7250,20 @@ export default class posDoc extends React.PureComponent
                                     {/* Payment Type Selection */}
                                     <div className="col-2 pe-1">
                                         <NbRadioButton id={"rbtnTotalPayType"} parent={this} 
-                                        button={[
+                                        button={
+                                            (()=>
                                             {
-                                                id:"btn01",
-                                                style:{height:'49px',width:'100%'},
-                                                icon:"fa-money-bill-1",
-                                                text:"ESC",
-                                                index:0,
-                                            },
-                                            {
-                                                id:"btn02",
-                                                style:{height:'49px',width:'100%'},
-                                                icon:"fa-credit-card",
-                                                text:"CB",
-                                                index:1,
-                                            },
-                                            {
-                                                id:"btn03",
-                                                style:{height:'49px',width:'100%'},
-                                                icon:"fa-rectangle-list",
-                                                text:"CHQ",
-                                                index:2,
-                                            },
-                                            {
-                                                id:"btn04",
-                                                style:{height:'49px',width:'100%'},
-                                                icon:"fa-rectangle-list",
-                                                text:"CHQe",
-                                                index:3,
-                                            },
-                                            {
-                                                id:"btn05",
-                                                style:{height:'49px',width:'100%'},
-                                                icon:"fa-file-invoice-dollar",
-                                                text:"VIRM",
-                                                index:6,
-                                            }
-                                        ]}/>
+                                                let tmpArr = []
+                                                for (let i = 0; i < this.payType.length; i++) 
+                                                {
+                                                    if(this.payType[i].TOTAL_VISIBLE)
+                                                    {
+                                                        tmpArr.push({id:"btn0" + i,style:{height:'49px',width:'100%'},icon:this.payType[i].ICON,text:this.payType[i].NAME,index:this.payType[i].TYPE})
+                                                    }
+                                                }
+                                                return tmpArr
+                                            })()
+                                        }/>
                                     </div>
                                     {/* Payment Grid */}
                                     <div className="col-10">
@@ -7234,38 +7393,10 @@ export default class posDoc extends React.PureComponent
                                                     let tmpTypeName = ""
                                                     let tmpAmount = Number(parseFloat(this.txtPopLastTotal.value).round(2))
                                                     let tmpChange = Number(parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - (this.lastPosPayDt.sum('AMOUNT') + tmpAmount)).round(2))
-
-                                                    if(this.rbtnTotalPayType.value == 0)
-                                                    {                                                        
-                                                        tmpTypeName = "ESC"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 1)
+                                                    
+                                                    if(this.payType.where({TYPE:this.rbtnTotalPayType.value}).length > 0)
                                                     {
-                                                        tmpTypeName = "CB"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 2)
-                                                    {
-                                                        tmpTypeName = "CHQ"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 3)
-                                                    {
-                                                        tmpTypeName = "T.R"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 4)
-                                                    {
-                                                        tmpTypeName = "BON D'AVOIR"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 5)
-                                                    {
-                                                        tmpTypeName = "AVOIR"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 6)
-                                                    {
-                                                        tmpTypeName = "VIRMENT"
-                                                    }
-                                                    else if(this.rbtnTotalPayType.value == 7)
-                                                    {
-                                                        tmpTypeName = "PRLV"
+                                                        tmpTypeName = this.payType.where({TYPE:this.rbtnTotalPayType.value})[0].NAME
                                                     }
                                                     
                                                     if(tmpChange < 0)
@@ -7496,7 +7627,7 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.addEmpty()
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
-                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = this.payType.where({TYPE:0}).length > 0 ? this.payType.where({TYPE:0})[0].NAME : ""
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
@@ -7507,7 +7638,7 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.addEmpty()
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
-                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = this.payType.where({TYPE:4}).length > 0 ? this.payType.where({TYPE:4})[0].NAME : ""
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
@@ -7542,7 +7673,7 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.addEmpty()
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 1
-                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CB'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].NAME : ""
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
@@ -7733,8 +7864,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     this.msgRePaymentType._onClick("btn01")
                                 }}>
-                                    <div className="row"><div className="col-12">ESC</div></div>
-                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}}/></div></div>
+                                    <div className="row"><div className="col-12">{this.payType.where({TYPE:0}).length > 0 ? this.payType.where({TYPE:0})[0].NAME : ""}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:0}).length > 0 ? this.payType.where({TYPE:0})[0].ICON : "")} style={{fontSize: "24px"}}/></div></div>
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
@@ -7743,8 +7874,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     this.msgRePaymentType._onClick("btn02")
                                 }}>
-                                    <div className="row"><div className="col-12">CB</div></div>
-                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}}/></div></div>                                    
+                                    <div className="row"><div className="col-12">{this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].NAME : ""}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].ICON : "")} style={{fontSize: "24px"}}/></div></div>                                    
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
@@ -7753,8 +7884,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     this.msgRePaymentType._onClick("btn03")
                                 }}>
-                                    <div className="row"><div className="col-12">CHQ</div></div>
-                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-rectangle-list" style={{fontSize: "24px"}} /></div></div>                                    
+                                    <div className="row"><div className="col-12">{this.payType.where({TYPE:2}).length > 0 ? this.payType.where({TYPE:2})[0].NAME : ""}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:2}).length > 0 ? this.payType.where({TYPE:2})[0].ICON : "")} style={{fontSize: "24px"}} /></div></div>                                    
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
@@ -7763,8 +7894,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     this.msgRePaymentType._onClick("btn04")
                                 }}>
-                                    <div className="row"><div className="col-12">T.R</div></div>
-                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} /></div></div>                                    
+                                    <div className="row"><div className="col-12">{this.payType.where({TYPE:3}).length > 0 ? this.payType.where({TYPE:3})[0].NAME : ""}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:3}).length > 0 ? this.payType.where({TYPE:3})[0].ICON : "")} style={{fontSize: "24px"}} /></div></div>                                    
                                 </NbButton>
                             </div>
                         </div>
