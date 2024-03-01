@@ -118,7 +118,7 @@ export const acs =
     {
         TYPE : 1,
         ID :"PriceEdit",
-        VALUE : {dialog:{type:0}},
+        VALUE : {dialog:{type:-1}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

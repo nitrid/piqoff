@@ -40,6 +40,8 @@ posDoc.prototype.getItem = async function(pCode)
         this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
         return
     }
+    
+    getBarPattern = getBarPattern.bind(this)
 
     this.txtBarcode.value = ""; 
     let tmpQuantity = 1
@@ -235,7 +237,7 @@ posDoc.prototype.getItem = async function(pCode)
     }
     //******************************************************** */
     //BARKOD DESENİ
-    let tmpBarPattern = this.getBarPattern(pCode)
+    let tmpBarPattern = getBarPattern(pCode)
     tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
     tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
     pCode = tmpBarPattern.barcode     
@@ -438,4 +440,68 @@ posDoc.prototype.getItem = async function(pCode)
         await dialog(tmpConfObj);
     }
     //*********************************************************/
+}
+function getBarPattern(pBarcode)
+{
+    pBarcode = pBarcode.toString().trim()
+    let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
+    
+    if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+    {            
+        return {barcode:pBarcode}
+    }
+    //201234012550 0211234012550
+    for (let i = 0; i < tmpPrm.length; i++) 
+    {
+        let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+        if(tmpPrm[i].indexOf('X') > -1)
+        {
+            tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('X'))
+        }
+        
+        if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
+        {
+            let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+            let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+            let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+            let tmpCentFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+            let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+            let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+            let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+            let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+
+            let tmpSumFlag = ""
+            if(tmpPrm[i].indexOf('F') > -1)
+            {
+                tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+            }
+            else if(tmpPrm[i].indexOf('E') > -1)
+            {
+                tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+            }
+            
+            let tmpFactory = 1
+            if(tmpSumFlag == 'F')
+            {
+                tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
+            }
+
+            if(pBarcode.substring(0,tmpFlag.length) == '24')
+            {
+                return {
+                    barcode : "24XXXXX" + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                }
+            }
+
+            return {
+                barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
+                quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+            }
+        }
+    }
+
+    return {barcode : pBarcode}
 }

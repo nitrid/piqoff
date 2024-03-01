@@ -1712,25 +1712,27 @@ export class posDeviceCls
 
         this.scannerPort.on('data',(data) =>
         {
-            if(data.toString("utf8").substring(0,1) == 'F' || data.toString("utf8").substring(0,1) == 'A')
+            console.log(data)
+            console.log(data.toString('ascii'))
+            if(data.toString("ascii").substring(0,1) == 'F' || data.toString("ascii").substring(0,1) == 'A')
             {
                 tmpSerialCount = 0
             }
             tmpSerialCount++;
 
-            tmpBarcode = tmpBarcode + data.toString("utf8")
+            tmpBarcode = tmpBarcode + data.toString("ascii")
 
             if(tmpSerialCount == 2)
             {
-                if(tmpBarcode.length == 11)
-                {
-                    tmpBarcode = tmpBarcode.substring(2,10)
-                }
-                else
-                {
-                    tmpBarcode = tmpBarcode.substring(1,14)
-                }
-                
+                // if(tmpBarcode.length == 11)
+                // {
+                //     tmpBarcode = tmpBarcode.substring(2,10)
+                // }
+                // else
+                // {
+                //     tmpBarcode = tmpBarcode.substring(1,14)
+                // }
+                console.log(tmpBarcode)
                 this.emit('scanner',tmpBarcode);
                 
                 tmpSerialCount = 0;

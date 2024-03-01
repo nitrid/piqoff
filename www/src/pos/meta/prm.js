@@ -34,7 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20XXXXXMMMCCF',
+            '24XXXXXMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',

@@ -3346,7 +3346,7 @@ export default class posDoc extends React.PureComponent
             let tmpPayDt = new datatable()
             tmpPayDt.selectCmd = 
             {
-                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT,COUNT(AMOUNT) AS COUNTS FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
