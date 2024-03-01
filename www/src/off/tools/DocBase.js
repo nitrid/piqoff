@@ -824,6 +824,14 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
                     await this.docObj.docOrders.addEmpty(tmpDocItems)
@@ -858,6 +866,14 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE

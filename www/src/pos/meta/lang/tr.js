@@ -481,6 +481,10 @@ export const langTr =
     {
         title :"Kart Ödeme",
     },
+    popExchangePay :
+    {
+        title :"Nakit Döviz Ödeme",
+    },
     popTotal :
     {
         title :"Ara Toplam",
