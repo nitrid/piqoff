@@ -45,7 +45,9 @@ export default class salesOrder extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     loadState() {
@@ -863,7 +865,6 @@ export default class salesOrder extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                      onClick={async ()=>
                                     {       
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1114,6 +1115,7 @@ export default class salesOrder extends DocBase
                                                 {
                                                     this.txtRef.value=data[0].CODE;
                                                     this.txtRef.props.onChange()
+                                                    this.checkRow()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1176,6 +1178,7 @@ export default class salesOrder extends DocBase
                                                             {
                                                                 this.txtRef.value=data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                                this.checkRow()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
@@ -1194,7 +1197,6 @@ export default class salesOrder extends DocBase
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        console.log(pdata[0].TYPE)
                                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
@@ -1965,7 +1967,6 @@ export default class salesOrder extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -2010,7 +2011,6 @@ export default class salesOrder extends DocBase
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      

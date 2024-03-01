@@ -745,7 +745,7 @@ export default class endOfDay extends React.PureComponent
                     height={'250'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={1} height={'fit-content'} id={"frmAdvance"}>
+                        <Form colCount={1} height={'fit-content'} id={"frmAdvances"}>
                             <Item>
                                 <div className='row px-4'>
                                     <div className='col-12'>

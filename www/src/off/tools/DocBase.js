@@ -839,6 +839,7 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.REF = this.docObj.dt()[0].REF
                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                     tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                     tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                     tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
                     tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
@@ -947,7 +948,6 @@ export default class DocBase extends React.PureComponent
         let tmpQuery = arguments[0]
 
         let tmpData = await this.core.sql.execute(tmpQuery)
-        console.log(tmpData)
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_getRebate.setData(tmpData.result.recordset)
@@ -1738,7 +1738,7 @@ export default class DocBase extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_service.title")} //
-                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
+                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE,'00000000-0000-0000-0000-000000000000' AS UNIT FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
                     deferRendering={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
