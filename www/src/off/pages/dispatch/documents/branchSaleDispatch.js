@@ -517,6 +517,34 @@ export default class branchSaleDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                    param : ['GUID:string|50','DEPOT:string|50'],
+                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+                }
+                let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpQuantity.result.recordset.length > 0)
+                {
+                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+                   {
+                        App.instance.setState({isExecute:false})
+                        let tmpConfObj =
+                        {
+                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                        }
+            
+                        await dialog(tmpConfObj);
+                        await this.grdSlsDispatch.devGrid.deleteRow(0)
+                        resolve()
+                        return
+                   }
+                }
+            }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             if(pData.ITEM_TYPE == 0)
             {
@@ -582,38 +610,7 @@ export default class branchSaleDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
             }
     
-            if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
-            {
-                let tmpCheckQuery = 
-                {
-                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
-                    param : ['GUID:string|50','DEPOT:string|50'],
-                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
-                }
-                let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
-                if(tmpQuantity.result.recordset.length > 0)
-                {
-                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
-                   {
-                        App.instance.setState({isExecute:false})
-                        let tmpConfObj =
-                        {
-                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
-                        }
-            
-                        await dialog(tmpConfObj);
-                        await this.grdSlsDispatch.devGrid.deleteRow(0)
-                        resolve()
-                        return
-                   }
-                   else
-                   {
-                        this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
-                   }
-                }
-            }
+           
             
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID

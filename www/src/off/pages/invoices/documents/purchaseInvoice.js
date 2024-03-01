@@ -534,6 +534,64 @@ export default class purchaseInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            if(pData.ITEM_TYPE == 0)
+            {
+                if(this.customerControl == true)
+                {
+                    let tmpCheckQuery = 
+                    {
+                        query :"SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+                    }
+                    let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                    if(tmpCheckData.result.recordset.length == 0)
+                    {   
+                        let tmpCustomerBtn = ''
+                        if(this.customerClear == true)
+                        {
+                            resolve()
+                            return 
+                        }
+                        if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj);
+                            resolve()
+                            return
+                        }
+                        await this.msgCustomerNotFound.show().then(async (e) =>
+                        {
+                            if(e == 'btn01' && this.checkCustomer.value == true)
+                            {
+                                this.customerControl = false
+                                resolve()
+                                return
+                            }
+                            if(e == 'btn02')
+                            {
+                                tmpCustomerBtn = e
+                                if(this.checkCustomer.value == true)
+                                {
+                                    this.customerClear = true
+                                }
+                                resolve()
+                                return 
+                            }
+                        })
+                        if(tmpCustomerBtn == 'btn02')
+                        {
+                            resolve()
+                            return
+                        }
+                    }
+                }
+            }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
@@ -574,7 +632,7 @@ export default class purchaseInvoice extends DocBase
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                 tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                this.docObj.docItems.addEmpty(tmpDocItems)
+                await this.docObj.docItems.addEmpty(tmpDocItems)
                 pIndex = this.docObj.docItems.dt().length - 1
             }
 
@@ -608,67 +666,7 @@ export default class purchaseInvoice extends DocBase
                 }
             }
             
-            if(pData.ITEM_TYPE == 0)
-            {
-                if(this.customerControl == true)
-                {
-                    let tmpCheckQuery = 
-                    {
-                        query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID",
-                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-                    }
-                    let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                    if(tmpCheckData.result.recordset.length == 0)
-                    {   
-                        let tmpCustomerBtn = ''
-                        if(this.customerClear == true)
-                        {
-                            await this.grdPurcInv.devGrid.deleteRow(0)
-                            resolve()
-                            return 
-                        }
-                        if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
-                        {
-                            await this.grdPurcInv.devGrid.deleteRow(0)
-                            let tmpConfObj =
-                            {
-                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
-                            }
-                            await dialog(tmpConfObj);
-                            resolve()
-                            return
-                        }
-                        await this.msgCustomerNotFound.show().then(async (e) =>
-                        {
-                            if(e == 'btn01' && this.checkCustomer.value == true)
-                            {
-                                this.customerControl = false
-                                resolve()
-                                return
-                            }
-                            if(e == 'btn02')
-                            {
-                                tmpCustomerBtn = e
-                                await this.grdPurcInv.devGrid.deleteRow(0)
-                                if(this.checkCustomer.value == true)
-                                {
-                                    this.customerClear = true
-                                }
-                                resolve()
-                                return 
-                            }
-                        })
-                        if(tmpCustomerBtn == 'btn02')
-                        {
-                            resolve()
-                            return
-                        }
-                    }
-                }
-            }
+
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
