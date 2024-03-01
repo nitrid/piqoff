@@ -250,6 +250,26 @@ export const acs =
         ELEMENT : "btnCashLy",
         APP : "POS"
     },
+    //btnExchangeLy
+    {
+        TYPE : 2,
+        ID :"btnExchangeLy",
+        VALUE : {visible:false,editable:true,position:{x:55,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnExchangeLy",
+        APP : "POS"
+    },
+    //btnCardTicketLy
+    {
+        TYPE : 2,
+        ID :"btnCardTicketLy",
+        VALUE : {visible:true,editable:true,position:{x:0,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnCardTicketLy",
+        APP : "POS"
+    },
     //btnKey4Ly
     {
         TYPE : 2,

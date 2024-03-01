@@ -126,7 +126,8 @@ export default class App extends React.PureComponent
         this.core.appInfo = appInfo
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);
-        
+        this.payType = new datatable();
+
         this.textValueChanged = this.textValueChanged.bind(this)
         
         if(!App.instance)
@@ -188,9 +189,7 @@ export default class App extends React.PureComponent
         //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
         if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
         {
-            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
-            
+            await this.loadPos()
             App.instance.setState({logined:true,splash:false});
         }
         else
@@ -260,6 +259,19 @@ export default class App extends React.PureComponent
             await this.core.util.waitUntil(0)
             await this.transfer.init('POS') 
         }
+    }
+    loadPos()
+    {
+        return new Promise(async (resolve) =>
+        {
+            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+
+            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE"}
+            await this.payType.refresh()
+            console.log(this.payType)
+            resolve()
+        })
     }
     render() 
     {

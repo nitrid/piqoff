@@ -484,7 +484,6 @@ export default class itemCard extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitleInfo"))
         {
-            console.log(this.itemsObj.dt())
             await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
         }
         else if(e.itemData.title == this.t("tabTitleOtherShop"))
@@ -1510,9 +1509,11 @@ export default class itemCard extends React.PureComponent
                                             {
                                                 id:'001',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
-                                                    this.popDescription.show()
+                                                    await this.popDescription.show()
+                                                    this.txtDescription.value = this.itemsObj.dt()[0].DESCRIPTION
+                                                    await this.grdLang.dataRefresh({source:this.itemsObj.itemLang.dt('ITEM_LANG')});
                                                 }
                                             }]}>
                                                 <Validator validationGroup={"frmItems" + this.tabIndex}>
@@ -3180,17 +3181,55 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popDescription.title")}
                         container={"#root"} 
                         width={'800'}
-                        height={'500'}
+                        height={'470'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='300px'  dt={{data:this.itemsObj.dt('ITEMS'),field:"DESCRIPTION"}}
+                                    <div className='col-12'>
+                                        <Toolbar>
+                                            <Item location="after">
+                                                <Button icon="add"
+                                                onClick={async()=>
+                                                {                                                        
+                                                    await this.popItemLang.show();
+                                                }}/>
+                                            </Item>
+                                        </Toolbar>
+                                    </div>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdLang"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            onRowRemoving={async (e)=>
+                                            {
+                                            }}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                <Column dataField="ITEM_LANGUAGE" caption={this.t("grdLang.clmLang")} width={250} allowEditing={false}/>
+                                                <Column dataField="TRANSLATED_NAME" caption={this.t("grdLang.clmName")} allowEditing={false}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>    
+                                <Item>
+                                    <Label  text={this.t("popDescription.label")} alignment="right" />
+                                </Item>
+                                <Item>
+                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='100px' dt={{data:this.itemsObj.dt('ITEMS'),field:"DESCRIPTION"}}
                                     param={this.param.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
                                     />
-                                </Item>   
+                                </Item> 
+                                
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -3209,7 +3248,70 @@ export default class itemCard extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>    
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* URUN DILI POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popItemLang"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popItemLang.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'300'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popItemLang.cmbPopItemLanguage")} alignment="right" />
+                                    <div className="col-8 p-0">
+                                        <NdSelectBox simple={true} parent={this} id="cmbPopItemLanguage"
+                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
+                                        displayExpr="NAME"                       
+                                        valueExpr="CODE"
+                                        value=""
+                                        searchEnabled={true} showClearButton={true}
+                                        data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        >
+                                        </NdSelectBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popItemLang.cmbPopItemLangName")} alignment="right" />
+                                    <NdTextBox simple={true} parent={this} id="cmbPopItemLangName"  value=""
+                                    data={{source:{select:{query : "SELECT TRANSLATED_NAME FROM ITEM_LANG"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemLang.empty};
+                                                
+                                                tmpEmpty.ITEM_LANGUAGE = this.cmbPopItemLanguage.value
+                                                tmpEmpty.TRANSLATED_NAME = this.cmbPopItemLangName.value
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                console.log(tmpEmpty.ITEM_LANGUAGE)
+                                                console.log(this.cmbPopItemLanguage.value)
+                                                this.itemsObj.itemLang.addEmpty(tmpEmpty); 
+                                                this.popItemLang.hide();
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popItemLang.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div>
