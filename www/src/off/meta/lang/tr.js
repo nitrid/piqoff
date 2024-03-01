@@ -828,7 +828,19 @@ export const langTr =
         },
         popDescription :
         {
-            title : "Ürün Açıklaması"
+            title : "Ürün Dili ve Açıklaması",
+            label : "Ürün Açıklaması"
+        },
+        grdLang : 
+        {
+            clmLang : "Dil",
+            clmName : "Ürün adı",
+        },
+        popItemLang : 
+        {
+            title : "Ürün Dili",
+            cmbPopItemLanguage : "Dil",
+            cmbPopItemLangName : "Ürün adı",
         },
         grdAnalysis: 
         {
