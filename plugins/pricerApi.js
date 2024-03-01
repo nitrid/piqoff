@@ -1,10 +1,8 @@
-import {spawn} from 'child_process'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 
-//"{TYPE:'REVIEW',PATH:'C:\\\\Users\\\\A.K.K\\\\Desktop\\\\DevPrint\\\\test.repx',DATA:[{KODU:'001'}]}"
-class devprint
+class pricerApi
 {
     constructor()
     {
@@ -195,4 +193,4 @@ class devprint
     }
 }
 
-export const _devprint = new devprint()
+export const _pricerApi = new pricerApi()

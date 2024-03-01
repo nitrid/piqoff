@@ -63,7 +63,9 @@ export const langTr =
         salesTotalDetail : "Satış Detayı",
         detail : "Detay",
         balanceTicketCreated: "Kasap etiketleri",
-        balanceTicketChecked: "Kasadan geçen kasap etiketleri",
+        balanceTicketChecked: "Kasadan geçen etiket",
+        ticketCreatedAmount: "Toplam",
+        ticketCheckedAmount: "Toplam",
         grdSalesVatRate :
         {
             vatRate : "KDV %",

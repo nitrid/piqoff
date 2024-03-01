@@ -828,7 +828,19 @@ export const langFr =
         },
         popDescription :
         {
-            title : "Description du produit" 
+            title : "Langue et Description du Produit",
+            label : "Description du Produit"
+        },
+        grdLang : 
+        {
+            clmLang : "Langue",
+            clmName : "Nom du Produit",
+        },
+        popItemLang : 
+        {
+            title : "Langue du Produit",
+            cmbPopItemLanguage : "Langue",
+            cmbPopItemLangName : "Nom du Produit",
         },
         grdAnalysis:  
         {

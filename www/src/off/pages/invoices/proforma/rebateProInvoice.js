@@ -1219,7 +1219,7 @@ export default class rebateInvoice extends DocBase
                                         
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                            e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                            e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             if(e.key.DISCOUNT > 0)
                                             {
                                                 e.key.DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(3))
@@ -1250,13 +1250,13 @@ export default class rebateInvoice extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdRebtInv.clmItemName")} width={230} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtInv.clmBarcode")} width={110} allowEditing={false}/>
                                             <Column dataField="QUANTITY" caption={this.t("grdRebtInv.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'} />
-                                            <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdRebtInv.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdRebtInv.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                            <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdRebtInv.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdRebtInv.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} width={60} dataType={'number'}/>
-                                            <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdRebtInv.clmVatRate")} width={50} allowEditing={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu
@@ -1383,13 +1383,13 @@ export default class rebateInvoice extends DocBase
                                              <EmptyItem colSpan={2}/>
                                             <Item>
                                             <Label text={this.t("txtExpFee")} alignment="right" />
-                                                <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
+                                                <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
                                                 maxLength={32}
                                                 ></NdNumberBox>
                                             </Item>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
+                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -1404,7 +1404,7 @@ export default class rebateInvoice extends DocBase
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtbalance")} alignment="right" />
-                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>

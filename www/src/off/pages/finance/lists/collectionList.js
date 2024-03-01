@@ -142,7 +142,7 @@ export default class collectionList extends React.PureComponent
         App.instance.setState({isExecute:false})
 
         let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
-        this.txtTotal.setState({value:tmpTotal + ' €'});
+        this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
     }
     render()
     {
@@ -349,7 +349,7 @@ export default class collectionList extends React.PureComponent
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdColList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdColList.clmOutputName")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdColList.clmDate")} visible={true} width={200}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>
@@ -406,14 +406,14 @@ export default class collectionList extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE, " +
+                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE,AMOUNT, " +
                                                                     "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " + 
                                                                     "ISNULL((SELECT TOP 1 DOC_REF + ' - '+ CONVERT(NVARCHAR,DOC_REF_NO) FROM DEPT_CREDIT_MATCHING_VW_03 WHERE CUS.GUID = PAYING_DOC),'') AS PAYING_DOC " + 
                                                                 "FROM DOC_CUSTOMER_VW_01 AS CUS " +
                                                                 "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                                                                     "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                                                                     " AND TYPE = 0 AND DOC_TYPE = 200 ORDER BY DOC_DATE DESC",
-                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
+                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)

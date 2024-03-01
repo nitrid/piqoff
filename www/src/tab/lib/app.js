@@ -67,6 +67,7 @@ export default class App extends React.PureComponent
                 type : 0,
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
+                value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
             },
             page:'dashboard.js',
         }

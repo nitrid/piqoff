@@ -8,6 +8,7 @@ import AnimatedText from '../../core/react/bootstrap/animatedText.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NbPopUp from '../../core/react/bootstrap/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling}  from '../../core/react/devex/grid.js';
+import NbLabel from '../../core/react/bootstrap/label.js';
 
 
 export default class Dashboard extends React.PureComponent
@@ -577,7 +578,7 @@ export default class Dashboard extends React.PureComponent
                         select : 
                         {
                           query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED, " +
-                                    "ISNULL(SUM(CASE WHEN STATUS = 1 THEN 1 ELSE 0 END),0) AS BALANCE_TICKET_CHECKED " +  
+                                  "ISNULL(SUM(CASE WHEN STATUS = 1 THEN 1 ELSE 0 END),0) AS BALANCE_TICKET_CHECKED " +  
                                   "FROM BALANCE_COUNTER " + 
                                   "WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",
                           param : ['FISRT_DATE:date','LAST_DATE:date'],
@@ -586,8 +587,24 @@ export default class Dashboard extends React.PureComponent
                         sql : this.core.sql
                       }
                     }
+                    let tmpQuery = 
+                    {
+                        query : "SELECT ROUND(SUM(QUANTITY * PRICE),2) AS CREATED_AMOUNT,ROUND(ISNULL(SUM(CASE WHEN STATUS = 1 THEN (QUANTITY * PRICE) ELSE 0 END),0),2) AS CHECKED_AMOUNT " +
+                                "FROM BALANCE_COUNTER " + 
+                                "WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",
+                                param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                value : [this.dtDate.startDate,this.dtDate.endDate]
+                    }
+                    let tmpAmountData = await this.core.sql.execute(tmpQuery) 
+                 
                     await this.popBalanceTicket.show()
                     await this.grdBalanceTicket.dataRefresh(tmpSource)
+                    if(tmpAmountData.result.recordset.length > 0)
+                    {
+                      console.log(Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT).currency())
+                        this.lblTicketCreatedAmount.value = this.t("ticketCreatedAmount") + ': ' + Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT).currency()
+                        this.lblTicketCheckedAmount.value = this.t("ticketCheckedAmount") + ': ' +  Number(tmpAmountData.result.recordset[0].CHECKED_AMOUNT).currency()
+                    }
                   }).bind(this)}/>
                 </div>
               </div>
@@ -1124,6 +1141,18 @@ export default class Dashboard extends React.PureComponent
                       <Column dataField="BALANCE_TICKET_CHECKED" caption={this.t("balanceTicketChecked")} width={100}/>
                     </NdGrid>
                   </div>
+              </div>
+              <div className="row  p-1">
+                <div className="col-6">
+                  <h6 style={{height:'60px',textAlign:"right",overflow:"hidden"}}>
+                      <NbLabel id="lblTicketCreatedAmount" parent={this} value={this.t("ticketCreatedAmount")}/>
+                  </h6>
+                </div>
+                <div className="col-6">
+                  <h6 style={{height:'60px',textAlign:"right",overflow:"hidden"}}>
+                      <NbLabel id="lblTicketCheckedAmount" parent={this} value={this.t("ticketCheckedAmount")}/>
+                  </h6>
+                </div>
               </div>
             </div>
         </NbPopUp>
