@@ -781,7 +781,7 @@ export default class purchaseContract extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={250} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={600} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={100} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency:Number.money.code,precision: 2}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

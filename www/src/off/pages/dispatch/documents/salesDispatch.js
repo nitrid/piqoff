@@ -53,17 +53,17 @@ export default class salesDispatch extends DocBase
             }, 1000);
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
     }
-      
     async init()
     {
         await super.init()
@@ -158,7 +158,7 @@ export default class salesDispatch extends DocBase
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) - (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
-        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
     }
     calculateMargin()
     {
@@ -166,7 +166,7 @@ export default class salesDispatch extends DocBase
         {
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
-            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
     async multiItemAdd()
@@ -549,7 +549,35 @@ export default class salesDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            // DEPO MİKTAR KONTROLÜ
+            if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                    param : ['GUID:string|50','DEPOT:string|50'],
+                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+                }
+                let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
     
+                if(tmpQuantity.result.recordset.length > 0)
+                {
+                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+                   {
+                        App.instance.setState({isExecute:false})
+                        let tmpConfObj =
+                        {
+                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                        }
+            
+                        await dialog(tmpConfObj);
+                        resolve()
+                        return
+                   }
+                }
+            }        
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             if(pData.ITEM_TYPE == 0)
             {
@@ -628,39 +656,6 @@ export default class salesDispatch extends DocBase
                 pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
             }
             
-            if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
-            {
-                let tmpCheckQuery = 
-                {
-                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
-                    param : ['GUID:string|50','DEPOT:string|50'],
-                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
-                }
-                let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
-    
-                if(tmpQuantity.result.recordset.length > 0)
-                {
-                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
-                   {
-                        App.instance.setState({isExecute:false})
-                        let tmpConfObj =
-                        {
-                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
-                        }
-            
-                        await dialog(tmpConfObj);
-                        await this.grdSlsDispatch.devGrid.deleteRow(0)
-                        resolve()
-                        return
-                   }
-                   else
-                   {
-                        this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
-                   }
-                }
-            }        
             
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
@@ -1097,7 +1092,7 @@ export default class salesDispatch extends DocBase
                                         let tmpExVat = Number(this.docObj.docItems.dt().sum("PRICE",2))
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("COST_PRICE",2)) 
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("COST_PRICE",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" + isNaN(tmpMarginRate) ? 0 : tmpMarginRate.toFixed(2);                 
+                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" + isNaN(tmpMarginRate) ? 0 : tmpMarginRate.toFixed(2);                 
                                         
                                     }}/>
                                 </Item>
@@ -1263,7 +1258,7 @@ export default class salesDispatch extends DocBase
                                         <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} />
                                         <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
                                         <Column dataField="DOC_ADDRESS" caption={this.t("pg_Docs.clmAddress")} width={300} />
-                                        <Column dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
+                                        <Column dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
@@ -1905,7 +1900,7 @@ export default class salesDispatch extends DocBase
 
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                        e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                       
                                         if(e.key.DISCOUNT == 0)
                                         {
@@ -1946,16 +1941,16 @@ export default class salesDispatch extends DocBase
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={60} allowEditing={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} width={70} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdSlsDispatch.clmVatRate")} width={50} allowEditing={false}/>
-                                        <Column dataField="TOTALHT" caption={this.t("grdSlsDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdSlsDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="ORDER_REF" caption={this.t("grdSlsDispatch.clmOrder")} width={100}  allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsDispatch.clmDescription")} width={100} />
                                     </NdGrid>

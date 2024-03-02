@@ -1,8 +1,8 @@
 import React from "react";
-import Base from '../../core/react/devex/base.js';
-import NdPopGrid from '../../core/react/devex/popgrid';
-import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from '../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
+import Base from './base.js';
+import NdPopGrid from './popgrid';
+import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from './grid';
+import NdDialog, { dialog } from './dialog.js';
 
 export default class NdAccessEdit extends Base
 {
@@ -55,7 +55,7 @@ export default class NdAccessEdit extends Base
             
             if(tmpDialogResult == "btn01")
             {
-                if(this.core.auth.data.ROLE == 'Administrator')
+                if((typeof this.props.saveUser == 'undefined' || this.props.saveUser == false) && this.core.auth.data.ROLE == 'Administrator')
                 {
                     this.popAcsUserList.show()
                     this.popAcsUserList.onClick = (data) =>

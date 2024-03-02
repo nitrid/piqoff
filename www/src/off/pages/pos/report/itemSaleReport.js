@@ -281,11 +281,11 @@ export default class itemSaleReport extends React.PureComponent
                                     return
                                 }}/>
                                 <Column dataField="QUANTITY" caption={this.t("grdItemSaleReport.clmQuantity")} visible={true} width={150}/> 
-                                <Column dataField="PRICE" caption={this.t("grdItemSaleReport.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdItemSaleReport.clmAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdItemSaleReport.clmDiscount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="LOYALTY" caption={this.t("grdItemSaleReport.clmLoyalty")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdItemSaleReport.clmTotal")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={200}/> 
+                                <Column dataField="PRICE" caption={this.t("grdItemSaleReport.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdItemSaleReport.clmAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
+                                <Column dataField="DISCOUNT" caption={this.t("grdItemSaleReport.clmDiscount")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
+                                <Column dataField="LOYALTY" caption={this.t("grdItemSaleReport.clmLoyalty")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdItemSaleReport.clmTotal")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={200}/> 
                             </NdGrid>
                         </div>
                     </div>
@@ -297,7 +297,7 @@ export default class itemSaleReport extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdNumberBox id="txtTotal" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32} format={{ style: "currency", currency: "EUR",precision: 2}}
+                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}}
                                     ></NdNumberBox>
                                 </Item>
                             </Form>

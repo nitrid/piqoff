@@ -481,6 +481,10 @@ export const langFr =
     {
         title :"Paiement carte bancaire ",
     },
+    popExchangePay :
+    {
+        title :"Paiement en Devises en Espèces",
+    },
     popTotal :
     {
         title :"Sous total ",
@@ -925,5 +929,21 @@ export const langFr =
     {
         title: "Message de l'administrateur",
         btn01: "OK",
+    },
+    popUserList:
+    {
+        title: "Liste des utilisateurs",
+        clmCode: "Code",
+        clmName: "Nom"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous enregistrer les modifications apportées ?"
+        },
     },
 }
