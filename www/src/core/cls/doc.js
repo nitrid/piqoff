@@ -1879,7 +1879,7 @@ export class deptCreditMatchingCls
                                 <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
                                 <Column dataField="PAID_AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
                                 <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
-                                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
                                 <Summary calculateCustomSummary={(options) =>
                                 {
                                     if (options.name === 'SelectedRowsSummary') 
@@ -1897,7 +1897,7 @@ export class deptCreditMatchingCls
                                         }
                                     }
                                 }}>
-                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
                                 </Summary>
                             </NdGrid>
                         </div>

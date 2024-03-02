@@ -1,26 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report11" DataSourceSchema="{&quot;data1&quot;:[{&quot;GUID&quot;:&quot;DEAF1A82-6034-47D2-B70D-F6FF66A92145&quot;,&quot;CDATE&quot;:&quot;2023-04-19T14:31:14.247Z&quot;,&quot;CUSER&quot;:&quot;Recep&quot;,&quot;CUSER_NAME&quot;:&quot;Karaca&quot;,&quot;LDATE&quot;:&quot;2023-04-19T14:31:14.247Z&quot;,&quot;LUSER&quot;:&quot;Recep&quot;,&quot;LUSER_NAME&quot;:&quot;Karaca&quot;,&quot;DOC_GUID&quot;:&quot;05C4EC1F-719B-451F-ABBE-267D9866BACD&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:20,&quot;TYPE_NAME&quot;:&quot;FAC&quot;,&quot;REBATE&quot;:false,&quot;REF&quot;:&quot;1681169133&quot;,&quot;REF_NO&quot;:&quot;2&quot;,&quot;DOC_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;SHIPMENT_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;INPUT&quot;:&quot;A83E2601-AA75-4F51-AF49-2840B8E8268C&quot;,&quot;INPUT_CODE&quot;:&quot;1681169133&quot;,&quot;INPUT_NAME&quot;:&quot;ECO PLUS SARL&quot;,&quot;OUTPUT&quot;:&quot;1666D56A-BDC3-4FA7-9018-1874D2F3B808&quot;,&quot;OUTPUT_CODE&quot;:&quot;1681169565&quot;,&quot;OUTPUT_NAME&quot;:&quot;CENTRE&quot;,&quot;ITEM&quot;:&quot;EDC521E0-9219-4555-9094-C6AE04176025&quot;,&quot;ITEM_NAME&quot;:&quot;DATALOGIC ADC QUICKSCAN QBT2430, BLUETOOTH, KIT, USB, 2D, BLACK(INC. SCANNER, BASE STATION AND USB CABLE 90A05194 LIST PRICE: 635 EUR QUICKSCAN QBT2430, BLUETOOTH, KIT, USB, 2D, BLACK (INC. SCANNER, BASE STATION AND USB CABLE 90A051945.)&quot;,&quot;ITEM_CODE&quot;:&quot;1681172420&quot;,&quot;BARCODE&quot;:&quot;&quot;,&quot;ITEM_TYPE&quot;:&quot;0&quot;,&quot;MULTICODE&quot;:&quot;&quot;,&quot;ORGINS&quot;:&quot;&quot;,&quot;CUSTOMER_PRICE&quot;:332.5,&quot;DIFF_PRICE&quot;:0,&quot;LAST_CUSTOMER&quot;:&quot;BLUE STAR EUROPE DISTRIBUTION BV&quot;,&quot;LINE_NO&quot;:0,&quot;QUANTITY&quot;:10,&quot;PRICE&quot;:332.5,&quot;DISCOUNT&quot;:0,&quot;DISCOUNT_RATE&quot;:0,&quot;VAT&quot;:453.4502,&quot;AMOUNT&quot;:3325,&quot;TOTAL&quot;:2720.7,&quot;CONTACT&quot;:&quot;449 RUE DE METZ &quot;,&quot;ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FACTURE_ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FIRMA&quot;:&quot;PIQSOFT SAS&quot;,&quot;OFFICIAL_NAME&quot;:&quot;MUHAMMET&quot;,&quot;OFFICIAL_SURNAME&quot;:&quot;ZENGIN&quot;,&quot;COMPANT_WEB&quot;:&quot;www.piqsoft.fr&quot;,&quot;SIREN_NO&quot;:&quot;949290969&quot;,&quot;CAPITAL&quot;:4000,&quot;COMPANY_TYPE&quot;:&quot;&quot;,&quot;COMPANY_CIYT&quot;:&quot;Essey-lès-Nancy&quot;,&quot;COUNTRY&quot;:&quot;FR&quot;,&quot;COMPANY_MAIL&quot;:&quot;info@piqsoft.fr&quot;,&quot;COMPANY_TEL&quot;:&quot;03 83 52 62 34&quot;,&quot;ZIPCODE&quot;:&quot;54270&quot;,&quot;SIRET_ID&quot;:&quot;94929096900011&quot;,&quot;APE_CODE&quot;:&quot;6201Z&quot;,&quot;TAX_OFFICE&quot;:&quot;NANCY&quot;,&quot;TAX_NO&quot;:&quot;FR61949290969&quot;,&quot;INT_VAT_NO&quot;:&quot;FR61949290969&quot;,&quot;COMPANY_ADDRESS1&quot;:&quot;7 ALLEE DU MIDI&quot;,&quot;COMPANY_ADDRESS2&quot;:&quot;&quot;,&quot;RCS&quot;:&quot;NANCY B 949 290 969&quot;,&quot;CUSTOMER_SIRET_ID&quot;:&quot;838071124&quot;,&quot;CUSTOMER_APE_CODE&quot;:&quot;4722Z&quot;,&quot;CUSTOMER_TAX_OFFICE&quot;:&quot;METZ&quot;,&quot;CUSTOMER_TAX_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_INT_VAT_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_RCS&quot;:&quot;Thionville B 838 071 124&quot;,&quot;CUSTOMER_SIREN_NO&quot;:&quot;83807112400013&quot;,&quot;VAT_RATE&quot;:20,&quot;UNIT_SYMBOL&quot;:&quot;&quot;,&quot;UNIT2_NAME&quot;:&quot;Unité&quot;,&quot;UNIT2_FACTOR&quot;:1,&quot;UNIT2_SYMBOL&quot;:&quot;U&quot;,&quot;LINE_DESCRIPTION&quot;:&quot;&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;DOC_TOTAL&quot;:498.89,&quot;DOC_AMOUNT&quot;:3658.17,&quot;DOC_VAT&quot;:498.89,&quot;DOC_DISCOUNT&quot;:0,&quot;DOC_INTERFEL&quot;:0,&quot;DOC_TOTALHT&quot;:0,&quot;INVOICE_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;INVOICE_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;CONNECT_REF&quot;:&quot;&quot;,&quot;CONNECT_DOC_DATE&quot;:&quot;&quot;,&quot;COST_PRICE&quot;:190.5,&quot;CDATE_FORMAT&quot;:&quot;19.04.2023 14:31:14&quot;,&quot;MAIN_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_FACTOR&quot;:1,&quot;KILOGRAMME_SYMBOL&quot;:&quot;KG&quot;,&quot;KILOGRAMME_FACTOR&quot;:1,&quot;COLIS_SYMBOL&quot;:&quot;CO&quot;,&quot;COLIS_FACTOR&quot;:1,&quot;HEURE_SYMBOL&quot;:&quot;H&quot;,&quot;HEURE_FACTOR&quot;:1,&quot;LITRE_SYMBOL&quot;:&quot;L&quot;,&quot;LITRE_FACTOR&quot;:1,&quot;METRE_SYMBOL&quot;:&quot;M&quot;,&quot;METRE_FACTOR&quot;:1,&quot;METRE2_SYMBOL&quot;:&quot;M2&quot;,&quot;METRE2_FACTOR&quot;:1,&quot;JOUR_SYMBOL&quot;:&quot;J&quot;,&quot;JOUR_FACTOR&quot;:1,&quot;PAQUET_SYMBOL&quot;:&quot;PAQQQ&quot;,&quot;PAQUET_FACTOR&quot;:1,&quot;INPUT_BALANCE&quot;:3073.14,&quot;OUTPUT_BALANCE&quot;:-3073.14,&quot;EXP_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;CERTIFICATE&quot;:&quot;piqsoft version : 1.0.2d&quot;,&quot;FACTURE_NAME&quot;:&quot;1.DUPLICATA FACTURE&quot;,&quot;FACTURE_TIME&quot;:&quot;2023-04-19T14:33:13.350Z&quot;,&quot;SIGNATURE&quot;:&quot;piqsoft version : 1.0.2d-(NF203) D_452-1-ECKD&quot;,&quot;PATH&quot;:&quot;C:\\Project\\piqoff\\plugins\\devprint\\repx\\piqsoft\\facture\\Facture vente.repx&quot;},{&quot;GUID&quot;:&quot;23B3B22B-A4A5-46D7-9580-F525BC05EA79&quot;,&quot;CDATE&quot;:&quot;2023-04-19T14:31:14.223Z&quot;,&quot;CUSER&quot;:&quot;Recep&quot;,&quot;CUSER_NAME&quot;:&quot;Karaca&quot;,&quot;LDATE&quot;:&quot;2023-04-19T14:31:14.223Z&quot;,&quot;LUSER&quot;:&quot;Recep&quot;,&quot;LUSER_NAME&quot;:&quot;Karaca&quot;,&quot;DOC_GUID&quot;:&quot;05C4EC1F-719B-451F-ABBE-267D9866BACD&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:20,&quot;TYPE_NAME&quot;:&quot;FAC&quot;,&quot;REBATE&quot;:false,&quot;REF&quot;:&quot;1681169133&quot;,&quot;REF_NO&quot;:&quot;2&quot;,&quot;DOC_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;SHIPMENT_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;INPUT&quot;:&quot;A83E2601-AA75-4F51-AF49-2840B8E8268C&quot;,&quot;INPUT_CODE&quot;:&quot;1681169133&quot;,&quot;INPUT_NAME&quot;:&quot;ECO PLUS SARL&quot;,&quot;OUTPUT&quot;:&quot;1666D56A-BDC3-4FA7-9018-1874D2F3B808&quot;,&quot;OUTPUT_CODE&quot;:&quot;1681169565&quot;,&quot;OUTPUT_NAME&quot;:&quot;CENTRE&quot;,&quot;ITEM&quot;:&quot;718AE3A2-E402-4B8C-84D7-49DFF1EB9EDC&quot;,&quot;ITEM_NAME&quot;:&quot;DATALOGIC ADC POWER CORD, AC, IEC/EU&quot;,&quot;ITEM_CODE&quot;:&quot;1681753287&quot;,&quot;BARCODE&quot;:&quot;&quot;,&quot;ITEM_TYPE&quot;:&quot;0&quot;,&quot;MULTICODE&quot;:&quot;&quot;,&quot;ORGINS&quot;:&quot;&quot;,&quot;CUSTOMER_PRICE&quot;:8.325000000000001,&quot;DIFF_PRICE&quot;:-1.7763568394002505e-15,&quot;LAST_CUSTOMER&quot;:&quot;BLUE STAR EUROPE DISTRIBUTION BV&quot;,&quot;LINE_NO&quot;:1,&quot;QUANTITY&quot;:10,&quot;PRICE&quot;:8.325,&quot;DISCOUNT&quot;:0,&quot;DISCOUNT_RATE&quot;:0,&quot;VAT&quot;:11.3533,&quot;AMOUNT&quot;:83.25,&quot;TOTAL&quot;:68.12,&quot;CONTACT&quot;:&quot;449 RUE DE METZ &quot;,&quot;ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FACTURE_ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FIRMA&quot;:&quot;PIQSOFT SAS&quot;,&quot;OFFICIAL_NAME&quot;:&quot;MUHAMMET&quot;,&quot;OFFICIAL_SURNAME&quot;:&quot;ZENGIN&quot;,&quot;COMPANT_WEB&quot;:&quot;www.piqsoft.fr&quot;,&quot;SIREN_NO&quot;:&quot;949290969&quot;,&quot;CAPITAL&quot;:4000,&quot;COMPANY_TYPE&quot;:&quot;&quot;,&quot;COMPANY_CIYT&quot;:&quot;Essey-lès-Nancy&quot;,&quot;COUNTRY&quot;:&quot;FR&quot;,&quot;COMPANY_MAIL&quot;:&quot;info@piqsoft.fr&quot;,&quot;COMPANY_TEL&quot;:&quot;03 83 52 62 34&quot;,&quot;ZIPCODE&quot;:&quot;54270&quot;,&quot;SIRET_ID&quot;:&quot;94929096900011&quot;,&quot;APE_CODE&quot;:&quot;6201Z&quot;,&quot;TAX_OFFICE&quot;:&quot;NANCY&quot;,&quot;TAX_NO&quot;:&quot;FR61949290969&quot;,&quot;INT_VAT_NO&quot;:&quot;FR61949290969&quot;,&quot;COMPANY_ADDRESS1&quot;:&quot;7 ALLEE DU MIDI&quot;,&quot;COMPANY_ADDRESS2&quot;:&quot;&quot;,&quot;RCS&quot;:&quot;NANCY B 949 290 969&quot;,&quot;CUSTOMER_SIRET_ID&quot;:&quot;838071124&quot;,&quot;CUSTOMER_APE_CODE&quot;:&quot;4722Z&quot;,&quot;CUSTOMER_TAX_OFFICE&quot;:&quot;METZ&quot;,&quot;CUSTOMER_TAX_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_INT_VAT_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_RCS&quot;:&quot;Thionville B 838 071 124&quot;,&quot;CUSTOMER_SIREN_NO&quot;:&quot;83807112400013&quot;,&quot;VAT_RATE&quot;:20,&quot;UNIT_SYMBOL&quot;:&quot;&quot;,&quot;UNIT2_NAME&quot;:&quot;Unité&quot;,&quot;UNIT2_FACTOR&quot;:1,&quot;UNIT2_SYMBOL&quot;:&quot;U&quot;,&quot;LINE_DESCRIPTION&quot;:&quot;&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;DOC_TOTAL&quot;:498.89,&quot;DOC_AMOUNT&quot;:3658.17,&quot;DOC_VAT&quot;:498.89,&quot;DOC_DISCOUNT&quot;:0,&quot;DOC_INTERFEL&quot;:0,&quot;DOC_TOTALHT&quot;:0,&quot;INVOICE_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;INVOICE_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;CONNECT_REF&quot;:&quot;&quot;,&quot;CONNECT_DOC_DATE&quot;:&quot;&quot;,&quot;COST_PRICE&quot;:4.13,&quot;CDATE_FORMAT&quot;:&quot;19.04.2023 14:31:14&quot;,&quot;MAIN_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_FACTOR&quot;:1,&quot;KILOGRAMME_SYMBOL&quot;:&quot;KG&quot;,&quot;KILOGRAMME_FACTOR&quot;:1,&quot;COLIS_SYMBOL&quot;:&quot;CO&quot;,&quot;COLIS_FACTOR&quot;:1,&quot;HEURE_SYMBOL&quot;:&quot;H&quot;,&quot;HEURE_FACTOR&quot;:1,&quot;LITRE_SYMBOL&quot;:&quot;L&quot;,&quot;LITRE_FACTOR&quot;:1,&quot;METRE_SYMBOL&quot;:&quot;M&quot;,&quot;METRE_FACTOR&quot;:1,&quot;METRE2_SYMBOL&quot;:&quot;M2&quot;,&quot;METRE2_FACTOR&quot;:1,&quot;JOUR_SYMBOL&quot;:&quot;J&quot;,&quot;JOUR_FACTOR&quot;:1,&quot;PAQUET_SYMBOL&quot;:&quot;PAQQQ&quot;,&quot;PAQUET_FACTOR&quot;:1,&quot;INPUT_BALANCE&quot;:3073.14,&quot;OUTPUT_BALANCE&quot;:-3073.14,&quot;EXP_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;CERTIFICATE&quot;:&quot;piqsoft version : 1.0.2d&quot;,&quot;FACTURE_NAME&quot;:&quot;1.DUPLICATA FACTURE&quot;,&quot;FACTURE_TIME&quot;:&quot;2023-04-19T14:33:13.350Z&quot;,&quot;SIGNATURE&quot;:&quot;piqsoft version : 1.0.2d-(NF203) D_452-1-ECKD&quot;,&quot;PATH&quot;:&quot;C:\\Project\\piqoff\\plugins\\devprint\\repx\\piqsoft\\facture\\Facture vente.repx&quot;},{&quot;GUID&quot;:&quot;578BC3C0-B6EB-4B32-9926-7BBCA1F9204F&quot;,&quot;CDATE&quot;:&quot;2023-04-19T14:31:14.243Z&quot;,&quot;CUSER&quot;:&quot;Recep&quot;,&quot;CUSER_NAME&quot;:&quot;Karaca&quot;,&quot;LDATE&quot;:&quot;2023-04-19T14:31:14.243Z&quot;,&quot;LUSER&quot;:&quot;Recep&quot;,&quot;LUSER_NAME&quot;:&quot;Karaca&quot;,&quot;DOC_GUID&quot;:&quot;05C4EC1F-719B-451F-ABBE-267D9866BACD&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:20,&quot;TYPE_NAME&quot;:&quot;FAC&quot;,&quot;REBATE&quot;:false,&quot;REF&quot;:&quot;1681169133&quot;,&quot;REF_NO&quot;:&quot;2&quot;,&quot;DOC_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;SHIPMENT_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;INPUT&quot;:&quot;A83E2601-AA75-4F51-AF49-2840B8E8268C&quot;,&quot;INPUT_CODE&quot;:&quot;1681169133&quot;,&quot;INPUT_NAME&quot;:&quot;ECO PLUS SARL&quot;,&quot;OUTPUT&quot;:&quot;1666D56A-BDC3-4FA7-9018-1874D2F3B808&quot;,&quot;OUTPUT_CODE&quot;:&quot;1681169565&quot;,&quot;OUTPUT_NAME&quot;:&quot;CENTRE&quot;,&quot;ITEM&quot;:&quot;4C9DD32C-7260-48F7-BDAA-BDB96C721F6D&quot;,&quot;ITEM_NAME&quot;:&quot;DATALOGIC ADC POWER ADAPTER, 12V DC, AC/DC REGULATED, ROHS (FOR USE WITH 6003-XXXX POWER CORDS)&quot;,&quot;ITEM_CODE&quot;:&quot;1681753158&quot;,&quot;BARCODE&quot;:&quot;&quot;,&quot;ITEM_TYPE&quot;:&quot;0&quot;,&quot;MULTICODE&quot;:&quot;&quot;,&quot;ORGINS&quot;:&quot;&quot;,&quot;CUSTOMER_PRICE&quot;:24.991666666666667,&quot;DIFF_PRICE&quot;:0.000033333333334439885,&quot;LAST_CUSTOMER&quot;:&quot;BLUE STAR EUROPE DISTRIBUTION BV&quot;,&quot;LINE_NO&quot;:2,&quot;QUANTITY&quot;:10,&quot;PRICE&quot;:24.9917,&quot;DISCOUNT&quot;:0,&quot;DISCOUNT_RATE&quot;:0,&quot;VAT&quot;:34.0827,&quot;AMOUNT&quot;:249.92,&quot;TOTAL&quot;:204.5,&quot;CONTACT&quot;:&quot;449 RUE DE METZ &quot;,&quot;ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FACTURE_ADDRESS&quot;:&quot;449 RUE DE METZ  \r 57300 Mondelange/FR&quot;,&quot;FIRMA&quot;:&quot;PIQSOFT SAS&quot;,&quot;OFFICIAL_NAME&quot;:&quot;MUHAMMET&quot;,&quot;OFFICIAL_SURNAME&quot;:&quot;ZENGIN&quot;,&quot;COMPANT_WEB&quot;:&quot;www.piqsoft.fr&quot;,&quot;SIREN_NO&quot;:&quot;949290969&quot;,&quot;CAPITAL&quot;:4000,&quot;COMPANY_TYPE&quot;:&quot;&quot;,&quot;COMPANY_CIYT&quot;:&quot;Essey-lès-Nancy&quot;,&quot;COUNTRY&quot;:&quot;FR&quot;,&quot;COMPANY_MAIL&quot;:&quot;info@piqsoft.fr&quot;,&quot;COMPANY_TEL&quot;:&quot;03 83 52 62 34&quot;,&quot;ZIPCODE&quot;:&quot;54270&quot;,&quot;SIRET_ID&quot;:&quot;94929096900011&quot;,&quot;APE_CODE&quot;:&quot;6201Z&quot;,&quot;TAX_OFFICE&quot;:&quot;NANCY&quot;,&quot;TAX_NO&quot;:&quot;FR61949290969&quot;,&quot;INT_VAT_NO&quot;:&quot;FR61949290969&quot;,&quot;COMPANY_ADDRESS1&quot;:&quot;7 ALLEE DU MIDI&quot;,&quot;COMPANY_ADDRESS2&quot;:&quot;&quot;,&quot;RCS&quot;:&quot;NANCY B 949 290 969&quot;,&quot;CUSTOMER_SIRET_ID&quot;:&quot;838071124&quot;,&quot;CUSTOMER_APE_CODE&quot;:&quot;4722Z&quot;,&quot;CUSTOMER_TAX_OFFICE&quot;:&quot;METZ&quot;,&quot;CUSTOMER_TAX_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_INT_VAT_NO&quot;:&quot;FR59838071124&quot;,&quot;CUSTOMER_RCS&quot;:&quot;Thionville B 838 071 124&quot;,&quot;CUSTOMER_SIREN_NO&quot;:&quot;83807112400013&quot;,&quot;VAT_RATE&quot;:20,&quot;UNIT_SYMBOL&quot;:&quot;&quot;,&quot;UNIT2_NAME&quot;:&quot;Unité&quot;,&quot;UNIT2_FACTOR&quot;:1,&quot;UNIT2_SYMBOL&quot;:&quot;U&quot;,&quot;LINE_DESCRIPTION&quot;:&quot;&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;DOC_TOTAL&quot;:498.89,&quot;DOC_AMOUNT&quot;:3658.17,&quot;DOC_VAT&quot;:498.89,&quot;DOC_DISCOUNT&quot;:0,&quot;DOC_INTERFEL&quot;:0,&quot;DOC_TOTALHT&quot;:0,&quot;INVOICE_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;INVOICE_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;CONNECT_REF&quot;:&quot;&quot;,&quot;CONNECT_DOC_DATE&quot;:&quot;&quot;,&quot;COST_PRICE&quot;:12.98,&quot;CDATE_FORMAT&quot;:&quot;19.04.2023 14:31:14&quot;,&quot;MAIN_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_FACTOR&quot;:1,&quot;KILOGRAMME_SYMBOL&quot;:&quot;KG&quot;,&quot;KILOGRAMME_FACTOR&quot;:1,&quot;COLIS_SYMBOL&quot;:&quot;CO&quot;,&quot;COLIS_FACTOR&quot;:1,&quot;HEURE_SYMBOL&quot;:&quot;H&quot;,&quot;HEURE_FACTOR&quot;:1,&quot;LITRE_SYMBOL&quot;:&quot;L&quot;,&quot;LITRE_FACTOR&quot;:1,&quot;METRE_SYMBOL&quot;:&quot;M&quot;,&quot;METRE_FACTOR&quot;:1,&quot;METRE2_SYMBOL&quot;:&quot;M2&quot;,&quot;METRE2_FACTOR&quot;:1,&quot;JOUR_SYMBOL&quot;:&quot;J&quot;,&quot;JOUR_FACTOR&quot;:1,&quot;PAQUET_SYMBOL&quot;:&quot;PAQQQ&quot;,&quot;PAQUET_FACTOR&quot;:1,&quot;INPUT_BALANCE&quot;:3073.14,&quot;OUTPUT_BALANCE&quot;:-3073.14,&quot;EXP_DATE&quot;:&quot;2023-04-19T00:00:00.000Z&quot;,&quot;CERTIFICATE&quot;:&quot;piqsoft version : 1.0.2d&quot;,&quot;FACTURE_NAME&quot;:&quot;1.DUPLICATA FACTURE&quot;,&quot;FACTURE_TIME&quot;:&quot;2023-04-19T14:33:13.350Z&quot;,&quot;SIGNATURE&quot;:&quot;piqsoft version : 1.0.2d-(NF203) D_452-1-ECKD&quot;,&quot;PATH&quot;:&quot;C:\\Project\\piqoff\\plugins\\devprint\\repx\\piqsoft\\facture\\Facture vente.repx&quot;}],&quot;data2&quot;:[{&quot;DISPATCH&quot;:0,&quot;BALANCE&quot;:3073.14}]}" Margins="30, 32, 0, 51" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report11" ScriptsSource="private void subreport1_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)&#xD;&#xA;{&#xD;&#xA;&#x9;XRSubreport subreport = sender as XRSubreport;&#xD;&#xA;&#x9;XtraReport reportSource = subreport.ReportSource as XtraReport;&#xD;&#xA;&#x9;reportSource.DataSource = this.Report.DataSource;&#xD;&#xA;}" DataSourceSchema="{&quot;DATA&quot;:[{&quot;GUID&quot;:&quot;62CF7D66-E87F-401D-8AE8-0FC4D3BD1E49&quot;,&quot;CDATE&quot;:&quot;2024-02-14T10:58:42.867Z&quot;,&quot;CUSER&quot;:&quot;Recep&quot;,&quot;CUSER_NAME&quot;:&quot;Karaca&quot;,&quot;LDATE&quot;:&quot;2024-02-14T10:58:42.867Z&quot;,&quot;LUSER&quot;:&quot;Recep&quot;,&quot;LUSER_NAME&quot;:&quot;Karaca&quot;,&quot;DOC_GUID&quot;:&quot;6C5B6198-F895-4AF0-AB06-F054CB9CEBB5&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:20,&quot;TYPE_NAME&quot;:&quot;FAC&quot;,&quot;REBATE&quot;:false,&quot;REF&quot;:&quot;1697898160&quot;,&quot;REF_NO&quot;:&quot;97&quot;,&quot;DOC_DATE&quot;:&quot;2024-02-14T00:00:00.000Z&quot;,&quot;SHIPMENT_DATE&quot;:&quot;2024-02-14T00:00:00.000Z&quot;,&quot;INPUT&quot;:&quot;763A5DE1-2539-4B55-B790-CA5F6A1299BE&quot;,&quot;INPUT_CODE&quot;:&quot;1697898160&quot;,&quot;INPUT_NAME&quot;:&quot;PIQSOFT&quot;,&quot;OUTPUT&quot;:&quot;1A428DFC-48A9-4AC6-AF20-4D0A4D33F316&quot;,&quot;OUTPUT_CODE&quot;:&quot;1&quot;,&quot;OUTPUT_NAME&quot;:&quot;DEPOT MAGASIN&quot;,&quot;ITEM&quot;:&quot;6681AEEF-FA24-4DDD-93A5-0585730D0E15&quot;,&quot;ITEM_NAME&quot;:&quot;TOMATE SAN MARZANO&quot;,&quot;ITEM_CODE&quot;:&quot;1663918611&quot;,&quot;BARCODE&quot;:&quot;202210201663918611&quot;,&quot;ITEM_TYPE&quot;:&quot;0&quot;,&quot;MAIN_GRP_NAME&quot;:&quot;BISCUIT TR&quot;,&quot;MULTICODE&quot;:&quot;1&quot;,&quot;ORGINS&quot;:&quot;BELGIQUE&quot;,&quot;CUSTOMER_PRICE&quot;:0.9478672985781991,&quot;DIFF_PRICE&quot;:0.0021327014218008866,&quot;LINE_NO&quot;:1,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.95,&quot;DISCOUNT&quot;:0,&quot;DISCOUNT_RATE&quot;:0,&quot;VAT&quot;:0.05225,&quot;AMOUNT&quot;:0.95,&quot;TOTAL&quot;:1,&quot;TOTALHT&quot;:0.95,&quot;CONTACT&quot;:&quot;&quot;,&quot;ADDRESS&quot;:&quot;XXX \r 54000 Saulxures-lès-Nancy/FR&quot;,&quot;FACTURE_ADDRESS&quot;:&quot;XXX \r 54000 Saulxures-lès-Nancy/FR&quot;,&quot;CUSTOMER_ZIPCODE&quot;:&quot;54000&quot;,&quot;CUSTOMER_ADRESS&quot;:&quot;XXX&quot;,&quot;CUSTOMER_CITY&quot;:&quot;Saulxures-lès-Nancy&quot;,&quot;CUSTOMER_COUNTRY&quot;:&quot;FRANCE&quot;,&quot;OFFICAL&quot;:&quot;ALI KEMAL  KARACA&quot;,&quot;FIRMA&quot;:&quot;PIQSOFT&quot;,&quot;OFFICIAL_NAME&quot;:&quot;MUHAMMET  TEST&quot;,&quot;OFFICIAL_SURNAME&quot;:&quot;ZENGIN&quot;,&quot;COMPANY_WEB&quot;:&quot;www.prodorplus.fr&quot;,&quot;SIREN_NO&quot;:&quot;885339697&quot;,&quot;CAPITAL&quot;:20000,&quot;COMPANY_TYPE&quot;:&quot;&quot;,&quot;COMPANY_CIYT&quot;:&quot;Essey-lès-Nancy&quot;,&quot;COUNTRY&quot;:&quot;FR&quot;,&quot;COMPANY_MAIL&quot;:&quot;nancy@prodorplus.fr&quot;,&quot;COMPANY_TEL&quot;:&quot;03 83 93 33 07&quot;,&quot;ZIPCODE&quot;:&quot;54270&quot;,&quot;SIRET_ID&quot;:&quot;88533969700017&quot;,&quot;APE_CODE&quot;:&quot;4722Z&quot;,&quot;TAX_OFFICE&quot;:&quot;NANCY&quot;,&quot;TAX_NO&quot;:&quot;FR23885339697&quot;,&quot;INT_VAT_NO&quot;:&quot;FR23885339697&quot;,&quot;COMPANY_ADDRESS1&quot;:&quot;7 ALLEE DU MIDI &quot;,&quot;COMPANY_ADDRESS2&quot;:&quot;&quot;,&quot;COMPANY_BANK_CODE&quot;:&quot;0&quot;,&quot;COMPANY_ACCOUNT_NO&quot;:&quot;0&quot;,&quot;COMPANY_BIC&quot;:&quot;0&quot;,&quot;COMPANY_IBAN&quot;:&quot;0&quot;,&quot;RCS&quot;:&quot;NANCY B 885339697&quot;,&quot;CUSTOMER_SIRET_ID&quot;:&quot;-&quot;,&quot;CUSTOMER_APE_CODE&quot;:&quot;-&quot;,&quot;CUSTOMER_TAX_OFFICE&quot;:&quot;-&quot;,&quot;CUSTOMER_TAX_NO&quot;:&quot;FR23885339697&quot;,&quot;CUSTOMER_INT_VAT_NO&quot;:&quot;-&quot;,&quot;CUSTOMER_RCS&quot;:&quot;&quot;,&quot;CUSTOMER_SIREN_NO&quot;:&quot;&quot;,&quot;VAT_RATE&quot;:5.5,&quot;UNIT_SYMBOL&quot;:&quot;kg&quot;,&quot;UNIT2_NAME&quot;:&quot;Kilogramme&quot;,&quot;UNIT2_FACTOR&quot;:1,&quot;UNIT2_SYMBOL&quot;:&quot;kg&quot;,&quot;ITEM_DESCRIPTION&quot;:&quot;&quot;,&quot;LINE_DESCRIPTION&quot;:&quot;&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;DOC_TOTAL&quot;:1,&quot;DOC_AMOUNT&quot;:0.95,&quot;DOC_VAT&quot;:0.05,&quot;LINE_DISCOUNT&quot;:0,&quot;DOC_DISCOUNT&quot;:0,&quot;DOC_DISCOUNT_RATE&quot;:0,&quot;DOC_INTERFEL&quot;:0,&quot;DOC_TOTALHT&quot;:0.95,&quot;DOC_SUBTOTAL&quot;:0.95,&quot;INVOICE_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;INVOICE_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;ORDER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;OFFER_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_LINE_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;PROFORMA_DOC_GUID&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;CONNECT_DOC_DATE&quot;:&quot;1697898160-97&quot;,&quot;COST_PRICE&quot;:0.5,&quot;CDATE_FORMAT&quot;:&quot;14.02.2024 10:58:42&quot;,&quot;MAIN_SYMBOL&quot;:&quot;kg&quot;,&quot;UNITE_SYMBOL&quot;:&quot;U&quot;,&quot;UNITE_FACTOR&quot;:1,&quot;KILOGRAMME_SYMBOL&quot;:&quot;kg&quot;,&quot;KILOGRAMME_FACTOR&quot;:1,&quot;COLIS_SYMBOL&quot;:&quot;CO&quot;,&quot;COLIS_FACTOR&quot;:0,&quot;HEURE_SYMBOL&quot;:&quot;H&quot;,&quot;HEURE_FACTOR&quot;:0,&quot;LITRE_SYMBOL&quot;:&quot;L&quot;,&quot;LITRE_FACTOR&quot;:0,&quot;METRE_SYMBOL&quot;:&quot;M&quot;,&quot;METRE_FACTOR&quot;:0,&quot;METRE2_SYMBOL&quot;:&quot;M2&quot;,&quot;METRE2_FACTOR&quot;:0,&quot;JOUR_SYMBOL&quot;:&quot;J&quot;,&quot;JOUR_FACTOR&quot;:0,&quot;PAQUET_SYMBOL&quot;:&quot;PAQQQ&quot;,&quot;PAQUET_FACTOR&quot;:0,&quot;INPUT_BALANCE&quot;:-44912066.65,&quot;OUTPUT_BALANCE&quot;:44887696.39,&quot;EXP_DATE&quot;:&quot;2024-02-14T00:00:00.000Z&quot;,&quot;CERTIFICATE&quot;:&quot;piqsoft version : 1.0.7d&quot;,&quot;FACTURE_NAME&quot;:&quot;FATURA&quot;,&quot;FACTURE_TIME&quot;:&quot;2024-02-14T00:00:00.000Z&quot;,&quot;PRINT_TIME&quot;:&quot;2024-02-14T14:43:41.720Z&quot;,&quot;SIGNATURE&quot;:&quot;piqsoft version : 1.0.7d-(NF203)  D_452-1-EQZL&quot;,&quot;PRINT_SIGNATURE&quot;:&quot;&quot;,&quot;PATH&quot;:&quot;facture\\Facture vente.repx&quot;}],&quot;DATA1&quot;:[{&quot;DOC_DATE&quot;:&quot;2024-02-14T00:00:00.000Z&quot;,&quot;REF&quot;:&quot;&quot;,&quot;REF_NO&quot;:&quot;97&quot;,&quot;BALANCE&quot;:1},{&quot;DOC_DATE&quot;:&quot;2024-02-02T00:00:00.000Z&quot;,&quot;REF&quot;:&quot;&quot;,&quot;REF_NO&quot;:&quot;96&quot;,&quot;BALANCE&quot;:1},{&quot;DOC_DATE&quot;:&quot;2024-01-18T00:00:00.000Z&quot;,&quot;REF&quot;:&quot;&quot;,&quot;REF_NO&quot;:&quot;77&quot;,&quot;BALANCE&quot;:1}]}" Margins="30, 32, 0, 69" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" Font="Arial, 9.75pt">
   <CalculatedFields>
-    <Item1 Ref="1" Name="TTC" Expression="[TOTAL_AMOUNT] + [TOTAL_VAT]" />
+    <Item1 Ref="1" Name="TTC" FieldType="DateTime" Expression="[TOTAL_AMOUNT] + [TOTAL_VAT]" />
   </CalculatedFields>
   <Bands>
     <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="0" Font="Arial, 7.5pt">
       <StylePriority Ref="3" UseFont="false" />
     </Item1>
-    <Item2 Ref="4" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="51.1580162">
+    <Item2 Ref="4" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="69.16784">
       <Controls>
-        <Item1 Ref="5" ControlType="XRLabel" Name="label1" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" Text="----------------------------------------------------------------" TextAlignment="TopCenter" SizeF="784.0416,21.58343" LocationFloat="0, 27.8333035" Font="Arial, 10pt, style=Underline" Padding="2,2,0,0,100">
+        <Item1 Ref="5" ControlType="XRLabel" Name="label10" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" Text="----------------------------------------------------------------" TextAlignment="TopCenter" SizeF="788,21.5834351" LocationFloat="0.5800645, 0" Font="Arial, 10pt, style=Underline" Padding="2,2,0,0,100">
           <StylePriority Ref="6" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="7" ControlType="XRLabel" Name="label63" TextFormatString="{0:00000}" Multiline="true" TextAlignment="TopRight" SizeF="231.876648,15.999999" LocationFloat="554.1232, 10.9999971" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item2 Ref="9" ControlType="XRLabel" Name="label2" Multiline="true" Text="IBAN:" SizeF="44.68097,23.0000153" LocationFloat="335.723236, 83.86402" Padding="2,2,0,0,100" />
+        <Item3 Ref="10" ControlType="XRLabel" Name="label3" Multiline="true" Text="BIC:" SizeF="34.3427658,23.0000153" LocationFloat="1.66331923, 83.86402" Padding="2,2,0,0,100" />
+        <Item4 Ref="11" ControlType="XRLabel" Name="label4" Multiline="true" Text="Code banque:" SizeF="100.855377,24.16782" LocationFloat="335.723236, 49.4167328" Padding="2,2,0,0,100" />
+        <Item5 Ref="12" ControlType="XRLabel" Name="label5" Multiline="true" Text="Numéro de compte:" SizeF="131.739014,23.00002" LocationFloat="1.24999678, 48.2489281" Padding="2,2,0,0,100" />
+        <Item6 Ref="13" ControlType="XRLabel" Name="label6" Multiline="true" Text="label68" SizeF="374.1735,23" LocationFloat="375.077057, 83.86402" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="8" EventName="BeforePrint" PropertyName="Text" Expression="[TYPE_NAME]+'-'+[REF_NO]" />
           </ExpressionBindings>
           <StylePriority Ref="9" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="10" ControlType="XRLine" Name="line1" SizeF="789.2916,11" LocationFloat="0, 0" />
-        <Item4 Ref="11" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="1.58945713E-05, 0" />
-        <Item5 Ref="12" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 11" StyleName="PageInfo">
+        <Item3 Ref="10" ControlType="XRLine" Name="line1" SizeF="789.2916,11" LocationFloat="0, 22.91673" />
+        <Item4 Ref="11" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="0, 46.4475632" />
+        <Item5 Ref="12" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 33.91679" StyleName="PageInfo">
           <StylePriority Ref="13" UseTextAlignment="false" />
         </Item5>
       </Controls>
@@ -259,7 +263,7 @@
         </Item43>
       </Controls>
     </Item3>
-    <Item4 Ref="138" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="27.87504">
+    <Item4 Ref="138" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="28.66675">
       <GroupFields>
         <Item1 Ref="139" FieldName="CONNECT_REF" />
       </GroupFields>
@@ -273,10 +277,10 @@
           </ExpressionBindings>
           <StylePriority Ref="144" UseFont="false" UseBorders="false" UseBorderDashStyle="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="145" ControlType="XRLabel" Name="label37" Multiline="true" Text="BON DE LIVRAISON  NO:" TextAlignment="TopRight" SizeF="144.58371,13.0000114" LocationFloat="38.8642731, 1.87511444" Font="Arial, 8pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None" BorderDashStyle="Dot">
+        <Item3 Ref="145" ControlType="XRLabel" Name="label56" Multiline="true" Text="BON DE LIVRAISON  NO:" TextAlignment="TopRight" SizeF="144.58371,13.0000114" LocationFloat="38.8642731, 1.87511444" Font="Arial, 8pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None" BorderDashStyle="Dot">
           <StylePriority Ref="146" UseFont="false" UseBorders="false" UseBorderDashStyle="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="147" ControlType="XRLabel" Name="label49" Multiline="true" TextAlignment="TopLeft" SizeF="602.5519,13.0000114" LocationFloat="183.447983, 1.8750509" Font="Arial, 8pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None" BorderDashStyle="Dot">
+        <Item4 Ref="147" ControlType="XRLabel" Name="label57" Multiline="true" TextAlignment="TopLeft" SizeF="602.5519,13.0000114" LocationFloat="183.447983, 1.8750509" Font="Arial, 8pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None" BorderDashStyle="Dot">
           <ExpressionBindings>
             <Item1 Ref="148" EventName="BeforePrint" PropertyName="Text" Expression="[CONNECT_REF]+'  '+'Livré à : ' + [ADDRESS]" />
           </ExpressionBindings>
@@ -363,165 +367,221 @@
       </Controls>
       <StylePriority Ref="186" UseBorders="false" />
     </Item5>
-    <Item6 Ref="187" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="192.166779" KeepTogether="true">
+    <Item6 Ref="187" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="358.903748" KeepTogether="true">
       <Controls>
         <Item1 Ref="188" ControlType="XRLabel" Name="label38" Multiline="true" Text="Titulaire du compte: Ebo Distributıon Sarl&#xD;&#xA;  &#xA;IBAN: FR15 3000 2069 9500 0007 0079G 54    BIC: CRLYFRPP" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="3.62170529, 149.004745" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
           <StylePriority Ref="189" UseFont="false" UseTextAlignment="false" />
         </Item1>
         <Item2 Ref="190" ControlType="XRLabel" Name="label36" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.3717041, 133.631638" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="191" EventName="BeforePrint" PropertyName="Text" Expression="[PRINT_SIGNATURE]" />
+            <Item1 Ref="190" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_ACCOUNT_NO]" />
           </ExpressionBindings>
-          <StylePriority Ref="192" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="191" UseBorders="false" />
         </Item2>
-        <Item3 Ref="193" ControlType="XRLabel" Name="label50" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.33006477, 118.258484" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
+        <Item3 Ref="192" ControlType="XRLabel" Name="label4" Multiline="true" Text="Code banque:" SizeF="100.855377,24.16782" LocationFloat="334.7776, 247.823456" Padding="2,2,0,0,100" />
+        <Item4 Ref="193" ControlType="XRLabel" Name="label8" Multiline="true" Text="label66" SizeF="200.513718,23" LocationFloat="435.632965, 248.991272" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="194" EventName="BeforePrint" PropertyName="Text" Expression="[SIGNATURE]" />
+            <Item1 Ref="194" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_BANK_CODE]" />
           </ExpressionBindings>
-          <StylePriority Ref="195" UseFont="false" UseTextAlignment="false" />
-        </Item3>
-        <Item4 Ref="196" ControlType="XRTable" Name="table4" TextAlignment="TopCenter" SizeF="786,23.124155" LocationFloat="0.999982834, 28.125" Padding="2,2,0,0,96" Borders="All">
+        </Item4>
+        <Item5 Ref="195" ControlType="XRLabel" Name="label7" Multiline="true" Text="label67" SizeF="100,23" LocationFloat="34.3427658, 269.655731" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="196" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_BIC]" />
+          </ExpressionBindings>
+        </Item5>
+        <Item6 Ref="197" ControlType="XRLabel" Name="label6" Multiline="true" Text="label68" SizeF="374.1735,23" LocationFloat="379.458557, 282.270752" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="198" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_IBAN]" />
+          </ExpressionBindings>
+        </Item6>
+        <Item7 Ref="199" ControlType="XRLabel" Name="label1" Multiline="true" Text="label73" TextAlignment="TopCenter" SizeF="788,23" LocationFloat="0, 330.1874" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="200" EventName="BeforePrint" PropertyName="Text" Expression="[COMPANY_WEB]" />
+          </ExpressionBindings>
+          <StylePriority Ref="201" UseTextAlignment="false" />
+        </Item7>
+        <Item8 Ref="202" ControlType="XRLabel" Name="label5" Multiline="true" Text="Numéro de compte:" SizeF="131.739014,23.00002" LocationFloat="1.66331923, 246.655655" Padding="2,2,0,0,100" />
+        <Item9 Ref="203" ControlType="XRLabel" Name="label2" Multiline="true" Text="IBAN:" SizeF="44.68097,23.0000153" LocationFloat="334.7776, 282.270752" Padding="2,2,0,0,100" />
+        <Item10 Ref="204" ControlType="XRTable" Name="table1" SizeF="512.0384,26.041666" LocationFloat="0, 186.210281" Padding="2,2,0,0,96">
           <Rows>
-            <Item1 Ref="197" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+            <Item1 Ref="205" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="198" ControlType="XRTableCell" Name="tableCell26" Weight="0.97059055151477658" CanGrow="false" Multiline="true" Text="Taux TVA" />
-                <Item2 Ref="199" ControlType="XRTableCell" Name="tableCell27" Weight="1.0394548180649059" Multiline="true" Text="Total HT" />
-                <Item3 Ref="200" ControlType="XRTableCell" Name="tableCell28" Weight="0.97611410448848956" Multiline="true" Text="Total Taxes" />
-                <Item4 Ref="201" ControlType="XRTableCell" Name="tableCell29" Weight="0.98332035801437756" Multiline="true" Text="Devise" />
-                <Item5 Ref="202" ControlType="XRTableCell" Name="tableCell30" Weight="1.0030819680846939" Multiline="true" Text="Total HT" />
-                <Item6 Ref="203" ControlType="XRTableCell" Name="tableCell37" Weight="1.3423753404058203" Multiline="true" Text="Remise" />
-                <Item7 Ref="204" ControlType="XRTableCell" Name="tableCell38" Weight="1.4560512078821668" Multiline="true" Text="Total Taxes" />
-                <Item8 Ref="205" ControlType="XRTableCell" Name="tableCell41" Weight="1.7421878857802438" Multiline="true" Text="Net à Payer" />
+                <Item1 Ref="206" ControlType="XRTableCell" Name="tableCell19" Weight="0.82223031616210929" Multiline="true" Text="DATE" TextAlignment="MiddleCenter" Font="Arial, 11pt, style=Bold" BackColor="Silver" Borders="All" BorderWidth="1">
+                  <StylePriority Ref="207" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="208" ControlType="XRTableCell" Name="tableCell1" Weight="0.91874987792968754" Multiline="true" Text="REF" TextAlignment="MiddleCenter" Font="Arial, 11pt, style=Bold" BackColor="Silver" Borders="All">
+                  <StylePriority Ref="209" UseFont="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="210" ControlType="XRTableCell" Name="tableCell2" Weight="0.66875022888183588" Multiline="true" Text="REF NO" TextAlignment="MiddleCenter" Font="Arial, 11pt, style=Bold" BackColor="Silver" Borders="All">
+                  <StylePriority Ref="211" UseFont="false" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="212" ControlType="XRTableCell" Name="tableCell3" Weight="0.6625000152587891" Multiline="true" Text="MONTANT" TextAlignment="MiddleCenter" Font="Arial, 11pt, style=Bold" BackColor="Silver" Borders="All" BorderWidth="1">
+                  <StylePriority Ref="213" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" UseTextAlignment="false" />
+                </Item4>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="206" UseBorders="false" UseTextAlignment="false" />
-        </Item4>
-        <Item5 Ref="207" ControlType="XRLabel" Name="label51" Multiline="true" Text="          EXTRAIT DE NOS CONDITIONS GENERALES DE VENTE : - Escompte pour paiement anticipé : Néant - Pénalité pour paiement tardif : 3 x taux de l'intérêt légal. &#xD;&#xA;Indémnité forfaitaire pour frais de recouvrement : 40€. En cas de contestation quelconque, le tribunal de commerce dont dépend le siège de la société est le seul compétent." TextAlignment="TopJustify" SizeF="786.874939,28.125" LocationFloat="0.5800673, 0" Font="Arial, 7.2pt" Padding="2,2,0,0,100" Borders="All">
-          <StylePriority Ref="208" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-        </Item5>
-        <Item6 Ref="209" ControlType="XRLabel" Name="label53" Multiline="true" Text="Total de Poids de Facturés :" TextAlignment="TopRight" SizeF="180.669983,14.0000305" LocationFloat="1.66331923, 101.258453" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <StylePriority Ref="210" UseFont="false" UseTextAlignment="false" />
-        </Item6>
-        <Item7 Ref="211" ControlType="XRLabel" Name="label54" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="142.485641,14" LocationFloat="184.323044, 101.258453" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        </Item10>
+        <Item11 Ref="214" ControlType="XRSubreport" Name="subreport1" ReportSourceUrl="D:\project\piqoff\plugins\devprint\repx\facture\subReport.repx" SizeF="788,25" LocationFloat="0, 212.251953">
+          <Scripts Ref="215" OnBeforePrint="subreport1_BeforePrint" />
+        </Item11>
+        <Item12 Ref="216" ControlType="XRLabel" Name="label58" Multiline="true" Text="Titulaire du compte: --------------------------------------&#xD;&#xA;" TextAlignment="TopCenter" SizeF="782.6699,37.2055359" LocationFloat="3.62170529, 149.004745" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="217" UseFont="false" UseTextAlignment="false" />
+        </Item12>
+        <Item13 Ref="218" ControlType="XRLabel" Name="label59" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.3717041, 133.631638" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="212" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+            <Item1 Ref="219" EventName="BeforePrint" PropertyName="Text" Expression="[PRINT_SIGNATURE]" />
           </ExpressionBindings>
-          <StylePriority Ref="213" UseFont="false" UseTextAlignment="false" />
-        </Item7>
-        <Item8 Ref="214" ControlType="XRLabel" Name="label55" TextFormatString="{0:0,0.00€}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="194.750061,14" LocationFloat="590.249939, 101.235657" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="220" UseFont="false" UseTextAlignment="false" />
+        </Item13>
+        <Item14 Ref="221" ControlType="XRLabel" Name="label60" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.33006477, 118.258484" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="215" EventName="BeforePrint" PropertyName="Text" Expression="[INPUT_BALANCE]" />
+            <Item1 Ref="222" EventName="BeforePrint" PropertyName="Text" Expression="[SIGNATURE]" />
           </ExpressionBindings>
-          <StylePriority Ref="216" UseFont="false" UseTextAlignment="false" />
-        </Item8>
-        <Item9 Ref="217" ControlType="XRLabel" Name="label56" Multiline="true" Text="Total des factures non soldées :" TextAlignment="TopRight" SizeF="262.441254,14.0000305" LocationFloat="327.8087, 101.235657" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <StylePriority Ref="218" UseFont="false" UseTextAlignment="false" />
-        </Item9>
-        <Item10 Ref="219" ControlType="XRCrossTab" Name="crossTab1" GeneralStyleName="crossTabGeneralStyle1" DataAreaStyleName="crossTabDataStyle1" HeaderAreaStyleName="crossTabHeaderStyle1" TotalAreaStyleName="crossTabTotalStyle1" SizeF="247.037064,27.839283" LocationFloat="0.330064774, 49.2491531">
-          <LayoutOptions Ref="220" />
-          <PrintOptions Ref="221" />
+          <StylePriority Ref="223" UseFont="false" UseTextAlignment="false" />
+        </Item14>
+        <Item15 Ref="224" ControlType="XRTable" Name="table4" TextAlignment="TopCenter" SizeF="786,23.124155" LocationFloat="0.999982834, 28.125" Padding="2,2,0,0,96" Borders="All">
+          <Rows>
+            <Item1 Ref="225" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+              <Cells>
+                <Item1 Ref="226" ControlType="XRTableCell" Name="tableCell26" Weight="0.97059055151477658" CanGrow="false" Multiline="true" Text="Taux TVA" />
+                <Item2 Ref="227" ControlType="XRTableCell" Name="tableCell27" Weight="1.0394548180649059" Multiline="true" Text="Total HT" />
+                <Item3 Ref="228" ControlType="XRTableCell" Name="tableCell28" Weight="0.97611410448848956" Multiline="true" Text="Total Taxes" />
+                <Item4 Ref="229" ControlType="XRTableCell" Name="tableCell29" Weight="0.98332035801437756" Multiline="true" Text="Devise" />
+                <Item5 Ref="230" ControlType="XRTableCell" Name="tableCell30" Weight="1.0030819680846939" Multiline="true" Text="Total HT" />
+                <Item6 Ref="231" ControlType="XRTableCell" Name="tableCell37" Weight="1.3423753404058203" Multiline="true" Text="Remise" />
+                <Item7 Ref="232" ControlType="XRTableCell" Name="tableCell38" Weight="1.4560512078821668" Multiline="true" Text="Total Taxes" />
+                <Item8 Ref="233" ControlType="XRTableCell" Name="tableCell41" Weight="1.7421878857802438" Multiline="true" Text="Net à Payer" />
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="234" UseBorders="false" UseTextAlignment="false" />
+        </Item15>
+        <Item16 Ref="235" ControlType="XRLabel" Name="label62" Multiline="true" Text="          EXTRAIT DE NOS CONDITIONS GENERALES DE VENTE : - Escompte pour paiement anticipé : Néant - Pénalité pour paiement tardif : 3 x taux de l'intérêt légal. &#xD;&#xA;Indémnité forfaitaire pour frais de recouvrement : 40€. En cas de contestation quelconque, le tribunal de commerce dont dépend le siège de la société est le seul compétent." TextAlignment="TopJustify" SizeF="786.874939,28.125" LocationFloat="0.5800673, 0" Font="Arial, 7.2pt" Padding="2,2,0,0,100" Borders="All">
+          <StylePriority Ref="236" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+        </Item16>
+        <Item17 Ref="237" ControlType="XRLabel" Name="label65" Multiline="true" Text="Total de Poids de Facturés :" TextAlignment="TopRight" SizeF="180.669983,14.0000305" LocationFloat="1.66331923, 101.258453" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="238" UseFont="false" UseTextAlignment="false" />
+        </Item17>
+        <Item18 Ref="239" ControlType="XRLabel" Name="label66" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="142.485641,14" LocationFloat="184.323044, 101.258453" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="240" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+          </ExpressionBindings>
+          <StylePriority Ref="241" UseFont="false" UseTextAlignment="false" />
+        </Item18>
+        <Item19 Ref="242" ControlType="XRLabel" Name="label67" TextFormatString="{0:0,0.00€}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="194.750061,14" LocationFloat="590.249939, 101.235657" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="243" EventName="BeforePrint" PropertyName="Text" Expression="[INPUT_BALANCE]" />
+          </ExpressionBindings>
+          <StylePriority Ref="244" UseFont="false" UseTextAlignment="false" />
+        </Item19>
+        <Item20 Ref="245" ControlType="XRLabel" Name="label68" Multiline="true" Text="Total des factures non soldées :" TextAlignment="TopRight" SizeF="262.441254,14.0000305" LocationFloat="327.8087, 101.235657" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="246" UseFont="false" UseTextAlignment="false" />
+        </Item20>
+        <Item21 Ref="247" ControlType="XRCrossTab" Name="crossTab1" GeneralStyleName="crossTabGeneralStyle1" DataAreaStyleName="crossTabDataStyle1" HeaderAreaStyleName="crossTabHeaderStyle1" TotalAreaStyleName="crossTabTotalStyle1" SizeF="247.037064,27.839283" LocationFloat="0.330064774, 49.2491531">
+          <LayoutOptions Ref="248" />
+          <PrintOptions Ref="249" />
           <RowFields>
-            <Item1 Ref="222" FieldName="VAT_RATE" />
+            <Item1 Ref="250" FieldName="VAT_RATE" />
           </RowFields>
           <DataFields>
-            <Item1 Ref="223" FieldName="TOTALHT" />
-            <Item2 Ref="224" FieldName="VAT" />
+            <Item1 Ref="251" FieldName="TOTALHT" />
+            <Item2 Ref="252" FieldName="VAT" />
           </DataFields>
           <ColumnDefinitions>
-            <Item1 Ref="225" Width="80.2404556" />
-            <Item2 Ref="226" Width="86.37086" />
-            <Item3 Ref="227" Width="80.42575" />
+            <Item1 Ref="253" Width="80.2404556" />
+            <Item2 Ref="254" Width="86.37086" />
+            <Item3 Ref="255" Width="80.42575" />
           </ColumnDefinitions>
           <RowDefinitions>
-            <Item1 Ref="228" Height="2.57815623" Visible="false" />
-            <Item2 Ref="229" Height="2.57815623" />
-            <Item3 Ref="230" Height="20.6970711" />
-            <Item4 Ref="231" Height="1.98589909" Visible="false" />
+            <Item1 Ref="256" Height="2.57815623" Visible="false" />
+            <Item2 Ref="257" Height="2.57815623" />
+            <Item3 Ref="258" Height="20.6970711" />
+            <Item4 Ref="259" Height="1.98589909" Visible="false" />
           </RowDefinitions>
           <Cells>
-            <Item1 Ref="232" ControlType="XRCrossTabCell" Name="crossTabHeaderCell1" ColumnIndex="0" RowIndex="0" RowSpan="2" Text="VAT_RATE" />
-            <Item2 Ref="233" ControlType="XRCrossTabCell" Name="crossTabDataCell1" TextFormatString="{0:0,0.00€}" ColumnIndex="1" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item3 Ref="234" ControlType="XRCrossTabCell" Name="crossTabHeaderCell2" ColumnIndex="1" RowIndex="0" ColumnSpan="2" />
-            <Item4 Ref="235" ControlType="XRCrossTabCell" Name="crossTabHeaderCell3" ColumnIndex="0" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item5 Ref="236" ControlType="XRCrossTabCell" Name="crossTabHeaderCell4" ColumnIndex="0" RowIndex="3" Text="Grand Total" />
-            <Item6 Ref="237" ControlType="XRCrossTabCell" Name="crossTabTotalCell1" ColumnIndex="1" RowIndex="3" />
-            <Item7 Ref="238" ControlType="XRCrossTabCell" Name="crossTabHeaderCell5" ColumnIndex="1" RowIndex="1" Text="[AMOUNT]- [DISCOUNT]" />
-            <Item8 Ref="239" ControlType="XRCrossTabCell" Name="crossTabHeaderCell6" ColumnIndex="2" RowIndex="1" Text="VAT" />
-            <Item9 Ref="240" ControlType="XRCrossTabCell" Name="crossTabDataCell2" TextFormatString="{0:0,0.00€}" ColumnIndex="2" RowIndex="2" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item10 Ref="241" ControlType="XRCrossTabCell" Name="crossTabTotalCell2" ColumnIndex="2" RowIndex="3" />
+            <Item1 Ref="260" ControlType="XRCrossTabCell" Name="crossTabHeaderCell1" ColumnIndex="0" RowIndex="0" RowSpan="2" Text="VAT_RATE" />
+            <Item2 Ref="261" ControlType="XRCrossTabCell" Name="crossTabDataCell1" TextFormatString="{0:0,0.00€}" ColumnIndex="1" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item3 Ref="262" ControlType="XRCrossTabCell" Name="crossTabHeaderCell2" ColumnIndex="1" RowIndex="0" ColumnSpan="2" />
+            <Item4 Ref="263" ControlType="XRCrossTabCell" Name="crossTabHeaderCell3" ColumnIndex="0" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item5 Ref="264" ControlType="XRCrossTabCell" Name="crossTabHeaderCell4" ColumnIndex="0" RowIndex="3" Text="Grand Total" />
+            <Item6 Ref="265" ControlType="XRCrossTabCell" Name="crossTabTotalCell1" ColumnIndex="1" RowIndex="3" />
+            <Item7 Ref="266" ControlType="XRCrossTabCell" Name="crossTabHeaderCell5" ColumnIndex="1" RowIndex="1" Text="[AMOUNT]- [DISCOUNT]" />
+            <Item8 Ref="267" ControlType="XRCrossTabCell" Name="crossTabHeaderCell6" ColumnIndex="2" RowIndex="1" Text="VAT" />
+            <Item9 Ref="268" ControlType="XRCrossTabCell" Name="crossTabDataCell2" TextFormatString="{0:0,0.00€}" ColumnIndex="2" RowIndex="2" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item10 Ref="269" ControlType="XRCrossTabCell" Name="crossTabTotalCell2" ColumnIndex="2" RowIndex="3" />
           </Cells>
-        </Item10>
-        <Item11 Ref="242" ControlType="XRTable" Name="table6" TextAlignment="TopRight" SizeF="785.3366,43.9865074" LocationFloat="1.66331923, 51.2491531" Padding="2,2,0,0,96" Borders="All">
+        </Item21>
+        <Item22 Ref="270" ControlType="XRTable" Name="table6" TextAlignment="TopRight" SizeF="785.3366,43.9865074" LocationFloat="1.66331923, 51.2491531" Padding="2,2,0,0,96" Borders="All">
           <Rows>
-            <Item1 Ref="243" ControlType="XRTableRow" Name="tableRow6" Weight="1">
+            <Item1 Ref="271" ControlType="XRTableRow" Name="tableRow6" Weight="1">
               <Cells>
-                <Item1 Ref="244" ControlType="XRTableCell" Name="tableCell43" Weight="0.933205397300761" Multiline="true" />
-                <Item2 Ref="245" ControlType="XRTableCell" Name="tableCell44" Weight="1.0215917988632564" Multiline="true" TextAlignment="TopLeft">
-                  <StylePriority Ref="246" UseTextAlignment="false" />
+                <Item1 Ref="272" ControlType="XRTableCell" Name="tableCell43" Weight="0.933205397300761" Multiline="true" />
+                <Item2 Ref="273" ControlType="XRTableCell" Name="tableCell44" Weight="1.0215917988632564" Multiline="true" TextAlignment="TopLeft">
+                  <StylePriority Ref="274" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="247" ControlType="XRTableCell" Name="tableCell45" Weight="0.93657367082395271" Multiline="true" />
-                <Item4 Ref="248" ControlType="XRTableCell" Name="tableCell46" Weight="0.95642408697641368" Multiline="true" TextAlignment="TopCenter">
+                <Item3 Ref="275" ControlType="XRTableCell" Name="tableCell45" Weight="0.93657367082395271" Multiline="true" />
+                <Item4 Ref="276" ControlType="XRTableCell" Name="tableCell46" Weight="0.95642408697641368" Multiline="true" TextAlignment="TopCenter">
                   <Controls>
-                    <Item1 Ref="249" ControlType="XRLabel" Name="label57" Multiline="true" CanGrow="false" Text="EURO" TextAlignment="TopCenter" SizeF="80.54779,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
-                      <StylePriority Ref="250" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    <Item1 Ref="277" ControlType="XRLabel" Name="label69" Multiline="true" CanGrow="false" Text="EURO" TextAlignment="TopCenter" SizeF="80.54779,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                      <StylePriority Ref="278" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
-                  <StylePriority Ref="251" UseTextAlignment="false" />
+                  <StylePriority Ref="279" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="252" ControlType="XRTableCell" Name="tableCell47" Weight="0.97430336546145924" Multiline="true" Text="tableCell24">
+                <Item5 Ref="280" ControlType="XRTableCell" Name="tableCell47" Weight="0.97430336546145924" Multiline="true" Text="tableCell24">
                   <Controls>
-                    <Item1 Ref="253" ControlType="XRLabel" Name="label58" TextFormatString="{0:0,0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="78.8176,17.3749924" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="281" ControlType="XRLabel" Name="label70" TextFormatString="{0:0,0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="78.8176,17.3749924" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="254" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTALHT])" />
+                        <Item1 Ref="282" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTALHT])" />
                       </ExpressionBindings>
-                      <StylePriority Ref="255" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="283" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item5>
-                <Item6 Ref="256" ControlType="XRTableCell" Name="tableCell48" Weight="1.3038610272553135" Multiline="true" Text="tableCell22">
+                <Item6 Ref="284" ControlType="XRTableCell" Name="tableCell48" Weight="1.3038610272553135" Multiline="true" Text="tableCell22">
                   <Controls>
-                    <Item1 Ref="257" ControlType="XRLabel" Name="label59" TextFormatString="{0:0,0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="109.069794,18.9999237" LocationFloat="9.15527344E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="285" ControlType="XRLabel" Name="label71" TextFormatString="{0:0,0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="109.069794,18.9999237" LocationFloat="9.15527344E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="258" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DISCOUNT]" />
+                        <Item1 Ref="286" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DISCOUNT]" />
                       </ExpressionBindings>
-                      <StylePriority Ref="259" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="287" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item6>
-                <Item7 Ref="260" ControlType="XRTableCell" Name="tableCell49" Weight="1.4229184818444516" Multiline="true">
+                <Item7 Ref="288" ControlType="XRTableCell" Name="tableCell49" Weight="1.4229184818444516" Multiline="true">
                   <Controls>
-                    <Item1 Ref="261" ControlType="XRLabel" Name="label60" TextFormatString="{0:0,0.00€}" Multiline="true" TextAlignment="TopCenter" SizeF="118.177368,18.9999237" LocationFloat="6.10351563E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="289" ControlType="XRLabel" Name="label72" TextFormatString="{0:0,0.00€}" Multiline="true" TextAlignment="TopCenter" SizeF="118.177368,18.9999237" LocationFloat="6.10351563E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="262" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
+                        <Item1 Ref="290" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
                       </ExpressionBindings>
-                      <StylePriority Ref="263" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="291" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item7>
-                <Item8 Ref="264" ControlType="XRTableCell" Name="tableCell50" Weight="1.6835608469302048" Multiline="true" Text="tableCell19" TextAlignment="TopRight">
+                <Item8 Ref="292" ControlType="XRTableCell" Name="tableCell50" Weight="1.6835608469302048" Multiline="true" Text="tableCell19" TextAlignment="TopRight">
                   <Controls>
-                    <Item1 Ref="265" ControlType="XRLabel" Name="label62" TextFormatString="{0:0,0.00}€" Multiline="true" TextAlignment="TopCenter" SizeF="141.208374,18.9999275" LocationFloat="0, 1.99995041" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="293" ControlType="XRLabel" Name="label73" TextFormatString="{0:0,0.00}€" Multiline="true" TextAlignment="TopCenter" SizeF="141.208374,18.9999275" LocationFloat="0, 1.99995041" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="266" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTAL]" />
+                        <Item1 Ref="294" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTAL]" />
                       </ExpressionBindings>
-                      <StylePriority Ref="267" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="295" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
-                  <StylePriority Ref="268" UseTextAlignment="false" />
+                  <StylePriority Ref="296" UseTextAlignment="false" />
                 </Item8>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="269" UseBorders="false" UseTextAlignment="false" />
-        </Item11>
+          <StylePriority Ref="297" UseBorders="false" UseTextAlignment="false" />
+        </Item22>
       </Controls>
     </Item6>
-    <Item7 Ref="270" ControlType="PageHeaderBand" Name="PageHeader" HeightF="23">
+    <Item7 Ref="298" ControlType="PageHeaderBand" Name="PageHeader" HeightF="23">
       <Controls>
-        <Item1 Ref="271" ControlType="XRTable" Name="table1" SizeF="788,23" LocationFloat="0, 0" Font="Arial, 8pt">
+        <Item1 Ref="299" ControlType="XRTable" Name="table3" SizeF="788,23" LocationFloat="0, 0" Font="Arial, 8pt">
           <Rows>
-            <Item1 Ref="272" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+            <Item1 Ref="300" ControlType="XRTableRow" Name="tableRow3" Weight="1">
               <Cells>
                 <Item1 Ref="273" ControlType="XRTableCell" Name="tableCell1" Weight="0.1007477096972587" Text="Ligne" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold" Borders="None">
                   <StylePriority Ref="274" UseFont="false" UseBorders="false" UseTextAlignment="false" />
@@ -532,47 +592,47 @@
                 <Item3 Ref="277" ControlType="XRTableCell" Name="tableCell3" Weight="0.56974422325758511" Text="Designation Produit" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="278" UseFont="false" />
                 </Item3>
-                <Item4 Ref="279" ControlType="XRTableCell" Name="tableCell5" Weight="0.07908728200167596" Text="Colis" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="280" UseFont="false" />
+                <Item4 Ref="307" ControlType="XRTableCell" Name="tableCell7" Weight="0.07908728200167596" Text="Colis" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="308" UseFont="false" />
                 </Item4>
-                <Item5 Ref="281" ControlType="XRTableCell" Name="tableCell6" Weight="0.10141136920257753" Text="Qte." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="282" UseFont="false" UseTextAlignment="false" />
+                <Item5 Ref="309" ControlType="XRTableCell" Name="tableCell8" Weight="0.10141136920257753" Text="Qte." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="310" UseFont="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="283" ControlType="XRTableCell" Name="tableCell4" Weight="0.091615034982329258" Multiline="true" Text="Unite" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="284" UseFont="false" UseTextAlignment="false" />
+                <Item6 Ref="311" ControlType="XRTableCell" Name="tableCell9" Weight="0.091615034982329258" Multiline="true" Text="Unite" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="312" UseFont="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="285" ControlType="XRTableCell" Name="tableCell7" Weight="0.12920357530208554" Text="Prix Unit." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="286" UseFont="false" UseTextAlignment="false" />
+                <Item7 Ref="313" ControlType="XRTableCell" Name="tableCell20" Weight="0.12920357530208554" Text="Prix Unit." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="314" UseFont="false" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="287" ControlType="XRTableCell" Name="tableCell8" Weight="0.11519483246035168" Text="TVA" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="288" UseFont="false" UseTextAlignment="false" />
+                <Item8 Ref="315" ControlType="XRTableCell" Name="tableCell21" Weight="0.11519483246035168" Text="TVA" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="316" UseFont="false" UseTextAlignment="false" />
                 </Item8>
-                <Item9 Ref="289" ControlType="XRTableCell" Name="tableCell32" Weight="0.087210787480465554" Multiline="true" Text="Taux TVA" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="290" UseFont="false" UseTextAlignment="false" />
+                <Item9 Ref="317" ControlType="XRTableCell" Name="tableCell32" Weight="0.087210787480465554" Multiline="true" Text="Taux TVA" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="318" UseFont="false" UseTextAlignment="false" />
                 </Item9>
-                <Item10 Ref="291" ControlType="XRTableCell" Name="tableCell39" Weight="0.13022248756000757" Multiline="true" Text="Taux Remise" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="292" UseFont="false" UseTextAlignment="false" />
+                <Item10 Ref="319" ControlType="XRTableCell" Name="tableCell39" Weight="0.13022248756000757" Multiline="true" Text="Taux Remise" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="320" UseFont="false" UseTextAlignment="false" />
                 </Item10>
-                <Item11 Ref="293" ControlType="XRTableCell" Name="tableCell9" Weight="0.15629054441824894" Text="Totale Ligne HT" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="294" UseFont="false" UseTextAlignment="false" />
+                <Item11 Ref="321" ControlType="XRTableCell" Name="tableCell22" Weight="0.15629054441824894" Text="Totale Ligne HT" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="322" UseFont="false" UseTextAlignment="false" />
                 </Item11>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="295" UseFont="false" />
+          <StylePriority Ref="323" UseFont="false" />
         </Item1>
       </Controls>
     </Item7>
   </Bands>
   <StyleSheet>
-    <Item1 Ref="296" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
-    <Item2 Ref="297" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item3 Ref="298" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item4 Ref="299" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
-    <Item5 Ref="300" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
-    <Item6 Ref="301" Name="crossTabGeneralStyle1" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 9.75pt" ForeColor="Black" BackColor="White" BorderColor="255,160,160,160" Sides="All" StringFormat="Near;Near;0;None;Character;Default" />
-    <Item7 Ref="302" Name="crossTabHeaderStyle1" BorderStyle="Inset" BackColor="255,240,240,240" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
-    <Item8 Ref="303" Name="crossTabDataStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
-    <Item9 Ref="304" Name="crossTabTotalStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
+    <Item1 Ref="324" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="325" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="326" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="327" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="328" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item6 Ref="329" Name="crossTabGeneralStyle1" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 9.75pt" ForeColor="Black" BackColor="White" BorderColor="255,160,160,160" Sides="All" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item7 Ref="330" Name="crossTabHeaderStyle1" BorderStyle="Inset" BackColor="255,240,240,240" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item8 Ref="331" Name="crossTabDataStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
+    <Item9 Ref="332" Name="crossTabTotalStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
   </StyleSheet>
 </XtraReportsLayoutSerializer>

@@ -29,6 +29,8 @@ export default class salesOrder extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -43,8 +45,21 @@ export default class salesOrder extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -471,7 +486,7 @@ export default class salesOrder extends DocBase
                 {
                     let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE
                     let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
-                    this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                    this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                     this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
                     this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
                     this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
@@ -596,7 +611,6 @@ export default class salesOrder extends DocBase
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
         if(tmpMissCodes.length > 0)
         {
@@ -617,7 +631,6 @@ export default class salesOrder extends DocBase
         }
     
         await dialog(tmpConfObj);
-
     }
     async multiItemSave()
     {
@@ -825,8 +838,7 @@ export default class salesOrder extends DocBase
                                             {
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
-                                            }
-                                            
+                                            }  
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
@@ -844,14 +856,12 @@ export default class salesOrder extends DocBase
 
                                             await dialog(tmpConfObj);
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                     onClick={async ()=>
+                                    onClick={async ()=>
                                     {       
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -895,7 +905,7 @@ export default class salesOrder extends DocBase
                                         let tmpExVat = Number(this.docObj.docOrders.dt().sum("PRICE",2))
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docOrders.dt().sum("COST_PRICE",2)) 
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docOrders.dt().sum("COST_PRICE",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);
+                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1073,7 +1083,7 @@ export default class salesOrder extends DocBase
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper = {this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt = {{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
-                                    onEnterKey = {(async()=>
+                                    onEnterKey = {(async() =>
                                     {
                                         // if(this.docObj.docOrders.dt().length > 0)
                                         // {
@@ -1102,6 +1112,7 @@ export default class salesOrder extends DocBase
                                                 {
                                                     this.txtRef.value=data[0].CODE;
                                                     this.txtRef.props.onChange()
+                                                    this.checkRow()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1164,6 +1175,7 @@ export default class salesOrder extends DocBase
                                                             {
                                                                 this.txtRef.value=data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                                this.checkRow()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
@@ -1182,7 +1194,6 @@ export default class salesOrder extends DocBase
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        console.log(pdata[0].TYPE)
                                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
@@ -1224,13 +1235,13 @@ export default class salesOrder extends DocBase
                                     <NdTextBox id = "txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper = {this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     validationGroup = {"frmslsDoc" + this.tabIndex}
-                                    button=
+                                    button =
                                     {
                                         [
                                             {
                                                 id:'01',
                                                 icon:"fa-solid fa-barcode",
-                                                onClick:async(e)=>
+                                                onClick:async(e) =>
                                                 {
                                                     if(this.txtBarcode.value == '')
                                                     {
@@ -1281,7 +1292,7 @@ export default class salesOrder extends DocBase
                                             }
                                         ]
                                     }
-                                    onEnterKey={(async(e)=>
+                                    onEnterKey={(async(e) =>
                                     {
                                         if(this.txtBarcode.value == '')
                                         {
@@ -1332,8 +1343,7 @@ export default class salesOrder extends DocBase
                                                     {
                                                         await this.addItem(data[i],null)
                                                     }
-                                                    this.grdSlsOrder.devGrid.endUpdate()
-                                                        
+                                                    this.grdSlsOrder.devGrid.endUpdate()  
                                                 }
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
@@ -1467,16 +1477,16 @@ export default class salesOrder extends DocBase
                                         {
                                             if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                e.rowElement.style.color ="Silver"
+                                                e.rowElement.style.color = "Silver"
                                             }
                                             if(e.isEditing == true)
                                             {
-                                                e.rowElement.style.backgroundColor ="#b1cbbb"
+                                                e.rowElement.style.backgroundColor = "#b1cbbb"
                                                 this.grdSlsOrder.devGrid.selectRowsByIndexes(e.rowIndex)
                                             }
                                             else
                                             {
-                                                e.rowElement.style.backgroundColor =""
+                                                e.rowElement.style.backgroundColor = ""
                                             }
                                         }}
                                         onRowUpdating={async (e)=>
@@ -1628,7 +1638,7 @@ export default class salesOrder extends DocBase
 
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                            e.key.MARGIN = tmpMargin + "€ / %" +  tmpMarginRate
+                                            e.key.MARGIN = tmpMargin + Number.money.sign + " / %" +  tmpMarginRate
                                             if(e.key.DISCOUNT > 0)
                                             {
                                                 e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
@@ -1644,7 +1654,7 @@ export default class salesOrder extends DocBase
                                             await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsOrder"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrder"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1660,16 +1670,16 @@ export default class salesOrder extends DocBase
                                             <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOrder.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOrder.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} editorOptions={{step:0}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsOrder.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsOrder.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="MARGIN" caption={this.t("grdSlsOrder.clmMargin")} width={70} allowEditing={false}/>
-                                            <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} width={70} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdSlsOrder.clmVatRate")} width={50} allowEditing={false}/>
-                                            <Column dataField="TOTALHT" caption={this.t("grdSlsOrder.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdSlsOrder.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="OFFER_REF" caption={this.t("grdSlsOrder.clmOffer")} width={100}  headerFilter={{visible:true}} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsOrder.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                         </NdGrid>
@@ -1932,7 +1942,7 @@ export default class salesOrder extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     > 
@@ -1953,7 +1963,6 @@ export default class salesOrder extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -1998,7 +2007,6 @@ export default class salesOrder extends DocBase
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -2066,7 +2074,7 @@ export default class salesOrder extends DocBase
                                     searchEnabled={true}
                                     data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
                                     >
-                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdSelectBox>

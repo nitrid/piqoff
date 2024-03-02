@@ -55,6 +55,7 @@ export default class CustomerCard extends React.PureComponent
     }
     async init()
     {
+        console.log('000000060000000')
         this.customerObj.clearAll();
 
         this.customerObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -621,47 +622,82 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtPhone1 */}
                                 <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
-                                    <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
-                                    access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
-                                    />
+                                    <NdTextBox id="txtPhone1" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtPhone2 */}
                                 <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
-                                    <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
-                                    access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
-                                    />
+                                    <NdTextBox id="txtPhone2" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtGsmPhone */}
                                 <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
-                                    <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    <NdTextBox id="txtGsmPhone" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
-                                    />
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtOtherPhone */}
                                 <Item>
                                     <Label text={this.t("txtOtherPhone")} alignment="right" />
-                                    <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    <NdTextBox id="txtOtherPhone" 
+                                        parent={this} 
+                                        simple={true} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
-                                    />
+                                    >
+                                        <Validator>
+                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtEmail */}
                                 <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={100}
+                                    <NdTextBox id="txtEmail"                                       
+                                        parent={this} 
+                                        simple={true}  
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={100}
                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
-                                    />
+                                    >
+                                        <Validator>
+                                            <EmailRule message={this.lang.t("mailIsInvalid")}/>
+                                        </Validator>
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtWeb */}
                                 <Item>
@@ -1178,7 +1214,7 @@ export default class CustomerCard extends React.PureComponent
                                                 <Item>
                                                     <Label text={this.t("txtRiskLimit")} alignment="right" />
                                                     <NdNumberBox id="txtRiskLimit" parent={this} simple={true} 
-                                                    format={{ style: "currency", currency: "EUR",precision: 2}}
+                                                    format={{ style: "currency", currency: Number.money.code,precision: 2}}
                                                     dt={{data:this.customerObj.dt('CUSTOMERS'),field:"RISK_LIMIT"}} 
                                                     onChange={()=>
                                                     {
@@ -1291,7 +1327,9 @@ export default class CustomerCard extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" 
+                                    acceptCustomValue={true}
+                                   
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
@@ -1299,7 +1337,32 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize={50}
                                     notRefresh={true}
-                                    />
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                     
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                     
+                                        const newItem = {
+                                            ZIPCODE: text.trim(),
+                                            ZIPNAME: text.trim(),
+                                        };
+                                     
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
+                                    >
+                                    </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
@@ -1307,10 +1370,35 @@ export default class CustomerCard extends React.PureComponent
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
+                                    onCustomItemCreating={async(e)=>
+                                    {
+                                        if (!e.text) {
+                                            e.customItem = null;
+                                            return;
+                                        }
+                                        
+                                        const { component, text } = e;
+                                        const currentItems = component.option('items');
+                                        
+                                        const newItem = {
+                                            PLACE: text.trim(),
+                                            PLACE: text.trim(),
+                                        };
+                                        
+                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) {
+                                            e.customItem = itemInDataSource;
+                                        } else {    
+                                            currentItems.push(newItem);
+                                            component.option('items', currentItems);
+                                            e.customItem = newItem;
+                                        }
+                                    }}
                                     />
                                 </Item>
                               

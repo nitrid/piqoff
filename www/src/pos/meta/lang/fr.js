@@ -106,6 +106,12 @@ export const langFr =
         msg : "Encaissement non effectué  ",
         btn01 : "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Un montant a été saisi sur le terminal de carte. Veuillez annuler la transaction sur le terminal de carte avant d'envoyer un nouveau montant !",
+        btn01 : "D'accord"
+    },
     msgBonDavoir : 
     {
         title : "Attention",
@@ -399,6 +405,7 @@ export const langFr =
         msg :"Veuillez sélectionner le mode de remboursement  ! ",
         btn01 : "Espèce",
         btn02 :"Bon d'avoir",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -473,6 +480,10 @@ export const langFr =
     popCardPay :
     {
         title :"Paiement carte bancaire ",
+    },
+    popExchangePay :
+    {
+        title :"Paiement en Devises en Espèces",
     },
     popTotal :
     {
@@ -906,6 +917,33 @@ export const langFr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Numéro de téléphone",
     txtNewCustomerLastName : "Nom",
-    txtNewCustomerName : "Prenom"
-    
+    txtNewCustomerName : "Prenom",
+    msgMultipleLineSelect:
+    {
+        title: "Attention",
+        btn: "OK",
+        msg: "Vous devez sélectionner une seule ligne pour appliquer la remise.",
+    },
+    applyDiscountText: "Appliquer la remise",
+    msgAdminMessage:
+    {
+        title: "Message de l'administrateur",
+        btn01: "OK",
+    },
+    popUserList:
+    {
+        title: "Liste des utilisateurs",
+        clmCode: "Code",
+        clmName: "Nom"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous enregistrer les modifications apportées ?"
+        },
+    },
 }

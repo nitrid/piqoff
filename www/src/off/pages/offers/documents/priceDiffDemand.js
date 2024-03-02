@@ -29,6 +29,8 @@ export default class priceDiffDemand extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -43,7 +45,9 @@ export default class priceDiffDemand extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getPriceDiff(this.pagePrm.GUID)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     async getPriceDiff(pGuid) 
@@ -128,6 +132,17 @@ export default class priceDiffDemand extends DocBase
             }
             this.calculateTotal()
         }
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdDiffOffState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdDiffOffState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -1219,6 +1234,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 this.txtRef.value=data[0].CODE;
                                                 this.txtRef.props.onValueChanged()
+                                                this.checkRow()
                                             }
                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                             {
@@ -1286,6 +1302,7 @@ export default class priceDiffDemand extends DocBase
                                                         {
                                                             this.txtRef.value=data[0].CODE
                                                             this.txtRef.props.onValueChanged()
+                                                            this.checkRow()
                                                         }
                                                         if(this.cmbDepot.value != '' && this.docLocked == false)
                                                         {
@@ -1711,7 +1728,7 @@ export default class priceDiffDemand extends DocBase
                                     
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                        e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                         if(e.key.DISCOUNT == 0)
                                         {
                                             e.key.DISCOUNT_RATE = 0
@@ -1734,7 +1751,7 @@ export default class priceDiffDemand extends DocBase
                                         await this.grdDiffOff.dataRefresh({source:this.docObj.docDemand.dt('DOC_DEMAND')});
                                     }}
                                     >
-                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdDiffOff"}/>
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdDiffOff"}/>
                                         <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1748,17 +1765,17 @@ export default class priceDiffDemand extends DocBase
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDiffOff.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdDiffOff.clmMulticode")} width={90} />
                                         <Column dataField="ITEM_NAME" caption={this.t("grdDiffOff.clmItemName")} width={200}/>
-                                        <Column dataField="PRICE_AGREED" caption={this.t("grdDiffOff.clmPriceAgreed")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
-                                        <Column dataField="INVOICED_PRICE" caption={this.t("grdDiffOff.clmInvoicedPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
+                                        <Column dataField="PRICE_AGREED" caption={this.t("grdDiffOff.clmPriceAgreed")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
+                                        <Column dataField="INVOICED_PRICE" caption={this.t("grdDiffOff.clmInvoicedPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdDiffOff.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="PRICE" caption={this.t("grdDiffOff.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDiffOff.clmDiscount")} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDiffOff.clmPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdDiffOff.clmDiscount")} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={60} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffOff.clmDiscountRate")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDiffOff.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdDiffOff.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={75} allowEditing={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDiffOff.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={90} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdDiffOff.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={75} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdDiffOff.clmVatRate")} width={50} allowEditing={false}/>
-                                        <Column dataField="TOTALHT" caption={this.t("grdDiffOff.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDiffOff.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={100} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdDiffOff.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDiffOff.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={100} allowEditing={false}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdDiffOff.clmInvNo")}  width={80} allowEditing={false}/>
                                         <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffOff.clmInvDate")} width={80} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdDiffOff.clmDescription")} width={80} />
@@ -1960,7 +1977,7 @@ export default class priceDiffDemand extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                 displayExpr="VALUE"                       
                                 valueExpr="ID"
-                                value=""
+                                value={localStorage.getItem('lang').toUpperCase()}
                                 searchEnabled={true}
                                 data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                 >

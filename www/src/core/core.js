@@ -683,6 +683,7 @@ export class util
     {
         this.core = core.instance;
         this.logPath = ""
+        this.logStatus = false
     }
     folder_list(pPath)
     {
@@ -741,6 +742,12 @@ export class util
     {
         return new Promise(resolve => 
         {
+            if(!this.logStatus)
+            {
+                resolve(false)
+                return
+            }
+            
             let tmpPath = this.logPath
             if(typeof pPath != 'undefined')
             {
@@ -1085,6 +1092,13 @@ export class datatable
         
         if(tmpIndex > -1)
         {
+            // Irsaliyeden cevirirken evrakı daha kayıt etmeden satır silince irsaliye satırı databaseden silindiği için yapıldı...
+            if(typeof this[tmpIndex].stat != 'undefined' && this[tmpIndex].stat == 'edit' && this[tmpIndex].INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.splice(tmpIndex,1);
+                return
+            }
+            //----------------------------------------------------
             this._deleteList.push(this[tmpIndex]); 
             this.splice(tmpIndex,1);
             this.emit('onDelete');
@@ -1610,11 +1624,31 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof b[pKey] == 'number')
+                    {
+                        return b[pKey] - a[pKey]
+                    }
+                    else if(typeof b[pKey] == 'string')
+                    {
+                        return b[pKey].localeCompare(a[pKey])
+                    }
+                })
             }
             else
             {
-                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
+                return this.sort((a, b) => 
+                {
+                    if(typeof a[pKey] == 'number')
+                    {
+                        return a[pKey] - b[pKey]
+                    }
+                    else if(typeof a[pKey] == 'string')
+                    {
+                        return a[pKey].localeCompare(b[pKey])
+                    }
+                })
             }
         }
         return this
@@ -1944,6 +1978,7 @@ export class access extends datatable
                     {
                         tmpMeta = tmpMeta.filter(x => x[tmpKey] === tmpValue)
                     }
+
                 }
             }
             //DATA FİLİTRELENİYOR.
@@ -1954,6 +1989,7 @@ export class access extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+
                 }                
             }
             //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
@@ -2001,6 +2037,7 @@ export class access extends datatable
     }
     setValue()
     {
+
         // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
         if(this.length > 0)
         {
@@ -2027,6 +2064,7 @@ export class access extends datatable
             {
                 let tmpData = {...this.meta[0]}
                 tmpData.VALUE = JSON.stringify(arguments[0])
+                
                 this.push(tmpData)
             }
         }
@@ -2299,7 +2337,7 @@ String.prototype.space = function(pLen,pType)
 //* FORMAT CURRENCY */
 Number.prototype.currency = function()
 {
-    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money == 'undefined' ? 'EUR' : typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
 }
 //* FORMAT DECIMAL */
 Number.prototype.decimal = function()

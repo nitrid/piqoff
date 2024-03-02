@@ -42,6 +42,8 @@ export default class customerBalanceReport extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -49,6 +51,17 @@ export default class customerBalanceReport extends React.PureComponent
         {
             this.txtCustomerCode.GUID = ''
         }, 500);
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     _columnListBox(e)
     {
@@ -301,7 +314,7 @@ export default class customerBalanceReport extends React.PureComponent
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
+                                        <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                     </NdPopGrid>
                                 </Item> 
                                 <Item>
@@ -344,7 +357,7 @@ export default class customerBalanceReport extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >                            
-                                <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                 <ColumnChooser enabled={true} />
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
@@ -363,18 +376,18 @@ export default class customerBalanceReport extends React.PureComponent
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={100}/> 
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} width={100}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
-                                <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/>
+                                <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/>
                                 <Summary>
                                     <TotalItem
                                     column="DEBIT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="RECEIVE"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

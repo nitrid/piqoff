@@ -40,6 +40,7 @@ export class itemsCls
             GENRE : ''
         }
 
+        this.itemLang = new itemLangCls()
         this.itemUnit = new itemUnitCls();
         this.itemPrice = new itemPriceCls();
         this.itemBarcode = new itemBarcodeCls();
@@ -215,6 +216,7 @@ export class itemsCls
         this.ds.add(this.itemBarcode.dt('ITEM_BARCODE'))
         this.ds.add(this.itemMultiCode.dt('ITEM_MULTICODE'))
         this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
+        this.ds.add(this.itemLang.dt('ITEM_LANG'))
 
         this.ds.get('ITEMS').noColumnEdit = ['GROSS_MARGIN','SNAME','CUSER','MAIN_GRP_NAME','VAT_EXT','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
     }
@@ -280,6 +282,7 @@ export class itemsCls
                 await this.itemBarcode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemLang.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -1658,7 +1661,6 @@ export class depotCls
         });
     }
 }
-
 export class itemLogPriceCls
 {
     constructor()
@@ -2657,6 +2659,271 @@ export class genreCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class productRecipeCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : '',
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LUSER_NAME : '',
+            PRODUCED_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            PRODUCED_ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+            PRODUCED_ITEM_CODE : '',
+            PRODUCED_ITEM_NAME : '',
+            PRODUCED_QTY : 0,
+            RAW_ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+            RAW_ITEM_CODE : '',
+            RAW_ITEM_NAME : '',
+            RAW_QTY : 0,
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('PRODUCT_RECIPE');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[PRODUCT_RECIPE_VW_01] WHERE ((PRODUCED_ITEM_GUID = @PRODUCED_ITEM_GUID) OR (@PRODUCED_ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND ((PRODUCED_ITEM_CODE = @PRODUCED_ITEM_CODE) OR (@PRODUCED_ITEM_CODE = ''))",
+            param : ['PRODUCED_ITEM_GUID:string|50','PRODUCED_ITEM_CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRODUCT_RECIPE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@PRODUCED_DATE = @PPRODUCED_DATE, " + 
+                    "@PRODUCED_ITEM = @PPRODUCED_ITEM_GUID, " + 
+                    "@PRODUCED_QTY = @PPRODUCED_QTY, " + 
+                    "@RAW_ITEM = @PRAW_ITEM_GUID, " + 
+                    "@RAW_QTY = @PRAW_QTY " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM_GUID:string|50','PPRODUCED_QTY:float','PRAW_ITEM_GUID:string|50','PRAW_QTY:float'],
+            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM_GUID','PRODUCED_QTY','RAW_ITEM_GUID','RAW_QTY']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRODUCT_RECIPE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@PRODUCED_DATE = @PPRODUCED_DATE, " + 
+                    "@PRODUCED_ITEM = @PPRODUCED_ITEM_GUID, " + 
+                    "@PRODUCED_QTY = @PPRODUCED_QTY, " + 
+                    "@RAW_ITEM = @PRAW_ITEM_GUID, " + 
+                    "@RAW_QTY = @PRAW_QTY " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PPRODUCED_DATE:date','PPRODUCED_ITEM_GUID:string|50','PPRODUCED_QTY:float','PRAW_ITEM_GUID:string|50','PRAW_QTY:float'],
+            dataprm : ['GUID','CUSER','PRODUCED_DATE','PRODUCED_ITEM_GUID','PRODUCED_QTY','RAW_ITEM_GUID','RAW_QTY']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRODUCT_RECIPE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ",
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('PRODUCT_RECIPE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('PRODUCT_RECIPE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                PRODUCED_ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+                PRODUCED_ITEM_CODE : ''
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.PRODUCED_ITEM_GUID = typeof arguments[0].PRODUCED_ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PRODUCED_ITEM_GUID;
+                tmpPrm.PRODUCED_ITEM_CODE = typeof arguments[0].PRODUCED_ITEM_CODE == 'undefined' ? '' : arguments[0].PRODUCED_ITEM_CODE;
+            }
+            this.ds.get('PRODUCT_RECIPE').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('PRODUCT_RECIPE').refresh();
+            resolve(this.ds.get('PRODUCT_RECIPE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class itemLangCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            ITEM_LANGUAGE : '',
+            TRANSLATED_NAME: '',
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+            DELETED: 'false'
+        }
+
+        this._initDs();
+    }    
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_LANG');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_LANG_VW_01] WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['ITEM_GUID:string|50']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_LANG_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM_LANGUAGE = @PITEM_LANGUAGE, " + 
+                    "@TRANSLATED_NAME = @PTRANSLATED_NAME, " + 
+                    "@ITEM_GUID = @PITEM_GUID " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM_LANGUAGE:string|25','PTRANSLATED_NAME:string|25','PITEM_GUID:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_LANGUAGE','TRANSLATED_NAME','ITEM_GUID']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_LANG_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM_LANGUAGE = @PITEM_LANGUAGE, " + 
+                    "@TRANSLATED_NAME = @PTRANSLATED_NAME, " + 
+                    "@ITEM_GUID = @PITEM_GUID " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PLUSER:string|25','PITEM_LANGUAGE:string|25','PTRANSLATED_NAME:string|25','PITEM_GUID:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_LANGUAGE','TRANSLATED_NAME','ITEM_GUID']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_LANG_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_LANG') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_LANG').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {ITEM_GUID:'00000000-0000-0000-0000-000000000000'}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {ITEM_GUID:'00000000-0000-0000-0000-000000000000'}
+            if(arguments.length > 0)
+            {
+               tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+            }
+
+            this.ds.get('ITEM_LANG').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('ITEM_LANG').refresh();
+            
+            resolve(this.ds.get('ITEM_LANG'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
             resolve(await this.ds.update()); 
         });
     }

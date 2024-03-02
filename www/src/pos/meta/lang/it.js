@@ -106,6 +106,12 @@ export const langIt =
         msg: "Pagamento non riuscito",
         btn01: "Ok",
     },
+    msgPayProcessFailed :
+    {
+        title : "Informazione",
+        msg : "È stato inserito un importo sul dispositivo della carta. Si prega di annullare la transazione sul dispositivo della carta prima di inviare un nuovo importo!",
+        btn01 : "Okay"
+    },
     msgBonDavoir: 
     {
         title: "Avviso",
@@ -400,6 +406,7 @@ export const langIt =
         msg: "Seleziona il tipo di reso!",
         btn01: "Contanti",
         btn02: "Buono d'acquisto",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -474,6 +481,10 @@ export const langIt =
     popCardPay:
     {
         title: "Pagamento con Carta",
+    },
+    popExchangePay :
+    {
+        title :"Pagamento in Valuta Contante",
     },
     popTotal:
     {
@@ -868,5 +879,33 @@ export const langIt =
     itemInfo:
     {
         msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
+    },
+    msgMultipleLineSelect:
+    {
+        title: "Attenzione",
+        btn: "OK",
+        msg: "Devi selezionare una sola riga per applicare lo sconto.",
+    },
+    applyDiscountText: "Applica Sconto",
+    msgAdminMessage:
+    {
+        title: "Messaggio dell'amministratore",
+        btn01: "OK",
+    },
+    popUserList: 
+    {
+        title: "Elenco Utenti",
+        clmCode: "Codice",
+        clmName: "Nome"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Attenzione",
+            btn01: "Sì",
+            btn02: "No",
+            msg: "Vuoi salvare le modifiche apportate?"
+        }
     }
 }

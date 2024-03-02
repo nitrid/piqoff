@@ -106,6 +106,12 @@ export const langDe =
         msg: "Die Zahlung ist fehlgeschlagen",
         btn01: "OK"
     },
+    msgPayProcessFailed :
+    {
+        title : "Information",
+        msg : "Ein Betrag wurde auf dem Kartengerät eingegeben. Bitte brechen Sie die Transaktion auf dem Kartengerät ab, bevor Sie einen neuen Betrag senden!",
+        btn01 : "Okay"
+    },
     msgBonDavoir:
     {
         title: "Achtung",
@@ -401,6 +407,7 @@ export const langDe =
         msg: "Bitte wählen Sie den Rückgabetyp aus!",
         btn01: "Bar",
         btn02: "Gutschein",
+        btn03 : "CB",
     },
     msgWeighing: 
     {
@@ -474,6 +481,10 @@ export const langDe =
     popCardPay:
     {
         title: "Kartenzahlung"
+    },
+    popExchangePay :
+    {
+        title :"Bargeld Devisenzahlung",
     },
     popTotal:
     {
@@ -876,4 +887,32 @@ export const langDe =
         btnApprove : "Bestätigen"  
     },
     passChange :"Passwort ändern!", 
+    msgMultipleLineSelect:
+    {
+        title: "Achtung",
+        btn: "OK",
+        msg: "Sie müssen eine einzelne Zeile für den Rabatt auswählen.",
+    },
+    applyDiscountText: "Rabatt anwenden",
+    msgAdminMessage:
+    {
+        title: "Administratornachricht",
+        btn01: "OK",
+    },
+    popUserList:
+    {
+        title: "Benutzerliste",
+        clmCode: "Code",
+        clmName: "Name"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Achtung",
+            btn01: "Ja",
+            btn02: "Nein",
+            msg: "Möchten Sie die vorgenommenen Änderungen speichern?"
+        },
+    },
 }

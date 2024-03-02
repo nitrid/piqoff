@@ -48,6 +48,7 @@ export default class collection extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.init()
     }
+    
     async init()
     {
         this.docObj.clearAll()
@@ -495,7 +496,7 @@ export default class collection extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
                                             {
@@ -590,8 +591,8 @@ export default class collection extends React.PureComponent
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -708,7 +709,7 @@ export default class collection extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                
+
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -755,9 +756,22 @@ export default class collection extends React.PureComponent
                                         height={'500'} 
                                         width={'100%'}
                                         dbApply={false}
-                                        onRowUpdated={async(e)=>{
-                                            let rowIndex = e.component.getRowIndexByKey(e.key)
-
+                                        onRowUpdating={async(e)=>{      
+                                            
+                                            if(this.deptCreditMatchingObj.popUpList.length > 0)
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                            }                                            
+                                            
                                             this._calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>{
@@ -773,7 +787,7 @@ export default class collection extends React.PureComponent
                                             <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                             <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
                                             <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
@@ -935,7 +949,7 @@ export default class collection extends React.PureComponent
                                             onClick={async (e)=>
                                             {       
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
-                                                this.numCash.value = this.deptCreditMatchingObj.popUpList.sum('REMAINDER').round(2)
+                                                this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
                                             }}/>
                                         </div>
                                     </div>

@@ -88,6 +88,11 @@ export const menu = (e) =>
                             id: 'stk_01_014',
                             text: e.t('menuOff.stk_01_014'),//'Cins Tanımları',
                             path: 'items/cards/genreCard'
+                        },
+                        {
+                            id: 'stk_01_016',
+                            text: e.t('menuOff.stk_01_016'),//'Ürün Recete Tanımları',
+                            path: 'items/cards/productRecipeCard'
                         }
                     ]
                 },
@@ -134,14 +139,14 @@ export const menu = (e) =>
                         },
                         {
                             id: 'stk_02_008',
-                            text: e.t('menuOff.stk_02_008'),//'Stok Giriş  ',
+                            text: e.t('menuOff.stk_02_008'), //'Stok Giriş',
                             path: 'items/documents/itemEntryDoc'
                         },
                         {
                             id: 'stk_02_009',
-                            text: e.t('menuOff.stk_02_009'),//'Stok  Çıkış ',
+                            text: e.t('menuOff.stk_02_009'), //'Stok Çıkış',
                             path: 'items/documents/itemOutDoc'
-                        }
+                        },
                     ]
                 },
                 {
@@ -208,6 +213,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_04_004'),//'SKT Operasyonu',
                             path: 'items/operations/expdateOperations'
                         },
+                        {
+                            id: 'stk_04_005',
+                            text: e.t('menuOff.stk_04_005'), //'Stok Giriş Çıkış Operasyonu',
+                            path: 'items/operations/itemEntryOutDoc'
+                        }
                     ]
                 },
                 {
@@ -688,6 +698,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_02_005'),//'DEB Detay Raporu',
                             path: 'report/purchase/debDetailReport'
                         },
+                        {
+                            id: 'slsRpt_02_006',
+                            text: e.t('menuOff.slsRpt_02_006'),//'Açik Alis Fatura Raporu',
+                            path: 'report/purchase/openInvoicePurchaseReport'
+                        },
                     ]
                 }
             ]
@@ -991,6 +1006,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_008'),//'İade Fatura raporu',
                             path: 'report/sales/itemInvoiceSalesReport'
                         },
+                        {
+                            id: 'slsRpt_01_009',
+                            text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
+                            path: 'report/sales/openInvoiceSalesReport'
+                        },
                     ]
                 }
             ]
@@ -1142,6 +1162,11 @@ export const menu = (e) =>
                             id: 'pos_01_003',
                             text: e.t('menuOff.pos_01_003'),//'Fiş Sonu Açıklaması',
                             path: 'pos/card/printDescription'
+                        },
+                        {
+                            id: 'pos_01_004',
+                            text: e.t('menuOff.pos_01_004'),//'Pos Mesaj',
+                            path: 'pos/card/posMsg'
                         }
                     ]
                 },

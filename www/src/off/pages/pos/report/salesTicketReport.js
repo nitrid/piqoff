@@ -83,6 +83,18 @@ export default class salesOrdList extends React.PureComponent
         {
           this.popOpenTike.show()
         }
+         //** FIRMA GETIR ******************************/
+         this.firm.selectCmd = 
+         {
+             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+             local : 
+             {
+                 type : "select",
+                 query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                 values : []
+             }
+         }
+         await this.firm.refresh();
     }
     async _btnGetClick()
     {
@@ -119,8 +131,8 @@ export default class salesOrdList extends React.PureComponent
                     "PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
                     " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
                     " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),103) AS DATE,   "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.LDATE),108) AS TIME,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),103) AS DATE,   "  +
+                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
                     " MAX(SALE.DEVICE) AS DEVICE,  "  +
                     " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
                     " SALE.TYPE AS SALE_TYPE,  "  +
@@ -292,6 +304,7 @@ export default class salesOrdList extends React.PureComponent
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
             await this.lastPosPayDt.refresh()
+            console.log(this.firm)
             let tmpData = 
             {
                 pos : tmpLastPos,
@@ -790,11 +803,11 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={300}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdSaleTicketReport.clmCardId")} visible={true} width={150}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="HT" caption={this.t("grdSaleTicketReport.clmHT")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="TVA" caption={this.t("grdSaleTicketReport.clmVTA")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>  
-                                <Column dataField="TTC" caption={this.t("grdSaleTicketReport.clmTTC")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>  
+                                <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="HT" caption={this.t("grdSaleTicketReport.clmHT")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="TVA" caption={this.t("grdSaleTicketReport.clmVTA")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
+                                <Column dataField="TTC" caption={this.t("grdSaleTicketReport.clmTTC")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
                                 <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
 
                             </NdGrid>
@@ -836,8 +849,8 @@ export default class salesOrdList extends React.PureComponent
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                             </NdGrid>
                             </div>
                             <div className="col-3 ps-0">
@@ -870,7 +883,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
-                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>
                             </div>
                             </div>
@@ -1208,7 +1221,7 @@ export default class salesOrdList extends React.PureComponent
                                                 <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
                                                 <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
                                                 <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                                <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                                <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} headerFilter={{visible:true}}/>
                                                 <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
                                         </NdGrid>
                                     </Item>
@@ -1253,7 +1266,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
