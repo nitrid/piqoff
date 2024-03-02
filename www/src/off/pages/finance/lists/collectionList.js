@@ -406,7 +406,7 @@ export default class collectionList extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE, " +
+                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE,AMOUNT, " +
                                                                 "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " + 
                                                                 "ISNULL((SELECT TOP 1 DOC_REF + ' - '+ CONVERT(NVARCHAR,DOC_REF_NO) FROM DEPT_CREDIT_MATCHING_VW_03 WHERE CUS.GUID = PAYING_DOC),'') AS PAYING_DOC " + 
                                                                 "FROM DOC_CUSTOMER_VW_01 AS CUS " +
