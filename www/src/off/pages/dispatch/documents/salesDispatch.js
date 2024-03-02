@@ -32,6 +32,8 @@ export default class salesDispatch extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -46,9 +48,22 @@ export default class salesDispatch extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsDispatchState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+      
     async init()
     {
         await super.init()
@@ -1913,7 +1928,7 @@ export default class salesDispatch extends DocBase
                                         await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                     }}
                                     >
-                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsDispatch"}/>
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatch"}/>
                                         <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2147,7 +2162,7 @@ export default class salesDispatch extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >                       

@@ -31,6 +31,8 @@ export default class purchaseDispatch extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     
         this.frmDocItems = undefined;
         this.docLocked = false; 
@@ -48,8 +50,20 @@ export default class purchaseDispatch extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPurcDispatchState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdPurcDispatchState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -1405,7 +1419,6 @@ export default class purchaseDispatch extends DocBase
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -1466,7 +1479,6 @@ export default class purchaseDispatch extends DocBase
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1506,7 +1518,7 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,VAT_ZERO,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1944,7 +1956,7 @@ export default class purchaseDispatch extends DocBase
                                         await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                     }}
                                     >
-                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcDispatch"}/>
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcDispatch"}/>
                                         <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2168,7 +2180,7 @@ export default class purchaseDispatch extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >

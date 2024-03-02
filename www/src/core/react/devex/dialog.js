@@ -22,6 +22,7 @@ export default class NdDialog extends Base
         this._onHiding = this._onHiding.bind(this);
         this._onShowed = this._onShowed.bind(this);   
 
+        this.isShowed = false;
         this.result = null;
     }
     _onHiding() 
@@ -46,7 +47,8 @@ export default class NdDialog extends Base
     {
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
-        
+        this.isShowed = true;
+
         return new Promise(async resolve => 
         {
             if(typeof this.props.timeout != 'undefined')
@@ -74,6 +76,7 @@ export default class NdDialog extends Base
     }
     hide()
     {
+        this.isShowed = false;
         this["dia_" + this.props.id].setState({show:false})
     }
     _buttonView(props)

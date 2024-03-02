@@ -32,6 +32,8 @@ export default class branchSaleInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -46,8 +48,20 @@ export default class branchSaleInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
@@ -190,7 +204,6 @@ export default class branchSaleInvoice extends DocBase
                                 value : [r.component._changedValue]
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                            console.log(tmpData)
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.combineControl = true
@@ -717,8 +730,6 @@ export default class branchSaleInvoice extends DocBase
                 App.instance.setState({isExecute:true})
                 let tmpData = await this.core.sql.execute(tmpQuery)
                 App.instance.setState({isExecute:false})
-                console.log(tmpData)
-                console.log(txtSendMail)
                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                 {
                     App.instance.setState({isExecute:true})
@@ -962,8 +973,7 @@ export default class branchSaleInvoice extends DocBase
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
-                                    {
-                                        console.log(this.docObj.isSaved)                             
+                                    {                        
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1603,7 +1613,6 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -1673,7 +1682,7 @@ export default class branchSaleInvoice extends DocBase
                                             await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -1906,7 +1915,7 @@ export default class branchSaleInvoice extends DocBase
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     > 

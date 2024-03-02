@@ -21,6 +21,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDocAi from '../../../tools/NdDocAi';
 
 export default class purchaseInvoice extends DocBase
 {
@@ -33,6 +34,8 @@ export default class purchaseInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -49,86 +52,101 @@ export default class purchaseInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
+    }
+    loadState() {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e){
+        let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async init()
     {
-        await super.init()
-        this.grdPurcInv.devGrid.clearFilter("row")
-        this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
-
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-        
-        this.docLocked = false
-        
-        this.frmDocItems.option('disabled',true)        
-        
-        this.txtDiffrentPositive.value = 0
-        this.txtDiffrentNegative.value = 0
-        this.txtDiffrentTotal.value = 0
-        this.txtDiffrentInv.value = 0
-
-        this.pg_txtItemsCode.on('showing',()=>
+        return new Promise(async resolve =>
         {
-            console.log(this.pg_txtItemsCode.on)
-            this.pg_txtItemsCode.setSource(
+            await super.init()
+            this.grdPurcInv.devGrid.clearFilter("row")
+            this.dtDocDate.value = moment(new Date())
+            this.dtShipDate.value = moment(new Date())
+
+            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            
+            this.docLocked = false
+            
+            this.frmDocItems.option('disabled',true)        
+            
+            this.txtDiffrentPositive.value = 0
+            this.txtDiffrentNegative.value = 0
+            this.txtDiffrentTotal.value = 0
+            this.txtDiffrentInv.value = 0
+
+            this.pg_txtItemsCode.on('showing',()=>
             {
-                source:
+                this.pg_txtItemsCode.setSource(
                 {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
-                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
+                                    "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
+                                    "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+                
             })
             
-        })
-        
-        this.pg_txtBarcode.on('showing',()=>
-        {
-            this.pg_txtBarcode.setSource(
+            this.pg_txtBarcode.on('showing',()=>
             {
-                source:
+                this.pg_txtBarcode.setSource(
                 {
-                    select:
-                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
-                        param : ['BARCODE:string|50'],
-                    },
-                    sql:this.core.sql
-                }
-            })
-        })
-        this.pg_txtCustomerCode.on('showing',()=>
-        {
-            this.pg_txtCustomerCode.setSource(
-            {
-                source:
-                {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                            param : ['BARCODE:string|50'],
+                        },
+                        sql:this.core.sql
+                    }
+                })
             })
-        })
+            this.pg_txtCustomerCode.on('showing',()=>
+            {
+                this.pg_txtCustomerCode.setSource(
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+            })
+            resolve()
+        });
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -1233,6 +1251,97 @@ export default class purchaseInvoice extends DocBase
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDocAi.show(this.docObj.dt()[0].OUTPUT)
+                                        this.popDocAi.onImport = async(e) =>
+                                        {
+                                            if(typeof e != 'undefined')
+                                            {
+                                                if(e.CustomerCode != '')
+                                                {
+                                                    this.docObj.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.docCustomer.dt()[0].OUTPUT = e.CustomerGuid
+                                                    this.docObj.dt()[0].OUTPUT_CODE = e.CustomerCode
+                                                    this.docObj.dt()[0].OUTPUT_NAME = e.CustomerName
+                                                    this.docObj.dt()[0].VAT_ZERO = e.CustomerVatZero
+
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.value = e.CustomerCode
+                                                    }
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [e.CustomerGuid]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            }
+                                                        }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                    }
+                                                }
+                                                this.dtDocDate.value = moment(e.InvoiceDate)
+                                                this.dtShipDate.value = moment(e.DueDate)
+
+                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                let tmpMissCodes = []
+                                                for (let i = 0; i < e.Item.length; i++) 
+                                                {
+                                                    if(e.Item[i].ItemCode != '')
+                                                    {
+                                                        let tmpItem =
+                                                        {
+                                                            GUID : e.Item[i].ItemGuid,
+                                                            CODE : e.Item[i].ItemCode,
+                                                            NAME : e.Item[i].ItemName,
+                                                            ITEM_TYPE : e.Item[i].ItemType,
+                                                            UNIT : e.Item[i].ItemUnit,
+                                                            COST_PRICE : e.Item[i].ItemCost,
+                                                            VAT : e.Item[i].ItemVat
+                                                        }
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
+                                                    }
+                                                }
+                                                this.grdPurcInv.devGrid.endUpdate()
+                                                if(tmpMissCodes.length > 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                                                    }
+                                                
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                            console.log(e)
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>
                                     {
@@ -2249,7 +2358,7 @@ export default class purchaseInvoice extends DocBase
                                             await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcInv"}/>
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcInv"}/>
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
@@ -2583,7 +2692,7 @@ export default class purchaseInvoice extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
@@ -2888,6 +2997,10 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Document AI PopUp */}
+                    <div>
+                        <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>     

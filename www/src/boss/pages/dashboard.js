@@ -16,7 +16,7 @@ export default class Dashboard extends React.PureComponent
   {
     super(props)
     this.core = App.instance.core;
-    this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [] };
+    this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0};
     this.t = App.instance.lang.getFixedT(null ,null ,"dashboard")
     this.date = moment(new Date()).format("YYYY-MM-DD")
     this.query = 
@@ -40,7 +40,8 @@ export default class Dashboard extends React.PureComponent
       purchasePriceDown : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },  
+      balanceTicketCreated : { query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED FROM BALANCE_COUNTER WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
     }
   }
   async componentDidMount()
@@ -109,8 +110,9 @@ export default class Dashboard extends React.PureComponent
     const { result: { recordset: purchasePriceUpRecordset } } = await this.core.sql.execute(this.query.purchasePriceUp);
     const { result: { recordset: salePriceDownRecordset } } = await this.core.sql.execute(this.query.salePriceDown);
     const { result: { recordset: salePriceUpRecordset } } = await this.core.sql.execute(this.query.salePriceUp);
+    const { result: { recordset: balanceTicketCreatedRecordset } } = await this.core.sql.execute(this.query.balanceTicketCreated);
 
-
+    
 
 
 
@@ -202,7 +204,11 @@ export default class Dashboard extends React.PureComponent
       const { SALE_PRICE_UP } = salePriceUpRecordset[0];
       this.setState({ salePriceUp: SALE_PRICE_UP});
     }
-
+    if(balanceTicketCreatedRecordset.length > 0) 
+    {
+      const { BALANCE_TICKET_CREATED } = balanceTicketCreatedRecordset[0];
+      this.setState({ balanceTicketCreated: BALANCE_TICKET_CREATED});
+    }
   }
   onClick()
   {
@@ -215,36 +221,37 @@ export default class Dashboard extends React.PureComponent
         <div className="row py-1 px-3">
           <div className="col-sm-12 col-md-6 p-1">
             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
-             onApply={(async()=>
+            onApply={(async()=>
               {
-                  this.date = this.dtDate.value 
-                  this.query.dailySalesTotal.value = [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.salesAvg.value = [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailySalesCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.bestItemGroup.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyPriceChange.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyRowDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyFullDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyRebateTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyRebateTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyCustomerTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.dailyUseLoyalty.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.useDiscount.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.useDiscountTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.purchaseTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.purchasePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.salePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.purchasePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.purchasePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.salePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                  this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.date = this.dtDate.value 
+                this.query.dailySalesTotal.value = [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.salesAvg.value = [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailySalesCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.bestItemGroup.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyPriceChange.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyRowDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyFullDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyRebateTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyRebateTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyCustomerTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyUseLoyalty.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.useDiscount.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.useDiscountTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.purchaseTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.purchasePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.salePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.purchasePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.purchasePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.salePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.balanceTicketCreated.value =  [this.dtDate.startDate,this.dtDate.endDate]
 
-
-
-                  this.getSalesTotal();
-                  this.getSalesCount();
-                  this.getBestItemGroup();
-                  this.getExtra()
+                
+                this.getSalesTotal();
+                this.getSalesCount();
+                this.getBestItemGroup();
+                this.getExtra()
               }).bind(this)}/>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
@@ -428,7 +435,7 @@ export default class Dashboard extends React.PureComponent
                             groupBy : this.groupList,
                             select : 
                             {
-                                query : " SELECT *,(SELECT TOTAL FROM POS WHERE GUID = POS_EXTRA_VW_01.POS_GUID) AS TOTAL FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
+                                query : "SELECT *,(SELECT TOTAL FROM POS WHERE GUID = POS_EXTRA_VW_01.POS_GUID) AS TOTAL FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
                                 param : ['FISRT_DATE:date','LAST_DATE:date'],
                                 value : [this.dtDate.startDate,this.dtDate.endDate]
                             },
@@ -553,6 +560,40 @@ export default class Dashboard extends React.PureComponent
               </div>
             </div>
           </div>
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#56487b" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("balanceTicketCreated")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.balanceTicketCreated ? parseFloat(this.state.balanceTicketCreated) : 0)}  type={'number'} onClicks={(async()=>
+                  {
+                    let tmpSource =
+                    {
+                      source : 
+                      {
+                        groupBy : this.groupList,
+                        select : 
+                        {
+                          query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED, " +
+                                    "ISNULL(SUM(CASE WHEN STATUS = 1 THEN 1 ELSE 0 END),0) AS BALANCE_TICKET_CHECKED " +  
+                                  "FROM BALANCE_COUNTER " + 
+                                  "WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",
+                          param : ['FISRT_DATE:date','LAST_DATE:date'],
+                          value : [this.dtDate.startDate,this.dtDate.endDate]
+                        },
+                        sql : this.core.sql
+                      }
+                    }
+                    await this.popBalanceTicket.show()
+                    await this.grdBalanceTicket.dataRefresh(tmpSource)
+                  }).bind(this)}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div className="row py-1 px-3">
           <div className="col-12">
@@ -791,10 +832,10 @@ export default class Dashboard extends React.PureComponent
                       width={"100%"}
                       dbApply={false}
                       >
-                          <Column dataField="VAT_RATE" caption={this.t("grdSalesVatRate.vatRate")} width={60} alignment={"center"}/>
-                          <Column dataField="AMOUNT" caption={this.t("grdSalesVatRate.amount")} width={90} format={"#,##0.00€"}/>       
-                          <Column dataField="VAT" caption={this.t("grdSalesVatRate.vat")} width={90} format={"#,##0.00€"}/>       
-                          <Column dataField="TOTAL" caption={this.t("grdSalesVatRate.total")} width={40} format={"#,##0.00€"}/>                                        
+                        <Column dataField="VAT_RATE" caption={this.t("grdSalesVatRate.vatRate")} width={60} alignment={"center"}/>
+                        <Column dataField="AMOUNT" caption={this.t("grdSalesVatRate.amount")} width={90} format={"#,##0.00€"}/>       
+                        <Column dataField="VAT" caption={this.t("grdSalesVatRate.vat")} width={90} format={"#,##0.00€"}/>       
+                        <Column dataField="TOTAL" caption={this.t("grdSalesVatRate.total")} width={40} format={"#,##0.00€"}/>                                        
                       </NdGrid>
                   </div>
               </div>
@@ -1051,6 +1092,37 @@ export default class Dashboard extends React.PureComponent
                           <Column dataField="FISRT_PRICE" width={60} format={"#,##0.00€"}/>    
                           <Column dataField="LAST_PRICE" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
+                  </div>
+              </div>
+            </div>
+        </NbPopUp>
+        <NbPopUp id={"popBalanceTicket"} parent={this} title={this.t("detail")} fullscreen={false} centered={true}>
+            <div>
+              <div className="row  p-1">
+                  <div className="col-12">
+                    <NdGrid parent={this} id={"grdBalanceTicket"} 
+                    showBorders={true} 
+                    columnsAutoWidth={true} 
+                    allowColumnReordering={true} 
+                    allowColumnResizing={true} 
+                    showRowLines={true}
+                    showColumnLines={true}
+                    showColumnHeaders={true}
+                    loadPanel={{enabled:true}}
+                    height={"59px"} 
+                    width={"100%"}
+                    dbApply={false}
+                    onCellPrepared={(e) =>
+                    {
+                      if(e.rowType === "data" && e.column.dataField === "BALANCE_TICKET_CHECKED")
+                      {
+                        e.cellElement.style.color =  "red" 
+                      }
+                    }}
+                    >
+                      <Column dataField="BALANCE_TICKET_CREATED" caption={this.t("balanceTicketCreated")} width={150} />
+                      <Column dataField="BALANCE_TICKET_CHECKED" caption={this.t("balanceTicketChecked")} width={100}/>
+                    </NdGrid>
                   </div>
               </div>
             </div>

@@ -31,7 +31,13 @@ export default class specialPurcOrder extends React.PureComponent
         this.unitDt = new datatable();
         this.priceDt = new datatable();        
         this.orderDt = new datatable();
-        
+        this.state = 
+        {
+            image:'../../css/img/noimage.jpg',
+            price : 0,
+            name :"",
+            factor : 1,
+        }
         this.itemDt.selectCmd = 
         {
             query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER_GUID)) OR (@CODE = '')",
@@ -70,6 +76,23 @@ export default class specialPurcOrder extends React.PureComponent
         tmpDoc.DOC_TYPE = 60
         tmpDoc.REF = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'txtRef'}).getValue().value
         tmpDoc.INPUT = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
+        if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value != '')
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT * FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                param : ['CODE:string|50'],
+                value : [this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'customer'}).getValue().value]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpDoc.OUTPUT = tmpData.result.recordset[0].GUID
+                tmpDoc.OUTPUT_CODE = tmpData.result.recordset[0].CODE
+                tmpDoc.OUTPUT_NAME = tmpData.result.recordset[0].TITLE
+                tmpDoc.REF = tmpData.result.recordset[0].CODE
+            }
+        }
 
         this.docObj.addEmpty(tmpDoc);
 
@@ -83,7 +106,6 @@ export default class specialPurcOrder extends React.PureComponent
         this.txtRef.props.onChange(tmpDoc.REF)
 
         await this.grdList.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-        await this.cmbUnit.dataRefresh({source : this.unitDt})
     }
     async componentDidMount()
     {
@@ -101,8 +123,9 @@ export default class specialPurcOrder extends React.PureComponent
         this.orderDt.push({UNIT:"",FACTOR:0,QUANTITY:0,PRICE:0,AMOUNT:0,DISCOUNT:0,DISCOUNT_RATE:0,VAT:0,SUM_AMOUNT:0})
 
         this.lblItemName.value = ""
-        this.lblDepotQuantity.value = 0
-        this.cmbUnit.setData([])
+        this.setState({price:0})
+        this.setState({factor:1})
+        this.setState({image:"../../css/img/noimage.jpg"})
         this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -130,13 +153,11 @@ export default class specialPurcOrder extends React.PureComponent
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
 
                 if(this.unitDt.length > 0)
                 {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
-                    this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onValueChanged()
+                    this.orderDt[0].UNIT = this.unitDt.where({TYPE:0})[0].GUID
+                    this.setState({factor:this.unitDt.where({TYPE:0})[0].FACTOR})
                 }
 
                 this.txtBarcode.value = ""
@@ -150,6 +171,8 @@ export default class specialPurcOrder extends React.PureComponent
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
+            this.setState({image:this.itemDt[0].IMAGE})
+            this.setState({price:await this.getPrice(this.itemDt[0].GUID, 1, this.docObj.dt()[0].OUTPUT)})
             resolve();
         });
     }
@@ -168,10 +191,10 @@ export default class specialPurcOrder extends React.PureComponent
     }
     async calcEntry() {
         // Vérifie si l'une des propriétés a une valeur différente de zéro
-        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
+        if (this.state.factor !== 0 || this.txtQuantity.value !== 0 || this.state.price !== 0) {
             
             // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
-            let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
+            let tmpQuantity = this.state.factor * this.txtQuantity.value;
      
             // Récupère la limite de quantité depuis les paramètres système
             let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
@@ -191,15 +214,11 @@ export default class specialPurcOrder extends React.PureComponent
     
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
             if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
-                this.txtPrice.value = Number(
+                let price = Number(
                     (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
-                ).round(2);
+                ).round(3);
             }
-    
-            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
-            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
-            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
+
         }
     }
     async addItem()
@@ -223,7 +242,7 @@ export default class specialPurcOrder extends React.PureComponent
         {     
             let tmpFnMergeRow = async (i) =>
             {
-                let tmpQuantity = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
+                let tmpQuantity = this.orderDt[0].QUANTITY *this.state.factor
                 this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + tmpQuantity
                 this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
                 this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
@@ -278,18 +297,18 @@ export default class specialPurcOrder extends React.PureComponent
         tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
         tmpDocItems.UNIT = this.orderDt[0].UNIT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-        tmpDocItems.DISCOUNT = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_1 = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_RATE = this.orderDt[0].DISCOUNT_RATE
+        tmpDocItems.DISCOUNT = 0
+        tmpDocItems.DISCOUNT_1 = 0
+        tmpDocItems.DISCOUNT_RATE = 0
         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
+        tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.state.factor
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT
-        tmpDocItems.PRICE = this.orderDt[0].PRICE
-        tmpDocItems.VAT = this.orderDt[0].VAT
-        tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
-        tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
-        tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
+        tmpDocItems.PRICE = this.state.price
+        tmpDocItems.AMOUNT = tmpDocItems.PRICE * tmpDocItems.QUANTITY
+        tmpDocItems.VAT =  Number(tmpDocItems.AMOUNT).rateInc(this.itemDt[0].VAT, 2);
+        tmpDocItems.TOTALHT = Number(tmpDocItems.AMOUNT).round(2)
+        tmpDocItems.TOTAL =  tmpDocItems.AMOUNT + this.state.vat
 
         console.log(tmpDocItems)
         this.docObj.docOrders.addEmpty(tmpDocItems)
@@ -372,12 +391,84 @@ export default class specialPurcOrder extends React.PureComponent
 
         this.pageView.activePage('Process')
     }
+    async mailSend()
+    {
+
+        if(this.docObj.docOrders.dt().length == 0)
+        {
+            return
+        }
+        let tmpConfObj = 
+        {
+            id:'msgMailsend',showTitle:true,title:this.lang.t("msgMailsend.title"),showCloseButton:true,width:'350px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgMailsend.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailsend.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailsend.msg")}</div>)
+        }
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn02')
+        {                   
+            return
+        }
+        let tmpMail = ''
+        let tmpMailQuery = 
+        {
+            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+            param:  ['GUID:string|50'],
+            value:  [this.docObj.dt()[0].OUTPUT]
+        }
+        let tmpMailData = await this.core.sql.execute(tmpMailQuery) 
+        if(tmpMailData.result.recordset.length > 0)
+        {
+            tmpMail = tmpMailData.result.recordset[0].EMAIL
+        }
+
+        let tmpQuery = 
+        {
+            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID)ORDER BY DOC_DATE,LINE_NO " ,
+            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+            value:  [this.docObj.dt()[0].GUID,'21','FR']
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        console.log(tmpData)
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+        {
+            let tmpAttach = pResult.split('|')[1]
+            let tmpHtml = ''
+            if(pResult.split('|')[0] != 'ERR')
+            {
+            }
+            console.log(tmpMail)
+            let tmpMailData = {html:tmpHtml,subject:'Commande',sendMail:tmpMail,attachName:"commande " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:""}
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            {
+                let tmpConfObj1 =
+                {
+                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                }
+                
+                if((pResult1) == 0)
+                {  
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                    await dialog(tmpConfObj1);
+                    
+                   
+
+                }
+                else
+                {
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+            });
+        });
+    }
     render()
     {
         return(
             <div>
                 <div>
-                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_02")} content=
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_99")} content=
                     {[
                         {
                             name : 'Main',isBack : false,isTitle : true,
@@ -663,7 +754,7 @@ export default class specialPurcOrder extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
+                                    <div className='row pb-1'>
                                         <div className='col-12'>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
                                             onKeyUp={(async(e)=>
@@ -752,99 +843,51 @@ export default class specialPurcOrder extends React.PureComponent
                                             </NdPopGrid>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
+                                    <div className='row pb-1'>
                                         <div className='col-12'>
-                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
+                                            <h4 style={{height:'30px',textAlign:"center",overflow:"hidden"}}>
                                                 <NbLabel id="lblItemName" parent={this} value={""}/>
-                                            </h6>
+                                            </h4>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                <label className='text-purple-light'>{this.t("lblDepotQuantity")}</label>
-                                                <NbLabel id="lblDepotQuantity" parent={this} value={0}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblUnit")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                             dt={{data:this.orderDt,field:"UNIT"}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null && e.value != "")
+                                    <div className='row pb-1'>
+                                            <div className='col-12'>
+                                                <NdTextBox id={"txtQuantity" }  height={200} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                                selectAll={false}
+                                                value={0}
+                                                onChange={(async(e)=>
                                                 {
-                                                    let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                    if(tmpFactor.length > 0)
+                                                    console.log(e)
+                                                }).bind(this)}
+                                                onValueChanged={this.calcEntry.bind(this)}
+                                                button={
+                                                [
                                                     {
-                                                        this.txtFactor.value = tmpFactor[0].FACTOR
-                                                        this.txtFactor.props.onValueChanged()
-                                                    }
-                                                }
-                                            }}/>
+                                                        id:'01',
+                                                        icon:'minus',
+                                                        location:'before',
+                                                        onClick:async()=>
+                                                        {
+                                                            if(this.txtQuantity.value > 0)
+                                                            {
+                                                                this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                            }
+                                                            
+                                                        }
+                                                    },
+                                                    {
+                                                        id:'02',
+                                                        icon:'plus',
+                                                        location:'after',
+                                                        onClick:async()=>
+                                                        {
+                                                            this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
+                                                        }
+                                                    }                                                    
+                                                ]}>
+                                                </NdTextBox>
+                                            </div>                                            
                                         </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblQuantity")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                        <div className='col-1 d-flex align-items-center justify-content-center'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32}  onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblAmount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtAmount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"AMOUNT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblDiscount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtDiscount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"DISCOUNT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblVat")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtVat" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"VAT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblSumAmount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtSumAmount" parent={this} simple={true} maxLength={32} readOnly={true} dt={{data:this.orderDt,field:"SUM_AMOUNT"}}/>
-                                        </div>
-                                    </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
@@ -854,60 +897,6 @@ export default class specialPurcOrder extends React.PureComponent
                                     </div>
                                 </div>
                             </div>
-                            {/* İNDİRİM POPUP */}
-                            <NdPopUp parent={this} id={"popDiscount"} 
-                            visible={false}                        
-                            showCloseButton={false}
-                            showTitle={true}
-                            title={this.lang.t("popDiscount.title")}
-                            container={"#root"} 
-                            width={"250"}
-                            height={"190"}
-                            position={{of:"#root"}}
-                            >
-                                <div className='row p-1'>
-                                    <div className='col-4 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDisc")}</label>                                            
-                                    </div>
-                                    <div className='col-8'>
-                                        <NdTextBox id="txtPopDisc" parent={this} simple={true} maxLength={32} 
-                                        onValueChanged={() =>
-                                        {
-                                            this.txtPopDiscRate.value = Number(this.txtPrice.value * this.txtQuantity.value).rate2Num(this.txtPopDisc.value)
-                                        }} 
-                                        dt={{data:this.orderDt,field:"DISCOUNT"}} 
-                                        onEnterKey={{}}/>
-                                    </div>
-                                </div>
-                                <div className='row p-1'>
-                                    <div className='col-4 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDiscRate")}</label>                                            
-                                    </div>
-                                    <div className='col-8'>
-                                        <NdTextBox id="txtPopDiscRate" parent={this} simple={true} maxLength={32} 
-                                        onValueChanged={() =>
-                                        {
-                                            this.txtPopDisc.value = Number(this.txtPrice.value * this.txtQuantity.value).rateInc(this.txtPopDiscRate.value,4)
-                                        }}
-                                        dt={{data:this.orderDt,field:"DISCOUNT_RATE"}} 
-                                        onEnterKey={{}}/>
-                                    </div>
-                                </div>
-                                <div className="row p-1">
-                                    <div className='col-12'>
-                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={(() =>
-                                            {
-                                                
-                                                this.calcEntry(false)
-                                                console.log(this.popDiscount)
-                                                this.popDiscount.hide()
-                                            }).bind(this)
-                                        }>{this.t("lblAdd")}
-                                        </NbButton>
-                                    </div>
-                                </div>
-                            </NdPopUp>
                         </PageContent>
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
@@ -920,7 +909,7 @@ export default class specialPurcOrder extends React.PureComponent
                                             allowColumnReordering={true} 
                                             allowColumnResizing={true} 
                                             headerFilter = {{visible:false}}
-                                            height={'350'} 
+                                            height={'300'} 
                                             width={'100%'}
                                             dbApply={false}
                                             onRowRemoving={async (e)=>
@@ -1024,6 +1013,13 @@ export default class specialPurcOrder extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
+                                        <div className='col-12'>
+                                            <NbButton className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.mailSend.bind(this)}>{this.lang.t("btnMailsend")}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row'>
                                         <div className='col-8 d-flex align-items-center justify-content-end'>
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblAmount")}</label>                                            
                                         </div>
