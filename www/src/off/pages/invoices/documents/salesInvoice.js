@@ -1125,8 +1125,6 @@ export default class salesInvoice extends DocBase
                                                     this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
                                                 }
                                             }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
                                             <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
