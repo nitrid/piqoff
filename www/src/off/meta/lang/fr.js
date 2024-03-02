@@ -324,6 +324,7 @@ export const langFr =
         pos_01_001 : "Identifier Caisse",
         pos_01_002 : "Copier Pos Plu ",
         pos_01_003 : "Descriptions des tickets",
+        pos_01_004 : "Message POS",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -827,7 +828,19 @@ export const langFr =
         },
         popDescription :
         {
-            title : "Description du produit" 
+            title : "Langue et Description du Produit",
+            label : "Description du Produit"
+        },
+        grdLang : 
+        {
+            clmLang : "Langue",
+            clmName : "Nom du Produit",
+        },
+        popItemLang : 
+        {
+            title : "Langue du Produit",
+            cmbPopItemLanguage : "Langue",
+            cmbPopItemLangName : "Nom du Produit",
         },
         grdAnalysis:  
         {
@@ -3665,7 +3678,7 @@ export const langFr =
             title : "Choix du groupe",
             clmCode : "Code",
             clmName : "Nom",
-        },
+        },        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -4325,7 +4338,11 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     ftr_01_003 : // "İade Fatura Listesi"
     {
@@ -16065,6 +16082,7 @@ export const langFr =
     {
         txtCustomerCode : "Fournisseur",
         txtTotal : "Total",
+        validDesign : "Veuillez choisir le design",
         menu : "Encaissement",
         pg_txtCustomerCode : 
         {
@@ -16088,7 +16106,11 @@ export const langFr =
             clmTotal : "Total" ,
             clmInputName :"Caisse/Banque",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {
@@ -16447,6 +16469,12 @@ export const langFr =
             title: "Attention",   
             btn01: "OK",    
             msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"   
+        },
+        msgRowNotUpdate:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Déconnectez la connexion associée pour effectuer cette opération.",
         },
     },
     fns_03_001 : //  "Kasa Tanıtım"
@@ -16955,6 +16983,10 @@ export const langFr =
         {
             notValid: "Veuillez remplir les champs obligatoires !",
         },
+        clmBankCode: "Code banque",
+        clmAccountNo: "Numéro de compte",
+        clmIBAN: "IBAN",
+        clmBIC: "Code d'identification de la banque",
     },
     set_03_001 : // Silinmiş Evraklar
     {
@@ -17240,6 +17272,18 @@ export const langFr =
             btn01: "OK",
             msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
+        },
+    },
+    pos_01_004: // "Pos Mesaj"
+    {
+        cmbDevice: "Appareil",
+        txtMsg: "Message",
+        btnSend: "Envoyer",
+        msgResult:
+        {
+            title: "Avertissement",
+            btn01: "D'accord",
+            msg: "Votre message a été envoyé avec succès",
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",

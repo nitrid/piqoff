@@ -33,6 +33,7 @@ export class companyCls
             CAPITAL : 0,
             COUNTRY_NAME : '',
             PRINT_DESCRIPTION : '',
+            BANK_INFO : '',
         }
 
         this._initDs();
@@ -71,13 +72,17 @@ export class companyCls
                     "@COMPANY_TYPE = @PCOMPANY_TYPE, " +
                     "@SIREN_NO = @PSIREN_NO, " +
                     "@RCS = @PRCS, " +
-                    "@CAPITAL  =@PCAPITAL, " +
-                    "@PRINT_DESCRIPTION  =@PPRINT_DESCRIPTION ",
+                    "@CAPITAL  = @PCAPITAL, " +
+                    "@PRINT_DESCRIPTION  =@PPRINT_DESCRIPTION, " +
+                    "@BANK_CODE  = @PBANK_CODE, " +
+                    "@ACCOUNT_NO  = @PACCOUNT_NO, " +
+                    "@BIC  = @PBIC, " +
+                    "@IBAN  = @PIBAN " ,
             param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PBRAND_NAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
                      'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
-                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float','PPRINT_DESCRIPTION:string|max'],
+                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float','PPRINT_DESCRIPTION:string|max','PBANK_CODE:string|50','PACCOUNT_NO:string|50','PBIC:string|50','PIBAN:string|max'],
             dataprm : ['GUID','CUSER','NAME','BRAND_NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
-                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL','PRINT_DESCRIPTION']
+                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL','PRINT_DESCRIPTION','BANK_CODE','ACCOUNT_NO','BIC','IBAN']
         } 
         tmpDt.updateCmd = 
         {
@@ -105,12 +110,16 @@ export class companyCls
                     "@SIREN_NO = @PSIREN_NO, " +
                     "@RCS = @PRCS, " +
                     "@CAPITAL  =@PCAPITAL, " +
-                    "@PRINT_DESCRIPTION  =@PPRINT_DESCRIPTION ",
+                    "@PRINT_DESCRIPTION  =@PPRINT_DESCRIPTION, " +
+                    "@BANK_CODE  = @PBANK_CODE, " +
+                    "@ACCOUNT_NO  = @PACCOUNT_NO, " +
+                    "@BIC  = @PBIC, " +
+                    "@IBAN  = @PIBAN " ,
             param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PBRAND_NAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
                      'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
-                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float','PPRINT_DESCRIPTION:string|max'],
+                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float','PPRINT_DESCRIPTION:string|max','PBANK_CODE:string|50','PACCOUNT_NO:string|50','PBIC:string|50','PIBAN:string|max'],
             dataprm : ['GUID','CUSER','NAME','BRAND_NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
-                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL','PRINT_DESCRIPTION']
+                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL','PRINT_DESCRIPTION','BANK_CODE','ACCOUNT_NO','BIC','IBAN']
         } 
         this.ds.add(tmpDt);
     }

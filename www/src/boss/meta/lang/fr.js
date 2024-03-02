@@ -61,12 +61,18 @@ export const langFr =
         salePriceUp : "Qte Prix de Vente Augmenté",
         salesTotalDetail : "Détail des Ventes",
         detail : "Détail",
+        balanceTicketCreated: "Créer à la boucherie",
+        balanceTicketChecked: "Passées en caisse",
+        ticketCreatedAmount: "Total",
+        ticketCheckedAmount: "Total",
+        ticketDifferance : "Différence",
         grdSalesVatRate :
         {
             vatRate : "TVA %",
             amount : "HT",
             vat : "TVA",
             total : "TTC"
-        }
+        },
+       
     },
 }

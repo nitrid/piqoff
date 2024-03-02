@@ -325,6 +325,7 @@ export const langTr =
         pos_01_001 : "Pos Cihaz Tanıtım",
         pos_01_002 : "Pos Plu Kopyalama",
         pos_01_003 : "Fiş Sonu Açıklamaları",
+        pos_01_004 : "Pos Mesaj",
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
@@ -827,7 +828,19 @@ export const langTr =
         },
         popDescription :
         {
-            title : "Ürün Açıklaması"
+            title : "Ürün Dili ve Açıklaması",
+            label : "Ürün Açıklaması"
+        },
+        grdLang : 
+        {
+            clmLang : "Dil",
+            clmName : "Ürün adı",
+        },
+        popItemLang : 
+        {
+            title : "Ürün Dili",
+            cmbPopItemLanguage : "Dil",
+            cmbPopItemLangName : "Ürün adı",
         },
         grdAnalysis: 
         {
@@ -3664,6 +3677,7 @@ export const langTr =
             clmCode : "KODU",
             clmName : "ADI",
         },
+        
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -4322,7 +4336,11 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+        },
     },
     ftr_01_003 : // "İade Fatura Listesi"
     {
@@ -4530,7 +4548,7 @@ export const langTr =
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         cmbOrigin: "Menşei",
         txtTransport : "Taşıma Türü",
         tabTitleDetail : "Detay Bilgileri",
@@ -4591,7 +4609,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
-            clmDocNo : "Belgo No",
+            clmDocNo : "Belge No",
         },
         grdPurcInv: 
         {
@@ -5118,7 +5136,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         extraCost : "Ek Maliyet",
         cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
@@ -5681,7 +5699,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6170,7 +6188,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         isMsgSave :
         {  
             title: "Dikkat",
@@ -7048,7 +7066,7 @@ export const langTr =
             clmName : "Adı"
         },
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         msgPrintforLocked:
         {
             title: "Dikkat",
@@ -7112,7 +7130,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7554,7 +7572,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validDesign : "Lütfen Dizayn seçiniz.",
@@ -8063,7 +8081,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         isMsgSave :
         {  
             title: "Dikkat",
@@ -8556,7 +8574,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -9042,7 +9060,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         validDesign : "Lütfen Dizayn seçiniz.",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
@@ -9428,7 +9446,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9859,7 +9877,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         validDesign : "Lütfen Dizayn seçiniz.",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
@@ -10379,7 +10397,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         validDesign : "Lütfen Dizayn seçiniz.",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
@@ -10775,7 +10793,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -11555,7 +11573,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         cmbOrigin : "Menşei",
         validDesign : "Lütfen Dizayn Seçin",
         btnView : "Görüntüle",
@@ -11994,7 +12012,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         extraCost : "Ek Maliyet",
         cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
@@ -12429,7 +12447,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtUnitPrice: "Birim Fiyatı",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12787,7 +12805,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -13196,7 +13214,7 @@ export const langTr =
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         isMsgSave :
         {  
             title: "Dikkat",
@@ -13561,7 +13579,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -14428,7 +14446,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         cmbPricingList : "Fiyat Listesi",
         pg_Docs : 
         {
@@ -14822,7 +14840,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
@@ -15862,6 +15880,12 @@ export const langTr =
             clmTotal : "Tutar",
             clmInputName :"Kasa/Banka",
         },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+        },
+        validDesign : "Lütfen Dizayn seçiniz.",
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {
@@ -16233,6 +16257,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Fatura seçmeden işlem yapamazsınız !"
+        },
+        msgRowNotUpdate:
+        {
+            title:"Dikkat",
+            btn01:"Tamam",
+            msg:"Bu işlemi yapabilmeniz için ilgili bağlantıyı koparın.",
         },
     },
     fns_03_001 : //  "Kasa Tanıtım",
@@ -16684,6 +16714,10 @@ export const langTr =
         {
             notValid: "Boş geçemezsiniz !",
         },
+        clmBankCode: "Banka kodu",
+        clmAccountNo: "Hesap numarası",
+        clmIBAN: "IBAN",
+        clmBIC: "Banka Tanımlayıcı Kodu",
     },
     set_03_001 : // Silinmiş Evraklar
     {
@@ -16967,6 +17001,18 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Kayıt işleminiz başarılı !",
             msgFailed: "Kayıt işleminiz başarısız !"
+        },
+    },
+    pos_01_004 : // "Pos Mesaj",
+    {
+        cmbDevice : "Cihaz",
+        txtMsg : "Mesaj",
+        btnSend : "Gönder",
+        msgResult:
+        {
+            title: "Uyarı",
+            btn01: "Tamam",
+            msg: "Mesaj gönderiminiz başarılı",
         },
     },
     pos_02_001 : // "Satış Fiş Raporu",
@@ -18494,7 +18540,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
-        txtDocNo : "Belgo No",
+        txtDocNo : "Belge No",
         validMail : "Lütfen Boş Geçmeyin.",
         pg_service : 
         {

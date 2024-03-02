@@ -351,9 +351,9 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsOrdList.clmOutputName")} visible={false}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>

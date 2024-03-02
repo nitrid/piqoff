@@ -7,7 +7,7 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import FileUploader from 'devextreme-react/file-uploader';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdButton from "../../core/react/devex/button";
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling} from '../../core/react/devex/grid';
+import NdGrid,{Column,Editing,Paging,Pager,KeyboardNavigation,Scrolling} from '../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
@@ -34,9 +34,9 @@ export default class NdDocAi extends Base
         {
             if(typeof pData.content != 'undefined')
             {
-                tmpValue = pData.content
+                tmpValue = pData.content.replaceAll(',','.')
             }
-            if(typeof pData.value != 'undefined')
+            else if(typeof pData.value != 'undefined')
             {
                 tmpValue = pData.value
             }
@@ -100,7 +100,7 @@ export default class NdDocAi extends Base
                 pData.Item[i].Description = this.getValue(pData.Item[i].Description)
                 pData.Item[i].Quantity = typeof this.getValue(pData.Item[i].Quantity) == 'undefined' ? 0 : this.getValue(pData.Item[i].Quantity)
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
-                pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
+                pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice)).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
 
                 let tmpItem = await this.getItem(pData.Item[i].ProductCode,pData.CustomerGuid)
@@ -371,16 +371,18 @@ export default class NdDocAi extends Base
                                     }
                                 }}
                                 >
+                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Paging defaultPageSize={10} />
                                     <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Scrolling mode="standart" />
-                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                    <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} width={120} allowHeaderFiltering={false}/>
-                                    <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} width={350} allowHeaderFiltering={false}/>
-                                    <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.Unit}}/>
-                                    <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                    <Column dataField="Discount" caption={this.lang.t("popDocAi.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
-                                    <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                    <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
+                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={false} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                    <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} allowEditing={false} width={120} allowHeaderFiltering={false}/>
+                                    <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
+                                    <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.Unit}}/>
+                                    <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                    <Column dataField="Discount" caption={this.lang.t("popDocAi.clmDiscount")} dataType={'number'}  format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
+                                    <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                 </NdGrid>
                             </div>
                         </div>

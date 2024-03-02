@@ -317,6 +317,7 @@ export const langDe =
         pos_01: "Definitionen",
         pos_01_001: "POS-Gerätepräsentation",
         pos_01_002: "Pos Plu kopieren",  
+        pos_01_004: "POS Nachricht",
         pos_02: "Berichte",
         pos_02_001: "Verkaufsbeleg-Bericht",
         pos_02_002: "Kundenpunkte-Bericht",
@@ -818,7 +819,19 @@ export const langDe =
         },
         popDescription :
         {
-            title : "Artikelbeschreibung"
+            title : "Produkt Sprache und Beschreibung",
+            label : "Produktbeschreibung"
+        },
+        grdLang : 
+        {
+            clmLang : "Sprache",
+            clmName : "Produktname",
+        },
+        popItemLang : 
+        {
+            title : "Produkt Sprache",
+            cmbPopItemLanguage : "Sprache",
+            cmbPopItemLangName : "Produktname",
         },
         grdAnalysis: 
         {
@@ -3653,6 +3666,7 @@ export const langDe =
             clmCode : "CODE",
             clmName : "NAME",
         },
+        
     },
     cri_01_002: // "Adressdefinitionen"
     {
@@ -4311,7 +4325,11 @@ export const langDe =
             clmTotal : "Gesamt",
             clmOutputName :"Lager",
         },
-    
+        popDesign:
+        {
+            title: "Designauswahl",
+            design: "Design",
+        },
     },
     ftr_01_003 : // "Retourerechnungsliste"
     {
@@ -16135,6 +16153,12 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keine Vorgänge durchführen, ohne eine Rechnung auszuwählen!"
         },
+        msgRowNotUpdate:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Trennen Sie die entsprechende Verbindung, um diese Aktion auszuführen.",
+        },
     },
     fns_03_001 : // "Kassenstammdaten"
     {
@@ -16580,6 +16604,10 @@ export const langDe =
         {
             notValid: "Dieses Feld darf nicht leer sein!",
         },
+        clmBankCode: "BLZ",
+        clmAccountNo: "Konto Nr",
+        clmIBAN: "IBAN",
+        clmBIC: "BIC",
     },
     set_03_001 : // "Gelöschte Dokumente"
     {
@@ -16863,6 +16891,18 @@ export const langDe =
             title: "Achtung", 
             btn01: "OK", 
             msg: "Bitte Benutzer wählen"  
+        },
+    },
+    pos_01_004: // "Pos Mesaj"
+    {
+        cmbDevice: "Gerät",
+        txtMsg: "Nachricht",
+        btnSend: "Senden",
+        msgResult:
+        {
+            title: "Warnung",
+            btn01: "Ok",
+            msg: "Ihre Nachricht wurde erfolgreich gesendet",
         },
     },
     pos_02_001 : // "Belegbericht"

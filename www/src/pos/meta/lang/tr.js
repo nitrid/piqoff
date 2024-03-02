@@ -106,6 +106,12 @@ export const langTr =
         msg : "Ödeme Gerçekleşmedi",
         btn01 : "Tamam"
     },
+    msgPayProcessFailed :
+    {
+        title : "Bilgi",
+        msg : "Kart cihazı üzerinde girilmiş tutar var. Yeni bir tutar gönderimi yapmadan önce lütfen kart cihazı üzerindeki işlemi iptal edin!",
+        btn01 : "Tamam"
+    },
     msgBonDavoir : 
     {
         title : "Uyarı",
@@ -474,6 +480,10 @@ export const langTr =
     popCardPay :
     {
         title :"Kart Ödeme",
+    },
+    popExchangePay :
+    {
+        title :"Nakit Döviz Ödeme",
     },
     popTotal :
     {
@@ -906,5 +916,33 @@ export const langTr =
     txtNewMail : "E-Mail",
     txtNewPhone : "Telefon",
     txtNewCustomerLastName : "Soyisim",
-    txtNewCustomerName : "İsim"
+    txtNewCustomerName : "İsim",
+    msgMultipleLineSelect:
+    {
+        title: "Dikkat",
+        btn: "Tamam",
+        msg: "İndirim uygulamak için tek bir satır seçmelisiniz",
+    },
+    applyDiscountText: "İndirim Uygula",
+    msgAdminMessage:
+    {
+        title: "Yönetici Mesajı",
+        btn01: "Tamam",
+    },
+    popUserList :
+    {
+        title : "Kullanıcı Listesi",
+        clmCode : "Kodu",
+        clmName : "Adı"
+    },
+    acsEdit : 
+    {
+        msgCloseAlert : 
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
+        },
+    },
 }

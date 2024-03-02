@@ -52,95 +52,102 @@ export default class purchaseInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
     }
     async init()
     {
-        await super.init()
-        this.grdPurcInv.devGrid.clearFilter("row")
-        this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
-
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-        
-        this.docLocked = false
-        
-        this.frmDocItems.option('disabled',true)        
-        
-        this.txtDiffrentPositive.value = 0
-        this.txtDiffrentNegative.value = 0
-        this.txtDiffrentTotal.value = 0
-        this.txtDiffrentInv.value = 0
-
-        this.pg_txtItemsCode.on('showing',()=>
+        return new Promise(async resolve =>
         {
-            this.pg_txtItemsCode.setSource(
+            await super.init()
+            this.grdPurcInv.devGrid.clearFilter("row")
+            this.dtDocDate.value = moment(new Date())
+            this.dtShipDate.value = moment(new Date())
+
+            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            
+            this.docLocked = false
+            
+            this.frmDocItems.option('disabled',true)        
+            
+            this.txtDiffrentPositive.value = 0
+            this.txtDiffrentNegative.value = 0
+            this.txtDiffrentTotal.value = 0
+            this.txtDiffrentInv.value = 0
+
+            this.pg_txtItemsCode.on('showing',()=>
             {
-                source:
+                this.pg_txtItemsCode.setSource(
                 {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
-                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
+                                    "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
+                                    "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+                
             })
             
-        })
-        
-        this.pg_txtBarcode.on('showing',()=>
-        {
-            this.pg_txtBarcode.setSource(
+            this.pg_txtBarcode.on('showing',()=>
             {
-                source:
+                this.pg_txtBarcode.setSource(
                 {
-                    select:
-                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
-                        param : ['BARCODE:string|50'],
-                    },
-                    sql:this.core.sql
-                }
-            })
-        })
-        this.pg_txtCustomerCode.on('showing',()=>
-        {
-            this.pg_txtCustomerCode.setSource(
-            {
-                source:
-                {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                            param : ['BARCODE:string|50'],
+                        },
+                        sql:this.core.sql
+                    }
+                })
             })
-        })
+            this.pg_txtCustomerCode.on('showing',()=>
+            {
+                this.pg_txtCustomerCode.setSource(
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+            })
+            resolve()
+        });
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -527,6 +534,64 @@ export default class purchaseInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            if(pData.ITEM_TYPE == 0)
+            {
+                if(this.customerControl == true)
+                {
+                    let tmpCheckQuery = 
+                    {
+                        query :"SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+                    }
+                    let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                    if(tmpCheckData.result.recordset.length == 0)
+                    {   
+                        let tmpCustomerBtn = ''
+                        if(this.customerClear == true)
+                        {
+                            resolve()
+                            return 
+                        }
+                        if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj);
+                            resolve()
+                            return
+                        }
+                        await this.msgCustomerNotFound.show().then(async (e) =>
+                        {
+                            if(e == 'btn01' && this.checkCustomer.value == true)
+                            {
+                                this.customerControl = false
+                                resolve()
+                                return
+                            }
+                            if(e == 'btn02')
+                            {
+                                tmpCustomerBtn = e
+                                if(this.checkCustomer.value == true)
+                                {
+                                    this.customerClear = true
+                                }
+                                resolve()
+                                return 
+                            }
+                        })
+                        if(tmpCustomerBtn == 'btn02')
+                        {
+                            resolve()
+                            return
+                        }
+                    }
+                }
+            }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
@@ -567,7 +632,7 @@ export default class purchaseInvoice extends DocBase
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                 tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                this.docObj.docItems.addEmpty(tmpDocItems)
+                await this.docObj.docItems.addEmpty(tmpDocItems)
                 pIndex = this.docObj.docItems.dt().length - 1
             }
 
@@ -601,67 +666,7 @@ export default class purchaseInvoice extends DocBase
                 }
             }
             
-            if(pData.ITEM_TYPE == 0)
-            {
-                if(this.customerControl == true)
-                {
-                    let tmpCheckQuery = 
-                    {
-                        query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID",
-                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-                    }
-                    let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                    if(tmpCheckData.result.recordset.length == 0)
-                    {   
-                        let tmpCustomerBtn = ''
-                        if(this.customerClear == true)
-                        {
-                            await this.grdPurcInv.devGrid.deleteRow(0)
-                            resolve()
-                            return 
-                        }
-                        if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
-                        {
-                            await this.grdPurcInv.devGrid.deleteRow(0)
-                            let tmpConfObj =
-                            {
-                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
-                            }
-                            await dialog(tmpConfObj);
-                            resolve()
-                            return
-                        }
-                        await this.msgCustomerNotFound.show().then(async (e) =>
-                        {
-                            if(e == 'btn01' && this.checkCustomer.value == true)
-                            {
-                                this.customerControl = false
-                                resolve()
-                                return
-                            }
-                            if(e == 'btn02')
-                            {
-                                tmpCustomerBtn = e
-                                await this.grdPurcInv.devGrid.deleteRow(0)
-                                if(this.checkCustomer.value == true)
-                                {
-                                    this.customerClear = true
-                                }
-                                resolve()
-                                return 
-                            }
-                        })
-                        if(tmpCustomerBtn == 'btn02')
-                        {
-                            resolve()
-                            return
-                        }
-                    }
-                }
-            }
+
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
@@ -1042,11 +1047,11 @@ export default class purchaseInvoice extends DocBase
                                 let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
-                                tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                 let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
-                                tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
+                                tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
                                 this.newPrice.push(tmpItemData[0])
                             } 
@@ -1162,11 +1167,11 @@ export default class purchaseInvoice extends DocBase
                                     let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
-                                    tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                    tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                     let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                     let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
-                                    tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
+                                    tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
                                     console.log(tmpItemData[0])
                                     this.newPriceDate.push(tmpItemData[0])
@@ -1244,7 +1249,7 @@ export default class purchaseInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                {/* <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
                                     onClick={async()=>
                                     {
@@ -1296,9 +1301,10 @@ export default class purchaseInvoice extends DocBase
                                                 this.dtShipDate.value = moment(e.DueDate)
 
                                                 this.grdPurcInv.devGrid.beginUpdate()
+                                                let tmpMissCodes = []
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
-                                                    if(e.Item[i].ProductCode != '')
+                                                    if(e.Item[i].ItemCode != '')
                                                     {
                                                         let tmpItem =
                                                         {
@@ -1312,13 +1318,28 @@ export default class purchaseInvoice extends DocBase
                                                         }
                                                         await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
                                                     }
+                                                    else
+                                                    {
+                                                        tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
+                                                    }
                                                 }
                                                 this.grdPurcInv.devGrid.endUpdate()
+                                                if(tmpMissCodes.length > 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                                                    }
+                                                
+                                                    await dialog(tmpConfObj);
+                                                }
                                             }
                                             console.log(e)
                                         }
                                     }}/>
-                                </Item> */}
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>
@@ -2354,17 +2375,17 @@ export default class purchaseInvoice extends DocBase
                                             <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdPurcInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdPurcInv.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
-                                            <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
+                                            <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdPurcInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                            <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                            <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={'€#,##0.000'}allowEditing={false} width={75} allowHeaderFiltering={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={Number.money.sign + '#,##0.000'}allowEditing={false} width={75} allowHeaderFiltering={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdPurcInv.clmVat")} format={'%#,##'} allowEditing={false} width={55} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTALHT" caption={this.t("grdPurcInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdPurcInv.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={110} allowEditing={false}  allowHeaderFiltering={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={80}   allowHeaderFiltering={false}/>
                                         </NdGrid>
@@ -2670,7 +2691,7 @@ export default class purchaseInvoice extends DocBase
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >

@@ -241,12 +241,12 @@ export default class discountReport extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                <Column dataField="DISCOUNT" caption={this.t("grdListe.clmDiscount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="DISCOUNT" caption={this.t("grdListe.clmDiscount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Summary>
                                     <TotalItem
                                     column="DISCOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

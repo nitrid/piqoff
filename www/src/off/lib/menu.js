@@ -1162,6 +1162,11 @@ export const menu = (e) =>
                             id: 'pos_01_003',
                             text: e.t('menuOff.pos_01_003'),//'Fiş Sonu Açıklaması',
                             path: 'pos/card/printDescription'
+                        },
+                        {
+                            id: 'pos_01_004',
+                            text: e.t('menuOff.pos_01_004'),//'Pos Mesaj',
+                            path: 'pos/card/posMsg'
                         }
                     ]
                 },

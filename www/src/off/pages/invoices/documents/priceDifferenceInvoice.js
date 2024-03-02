@@ -50,15 +50,18 @@ export default class priceDifferenceInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
-    loadState() {
+    loadState() 
+    {
         let tmpLoad = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-
-    saveState(e){
+    saveState(e)
+    {
         let tmpSave = this.access.filter({ELEMENT:'grdDiffInvState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
@@ -938,8 +941,7 @@ export default class priceDifferenceInvoice extends DocBase
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                        onClick={async()=>
-                                        {       
-                                            console.log(this.docObj.isSaved)                             
+                                        {                           
                                             if(this.docObj.isSaved == false)
                                             {
                                                 let tmpConfObj =
@@ -1587,7 +1589,6 @@ export default class priceDifferenceInvoice extends DocBase
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -1633,7 +1634,7 @@ export default class priceDifferenceInvoice extends DocBase
                                         
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                            e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                            e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             if(e.key.DISCOUNT == 0)
                                             {
                                                 e.key.DISCOUNT_RATE = 0
@@ -1670,17 +1671,17 @@ export default class priceDifferenceInvoice extends DocBase
                                             <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="MULTICODE" caption={this.t("grdDiffInv.clmMulticode")} width={90} />
                                             <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={200}/>
-                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdDiffInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
-                                            <Column dataField="PURC_PRICE" caption={this.t("grdDiffInv.clmPurcPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
+                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdDiffInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
+                                            <Column dataField="PURC_PRICE" caption={this.t("grdDiffInv.clmPurcPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
                                             <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                            <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={60} allowHeaderFiltering={false}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false}/>
-                                            <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={75} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={90} allowEditing={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={75} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdDiffInv.clmVatRate")} width={50} allowEditing={false}/>
-                                            <Column dataField="TOTALHT" caption={this.t("grdDiffInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={100} allowEditing={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdDiffInv.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={100} allowEditing={false}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")}  width={80} allowEditing={false}/>
                                             <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} width={80} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDiffInv.clmDescription")} width={80} />
@@ -1908,7 +1909,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value=""
+                                    value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
@@ -1929,7 +1930,6 @@ export default class priceDifferenceInvoice extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset[0]))
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')

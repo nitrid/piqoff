@@ -62,12 +62,18 @@ export const langTr =
         salePriceUp : "Satış Fiyatı Artan Ürün Adeti",
         salesTotalDetail : "Satış Detayı",
         detail : "Detay",
+        balanceTicketCreated: "Kasap etiketleri",
+        balanceTicketChecked: "Kasadan geçen etiket",
+        ticketCreatedAmount: "Toplam",
+        ticketCheckedAmount: "Toplam",
+        ticketDifferance : "Fark",
         grdSalesVatRate :
         {
             vatRate : "KDV %",
             amount : "Vergisiz",
             vat : "KDV",
             total : "Vergili"
-        }
+        },
+        
     },
 }
