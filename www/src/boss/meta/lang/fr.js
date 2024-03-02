@@ -65,6 +65,7 @@ export const langFr =
         balanceTicketChecked: "Passées en caisse",
         ticketCreatedAmount: "Total",
         ticketCheckedAmount: "Total",
+        ticketDifferance : "Différence",
         grdSalesVatRate :
         {
             vatRate : "TVA %",

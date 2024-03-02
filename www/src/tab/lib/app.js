@@ -327,6 +327,7 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>    
+                                {/* MÜŞTERİ TANIMLAMA */}
                                 <div className='col-4'>
                                     <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
                                     onClick={()=>
@@ -341,7 +342,7 @@ export default class App extends React.PureComponent
                                         </div>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.collection')}</h3>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.customerCard')}</h3>
                                             </div>
                                         </div>                                        
                                     </NbButton>

@@ -125,8 +125,8 @@ export default class itemSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,STATUS " +
-                    "FROM BALANCE_COUNTER_VW_01 WHERE (CDATE >= @FIRST_DATE AND CDATE <= @LAST_DATE) ORDER BY TICKET_NO ASC" ,
+                    query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,TICKET_DATE,STATUS " +
+                    "FROM BALANCE_COUNTER_VW_01 WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) ORDER BY TICKET_NO ASC" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -231,7 +231,7 @@ export default class itemSalesReport extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_010")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="TICKET_DATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={'dd/MM/yyyy'}  width={150}/> 
+                                <Column dataField="TICKET_DATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={'dd/MM/yyyy - HH:mm:ss'}  width={150}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}  dataType="number"  width={150}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} width={150}/> 
                                 <Column dataField="TICKET_NO" caption={this.t("grdListe.clmTicketNo")} visible={true}  dataType="number"  width={150}/> 

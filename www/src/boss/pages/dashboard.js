@@ -601,9 +601,9 @@ export default class Dashboard extends React.PureComponent
                     await this.grdBalanceTicket.dataRefresh(tmpSource)
                     if(tmpAmountData.result.recordset.length > 0)
                     {
-                      console.log(Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT).currency())
                         this.lblTicketCreatedAmount.value = this.t("ticketCreatedAmount") + ': ' + Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT).currency()
                         this.lblTicketCheckedAmount.value = this.t("ticketCheckedAmount") + ': ' +  Number(tmpAmountData.result.recordset[0].CHECKED_AMOUNT).currency()
+                        this.lblTicketDifferance.value = this.t("ticketDifferance") + ': ' + Number(Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT) -  Number(tmpAmountData.result.recordset[0].CHECKED_AMOUNT)).currency()
                     }
                   }).bind(this)}/>
                 </div>
@@ -1151,6 +1151,17 @@ export default class Dashboard extends React.PureComponent
                 <div className="col-6">
                   <h6 style={{height:'60px',textAlign:"right",overflow:"hidden"}}>
                       <NbLabel id="lblTicketCheckedAmount" parent={this} value={this.t("ticketCheckedAmount")}/>
+                  </h6>
+                </div>
+              </div>
+              <div className="row  p-1">
+                <div className="col-6">
+                  <h6 style={{height:'60px',textAlign:"right",overflow:"hidden"}}>
+                  </h6>
+                </div>
+                <div className="col-6">
+                  <h6 style={{height:'60px',textAlign:"right",overflow:"hidden"}}>
+                      <NbLabel id="lblTicketDifferance" parent={this} value={this.t("TicketDifferance")}/>
                   </h6>
                 </div>
               </div>
