@@ -52,7 +52,9 @@ export default class purchaseInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     loadState() {
@@ -67,80 +69,84 @@ export default class purchaseInvoice extends DocBase
     }
     async init()
     {
-        await super.init()
-        this.grdPurcInv.devGrid.clearFilter("row")
-        this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
-
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-        
-        this.docLocked = false
-        
-        this.frmDocItems.option('disabled',true)        
-        
-        this.txtDiffrentPositive.value = 0
-        this.txtDiffrentNegative.value = 0
-        this.txtDiffrentTotal.value = 0
-        this.txtDiffrentInv.value = 0
-
-        this.pg_txtItemsCode.on('showing',()=>
+        return new Promise(async resolve =>
         {
-            this.pg_txtItemsCode.setSource(
+            await super.init()
+            this.grdPurcInv.devGrid.clearFilter("row")
+            this.dtDocDate.value = moment(new Date())
+            this.dtShipDate.value = moment(new Date())
+
+            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            
+            this.docLocked = false
+            
+            this.frmDocItems.option('disabled',true)        
+            
+            this.txtDiffrentPositive.value = 0
+            this.txtDiffrentNegative.value = 0
+            this.txtDiffrentTotal.value = 0
+            this.txtDiffrentInv.value = 0
+
+            this.pg_txtItemsCode.on('showing',()=>
             {
-                source:
+                this.pg_txtItemsCode.setSource(
                 {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
-                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
+                                    "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
+                                    "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+                
             })
             
-        })
-        
-        this.pg_txtBarcode.on('showing',()=>
-        {
-            this.pg_txtBarcode.setSource(
+            this.pg_txtBarcode.on('showing',()=>
             {
-                source:
+                this.pg_txtBarcode.setSource(
                 {
-                    select:
-                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
-                        param : ['BARCODE:string|50'],
-                    },
-                    sql:this.core.sql
-                }
-            })
-        })
-        this.pg_txtCustomerCode.on('showing',()=>
-        {
-            this.pg_txtCustomerCode.setSource(
-            {
-                source:
-                {
-                    select:
+                    source:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                        param : ['VAL:string|50']
-                    },
-                    sql:this.core.sql
-                }
+                        select:
+                        {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                            param : ['BARCODE:string|50'],
+                        },
+                        sql:this.core.sql
+                    }
+                })
             })
-        })
+            this.pg_txtCustomerCode.on('showing',()=>
+            {
+                this.pg_txtCustomerCode.setSource(
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+            })
+            resolve()
+        });
     }
     async getDoc(pGuid,pRef,pRefno)
     {

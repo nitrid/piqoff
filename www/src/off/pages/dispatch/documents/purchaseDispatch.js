@@ -50,7 +50,9 @@ export default class purchaseDispatch extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
         }
     }
     loadState() {
@@ -1417,7 +1419,6 @@ export default class purchaseDispatch extends DocBase
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -1478,7 +1479,6 @@ export default class purchaseDispatch extends DocBase
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1518,7 +1518,7 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,VAT_ZERO,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
