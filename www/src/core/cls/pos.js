@@ -262,9 +262,30 @@ export class posCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
+            //DEPO MIKTARLARININ GÜNCELLENMESİ İÇİN YAPILDI.
+            this.depotQtyUpdate()
             resolve(await this.ds.update()); 
             this.posSale.subTotalBuild();
         });
+    }
+    async depotQtyUpdate()
+    {
+        if(this.ds.get('POS').length > 0 && this.ds.get('POS')[0].STATUS == 1)
+        {
+            let tmpPos = {...this.ds.get('POS')}
+            let tmpPosSale = {...this.ds.get('POS_SALE')}
+            
+            for (let i = 0; i < tmpPosSale.length; i++) 
+            {
+                let tmpQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_ITEM_QUANTITY_INPUT] @ITEM = @PITEM,@DEPOT = @PDEPOT,@QUANTITY = @PQUANTITY,@TYPE = @PTYPE",
+                    param : ['PITEM:string|50','PDEPOT:string|50','PQUANTITY:float','PTYPE:int'],
+                    value : [tmpPosSale[i].ITEM_GUID,tmpPos[0].DEPOT_GUID,tmpPosSale[i].QUANTITY,tmpPos[0].TYPE == 0 ? 1 : 0]
+                }
+                await this.core.sql.execute(tmpQuery)
+            }
+        }
     }
 }
 export class posSaleCls
@@ -626,11 +647,12 @@ export class posPaymentCls
                     "@CUSER = @PCUSER, " + 
                     "@POS = @PPOS, " +
                     "@TYPE = @PTYPE, " +
+                    "@TYPE_NAME = @PTYPE_NAME, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE'],
             local : 
             {
                 type : "insert",
@@ -651,11 +673,12 @@ export class posPaymentCls
                     "@CUSER = @PCUSER, " + 
                     "@POS = @PPOS, " +
                     "@TYPE = @PTYPE, " +
+                    "@TYPE_NAME = @PTYPE_NAME, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE'],
             local : 
             {
                 type : "update",

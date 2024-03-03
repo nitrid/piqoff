@@ -65,7 +65,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "PRICE.LAST_PRICE AS PURC_PRICE,    " +
                             "ITEMS.VAT AS VAT,   " +
                             "PRICE.FISRT_PRICE AS FISRT_PRICE,   " +
-                            "ISNULL((SELECT [dbo].[FN_PRICE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',0,0,1)),0) AS PRICE_SALE," +
+                            "ISNULL((SELECT [dbo].[FN_PRICE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),0) AS PRICE_SALE," +
                             "ISNULL((SELECT  TITLE FROM CUSTOMER_VW_02 WHERE GUID = PRICE.CUSTOMER),'')AS CUSTOMER_NAME,   " +
                             "PRICE.CUSTOMER AS CUSTOMER,    " +
                             "ISNULL((SELECT TOP 1 FISRT_PRICE FROM  PRICE_HISTORY AS SALE WHERE SALE.ITEM = PRICE.ITEM AND TYPE = 0 AND CONVERT(NVARCHAR,PRICE.CDATE,110) >= @FISRT_DATE AND CONVERT(NVARCHAR,PRICE.CDATE,110) <= @LAST_DATE),ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0)) AS LAST_SALE_PRICE,    " +
@@ -252,7 +252,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.PURC_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
                                         //e.data.MARGIN =  tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2);        
                                         //e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                        e.values[8] = tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2); 
+                                        e.values[7] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
 
                                         // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                         let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
@@ -260,7 +260,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.PURC_PRICE) * 100
                                         // e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                         // e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                        e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
+                                        e.values[8] =   tmpNetMargin.toFixed(2) + Number.money.sign + " /  %" +  tmpNetMarginRate.toFixed(2);
                                     }
                                 }}
                             >                            
@@ -281,10 +281,9 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         
                                         return
                                     }}/>
-                                <Column dataField="FISRT_PRICE" caption={this.t("grdItemPurcPriceReport.clmFisrtCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="PURC_PRICE" caption={this.t("grdItemPurcPriceReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="LAST_SALE_PRICE" caption={this.t("grdItemPurcPriceReport.clmLastSale")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={130}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdItemPurcPriceReport.clmSale")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={130}/> 
+                                <Column dataField="FISRT_PRICE" caption={this.t("grdItemPurcPriceReport.clmFisrtCost")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                <Column dataField="PURC_PRICE" caption={this.t("grdItemPurcPriceReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdItemPurcPriceReport.clmSale")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdItemPurcPriceReport.clmMargin")} visible={true}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdItemPurcPriceReport.clmNetMargin")} visible={true}/> 
                             </NdGrid>

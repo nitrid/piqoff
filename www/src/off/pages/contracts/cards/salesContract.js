@@ -282,7 +282,7 @@ export default class salesContract extends React.PureComponent
         {
             let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE)
             let tmpMarginRate = Number(this.contractObj.dt()[i].COST_PRICE).rate2Num(tmpMargin,2) //(tmpMargin ) * 100
-            this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
     async checkRow()
@@ -867,7 +867,7 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={250} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={600} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={100} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

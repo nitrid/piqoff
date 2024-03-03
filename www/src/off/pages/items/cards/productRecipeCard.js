@@ -13,7 +13,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class productRecipeCard extends React.PureComponent

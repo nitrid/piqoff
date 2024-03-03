@@ -1848,15 +1848,15 @@ export default class purchaseProInvoice extends DocBase
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={260} allowHeaderFiltering={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>
-                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={60} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={60} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={'€#,##0.000'}allowEditing={false} width={75} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={Number.money.sign + '#,##0.000'}allowEditing={false} width={75} allowHeaderFiltering={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdPurcInv.clmVat")} format={'%#,##'} allowEditing={false} width={50} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={110} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={110} allowHeaderFiltering={false}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={110} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
@@ -2051,13 +2051,13 @@ export default class purchaseProInvoice extends DocBase
                                             <EmptyItem colSpan={2}/>
                                             <Item>
                                             <Label text={this.t("txtExpFee")} alignment="right" />
-                                                <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
+                                                <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
                                                 maxLength={32}
                                                 ></NdNumberBox>
                                             </Item>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
+                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -2065,7 +2065,7 @@ export default class purchaseProInvoice extends DocBase
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtRemainder")} alignment="right" />
-                                                <NdTextBox id="txtRemainder" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
+                                                <NdTextBox id="txtRemainder" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -2073,7 +2073,7 @@ export default class purchaseProInvoice extends DocBase
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtbalance")} alignment="right" />
-                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"OUTPUT_BALANCE"}}
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"OUTPUT_BALANCE"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>

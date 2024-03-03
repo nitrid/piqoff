@@ -254,7 +254,7 @@ export default class safeEkstreReport extends React.PureComponent
                                     <TotalItem
                                     column="DOC_AMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>
