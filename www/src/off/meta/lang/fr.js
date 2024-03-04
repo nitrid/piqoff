@@ -828,7 +828,19 @@ export const langFr =
         },
         popDescription :
         {
-            title : "Description du produit" 
+            title : "Langue et Description du Produit",
+            label : "Description du Produit"
+        },
+        grdLang : 
+        {
+            clmLang : "Langue",
+            clmName : "Nom du Produit",
+        },
+        popItemLang : 
+        {
+            title : "Langue du Produit",
+            cmbPopItemLanguage : "Langue",
+            cmbPopItemLangName : "Nom du Produit",
         },
         grdAnalysis:  
         {
@@ -4326,7 +4338,11 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     ftr_01_003 : // "İade Fatura Listesi"
     {
@@ -16066,6 +16082,7 @@ export const langFr =
     {
         txtCustomerCode : "Fournisseur",
         txtTotal : "Total",
+        validDesign : "Veuillez choisir le design",
         menu : "Encaissement",
         pg_txtCustomerCode : 
         {
@@ -16089,7 +16106,11 @@ export const langFr =
             clmTotal : "Total" ,
             clmInputName :"Caisse/Banque",
         },
-
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+        },
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {

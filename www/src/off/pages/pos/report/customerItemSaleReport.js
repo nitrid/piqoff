@@ -235,21 +235,21 @@ export default class customerItemSaleReport extends React.PureComponent
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdList.itemGrpName")} visible={true} width={100}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} visible={true} width={80}/> 
                                 <Column dataField="UNIT_SHORT" caption={this.t("grdList.unitShort")} visible={true} width={50}/> 
-                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} visible={true} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
-                                <Column dataField="FAMOUNT" caption={this.t("grdList.clmFAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
-                                <Column dataField="LOYALTY" caption={this.t("grdList.clmLoyalty")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
-                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
+                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} visible={true} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
+                                <Column dataField="FAMOUNT" caption={this.t("grdList.clmFAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
+                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
+                                <Column dataField="LOYALTY" caption={this.t("grdList.clmLoyalty")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
+                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
                                 <Column dataField="VAT_RATE" caption={this.t("grdList.clmVatRate")} visible={true}  dataType="number"width={50}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={80}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={80}/> 
                                 <Summary>
-                                    <TotalItem column="FAMOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
-                                    <TotalItem column="AMOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
-                                    <TotalItem column="DISCOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
-                                    <TotalItem column="LOYALTY" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
-                                    <TotalItem column="VAT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
-                                    <TotalItem column="TOTAL" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR",precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="FAMOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="AMOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="DISCOUNT" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="LOYALTY" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="VAT" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
+                                    <TotalItem column="TOTAL" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} customizeText={(e)=>{return e.value + Number.money.sign;}}/>
                                 </Summary>
                             </NdGrid>
                         </div>
@@ -262,7 +262,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdNumberBox id="txtTotal" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32} format={{ style: "currency", currency: "EUR",precision: 2}}
+                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}}
                                     ></NdNumberBox>
                                 </Item>
                             </Form>
