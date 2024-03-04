@@ -153,11 +153,11 @@ export default class itemList extends React.PureComponent
                         query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
                                 "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE,PRICE_SALE_VAT_EXT, " +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN  " +
-                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE,2)) + " + Number.money.sign + "' / %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / CUSTOMER_PRICE ) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE,2)) + '€ / %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / CUSTOMER_PRICE ) * 100,2)) " +
                                 "ELSE '0'   " +
                                 "END AS MARGIN,  " +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN  " + 
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + " + Number.money.sign + "' / %' / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE ) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE ) * 100,2)) " +
                                 "ELSE '0'  " +
                                 "END AS NETMARGIN  " +
                                 "FROM ITEMS_BARCODE_MULTICODE_VW_01  " +
@@ -272,7 +272,7 @@ export default class itemList extends React.PureComponent
                                 "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS CUSTOMER_PRICE," +
                                 "PRICE_SALE, " +
                                 "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
-                                "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) + '% / " + Number.money.sign + "' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
+                                "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
                                 "ELSE '0'   " +
                                 "END AS MARGIN,  " +
                                 "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
@@ -384,11 +384,11 @@ export default class itemList extends React.PureComponent
                     {
                         query : "SELECT *," +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE,2)) + " + Number.money.sign + "' / / %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / CUSTOMER_PRICE ) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE,2)) + '€ / %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / CUSTOMER_PRICE ) * 100,2)) " +
                                 "ELSE '0'  " +
                                 "END AS MARGIN, " +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + " + Number.money.sign + "' / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE) * 100,2)) " +
                                 "ELSE '0' " +
                                 "END AS NETMARGIN " +
                                 "FROM ITEMS_BARCODE_MULTICODE_VW_01 " +
@@ -687,9 +687,9 @@ export default class itemList extends React.PureComponent
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
-                                <Column dataField="PRICE_SALE_VAT_EXT" caption={this.t("grdListe.clmPriceSaleVatExt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="PRICE_SALE_VAT_EXT" caption={this.t("grdListe.clmPriceSaleVatExt")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
