@@ -72,7 +72,7 @@ export default class itemSaleReport extends React.PureComponent
                     "MAX(VAT_RATE) AS VAT_RATE, " +
                     "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL,  " +
                     "CASE WHEN SUM(TOTAL) <> 0 AND SUM(COST_PRICE * QUANTITY) <> 0 THEN  " +
-                    "CONVERT(nvarchar,ROUND((SUM(TOTAL) / ((MAX(VAT_RATE) / 100) + 1)) - SUM(COST_PRICE * QUANTITY),2)) + '€' + '/ %' + CONVERT(nvarchar,ROUND((((SUM(TOTAL)  / ((MAX(VAT_RATE) / 100) + 1)) - SUM(COST_PRICE * QUANTITY)) / (SUM(TOTAL) / ((MAX(VAT_RATE) / 100) + 1))) * 100,2)) " +
+                    "CONVERT(nvarchar,ROUND((SUM(TOTAL) / ((MAX(VAT_RATE) / 100) + 1)) - SUM(COST_PRICE * QUANTITY),2)) + '" + Number.money.sign + "' + '/ %' + CONVERT(nvarchar,ROUND((((SUM(TOTAL)  / ((MAX(VAT_RATE) / 100) + 1)) - SUM(COST_PRICE * QUANTITY)) / (SUM(TOTAL) / ((MAX(VAT_RATE) / 100) + 1))) * 100,2)) " +
                     "ELSE '0'  " +
                     "END AS GROSS_MARGIN " +
                     "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_CODE IN(" + this.itemsCode+ ") GROUP BY ITEM_CODE,ITEM_NAME ORDER BY ITEM_NAME",
@@ -273,33 +273,33 @@ export default class itemSaleReport extends React.PureComponent
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} width={300}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} width={100}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="FAMOUNT" caption={this.t("grdListe.clmFamount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdListe.clmTotal")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="REST_TOTAL" caption={this.t("grdListe.clmRestTotal")} visible={true}   format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="FAMOUNT" caption={this.t("grdListe.clmFamount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdListe.clmTotal")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="REST_TOTAL" caption={this.t("grdListe.clmRestTotal")} visible={true}   format={{ style: "currency", currency: Number.money.code,precision: 2}} allowHeaderFiltering={false}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdListe.clmMargin")} visible={true} width={150} allowHeaderFiltering={false}/> 
                                 <Summary>
                                     <TotalItem
                                     column="TOTAL_COST"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="FAMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="VAT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="REST_TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary>
                             </NdGrid>
                         </div>

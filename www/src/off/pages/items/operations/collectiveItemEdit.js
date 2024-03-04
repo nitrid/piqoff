@@ -148,7 +148,7 @@ export default class collectiveItemEdit extends React.PureComponent
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE;
             let tmpMarginRate = ((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / tmpExVat) * 100
-            this.editObj.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
+            this.editObj.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);        
             this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
         }
         await this.grdItemList.dataRefresh({source:this.editObj.dt()});
@@ -161,7 +161,7 @@ export default class collectiveItemEdit extends React.PureComponent
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
             let tmpMargin = (tmpExVat -this.editObj.dt()[i].CUSTOMER_PRICE) / 1.12;
             let tmpMarginRate = (((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / 1.12) / tmpExVat) * 100
-            this.editObj.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);
+            this.editObj.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);
             this.editObj.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
         await this.grdItemList.dataRefresh({source:this.editObj.dt()});
@@ -346,17 +346,17 @@ export default class collectiveItemEdit extends React.PureComponent
                                     let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
                                     let tmpMargin = e.data.CUSTOMER_PRICE == 0 || tmpExVat == 0 ? 0 : tmpExVat - e.data.CUSTOMER_PRICE;
                                     let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
-                                    e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2);        
+                                    e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                    e.values[8] = tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2); 
+                                    e.values[8] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
                                     let tmpNetMargin = tmpNetExVat == 0 || e.data.CUSTOMER_PRICE == 0 ? 0 : (tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.15;
                                     let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
-                                    e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
+                                    e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                    e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
+                                    e.values[9] =   tmpNetMargin.toFixed(2) + Number.money.sign + "  %" +  tmpNetMarginRate.toFixed(2);
                                 }
                             }}
                             >                            

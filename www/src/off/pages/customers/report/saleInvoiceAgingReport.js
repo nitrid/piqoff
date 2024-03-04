@@ -278,9 +278,9 @@ export default class invoiceAgingReport extends React.PureComponent
                                 <Column dataField="DATE" caption={this.t("grdList.clmDate")} dataType={"date"} visible={true} width={100}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdList.clmType")} visible={true} width={200}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmCustomerName")} visible={true}/> 
-                                <Column dataField="PAID_AMOUNT" caption={this.t("grdList.clmDebit")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="PAYING_AMOUNT" caption={this.t("grdList.clmCredit")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/>   
-                                <Column dataField="BALANCE" caption={this.t("grdList.clmBalance")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="PAID_AMOUNT" caption={this.t("grdList.clmDebit")} visible={true} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="PAYING_AMOUNT" caption={this.t("grdList.clmCredit")} visible={true} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
+                                <Column dataField="BALANCE" caption={this.t("grdList.clmBalance")} visible={true} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>

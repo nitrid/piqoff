@@ -371,7 +371,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <Column dataField="OUTPUT_CODE" caption={this.t("grdDocPayments.clmCustomerCode")} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmCustomerName")} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                         </NdGrid>
                                         <ContextMenu

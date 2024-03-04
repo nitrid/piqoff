@@ -482,6 +482,10 @@ export const langDe =
     {
         title: "Kartenzahlung"
     },
+    popExchangePay :
+    {
+        title :"Bargeld Devisenzahlung",
+    },
     popTotal:
     {
         title: "Zwischensumme"
@@ -894,5 +898,21 @@ export const langDe =
     {
         title: "Administratornachricht",
         btn01: "OK",
+    },
+    popUserList:
+    {
+        title: "Benutzerliste",
+        clmCode: "Code",
+        clmName: "Name"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Achtung",
+            btn01: "Ja",
+            btn02: "Nein",
+            msg: "Möchten Sie die vorgenommenen Änderungen speichern?"
+        },
     },
 }
