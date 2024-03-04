@@ -560,7 +560,7 @@ export default class purchaseInvoice extends DocBase
                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                 tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
                 tmpDocItems.REF = this.docObj.dt()[0].REF
                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT

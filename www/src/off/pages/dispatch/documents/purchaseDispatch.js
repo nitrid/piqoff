@@ -769,6 +769,7 @@ export default class purchaseDispatch extends DocBase
         if(pResult == 'btn01')
         {
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+            console.log(tmpData)
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
                 App.instance.setState({isExecute:true})
@@ -955,7 +956,6 @@ export default class purchaseDispatch extends DocBase
                                     this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
                                 }
                                 await this.updatePriceData.update()
-                                App.instance.setState({isExecute:false})
                                 this.updatePriceData.clear()
                             }
                         })
