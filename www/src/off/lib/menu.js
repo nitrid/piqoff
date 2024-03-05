@@ -1313,7 +1313,7 @@ export const menu = (e) =>
                             id: 'promo_01_001',
                             text: e.t('menuOff.promo_01_001'),//'Promosyon Tanımları',
                             path: 'promotion/cards/promotionCard'
-                        }
+                        },
                     ]
                 },
                 {

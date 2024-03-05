@@ -88,7 +88,8 @@ export default class posDoc extends React.PureComponent
             date:"00.00.0000",
             isPluEdit:false,
             isConnected:this.core.offline ? false : true,
-            isFormation:false
+            isFormation:false,
+            keyboardVisibility: false // État initial pour la visibilité du clavier
         }   
         
         document.onkeydown = (e) =>
@@ -339,6 +340,11 @@ export default class posDoc extends React.PureComponent
     async componentDidMount()
     {
         this.init();
+    }
+    toggleKeyboardVisibility = () => {
+        this.setState(prevState => ({
+            keyboardVisibility: !prevState.keyboardVisibility
+        }));
     }
     async init()
     {
@@ -6976,9 +6982,11 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.btnPopLastSaleSearch._onClick()
                                     }
-                                }}>     
+                                }}
+                                >     
                                 </NdTextBox> 
                             </div>
+                                
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-2">
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
@@ -7020,18 +7028,48 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastRefNo"
+                                            this.keyboardRef.setInput(this.txtPopLastRefNo.value)
+                                        }
+                                    },
+                                ]}>      
                                 </NdTextBox> 
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">
                                 <NdTextBox id="txtPopLastCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
-                                 onChange={async(e)=>
+                                onChange={async(e)=>
                                 {                         
                                    this.cmbPopLastSaleUser.value = ''
-                                }}>     
+                                }}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastCustomer"
+                                            this.keyboardRef.setInput(this.txtPopLastCustomer.value)
+                                        }
+                                    },
+                                ]}>     
                                 </NdTextBox> 
                             </div>
+                            {this.state.keyboardVisibility && 
+                            (
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"}/>
+                            )}
                         </div>
                         {/* grdLastPos */}
                         <div className="row py-1">
@@ -9279,8 +9317,9 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
-                                </NdTextBox> 
+                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")} 
+                                />
+                                
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">

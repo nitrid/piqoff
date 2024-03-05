@@ -54,7 +54,6 @@ export default class NbKeyboard extends NbBase
                 inputName={this.state.inputName}
                 onChangeAll={(inputs) =>
                 {
-                    console.log(inputs)
                     this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
                     this.setState({inputs:inputs})
                 }}
