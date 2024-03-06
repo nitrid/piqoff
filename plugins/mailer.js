@@ -71,13 +71,13 @@ class mailer
                 service: 'outlook',
                 host: tmpResult[0].MAIL_SMTP,
                 port: tmpResult[0].MAIL_PORT,
-                secure: true,
+                secure: false,
                 auth: 
                 {
                   user: tmpResult[0].MAIL_ADDRESS,
                   pass: tmpResult[0].MAIL_PASSWORD
                 },
-                tls : { rejectUnauthorized: false }
+                tls : {  ciphers:'SSLv3' }
               });
               var mailOptions = {
                 from: tmpResult[0].MAIL_ADDRESS,
