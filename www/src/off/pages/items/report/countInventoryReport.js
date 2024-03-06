@@ -254,10 +254,10 @@ export default class countInventoryReport extends React.PureComponent
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
-                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} format={{ style: "currency", currency: "EUR",precision: 3}} visible={true}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} format={{ style: "currency", currency: Number.money.code,precision: 3}} visible={true}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
                                 <Summary>
                                     <TotalItem
                                     column="QUANTITY"
@@ -265,11 +265,11 @@ export default class countInventoryReport extends React.PureComponent
                                     <TotalItem
                                     column="TOTAL_COST"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="TOTAL_PRICE"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary>
                             </NdGrid>
                         </div>

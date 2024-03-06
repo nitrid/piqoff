@@ -1092,6 +1092,13 @@ export class datatable
         
         if(tmpIndex > -1)
         {
+            // Irsaliyeden cevirirken evrakı daha kayıt etmeden satır silince irsaliye satırı databaseden silindiği için yapıldı...
+            if(typeof this[tmpIndex].stat != 'undefined' && this[tmpIndex].stat == 'edit' && this[tmpIndex].INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.splice(tmpIndex,1);
+                return
+            }
+            //----------------------------------------------------
             this._deleteList.push(this[tmpIndex]); 
             this.splice(tmpIndex,1);
             this.emit('onDelete');
@@ -2330,7 +2337,7 @@ String.prototype.space = function(pLen,pType)
 //* FORMAT CURRENCY */
 Number.prototype.currency = function()
 {
-    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money == 'undefined' ? 'EUR' : typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
 }
 //* FORMAT DECIMAL */
 Number.prototype.decimal = function()
