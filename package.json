@@ -2,8 +2,7 @@
     "type": "module",
     "name": "piqsoft",
     "version": "1.0.7e",
-    "dependencies": 
-    {
+    "dependencies": {
         "adm-zip": "^0.5.10",
         "gensrv": "1.0.105a",
         "jsrsasign": "10.6.1",
@@ -13,8 +12,7 @@
         "nodemailer": "^6.8.0",
         "xlsx": "0.18.5"
     },
-    "scripts": 
-    {
+    "scripts": {
         "start": "node server.js"
     }
 }
