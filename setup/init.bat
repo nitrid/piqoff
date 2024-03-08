@@ -1,0 +1,13 @@
+@echo off
+echo Cloning the Piqoff repository...
+git clone https://github.com/nitrid/piqoff
+cd piqoff
+echo Installing dependencies for Piqoff...
+npm install
+cd www
+echo Installing dependencies for the frontend...
+npm install
+cd ..
+cd setup
+echo Running setup script...
+node init.js
