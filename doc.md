@@ -4,6 +4,7 @@ piqoff/www npm i
 piqoff/www npm i devextreme@21.1.5
 piqoff/www npm i devextreme-react@21.1.5
 
+ali
 - 20 - Günlük fiş arşivlendi. (excel-archive fiscal) - nf525.js
 - 30 - Yıllık grand total arşivlendi.(excel-archive fiscal) - nf525.js
 + 40 - Kasa offline döndü yada kasa kapandı. - nf525.js içerisinde socket durumu event
