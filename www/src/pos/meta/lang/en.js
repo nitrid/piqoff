@@ -339,6 +339,10 @@ export const langEn =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Return list",
+    },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK

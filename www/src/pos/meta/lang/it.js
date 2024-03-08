@@ -339,6 +339,10 @@ export const langIt =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Elenco dei resi",
+    },
     txtPopLastRefPholder: "Leggi il codice a barre sulla ricevuta...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK

@@ -339,6 +339,10 @@ export const langDe =
             optionAvoir : "Gutschein"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Rückgabeliste",
+    },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
     txtPopLastRefNoPholder : "Referenznummer",  
     txtPopLastCustomerPholder : "Kundennummer", 

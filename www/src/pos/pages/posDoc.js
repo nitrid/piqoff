@@ -9318,7 +9318,20 @@ export default class posDoc extends React.PureComponent
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
                                 <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")} 
-                                />
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopRebateRefNo"
+                                            this.keyboardRef.setInput(this.txtPopRebateRefNo.value)
+                                        }
+                                    },
+                                ]}>      
+                                </NdTextBox> 
                                 
                             </div>
                             {/* txtPopLastCustomer */} 
@@ -9328,9 +9341,25 @@ export default class posDoc extends React.PureComponent
                                 {                         
                                    this.cmbpopRebateTicletUser.value = ''
                                    this.dtpopRebateTicletStartDate.value = '19700101'
-                                }}>     
+                                }}button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopRebateCustomer"
+                                            this.keyboardRef.setInput(this.txtPopRebateCustomer.value)
+                                        }
+                                    },
+                                ]}>     
                                 </NdTextBox> 
                             </div>
+                            {this.state.keyboardVisibility && 
+                            (
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopRebateRefNo"}/>
+                            )}
                         </div>
                         {/* grdLastPos */}
                         <div className="row py-1">
