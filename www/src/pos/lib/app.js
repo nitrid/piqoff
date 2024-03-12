@@ -267,9 +267,9 @@ export default class App extends React.PureComponent
             await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
             await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 
-            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE"}
+            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE",local:{type : "select",query : "SELECT * FROM POS_PAY_TYPE;"}}
             await this.payType.refresh()
-            console.log(this.payType)
+            
             resolve()
         })
     }
