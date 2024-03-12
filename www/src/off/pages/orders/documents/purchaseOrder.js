@@ -72,8 +72,6 @@ export default class purchaseOrder extends DocBase
 
         this.grdPurcOrders.devGrid.clearFilter("row")
 
-        this.dtDocDate.value = moment(new Date())
-
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -433,6 +431,7 @@ export default class purchaseOrder extends DocBase
                 tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                 tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocOrders.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 this.docObj.docOrders.addEmpty(tmpDocOrders)
                 pIndex = this.docObj.docOrders.dt().length - 1
             }
@@ -1243,8 +1242,40 @@ export default class purchaseOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* txtBarcode */}
-                                 <Item>
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* dtShipmentDate */}
+                                <Item>
+                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtShipmentDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* txtBarcode */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1375,23 +1406,6 @@ export default class purchaseOrder extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.checkRow()
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                             </Form>
                         </div>
                     </div>
