@@ -81,6 +81,7 @@ export default class Login extends React.PureComponent
                 this.msgDataTransfer.hide()        
             }
             
+            await App.instance.loadTab()
             App.instance.setState({logined:true});            
         }
         else
