@@ -40,7 +40,7 @@ export default class App extends React.PureComponent
         locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
-        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));        
+        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));       
 
         this.style =
         {
@@ -91,6 +91,8 @@ export default class App extends React.PureComponent
                 this.init();
             }, false);
         }
+        this.prmObj = new param(prm)
+       
     }
     async init()
     {
@@ -109,6 +111,7 @@ export default class App extends React.PureComponent
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'TAB')))
             {
+                await this.loadTab()
                 App.instance.setState({logined:true,connected:true});
             }
             else
@@ -132,6 +135,96 @@ export default class App extends React.PureComponent
                 window.location.reload()
             }
         })
+
+    }
+    async loadTab()
+    {
+        return new Promise(async (resolve) =>
+        {
+            await this.prmObj.load({APP:'TAB',USERS:this.core.auth.data.CODE})
+            resolve()
+        })
+    }
+    menu()
+    {
+        const menuButtons = 
+        [{
+            id: 'saleCard',
+            icon: 'fa-scale-unbalanced',
+            text:this.lang.t('menu.sale'),
+            onClick: () => 
+            {
+                this.popMenu.hide()
+                this.setState({page:'sale.js'})
+            }
+        },
+        {
+            id: 'customerExtractCard',
+            icon: 'fa-receipt',
+            text: this.lang.t('menu.customerAccount'),
+            onClick: () => 
+            {
+                this.popMenu.hide()
+                this.setState({page:'extract.js'})
+            }
+        },
+        {
+            id: 'productCard',
+            icon: 'fa-circle-info',
+            text: this.lang.t('menu.itemDetail'),
+            onClick: () => 
+            {
+                this.popMenu.hide()
+                this.setState({page:'itemDetail.js'})
+            }
+        },
+        {
+            id: 'collectionCard',
+            icon: 'fa-scale-unbalanced-flip',
+            text: this.lang.t('menu.collection'),
+            onClick: () => 
+            {
+                this.popMenu.hide();
+                this.setState({ page: 'collection.js' });
+            }
+        },
+        {
+            id: 'customerCard',
+            icon: 'fa-user-plus',
+            text: this.lang.t('menu.customerCard'),
+            onClick: () => 
+            {
+                this.popMenu.hide();
+                this.setState({ page: 'customerCard.js' });
+            }
+        },
+    ];
+
+    console.log(this.prmObj)
+    let tmpMenu = []
+    for (let i = 0; i < menuButtons.length; i++) 
+    {
+        if(this.prmObj.filter({ID:menuButtons[i].id}).getValue() != false || typeof this.prmObj.filter({ID:menuButtons[i].id}).getValue() == 'undefined' )
+        {
+            tmpMenu.push(menuButtons[i])
+        }
+    }
+    return tmpMenu.map(button => (
+        <div className='col-4' style={{paddingTop:"30px"}} key={button.id}>
+            <NbButton className="form-group btn btn-block" style={{ height: "100%", width: "100%", backgroundColor: '#0d6efd' }} onClick={button.onClick}>
+                <div className='row py-2'>
+                    <div className='col-12'>
+                        <i className={`fa-solid ${button.icon} fa-4x`} style={{ color: '#ecf0f1' }}></i>
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='col-12'>
+                        <h3 style={{ color: '#ecf0f1' }}>{button.text}</h3>
+                    </div>
+                </div>
+            </NbButton>
+        </div>
+    ));
     }
     render() 
     {
@@ -243,110 +336,8 @@ export default class App extends React.PureComponent
                                     </NbButton>
                                 </div>
                             </div>
-                            {/* 2 */}
-                            <div className='row' style={{paddingTop:"30px"}}>
-                                {/* SATIŞ */}
-                                <div className='col-4'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.sale')}</h3>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                {/* MÜŞTERİ EKSTRESİ */}
-                                <div className='col-4'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'extract.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-receipt fa-4x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.customerAccount')}</h3>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                {/* ÜRÜN  */}
-                                <div className='col-4'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'itemDetail.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-circle-info fa-4x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.itemDetail')}</h3>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                            </div>      
-                            <div className='row' style={{paddingTop:"30px"}}>
-                              {/* TAHSİLAT */}
-                              <div className='col-4'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'collection.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.collection')}</h3>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>    
-                                {/* MÜŞTERİ TANIMLAMA */}
-                                <div className='col-4'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'customerCard.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.customerCard')}</h3>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>    
+                            <div className='row' >
+                                {this.menu()}
                             </div>                  
                         </div>
                     </NbPopUp>

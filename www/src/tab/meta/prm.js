@@ -100,5 +100,85 @@ export const prm =
             CAPTION : "Fiyat Liste No"
         }
     },
+    // Satis menü
+    {
+        TYPE : 3,
+        ID :"saleCard",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "Satış menü"
+        }
+    },
+    // Müsteri ekstresi menü
+    {
+        TYPE : 3,
+        ID :"customerExtractCard",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "Müşteri ekstresi menü"
+        }
+    },
+    // Ürün info menü
+    {
+        TYPE : 3,
+        ID :"productCard",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "Ürün info menü"
+        }
+    },
+    // tahsilat menü
+    {
+        TYPE : 3,
+        ID :"collectionCard",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "tahsilat menü"
+        }
+    },
+    // Müsteri tanimlama menü
+    {
+        TYPE : 3,
+        ID :"customerCard",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "Müşteri tanimlama menü"
+        }
+    },
     //#endregion
 ]
