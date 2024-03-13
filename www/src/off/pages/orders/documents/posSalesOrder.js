@@ -1241,6 +1241,38 @@ export default class posSalesOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* dtShipmentDate */}
+                                <Item>
+                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtShipmentDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
@@ -1378,23 +1410,8 @@ export default class posSalesOrder extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.checkRow()
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                
+                               
                             </Form>
                         </div>
                     </div>
