@@ -436,6 +436,50 @@ export default class rebateInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            if(this.customerControl == true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
+                }
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpCheckData.result.recordset.length == 0)
+                {   
+                    let tmpCustomerBtn = ''
+                    if(this.customerClear == true)
+                    {
+                        resolve()
+                        return 
+                    }
+                    App.instance.setState({isExecute:false})
+                    await this.msgCustomerNotFound.show().then(async (e) =>
+                    {
+                        if(e == 'btn01' && this.checkCustomer.value == true)
+                        {
+                            this.customerControl = false
+                            resolve()
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            tmpCustomerBtn = e
+                            if(this.checkCustomer.value == true)
+                            {
+                                this.customerClear = true
+                            }
+                            resolve()
+                            return 
+                        }
+                    })
+                    if(tmpCustomerBtn == 'btn02')
+                    {
+                        resolve()
+                        return
+                    }
+                }
+            }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
@@ -498,52 +542,7 @@ export default class rebateInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
             }
     
-            if(this.customerControl == true)
-            {
-                let tmpCheckQuery = 
-                {
-                    query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                    value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
-                }
-                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                if(tmpCheckData.result.recordset.length == 0)
-                {   
-                    let tmpCustomerBtn = ''
-                    if(this.customerClear == true)
-                    {
-                        await this.grdRebtInv.devGrid.deleteRow(0)
-                        resolve()
-                        return 
-                    }
-                    App.instance.setState({isExecute:false})
-                    await this.msgCustomerNotFound.show().then(async (e) =>
-                    {
-                        if(e == 'btn01' && this.checkCustomer.value == true)
-                        {
-                            this.customerControl = false
-                            resolve()
-                            return
-                        }
-                        if(e == 'btn02')
-                        {
-                            tmpCustomerBtn = e
-                            await this.grdRebtInv.devGrid.deleteRow(0)
-                            if(this.checkCustomer.value == true)
-                            {
-                                this.customerClear = true
-                            }
-                            resolve()
-                            return 
-                        }
-                    })
-                    if(tmpCustomerBtn == 'btn02')
-                    {
-                        resolve()
-                        return
-                    }
-                }
-            }
+       
             
             if(typeof pData.ITEM_TYPE == 'undefined')
             {

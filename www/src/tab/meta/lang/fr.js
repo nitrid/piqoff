@@ -1,6 +1,10 @@
 export const langFr = 
 {
-    popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
+    popGrid: 
+    {
+        btnSelection:"Choix",
+        btnSearch:"Listes"
+    },
     txtLangSelect : "Choix de la langue",
     userListTitle : "Liste des utilisateurs",
     txtUser : "Utilisateur",
@@ -28,8 +32,8 @@ export const langFr =
     },
     msgDataTransfer: 
     {
-        title : "Lütfen Bekleyiniz !", //BAK
-        msg : "Verileriniz güncelleniyor..." //BAK,
+        title : "Veuillez patienter !",
+        msg : "Vos données sont en train de se mettre à jour..."
     },
     sale:  // "Vente"
     {
@@ -48,7 +52,7 @@ export const langFr =
             txtDescription : "Information",
             cmbPricingList : "Numéro de tarif"
         },
-        itemPopup: // BAK
+        itemPopup:
         {
             txtFactor: "Coefficient", 
             txtPrice: "Prix",
@@ -74,7 +78,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Montant",
             clmTotal : "Montant total",
-            clmTotalHt : "Montant sans la taxe",
+            clmTotalHt : "Montant Hors Taxe",
         },
         msgSave:
         {
@@ -133,7 +137,7 @@ export const langFr =
             clmRefNo : "Ligne", 
             clmInputName : "Client", 
             clmDate : "Date", 
-            clmTotal : "Montant" 
+            clmTotal : "Total" 
         },
         popVatRate:
         {
@@ -143,7 +147,7 @@ export const langFr =
         {
             clmRate : "Taux d'imposition",
             clmVat : "Montant du taux", 
-            clmTotalHt : "Montant", 
+            clmTotalHt : "Montant Hors Taxe", 
         },
         btnVatToZero : "Mettre à 0 le taux", 
         btnCancel : "Fermez", 
@@ -172,16 +176,16 @@ export const langFr =
         },
         msgMemRecord:
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Evrak a dönüşmemiş kayıtlarınız mevcut ! Lütfen işlemlerinizi kontrol ediniz." //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Vous avez des enregistrements non convertis dans votre document ! Veuillez vérifier vos opérations."
         },
         msgNew:
         {
-            title: "Dikkat", //BAK
-            btn01: "Evet", //BAK
-            btn02: "Hayır", //BAK
-            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?" //BAK
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Êtes-vous sûr de vouloir créer un nouveau document ?"
         },
         popDesign : 
         {
@@ -195,30 +199,30 @@ export const langFr =
         },
         msgCollection:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Evet",   // BAK
-            btn02: "Hayır",   // BAK
-            msg: "Faturanıza tahsilat girmek istermisiniz ?"   // BAK
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Souhaitez-vous saisir un paiement pour votre facture ?"
         },
         grdLastSales : 
         {
-            clmDocDate: "Tarih",  // BAK
-            clmRef : "Evrak No",  // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmPrice : "Fiyat",  // BAK
-            clmTotal : "Tutar",  // BAK
+            clmDocDate: "date",
+            clmRef : "N° Document",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Total",
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
+            msg: "Vous ne Pouvez pas Appliquer de Remise Supérieure au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
+            msg: "Vous ne Pouvez pas Appliquer de Remise Supérieure au Montant Total !"
         },
     },
     extract :
@@ -248,20 +252,20 @@ export const langFr =
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît choisissez un client"
+            msg: "Veuillez choisir un client"
         },
         grdDetail : 
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Ürün Adı",  // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmPrice : "Fiyat",  // BAK
-            clmTotal : "Toplam",  // BAK
+            clmCode: "Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Total",
         },
     },
     itemDetail :
     {
-        txtItem : "S'il vous plait choissisez un produit", 
+        txtItem : "Veuillez choisir un produit",
         txtItemGroup : "Groupe de produit",  
         txtItemPrice : "Prix",  
         grdListe : 
@@ -281,7 +285,7 @@ export const langFr =
         {
             title: "Attention", 
             btn01: "D'accord", 
-            msg: "S'il vous plaît choissiez un produit" 
+            msg: "Veuillez choisir un produit"
         },
     },
     dashboard: 
@@ -291,85 +295,86 @@ export const langFr =
         yearSales : "Total des commandes de cette année", 
         sale : "Montant des ventes",        
     },
-    collection:  // KOMPLE BAK
+    collection:
     {
-        txtCustomer: "Müşteri",
-        dtDocDate : "Tarih",
-        btnCash: "Tahilat Girişi",
-        txtTotal : "Toplam Tutar",
-        cmbPayType : {
-            title : "Ödeme Tipi",
-            cash : "Nakit",
-            check : "Çek",
-            bankTransfer : "Hesaba Havale",
-            otoTransfer : "Otomatik Ödeme",
-            foodTicket : "Yemek Çeki",
-            bill : "Senet",
+        txtCustomer: "Client", 
+        dtDocDate : "Date",
+        btnCash: "Saisie de paiement",
+        txtTotal : "Total",
+        cmbPayType : 
+        {
+            title : "Type de paiement",
+            cash : "Espèces",
+            check : "Chèque",
+            bankTransfer : "Virement bancaire",
+            otoTransfer : "Paiement automatique",
+            foodTicket : "Ticket resto",
+            bill : "Billet à ordre",
         },
         grdDocPayments: 
         {
-            clmCreateDate: "Kayıt Tarihi",
-            clmAmount : "Tutar",
-            clmInputName : "Kasa/Banka",
-            clmDescription : "Açıklama",
-            clmInvoice : "Ödenen Fatura",
-            clmFacDate : "Fatura Tarihi "
+            clmCreateDate: "Date d'enregistrement",
+            clmAmount : "Montant",
+            clmInputName : "Caisse/Banque",
+            clmDescription : "Description",
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de la facture",
         },
         popCash : 
         {
-            title: "Tahsilat Girişi",
-            btnApprove : "Ekle",
-            cash : "Tutar",
-            description : "Açıklama",
-            btnCancel : "Vazgeç",
-            cmbCashSafe: "Kasa/Banka",
-            invoiceSelect : "Fatura Seçimi",
+            title: "Encaissement",
+            btnApprove : "Ajouter",
+            cash : "Montant",
+            description : "Description",
+            btnCancel : "Annuler",
+            cmbCashSafe: "Caisse/Banque",
+            invoiceSelect : "Sélection de facture",
         },
-        ValidCash : "0'dan büyük bir tutar giriniz",
+        ValidCash : "Veuillez saisir un montant supérieur à 0",
         msgNew:
         {
-            title: "Dikkat",
-            btn01: "Evet",
-            btn02: "Hayır",
-            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Êtes-vous sûr de vouloir créer un nouveau document ?"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Evet",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize emin misiniz?"
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Annuler",
+            msg: "Êtes-vous sûr de vouloir enregistrer ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistrement réussi !",
+            msgFailed: "Enregistrement échoué !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Annuler",
+            msg: "Êtes-vous sûr de vouloir supprimer l'enregistrement ? "
         },
         pg_invoices : 
         {
-            title : "Fatura Seçimi",
-            clmReferans : "REFERANS",
-            clmInputName : "CARİ ADI",
-            clmDate : "TARIH",
-            clmTotal : "TOPLAM",
-            clmRemaining  : "KALAN",
+            title : "Sélection de facture",
+            clmReferans : "Réf",
+            clmInputName : "Nom du client",
+            clmDate : "Date",
+            clmTotal : "Total",
+            clmRemaining  : "Reste",
         },
         popCustomer:
         {
-            title : "Müşteri Seçimi",
-            btn01 : "Ara",
-            btn02 : "Seç",
-            clmCode : "KODU",
-            clmName : "ADI"
+            title : "Sélection du client",
+            btn01 : "Rechercher",
+            btn02 : "Choisir",
+            clmCode : "Code",
+            clmName : "Nom", 
         },
     },
     customerCard: // "Cari Tanımları"
@@ -411,21 +416,21 @@ export const langFr =
         {
             clmAdress : "Adresse",
             clmZipcode : "Code Postal",
-            clmCity :"Ville",
+            clmCity : "Ville",
             clmCountry : "Pays",
         },
         grdLegal : 
         {
-            clmSiretID : "Siret No",
+            clmSiretID : "N° Siret ",
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
-            clmIntVatNo : "No TVA inter.",
+            clmIntVatNo : "N° TVA inter.",
             clmTaxType : "Type de Taxe",
-            clmSirenID : "Siren No",
+            clmSirenID : "N° Siren ",
             clmRcs : "RCS",
             clmCapital : "Capital",
-            clmInsurance : "Assurance No" 
+            clmInsurance : "N° Assurance " 
         },
         grdOffical : 
         {
@@ -447,28 +452,28 @@ export const langFr =
         {
             title : "Adresse",
             txtPopAdress : "Adresse",
-            cmbPopZipcode :"Code Postal",
-            cmbPopCity :"Ville",
-            cmbPopCountry :"Pays",
+            cmbPopZipcode : "Code Postal",
+            cmbPopCity : "Ville",
+            cmbPopCountry : "Pays",
         },
         popBank : 
         {
             title : "Données Bancaires",
             txtName : "Nom de Banque",
-            txtIban :"IBAN",
-            txtOffice :"Centre",
-            txtSwift :"Code Swift",
+            txtIban : "IBAN",
+            txtOffice : "Centre",
+            txtSwift : "Code Swift",
         },
         popOffical : 
         {
             title : "Administrateur",
             txtPopName : "Nom",
             txtPopLastName : "Nom De Famille",
-            txtPopPhone1 :"Téléphone 1",
-            txtPopPhone2 :"Téléphone  2",
+            txtPopPhone1 : "Téléphone 1",
+            txtPopPhone2 : "Téléphone  2",
             txtPopGsmPhone : "Port Tel.",
             txtPopOtherPhone : "Autre Tel.",
-            txtPopMail :"E-Mail"
+            txtPopMail : "E-Mail"
         },
         msgSave:
         {
@@ -578,8 +583,8 @@ export const langFr =
             clmCode : "Code",  
             clmName : "Nom", 
         },
-        txtPriceListNo: "Numéro Liste Prix", //BAK
-        pg_priceListNo: //BAK
+        txtPriceListNo: "Numéro Liste Prix",
+        pg_priceListNo:
         {
             title: "Sélection de la Liste de Prix",
             clmNo: "Numéro",

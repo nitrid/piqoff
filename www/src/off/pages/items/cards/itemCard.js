@@ -33,7 +33,6 @@ export default class itemCard extends React.PureComponent
 {
     constructor(props)
     {
-        // console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
         this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
@@ -99,7 +98,6 @@ export default class itemCard extends React.PureComponent
         {
             this.init(); 
         }
-        // console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -232,7 +230,6 @@ export default class itemCard extends React.PureComponent
     }
     async getItem(pCode)
     {
-        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
         this.txtRef.value = Math.floor(Date.now() / 1000)
@@ -284,7 +281,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -299,7 +295,6 @@ export default class itemCard extends React.PureComponent
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
         this.itemGrpForOrginsValidCheck();   
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
     {
@@ -499,7 +494,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -768,7 +762,6 @@ export default class itemCard extends React.PureComponent
                             {
                                 this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[e.rowIndex].CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
                                 this.txtCostPrice.value = e.data.CUSTOMER_PRICE
-                                console.log(e)
                                 let tmpQuery = 
                                 {
                                     query : "UPDATE ITEM_PRICE SET CHANGE_DATE = GETDATE() WHERE GUID =@PRICE_GUID ",
@@ -793,7 +786,6 @@ export default class itemCard extends React.PureComponent
         }
         if(e.column.dataField == "FACTOR")
         {
-            console.log(e)
             return (
                 <NdTextBox id={"txtGrdFactor"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -989,7 +981,6 @@ export default class itemCard extends React.PureComponent
                                             value : [this.itemsObj.dt()[0].GUID]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        console.log(tmpData)
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             let tmpConfObj =
@@ -1823,7 +1814,6 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdated={async(e)=>
                                             {
-                                                console.log(e)
                                                 if(typeof e.data.PRICE != 'undefined')
                                                 {
                                                     if(e.key.LIST_VAT_TYPE == 0)
@@ -2726,7 +2716,6 @@ export default class itemCard extends React.PureComponent
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
                                                 let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
-                                                console.log(tmpResult)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
                                                     this.popBarcode.hide(); 
@@ -2964,7 +2953,7 @@ export default class itemCard extends React.PureComponent
                                 </div>
                                 </Item>
                                 <Item >
-                                <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
+                                    <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
                                     onClick={async()=>
                                     {
                                         App.instance.setState({isExecute:true})
@@ -2983,7 +2972,6 @@ export default class itemCard extends React.PureComponent
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
-                                                    console.log(tmpData.result.recordset)
                                                     this.setState({dataSource:tmpData.result.recordset})
                                                 }
                                                 else
@@ -3027,12 +3015,10 @@ export default class itemCard extends React.PureComponent
                                                 let tmpFacData = await this.core.sql.execute(tmpFacQuery) 
                                                 if(tmpFacData.result.recordset.length > 0)
                                                 {
-                                                    console.log('asddsa3')
                                                     this.setState({dataSource:tmpFacData.result.recordset})
                                                 }
                                                 else
                                                 {
-                                                    console.log('asddsa4')
                                                     this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                                 }
                                             }
@@ -3056,15 +3042,12 @@ export default class itemCard extends React.PureComponent
                                                     this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                                 }
                                             }
-                                        }
-                                            
+                                        } 
                                         App.instance.setState({isExecute:false})
-
-                                       
                                     }}/>
                                 </Item>
-                                 {/* cmbAnlysType */}
-                                 <Item>
+                                {/* cmbAnlysType */}
+                                <Item>
                                     <Label text={this.t("cmbAnlysType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbAnlysType" height='fit-content'
                                     displayExpr="VALUE"                       
@@ -3261,7 +3244,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popItemLang.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'300'}
+                        height={'250'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -3270,7 +3253,6 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popItemLang.cmbPopItemLanguage")} alignment="right" />
                                     <div className="col-8 p-0">
                                         <NdSelectBox simple={true} parent={this} id="cmbPopItemLanguage"
-                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
                                         value=""
@@ -3282,7 +3264,7 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popItemLang.cmbPopItemLangName")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="cmbPopItemLangName"  value=""
+                                    <NdTextBox simple={true} parent={this} id="cmbPopItemLangName" value=""
                                     data={{source:{select:{query : "SELECT TRANSLATED_NAME FROM ITEM_LANG"},sql:this.core.sql}}}
                                     />
                                 </Item>
@@ -3297,8 +3279,6 @@ export default class itemCard extends React.PureComponent
                                                 tmpEmpty.ITEM_LANGUAGE = this.cmbPopItemLanguage.value
                                                 tmpEmpty.TRANSLATED_NAME = this.cmbPopItemLangName.value
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                console.log(tmpEmpty.ITEM_LANGUAGE)
-                                                console.log(this.cmbPopItemLanguage.value)
                                                 this.itemsObj.itemLang.addEmpty(tmpEmpty); 
                                                 this.popItemLang.hide();
                                             }}/>

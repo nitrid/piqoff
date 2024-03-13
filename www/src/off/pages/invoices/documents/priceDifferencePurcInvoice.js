@@ -1980,20 +1980,8 @@ export default class priceDifferenceInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    console.log(this.cmbMailAddress.value)
-                                                    let tmpMailQuery = 
-                                                    {
-                                                        query: "SELECT * FROM  [dbo].[MAIL_SETTINGS] WHERE GUID = @GUID" ,
-                                                        param:  ['GUID:string|50'],
-                                                        value:  [this.cmbMailAddress.value]
-                                                    }
-                                                    console.log(1)
-                                                    let tmpMailAdress = await this.core.sql.execute(tmpMailQuery) 
-                                                    console.log(tmpMailAdress)
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                    console.log(2)
-                                                    console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
@@ -2005,12 +1993,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                         }
                                                         
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",
-                                                                        service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
-                                                                        host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
-                                                                        port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
-                                                                        userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
-                                                                        password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                          console.log(4)

@@ -66,6 +66,7 @@ export const langTr =
         balanceTicketChecked: "Kasadan geçen etiket",
         ticketCreatedAmount: "Toplam",
         ticketCheckedAmount: "Toplam",
+        ticketDifferance : "Fark",
         grdSalesVatRate :
         {
             vatRate : "KDV %",
