@@ -1,10 +1,11 @@
-// Ürün Giriş Fişi
-const stk_02_008 = 
+// Ürün Çıkış Fişi
+const stk_02_009 = 
 {
     txtRefRefno : "Seri-Sıra",
-    cmbOutDepot: "Giriş Deposu",
+    cmbOutDepot: "Çıkış Deposu",
     dtDocDate : "Tarih",
     txtBarcode : "Barkod Ekle",
+    getDispatch : "İrsaliye Getir",
     txtTotalCost : "Toplam Maliyet",
     txtTotalQuantity: "Toplam Miktar",
     pg_Docs : 
@@ -193,4 +194,5 @@ const stk_02_008 =
     },
     txtQuantity : "Miktar",
 }
-export default stk_02_008
+
+export default stk_02_009

@@ -1,12 +1,11 @@
-// Ürün Giriş Fişi
-const stk_02_008 = 
+// "Ürün Giriş Çıkış Operasyonu"
+const stk_04_005 =
 {
-    txtRefRefno : "Seri-Sıra",
-    cmbOutDepot: "Giriş Deposu",
+    txtRef : "Seri-Sıra",
+    cmbDepot: "Depo",
     dtDocDate : "Tarih",
     txtBarcode : "Barkod Ekle",
-    txtTotalCost : "Toplam Maliyet",
-    txtTotalQuantity: "Toplam Miktar",
+    getRecipe : "Ürün Recetesi",
     pg_Docs : 
     {
         title : "Evrak Seçimi",
@@ -23,42 +22,19 @@ const stk_02_008 =
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
     },
-    grdOutwasItems: 
+    grdList: 
     {
+        clmType: "Tip",
         clmItemCode: "Kodu",
         clmItemName: "Adı",
         clmQuantity : "Adet",
-        clmCreateDate: "Kayıt Tarihi",
-        clmDescription :"Açıklama",
-        clmCuser : "Kullanıcı"
-    },
-    pg_dispatchGrid : 
-    {
-        title : "İrsaliye Seçimi",
-        clmReferans : "Seri - Sıra",
-        clmCode : "Kodu",
-        clmName : "Adı",
-        clmQuantity : "Adet",
-        clmCuStomer : "Müşteri",
-        clmDate : "Tarih",
+        clmDescription :"Açıklama"
     },
     popPassword : 
     {
         title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
         Password : "Şifre",
         btnApprove : "Onayla"
-    },
-    msgGetLocked:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
-    },
-    msgDocLocked:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
     },
     msgDocValid:
     {
@@ -99,12 +75,6 @@ const stk_02_008 =
         btn02: "Vazgeç",
         msg: "Kaydı silmek istediğinize eminmisiniz ?"
     },
-    msgLocked:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
-    },
     msgPasswordSucces:
     {
         title: "Başarılı",
@@ -116,18 +86,6 @@ const stk_02_008 =
         title: "Başarısız",
         btn01: "Tamam",
         msg: "Şifreniz Hatalı !"
-    },
-    msgGetLocked:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
-    },
-    msgDocLocked:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
     },
     msgItemNotFound:
     {
@@ -158,12 +116,6 @@ const stk_02_008 =
         description : "Yeni Açılama",
         btnApprove : "Kaydet"
     },
-    popDesign : 
-    {
-        title: "Dizayn seçimi",
-        design : "Dizayn",
-        lang : "Evrak Dili"
-    },
     msgNotQuantity:
     {
         title: "Dikkat",
@@ -192,5 +144,28 @@ const stk_02_008 =
         msg: "Lütfen Miktar Giriniz !"
     },
     txtQuantity : "Miktar",
+    cmbType : 
+    {
+        input : "Giriş",
+        output : "Çıkış"
+    },
+    popRecipe : 
+    {
+        title: "Ürün Recetesi Seçim",
+        clmDate: "Tarih",
+        clmCode: "Ürün Kodu",
+        clmName: "Ürün Adı",
+        clmQuantity: "Miktar"
+    },
+    popRecipeDetail : 
+    {
+        title: "Ürün Recetesi Detay Giriş",
+        clmType: "Tip",
+        clmCode: "Ürün Kodu",
+        clmName: "Ürün Adı",
+        clmQuantity: "Recete Miktarı",
+        clmEntry: "Giriş Miktarı"
+    },
 }
-export default stk_02_008
+
+export default stk_04_005
