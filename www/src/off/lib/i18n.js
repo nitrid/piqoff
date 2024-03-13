@@ -1,8 +1,16 @@
 import i18n from 'i18next';
-import {langTr} from '../meta/lang/tr.js'
-import {langFr} from '../meta/lang/fr.js'
-import {langDe} from '../meta/lang/de.js'
+import {langTr} from '../meta/lang/tr/tr.js'
+import {langFr} from '../meta/lang/fr/fr.js'
+import {langDe} from '../meta/lang/de/de.js'
 
+async function loadLocaleResources(language, page) 
+{
+    try
+    {
+        const resources = await import(`../meta/lang/${language}/${page}.js`)
+        i18n.addResource(language, 'translation', `${page}`, resources.default)
+    }catch{}
+}
 i18n.init(
 {
     lng: 'en',
@@ -22,5 +30,4 @@ i18n.init(
         }
     },
 });
-
-export default i18n;
+export { i18n, loadLocaleResources };
