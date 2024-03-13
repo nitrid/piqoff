@@ -2637,7 +2637,7 @@ export const prm =
         ID :"cmbDepot1",
         VALUE : 
         {
-            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
@@ -2665,7 +2665,7 @@ export const prm =
         ID :"cmbDepot2",
         VALUE : 
         {
-            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
