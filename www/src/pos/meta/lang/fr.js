@@ -628,7 +628,9 @@ export const langFr =
         msg3 : "Table de transfert.",
         btnPopTransferManuel : "Démarrage manuel",
         btnPopTransferClear : "Transfert Supprime ", 
-        btnPopTransferStop : "Arrêter"
+        btnPopTransferStop : "Arrêter",
+        titleApp : "La base de données locale est en cours de mise à jour.",
+        msgApp : "L'application va bientôt se fermer ! Veuillez redémarrer l'application."
     },
     msgOfflineWarning: 
     {

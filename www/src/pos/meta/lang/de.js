@@ -625,7 +625,9 @@ export const langDe =
         msg3 : "Tabelle wird übertragen.",
         btnPopTransferManuel : "Manuell starten",
         btnPopTransferClear : "Übertragung löschen",
-        btnPopTransferStop : "Anhalten"
+        btnPopTransferStop : "Anhalten",
+        titleApp : "Lokale Datenbank wird aktualisiert.",
+        msgApp : "Die Anwendung wird gleich geschlossen! Bitte starten Sie die Anwendung neu."
     },
     msgOfflineWarning: 
     {

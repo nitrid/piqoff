@@ -5,7 +5,7 @@
     "dependencies": 
     {
         "adm-zip": "^0.5.10",
-        "gensrv": "1.0.105a",
+        "gensrv": "1.0.106",
         "jsrsasign": "10.6.1",
         "jsrsasign-util": "1.0.5",
         "node-cron": "^3.0.2",

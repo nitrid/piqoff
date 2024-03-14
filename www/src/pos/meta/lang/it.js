@@ -618,15 +618,17 @@ export const langIt =
         btn02: "Annulla",
     },
     popTransfer: 
-{
-    title: "Trasferimento dati",
-    msg1: "Inizio trasferimento: ",
-    msg2: "Trasferimento avviato.",
-    msg3: "Trasferimento della tabella.",
-    btnPopTransferManuel: "Avvia Manuale",
-    btnPopTransferClear: "Trasferimento Pulito",
-    btnPopTransferStop: "Ferma"
-},
+    {
+        title: "Trasferimento dati",
+        msg1: "Inizio trasferimento: ",
+        msg2: "Trasferimento avviato.",
+        msg3: "Trasferimento della tabella.",
+        btnPopTransferManuel: "Avvia Manuale",
+        btnPopTransferClear: "Trasferimento Pulito",
+        btnPopTransferStop: "Ferma",
+        titleApp : "Database locale in aggiornamento.",
+        msgApp : "L'applicazione si chiuderà a breve! Si prega di riavviare l'applicazione."
+    },
     msgOfflineWarning: 
     {
         title: "Attenzione",
@@ -640,7 +642,6 @@ export const langIt =
       btn01: "SÌ",
       btn02: "NO"
     },
-
     msgOfflineAlert: 
     {
         title: "Attenzione",

@@ -7,7 +7,7 @@ export default class transferCls
     constructor()
     {
         this.core = core.instance
-        this.listeners = Object();        
+        this.listeners = Object();
     }
     //#region  "EVENT"
     on(pEvt, pCallback) 
@@ -1485,6 +1485,10 @@ export default class transferCls
     {
         return new Promise(async resolve => 
         {
+            if(pClear)
+            {
+                await this.dropTbl()
+            }
             let tmpSchema = this.fetchSchema()
             for (let i = 0; i < tmpSchema.length; i++) 
             {                
@@ -1556,14 +1560,18 @@ export default class transferCls
         }
         return tmpArr;
     }
-    dropDb(pDbName)
+    dropTbl()
     {
         return new Promise(async resolve => 
         {
-            await this.core.local.dropDb()    
-            await this.core.local.init({name:pDbName,tables: this.tableSchema()})
+            let tmpTbl = this.tableSchema()
+            for (let i = 0; i < tmpTbl.length; i++) 
+            {
+                await this.core.local.select({query : "DROP TABLE if exists " + tmpTbl[i].name + ";"})
+                await this.core.local.select(tmpTbl[i])
+            }
             resolve()
-        });
+        })
     }
     clearTbl(pTblName)
     {

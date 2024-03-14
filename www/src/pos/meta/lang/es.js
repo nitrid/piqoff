@@ -625,7 +625,9 @@ export const langEs =
         msg3: "Tabla siendo transferida.",
         btnPopTransferManuel: "Iniciar Manualmente",
         btnPopTransferClear: "Borrar y Transferir",
-        btnPopTransferStop: "Detener"
+        btnPopTransferStop: "Detener",
+        titleApp : "La base de datos local se está actualizando.",
+        msgApp : "¡La aplicación se cerrará pronto! Por favor, reinicie la aplicación."
     },
     msgOfflineWarning: 
     {

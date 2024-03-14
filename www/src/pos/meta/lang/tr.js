@@ -624,7 +624,9 @@ export const langTr =
         msg3 : "Tablosu Aktarılıyor.",
         btnPopTransferManuel : "Manuel Başlat",
         btnPopTransferClear : "Temizle Aktar",
-        btnPopTransferStop : "Durdur"
+        btnPopTransferStop : "Durdur",
+        titleApp : "Local Database Güncelleniyor.",
+        msgApp : "Birazdan uygulama kapanacak ! Lütfen uygulamayı tekrar çalıştırın."
     },
     msgOfflineWarning: 
     {

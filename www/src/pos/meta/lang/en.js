@@ -624,7 +624,9 @@ export const langEn =
         msg3: "Transfer table.",
         btnPopTransferManuel: "Manual Start",
         btnPopTransferClear: "Clear Transfer",
-        btnPopTransferStop: "Stop"
+        btnPopTransferStop: "Stop",
+        titleApp : "Local database is being updated.",
+        msgApp : "The application will close shortly! Please restart the application."
     },
     msgOfflineWarning:
     {
