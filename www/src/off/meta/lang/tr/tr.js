@@ -326,6 +326,7 @@ export const langTr =
         pos_01_002 : "Pos Plu Kopyalama",
         pos_01_003 : "Fiş Sonu Açıklamaları",
         pos_01_004 : "Pos Mesaj",
+        pos_01_005 : "Pos Ödeme Tipi",
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
