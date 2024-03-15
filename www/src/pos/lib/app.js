@@ -280,7 +280,6 @@ export default class App extends React.PureComponent
                 {
                     App.instance.setState({splash:false,transferPanel:true});
                     //DATA TRANSFER İŞLEMİ
-                    this.transfer = new transferCls();
                     this.transfer.on('onState',(pParam)=>
                     {
                         if(pParam.tag == 'progress')
