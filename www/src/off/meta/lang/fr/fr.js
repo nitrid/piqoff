@@ -325,6 +325,7 @@ export const langFr =
         pos_01_002 : "Copier Pos Plu ",
         pos_01_003 : "Descriptions des tickets",
         pos_01_004 : "Message POS",
+        pos_01_005 : "Type de paiement POS",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -17285,6 +17286,42 @@ export const langFr =
             btn01: "D'accord",
             msg: "Votre message a été envoyé avec succès",
         },
+    },
+    pos_01_005 : // Pos Ödeme Tipi
+    {
+        txtPayType: "Code",
+        txtPayTypeName: "Nom",
+        txtPayTypeIcon: "Icône",
+        txtPayTypeRate: "Valeur",
+        chkPayTypeVisible: "Visible dans le panneau de paiement POS",
+        msgSave: {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Annuler",
+            msg: "Êtes-vous sûr de vouloir enregistrer ?"
+        },
+        msgSaveResult: {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre enregistrement a été effectué avec succès !",
+            msgFailed: "Échec de l'enregistrement !"
+        },
+        msgSaveValid: {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez remplir les champs requis !"
+        },
+        msgDelete: {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Annuler",
+            msg: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?"
+        },
+        pg_txtCode: {
+            title: "Types de paiement",
+            clmCode: "Code",
+            clmName: "Nom",
+        }
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {
