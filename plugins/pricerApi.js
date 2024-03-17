@@ -12,65 +12,82 @@ class devprint
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
+        this.active = false
     }
-    connEvt(pSocket)
+    async connEvt(pSocket)
     {
+        // let tmpQuery = 
+        // {
+        //     query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
+        // }
+        // let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        // for (let i = 0; i < tmpResult.length; i++) 
+        // {
+        //     await this.itemUpdate(tmpResult[i].GUID)
+        //     console.log(tmpResult[i].GUID)
+        // }
+
         pSocket.on('sql',async (pParam,pCallback) =>
         {
-            if(typeof pParam.length != 'undefined')
+            if(this.active ==  true)
             {
-                for (let i = 0; i < pParam.length; i++) 
+                if(typeof pParam.length != 'undefined')
                 {
-                    // if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('ITEMS_INSERT') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('ITEMS_UPDATE') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('ITEM_UNIT_INSERT') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('ITEM_UNIT_UPDATE') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('PRD_INVOICE_PRICE_UPDATE') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM)
-                    //     }, 5000);
-                    // }
-                    // else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
-                    // {
-                    //     setTimeout(() => {
-                    //         this.itemUpdate(pParam[i].rowData.ITEM)
-                    //     }, 5000);
-                    // }
+                    for (let i = 0; i < pParam.length; i++) 
+                    {
+                        if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('ITEMS_INSERT') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('ITEMS_UPDATE') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('ITEM_UNIT_INSERT') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('ITEM_UNIT_UPDATE') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('PRD_INVOICE_PRICE_UPDATE') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM)
+                            }, 5000);
+                        }
+                        else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
+                        {
+                            setTimeout(() => {
+                                this.itemUpdate(pParam[i].rowData.ITEM)
+                            }, 5000);
+                        }
+                    }
                 }
             }
+           
         })
     }
     async itemUpdate(pGuid)
@@ -83,70 +100,74 @@ class devprint
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        let tmpBarcodes =[]
-        for (let i = 0; i < tmpResult.length; i++) 
+        if(typeof tmpResult.length != 'undefined')
         {
-            tmpBarcodes.push(tmpResult[i].BARCODE)
-        }
-        fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
-        {
-            method: 'PATCH',
-            headers:  
+            let tmpBarcodes =[]
+            for (let i = 0; i < tmpResult.length; i++) 
             {
-                'Content-Type': 'application/json',
-                Authorization: 'Basic ' + btoa('config' + ":" + 'config')
-            },
-            body: JSON.stringify(
-            [
+                tmpBarcodes.push(tmpResult[i].BARCODE)
+            }
+            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            {
+                method: 'PATCH',
+                headers:  
                 {
-                  "itemId": tmpResult[0].GUID,
-                  "itemName": tmpResult[0].NAME,
-                  "price": tmpResult[0].PRICE_SALE,
-                  "sics":tmpBarcodes,
-                  "properties": 
-                  {
-                    "BARCODE": tmpResult[0].BARCODE,
-                    "UNIT_PRICE": tmpResult[0].UNIT_PRICE,
-                    "SALES_UNIT": "",
-                    "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
-                    "DISCOUNT_PRICE":"",
-                    "DISCOUNT_FLAG":"",
-                    "STRIKE_FLAG":"",
-                    "VAT":tmpResult[0].VAT,
-                    "VARIETY":"",
-                    "SIZE":"",
-                    "CATEGORY":"",
-                    "ORIGIN":"",
-                    "STOCK":"",
-                    "NEXT_DELIVERY_DATE":"",
-                    "ORDER_IN_PROGRESS":""
-                  }
+                    'Content-Type': 'application/json',
+                    Authorization: 'Basic ' + btoa('config' + ":" + 'config')
+                },
+                body: JSON.stringify(
+                [
+                    {
+                      "itemId": tmpResult[0].GUID,
+                      "itemName": tmpResult[0].NAME,
+                      "price": tmpResult[0].PRICE_SALE,
+                      "sics":tmpBarcodes,
+                      "properties": 
+                      {
+                        "BARCODE": tmpResult[0].BARCODE,
+                        "UNIT_PRICE": tmpResult[0].UNIT_PRICE,
+                        "SALES_UNIT": "",
+                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
+                        "DISCOUNT_PRICE":"",
+                        "DISCOUNT_FLAG":"",
+                        "STRIKE_FLAG":"",
+                        "VAT":tmpResult[0].VAT,
+                        "VARIETY":"",
+                        "SIZE":"",
+                        "CATEGORY":"",
+                        "ORIGIN":"",
+                        "STOCK":"",
+                        "NEXT_DELIVERY_DATE":"",
+                        "ORDER_IN_PROGRESS":""
+                      }
+                    }
+                ])
+            })
+            .then(response => 
+            {
+                if (!response.ok) 
+                {
+                    throw new Error('yükleme başarısız. HTTP Hata: ' + response.status);
                 }
-            ])
-        })
-        .then(response => 
-        {
-            if (!response.ok) 
+                return response.json();
+            })
+            .then(data => 
             {
-                throw new Error('yükleme başarısız. HTTP Hata: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => 
-        {
-            if(data.success)
+                if(data.success)
+                {
+                    console.log(data.result)
+                }
+                else
+                {
+                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                }
+            })
+            .catch(error => 
             {
-                console.log(data.result)
-            }
-            else
-            {
-                console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
-            }
-        })
-        .catch(error => 
-        {
-            console.error('Hata:', error.message);
-        });
+                console.error('Hata:', error.message);
+            });
+        }
+      
     }
 }
 
