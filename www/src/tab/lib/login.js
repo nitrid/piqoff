@@ -73,6 +73,7 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
         {
+            localStorage.setItem('lang',localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
             if(this.core.local.platform != '')
             {
                 this.msgDataTransfer.show()
@@ -80,6 +81,7 @@ export default class Login extends React.PureComponent
                 this.msgDataTransfer.hide()        
             }
             
+            await App.instance.loadTab()
             App.instance.setState({logined:true});            
         }
         else

@@ -523,21 +523,6 @@ export class local
             resolve()
         });
     }
-    // dropDb()
-    // {
-    //     return new Promise(async resolve => 
-    //     {
-    //         this.conn.dropDb().then(async function() 
-    //         {
-    //             console.log('Db deleted successfully');
-    //             resolve(true)                
-    //         }).catch(function(error) 
-    //         {                
-    //             console.log(error);
-    //             resolve(false)
-    //         });    
-    //     });
-    // }
 }
 export class auth 
 {
@@ -765,6 +750,16 @@ export class util
             {
                 resolve(false)
             }
+        });
+    }
+    getVersion()
+    {
+        return new Promise(resolve => 
+        {
+            this.core.socket.emit('util',{cmd:'version'},(data) =>
+            {
+                resolve(data)
+            });
         });
     }
 }
@@ -2330,7 +2325,7 @@ String.prototype.space = function(pLen,pType)
 //* FORMAT CURRENCY */
 Number.prototype.currency = function()
 {
-    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money == 'undefined' ? 'EUR' : typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
 }
 //* FORMAT DECIMAL */
 Number.prototype.decimal = function()
@@ -2354,6 +2349,6 @@ Number.prototype.round = function(pDigits)
     tmpNum = Number(tmpNum)
     
     return isNaN(Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)) ? 0 : Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
-    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
     //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

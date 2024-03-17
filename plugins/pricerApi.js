@@ -1,10 +1,8 @@
-import {spawn} from 'child_process'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 
-//"{TYPE:'REVIEW',PATH:'C:\\\\Users\\\\A.K.K\\\\Desktop\\\\DevPrint\\\\test.repx',DATA:[{KODU:'001'}]}"
-class devprint
+class pricerApi
 {
     constructor()
     {
@@ -30,59 +28,83 @@ class devprint
 
         pSocket.on('sql',async (pParam,pCallback) =>
         {
-            if(this.active ==  true)
+            if(this.active == true)
             {
                 if(typeof pParam.length != 'undefined')
                 {
                     for (let i = 0; i < pParam.length; i++) 
                     {
                         if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
-                        {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                        { 
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEMS_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEMS_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_UNIT_INSERT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('ITEM_UNIT_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM_GUID)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('PRD_INVOICE_PRICE_UPDATE') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
                         }
                         else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
                         {
-                            setTimeout(() => {
-                                this.itemUpdate(pParam[i].rowData.ITEM)
-                            }, 5000);
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                setTimeout(() => {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
                         }
                     }
                 }
@@ -94,7 +116,7 @@ class devprint
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -120,7 +142,7 @@ class devprint
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": tmpResult[0].PRICE_SALE,
+                      "price": tmpResult[0].CENTIM_PRICE,
                       "sics":tmpBarcodes,
                       "properties": 
                       {
@@ -134,8 +156,9 @@ class devprint
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
-                        "CATEGORY":"",
-                        "ORIGIN":"",
+                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "ORIGIN":tmpResult[0].ORGINS_NAME,
+                        "TRAITEMENT" : "",
                         "STOCK":"",
                         "NEXT_DELIVERY_DATE":"",
                         "ORDER_IN_PROGRESS":""
@@ -171,4 +194,4 @@ class devprint
     }
 }
 
-export const _devprint = new devprint()
+export const _pricerApi = new pricerApi()

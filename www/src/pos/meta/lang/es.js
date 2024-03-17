@@ -339,6 +339,10 @@ export const langEs =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Lista de devoluciones",
+    },
     txtPopLastRefPholder : "Por favor, lea el código de barras en el ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -482,6 +486,10 @@ export const langEs =
     {
         title: "Pago con Tarjeta",
     },
+    popExchangePay :
+    {
+        title :"Pago en Divisas en Efectivo",
+    },
     popTotal:
     {
         title: "Total Parcial",
@@ -617,7 +625,9 @@ export const langEs =
         msg3: "Tabla siendo transferida.",
         btnPopTransferManuel: "Iniciar Manualmente",
         btnPopTransferClear: "Borrar y Transferir",
-        btnPopTransferStop: "Detener"
+        btnPopTransferStop: "Detener",
+        titleApp : "La base de datos local se está actualizando.",
+        msgApp : "¡La aplicación se cerrará pronto! Por favor, reinicie la aplicación."
     },
     msgOfflineWarning: 
     {
@@ -887,4 +897,20 @@ export const langEs =
         title: "Mensaje del administrador",
         btn01: "OK",
     },
+    popUserList: 
+    {
+        title: "Lista de Usuarios",
+        clmCode: "Código",
+        clmName: "Nombre"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Atención",
+            btn01: "Sí",
+            btn02: "No",
+            msg: "¿Desea guardar los cambios que realizó?"
+        }
+    }
 }

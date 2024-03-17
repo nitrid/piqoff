@@ -339,6 +339,10 @@ export const langIt =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Elenco dei resi",
+    },
     txtPopLastRefPholder: "Leggi il codice a barre sulla ricevuta...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -482,6 +486,10 @@ export const langIt =
     {
         title: "Pagamento con Carta",
     },
+    popExchangePay :
+    {
+        title :"Pagamento in Valuta Contante",
+    },
     popTotal:
     {
         title: "Totale Intermedio",
@@ -610,15 +618,17 @@ export const langIt =
         btn02: "Annulla",
     },
     popTransfer: 
-{
-    title: "Trasferimento dati",
-    msg1: "Inizio trasferimento: ",
-    msg2: "Trasferimento avviato.",
-    msg3: "Trasferimento della tabella.",
-    btnPopTransferManuel: "Avvia Manuale",
-    btnPopTransferClear: "Trasferimento Pulito",
-    btnPopTransferStop: "Ferma"
-},
+    {
+        title: "Trasferimento dati",
+        msg1: "Inizio trasferimento: ",
+        msg2: "Trasferimento avviato.",
+        msg3: "Trasferimento della tabella.",
+        btnPopTransferManuel: "Avvia Manuale",
+        btnPopTransferClear: "Trasferimento Pulito",
+        btnPopTransferStop: "Ferma",
+        titleApp : "Database locale in aggiornamento.",
+        msgApp : "L'applicazione si chiuderà a breve! Si prega di riavviare l'applicazione."
+    },
     msgOfflineWarning: 
     {
         title: "Attenzione",
@@ -632,7 +642,6 @@ export const langIt =
       btn01: "SÌ",
       btn02: "NO"
     },
-
     msgOfflineAlert: 
     {
         title: "Attenzione",
@@ -888,4 +897,20 @@ export const langIt =
         title: "Messaggio dell'amministratore",
         btn01: "OK",
     },
+    popUserList: 
+    {
+        title: "Elenco Utenti",
+        clmCode: "Codice",
+        clmName: "Nome"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Attenzione",
+            btn01: "Sì",
+            btn02: "No",
+            msg: "Vuoi salvare le modifiche apportate?"
+        }
+    }
 }

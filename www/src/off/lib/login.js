@@ -8,7 +8,7 @@ import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
-import i18n from './i18n.js'
+import { i18n, loadLocaleResources } from './i18n';
 import NbKeyboard from "../tools/keyboard.js";
 import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
@@ -86,6 +86,7 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
+            localStorage.setItem('lang',localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
             // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
             let tmpDt = new datatable()
             tmpDt.import([this.core.auth.data])
@@ -159,7 +160,7 @@ export default class Login extends React.PureComponent
                     items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
-                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
                     onValueChanged: (args) => 
                     {
                         localStorage.setItem('lang',args.value)

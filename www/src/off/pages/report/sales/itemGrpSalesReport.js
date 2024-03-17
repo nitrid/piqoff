@@ -236,32 +236,32 @@ export default class itemGrpSalesReport extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_GRP_CODE" caption={this.t("grdGroupSalesReport.clmGrpCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdGroupSalesReport.clmGrpName")} visible={true} width={300}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdGroupSalesReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="FAMOUNT" caption={this.t("grdGroupSalesReport.clmFamount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="VAT" caption={this.t("grdGroupSalesReport.clmVat")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdGroupSalesReport.clmTotal")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
-                                <Column dataField="REST_TOTAL" caption={this.t("grdGroupSalesReport.clmRestTotal")} visible={true}   format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdGroupSalesReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="FAMOUNT" caption={this.t("grdGroupSalesReport.clmFamount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="VAT" caption={this.t("grdGroupSalesReport.clmVat")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdGroupSalesReport.clmTotal")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="REST_TOTAL" caption={this.t("grdGroupSalesReport.clmRestTotal")} visible={true}   format={{ style: "currency", currency: Number.money.code,precision: 2}} allowHeaderFiltering={false}/> 
                                 <Summary>
                                     <TotalItem
                                     column="TOTAL_COST"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                      <TotalItem
                                     column="FAMOUNT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="VAT"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
                                     column="REST_TOTAL"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary>
                             </NdGrid>
                         </div>
@@ -312,32 +312,32 @@ export default class itemGrpSalesReport extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grpGrpDetail.clmCode")} visible={true} width={100}/> 
                                         <Column dataField="ITEM_NAME" caption={this.t("grpGrpDetail.clmName")} visible={true} width={250}/> 
                                         <Column dataField="QUANTITY" caption={this.t("grpGrpDetail.clmQuantity")} visible={true} width={80}/> 
-                                        <Column dataField="COST_PRICE" caption={this.t("grpGrpDetail.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
-                                        <Column dataField="FAMOUNT" caption={this.t("grpGrpDetail.clmFamount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
-                                        <Column dataField="VAT" caption={this.t("grpGrpDetail.clmVat")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
-                                        <Column dataField="TOTAL" caption={this.t("grpGrpDetail.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
-                                        <Column dataField="REST_TOTAL" caption={this.t("grpGrpDetail.clmRestTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
+                                        <Column dataField="COST_PRICE" caption={this.t("grpGrpDetail.clmTotalCost")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                        <Column dataField="FAMOUNT" caption={this.t("grpGrpDetail.clmFamount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                        <Column dataField="VAT" caption={this.t("grpGrpDetail.clmVat")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                        <Column dataField="TOTAL" caption={this.t("grpGrpDetail.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                        <Column dataField="REST_TOTAL" caption={this.t("grpGrpDetail.clmRestTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
                                         <Summary>
                                             <TotalItem
                                             column="TOTAL_COST"
                                             summaryType="sum"
-                                            valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <TotalItem
                                             column="FAMOUNT"
                                             summaryType="sum"
-                                            valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <TotalItem
                                             column="VAT"
                                             summaryType="sum"
-                                            valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <TotalItem
                                             column="TOTAL"
                                             summaryType="sum"
-                                            valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <TotalItem
                                             column="REST_TOTAL"
                                             summaryType="sum"
-                                            valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                         </Summary>
                                     </NdGrid>
                                     </Item>
