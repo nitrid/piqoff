@@ -116,7 +116,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -142,7 +142,7 @@ class pricerApi
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": tmpResult[0].PRICE_SALE,
+                      "price": tmpResult[0].CENTIM_PRICE,
                       "sics":tmpBarcodes,
                       "properties": 
                       {
@@ -156,8 +156,9 @@ class pricerApi
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
-                        "CATEGORY":"",
-                        "ORIGIN":"",
+                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "ORIGIN":tmpResult[0].ORGINS_NAME,
+                        "TRAITEMENT" : "",
                         "STOCK":"",
                         "NEXT_DELIVERY_DATE":"",
                         "ORDER_IN_PROGRESS":""
