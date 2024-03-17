@@ -559,6 +559,8 @@ export default class purchaseInvoice extends DocBase
                         value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                    console.log(tmpCheckData.result.recordset.length)
+                    console.log(tmpCheckData)
                     if(tmpCheckData.result.recordset.length == 0)
                     {   
                         let tmpCustomerBtn = ''
@@ -567,6 +569,7 @@ export default class purchaseInvoice extends DocBase
                             resolve()
                             return 
                         }
+                        console.log(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value )
                         if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
                         {
                             let tmpConfObj =

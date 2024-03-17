@@ -341,7 +341,8 @@ export const langFr =
         acs_02: "Autorisation POS",
         acs_03: "Autorisation MOB",
         menu: "Organisation Menu",
-        menu_01: "Réglages Menu Utilisateur"
+        menu_01: "Réglages Menu Utilisateur",
+        menu_02: "Réglages Menu TAB"
     },
     P0002 : 
     {
@@ -389,6 +390,17 @@ export const langFr =
         btnSave : "Enregistre",
         cmbUser : "Utilisateur",
         cmbApp : "Application"
+    },
+    menu_02 :
+    {
+        lblUser : "Utilisateur",
+        btnSave : "Enregistre",
+        pg_UserList :
+        {
+            title : "Choix Utilisateur ",
+            clmCode : "CODE",
+            clmName : "NOM"
+        }
     },
     prm_01_001 :
     {

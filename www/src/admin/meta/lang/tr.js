@@ -342,7 +342,8 @@ export const langTr =
         acs_02: "POS Yetkileri",
         acs_03: "MOB Yetkileri",
         menu: "Menü Düzenleme",
-        menu_01: "Kullanıcı Menü Ayarları"
+        menu_01: "Kullanıcı Menü Ayarları",
+        menu_02: "Tab Menü Ayarları"
     },
     P0002 : 
     {
@@ -390,6 +391,17 @@ export const langTr =
         btnSave : "Kaydet",
         cmbUser : "Kullanıcı",
         cmbApp : "Uygulama"
+    },
+    menu_02 :
+    {
+        lblUser : "Kullanıcı",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
     },
     prm_01_001 :
     {
