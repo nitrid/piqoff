@@ -231,7 +231,7 @@ export default class DocBase extends React.PureComponent
                         priceType = this.type == 0 ? 0 : 1
                     }
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
-                    this.txtPopQteUnitPrice.value = Number(tmpPrice).round(2)
+                    this.txtPopQteUnitPrice.value = Number(tmpPrice).round(3)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
                     let tmpDepotQty = await this.getDepotQty(this.msgQuantity.tmpData.GUID,tmpDepot)
