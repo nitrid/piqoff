@@ -2211,6 +2211,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(tmpData)
                                                     App.instance.setState({isExecute:false})
                                                     let tmpQuery2 = 
                                                     { 
@@ -2227,8 +2228,12 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                                                    console.log(tmpData2)
+                                                    console.log(tmpObj)
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
+                                                        console.log(pResult.split('|'))
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         { 
                                                             // var a = document.createElement('a');
