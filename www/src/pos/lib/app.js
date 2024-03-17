@@ -9,7 +9,7 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import React from 'react';
-import {core, datatable} from '../../core/core.js'
+import {core, datatable,param,access} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
@@ -26,6 +26,9 @@ import CustomerInfoScreen from '../pages/customerInfoScreen.js'
 import ItemInfoScreen from '../pages/itemInfoScreen.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
+
+import {prm} from '../meta/prm.js'
+import {acs} from '../meta/acs.js'
 
 import * as appInfo from '../../../package.json'
 import '../plugins/balanceCounter.js'
@@ -70,6 +73,9 @@ export default class App extends React.PureComponent
             vtadi : '',
             lcd : false,
             itemInfo : false,
+            transferPanel : false,
+            transProgress : "",
+            msgTransfer : ""
         }
         this.toolbarItems = 
         [
@@ -120,7 +126,10 @@ export default class App extends React.PureComponent
         
         this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
         this.transfer = new transferCls()
-        this.core.appInfo = appInfo
+        this.core.appInfo = {...appInfo}
+        this.prmObj = new param(prm)
+        this.acsObj = new access(acs);
+        this.payType = new datatable();
 
         this.textValueChanged = this.textValueChanged.bind(this)
         
@@ -183,6 +192,7 @@ export default class App extends React.PureComponent
         //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
         if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
         {
+            await this.loadPos()
             App.instance.setState({logined:true,splash:false});
         }
         else
@@ -253,9 +263,46 @@ export default class App extends React.PureComponent
             await this.transfer.init('POS') 
         }
     }
+    loadPos()
+    {
+        return new Promise(async (resolve) =>
+        {
+            await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+            await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+
+            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE",local:{type : "select",query : "SELECT * FROM POS_PAY_TYPE;"}}
+            await this.payType.refresh()
+            
+            if(this.core.util.isElectron() && !this.core.offline)
+            {
+                this.core.appInfo.version = await this.core.util.getVersion()
+                if(localStorage.getItem('version') == null || localStorage.getItem('version') != this.core.appInfo.version)
+                {
+                    App.instance.setState({splash:false,transferPanel:true});
+                    //DATA TRANSFER İŞLEMİ
+                    this.transfer.on('onState',(pParam)=>
+                    {
+                        if(pParam.tag == 'progress')
+                        {
+                            App.instance.setState({transProgress : pParam.index + " / " + pParam.count});
+                        }
+                        else
+                        {
+                            App.instance.setState({msgTransfer : pParam.text + " " + this.lang.t("popTransfer.msg3")});
+                        }
+                    })
+                    await this.transfer.transferSql(true)
+                    App.instance.setState({transProgress : "",msgTransfer:this.lang.t("popTransfer.msgApp")});
+                    setTimeout(() => {window.close()}, 2000);
+                    localStorage.setItem('version',this.core.appInfo.version)
+                }    
+            }
+            resolve()
+        })
+    }
     render() 
     {
-        const { logined,splash,lcd,itemInfo } = this.state;
+        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer } = this.state;
         if(lcd)
         {
             return <CustomerInfoScreen/>
@@ -265,6 +312,29 @@ export default class App extends React.PureComponent
             return <ItemInfoScreen/>
         }
         
+        if(transferPanel)
+        {
+            return(
+                <div style={this.style.splash_body}>
+                    <div className="card" style={{position: 'relative',margin:'auto',top: '30%',width: '600px',height: 'fit-content'}}>
+                        <div className="card-header">{this.lang.t("popTransfer.titleApp")}</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h3 className="text-center">{transProgress}</h3>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12">
+                                    <h3 className="text-center">{msgTransfer}</h3>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            )
+        }
+
         if(splash)
         {
             return(

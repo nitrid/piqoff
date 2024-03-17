@@ -339,6 +339,10 @@ export const langEn =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Return list",
+    },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -481,6 +485,10 @@ export const langEn =
     {
         title: "Credit Card Payment",
     },
+    popExchangePay :
+    {
+        title :"Cash Foreign Exchange Payment",
+    },
     popTotal:
     {
         title: "Subtotal",
@@ -616,7 +624,9 @@ export const langEn =
         msg3: "Transfer table.",
         btnPopTransferManuel: "Manual Start",
         btnPopTransferClear: "Clear Transfer",
-        btnPopTransferStop: "Stop"
+        btnPopTransferStop: "Stop",
+        titleApp : "Local database is being updated.",
+        msgApp : "The application will close shortly! Please restart the application."
     },
     msgOfflineWarning:
     {
@@ -886,4 +896,20 @@ export const langEn =
         title: "Administrator Message",
         btn01: "OK",
     },
+    popUserList: 
+    {
+        title: "User List",
+        clmCode: "Code",
+        clmName: "Name"
+    },
+    acsEdit: 
+    {
+        msgCloseAlert: 
+        {
+            title: "Attention",
+            btn01: "Yes",
+            btn02: "No",
+            msg: "Do you want to save the changes you made?"
+        }
+    }
 }

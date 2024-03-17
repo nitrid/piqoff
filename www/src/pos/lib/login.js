@@ -85,6 +85,7 @@ export default class Login extends React.Component
             }
             else
             {
+                await App.instance.loadPos()
                 App.instance.setState({logined:true});
             }
         }
@@ -144,6 +145,7 @@ export default class Login extends React.Component
                     }
                     else
                     {
+                        await App.instance.loadPos()
                         App.instance.setState({logined:true});
                         idCheck = true
                     }

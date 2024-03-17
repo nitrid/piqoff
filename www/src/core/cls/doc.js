@@ -867,6 +867,7 @@ export class docOrdersCls
             REF : '',
             REF_NO : 0,
             DOC_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+            SHIPMENT_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             INPUT : '00000000-0000-0000-0000-000000000000',
             INPUT_CODE : '',
             INPUT_NAME : '',
@@ -967,12 +968,13 @@ export class docOrdersCls
                     "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
                     "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
                     "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID ",
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
+                    "@SHIPMENT_DATE = @PSHIPMENT_DATE",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50'],
+                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PSHIPMENT_DATE:date'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID']
+                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
         }
         tmpDt.updateCmd = 
         {
@@ -1009,12 +1011,13 @@ export class docOrdersCls
                     "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
                     "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
                     "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID ",
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
+                    "@SHIPMENT_DATE = @PSHIPMENT_DATE",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50'],
+                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PSHIPMENT_DATE:date'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID']
+                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
         }
         tmpDt.deleteCmd = 
         {
@@ -1879,7 +1882,7 @@ export class deptCreditMatchingCls
                                 <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
                                 <Column dataField="PAID_AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
                                 <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
-                                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
                                 <Summary calculateCustomSummary={(options) =>
                                 {
                                     if (options.name === 'SelectedRowsSummary') 
@@ -1897,7 +1900,7 @@ export class deptCreditMatchingCls
                                         }
                                     }
                                 }}>
-                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
                                 </Summary>
                             </NdGrid>
                         </div>
