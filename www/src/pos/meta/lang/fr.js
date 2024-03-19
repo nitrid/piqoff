@@ -489,6 +489,10 @@ export const langFr =
     {
         title : "Paiement carte bancaire ",
     },
+    popCardTicketPay :
+    {
+        title :"CB Ticket Restaurant",
+    },
     popExchangePay :
     {
         title : "Paiement en Devises en Espèces",

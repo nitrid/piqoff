@@ -485,6 +485,10 @@ export const langEn =
     {
         title: "Credit Card Payment",
     },
+    popCardTicketPay :
+    {
+        title :"Food card",
+    },
     popExchangePay :
     {
         title :"Cash Foreign Exchange Payment",
