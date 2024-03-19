@@ -1,4 +1,4 @@
-export const prm =
+export const prm = 
 [
     //#region Pos
     //Para Sembolu
