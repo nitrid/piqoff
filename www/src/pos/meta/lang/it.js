@@ -486,6 +486,10 @@ export const langIt =
     {
         title: "Pagamento con Carta",
     },
+    popCardTicketPay :
+    {
+        title :"Carta alimentare",
+    },
     popExchangePay :
     {
         title :"Pagamento in Valuta Contante",

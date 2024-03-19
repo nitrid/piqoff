@@ -486,6 +486,10 @@ export const langDe =
     {
         title: "Kartenzahlung"
     },
+    popCardTicketPay :
+    {
+        title :"Lebensmittelkarte",
+    },
     popExchangePay :
     {
         title :"Bargeld Devisenzahlung",
