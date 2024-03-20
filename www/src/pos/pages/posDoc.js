@@ -32,6 +32,7 @@ import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 import NdAccessEdit from '../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
@@ -756,7 +757,8 @@ export default class posDoc extends React.PureComponent
 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0                       
+        let tmpPrice = 0
+        let tmpPriceListNo = this.pricingListNo
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -964,6 +966,20 @@ export default class posDoc extends React.PureComponent
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
             //*********************************************************/
+            //BİRDEN FAZLA FİYAT LİSTESİ VARSA LİSTE SEÇİMİ SORULUYOR
+            if(this.prmObj.filter({ID:'PricingListNoChoice',TYPE:0}).getValue())
+            {
+                let tmpPriceChoice = await this.priceListChoice(tmpItemsDt[0].GUID)
+                if(tmpPriceChoice == -1)
+                {
+                    this.loading.current.instance.hide()
+                    return;
+                }
+                else if(tmpPriceChoice > 0)
+                {
+                    tmpPriceListNo = tmpPriceChoice
+                }
+            }
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
@@ -978,7 +994,7 @@ export default class posDoc extends React.PureComponent
                     values : [tmpItemsDt[0].GUID]
                 }
             }
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo,tmpItemsDt[0].GUID]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,tmpPriceListNo,tmpItemsDt[0].GUID]
             await tmpPriceDt.refresh();  
             
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
@@ -3469,6 +3485,46 @@ export default class posDoc extends React.PureComponent
             return true
         }
         return false
+    }
+    priceListChoice(pItem)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpDt = new datatable()
+            tmpDt.selectCmd = 
+            {
+                query : "SELECT LIST_NO,ISNULL((SELECT NAME FROM ITEM_PRICE_LIST WHERE NO = LIST_NO),'') AS LIST_NO_NAME,PRICE FROM ITEM_PRICE WHERE TYPE = 0 AND ITEM = @ITEM",
+                param : ['ITEM:string|50'],
+                value : [pItem]
+            }
+
+            await tmpDt.refresh(); 
+            
+            if(tmpDt.length > 1)
+            {
+                this.priceListChoicePopUp.onClick = (data) =>
+                {
+                    if(data.length > 0)
+                    {
+                        resolve(data[0].LIST_NO)
+                    }
+                    else
+                    {
+                        resolve(-1)
+                    }
+                }
+                this.priceListChoicePopUp.onHiding = ()=>
+                {
+                    resolve(-1)
+                }
+                await this.priceListChoicePopUp.show()
+                await this.priceListChoicePopUp.setData(tmpDt)
+            }
+            else
+            {
+                resolve(0)
+            }
+        })
     }
     render()
     {
@@ -9215,7 +9271,7 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
-                {/* Last Sale List Popup */} 
+                {/* Last Sale List PopUp */} 
                 <div>
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
@@ -9470,6 +9526,26 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NdAccessEdit id={"accesComp"} parent={this} saveUser={true}/>
                 </div> 
+                {/* Price List Choice PopUp */}
+                <div>
+                    <NdPopGrid id={"priceListChoicePopUp"} parent={this} container={"#root"}
+                    visible={false}
+                    selection={{mode:'single'}}
+                    filterRow={{visible:false}}
+                    headerFilter={{visible:false}}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.lang.t("priceListChoicePopUp.title")} 
+                    deferRendering={true}
+                    >
+                        <Column dataField="LIST_NO" caption={this.lang.t("priceListChoicePopUp.clmListNo")} width={150}/>
+                        <Column dataField="LIST_NO_NAME" caption={this.lang.t("priceListChoicePopUp.clmListName")} width={300}/>
+                        <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={120}/>
+                    </NdPopGrid>
+                </div>
             </div>
         )
     }

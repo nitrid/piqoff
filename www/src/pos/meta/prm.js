@@ -1347,20 +1347,20 @@ export const prm =
             CAPTION : "Fiyat Liste No"
         }
     },
-    //Butonlarin ses cikarma islemi
+    //Fiyat Liste Seçim
     {
         TYPE : 0,
-        ID :"buttonsSound",
-        VALUE : true,
+        ID :"PricingListNoChoice",
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
-            CAPTION : "Fiyat Liste No"
+            CAPTION : "Fiyat Liste Seçimi"
         }
     },
     //#endregion

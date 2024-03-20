@@ -915,5 +915,12 @@ export const langEn =
             btn02: "No",
             msg: "Do you want to save the changes you made?"
         }
-    }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Choose a Price List",
+        clmListNo : "List Number",
+        clmListName : "List Name",
+        clmPrice : "Price"
+    },
 }
