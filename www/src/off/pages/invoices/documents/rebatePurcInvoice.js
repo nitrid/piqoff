@@ -763,7 +763,13 @@ export default class rebateInvoice extends DocBase
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
-                                                
+                                                this.docObj.dt()[0].LOCKED = 1
+                                                this.docLocked = true
+                                                  //***** TICKET İMZALAMA *****/
+                                                let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                                this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                                this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+
                                                 if((await this.docObj.save()) == 0)
                                                 {
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -1876,7 +1882,17 @@ export default class rebateInvoice extends DocBase
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
                                             onClick={async ()=>
-                                            {   let tmpQuery = 
+                                            {   
+                                                let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                let tmpExtra = {...this.extraObj.empty}
+                                                tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                tmpExtra.DESCRIPTION = ''
+                                                tmpExtra.TAG = 'PRINT'
+                                                tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                this.extraObj.addEmpty(tmpExtra);
+                                                await this.extraObj.save()
+                                                let tmpQuery = 
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
