@@ -1167,6 +1167,11 @@ export const menu = (e) =>
                             id: 'pos_01_004',
                             text: e.t('menuOff.pos_01_004'),//'Pos Mesaj',
                             path: 'pos/card/posMsg'
+                        },
+                        {
+                            id: 'pos_01_005',
+                            text: e.t('menuOff.pos_01_005'),//'Pos ödeme tipi tanımlama',
+                            path: 'pos/card/posPayType'
                         }
                     ]
                 },

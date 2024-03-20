@@ -1,6 +1,6 @@
 {
   "name": "piqsoft",
-  "version": "1.0.7e",
+  "version": "1.0.7f",
   "certificate": "(NF525) B_0527-3",
   "description": "",
   "main": "index.js",
@@ -62,7 +62,7 @@
     "react-router-dom": "6.11.1",
     "react-simple-keyboard": "3.4.139",
     "react-spring": "^9.7.3",
-    "reactstrap": "9.2.2",
+    "reactstrap": "8.8.0",
     "remove-files-webpack-plugin": "1.5.0",
     "socket.io-client": "4.5.2",
     "xlsx": "0.18.5",

@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
+import cron from 'node-cron';
 
 class pricerApi
 {
@@ -11,6 +12,8 @@ class pricerApi
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.active = false
+
+        this.processRun()
     }
     async connEvt(pSocket)
     {
@@ -34,7 +37,7 @@ class pricerApi
                 {
                     for (let i = 0; i < pParam.length; i++) 
                     {
-                        if(pParam[i].query.indexOf('ITEM_PRICE_UPDATE') > -1)
+                        if(pParam[i].query.indexOf('PRD_ITEM_PRICE_UPDATE') > -1)
                         { 
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
@@ -43,7 +46,7 @@ class pricerApi
                                 }, 5000);
                             }
                         }
-                        else if(pParam[i].query.indexOf('ITEM_PRICE_INSERT') > -1)
+                        else if(pParam[i].query.indexOf('PRD_ITEM_PRICE_INSERT') > -1)
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
@@ -52,7 +55,7 @@ class pricerApi
                                 }, 5000);
                             }
                         }
-                        else if(pParam[i].query.indexOf('ITEMS_INSERT') > -1)
+                        else if(pParam[i].query.indexOf('PRD_ITEMS_INSERT') > -1)
                         {
                             if(typeof pParam[i].rowData.GUID != 'undefined')
                             {
@@ -61,7 +64,7 @@ class pricerApi
                                 }, 5000);
                             }
                         }
-                        else if(pParam[i].query.indexOf('ITEMS_UPDATE') > -1)
+                        else if(pParam[i].query.indexOf('PRD_ITEMS_UPDATE') > -1)
                         {
                             if(typeof pParam[i].rowData.GUID != 'undefined')
                             {
@@ -70,7 +73,7 @@ class pricerApi
                                 }, 5000);
                             }
                         }
-                        else if(pParam[i].query.indexOf('ITEM_UNIT_INSERT') > -1)
+                        else if(pParam[i].query.indexOf('PRD_ITEM_UNIT_INSERT') > -1)
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
@@ -79,7 +82,7 @@ class pricerApi
                                 }, 5000);
                             }
                         }
-                        else if(pParam[i].query.indexOf('ITEM_UNIT_UPDATE') > -1)
+                        else if(pParam[i].query.indexOf('PRD_ITEM_UNIT_UPDATE') > -1)
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
@@ -116,13 +119,13 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        if(typeof tmpResult.length != 'undefined')
+        if(typeof tmpResult != 'undefined' && typeof tmpResult.length != 'undefined')
         {
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
@@ -142,7 +145,7 @@ class pricerApi
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": tmpResult[0].PRICE_SALE,
+                      "price": tmpResult[0].CENTIM_PRICE,
                       "sics":tmpBarcodes,
                       "properties": 
                       {
@@ -151,13 +154,14 @@ class pricerApi
                         "SALES_UNIT": "",
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
                         "DISCOUNT_PRICE":"",
-                        "DISCOUNT_FLAG":"",
+                        "DISCOUNT_FLAG":"0",
                         "STRIKE_FLAG":"",
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
-                        "CATEGORY":"",
-                        "ORIGIN":"",
+                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "ORIGIN":tmpResult[0].ORGINS_NAME,
+                        "TRAITEMENT" : "",
                         "STOCK":"",
                         "NEXT_DELIVERY_DATE":"",
                         "ORDER_IN_PROGRESS":""
@@ -190,6 +194,128 @@ class pricerApi
             });
         }
       
+    }
+    async processRun()
+    {
+        if(this.active == true)
+        {
+            cron.schedule('0 0 */1 * * *', async () => 
+            {
+                await this.processPromoSend()
+            })
+            cron.schedule('0 0 22 * * *', async () => 
+            {
+                await this.processPromoClear()
+            })
+        }
+    }
+    async processPromoSend()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
+            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM " +
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),110) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),110)  ",
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
+        }
+    }
+    async itemPromoUpdate(pGuid,pPrice)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+        
+        if(typeof tmpResult.length != 'undefined')
+        {
+            let tmpBarcodes =[]
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                tmpBarcodes.push(tmpResult[i].BARCODE)
+            }
+            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            {
+                method: 'PATCH',
+                headers:  
+                {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Basic ' + btoa('config' + ":" + 'config')
+                },
+                body: JSON.stringify(
+                [
+                    {
+                      "itemId": tmpResult[0].GUID,
+                      "itemName": tmpResult[0].NAME,
+                      "price": (pPrice * 100),
+                      "sics":tmpBarcodes,
+                      "properties": 
+                      {
+                        "BARCODE": tmpResult[0].BARCODE,
+                        "UNIT_PRICE": tmpResult[0].UNIT_PRICE,
+                        "SALES_UNIT": "",
+                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
+                        "DISCOUNT_FLAG":"1",
+                        "STRIKE_PRICE":tmpResult[0].CENTIM_PRICE,
+                        "VAT":tmpResult[0].VAT,
+                        "VARIETY":"",
+                        "SIZE":"",
+                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "ORIGIN":tmpResult[0].ORGINS_NAME,
+                        "TRAITEMENT" : "",
+                        "STOCK":"",
+                        "NEXT_DELIVERY_DATE":"",
+                        "ORDER_IN_PROGRESS":""
+                      }
+                    }
+                ])
+            })
+            .then(response => 
+            {
+                if (!response.ok) 
+                {
+                    throw new Error('yükleme başarısız. HTTP Hata: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => 
+            {
+                if(data.success)
+                {
+                    console.log(data.result)
+                }
+                else
+                {
+                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                }
+            })
+            .catch(error => 
+            {
+                console.error('Hata:', error.message);
+            });
+        }
+      
+    }
+    async processPromoClear()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT COND_ITEM_GUID AS ITEM " +
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),110) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,110)  ",
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.itemUpdate(tmpResult[i].ITEM)
+        }
     }
 }
 

@@ -339,6 +339,10 @@ export const langEn =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Return list",
+    },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -481,6 +485,10 @@ export const langEn =
     {
         title: "Credit Card Payment",
     },
+    popCardTicketPay :
+    {
+        title :"Food card",
+    },
     popExchangePay :
     {
         title :"Cash Foreign Exchange Payment",
@@ -620,7 +628,9 @@ export const langEn =
         msg3: "Transfer table.",
         btnPopTransferManuel: "Manual Start",
         btnPopTransferClear: "Clear Transfer",
-        btnPopTransferStop: "Stop"
+        btnPopTransferStop: "Stop",
+        titleApp : "Local database is being updated.",
+        msgApp : "The application will close shortly! Please restart the application."
     },
     msgOfflineWarning:
     {

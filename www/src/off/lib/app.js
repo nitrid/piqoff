@@ -15,7 +15,7 @@ import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-import i18n from './i18n.js'
+import { i18n, loadLocaleResources } from './i18n';
 import Drawer from 'devextreme-react/drawer';
 import Toolbar from 'devextreme-react/toolbar';
 import TextBox from 'devextreme-react/text-box';

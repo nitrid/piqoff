@@ -1,6 +1,10 @@
 export const langTr = 
 {
-    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
+    popGrid: 
+    {
+        btnSelection:"Seç",
+        btnSearch:"Listele"
+    },
     txtLangSelect : "Dil Seçimi",
     userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",

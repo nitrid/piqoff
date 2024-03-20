@@ -341,8 +341,10 @@ export default class posDoc extends React.PureComponent
     {
         this.init();
     }
-    toggleKeyboardVisibility = () => {
-        this.setState(prevState => ({
+    toggleKeyboardVisibility()
+    {
+        this.setState(prevState => (
+        {
             keyboardVisibility: !prevState.keyboardVisibility
         }));
     }
@@ -407,33 +409,33 @@ export default class posDoc extends React.PureComponent
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
-         //** CHEQ GETIR ********************************************/
-         this.cheqDt.selectCmd = 
-         {
-             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-             param : ['DOC:string|50'], 
-             value : [this.posObj.dt()[0].GUID],
-             local : 
-             {
-                 type : "select",
-                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                 values : [this.posObj.dt()[0].GUID]
-             }
-         }
-         this.cheqDt.deleteCmd = 
-         {
-             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-             param : ['PGUID:string|50','PDOC:string|50'], 
-             dataprm : ['GUID','DOC'],
-             local : 
-             {
-                 type : "delete",
-                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-             }
-         }
-         await this.cheqDt.refresh();  
-         //******************************************************** */
+        //** CHEQ GETIR ********************************************/
+        this.cheqDt.selectCmd = 
+        {
+            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+            param : ['DOC:string|50'], 
+            value : [this.posObj.dt()[0].GUID],
+            local : 
+            {
+                type : "select",
+                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                values : [this.posObj.dt()[0].GUID]
+            }
+        }
+        this.cheqDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+            param : ['PGUID:string|50','PDOC:string|50'], 
+            dataprm : ['GUID','DOC'],
+            local : 
+            {
+                type : "delete",
+                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+            }
+        }
+        await this.cheqDt.refresh();  
+        //******************************************************** */
         if(!this.isFirstOpen)
         {
             //********************************************************* */
@@ -678,6 +680,11 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
+            {
+                resolve([])
+                return
+            } 
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
@@ -749,11 +756,7 @@ export default class posDoc extends React.PureComponent
 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0          
-        if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
-        {
-           return
-        }      
+        let tmpPrice = 0                       
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -3883,7 +3886,7 @@ export default class posDoc extends React.PureComponent
                                     >
                                         <Editing confirmDelete={false}/>
                                         <Scrolling mode="standard" />
-                                        <Paging defaultPageSize={20} />
+                                        <Paging defaultPageSize={9} />
                                         <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                         <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                         {

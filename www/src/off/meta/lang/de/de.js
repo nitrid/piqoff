@@ -318,6 +318,7 @@ export const langDe =
         pos_01_001: "POS-Gerätepräsentation",
         pos_01_002: "Pos Plu kopieren",  
         pos_01_004: "POS Nachricht",
+        pos_01_005: "POS Zahlungstyp",
         pos_02: "Berichte",
         pos_02_001: "Verkaufsbeleg-Bericht",
         pos_02_002: "Kundenpunkte-Bericht",
@@ -16904,6 +16905,53 @@ export const langDe =
             btn01: "Ok",
             msg: "Ihre Nachricht wurde erfolgreich gesendet",
         },
+    },
+    pos_01_005 : // Pos Ödeme Tipi
+    {
+        txtPayType : "Code",
+    txtPayTypeName : "Name",
+    txtPayTypeIcon : "Symbol",
+    txtPayTypeRate : "Wert",
+    chkPayTypeVisible : "In der POS-Zahlungsanzeige sichtbar",
+    msgSave:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveResult:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+    },
+    msgSaveValid:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
+    },
+    msgDelete:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+    },
+    msgSaveValid:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
+    },
+    pg_txtCode : 
+    {
+        title : "Zahlungsarten",
+        clmCode: "Code",
+        clmName : "Name",
+    }
     },
     pos_02_001 : // "Belegbericht"
     {

@@ -57,6 +57,7 @@ export class posCls
         this.posSale = new posSaleCls();
         this.posPay = new posPaymentCls();
         this.posExtra = new posExtraCls();
+        this.payTypeObj = new posPayTypeCls();
         
         this._initDs();
     }
@@ -110,15 +111,15 @@ export class posCls
                 type : "insert",
                 query : `INSERT INTO POS_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, FIRM, DEVICE, DEPOT_GUID, DEPOT_CODE, DEPOT_NAME, TYPE, TYPE_NAME, DOC_TYPE, 
                         DOC_DATE, REF, CUSTOMER_GUID, CUSTOMER_TYPE, CUSTOMER_CODE, CUSTOMER_NAME, CUSTOMER_TAX_NO, CUSTOMER_ADRESS, CUSTOMER_ZIPCODE, CUSTOMER_COUNTRY, CUSTOMER_CITY, 
-                        CUSTOMER_POINT, FAMOUNT, AMOUNT, DISCOUNT, LOYALTY, VAT, TOTAL, TICKET, REBATE_CHEQPAY, STATUS, DESCRIPTION, DELETED, CERTIFICATE, ORDER_GUID, SIGNATURE, SIGNATURE_SUM)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                        CUSTOMER_POINT, FAMOUNT, AMOUNT, DISCOUNT, LOYALTY, VAT, TOTAL, TICKET, REBATE_CHEQPAY, STATUS, DESCRIPTION, DELETED, CERTIFICATE, ORDER_GUID, SIGNATURE, SIGNATURE_SUM, PRINT_DESCRIPTION)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 values : [{GUID : {map:'GUID'},CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
                         LUSER_NAME : {map:'LUSER_NAME'},FIRM : {map:'FIRM'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},TYPE_NAME : {map:'TYPE_NAME'},
                         DOC_TYPE : {map:'DOC_TYPE'},DOC_DATE : {map:'DOC_DATE',type:'date_time'},REF : {map:'REF'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
                         CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
                         CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
                         VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:0,
-                        CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'}}]
+                        CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'},PRINT_DESCRIPTION : {map:'PRINT_DESCRIPTION'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -156,14 +157,14 @@ export class posCls
                 query : `UPDATE POS_VW_01 SET CDATE = ?, CUSER = ?, CUSER_NAME = ?, LDATE = ?, LUSER = ?, LUSER_NAME = ?, DEVICE = ?, DEPOT_GUID = ?, DEPOT_CODE = ?, DEPOT_NAME = ?, 
                         TYPE = ?, TYPE_NAME = ?, DOC_TYPE = ?, DOC_DATE = ?, REF = ?, CUSTOMER_GUID = ?, CUSTOMER_TYPE = ?, CUSTOMER_CODE = ?, CUSTOMER_NAME = ?, CUSTOMER_TAX_NO = ?, 
                         CUSTOMER_ADRESS = ?, CUSTOMER_ZIPCODE = ?, CUSTOMER_COUNTRY = ?, CUSTOMER_CITY = ?, CUSTOMER_POINT = ?, FAMOUNT = ?, AMOUNT = ?, DISCOUNT = ?, LOYALTY = ?, 
-                        VAT = ?, TOTAL = ?, TICKET = ?, REBATE_CHEQPAY = ?, STATUS = ?, DESCRIPTION = ?, DELETED = ?, CERTIFICATE = ?, ORDER_GUID = ?, SIGNATURE = ?, SIGNATURE_SUM = ? WHERE GUID = ?;`,
+                        VAT = ?, TOTAL = ?, TICKET = ?, REBATE_CHEQPAY = ?, STATUS = ?, DESCRIPTION = ?, DELETED = ?, CERTIFICATE = ?, ORDER_GUID = ?, SIGNATURE = ?, SIGNATURE_SUM = ?, PRINT_DESCRIPTION = ? WHERE GUID = ?;`,
                 values :[{CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
                         LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},TYPE_NAME : {map:'TYPE_NAME'},
                         DOC_TYPE : {map:'DOC_TYPE'},DOC_DATE : {map:'DOC_DATE',type:'date_time'},REF : {map:'REF'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
                         CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
                         CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
                         VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:0,
-                        CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'},GUID : {map:'GUID'}}],
+                        CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'},PRINT_DESCRIPTION : {map:'PRINT_DESCRIPTION'},GUID : {map:'GUID'}}],
             }
         } 
         tmpDt.deleteCmd = 
@@ -2449,6 +2450,155 @@ export class posUsbTSECls
                 this.lastTransaction = {status:false}
                 resolve(this.lastTransaction)
             }
+        });
+    }
+}
+
+export class posPayTypeCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE: 0,
+            NAME: '',
+            ICON: '',
+            TOTAL_VISIBLE : false,
+            RATE : 1
+        }
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('POS_PAY_TYPE');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[POS_PAY_TYPE] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                query : `SELECT * FROM POS_PAY_TYPE WHERE ((GUID = ?) OR (? = '00000000-0000-0000-0000-000000000000'));`,
+                values : []
+            }
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAY_TYPE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@TYPE = @PTYPE, " + 
+                    "@NAME = @PNAME, " +
+                    "@ICON = @PICON, " +
+                    "@TOTAL_VISIBLE = @PTOTAL_VISIBLE, " +
+                    "@RATE = @PRATE " ,
+            param : ['PGUID:string|50','PTYPE:int','PNAME:string|50','PICON:string|50','PTOTAL_VISIBLE:int','PRATE:int'],
+            dataprm : ['GUID','TYPE','NAME','ICON','TOTAL_VISIBLE','RATE'],
+            local : 
+            {
+                type : "insert",
+                query : `INSERT INTO POS_PAY_TYPE (GUID, TYPE, NAME, ICON, TOTAL_VISIBLE, RATE)
+                        VALUES (?, ?, ?, ?, ?, ?);`,
+                values : [{GUID : {map:'GUID'},TYPE : {map:'TYPE'},NAME : {map:'NAME'},ICON : {map:'ICON'},TOTAL_VISIBLE : {map:'TOTAL_VISIBLE'},RATE : {map:'RATE'}}]
+            }
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAY_TYPE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@TYPE = @PTYPE, " + 
+                    "@NAME = @PNAME, " +
+                    "@ICON = @PICON, " +
+                    "@TOTAL_VISIBLE = @PTOTAL_VISIBLE, " +
+                    "@RATE = @PRATE " ,
+            param : ['PGUID:string|50','PTYPE:int','PNAME:string|50','PICON:string|50','PTOTAL_VISIBLE:int','PRATE:int'],
+            dataprm : ['GUID','TYPE','NAME','ICON','TOTAL_VISIBLE','RATE'],
+            local : 
+            {
+                type : "update",
+                query : `UPDATE POS_PAY_TYPE SET TYPE = ?, NAME = ?, ICON = ?, TOTAL_VISIBLE = ?, RATE = ? WHERE GUID = ?;`,
+                values : [{GUID : {map:'GUID'},TYPE : {map:'TYPE'},NAME : {map:'NAME'},ICON : {map:'ICON'},TOTAL_VISIBLE : {map:'TOTAL_VISIBLE'},RATE : {map:'RATE'}}]
+            }
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAY_TYPE_DELETE] " + 
+                    "@GUID = @PGUID " ,
+            param : ['PGUID:string|50'],
+            dataprm : ['GUID'],
+            local : 
+            {
+                type : "update",
+                query : `UPDATE POS_PAY_TYPE SET GUID = ? WHERE GUID = ?;`,
+                values : [{GUID : {map:'GUID'}}]
+            }
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('POS_PAY_TYPE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('POS_PAY_TYPE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',POS_GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'',}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+            }            
+                 
+            this.ds.get('POS_PAY_TYPE').selectCmd.value = Object.values(tmpPrm);
+            this.ds.get('POS_PAY_TYPE').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,0]
+
+            await this.ds.get('POS_PAY_TYPE').refresh();
+            
+            resolve(this.ds.get('POS_PAY_TYPE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
         });
     }
 }

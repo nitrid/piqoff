@@ -148,6 +148,11 @@ export const menu = (e) =>
                     text: e.t('menu.menu_01'), // Kullanıcı Menü Ayarları
                     path: 'menuEdit'
                 },
+                {
+                    id: 'menu_02',
+                    text: e.t('menu.menu_02'), // Tab Menü Ayarları
+                    path: 'tabMenuEdit'
+                },
             ]
         },
     ]
