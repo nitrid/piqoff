@@ -916,5 +916,12 @@ export const langEs =
             btn02: "No",
             msg: "¿Desea guardar los cambios que realizó?"
         }
-    }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Seleccione una lista de precios",
+        clmListNo : "Número de lista",
+        clmListName : "Nombre de la lista",
+        clmPrice : "Precio"
+    },
 }

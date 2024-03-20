@@ -960,4 +960,11 @@ export const langFr =
             msg: "Voulez-vous enregistrer les modifications apportées ?"
         },
     },
+    priceListChoicePopUp :
+    {
+        title : "Choisissez une liste de prix",
+        clmListNo : "Numéro de liste",
+        clmListName : "Nom de la liste",
+        clmPrice : "Prix"
+    },
 }

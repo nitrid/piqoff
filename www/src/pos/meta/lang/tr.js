@@ -955,4 +955,11 @@ export const langTr =
             msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
         },
     },
+    priceListChoicePopUp :
+    {
+        title : "Fiyat Listesi Seçiniz",
+        clmListNo : "Liste No",
+        clmListName : "Liste Adı",
+        clmPrice : "Fiyat"
+    }
 }
