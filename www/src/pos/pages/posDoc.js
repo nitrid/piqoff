@@ -88,7 +88,8 @@ export default class posDoc extends React.PureComponent
             date:"00.00.0000",
             isPluEdit:false,
             isConnected:this.core.offline ? false : true,
-            isFormation:false
+            isFormation:false,
+            keyboardVisibility: false // État initial pour la visibilité du clavier
         }   
         
         document.onkeydown = (e) =>
@@ -340,6 +341,13 @@ export default class posDoc extends React.PureComponent
     {
         this.init();
     }
+    toggleKeyboardVisibility()
+    {
+        this.setState(prevState => (
+        {
+            keyboardVisibility: !prevState.keyboardVisibility
+        }));
+    }
     async init()
     {
         this.loadingPay.current.instance.show()
@@ -401,33 +409,33 @@ export default class posDoc extends React.PureComponent
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
-         //** CHEQ GETIR ********************************************/
-         this.cheqDt.selectCmd = 
-         {
-             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-             param : ['DOC:string|50'], 
-             value : [this.posObj.dt()[0].GUID],
-             local : 
-             {
-                 type : "select",
-                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                 values : [this.posObj.dt()[0].GUID]
-             }
-         }
-         this.cheqDt.deleteCmd = 
-         {
-             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-             param : ['PGUID:string|50','PDOC:string|50'], 
-             dataprm : ['GUID','DOC'],
-             local : 
-             {
-                 type : "delete",
-                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-             }
-         }
-         await this.cheqDt.refresh();  
-         //******************************************************** */
+        //** CHEQ GETIR ********************************************/
+        this.cheqDt.selectCmd = 
+        {
+            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+            param : ['DOC:string|50'], 
+            value : [this.posObj.dt()[0].GUID],
+            local : 
+            {
+                type : "select",
+                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                values : [this.posObj.dt()[0].GUID]
+            }
+        }
+        this.cheqDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+            param : ['PGUID:string|50','PDOC:string|50'], 
+            dataprm : ['GUID','DOC'],
+            local : 
+            {
+                type : "delete",
+                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+            }
+        }
+        await this.cheqDt.refresh();  
+        //******************************************************** */
         if(!this.isFirstOpen)
         {
             //********************************************************* */
@@ -672,6 +680,11 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
+            {
+                resolve([])
+                return
+            } 
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
@@ -743,11 +756,7 @@ export default class posDoc extends React.PureComponent
 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0          
-        if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
-        {
-           return
-        }      
+        let tmpPrice = 0                       
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -3877,7 +3886,7 @@ export default class posDoc extends React.PureComponent
                                     >
                                         <Editing confirmDelete={false}/>
                                         <Scrolling mode="standard" />
-                                        <Paging defaultPageSize={20} />
+                                        <Paging defaultPageSize={9} />
                                         <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                         <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                         {
@@ -6976,9 +6985,11 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.btnPopLastSaleSearch._onClick()
                                     }
-                                }}>     
+                                }}
+                                >     
                                 </NdTextBox> 
                             </div>
+                                
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-2">
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
@@ -7020,18 +7031,48 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastRefNo"
+                                            this.keyboardRef.setInput(this.txtPopLastRefNo.value)
+                                        }
+                                    },
+                                ]}>      
                                 </NdTextBox> 
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">
                                 <NdTextBox id="txtPopLastCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
-                                 onChange={async(e)=>
+                                onChange={async(e)=>
                                 {                         
                                    this.cmbPopLastSaleUser.value = ''
-                                }}>     
+                                }}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastCustomer"
+                                            this.keyboardRef.setInput(this.txtPopLastCustomer.value)
+                                        }
+                                    },
+                                ]}>     
                                 </NdTextBox> 
                             </div>
+                            {this.state.keyboardVisibility && 
+                            (
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"}/>
+                            )}
                         </div>
                         {/* grdLastPos */}
                         <div className="row py-1">
@@ -9279,8 +9320,9 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
-                                </NdTextBox> 
+                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")} 
+                                />
+                                
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">

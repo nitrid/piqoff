@@ -337,6 +337,10 @@ export const langTr =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Son iade listesi",
+    },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
     txtPopLastRefNoPholder : "Ref No",
     txtPopLastCustomerPholder : "Müşteri Kodu",
@@ -397,15 +401,15 @@ export const langTr =
         msg :"İade Alınan Ticketı Okutunuz !",
         btn01 : "Tamam",
         btn02 : "İptal",
-        btn03 : "Fiş Seçimi" // BAK
+        btn03 : "Fiş Seçimi"
     },
     msgItemReturnType: 
     {
         title : "Uyarı",
         msg :"İade Tipini Seçiniz !",
-        btn01 : "Espece",
-        btn02 : "Bon D'avoir",
-        btn03 : "CB",
+        btn01 : "Nakit",
+        btn02 : "İade fişi",
+        btn03 : "Kredi Kartı",
     },
     msgWeighing: 
     {
@@ -439,7 +443,7 @@ export const langTr =
     },
     popAdvanceDesc :
     {
-        head :"Avas Açıklaması",
+        head :"Avans Açıklaması",
         title :"Lütfen Avans Nedenini Giriniz",
     },
     msgSave : 
@@ -481,6 +485,10 @@ export const langTr =
     {
         title :"Kart Ödeme",
     },
+    popCardTicketPay :
+    {
+        title :"Ticket Rest. Kart",
+    },
     popExchangePay :
     {
         title :"Nakit Döviz Ödeme",
@@ -499,7 +507,7 @@ export const langTr =
     },
     grdList: 
     {
-        LDATE : "LDATE",
+        LDATE : "TARIH",
         ITEM_NAME :"ADI",
         QUANTITY : "ADET",
         DISCOUNT : "IND.FIYAT",
@@ -526,7 +534,7 @@ export const langTr =
     },
     grdDiscList :
     {
-        LDATE : "D TARIH",
+        LDATE : "TARIH",
         ITEM_NAME : "ADI",
         INDIRIM : "INDIRIM",
         DISCOUNT : "INDIRIM",
@@ -620,7 +628,9 @@ export const langTr =
         msg3 : "Tablosu Aktarılıyor.",
         btnPopTransferManuel : "Manuel Başlat",
         btnPopTransferClear : "Temizle Aktar",
-        btnPopTransferStop : "Durdur"
+        btnPopTransferStop : "Durdur",
+        titleApp : "Local Database Güncelleniyor.",
+        msgApp : "Birazdan uygulama kapanacak ! Lütfen uygulamayı tekrar çalıştırın."
     },
     msgOfflineWarning: 
     {

@@ -534,6 +534,20 @@ export default class purchaseInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            if(typeof pData.ITEM_TYPE == 'undefined')
+            {
+                let tmpTypeQuery = 
+                {
+                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.GUID]
+                }
+                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                if(tmpType.result.recordset.length > 0)
+                {
+                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                }
+            }
             if(pData.ITEM_TYPE == 0)
             {
                 if(this.customerControl == true)
@@ -545,6 +559,8 @@ export default class purchaseInvoice extends DocBase
                         value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                    console.log(tmpCheckData.result.recordset.length)
+                    console.log(tmpCheckData)
                     if(tmpCheckData.result.recordset.length == 0)
                     {   
                         let tmpCustomerBtn = ''
@@ -553,6 +569,7 @@ export default class purchaseInvoice extends DocBase
                             resolve()
                             return 
                         }
+                        console.log(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value )
                         if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
                         {
                             let tmpConfObj =
@@ -651,21 +668,7 @@ export default class purchaseInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
             }
-            if(typeof pData.ITEM_TYPE == 'undefined')
-            {
-                let tmpTypeQuery = 
-                {
-                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
-                    param : ['GUID:string|50'],
-                    value : [pData.GUID]
-                }
-                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
-                if(tmpType.result.recordset.length > 0)
-                {
-                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
-                }
-            }
-            
+           
 
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID

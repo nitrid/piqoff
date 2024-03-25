@@ -339,6 +339,10 @@ export const langDe =
             optionAvoir : "Gutschein"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Rückgabeliste",
+    },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
     txtPopLastRefNoPholder : "Referenznummer",  
     txtPopLastCustomerPholder : "Kundennummer", 
@@ -482,6 +486,10 @@ export const langDe =
     {
         title: "Kartenzahlung"
     },
+    popCardTicketPay :
+    {
+        title :"Lebensmittelkarte",
+    },
     popExchangePay :
     {
         title :"Bargeld Devisenzahlung",
@@ -621,7 +629,9 @@ export const langDe =
         msg3 : "Tabelle wird übertragen.",
         btnPopTransferManuel : "Manuell starten",
         btnPopTransferClear : "Übertragung löschen",
-        btnPopTransferStop : "Anhalten"
+        btnPopTransferStop : "Anhalten",
+        titleApp : "Lokale Datenbank wird aktualisiert.",
+        msgApp : "Die Anwendung wird gleich geschlossen! Bitte starten Sie die Anwendung neu."
     },
     msgOfflineWarning: 
     {

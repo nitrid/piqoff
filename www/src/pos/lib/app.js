@@ -73,6 +73,9 @@ export default class App extends React.PureComponent
             vtadi : '',
             lcd : false,
             itemInfo : false,
+            transferPanel : false,
+            transProgress : "",
+            msgTransfer : ""
         }
         this.toolbarItems = 
         [
@@ -123,7 +126,7 @@ export default class App extends React.PureComponent
         
         this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
         this.transfer = new transferCls()
-        this.core.appInfo = appInfo
+        this.core.appInfo = {...appInfo}
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);
         this.payType = new datatable();
@@ -267,15 +270,39 @@ export default class App extends React.PureComponent
             await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
             await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 
-            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE"}
+            this.payType.selectCmd = {query:"SELECT * FROM POS_PAY_TYPE",local:{type : "select",query : "SELECT * FROM POS_PAY_TYPE;"}}
             await this.payType.refresh()
-            console.log(this.payType)
+            
+            if(this.core.util.isElectron() && !this.core.offline)
+            {
+                this.core.appInfo.version = await this.core.util.getVersion()
+                if(localStorage.getItem('version') == null || localStorage.getItem('version') != this.core.appInfo.version)
+                {
+                    App.instance.setState({splash:false,transferPanel:true});
+                    //DATA TRANSFER İŞLEMİ
+                    this.transfer.on('onState',(pParam)=>
+                    {
+                        if(pParam.tag == 'progress')
+                        {
+                            App.instance.setState({transProgress : pParam.index + " / " + pParam.count});
+                        }
+                        else
+                        {
+                            App.instance.setState({msgTransfer : pParam.text + " " + this.lang.t("popTransfer.msg3")});
+                        }
+                    })
+                    await this.transfer.transferSql(true)
+                    App.instance.setState({transProgress : "",msgTransfer:this.lang.t("popTransfer.msgApp")});
+                    setTimeout(() => {window.close()}, 2000);
+                    localStorage.setItem('version',this.core.appInfo.version)
+                }    
+            }
             resolve()
         })
     }
     render() 
     {
-        const { logined,splash,lcd,itemInfo } = this.state;
+        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer } = this.state;
         if(lcd)
         {
             return <CustomerInfoScreen/>
@@ -285,6 +312,29 @@ export default class App extends React.PureComponent
             return <ItemInfoScreen/>
         }
         
+        if(transferPanel)
+        {
+            return(
+                <div style={this.style.splash_body}>
+                    <div className="card" style={{position: 'relative',margin:'auto',top: '30%',width: '600px',height: 'fit-content'}}>
+                        <div className="card-header">{this.lang.t("popTransfer.titleApp")}</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h3 className="text-center">{transProgress}</h3>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12">
+                                    <h3 className="text-center">{msgTransfer}</h3>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            )
+        }
+
         if(splash)
         {
             return(
@@ -306,7 +356,7 @@ export default class App extends React.PureComponent
         {
             return <Login />
         }
-
+        
         return (
             <div>
                 <LoadPanel
