@@ -485,6 +485,10 @@ export const langTr =
     {
         title :"Kart Ödeme",
     },
+    popCardTicketPay :
+    {
+        title :"Ticket Rest. Kart",
+    },
     popExchangePay :
     {
         title :"Nakit Döviz Ödeme",
