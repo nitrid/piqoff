@@ -72,6 +72,7 @@ export default class App extends React.PureComponent
             page:'dashboard.js',
         }
         this.pagePrm = null
+        this.prmObj = null
 
         if(window.origin.substring(0,4) == 'http')
         {
@@ -88,11 +89,10 @@ export default class App extends React.PureComponent
             this.device = true
             document.addEventListener('deviceready', ()=>
             {
+                console.log(navigator.camera)
                 this.init();
             }, false);
         }
-        this.prmObj = new param(prm)
-       
     }
     async init()
     {
@@ -100,7 +100,7 @@ export default class App extends React.PureComponent
         this.core.appInfo = appInfo
         this.transfer = new transferCls()
         await this.transfer.init('TAB')
-
+        
         if(!App.instance)
         {
             App.instance = this;
@@ -141,6 +141,7 @@ export default class App extends React.PureComponent
     {
         return new Promise(async (resolve) =>
         {
+            this.prmObj = new param(prm)
             await this.prmObj.load({APP:'TAB',USERS:this.core.auth.data.CODE})
             resolve()
         })
