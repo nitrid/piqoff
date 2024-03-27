@@ -1,6 +1,6 @@
 const plugins = 
 {
-  mrminit : () => import('./mrminit/index.js')
+  //example : () => import('./example.js')
 };
   
   export default plugins;

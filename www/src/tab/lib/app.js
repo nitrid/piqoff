@@ -72,6 +72,7 @@ export default class App extends React.PureComponent
             page:'dashboard.js',
         }
         this.pagePrm = null
+        this.prmObj = null
 
         if(window.origin.substring(0,4) == 'http')
         {
@@ -88,11 +89,10 @@ export default class App extends React.PureComponent
             this.device = true
             document.addEventListener('deviceready', ()=>
             {
+                console.log(navigator.camera)
                 this.init();
             }, false);
         }
-        this.prmObj = new param(prm)
-       
     }
     async init()
     {
@@ -100,7 +100,7 @@ export default class App extends React.PureComponent
         this.core.appInfo = appInfo
         this.transfer = new transferCls()
         await this.transfer.init('TAB')
-
+        
         if(!App.instance)
         {
             App.instance = this;
@@ -141,6 +141,7 @@ export default class App extends React.PureComponent
     {
         return new Promise(async (resolve) =>
         {
+            this.prmObj = new param(prm)
             await this.prmObj.load({APP:'TAB',USERS:this.core.auth.data.CODE})
             resolve()
         })
@@ -225,6 +226,25 @@ export default class App extends React.PureComponent
             </div>
         ));
     }
+    loadPage()
+    {
+        return React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
+        {
+            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
+            let tmpPrm = new param(prm);
+            await tmpPrm.load({APP:'TAB'})
+
+            let tmpAcs = new access(acs);
+            await tmpAcs.load({APP:'TAB'})
+
+            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.page});
+            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
+            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.page});
+            obj.default.prototype.user = this.core.auth.data;
+
+            return obj;
+        }));
+    }
     render() 
     {
         const { logined,connected,splash } = this.state;
@@ -257,22 +277,7 @@ export default class App extends React.PureComponent
             return <Login />
         }
 
-        const Page = React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
-        {
-            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
-            let tmpPrm = new param(prm);
-            await tmpPrm.load({APP:'TAB'})
-
-            let tmpAcs = new access(acs);
-            await tmpAcs.load({APP:'TAB'})
-
-            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.page});
-            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
-            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.page});
-            obj.default.prototype.user = this.core.auth.data;
-
-            return obj;
-        }));
+        const Page = this.loadPage()
 
         return (
             <div style={{height:'90%'}}>

@@ -5,14 +5,13 @@ import plugins from './plugins/plugins.js';
 
 async function loadPlugins() 
 {
-  const loadedPlugins = [];
-  for (const key in plugins) 
-  {
-    const plugin = await plugins[key]();
-    loadedPlugins.push(plugin);
-  }
+    const loadedPlugins = [];
+    for (const key in plugins) 
+    {
+        const plugin = await plugins[key]();
+        loadedPlugins.push(plugin);
+    }
 }
-
 loadPlugins().then(() => 
 {
     ReactDOM.render(<App />,document.getElementById("root"));
