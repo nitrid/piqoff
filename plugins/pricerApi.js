@@ -10,15 +10,15 @@ class pricerApi
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
+        this.promoSocket = this.promoSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
+        this.core.socket.on('connection',this.promoSocket)
         this.active = true
 
         this.processRun()
     }
     async connEvt(pSocket)
     {
-       
-
         pSocket.on('sql',async (pParam,pCallback) =>
         {
             if(this.active == true)
@@ -105,6 +105,14 @@ class pricerApi
            
         })
     }
+    async promoSocket(pSocket)
+    {
+        pSocket.on('allPromoSend',async (pParam,pCallback) =>
+        {
+            console.log(111)
+            this.processPromoSend()
+        })
+    }
     async itemUpdate(pGuid)
     {
         let tmpQuery = 
@@ -185,9 +193,9 @@ class pricerApi
         }
       
     }
-    async processRun()
+    async allItemSend()
     {
-         let tmpQuery = 
+        let tmpQuery = 
         {
             query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
         }
@@ -196,24 +204,34 @@ class pricerApi
         for (let i = 0; i < tmpResult.length; i++) 
         {
             await this.itemUpdate(tmpResult[i].GUID)
-            console.log(tmpResult[i].GUID)
         }
+    }
+    async processRun()
+    {
         if(this.active == true)
         {
 
-            setInterval(async() => {
-                await this.processPromoSend()
-                //await this.processPromoClear()
-            }, 180000);
-          
-            cron.schedule('0 0 22 * * *', async () => 
+            cron.schedule('0 0 02 * * *', async () => 
             {
-                
-            })
+                await this.processPromoSend()
+                await this.processPromoClear()
+            })      
         }
     }
     async processPromoSend()
     {
+        let tmpCleanQuery = 
+        {
+            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE (SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) <= CONVERT(nvarchar,GETDATE(),112) AND  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1",
+        }
+        let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
+        for (let i = 0; i < tmpCleanResult.length; i++) 
+        {
+            console.log(123)
+            console.log(tmpCleanResult[i].ITEM)
+            await this.itemUpdate(tmpCleanResult[i].ITEM)
+        }
+
         let tmpQuery = 
         {
             query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
@@ -224,6 +242,8 @@ class pricerApi
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
+            console.log(1247)
+            console.log(tmpResult[i].ITEM)
             await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
         }
     }

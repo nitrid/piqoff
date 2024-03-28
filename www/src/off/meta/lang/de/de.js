@@ -346,6 +346,8 @@ export const langDe =
         promo_02_001: "Angebotsliste",
         promo_02_002: "Angebotsdetailliste",
         promo_03: "Berichte",
+        promo_04: "Operationen",
+        promo_04_001: "Elektronik Etiket Güncelleme", // BAK
         set: "Einstellungen",
         set_01: "Kosten und Zusatzsteuern",
         set_01_001: "Zuckersatzsteuer",
@@ -11348,6 +11350,24 @@ export const langDe =
             clmAppQuantity: "Anwendungsmenge",
             clmAppAmount: "Anwendungsbetrag",
         }
+    },
+    promo_04_001: //  "Promosyon Elektronik Etiket Güncelleme"
+    {
+        btnPromoSend : "Promosyon Fiyatlarını Gönder", // BAK
+        msgSaveResult:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msgSuccess: "Fiyat Güncellemesi Gönderildi !",  // BAK
+        },
+        grdPromotion : 
+        {
+            clmCode : "Promosyon Kodu",  // BAK
+            clmName : "Promosyon Adı",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmItemCode : "Ürün Kodu",  // BAK
+            clmItemName : "Ürün Adı"  // BAK
+        },
     },
     irs_01_001: // "Purchase Dispatch List"
     {
