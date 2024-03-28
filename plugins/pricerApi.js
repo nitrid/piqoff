@@ -10,25 +10,15 @@ class pricerApi
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
+        this.promoSocket = this.promoSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.core.socket.on('connection',this.promoSocket)
+        this.active = true
 
         this.processRun()
     }
     async connEvt(pSocket)
     {
-        // let tmpQuery = 
-        // {
-        //     query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
-        // }
-        // let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-        // for (let i = 0; i < tmpResult.length; i++) 
-        // {
-        //     await this.itemUpdate(tmpResult[i].GUID)
-        //     console.log(tmpResult[i].GUID)
-        // }
-
         pSocket.on('sql',async (pParam,pCallback) =>
         {
             if(this.active == true)
@@ -115,11 +105,19 @@ class pricerApi
            
         })
     }
+    async promoSocket(pSocket)
+    {
+        pSocket.on('allPromoSend',async (pParam,pCallback) =>
+        {
+            console.log(111)
+            this.processPromoSend()
+        })
+    }
     async itemUpdate(pGuid)
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -145,21 +143,21 @@ class pricerApi
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": tmpResult[0].CENTIM_PRICE,
+                      "price": Math.round(tmpResult[0].CENTIM_PRICE),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
-                        "UNIT_PRICE": tmpResult[0].UNIT_PRICE,
-                        "SALES_UNIT": "",
-                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
+                        "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
+                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
+                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
                         "STRIKE_FLAG":"",
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
-                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "CATEGORY":"",
                         "ORIGIN":tmpResult[0].ORGINS_NAME,
                         "TRAITEMENT" : "",
                         "STOCK":"",
@@ -195,32 +193,57 @@ class pricerApi
         }
       
     }
-    async processRun()
-    {
-        if(this.active == true)
-        {
-            cron.schedule('0 0 */1 * * *', async () => 
-            {
-                await this.processPromoSend()
-            })
-            cron.schedule('0 0 22 * * *', async () => 
-            {
-                await this.processPromoClear()
-            })
-        }
-    }
-    async processPromoSend()
+    async allItemSend()
     {
         let tmpQuery = 
         {
-            query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),110) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),110)  ",
+            query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
+            await this.itemUpdate(tmpResult[i].GUID)
+        }
+    }
+    async processRun()
+    {
+        if(this.active == true)
+        {
+
+            cron.schedule('0 0 02 * * *', async () => 
+            {
+                await this.processPromoSend()
+                await this.processPromoClear()
+            })      
+        }
+    }
+    async processPromoSend()
+    {
+        let tmpCleanQuery = 
+        {
+            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE (SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) <= CONVERT(nvarchar,GETDATE(),112) AND  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1",
+        }
+        let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
+        for (let i = 0; i < tmpCleanResult.length; i++) 
+        {
+            console.log(123)
+            console.log(tmpCleanResult[i].ITEM)
+            await this.itemUpdate(tmpCleanResult[i].ITEM)
+        }
+
+        let tmpQuery = 
+        {
+            query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
+            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM " +
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112)  ",
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            console.log(1247)
+            console.log(tmpResult[i].ITEM)
             await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
         }
     }
@@ -228,7 +251,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -254,20 +277,20 @@ class pricerApi
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": (pPrice * 100),
+                      "price": Math.round(pPrice * 100),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
-                        "UNIT_PRICE": tmpResult[0].UNIT_PRICE,
-                        "SALES_UNIT": "",
-                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL,
+                        "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
+                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
+                        "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_FLAG":"1",
-                        "STRIKE_PRICE":tmpResult[0].CENTIM_PRICE,
+                        "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
-                        "CATEGORY":tmpResult[0].MAIN_GRP_NAME,
+                        "CATEGORY":"",
                         "ORIGIN":tmpResult[0].ORGINS_NAME,
                         "TRAITEMENT" : "",
                         "STOCK":"",

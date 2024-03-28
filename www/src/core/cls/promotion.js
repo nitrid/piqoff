@@ -274,7 +274,7 @@ export class promoCondCls
         {
             query : "EXEC [dbo].[PRD_PROMO_CONDITION_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 0, " + 
+                    "@UPDATE = 1, " + 
                     "@PROMO = @PPROMO, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],
@@ -426,7 +426,7 @@ export class promoAppCls
         {
             query : "EXEC [dbo].[PRD_PROMO_APPLICATION_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 0, " + 
+                    "@UPDATE = 1, " + 
                     "@PROMO = @PPROMO, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],
