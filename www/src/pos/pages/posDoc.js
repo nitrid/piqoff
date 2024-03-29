@@ -947,6 +947,7 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
+        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1304,8 +1305,13 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
+                let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+                if(tmpBarkod.length > 18)
+                {
+                    tmpBarkod = pBarcode.substring(2,tmpPrm[i].lastIndexOf('N') + 1)
+                }
                 return {
-                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    barcode : tmpBarkod,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
