@@ -947,7 +947,6 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1305,13 +1304,8 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
-                let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
-                if(tmpBarkod.length > 18)
-                {
-                    tmpBarkod = pBarcode.substring(2,tmpPrm[i].lastIndexOf('N') + 1)
-                }
                 return {
-                    barcode : tmpBarkod,
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
@@ -9518,7 +9512,7 @@ export default class posDoc extends React.PureComponent
                     deferRendering={true}
                     >
                         <Column dataField="LIST_NO" caption={this.lang.t("priceListChoicePopUp.clmListNo")} width={150}/>
-                        <Column dataField="LIST_NO_NAME" caption={this.lang.t("priceListChoicePopUp.clmListName")} width={300}/>
+                        <Column dataField="ITEM_NAME" caption={this.lang.t("priceListChoicePopUp.clmItemName")} width={300}/>
                         <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={120}/>
                     </NdPopGrid>
                 </div>
