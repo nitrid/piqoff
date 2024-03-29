@@ -1128,6 +1128,7 @@ export default class promotionCard extends React.PureComponent
                                                 })
 
                                                 this.promo.cond.dt()._deleteList = this["itemList" + this.condDt[0].WITHAL]._deleteList
+                                                console.log(this["itemList" + this.condDt[0].WITHAL]._deleteList)
                                                 await this.core.util.waitUntil(0)
                                                 
                                                 if((await this.promo.save()) == 0)
