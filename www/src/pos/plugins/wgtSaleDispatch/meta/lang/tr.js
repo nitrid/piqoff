@@ -25,5 +25,12 @@ const lang =
         btn01 : "Tamam",
         msg : "Satış işleminiz irsaliyeye başarılı şekilde çevirildi.",
     },
+    msgPrintMail:
+    {
+        title: "Uyarı",
+        msg: "E-postayla göndermek veya yazdırmak ister misiniz ?",
+        btn01: "E-Mail",
+        btn02: "Yazdır"
+    },
 }
 export default lang

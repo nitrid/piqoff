@@ -1804,8 +1804,8 @@ export class posDeviceCls
                 {
                     let img = new Image()
                     img.src = tmpArr[i].logo
-                    docPdf.addImage(img, 'png', 15, tmpY, undefined, undefined)
-                    tmpY += 20
+                    docPdf.addImage(img, 'png', 25, tmpY, undefined, undefined)
+                    tmpY += 30
                 }
                 else
                 {

@@ -25,5 +25,12 @@ const lang =
         btn01 : "OK",
         msg : "Votre transaction de vente a été convertie en bon de livraison avec succès.",
     },
+    msgPrintMail:
+    {
+        title: "Avertissement",
+        msg: "Souhaitez-vous envoyer un e-mail ou imprimer ?",
+        btn01: "E-Mail",
+        btn02: "Imprimer"
+    },
 }
 export default lang

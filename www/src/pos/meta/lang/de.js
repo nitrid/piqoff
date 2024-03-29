@@ -930,6 +930,7 @@ export const langDe =
         title : "Wählen Sie eine Preisliste",
         clmListNo : "Listennummer",
         clmListName : "Listenname",
+        clmItemName : "Produktname",
         clmPrice : "Preis"
     },
 }

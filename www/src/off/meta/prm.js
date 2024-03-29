@@ -688,7 +688,7 @@ export const prm =
         ID :"cmbTax",
         VALUE : 
         {
-            value : "5.5"
+            value : "20"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",

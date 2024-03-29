@@ -55,6 +55,21 @@ export function print()
 
                 tmpArr.push({font:"a",style:"b",align:"ct",data: " ".space(64)})
             }   
+            else if(data.special.type == 'İrsaliye')
+            {
+                tmpArr.push({font:"a",align:"ct",data:"------------------------------------------------"})
+                tmpArr.push({font:"a",align:"ct",data:"BL A"})
+                tmpArr.push({font:"a",align:"ct",data:"------------------------------------------------"})
+                tmpArr.push({font:"a",style:"b",align:"ct",data: " ".space(64)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_NAME.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ADRESS.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ZIPCODE.toString().substring(0,5) + " - " + data.pos[0].CUSTOMER_CITY.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_COUNTRY.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"NO TVA : "+ data.pos[0].CUSTOMER_TAX_NO.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"SIRET : "+ data.pos[0].CUSTOMER_SIRET.toString().substring(0,48)})
+
+                tmpArr.push({font:"a",style:"b",align:"ct",data: " ".space(64)})
+            }   
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
@@ -83,7 +98,7 @@ export function print()
         ()=>
         {
             let tmpArr = []
-            if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+            if(data.pos[0].TYPE == 0 && data.special.type == 'Fis')
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"TICKET DE VENTE"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
@@ -92,6 +107,12 @@ export function print()
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
                 tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
+                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+            }
+            else if(data.pos[0].TYPE == 0 && data.special.type == 'İrsaliye')
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"BON DE LIVRAISON"})
+                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De BL : " + data.pos[0].DEVICE + " - " + data.pos[0].REF})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }
             else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
@@ -103,7 +124,7 @@ export function print()
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-            } 
+            }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         // BAŞLIK 1 (TERAZİ SERTİFİKASI İÇİN)
@@ -191,7 +212,7 @@ export function print()
                                 tmpFactStr = "X" + tmpProSale[0].UNIT_FACTOR.toString().substring(0,2)
                             }
                             
-                            if(data.special.type == 'Fatura')
+                            if(data.special.type == 'Fatura' || data.special.type == 'İrsaliye')
                             {
                                 tmpArr.push( 
                                 {
@@ -254,7 +275,7 @@ export function print()
                         tmpFactStr = "X" + tmpSaleItem.UNIT_FACTOR.toString().substring(0,2)
                     }
 
-                    if(data.special.type == 'Fatura')
+                    if(data.special.type == 'Fatura' || data.special.type == 'İrsaliye')
                     {
                         tmpArr.push( 
                         {
@@ -269,6 +290,17 @@ export function print()
                                // (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
                                 (parseFloat(tmpSaleItem.FAMOUNT).toFixed(2)).space(7,"s")
                         }) 
+
+                        if(tmpSaleItem.DISCOUNT != 0)
+                        {
+                            tmpArr.push( 
+                            {
+                                font: "b",
+                                style: "b",
+                                align: "rt",
+                                data: "Remise ".space(46,"s") + (Number(tmpSaleItem.DISCOUNT).rate2In(tmpSaleItem.FAMOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(10,"s")
+                            })
+                        }
                     }
                     else
                     {
@@ -290,14 +322,25 @@ export function print()
                                 font: "b",
                                 style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                                 align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
-                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
+                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:32,align:'left'},{x:80,charS:33,charE:46},{x:90,charS:47,charE:54},{x:100,charS:55,charE:62}]},
                                 data: tmpSaleItem.VAT_TYPE + " " +
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                     //(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
                                     (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
-                            }) 
+                            })
+                            
+                            if(tmpSaleItem.DISCOUNT != 0)
+                            {
+                                tmpArr.push( 
+                                {
+                                    font: "b",
+                                    style: "b",
+                                    align: "rt",
+                                    data: "Remise ".space(40,"s") + (Number(tmpSaleItem.AMOUNT).rate2Num(tmpSaleItem.DISCOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(16,"s")
+                                })
+                            }
                         }
                     }
                 }) 
@@ -504,6 +547,21 @@ export function print()
         ()=>
         {
             let tmpArr = [];
+
+            if(data.special.type == 'İrsaliye')
+            {
+                tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+                tmpArr.push({font:"b",align:"ct",data:(data.pos[0].CUSTOMER_NAME).space(64)});
+                tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
+                tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
+                tmpArr.push({font:"b",align:"lt",data:("SIGNATURE: ").space(64)});
+                tmpArr.push({font:"b",align:"lt",data:("......................................NOM:......................").space(64)});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+                
+                return tmpArr.length > 0 ? tmpArr : undefined
+            }
+            
             if(data.pos[0].CUSTOMER_CODE != '')
             {            
                 if(data.pos[0].CUSTOMER_POINT_PASSIVE == false)
@@ -586,7 +644,7 @@ export function print()
         // ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
         ()=>
         {
-            if(data.special.type == 'Fatura')
+            if(data.special.type == 'Fatura' || data.special.type == 'İrsaliye')
             {
                 return {font:"b",style:"b",align:"ct",data:data.special.factCertificate}
             }

@@ -35,7 +35,7 @@ posDoc.prototype.render = function()
 function render()
 {
     return (
-        <NdLayoutItem key={"btnSaleDispatchLy"} id={"btnSaleDispatchLy"} parent={this} data-grid={{x:60,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+        <NdLayoutItem key={"btnSaleDispatchLy"} id={"btnSaleDispatchLy"} parent={this} data-grid={{x:5,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
         access={this.acsObj.filter({ELEMENT:'btnSaleDispatchLy',USERS:this.user.CODE})}>
             <div>
                 <NbButton id={"btnSaleDispatch"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -94,8 +94,6 @@ async function onClick()
 }
 async function dispatchSave()
 {
-    this.loading.current.instance.show()
-
     let docObj = new docCls();
     let tmpMaxNo = 0
 
@@ -110,7 +108,7 @@ async function dispatchSave()
     {
         tmpMaxNo = tmpData.result.recordset[0].REF_NO
     }
-
+    
     let tmpDoc = {...docObj.empty}
     tmpDoc.TYPE = 1
     tmpDoc.DOC_TYPE = 40
@@ -121,9 +119,8 @@ async function dispatchSave()
     tmpDoc.SHIPMENT_DATE = this.posObj.dt()[0].DOC_DATE
     tmpDoc.INPUT = this.posObj.dt()[0].CUSTOMER_GUID
     tmpDoc.OUTPUT = this.posObj.dt()[0].DEPOT_GUID
-    tmpDoc.AMOUNT = this.posObj.dt()[0].AMOUNT
-    tmpDoc.DISCOUNT = this.posObj.dt()[0].DISCOUNT
-    tmpDoc.DOC_DISCOUNT = this.posObj.dt()[0].DISCOUNT
+    tmpDoc.AMOUNT = this.posObj.dt()[0].FAMOUNT
+    tmpDoc.DISCOUNT = 0
     tmpDoc.VAT = this.posObj.dt()[0].VAT
     tmpDoc.TOTAL = this.posObj.dt()[0].TOTAL
     tmpDoc.TOTALHT = this.posObj.dt()[0].FAMOUNT
@@ -150,14 +147,17 @@ async function dispatchSave()
         tmpDocItems.UNIT = this.posObj.dt('POS_SALE')[i].UNIT_GUID
         tmpDocItems.UNIT_FACTOR = this.posObj.dt('POS_SALE')[i].UNIT_FACTOR
         tmpDocItems.QUANTITY = this.posObj.dt('POS_SALE')[i].QUANTITY
-        tmpDocItems.PRICE = this.posObj.dt('POS_SALE')[i].PRICE
-        tmpDocItems.DISCOUNT = this.posObj.dt('POS_SALE')[i].DISCOUNT
+        tmpDocItems.PRICE = Number(this.posObj.dt('POS_SALE')[i].PRICE).rateInNum(this.posObj.dt('POS_SALE')[i].VAT_RATE,3)
+        tmpDocItems.DISCOUNT = Number(this.posObj.dt('POS_SALE')[i].DISCOUNT).rateInNum(this.posObj.dt('POS_SALE')[i].VAT_RATE,3)
+        tmpDocItems.DISCOUNT_1 = Number(this.posObj.dt('POS_SALE')[i].DISCOUNT).rateInNum(this.posObj.dt('POS_SALE')[i].VAT_RATE,3)
         tmpDocItems.VAT = this.posObj.dt('POS_SALE')[i].VAT
-        tmpDocItems.AMOUNT = this.posObj.dt('POS_SALE')[i].AMOUNT
+        tmpDocItems.AMOUNT = Number(tmpDocItems.PRICE * tmpDocItems.QUANTITY).round(2)
         tmpDocItems.TOTALHT = this.posObj.dt('POS_SALE')[i].FAMOUNT
         tmpDocItems.TOTAL = this.posObj.dt('POS_SALE')[i].TOTAL
         tmpDocItems.VAT_RATE = this.posObj.dt('POS_SALE')[i].VAT_RATE
         tmpDocItems.ITEM_BARCODE = this.posObj.dt('POS_SALE')[i].BARCODE
+
+        docObj.dt()[0].DISCOUNT = docObj.dt()[0].DISCOUNT + tmpDocItems.DISCOUNT_1
 
         docObj.docItems.addEmpty(tmpDocItems);
     }
@@ -166,6 +166,34 @@ async function dispatchSave()
     
     if(tmpSaveResult == 0)
     {
+        let tmpMsgObj =
+        {
+            id:'msgPrintMail',showTitle:true,title:this.lang.t("msgPrintMail.title"),showCloseButton:true,width:'400px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgPrintMail.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintMail.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintMail.msg")}</div>)
+        }
+        
+        let tmpMsgObjResult = await dialog(tmpMsgObj);
+
+        if(tmpMsgObjResult == 'btn01')
+        {
+            mailSend = mailSend.bind(this)
+            await mailSend(docObj)
+        }
+        else
+        {
+            print = print.bind(this)
+            
+            let tmpGuid = this.posObj.dt()[0].GUID
+            this.posObj.dt()[0].GUID = docObj.dt()[0].GUID
+            this.posObj.dt()[0].DEVICE = docObj.dt()[0].REF
+            this.posObj.dt()[0].REF = docObj.dt()[0].REF_NO
+            this.posObj.dt()[0].CUSTOMER_SIRET = ""
+            
+            await print()
+            this.posObj.dt()[0].GUID = tmpGuid
+        }
+
         let tmpConfObj =
         {
             id:'msgDispatchResult',showTitle:true,title:this.lang.t("msgDispatchResult.title"),showCloseButton:true,width:'400px',height:'200px',
@@ -174,11 +202,89 @@ async function dispatchSave()
         }
         
         await dialog(tmpConfObj);
-
         await this.delete()
     }
-    console.log(tmpSaveResult)
+
     this.loading.current.instance.hide()
+}
+function print()
+{
+    return new Promise(async resolve => 
+    {
+        let tmpData = 
+        {
+            pos : this.posObj.dt(),
+            possale : this.posObj.posSale.dt(),
+            pospay : this.posObj.posPay.dt(),
+            pospromo : this.posPromoObj.dt(),
+            firm : this.firm,
+            special : 
+            {
+                type : 'İrsaliye',
+                ticketCount : 0,
+                reprint : 1,
+                repas : 0,
+                factCertificate : "",
+                dupCertificate : "",
+                customerUsePoint : 0,
+                customerPoint : 0,
+                customerGrowPoint : 0,
+                customerPointFactory : 0
+            }
+        }
+        await this.print(tmpData,0)
+        resolve()
+    });
+}
+function mailSend(docObj)
+{
+    return new Promise(async resolve => 
+    {
+        let tmpQuery = 
+        {
+            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+            value:  [docObj.dt()[0].GUID,'25','FR']
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+        {
+            let tmpAttach = pResult.split('|')[1]
+            let tmpHtml =''
+
+            if(pResult.split('|')[0] != 'ERR')
+            {
+            }
+
+            let tmpText = "Bonjour Cher Client, \n" + 
+            " \n "+
+            "Merci pour votre achat dans notre magasin. \n" +
+            "Ci-joint votre bon de livraison. \n" +
+            "Ceci est un e-mail automatique,veuillez ne pas y répondre! \n"+
+            "Pour toute information, vous pouvez nous joindre sur les coordonnées indiquées sur votre bon de livraison. \n"+
+            " \n"+
+            " \n"+
+            " \n"+
+            " \n"+
+            "Cordialment \n"+
+            "MISTER MINIT \n" + 
+            " \n"+
+            " \n"+ 
+            "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +
+            " \n"+
+            " \n"+
+            "This message is confidential. Any unauthorised disclosure, use or dissemination, either whole or partial, is prohibited. If you are not the intended recipient of the message, please notify the sender immediatly and delete the message. Thank you. "
+
+            let tmpMailData = {html:tmpHtml,subject:"Bon de livraison",sendMail:this.posObj.dt()[0].CUSTOMER_MAIL,attachName:"Livraison " + docObj.dt()[0].REF + "-" + docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:tmpText}
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            {
+            });
+
+            resolve()
+        }); 
+    });
 }
 function addChildToElementWithId(children, id, newChild) 
 {
