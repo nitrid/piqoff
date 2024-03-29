@@ -3333,7 +3333,6 @@ export default class posDoc extends React.PureComponent
                     {
                         this.txtMail.value = ""
                     }
-
                     this.mailPopup.tmpData = tmpData;
                     await this.mailPopup.show()
                     return
@@ -3493,7 +3492,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable()
             tmpDt.selectCmd = 
             {
-                query : "SELECT LIST_NO,ISNULL((SELECT NAME FROM ITEM_PRICE_LIST WHERE NO = LIST_NO),'') AS LIST_NO_NAME,PRICE FROM ITEM_PRICE WHERE TYPE = 0 AND ITEM = @ITEM",
+                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
                 param : ['ITEM:string|50'],
                 value : [pItem]
             }
@@ -5032,35 +5031,6 @@ export default class posDoc extends React.PureComponent
                                                 this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%"})
                                             }
                                         }
-                                        
-                                        if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-                                        { 
-                                            let tmpQuery = 
-                                            {
-                                                query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
-                                                param:  ['GUID:string|50'],
-                                                value:  [this.posObj.dt()[0].CUSTOMER_GUID]
-                                            }
-                                            let tmpMailData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpMailData.result.recordset.length > 0)
-                                            {
-                                                this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
-                                            }
-                                            else
-                                            {
-                                                this.txtMail.value = ""
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.txtMail.value = ""
-                                        }
-
-                                        this.mailPopup.tmpData = tmpData;
-                                        await this.mailPopup.show()
-                                        return
-                                        
-                                        
                                     }}>
                                         <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                     </NbButton>

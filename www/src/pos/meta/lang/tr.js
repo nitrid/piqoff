@@ -960,6 +960,7 @@ export const langTr =
         title : "Fiyat Listesi Seçiniz",
         clmListNo : "Liste No",
         clmListName : "Liste Adı",
+        clmItemName : "Ürün Adı",
         clmPrice : "Fiyat"
     }
 }
