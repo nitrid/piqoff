@@ -1,7 +1,6 @@
 const plugins = 
 {
-  balanceCounter : () => import('./balanceCounter.js'),
-  wgtSalesDispatch : () => import('./wgtSaleDispatch/main.js')
+  balanceCounter : () => import('./balanceCounter.js')
 };
   
   export default plugins;
