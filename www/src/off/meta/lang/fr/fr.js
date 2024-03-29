@@ -353,6 +353,8 @@ export const langFr =
         promo_02_001: "Liste promotion",
         promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
+        promo_04: "Les opérations",
+        promo_04_001: "Elektronik Etiket Güncelleme", // BAK
         set : "Paramètres supplémentaires",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
@@ -3498,7 +3500,7 @@ export const langFr =
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
-            clmIntVatNo : "No TVA inter.",
+            clmIntVatNo : "No EORI",
             clmTaxType : "Type de Taxe",
             clmSirenID : "Siren No",
             clmRcs : "RCS",
@@ -3995,7 +3997,7 @@ export const langFr =
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
-            clmIntVatNo : "No TVA inter.",
+            clmIntVatNo : "No EORI",
             clmTaxType : "Type de Taxe",
             clmSirenID : "Siren No",
             clmRcs : "RCS",
@@ -11456,6 +11458,24 @@ export const langFr =
             clmAppAmount : "Application de montant",
             clmAppValue : "Valeur"
         }
+    },
+    promo_04_001: //  "Promosyon Elektronik Etiket Güncelleme"
+    {
+        btnPromoSend : "Promosyon Fiyatlarını Gönder", // BAK
+        msgSaveResult:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msgSuccess: "Fiyat Güncellemesi Gönderildi !",  // BAK
+        },
+        grdPromotion : 
+        {
+            clmCode : "Promosyon Kodu",  // BAK
+            clmName : "Promosyon Adı",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmItemCode : "Ürün Kodu",  // BAK
+            clmItemName : "Ürün Adı"  // BAK
+        },
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
     {
