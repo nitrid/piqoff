@@ -244,7 +244,6 @@ export default class salesOrdList extends React.PureComponent
             
             await tmpLastPos.refresh()
     
-            console.log(tmpLastPos)
             this.lastPosSaleDt.selectCmd = 
             {
                 query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
@@ -306,7 +305,7 @@ export default class salesOrdList extends React.PureComponent
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
             await this.lastPosPayDt.refresh()
-            console.log(this.firm)
+
             let tmpData = 
             {
                 pos : tmpLastPos,
