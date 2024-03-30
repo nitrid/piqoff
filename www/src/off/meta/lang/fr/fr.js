@@ -1395,6 +1395,7 @@ export const langFr =
     {
         txtNo: "Numéro",
         txtName: "Nom",
+        txtTag : "Tag",
         cmbVatType : 
         {
             title : "Type de Taxe",

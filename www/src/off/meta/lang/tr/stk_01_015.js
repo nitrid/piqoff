@@ -2,7 +2,8 @@
 const stk_01_015 = 
 {
     txtNo : "No",
-    txtName :"Adı",
+    txtName : "Adı",
+    txtTag : "Tag",
     cmbVatType : 
     {
         title : "Vergi Tip",
