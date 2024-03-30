@@ -922,6 +922,7 @@ export const langEn =
         clmListNo : "List Number",
         clmListName : "List Name",
         clmItemName : "Product Name",
+        clmTag : "Tag",
         clmPrice : "Price"
     },
 }

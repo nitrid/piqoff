@@ -3492,7 +3492,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable()
             tmpDt.selectCmd = 
             {
-                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
+                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME,TAG FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
                 param : ['ITEM:string|50'],
                 value : [pItem]
             }
@@ -9513,6 +9513,7 @@ export default class posDoc extends React.PureComponent
                     >
                         <Column dataField="LIST_NO" caption={this.lang.t("priceListChoicePopUp.clmListNo")} width={150}/>
                         <Column dataField="ITEM_NAME" caption={this.lang.t("priceListChoicePopUp.clmItemName")} width={300}/>
+                        <Column dataField="TAG" caption={this.lang.t("priceListChoicePopUp.clmTag")} width={300}/>
                         <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={120}/>
                     </NdPopGrid>
                 </div>
