@@ -3,6 +3,7 @@ import i18n from 'i18next';
 import App from '../../lib/app.js'
 import posDoc from '../../pages/posDoc.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../../core/react/devex/grid.js";
+import './css/custom.css';
 
 const orgLoadPos = App.prototype.loadPos
 const orgRender = posDoc.prototype.render
