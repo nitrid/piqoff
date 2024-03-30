@@ -923,6 +923,7 @@ export const langIt =
         clmListNo : "Numero elenco",
         clmListName : "Nome elenco",
         clmItemName : "Nome del prodotto",
+        clmTag : "Tag",
         clmPrice : "Prezzo"
     },
 }
