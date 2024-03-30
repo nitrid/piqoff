@@ -31,7 +31,6 @@ import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 
 import * as appInfo from '../../../package.json'
-import '../plugins/balanceCounter.js'
 
 export default class App extends React.PureComponent
 {

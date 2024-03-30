@@ -110,9 +110,10 @@ export default class NbRadioButton extends NbBase
     render()
     {
         return (
-            <div className="row">
+            <div className="row" style={{height : (typeof this.props.height == 'undefined' ? '100%' : this.props.height)}}>
                 <div className='col-12 pe-1'>
-                    <div className={"btn-group" + (this.state.vertical == true ? "-vertical" : "")} style={{width:'100%'}}>
+                    <div className={"btn-group" + (this.state.vertical == true ? "-vertical" : "")} 
+                    style={{width: (typeof this.props.width == 'undefined' ? '100%' : this.props.width), height : (typeof this.props.height == 'undefined' ? '100%' : this.props.height)}}>
                         {this._buttonView()}
                     </div>
                 </div>            

@@ -16,11 +16,13 @@ export default class NbPopUp extends NbBase
     }
     show()
     {
-        this.setState({show:true})
-        if(typeof this.props.onShowed != 'undefined')
+        this.setState({show:true},()=>
         {
-            this.props.onShowed()
-        }
+            if(typeof this.props.onShowed != 'undefined')
+            {
+                this.props.onShowed()
+            }
+        })
     }
     hide()
     {  

@@ -1,4 +1,4 @@
-export const prm =
+export const prm = 
 [
     //#region Pos
     //Para Sembolu
@@ -40,7 +40,8 @@ export const prm =
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
-            '27NNNNNKKGGGF',
+            '27NNNNKKKGGGMMMMCCF',
+            '26NNNNKKKGGGMMMMCCF',
         ],
         SPECIAL : "",
         PAGE : "pos",
@@ -1348,10 +1349,10 @@ export const prm =
             CAPTION : "Fiyat Liste No"
         }
     },
-    //Butonlarin ses cikarma islemi
+    //Fiyat Liste Seçim
     {
         TYPE : 0,
-        ID :"buttonsSound",
+        ID :"PricingListNoChoice",
         VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
@@ -1359,9 +1360,25 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
-            CAPTION : "Fiyat Liste No"
+            CAPTION : "Fiyat Liste Seçimi"
+        }
+    },
+    //Fiyat Bilgisi Sıfır Mesajı
+    {
+        TYPE : 0,
+        ID :"PriceNotFoundAlert",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Bilgisi Sıfır Mesajı"
         }
     },
     //#endregion

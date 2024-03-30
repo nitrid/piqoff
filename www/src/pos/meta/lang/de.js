@@ -22,8 +22,8 @@ export const langDe =
     msgNotAccess: "Benutzer hat keine Zugriffsberechtigung.",
     msgInvalidUser: "Benutzername oder Passwort falsch.",
     txtCardRead: "Bitte Ihre Benutzerkarte einlesen.",
-    price: "Preis",
-    quantity: "Menge",
+    price: "Geben Sie einen Preis ein",
+    quantity: "Geben Sie einen Menge ein",
     nbCalculator: "Taschenrechner",
     about: "Über uns",
     abtCertificate: "Zertifikat: NF525",
@@ -36,8 +36,6 @@ export const langDe =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Zertifikatsnummer: ",
     pleaseWait: "Bitte warten...",
-    qunatity: "Menge",
-    price: "Preis",
     msgDeviceChange : 
     {
         title : "Achtung!", 
@@ -486,6 +484,10 @@ export const langDe =
     {
         title: "Kartenzahlung"
     },
+    popCardTicketPay :
+    {
+        title :"Lebensmittelkarte",
+    },
     popExchangePay :
     {
         title :"Bargeld Devisenzahlung",
@@ -920,5 +922,14 @@ export const langDe =
             btn02: "Nein",
             msg: "Möchten Sie die vorgenommenen Änderungen speichern?"
         },
+    },
+    priceListChoicePopUp :
+    {
+        title : "Wählen Sie eine Preisliste",
+        clmListNo : "Listennummer",
+        clmListName : "Listenname",
+        clmItemName : "Produktname",
+        clmTag : "Tag",
+        clmPrice : "Preis"
     },
 }
