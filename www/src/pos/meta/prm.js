@@ -1,4 +1,4 @@
-export const prm =
+export const prm = 
 [
     //#region Pos
     //Para Sembolu
@@ -1361,6 +1361,22 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Fiyat Liste Seçimi"
+        }
+    },
+    //Fiyat Bilgisi Sıfır Mesajı
+    {
+        TYPE : 0,
+        ID :"PriceNotFoundAlert",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Bilgisi Sıfır Mesajı"
         }
     },
     //#endregion

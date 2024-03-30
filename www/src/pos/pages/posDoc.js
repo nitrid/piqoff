@@ -1137,18 +1137,24 @@ export default class posDoc extends React.PureComponent
             if(tmpPrice == 0)
             {
                 this.loading.current.instance.hide()
-                let tmpConfObj =
+
+                let tmpMsgResult = "btn01"
+                if(this.prmObj.filter({ID:'PriceNotFoundAlert',TYPE:0}).getValue())
                 {
-                    id:'msgPriceNotFound',
-                    showTitle:true,
-                    title:this.lang.t("msgPriceNotFound.title"),
-                    showCloseButton:false,
-                    width:'500px',
-                    height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgPriceNotFound.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceNotFound.btn02"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotFound.msg")}</div>)
+                    let tmpConfObj =
+                    {
+                        id:'msgPriceNotFound',
+                        showTitle:true,
+                        title:this.lang.t("msgPriceNotFound.title"),
+                        showCloseButton:false,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPriceNotFound.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceNotFound.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotFound.msg")}</div>)
+                    }
+                    tmpMsgResult = await dialog(tmpConfObj);
                 }
-                let tmpMsgResult = await dialog(tmpConfObj);
+                
                 if(tmpMsgResult == 'btn01')
                 {
                     let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
@@ -1169,13 +1175,11 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
-                        //
                         return
                     }
                 }
                 else if(tmpMsgResult == 'btn02')
                 {
-                    //
                     return
                 }
             }
