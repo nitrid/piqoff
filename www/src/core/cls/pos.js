@@ -30,6 +30,7 @@ export class posCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CUSTOMER_TAX_NO : '',
+            CUSTOMER_SIRET : '',
             CUSTOMER_ADRESS : '',
             CUSTOMER_ZIPCODE : '',
             CUSTOMER_COUNTRY : '',

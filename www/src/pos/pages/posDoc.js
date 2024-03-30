@@ -786,7 +786,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1,TAX_NO,SIRET_ID, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
@@ -836,6 +836,8 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
+                this.posObj.dt()[0].CUSTOMER_TAX_NO = tmpCustomerDt[0].TAX_NO
+                this.posObj.dt()[0].CUSTOMER_SIRET = tmpCustomerDt[0].SIRET_ID
 
                 if(this.prmObj.filter({ID:'mailControl',TYPE:0}).getValue() == true)
                 {
@@ -3677,6 +3679,8 @@ export default class posDoc extends React.PureComponent
                                                 this.posObj.dt()[0].CUSTOMER_POINT = 0
                                                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = false
                                                 this.posObj.dt()[0].CUSTOMER_MAIL = ''
+                                                this.posObj.dt()[0].CUSTOMER_TAX_NO = ''
+                                                this.posObj.dt()[0].CUSTOMER_SIRET = ''
 
                                                 this.btnPopLoyaltyDel.props.onClick()
 
@@ -5739,7 +5743,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL, " +
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL,TAX_NO,SIRET_ID, " +
                                     "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
@@ -5791,6 +5795,9 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
                             this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                             this.posObj.dt()[0].CUSTOMER_MAIL = pData[0].EMAIL
+                            this.posObj.dt()[0].CUSTOMER_TAX_NO = pData[0].TAX_NO
+                            this.posObj.dt()[0].CUSTOMER_SIRET = pData[0].SIRET_ID
+
                             //PROMOSYON GETİR.
                             await this.getPromoDb()
                             this.promoApply()
