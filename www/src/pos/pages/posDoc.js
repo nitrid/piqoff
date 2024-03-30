@@ -768,6 +768,10 @@ export default class posDoc extends React.PureComponent
         {
             pCode = pCode.substring(1,pCode.length)
         }
+        if(pCode.substring(0,1) == '#')
+        {
+            pCode = pCode.substring(1,pCode.length)
+        }
         
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.btnGetCustomer.lock)
@@ -1084,7 +1088,45 @@ export default class posDoc extends React.PureComponent
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
                             
-                            return
+                            if(typeof tmpWResult.Result == 'undefined')
+                            {
+                                tmpItemsDt[0].SCALE_MANUEL = true;
+                                tmpQuantity = tmpWResult;
+                            }
+                            else
+                            {
+                                if(tmpWResult.Type == "02")
+                                {
+                                    if(tmpWResult.Result.Scale > 0)
+                                    {
+                                        tmpQuantity = tmpWResult.Result.Scale
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play();
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                            }
                         }
 
                         tmpPrice = tmpResult
