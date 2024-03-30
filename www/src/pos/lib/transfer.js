@@ -409,6 +409,9 @@ export default class transferCls
                         UNIT_NAME TEXT,
                         UNIT_FACTOR REAL,
                         UNIT_SHORT TEXT,
+                        LIST_NO INTEGER,
+                        LIST_NAME TEXT,
+                        LIST_TAG TEXT,
                         QUANTITY REAL,
                         PRICE REAL,
                         FAMOUNT REAL,
@@ -1039,6 +1042,7 @@ export default class transferCls
                                 "@INPUT = @PINPUT, " +                      
                                 "@BARCODE = @PBARCODE, " + 
                                 "@UNIT = @PUNIT, " + 
+                                "@LIST_NO = @PLIST_NO, " + 
                                 "@QUANTITY = @PQUANTITY, " + 
                                 "@PRICE = @PPRICE, " + 
                                 "@FAMOUNT = @PFAMOUNT, " + 
@@ -1052,9 +1056,9 @@ export default class transferCls
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@DELETED = @PDELETED ",  
                         param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                                'PDELETED:bit'],
-                        dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
+                                'PLIST_NO:int','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int',
+                                'PORDER_GUID:string|50','PDELETED:bit'],
+                        dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','LIST_NO','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
                                 'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
                     },
                     update : 
@@ -1069,6 +1073,7 @@ export default class transferCls
                                 "@INPUT = @PINPUT, " +                   
                                 "@BARCODE = @PBARCODE, " + 
                                 "@UNIT = @PUNIT, " + 
+                                "@LIST_NO = @PLIST_NO, " +
                                 "@QUANTITY = @PQUANTITY, " + 
                                 "@PRICE = @PPRICE, " + 
                                 "@FAMOUNT = @PFAMOUNT, " +
@@ -1082,9 +1087,9 @@ export default class transferCls
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@DELETED = @PDELETED ",  
                         param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
+                                'PLIST_NO:int','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
                                 'PDELETED:bit'],
-                        dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+                        dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','LIST_NO','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
                                 'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
                     },
                     control :
