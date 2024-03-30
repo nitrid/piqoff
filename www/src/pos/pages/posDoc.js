@@ -759,6 +759,8 @@ export default class posDoc extends React.PureComponent
         let tmpQuantity = 1
         let tmpPrice = 0
         let tmpPriceListNo = this.pricingListNo
+        let tmpPriceListName = ""
+        let tmpPriceListTag = ""
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -975,7 +977,7 @@ export default class posDoc extends React.PureComponent
                     this.loading.current.instance.hide()
                     return;
                 }
-                else if(tmpPriceChoice > 0)
+                else
                 {
                     tmpPriceListNo = tmpPriceChoice
                 }
@@ -984,7 +986,10 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                        "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
+                        "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
+                        "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
@@ -1000,6 +1005,8 @@ export default class posDoc extends React.PureComponent
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
+                tmpPriceListName = tmpPriceDt[0].LIST_NAME
+                tmpPriceListTag = tmpPriceDt[0].LIST_TAG
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
@@ -1173,6 +1180,9 @@ export default class posDoc extends React.PureComponent
             //*****************************************************/
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
+            tmpItemsDt[0].LIST_NO = tmpPriceListNo
+            tmpItemsDt[0].LIST_NAME = tmpPriceListName
+            tmpItemsDt[0].LIST_TAG = tmpPriceListTag
             this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
@@ -1632,7 +1642,10 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = pItemData.UNIT_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_SHORT = pItemData.UNIT_SHORT
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR,
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NO = pItemData.LIST_NO
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NAME = pItemData.LIST_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_TAG = pItemData.LIST_TAG
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = pItemData.QUANTITY
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = tmpCalc.FAMOUNT
@@ -1666,7 +1679,10 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                        "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
+                        "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
+                        "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
                 local : 
                 {
@@ -1675,7 +1691,7 @@ export default class posDoc extends React.PureComponent
                     values : [pRowData.ITEM_GUID]
                 }
             }     
-            tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID,pRowData.DEPOT_GUID,this.pricingListNo]
+            tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID,pRowData.DEPOT_GUID,pRowData.LIST_NO]
             await tmpPriceDt.refresh();  
     
             pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
@@ -3521,7 +3537,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                resolve(0)
+                resolve(-1)
             }
         })
     }
