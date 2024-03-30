@@ -9512,9 +9512,9 @@ export default class posDoc extends React.PureComponent
                     deferRendering={true}
                     >
                         <Column dataField="LIST_NO" caption={this.lang.t("priceListChoicePopUp.clmListNo")} width={150}/>
-                        <Column dataField="ITEM_NAME" caption={this.lang.t("priceListChoicePopUp.clmItemName")} width={300}/>
-                        <Column dataField="TAG" caption={this.lang.t("priceListChoicePopUp.clmTag")} width={300}/>
-                        <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={120}/>
+                        <Column dataField="ITEM_NAME" caption={this.lang.t("priceListChoicePopUp.clmItemName")} width={400}/>
+                        <Column dataField="LIST_TAG" caption={this.lang.t("priceListChoicePopUp.clmTag")} width={200}/>
+                        <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={100}/>
                     </NdPopGrid>
                 </div>
             </div>
