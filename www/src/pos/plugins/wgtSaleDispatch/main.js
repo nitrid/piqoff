@@ -188,7 +188,6 @@ async function dispatchSave()
             this.posObj.dt()[0].GUID = docObj.dt()[0].GUID
             this.posObj.dt()[0].DEVICE = docObj.dt()[0].REF
             this.posObj.dt()[0].REF = docObj.dt()[0].REF_NO
-            this.posObj.dt()[0].CUSTOMER_SIRET = ""
             
             await print()
             this.posObj.dt()[0].GUID = tmpGuid
