@@ -1101,7 +1101,7 @@ export default class posDoc extends React.PureComponent
                 else
                 {   
                     //EĞER OKUTULAN BARKODUN FİYAT SIFIR İSE KULLANICIYA FİYAT 
-                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0,undefined,tmpItemsDt[0].NAME)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         //FIYAT DURUM KONTROLÜ
@@ -1157,7 +1157,7 @@ export default class posDoc extends React.PureComponent
                 
                 if(tmpMsgResult == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0,undefined,tmpItemsDt[0].NAME)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult == 0)
@@ -1219,7 +1219,7 @@ export default class posDoc extends React.PureComponent
             {
                 if(e == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult <= 0)
@@ -3922,7 +3922,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                             {                                
-                                                let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.data.UNIT_FACTOR))
+                                                let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.data.UNIT_FACTOR),undefined,e.data.ITEM_NAME)
                                                 if(typeof tmpResult != 'undefined' && tmpResult != '')
                                                 {
                                                     if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -6783,7 +6783,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
-                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
+                                            let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 let tmpLastPos = new datatable();
@@ -7656,7 +7656,7 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                         
-                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE,undefined,this.grdList.devGrid.getSelectedRowKeys()[0].ITEM_NAME)                                            
                         if(typeof tmpResult != 'undefined' && tmpResult != '')
                         {
                             if(typeof e != 'undefined')
@@ -8369,7 +8369,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
-                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
+                                            let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
                                                                                         
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
