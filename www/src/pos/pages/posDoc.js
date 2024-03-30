@@ -3492,7 +3492,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable()
             tmpDt.selectCmd = 
             {
-                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME,TAG FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
+                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME,LIST_TAG FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
                 param : ['ITEM:string|50'],
                 value : [pItem]
             }
