@@ -5252,7 +5252,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row pt-2">
                                     {/* Payment Type Selection */}
                                     <div className="col-2 pe-1">
-                                        <NbRadioButton id={"rbtnPayType"} parent={this} 
+                                        <NbRadioButton id={"rbtnPayType"} parent={this} height={'99%'} width={'100%'}
                                         button={
                                             (()=>
                                             {
@@ -5313,7 +5313,83 @@ export default class posDoc extends React.PureComponent
                                                 <NdTextBox id="txtPopTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
                                                 </NdTextBox> 
                                             </div>
-                                        </div>                                        
+                                        </div> 
+                                        <div className="row pt-2">
+                                            {/* Number Board */}
+                                            <div className="col-9">
+                                                <NbNumberboard id={"numPopTotal"} parent={this} textobj="txtPopTotal" span={1} buttonHeight={"60px"}/>
+                                            </div>
+                                            <div className="col-3">
+                                                <div className="row">
+                                                    {/* Line Delete */}
+                                                    <div className="col-12 ps-0 pb-1">
+                                                        <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>
+                                                        {
+                                                            if(this.grdPay.devGrid.getSelectedRowKeys().length > 0)
+                                                            {
+                                                                this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
+                                                            }
+                                                        }}>
+                                                        {this.lang.t("lineDelete")}
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    {/* T.R Detail */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={async ()=>
+                                                        {
+                                                            if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                            {
+                                                                let tmpDt = new datatable(); 
+                                                                tmpDt.selectCmd = 
+                                                                {
+                                                                    query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                                    param : ['DOC:string|50'],
+                                                                    local : 
+                                                                    {
+                                                                        type : "select",
+                                                                        query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT;",
+                                                                        values : [this.posObj.dt()[0].GUID]
+                                                                    }
+                                                                }
+                                                                tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
+                                                                await tmpDt.refresh();
+                                                                
+                                                                await this.grdTRDetail.dataRefresh({source:tmpDt});
+                                                                this.popTRDetail.show()
+                                                            }
+                                                        }}>
+                                                            {this.lang.t("trDeatil")}
+                                                        </NbButton>
+                                                    </div>                                                    
+                                                </div>
+                                                <div className="row">
+                                                    {/* Cancel */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>{this.popTotal.hide()}}>
+                                                            {this.lang.t("cancel")}
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    {/* Okey */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>
+                                                        {
+                                                            this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
+                                                            this.txtPopTotal.newStart = true;
+                                                        }}>
+                                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>            
                                     </div>
                                     {/* Cash Button Group */}
                                     <div className="col-3">
@@ -5341,101 +5417,33 @@ export default class posDoc extends React.PureComponent
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="row pt-1">
-                                    {/* Number Board */}
-                                    <div className="col-6">
-                                        <NbNumberboard id={"numPopTotal"} parent={this} textobj="txtPopTotal" span={1} buttonHeight={"60px"}/>
-                                    </div>
-                                    <div className="col-6">
-                                        <div className="row pb-1">
-                                            {/* T.R Detail */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={async ()=>
-                                                {
-                                                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                                                    {
-                                                        let tmpDt = new datatable(); 
-                                                        tmpDt.selectCmd = 
-                                                        {
-                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
-                                                            param : ['DOC:string|50'],
-                                                            local : 
-                                                            {
-                                                                type : "select",
-                                                                query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT;",
-                                                                values : [this.posObj.dt()[0].GUID]
-                                                            }
-                                                        }
-                                                        tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
-                                                        await tmpDt.refresh();
-                                                        
-                                                        await this.grdTRDetail.dataRefresh({source:tmpDt});
-                                                        this.popTRDetail.show()
-                                                    }
-                                                }}>
-                                                    {this.lang.t("trDeatil")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 10 € */}
-                                            <div className="col-6">
+                                        {/* 10 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash10"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
+                                        {/* 20 € */}
                                         <div className="row py-1">
-                                            {/* Line Delete */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
-                                                {
-                                                    if(this.grdPay.devGrid.getSelectedRowKeys().length > 0)
-                                                    {
-                                                        this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
-                                                    }
-                                                }}>
-                                                   {this.lang.t("lineDelete")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 20 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash20"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
+                                        {/* 50 € */}
                                         <div className="row py-1">
-                                            {/* Cancel */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>{this.popTotal.hide()}}>
-                                                    {this.lang.t("cancel")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 50 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash50"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
+                                        {/* 100 € */}
                                         <div className="row py-1">
-                                            {/* Okey */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
-                                                {
-                                                    this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
-                                                    this.txtPopTotal.newStart = true;
-                                                }}>
-                                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                                </NbButton>
-                                            </div>
-                                            {/* 100 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash100"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,100)}}/>
