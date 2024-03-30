@@ -324,13 +324,24 @@ export function print()
                                 align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
                                 pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:32,align:'left'},{x:80,charS:33,charE:46},{x:90,charS:47,charE:54},{x:100,charS:55,charE:62}]},
                                 data: tmpSaleItem.VAT_TYPE + " " +
-                                    (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
+                                    (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_NAME.substring(0,29) + tmpFactStr).toString().space(32,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_NAME.substring(0,29) + tmpFactStr : tmpSaleItem.ITEM_NAME.substring(0,29) + tmpFactStr).toString().space(32)) + " " +                            
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                     //(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
                                     (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
                             })
-                            
+
+                            if(tmpSaleItem.ITEM_NAME.length > 29)
+                            {
+                                tmpArr.push( 
+                                {
+                                    font: "b",
+                                    style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
+                                    align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                                    pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:32,align:'left'},{x:80,charS:33,charE:46},{x:90,charS:47,charE:54},{x:100,charS:55,charE:62}]},
+                                    data: (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_NAME.substring(29,60) + tmpFactStr).toString().space(32,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_NAME.substring(29,60) + tmpFactStr : tmpSaleItem.ITEM_NAME.substring(0,29) + tmpFactStr).toString().space(32))
+                                })
+                            }
                             if(tmpSaleItem.DISCOUNT != 0)
                             {
                                 tmpArr.push( 
