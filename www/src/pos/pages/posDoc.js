@@ -3535,9 +3535,13 @@ export default class posDoc extends React.PureComponent
                 await this.priceListChoicePopUp.show()
                 await this.priceListChoicePopUp.setData(tmpDt)
             }
+            else if(tmpDt.length == 1)
+            {
+                resolve(tmpDt[0].LIST_NO)
+            }
             else
             {
-                resolve(-1)
+                resolve(0)
             }
         })
     }
