@@ -22,8 +22,8 @@ export const langEn =
     msgNotAccess :"Unauthorized user",
     msgInvalidUser : "Error: invalid username or password",
     txtCardRead :"Please scan your badge",
-    price : "Price",
-    quantity : "Quantity",
+    price : "Enter a Price",
+    quantity : "Enter a Quantity",
     nbCalculator : "Calculator", 
     about : "About",
     abtCertificate : "Certificate: NF525",
@@ -36,8 +36,6 @@ export const langEn =
     blnAbtSw : "Version: ",
     blnAbtCertificate : "Certificate Number: ",
     pleaseWait : "Please wait...",
-    qunatity : "Qty.",
-    price : "Price",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
@@ -915,5 +913,14 @@ export const langEn =
             btn02: "No",
             msg: "Do you want to save the changes you made?"
         }
-    }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Choose a Price List",
+        clmListNo : "List Number",
+        clmListName : "List Name",
+        clmItemName : "Product Name",
+        clmTag : "Tag",
+        clmPrice : "Price"
+    },
 }

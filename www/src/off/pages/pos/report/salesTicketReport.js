@@ -188,28 +188,30 @@ export default class salesOrdList extends React.PureComponent
         this.lastPosPayDt.insertCmd = 
         {
             query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@POS = @PPOS, " +
+            "@TYPE = @PTYPE, " +
+            "@TYPE_NAME = @PTYPE_NAME, " +
+            "@LINE_NO = @PLINE_NO, " +
+            "@AMOUNT = @PAMOUNT, " + 
+            "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
         } 
         this.lastPosPayDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@POS = @PPOS, " +
+            "@TYPE = @PTYPE, " +
+            "@TYPE_NAME = @PTYPE_NAME, " +
+            "@LINE_NO = @PLINE_NO, " +
+            "@AMOUNT = @PAMOUNT, " + 
+            "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
         } 
         this.lastPosPayDt.deleteCmd = 
         {
@@ -242,7 +244,6 @@ export default class salesOrdList extends React.PureComponent
             
             await tmpLastPos.refresh()
     
-            console.log(tmpLastPos)
             this.lastPosSaleDt.selectCmd = 
             {
                 query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
@@ -304,7 +305,7 @@ export default class salesOrdList extends React.PureComponent
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
             await this.lastPosPayDt.refresh()
-            console.log(this.firm)
+
             let tmpData = 
             {
                 pos : tmpLastPos,

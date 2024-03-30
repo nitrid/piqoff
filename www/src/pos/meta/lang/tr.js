@@ -22,8 +22,8 @@ export const langTr =
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
     msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",    
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
-    price : "Fiyat",
-    quantity : "Miktar",
+    price : "Fiyat Giriniz",
+    quantity : "Miktar Giriniz",
     nbCalculator : "Hesap Makinesi",
     about : "Hakkımızda",
     abtCertificate : "Setifika : NF525",
@@ -36,8 +36,6 @@ export const langTr =
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
-    qunatity : "Miktar",
-    price : "Fiyat",
     msgDeviceChange : 
     {
         title : "Dikkat",
@@ -955,4 +953,13 @@ export const langTr =
             msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
         },
     },
+    priceListChoicePopUp :
+    {
+        title : "Fiyat Listesi Seçiniz",
+        clmListNo : "Liste No",
+        clmListName : "Liste Adı",
+        clmItemName : "Ürün Adı",
+        clmTag : "Tag",
+        clmPrice : "Fiyat"
+    }
 }

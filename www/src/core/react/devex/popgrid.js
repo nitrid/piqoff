@@ -197,6 +197,11 @@ export default class NdPopGrid extends Base
         {
             this.props.onHiding();
         }
+        if(typeof this.onHiding != 'undefined')
+        {
+            this.onHiding()
+        }
+        
         this.hide();
     }
     _onClick()

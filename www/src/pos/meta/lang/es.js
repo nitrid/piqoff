@@ -22,8 +22,8 @@ export const langEs =
     msgNotAccess: "El usuario no tiene permiso para acceder.",
     msgInvalidUser: "Nombre de usuario o contraseña incorrectos.",
     txtCardRead: "Por favor, pase su tarjeta de usuario.",
-    price: "Precio",
-    quantity: "Cantidad",
+    price: "Ingrese un Precio",
+    quantity: "Ingrese un Cantidad",
     nbCalculator: "Calculadora",
     about: "Acerca de",
     abtCertificate: "Certificado: NF525",
@@ -36,8 +36,6 @@ export const langEs =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Número de certificado: ",
     pleaseWait: "Por favor, espere...",
-    quantity: "Cantidad",
-    price: "Precio",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
@@ -916,5 +914,14 @@ export const langEs =
             btn02: "No",
             msg: "¿Desea guardar los cambios que realizó?"
         }
-    }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Seleccione una lista de precios",
+        clmListNo : "Número de lista",
+        clmListName : "Nombre de la lista",
+        clmItemName : "Nombre del producto",
+        clmTag : "Tag",
+        clmPrice : "Precio"
+    },
 }

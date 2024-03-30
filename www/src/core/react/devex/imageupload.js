@@ -134,7 +134,7 @@ export default class NdImageUpload extends Base
 
         return (
             <div className="widget-container flex-box" style={{width:this.props.width,height:this.props.height}}>
-                <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`}>
+                <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`} style={{width:this.props.width,height:this.props.height}}>
                     {imageSource && <img id={this.props.id + "img"} style={{width:"100%",height:"100%"}} src={imageSource} alt="" />}
                     {textVisible && <div id="dropzone-text" className="flex-box">
                         <span>Drag & Drop the desired file</span>
