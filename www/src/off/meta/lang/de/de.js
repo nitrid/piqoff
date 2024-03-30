@@ -1385,6 +1385,7 @@ export const langDe =
     {
         txtNo: "Nummer",
         txtName: "Name",
+        txtTag : "Tag",
         cmbVatType : 
         {
             title : "Steuerart",

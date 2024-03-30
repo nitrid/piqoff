@@ -923,6 +923,7 @@ export const langEs =
         clmListNo : "Número de lista",
         clmListName : "Nombre de la lista",
         clmItemName : "Nombre del producto",
+        clmTag : "Tag",
         clmPrice : "Precio"
     },
 }

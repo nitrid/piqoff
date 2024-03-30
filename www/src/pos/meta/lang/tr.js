@@ -961,6 +961,7 @@ export const langTr =
         clmListNo : "Liste No",
         clmListName : "Liste Adı",
         clmItemName : "Ürün Adı",
+        clmTag : "Tag",
         clmPrice : "Fiyat"
     }
 }

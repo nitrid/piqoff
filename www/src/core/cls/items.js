@@ -644,9 +644,10 @@ export class itemPricingListCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
-            NO : 0,
+            NO : '',
             NAME : '',
-            VAT_TYPE : 0
+            VAT_TYPE : 0,
+            TAG : ''
         }
 
         this._initDs();
@@ -657,7 +658,7 @@ export class itemPricingListCls
         let tmpDt = new datatable('ITEM_PRICE_LIST');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO IS NULL)) AND ((NAME = @NAME) OR (@NAME IS NULL))",
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO = -1)) AND ((NAME = @NAME) OR (@NAME = 'NULL'))",
             param : ['NO:int','NAME:string|100']
         }
         tmpDt.insertCmd = 
@@ -667,9 +668,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.updateCmd = 
         {
@@ -678,9 +680,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.deleteCmd = 
         {
@@ -736,14 +739,14 @@ export class itemPricingListCls
         {
             let tmpPrm = 
             {
-                NO : null,
-                NAME : null
+                NO : -1,
+                NAME : 'NULL'
             }         
 
             if(arguments.length > 0)
             {
-                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? null : arguments[0].NO;
-                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? null : arguments[0].NAME;
+                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? -1 : arguments[0].NO;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? 'NULL' : arguments[0].NAME;
             }
             this.ds.get('ITEM_PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
             
