@@ -13,7 +13,7 @@ class pricerApi
         this.promoSocket = this.promoSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.core.socket.on('connection',this.promoSocket)
-        this.active = true
+        this.active = false
 
         this.processRun()
     }
