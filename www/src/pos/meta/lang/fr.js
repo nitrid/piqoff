@@ -26,8 +26,8 @@ export const langFr =
     msgNotAccess :"Utilisateur non autorisé",
     msgInvalidUser : "Erreur nom utilisateur ou mdp",
     txtCardRead :"Veuillez scanner votre badge",
-    price : "Prix",
-    quantity : "Quantité",
+    price : "Veuillez Saisir Prix",
+    quantity : "Veuillez Saisir Quantité",
     nbCalculator : "Calculatrice", 
     about : "à propos ",
     abtCertificate : "Certificat : NF525",
@@ -40,8 +40,6 @@ export const langFr =
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
-    qunatity : "Qte.",
-    price : "Prix",
     msgDeviceChange : 
     {
         title : "Attention",

@@ -22,8 +22,8 @@ export const langIt =
     msgNotAccess: "L'utente non ha l'autorizzazione di accesso.",
     msgInvalidUser: "Nome utente o password non validi.",
     txtCardRead: "Si prega di inserire la tua carta utente.",
-    price: "Prezzo",
-    quantity: "Quantità",
+    price: "Inserisci un Prezzo",
+    quantity: "Inserisci un Quantità",
     nbCalculator: "Calcolatrice",
     about: "Informazioni",
     abtCertificate: "Certificazione: NF525",
@@ -36,8 +36,6 @@ export const langIt =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Numero certificato: ",
     pleaseWait: "Attendere prego...",
-    quantity: "Quantità",
-    price: "Prezzo",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
