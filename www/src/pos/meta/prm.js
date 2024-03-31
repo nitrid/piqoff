@@ -956,7 +956,7 @@ export const prm =
         ID :"DiscountDescription",
         VALUE : 
         {
-            disable:true,
+            disable:false,
             minCharSize:10,
             buttons:
             [
