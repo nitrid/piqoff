@@ -30,6 +30,7 @@ export class posCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CUSTOMER_TAX_NO : '',
+            CUSTOMER_SIRET : '',
             CUSTOMER_ADRESS : '',
             CUSTOMER_ZIPCODE : '',
             CUSTOMER_COUNTRY : '',
@@ -328,6 +329,9 @@ export class posSaleCls
             UNIT_NAME : '',
             UNIT_SHORT : '',
             UNIT_FACTOR : 0,
+            LIST_NO : 0,
+            LIST_NAME : '',
+            LIST_TAG : '',
             QUANTITY : 0,
             PRICE : 0,
             FAMOUNT : 0,
@@ -380,6 +384,8 @@ export class posSaleCls
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +  
+                    "@ITEM_NAME = @PITEM_NAME, " +  
+                    "@ITEM_SNAME = @PITEM_SNAME, " +  
                     "@INPUT = @PINPUT, " +                      
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
@@ -394,28 +400,31 @@ export class posSaleCls
                     "@SUBTOTAL = @PSUBTOTAL, " + 
                     "@PROMO_TYPE = @PPROMO_TYPE, " +
                     "@ORDER_GUID = @PORDER_GUID, " + 
-                    "@SCALE_MANUEL = @PSCALE_MANUEL ",  
-            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                    'PSCALE_MANUEL:bit'],
-            dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                    'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL'],
+                    "@SCALE_MANUEL = @PSCALE_MANUEL, " +
+                    "@LIST_NO = @PLIST_NO ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50',
+                    'PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float',
+                    'PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PSCALE_MANUEL:bit','PLIST_NO:int'],
+            dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT',
+                    'LOYALTY','VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL','LIST_NO'],
             local : 
             {
                 type : "insert",
                 query : `INSERT INTO POS_SALE_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, POS_GUID, DEVICE, DEPOT_GUID, DEPOT_CODE, DEPOT_NAME, TYPE, DOC_DATE, CUSTOMER_GUID, CUSTOMER_CODE, 
                         CUSTOMER_NAME, LINE_NO, ITEM_GUID, ITEM_CODE, ITEM_NAME, ITEM_SNAME, ITEM_GRP_CODE, ITEM_GRP_NAME, COST_PRICE, MIN_PRICE, MAX_PRICE, TICKET_REST, INPUT, BARCODE_GUID, BARCODE, UNIT_GUID, 
-                        UNIT_NAME, UNIT_FACTOR, UNIT_SHORT, QUANTITY, PRICE, FAMOUNT, AMOUNT, DISCOUNT, LOYALTY, VAT, VAT_RATE, VAT_TYPE, TOTAL, SUBTOTAL, PROMO_TYPE, GRAND_AMOUNT, GRAND_DISCOUNT, GRAND_LOYALTY, GRAND_VAT, GRAND_TOTAL, STATUS, REBATE_TICKET, DELETED, ORDER_GUID)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                        UNIT_NAME, UNIT_FACTOR, UNIT_SHORT, LIST_NO, LIST_NAME, LIST_TAG, QUANTITY, PRICE, FAMOUNT, AMOUNT, DISCOUNT, LOYALTY, VAT, VAT_RATE, VAT_TYPE, TOTAL, SUBTOTAL, PROMO_TYPE, GRAND_AMOUNT, 
+                        GRAND_DISCOUNT, GRAND_LOYALTY, GRAND_VAT, GRAND_TOTAL, STATUS, REBATE_TICKET, DELETED, ORDER_GUID)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 values : [{GUID : {map:'GUID'},CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
                         LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
                         DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},LINE_NO : {map:'LINE_NO'},
                         ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},ITEM_SNAME : {map:'ITEM_SNAME'},ITEM_GRP_CODE : {map:'ITEM_GRP_CODE'},ITEM_GRP_NAME : {map:'ITEM_GRP_NAME'},
                         COST_PRICE : {map:'COST_PRICE'},MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},TICKET_REST : {map:'TICKET_REST'},INPUT : {map:'INPUT'},BARCODE_GUID : {map:'BARCODE_GUID'},
-                        BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
-                        PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
-                        TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
-                        GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:false,ORDER_GUID : {map:'ORDER_GUID'}}]
+                        BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},LIST_NO : {map:'LIST_NO'},
+                        LIST_NAME : {map:'LIST_NAME'},LIST_TAG : {map:'LIST_TAG'},QUANTITY : {map:'QUANTITY'},PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},
+                        LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},
+                        GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},
+                        STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:false,ORDER_GUID : {map:'ORDER_GUID'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -427,6 +436,8 @@ export class posSaleCls
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " + 
+                    "@ITEM_NAME = @PITEM_NAME, " + 
+                    "@ITEM_SNAME = @PITEM_SNAME, " + 
                     "@INPUT = @PINPUT, " +                   
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
@@ -441,12 +452,13 @@ export class posSaleCls
                     "@SUBTOTAL = @PSUBTOTAL, " + 
                     "@PROMO_TYPE = @PPROMO_TYPE, " +
                     "@ORDER_GUID = @PORDER_GUID, " +
-                    "@SCALE_MANUEL = @PSCALE_MANUEL " ,  
-            param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                     'PSCALE_MANUEL:bit'],
-            dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
-                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL'],
+                    "@SCALE_MANUEL = @PSCALE_MANUEL, " + 
+                    "@LIST_NO = @PLIST_NO " ,  
+            param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50','PINPUT:string|25',
+                    'PBARCODE:string|50','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float',
+                    'PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PSCALE_MANUEL:bit','PLIST_NO:int'],
+            dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL','LIST_NO'],
             local : 
             {
                 type : "update",
@@ -454,7 +466,7 @@ export class posSaleCls
                         SET CDATE = ?, CUSER = ?, CUSER_NAME = ?, LDATE = ?, LUSER = ?, LUSER_NAME = ?, POS_GUID = ?, DEVICE = ?, DEPOT_GUID = ?, DEPOT_CODE = ?, DEPOT_NAME = ?, TYPE = ?, DOC_DATE = ?, 
                         CUSTOMER_GUID = ?, CUSTOMER_CODE = ?, CUSTOMER_NAME = ?, LINE_NO = ?, ITEM_GUID = ?, ITEM_CODE = ?, ITEM_NAME = ?, ITEM_SNAME = ?, ITEM_GRP_CODE = ?, ITEM_GRP_NAME = ?, 
                         COST_PRICE = ?, MIN_PRICE = ?, MAX_PRICE = ?, TICKET_REST = ?, INPUT = ?, BARCODE_GUID = ?, BARCODE = ?, UNIT_GUID = ?, UNIT_NAME = ?, UNIT_FACTOR = ?, UNIT_SHORT = ?, 
-                        QUANTITY = ?, PRICE = ?, FAMOUNT = ?, AMOUNT = ?, DISCOUNT = ?, LOYALTY = ?, VAT = ?, VAT_RATE = ?, VAT_TYPE = ?, TOTAL = ?, SUBTOTAL = ?, PROMO_TYPE = ?, GRAND_AMOUNT = ?, 
+                        LIST_NO = ?, LIST_NAME = ?, LIST_TAG = ?, QUANTITY = ?, PRICE = ?, FAMOUNT = ?, AMOUNT = ?, DISCOUNT = ?, LOYALTY = ?, VAT = ?, VAT_RATE = ?, VAT_TYPE = ?, TOTAL = ?, SUBTOTAL = ?, PROMO_TYPE = ?, GRAND_AMOUNT = ?, 
                         GRAND_DISCOUNT = ?, GRAND_LOYALTY = ?, GRAND_VAT = ?, GRAND_TOTAL = ?, STATUS = ?, REBATE_TICKET = ?, DELETED = ?, ORDER_GUID = ?
                         WHERE GUID = ?;`,
                 values : [{CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
@@ -462,10 +474,11 @@ export class posSaleCls
                         DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},LINE_NO : {map:'LINE_NO'},
                         ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},ITEM_SNAME : {map:'ITEM_SNAME'},ITEM_GRP_CODE : {map:'ITEM_GRP_CODE'},ITEM_GRP_NAME : {map:'ITEM_GRP_NAME'},
                         COST_PRICE : {map:'COST_PRICE'},MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},TICKET_REST : {map:'TICKET_REST'},INPUT : {map:'INPUT'},BARCODE_GUID : {map:'BARCODE_GUID'},
-                        BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
-                        PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
-                        TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
-                        GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:0,ORDER_GUID : {map:'ORDER_GUID'},GUID : {map:'GUID'}}]
+                        BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},LIST_NO : {map:'LIST_NO'},
+                        LIST_NAME : {map:'LIST_NAME'},LIST_TAG : {map:'LIST_TAG'},QUANTITY : {map:'QUANTITY'},PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},
+                        LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},
+                        GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},
+                        STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:0,ORDER_GUID : {map:'ORDER_GUID'},GUID : {map:'GUID'}}]
             }
         } 
         tmpDt.deleteCmd = 
@@ -1804,8 +1817,8 @@ export class posDeviceCls
                 {
                     let img = new Image()
                     img.src = tmpArr[i].logo
-                    docPdf.addImage(img, 'png', 15, tmpY, undefined, undefined)
-                    tmpY += 20
+                    docPdf.addImage(img, 'png', 25, tmpY, undefined, undefined)
+                    tmpY += 30
                 }
                 else
                 {
