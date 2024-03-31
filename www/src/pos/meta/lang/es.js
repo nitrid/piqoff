@@ -395,6 +395,11 @@ export const langEs =
         head: "Descripción de Reimpresión",
         title: "Por favor, ingrese el motivo de la reimpresión"
     },
+    popDiscountDesc : 
+    {
+        head : "Descripción del Descuento",
+        title : "Por favor, introduzca su motivo de descuento"
+    },
     msgItemReturnTicket:
     {
         title: "Advertencia",

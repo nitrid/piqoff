@@ -395,6 +395,11 @@ export const langEn =
         head : "Reason for Duplicate",
         title : "Please provide the reason for reprinting the duplicate ticket/invoice"
     },
+    popDiscountDesc : 
+    {
+        head : "Discount Description",
+        title : "Please Enter Your Discount Reason"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",

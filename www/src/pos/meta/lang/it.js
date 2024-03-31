@@ -395,6 +395,11 @@ export const langIt =
         head: "Descrizione Ristampa",
         title: "Inserisci una ragione per la ristampa, per favore"
     },
+    popDiscountDesc : 
+    {
+        head : "Descrizione dello Sconto",
+        title : "Si prega di inserire il motivo dello sconto"
+    },
     msgItemReturnTicket:
     {
         title: "Avviso",

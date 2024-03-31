@@ -393,6 +393,11 @@ export const langTr =
         head : "Yeniden yazdırma açıklaması",
         title : "Lütfen yeniden yazdırma nedeninizi giriniz"
     },
+    popDiscountDesc : 
+    {
+        head : "İndirim Açıklaması",
+        title : "Lütfen İndirim Nedeninizi Giriniz"
+    },
     msgItemReturnTicket: 
     {
         title : "Uyarı",

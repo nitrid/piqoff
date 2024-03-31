@@ -395,6 +395,11 @@ export const langDe =
         head: "Grund für erneuten Druck",
         title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
+    popDiscountDesc : 
+    {
+        head : "Rabattbeschreibung",
+        title : "Bitte geben Sie Ihren Rabattgrund ein"
+    },
     msgItemReturnTicket: 
     {
         title: "Achtung",

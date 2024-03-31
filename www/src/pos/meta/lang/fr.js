@@ -397,6 +397,11 @@ export const langFr =
         head : "Raison du duplicata",
         title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
     },
+    popDiscountDesc : 
+    {
+        head : "Description de la Réduction",
+        title : "Veuillez entrer la raison de votre réduction"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",
