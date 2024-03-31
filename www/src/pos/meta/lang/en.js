@@ -57,7 +57,7 @@ export const langEn =
     msgMaxQuantity :
     {
         title : "Attention",  // BAK
-        msg : "You cannot enter a quantity greater than 99,999!",  // BAK
+        msg : "You cannot enter a quantity greater than 999,999!",  // BAK
         btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
