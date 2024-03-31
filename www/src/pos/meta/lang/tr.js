@@ -57,7 +57,7 @@ export const langTr =
     msgMaxQuantity :
     {
         title : "Uyarı",
-        msg : "Miktar 99.999'dan büyük giremezsiniz !",
+        msg : "Miktar 999.999'dan büyük giremezsiniz !",
         btn01 : "Tamam",
     },
     msgPriceNotFound : 
