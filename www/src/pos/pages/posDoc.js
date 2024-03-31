@@ -1206,7 +1206,7 @@ export default class posDoc extends React.PureComponent
                             await dialog(tmpConfObj);
                             resolve()
                         }
-                        else if(tmpResult >= 100)
+                        else if(tmpResult >= 1000)
                         {
                             let tmpConfObj =
                             {
@@ -3854,7 +3854,7 @@ export default class posDoc extends React.PureComponent
                                                         return
                                                     }
 
-                                                    if(tmpResult >= 100)
+                                                    if(tmpResult >= 1000)
                                                     {
                                                         let tmpConfObj =
                                                         {
@@ -8318,7 +8318,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                                 
-                                                if(tmpResult >= 100)
+                                                if(tmpResult >= 1000)
                                                 {
                                                     let tmpConfObj =
                                                     {
