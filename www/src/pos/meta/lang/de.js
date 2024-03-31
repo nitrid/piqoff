@@ -395,6 +395,11 @@ export const langDe =
         head: "Grund für erneuten Druck",
         title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
+    popDiscountDesc : 
+    {
+        head : "Rabattbeschreibung",
+        title : "Bitte geben Sie Ihren Rabattgrund ein"
+    },
     msgItemReturnTicket: 
     {
         title: "Achtung",
@@ -731,7 +736,8 @@ export const langDe =
         },
         popSelectItem : "Artikel auswählen",
         popSelectItemGrp : "Produktgruppe auswählen",
-        popNameEntry : "TastenName"
+        popNameEntry : "TastenName",
+        txtPopPluGroup : "Geben Sie den PLU-Code oder den Namen ein, den Sie suchen möchten!"
     },
     popOrderList :
     {

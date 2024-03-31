@@ -395,6 +395,11 @@ export const langIt =
         head: "Descrizione Ristampa",
         title: "Inserisci una ragione per la ristampa, per favore"
     },
+    popDiscountDesc : 
+    {
+        head : "Descrizione dello Sconto",
+        title : "Si prega di inserire il motivo dello sconto"
+    },
     msgItemReturnTicket:
     {
         title: "Avviso",
@@ -731,7 +736,8 @@ export const langIt =
         },
         popSelectItem: "Seleziona Prodotto",
         popSelectItemGrp: "Seleziona Gruppo Prodotto",
-        popNameEntry: "Nome PLU"
+        popNameEntry: "Nome PLU",
+        txtPopPluGroup : "Inserisci il codice PLU o il nome che vuoi cercare!"
     },
     popOrderList: 
     {

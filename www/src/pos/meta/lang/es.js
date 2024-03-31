@@ -395,6 +395,11 @@ export const langEs =
         head: "Descripción de Reimpresión",
         title: "Por favor, ingrese el motivo de la reimpresión"
     },
+    popDiscountDesc : 
+    {
+        head : "Descripción del Descuento",
+        title : "Por favor, introduzca su motivo de descuento"
+    },
     msgItemReturnTicket:
     {
         title: "Advertencia",
@@ -731,7 +736,8 @@ export const langEs =
         },
         popSelectItem: "Selección de Producto",
         popSelectItemGrp: "Selección de Grupo de Producto",
-        popNameEntry: "Nombre del PLU"
+        popNameEntry: "Nombre del PLU",
+        txtPopPluGroup : "¡Ingrese el código PLU o el nombre que desea buscar!"
     },
     popOrderList: 
     {
