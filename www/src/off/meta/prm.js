@@ -1680,6 +1680,130 @@ export const prm =
         }
     },
     //#endregion
+    //#region Fiyat Liste Tanımı
+    //txtNo
+    {
+        TYPE : 2,
+        ID :"txtNo",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmMain",
+                val : 
+                [
+                    {
+                        type : "required",
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_015",
+        ELEMENT : "txtNo",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Fiyat Liste Tanımları",
+            CAPTION : "No",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtNoValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtNoGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopNoVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //txtName
+    {
+        TYPE : 2,
+        ID :"txtName",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmMain",
+                val : 
+                [
+                    {
+                        type : "required",
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_015",
+        ELEMENT : "txtName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Fiyat Liste Tanımları",
+            CAPTION : "Adı",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtNameValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtNameGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopNameVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //#endregion
     //#region Satış Faturası
     //txtRef
     {

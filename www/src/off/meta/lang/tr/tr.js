@@ -354,6 +354,8 @@ export const langTr =
         promo_02_001: "Promosyon Listesi",
         promo_02_002: "Promosyon Detay Listesi",
         promo_03: "Raporlar",
+        promo_04: "Operasyonlar",
+        promo_04_001: "Elektronik Etiket Güncelleme",
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
         set_01_001 : "Tax Sugar",
