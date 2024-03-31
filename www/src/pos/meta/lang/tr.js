@@ -393,6 +393,11 @@ export const langTr =
         head : "Yeniden yazdırma açıklaması",
         title : "Lütfen yeniden yazdırma nedeninizi giriniz"
     },
+    popDiscountDesc : 
+    {
+        head : "İndirim Açıklaması",
+        title : "Lütfen İndirim Nedeninizi Giriniz"
+    },
     msgItemReturnTicket: 
     {
         title : "Uyarı",
@@ -730,7 +735,8 @@ export const langTr =
         },
         popSelectItem : "Stok Seçim",
         popSelectItemGrp : "Ürün Grubu Seçim",
-        popNameEntry : "Plu Adı"
+        popNameEntry : "Plu Adı",
+        txtPopPluGroup : "Aratmak istediğiniz plu kodu yada ismini giriniz !"
     },
     popOrderList :
     {

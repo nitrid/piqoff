@@ -397,6 +397,11 @@ export const langFr =
         head : "Raison du duplicata",
         title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
     },
+    popDiscountDesc : 
+    {
+        head : "Description de la Réduction",
+        title : "Veuillez entrer la raison de votre réduction"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",
@@ -735,7 +740,8 @@ export const langFr =
         },
         popSelectItem : "Choix Du Stock",
         popSelectItemGrp : "Choix de la Catégorie du Produit",
-        popNameEntry : "Nom Plu "
+        popNameEntry : "Nom Plu ",
+        txtPopPluGroup : "Veuillez saisis le code ou le nom de PLU que vous souhaitez rechercher !"
     },
     popOrderList : 
     {

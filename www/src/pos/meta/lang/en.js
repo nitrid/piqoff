@@ -395,6 +395,11 @@ export const langEn =
         head : "Reason for Duplicate",
         title : "Please provide the reason for reprinting the duplicate ticket/invoice"
     },
+    popDiscountDesc : 
+    {
+        head : "Discount Description",
+        title : "Please Enter Your Discount Reason"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",
@@ -730,7 +735,8 @@ export const langEn =
         },
         popSelectItem: "Stock Selection",
         popSelectItemGrp: "Product Category Selection",
-        popNameEntry: "PLU Name"
+        popNameEntry: "PLU Name",
+        txtPopPluGroup : "Enter the PLU code or name you want to search for!"
     },
     popOrderList:
     {
