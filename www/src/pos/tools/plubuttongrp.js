@@ -40,6 +40,7 @@ export default class NbPluButtonGrp extends NbBase
 
         this._onClick = this._onClick.bind(this);
         this._onSelection = this._onSelection.bind(this);
+        this._searchPluGrp = this._searchPluGrp.bind(this)
     }
     async init()
     {        
@@ -371,6 +372,18 @@ export default class NbPluButtonGrp extends NbBase
                 }
             )
         }
+    }
+    _searchPluGrp(pKey)
+    {
+        let tmpData = this.pluImageDt.where({MAIN_GUID:this.clickData.data.LINK})
+        tmpData = tmpData.filter(x => x.ITEM_NAME.indexOf(pKey) > -1 || x.ITEM_CODE.indexOf(pKey) > -1)
+
+        this.setState(
+            {
+                btnPluImageGrp : tmpData,
+                pluImageCurrentPage:1
+            }
+        )
     }
     async _onClick(pIndex,pType,pData)
     {
@@ -709,60 +722,56 @@ export default class NbPluButtonGrp extends NbBase
                 </div>
                 {/* Plu Group Popup */}
                 <div>
-                    <NbPopUp id={"popPluGroup" + this.props.id} parent={this} title={""} fullscreen={true}>
-                        {/* Alphabet Button Group */}
-                        <div className="row py-1">
-                            <NbButton id={"btnAph01"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>A</NbButton>
-                            <NbButton id={"btnAph02"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>B</NbButton>
-                            <NbButton id={"btnAph03"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>C</NbButton>
-                            <NbButton id={"btnAph04"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>D</NbButton>
-                            <NbButton id={"btnAph05"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>E</NbButton>
-                            <NbButton id={"btnAph06"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>F</NbButton>
-                            <NbButton id={"btnAph07"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>G</NbButton>
-                            <NbButton id={"btnAph08"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>H</NbButton>
-                            <NbButton id={"btnAph09"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>I</NbButton>
-                            <NbButton id={"btnAph10"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>J</NbButton>
-                            <NbButton id={"btnAph11"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>K</NbButton>
-                            <NbButton id={"btnAph12"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>L</NbButton>
-                            <NbButton id={"btnAph13"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>M</NbButton>
-                            <NbButton id={"btnAph14"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>N</NbButton>
-                            <NbButton id={"btnAph15"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>O</NbButton>
-                            <NbButton id={"btnAph16"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>Q</NbButton>
-                            <NbButton id={"btnAph17"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>P</NbButton>
-                            <NbButton id={"btnAph18"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>R</NbButton>
-                            <NbButton id={"btnAph19"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>S</NbButton>
-                            <NbButton id={"btnAph20"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>T</NbButton>
-                            <NbButton id={"btnAph21"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>U</NbButton>
-                            <NbButton id={"btnAph22"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>V</NbButton>
-                            <NbButton id={"btnAph23"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>W</NbButton>
-                            <NbButton id={"btnAph24"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>Y</NbButton>
-                            <NbButton id={"btnAph25"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>Z</NbButton>
-                            <NbButton id={"btnAph26"} parent={this} className="form-group btn btn-primary me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>ALL</NbButton>
+                    <NbPopUp id={"popPluGroup" + this.props.id} parent={this} title={""} fullscreen={true} header={false}>
+                        <div className="row">
+                            <div className="col-1 px-1 pt-1 pb-1" style={{width:'5%'}}>
+                                <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "24px",color:'black'}} />
+                            </div>
+                            <div className="col p-1">
+                                <NdTextBox id="txtPopPluGroup" parent={this} simple={true} placeholder={this.lang.t("nbPluButtonGrp.txtPopPluGroup")}
+                                onValueChanging={(e)=>
+                                {
+                                    this._searchPluGrp(e)
+                                }}>
+                                </NdTextBox> 
+                            </div>
+                            <div className="col-1 px-1 pt-1 pb-1" style={{width:'5%'}}>
+                                <NbButton id={"btnClose" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                onClick={()=>
+                                {
+                                    this["popPluGroup" + this.props.id].hide()
+                                }}>
+                                    <i className="text-white fa-solid fa-circle-xmark" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
                         </div>
-                        <div style={{height:"430px"}}>
-                            {this._btnPluImageGrpView()}
-                        </div>
-                        <div className="row py-1">
-                            {/* btnLeft */}
-                            <div className="col-1 ps-0 pe-1">
-                                <NbButton id={"btnLeft" + this.props.id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                        <div className="row" style={{height:"430px"}}>
+                            <div className="col-1 px-1 pt-1 pb-1" style={{width:'5%',height:'430px'}}>
+                                <NbButton id={"btnLeft" + this.props.id} parent={this} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%"}}
                                 onClick={()=>
                                 {
                                     this.setState({pluImageCurrentPage:this.state.pluImageCurrentPage == 1 ? 1 : this.state.pluImageCurrentPage - 1})
                                 }}>
-                                    <i className="text-white fa-solid fa-arrow-left" style={{fontSize: "24px"}} />
+                                    <i className="text-white fa-solid fa-angle-left" style={{fontSize: "24px"}} />
                                 </NbButton>
                             </div>
-                            {/* btnRight */}
-                            <div className="col-1 px-1">
-                                <NbButton id={"btnRight" + this.props.id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                            <div className="col">
+                                {this._btnPluImageGrpView()}
+                            </div>
+                            <div className="col-1 px-1 pt-1 pb-1" style={{width:'5%',height:'430px'}}>
+                                <NbButton id={"btnRight" + this.props.id} parent={this} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%"}}
                                 onClick={()=>
                                 {
                                     let tmpPageCount = Math.ceil(this.state.btnPluImageGrp.length / 24)
                                     this.setState({pluImageCurrentPage:this.state.pluImageCurrentPage == tmpPageCount ? tmpPageCount : this.state.pluImageCurrentPage + 1})
                                 }}>
-                                    <i className="text-white fa-solid fa-arrow-right" style={{fontSize: "24px"}} />
+                                    <i className="text-white fa-solid fa-angle-right" style={{fontSize: "24px"}} />
                                 </NbButton>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12 px-1">
+                                <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtPopPluGroup"} keyType={this.props.keyType}/>
                             </div>
                         </div>
                     </NbPopUp>

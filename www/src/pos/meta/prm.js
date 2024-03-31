@@ -1380,5 +1380,21 @@ export const prm =
             CAPTION : "Fiyat Bilgisi Sıfır Mesajı"
         }
     },
+    //KeyType
+    {
+        TYPE : 0,
+        ID :"KeyType",
+        VALUE : "azert",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Klavye Deseni"
+        }
+    },
     //#endregion
 ]

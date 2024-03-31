@@ -730,7 +730,8 @@ export const langEn =
         },
         popSelectItem: "Stock Selection",
         popSelectItemGrp: "Product Category Selection",
-        popNameEntry: "PLU Name"
+        popNameEntry: "PLU Name",
+        txtPopPluGroup : "Enter the PLU code or name you want to search for!"
     },
     popOrderList:
     {

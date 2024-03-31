@@ -4774,7 +4774,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"pluBtnGrpLy"} id={"pluBtnGrpLy"} parent={this} data-grid={{x:40,y:3,h:82,w:30,minH:10,maxH:200,minW:30,maxW:30}} style={{margin:'-4px'}}
                             access={this.acsObj.filter({ELEMENT:'pluBtnGrpLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} 
+                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                                     onSelection={(pItem,pQuantity)=>
                                     {
                                         if(this.txtBarcode.value != '')
@@ -5793,6 +5793,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -5869,6 +5870,7 @@ export default class posDoc extends React.PureComponent
                 {/* Item List Popup */}
                 <div>
                     <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}  selectAll={true}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -7178,7 +7180,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                             {this.state.keyboardVisibility && 
                             (
-                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"}/>
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             )}
                         </div>
                         {/* grdLastPos */}
@@ -8325,7 +8327,7 @@ export default class posDoc extends React.PureComponent
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"}/>
+                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>
                         <div className="row py-1">
@@ -8853,7 +8855,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"}/>
+                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>                        
                     </NdPopUp>
@@ -8861,6 +8863,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8890,6 +8893,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Country Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCountry"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCountry.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8913,6 +8917,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add City Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCity"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCity.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8936,6 +8941,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Zipcode Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddZipCode"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddZipCode.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8959,6 +8965,7 @@ export default class posDoc extends React.PureComponent
                 {/* Print Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popPrintCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9137,7 +9144,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true}/>
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9196,7 +9203,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"}/>
+                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9270,7 +9277,7 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <div className="row py-1">
                                     <div className="col-12">
-                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"}/>
+                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                                     </div>
                                 </div>
                             </Item>

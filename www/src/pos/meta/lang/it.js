@@ -731,7 +731,8 @@ export const langIt =
         },
         popSelectItem: "Seleziona Prodotto",
         popSelectItemGrp: "Seleziona Gruppo Prodotto",
-        popNameEntry: "Nome PLU"
+        popNameEntry: "Nome PLU",
+        txtPopPluGroup : "Inserisci il codice PLU o il nome che vuoi cercare!"
     },
     popOrderList: 
     {

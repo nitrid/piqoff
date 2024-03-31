@@ -730,7 +730,8 @@ export const langTr =
         },
         popSelectItem : "Stok Seçim",
         popSelectItemGrp : "Ürün Grubu Seçim",
-        popNameEntry : "Plu Adı"
+        popNameEntry : "Plu Adı",
+        txtPopPluGroup : "Aratmak istediğiniz plu kodu yada ismini giriniz !"
     },
     popOrderList :
     {

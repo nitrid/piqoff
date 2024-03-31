@@ -731,7 +731,8 @@ export const langDe =
         },
         popSelectItem : "Artikel auswählen",
         popSelectItemGrp : "Produktgruppe auswählen",
-        popNameEntry : "TastenName"
+        popNameEntry : "TastenName",
+        txtPopPluGroup : "Geben Sie den PLU-Code oder den Namen ein, den Sie suchen möchten!"
     },
     popOrderList :
     {

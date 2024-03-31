@@ -735,7 +735,8 @@ export const langFr =
         },
         popSelectItem : "Choix Du Stock",
         popSelectItemGrp : "Choix de la Catégorie du Produit",
-        popNameEntry : "Nom Plu "
+        popNameEntry : "Nom Plu ",
+        txtPopPluGroup : "Veuillez saisis le code ou le nom de PLU que vous souhaitez rechercher !"
     },
     popOrderList : 
     {
