@@ -208,68 +208,68 @@ export const prm =
         VALUE : 
         {
             disable:false,
-            minCharSize:25,
+            minCharSize:10,
             buttons:
             [
                 {
                     id:"btn01",
-                    title:"Double du code barre.",
-                    text:"Erreur de saisie lecture double du code barre."
+                    title:"Commande NON conforme.",
+                    text:"Commande NON conforme."
                 },
                 {
                     id:"btn02",
-                    title:"Défectueux ou en panne.",
-                    text:"Le client a fait un retour, le produit est défectueux ou en panne."
+                    title:"Commande annulée par le client.",
+                    text:"Commande annulée par le client."
                 },
                 {
                     id:"btn03",
-                    title:"Retour du produit.",
-                    text:"Le client fait retour du produit car il ne lui a pas plu."
+                    title:"Clé cylindre ne fonctionne pas.",
+                    text:"Clé cylindre ne fonctionne pas."
                 },
                 {
                     id:"btn04",
-                    title:"Erreur d'achat.",
-                    text:"Le client s´est trompé sur son achat il souhaite faire un retour."
+                    title:"Clé ronde ou spéciale ne fonctionne pas.",
+                    text:"Clé ronde ou spéciale fonctionne pas."
                 },
                 {
                     id:"btn05",
-                    title:"Scanné 2 fois le produit",
-                    text:"La caissière a scanné 2 fois le produit."
+                    title:"Erreur d'encaissement.",
+                    text:"Erreur d'encaissement."
                 },
                 {
                     id:"btn06",
-                    title:"Oublié de Supprimer.",
-                    text:"La caissière a oublié de supprimer le produit non voulu."
+                    title:"Produit trop cher.",
+                    text:"Produit trop cher."
                 },
                 {
                     id:"btn07",
-                    title:"Pas sélectionné le bon produit.",
-                    text:"La caissière n’a pas sélectionné le bon produit."
+                    title:"Délai non respecté.",
+                    text:"Délai non respecté."
                 },
                 {
                     id:"btn08",
-                    title:"Pas vu l’étiquette jaune.",
-                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit."
+                    title:"Service Cordo mal fait.",
+                    text:"Service Cordo mal fait."
                 },
                 {
                     id:"btn09",
-                    title:"Erreur d’étiquetage.",
-                    text:"Le client a retourné le produit car erreur d’étiquetage."
+                    title:"Modéle supprimé.",
+                    text:"Modéle supprimé."
                 },
                 {
                     id:"btn10",
-                    title:"Trop cher.",
-                    text:"Le client a retourné le produit car trop cher."
+                    title:"Défradation objet client.",
+                    text:"Défradation objet client."
                 },
                 {
                     id:"btn11",
-                    title:"Mauvaise étiquette jaune.",
-                    text:"Mauvaise étiquette jaune sur le produit."
+                    title:"Rupture de stock.",
+                    text:"Rupture de stock."
                 },
                 {
                     id:"btn12",
-                    title:"Boucherie s’est trompée.",
-                    text:"La boucherie s’est trompée d’étiquette."
+                    title:"Travail non réalisable.",
+                    text:"Travail non réalisable."
                 }
             ]
         },
