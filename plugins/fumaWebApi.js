@@ -31,8 +31,12 @@ class pricerApi
         pSocket.on('posSaleClosed',async (pParam,pCallback) =>
         {
           
-            this.processPromoSend()
+            this.processPosSaleSend()
         })
+    }
+    async processPosSaleSend()
+    {
+        
     }
     async allCustomerSocket(pSocket)
     {
@@ -49,7 +53,7 @@ class pricerApi
             this.processCustomerSend(pParam)
         })
     }
-    async itemUpdate(pData)
+    async customerUpdate(pData)
     {   
 
         if(typeof pData != 'undefined')
@@ -128,7 +132,7 @@ class pricerApi
                 tmpArray.push(tmpJson)
             }
 
-            await this.itemUpdate(tmpArray)
+            await this.customerUpdate(tmpArray)
             tmpCounter = tmpLength
         }
     }
