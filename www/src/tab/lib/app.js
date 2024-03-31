@@ -72,6 +72,7 @@ export default class App extends React.PureComponent
             page:'dashboard.js',
         }
         this.pagePrm = null
+        this.prmObj = null
 
         if(window.origin.substring(0,4) == 'http')
         {
@@ -88,11 +89,10 @@ export default class App extends React.PureComponent
             this.device = true
             document.addEventListener('deviceready', ()=>
             {
+                console.log(navigator.camera)
                 this.init();
             }, false);
         }
-        this.prmObj = new param(prm)
-       
     }
     async init()
     {
@@ -100,7 +100,7 @@ export default class App extends React.PureComponent
         this.core.appInfo = appInfo
         this.transfer = new transferCls()
         await this.transfer.init('TAB')
-
+        
         if(!App.instance)
         {
             App.instance = this;
@@ -141,90 +141,109 @@ export default class App extends React.PureComponent
     {
         return new Promise(async (resolve) =>
         {
+            this.prmObj = new param(prm)
             await this.prmObj.load({APP:'TAB',USERS:this.core.auth.data.CODE})
             resolve()
         })
     }
     menu()
     {
-        const menuButtons = 
-        [{
-            id: 'saleCard',
-            icon: 'fa-scale-unbalanced',
-            text:this.lang.t('menu.sale'),
-            onClick: () => 
+        const menuButtons = [
             {
-                this.popMenu.hide()
-                this.setState({page:'sale.js'})
-            }
-        },
-        {
-            id: 'customerExtractCard',
-            icon: 'fa-receipt',
-            text: this.lang.t('menu.customerAccount'),
-            onClick: () => 
+                id: 'saleCard',
+                icon: 'fa-scale-unbalanced',
+                text:this.lang.t('menu.sale'),
+                onClick: () => 
+                {
+                    this.popMenu.hide()
+                    this.setState({page:'sale.js'})
+                }
+            },
             {
-                this.popMenu.hide()
-                this.setState({page:'extract.js'})
-            }
-        },
-        {
-            id: 'productCard',
-            icon: 'fa-circle-info',
-            text: this.lang.t('menu.itemDetail'),
-            onClick: () => 
+                id: 'customerExtractCard',
+                icon: 'fa-receipt',
+                text: this.lang.t('menu.customerAccount'),
+                onClick: () => 
+                {
+                    this.popMenu.hide()
+                    this.setState({page:'extract.js'})
+                }
+            },
             {
-                this.popMenu.hide()
-                this.setState({page:'itemDetail.js'})
-            }
-        },
-        {
-            id: 'collectionCard',
-            icon: 'fa-scale-unbalanced-flip',
-            text: this.lang.t('menu.collection'),
-            onClick: () => 
+                id: 'productCard',
+                icon: 'fa-circle-info',
+                text: this.lang.t('menu.itemDetail'),
+                onClick: () => 
+                {
+                    this.popMenu.hide()
+                    this.setState({page:'itemDetail.js'})
+                }
+            },
             {
-                this.popMenu.hide();
-                this.setState({ page: 'collection.js' });
-            }
-        },
-        {
-            id: 'customerCard',
-            icon: 'fa-user-plus',
-            text: this.lang.t('menu.customerCard'),
-            onClick: () => 
+                id: 'collectionCard',
+                icon: 'fa-scale-unbalanced-flip',
+                text: this.lang.t('menu.collection'),
+                onClick: () => 
+                {
+                    this.popMenu.hide();
+                    this.setState({ page: 'collection.js' });
+                }
+            },
             {
-                this.popMenu.hide();
-                this.setState({ page: 'customerCard.js' });
+                id: 'customerCard',
+                icon: 'fa-user-plus',
+                text: this.lang.t('menu.customerCard'),
+                onClick: () => 
+                {
+                    this.popMenu.hide();
+                    this.setState({ page: 'customerCard.js' });
+                }
             }
-        },
-    ];
+        ];
 
-    console.log(this.prmObj)
-    let tmpMenu = []
-    for (let i = 0; i < menuButtons.length; i++) 
-    {
-        if(this.prmObj.filter({ID:menuButtons[i].id}).getValue() != false || typeof this.prmObj.filter({ID:menuButtons[i].id}).getValue() == 'undefined' )
+        let tmpMenu = []
+        for (let i = 0; i < menuButtons.length; i++) 
         {
-            tmpMenu.push(menuButtons[i])
+            if(this.prmObj.filter({ID:menuButtons[i].id}).getValue() != false || typeof this.prmObj.filter({ID:menuButtons[i].id}).getValue() == 'undefined' )
+            {
+                tmpMenu.push(menuButtons[i])
+            }
         }
+        return tmpMenu.map(button => (
+            <div className='col-4' style={{paddingTop:"30px"}} key={button.id}>
+                <NbButton className="form-group btn btn-block" style={{ height: "100%", width: "100%", backgroundColor: '#0d6efd' }} onClick={button.onClick}>
+                    <div className='row py-2'>
+                        <div className='col-12'>
+                            <i className={`fa-solid ${button.icon} fa-4x`} style={{ color: '#ecf0f1' }}></i>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-12'>
+                            <h3 style={{ color: '#ecf0f1' }}>{button.text}</h3>
+                        </div>
+                    </div>
+                </NbButton>
+            </div>
+        ));
     }
-    return tmpMenu.map(button => (
-        <div className='col-4' style={{paddingTop:"30px"}} key={button.id}>
-            <NbButton className="form-group btn btn-block" style={{ height: "100%", width: "100%", backgroundColor: '#0d6efd' }} onClick={button.onClick}>
-                <div className='row py-2'>
-                    <div className='col-12'>
-                        <i className={`fa-solid ${button.icon} fa-4x`} style={{ color: '#ecf0f1' }}></i>
-                    </div>
-                </div>
-                <div className='row'>
-                    <div className='col-12'>
-                        <h3 style={{ color: '#ecf0f1' }}>{button.text}</h3>
-                    </div>
-                </div>
-            </NbButton>
-        </div>
-    ));
+    loadPage()
+    {
+        return React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
+        {
+            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
+            let tmpPrm = new param(prm);
+            await tmpPrm.load({APP:'TAB'})
+
+            let tmpAcs = new access(acs);
+            await tmpAcs.load({APP:'TAB'})
+
+            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.page});
+            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
+            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.page});
+            obj.default.prototype.user = this.core.auth.data;
+
+            return obj;
+        }));
     }
     render() 
     {
@@ -258,22 +277,7 @@ export default class App extends React.PureComponent
             return <Login />
         }
 
-        const Page = React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
-        {
-            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
-            let tmpPrm = new param(prm);
-            await tmpPrm.load({APP:'TAB'})
-
-            let tmpAcs = new access(acs);
-            await tmpAcs.load({APP:'TAB'})
-
-            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.page});
-            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
-            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.page});
-            obj.default.prototype.user = this.core.auth.data;
-
-            return obj;
-        }));
+        const Page = this.loadPage()
 
         return (
             <div style={{height:'90%'}}>
