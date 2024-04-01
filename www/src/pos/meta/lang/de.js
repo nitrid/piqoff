@@ -22,8 +22,8 @@ export const langDe =
     msgNotAccess: "Benutzer hat keine Zugriffsberechtigung.",
     msgInvalidUser: "Benutzername oder Passwort falsch.",
     txtCardRead: "Bitte Ihre Benutzerkarte einlesen.",
-    price: "Preis",
-    quantity: "Menge",
+    price: "Geben Sie einen Preis ein",
+    quantity: "Geben Sie einen Menge ein",
     nbCalculator: "Taschenrechner",
     about: "Über uns",
     abtCertificate: "Zertifikat: NF525",
@@ -36,8 +36,6 @@ export const langDe =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Zertifikatsnummer: ",
     pleaseWait: "Bitte warten...",
-    qunatity: "Menge",
-    price: "Preis",
     msgDeviceChange : 
     {
         title : "Achtung!", 
@@ -59,7 +57,7 @@ export const langDe =
     msgMaxQuantity:
     {
         title: "Achtung",
-        msg: "Sie können keine Menge größer als 99.999 eingeben!",
+        msg: "Sie können keine Menge größer als 999.999 eingeben!",
         btn01: "OK",
     },
     msgPriceNotFound:
@@ -397,6 +395,11 @@ export const langDe =
         head: "Grund für erneuten Druck",
         title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
+    popDiscountDesc : 
+    {
+        head : "Rabattbeschreibung",
+        title : "Bitte geben Sie Ihren Rabattgrund ein"
+    },
     msgItemReturnTicket: 
     {
         title: "Achtung",
@@ -733,7 +736,8 @@ export const langDe =
         },
         popSelectItem : "Artikel auswählen",
         popSelectItemGrp : "Produktgruppe auswählen",
-        popNameEntry : "TastenName"
+        popNameEntry : "TastenName",
+        txtPopPluGroup : "Geben Sie den PLU-Code oder den Namen ein, den Sie suchen möchten!"
     },
     popOrderList :
     {

@@ -22,8 +22,8 @@ export const langEs =
     msgNotAccess: "El usuario no tiene permiso para acceder.",
     msgInvalidUser: "Nombre de usuario o contraseña incorrectos.",
     txtCardRead: "Por favor, pase su tarjeta de usuario.",
-    price: "Precio",
-    quantity: "Cantidad",
+    price: "Ingrese un Precio",
+    quantity: "Ingrese un Cantidad",
     nbCalculator: "Calculadora",
     about: "Acerca de",
     abtCertificate: "Certificado: NF525",
@@ -36,8 +36,6 @@ export const langEs =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Número de certificado: ",
     pleaseWait: "Por favor, espere...",
-    quantity: "Cantidad",
-    price: "Precio",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
@@ -59,7 +57,7 @@ export const langEs =
     msgMaxQuantity:
     {
         title: "Advertencia",
-        msg: "¡No puede introducir una cantidad mayor de 99.999!",
+        msg: "¡No puede introducir una cantidad mayor de 999.999!",
         btn01: "Aceptar",
     },
     msgPriceNotFound:
@@ -397,6 +395,11 @@ export const langEs =
         head: "Descripción de Reimpresión",
         title: "Por favor, ingrese el motivo de la reimpresión"
     },
+    popDiscountDesc : 
+    {
+        head : "Descripción del Descuento",
+        title : "Por favor, introduzca su motivo de descuento"
+    },
     msgItemReturnTicket:
     {
         title: "Advertencia",
@@ -733,7 +736,8 @@ export const langEs =
         },
         popSelectItem: "Selección de Producto",
         popSelectItemGrp: "Selección de Grupo de Producto",
-        popNameEntry: "Nombre del PLU"
+        popNameEntry: "Nombre del PLU",
+        txtPopPluGroup : "¡Ingrese el código PLU o el nombre que desea buscar!"
     },
     popOrderList: 
     {

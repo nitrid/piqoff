@@ -11,9 +11,19 @@ export default class NbPopNumber extends NbBase
     {
         super(props)
         this.state.showCloseButton = typeof this.props.showCloseButton == 'undefined' ? true : false
+        this.state.content = typeof this.props.content == 'undefined' ? '' : this.props.content
     }
-    async show(pTitle,pValue,pShowCloseButton)
+    async show(pTitle,pValue,pShowCloseButton,pContent)
     {
+        if(typeof pContent != 'undefined')
+        {
+            this.setState({content:pContent})
+        }
+        else
+        {
+            this.setState({content:''})
+        }
+        
         this[this.props.id].setTitle(typeof pTitle == 'undefined' ? '' : pTitle);
         this["txt" + this.props.id].value = typeof pValue == 'undefined' ? 0 : pValue
         this["txt" + this.props.id].newStart = true;
@@ -37,6 +47,7 @@ export default class NbPopNumber extends NbBase
     }
     render()
     {
+        console.log(this.state.content)
         return(
             <div>
                 <NdPopUp parent={this} id={this.props.id} 
@@ -46,10 +57,15 @@ export default class NbPopNumber extends NbBase
                 title={""}
                 container={"#root"} 
                 width={"300"}
-                height={"475"}
+                height={"495"}
                 onHiding={()=> {this._onClick('close')}}
                 position={{of:"#root"}}
                 >
+                    <div className="row pt-1" style={{display:'list-item'}}>
+                        <div className="col-12" style={{overflow:'hidden',whiteSpace:'nowrap',fontWeight:600,color:'#198754'}}>
+                            {this.state.content}
+                        </div>
+                    </div> 
                     {/* txt */}
                     <div className="row pt-1">
                         <div className="col-12">

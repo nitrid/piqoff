@@ -11,7 +11,8 @@ export default class NbPopUp extends NbBase
         {
             fullscreen : this.props.fullscreen,
             show : false,
-            centered : this.props.centered
+            centered : this.props.centered,
+            header: typeof this.props.header == 'undefined' ? true : this.props.header
         }
     }
     show()
@@ -39,9 +40,21 @@ export default class NbPopUp extends NbBase
     {
         return(
             <Modal show={this.state.show} fullscreen={this.state.fullscreen} centered={this.state.centered} onHide={()=>{this.hide()}} backdrop="static">
-                <Modal.Header closeButton>
-                    <Modal.Title>{typeof this.props.title == 'undefined' ? '' : this.props.title}</Modal.Title>
-                </Modal.Header>
+                {(()=>
+                {
+                    if(this.state.header)
+                    {
+                        return (
+                            <Modal.Header closeButton>
+                                <Modal.Title>{typeof this.props.title == 'undefined' ? '' : this.props.title}</Modal.Title>
+                            </Modal.Header>
+                        )
+                    }
+                    else
+                    {
+                        return null
+                    }
+                })()}
                 <Modal.Body>
                     {this.props.children}
                 </Modal.Body>

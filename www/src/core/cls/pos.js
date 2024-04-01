@@ -30,6 +30,7 @@ export class posCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CUSTOMER_TAX_NO : '',
+            CUSTOMER_SIRET : '',
             CUSTOMER_ADRESS : '',
             CUSTOMER_ZIPCODE : '',
             CUSTOMER_COUNTRY : '',
@@ -383,6 +384,8 @@ export class posSaleCls
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +  
+                    "@ITEM_NAME = @PITEM_NAME, " +  
+                    "@ITEM_SNAME = @PITEM_SNAME, " +  
                     "@INPUT = @PINPUT, " +                      
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
@@ -399,11 +402,11 @@ export class posSaleCls
                     "@ORDER_GUID = @PORDER_GUID, " + 
                     "@SCALE_MANUEL = @PSCALE_MANUEL, " +
                     "@LIST_NO = @PLIST_NO ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                    'PSCALE_MANUEL:bit','PLIST_NO:int'],
-            dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                    'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL','LIST_NO'],
+            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50',
+                    'PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float',
+                    'PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PSCALE_MANUEL:bit','PLIST_NO:int'],
+            dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT',
+                    'LOYALTY','VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL','LIST_NO'],
             local : 
             {
                 type : "insert",
@@ -433,6 +436,8 @@ export class posSaleCls
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " + 
+                    "@ITEM_NAME = @PITEM_NAME, " + 
+                    "@ITEM_SNAME = @PITEM_SNAME, " + 
                     "@INPUT = @PINPUT, " +                   
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
@@ -449,10 +454,10 @@ export class posSaleCls
                     "@ORDER_GUID = @PORDER_GUID, " +
                     "@SCALE_MANUEL = @PSCALE_MANUEL, " + 
                     "@LIST_NO = @PLIST_NO " ,  
-            param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                     'PSCALE_MANUEL:bit','PLIST_NO:int'],
-            dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+            param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50','PINPUT:string|25',
+                    'PBARCODE:string|50','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float',
+                    'PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PSCALE_MANUEL:bit','PLIST_NO:int'],
+            dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
                     'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL','LIST_NO'],
             local : 
             {

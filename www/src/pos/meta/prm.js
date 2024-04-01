@@ -1,4 +1,4 @@
-export const prm =
+export const prm = 
 [
     //#region Pos
     //Para Sembolu
@@ -39,7 +39,8 @@ export const prm =
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
-            '27NNNNNKKGGGF',
+            '27NNNNKKKGGGMMMMCCF',
+            '26NNNNKKKGGGMMMMCCF',
         ],
         SPECIAL : "",
         PAGE : "pos",
@@ -949,6 +950,113 @@ export const prm =
             }
         }
     },
+    //İndirim Açıklama
+    {
+        TYPE : 0,
+        ID :"DiscountDescription",
+        VALUE : 
+        {
+            disable:true,
+            minCharSize:10,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Garantie Cordo.",
+                    text:"Garantie Cordo."
+                },
+                {
+                    id:"btn02",
+                    title:"Promo en cours",
+                    text:"Promo en cours."
+                },
+                {
+                    id:"btn03",
+                    title:"Remise quantitative clés.",
+                    text:"Remise quantitative clés."
+                },
+                {
+                    id:"btn04",
+                    title:"Remise quantitative autre.",
+                    text:"Remise quantitative autre produit"
+                },
+                {
+                    id:"btn05",
+                    title:"Remise suite a incident.",
+                    text:"Remise suite a incident."
+                },
+                {
+                    id:"btn06",
+                    title:"Produit endommagé.",
+                    text:"Produit endommagé."
+                },
+                {
+                    id:"btn07",
+                    title:"Erreur tarif.",
+                    text:"Erreur tarif."
+                },
+                {
+                    id:"btn08",
+                    title:"Offre ponctuelle.",
+                    text:"Offre ponctuelle."
+                },
+                {
+                    id:"btn09",
+                    title:"Remise premiére sur complet.",
+                    text:"Remise premiére sur complet."
+                },
+                {
+                    id:"btn10",
+                    title:"Remise billet à gratter.",
+                    text:"Remise billet à gratter."
+                },
+                {
+                    id:"btn11",
+                    title:"Remise Facebook...",
+                    text:"Remise Facebook Cordonnerie/Clés/Smartphones/Horlogerie/Pressing."
+                },
+                {
+                    id:"btn12",
+                    title:"Description non saisie.",
+                    text:"Description non saisie."
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "İndirim Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDiscountDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDiscountDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDiscountDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
+        }
+    },
     //Açılış da Park Getir
     {
         TYPE : 0,
@@ -1361,6 +1469,38 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Fiyat Liste Seçimi"
+        }
+    },
+    //Fiyat Bilgisi Sıfır Mesajı
+    {
+        TYPE : 0,
+        ID :"PriceNotFoundAlert",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Bilgisi Sıfır Mesajı"
+        }
+    },
+    //KeyType
+    {
+        TYPE : 0,
+        ID :"KeyType",
+        VALUE : "azert",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Klavye Deseni"
         }
     },
     //#endregion
