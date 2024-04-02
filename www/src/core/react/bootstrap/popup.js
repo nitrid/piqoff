@@ -39,7 +39,7 @@ export default class NbPopUp extends NbBase
     render()
     {
         return(
-            <Modal show={this.state.show} fullscreen={this.state.fullscreen} centered={this.state.centered} onHide={()=>{this.hide()}} backdrop="static">
+            <Modal show={this.state.show} fullscreen={this.state.fullscreen} centered={this.state.centered} style={this.props.style} onHide={()=>{this.hide()}} backdrop="static">
                 {(()=>
                 {
                     if(this.state.header)
