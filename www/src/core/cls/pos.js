@@ -1951,13 +1951,16 @@ export class posDeviceCls
             let tmpHtml = ''
             let tmpAttach = btoa(docPdf.output())
             let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
-            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            if(typeof pMail != 'undefined')
             {
-                console.log(pResult1)
-            });
+                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                {
+                    console.log(pResult1)
+                });
+            }
 
             //docPdf.save('test.pdf')
-            resolve()
+            resolve(btoa(docPdf.output()))
         });
     }
 }

@@ -2055,6 +2055,17 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                         await this.print(tmpData,1,this.posObj.dt()[0].CUSTOMER_MAIL)
+                       
+                        let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
+            
+                        import("../meta/print/" + prmPrint).then(async(e)=>
+                        {
+                            let tmpPrint = e.print(tmpData)
+                          
+                            let tmpPdf = await this.posDevice.pdfPrint(tmpPrint)
+
+                            this.core.socket.emit('posSaleClosed',[tmpData,tmpPdf])
+                        })
                     }
                 }
                 //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
