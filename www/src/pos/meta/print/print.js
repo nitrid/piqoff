@@ -412,7 +412,7 @@ export function print()
                 else if(data.pospay[i].PAY_TYPE == 4)
                     tmpType = "BON D'AVOIR"
                 else if(data.pospay[i].PAY_TYPE == 5)
-                    tmpType = "AVOIR"
+                    tmpType = "REFASHION"
                 else if(data.pospay[i].PAY_TYPE == 6)
                     tmpType = "VIRMENT"
                 else if(data.pospay[i].PAY_TYPE == 7)
