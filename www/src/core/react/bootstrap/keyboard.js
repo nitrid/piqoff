@@ -48,7 +48,8 @@ export default class NbKeyboard extends NbBase
                 "hotmail gmail outlook .com",
                 "outlook orange yahoo .fr"
                 ],
-                numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
+                numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
+                numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
             },
             azert :
             {
@@ -84,7 +85,8 @@ export default class NbKeyboard extends NbBase
                     "hotmail gmail outlook .com",
                     "outlook orange yahoo .fr"
                 ],
-                numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
+                numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
+                numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
             }
         }
         
