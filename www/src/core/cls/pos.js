@@ -1775,160 +1775,165 @@ export class posDeviceCls
             }
         })
     }
+    pdf(pData)
+    {
+        let tmpArr = [];
+        for (let i = 0; i < pData.length; i++) 
+        {
+            let tmpObj = pData[i]
+            if(typeof pData[i] == 'function')
+            {
+                tmpObj = pData[i]()
+            }
+            if(Array.isArray(tmpObj))
+            {
+                tmpArr.push(...tmpObj)
+            }
+            else if(typeof tmpObj == 'object')
+            {
+                tmpArr.push(tmpObj)
+            }
+        }
+
+        let tmpY = 5
+        let docPdf = new jsPDF('p','mm',[103,tmpArr.length * 10])
+        for (let i = 0; i < tmpArr.length; i++) 
+        {
+            if(typeof tmpArr[i].barcode != 'undefined')
+            {
+                docPdf.barcode(tmpArr[i].barcode, 
+                {
+                    fontSize: 25,
+                    textColor: "#000000",
+                    x: 26,
+                    y: tmpY+2,
+                    options: {align:"center"}
+                })
+                tmpY += 7
+            }
+            else if(typeof tmpArr[i].logo != 'undefined')
+            {
+                let img = new Image()
+                img.src = tmpArr[i].logo
+                docPdf.addImage(img, 'png', 25, tmpY, undefined, undefined)
+                tmpY += 30
+            }
+            else
+            {
+                let  tmpAlign = '' 
+                let tmpX = 0
+                let tmpCharSpace = 0
+
+                if(tmpArr[i].align == 'ct')
+                {
+                    tmpAlign = 'center'
+                    tmpX = docPdf.internal.pageSize.getWidth() / 2
+                }
+                else if(tmpArr[i].align == 'lt')
+                {
+                    tmpAlign = 'left'
+                    tmpX = 3
+                }
+                else  if(tmpArr[i].align == 'rt')
+                {
+                    tmpAlign = 'right'
+                    tmpX = docPdf.internal.pageSize.getWidth() - 3
+                }
+
+                let tmpStyle = 'normal'
+                if(tmpArr[i].style == 'bu')
+                {
+                    docPdf.line(tmpX,tmpY,tmpX + 103,tmpY)
+                }
+                else if(tmpArr[i].style == 'b')
+                {
+                    tmpStyle = 'bold'
+                }
+
+                let tmpFontSize = 12
+                if(tmpArr[i].font == 'a')
+                {
+                    tmpFontSize = 12
+                }
+                else if(tmpArr[i].font == 'b')
+                {
+                    tmpFontSize = 9
+                }                    
+
+                if(typeof tmpArr[i].size != 'undefined' && Array.isArray(tmpArr[i].size))
+                {
+                    if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 1)
+                    {
+                        tmpFontSize = 20
+                    }
+                    else if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 0)
+                    {
+                        tmpFontSize = 12
+                    }
+                }
+
+                if(typeof tmpArr[i].pdf != 'undefined')
+                {
+                    if(typeof tmpArr[i].pdf.fontSize != 'undefined')
+                    {
+                        tmpFontSize = tmpArr[i].pdf.fontSize
+                    }
+                    if(typeof tmpArr[i].pdf.charSpace != 'undefined')
+                    {
+                        tmpCharSpace = tmpArr[i].pdf.charSpace
+                    }                        
+                }
+
+                docPdf.setFont('helvetica',tmpStyle)
+                docPdf.setFontSize(tmpFontSize)
+
+                if(typeof tmpArr[i].pdf != 'undefined' && typeof tmpArr[i].pdf.grid != 'undefined')
+                {
+                    for (let x = 0; x < tmpArr[i].pdf.grid.length; x++) 
+                    {
+                        let tmpGrid = tmpArr[i].pdf.grid[x]
+                        let tmpGrdData = tmpArr[i].data.toString().substring(tmpGrid.charS,tmpGrid.charE)
+                        
+                        if(typeof tmpGrid.align != 'undefined')
+                        {
+                            tmpAlign = tmpGrid.align
+                        }
+                        else
+                        {
+                            if(tmpArr[i].align == 'ct')
+                            {
+                                tmpAlign = 'center'
+                            }
+                            else if(tmpArr[i].align == 'lt')
+                            {
+                                tmpAlign = 'left'
+                            }
+                            else if(tmpArr[i].align == 'rt')
+                            {
+                                tmpAlign = 'right'
+                            }
+                        }
+                        docPdf.text(tmpGrdData,tmpGrid.x,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                    }
+                }
+                else
+                {
+                    if(typeof tmpArr[i].data != 'undefined')
+                    {
+                        docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                    }
+                }
+
+                tmpY += 8
+            }
+        }           
+        return docPdf
+    }
     pdfPrint(pData,pMail)
     {
         return new Promise(async resolve => 
         {
-            let tmpArr = [];
-            for (let i = 0; i < pData.length; i++) 
-            {
-                let tmpObj = pData[i]
-                if(typeof pData[i] == 'function')
-                {
-                    tmpObj = pData[i]()
-                }
-                if(Array.isArray(tmpObj))
-                {
-                    tmpArr.push(...tmpObj)
-                }
-                else if(typeof tmpObj == 'object')
-                {
-                    tmpArr.push(tmpObj)
-                }
-            }
-            
-            let tmpY = 5
-            let docPdf = new jsPDF('p','mm',[103,tmpArr.length * 10])
-            for (let i = 0; i < tmpArr.length; i++) 
-            {
-                if(typeof tmpArr[i].barcode != 'undefined')
-                {
-                    docPdf.barcode(tmpArr[i].barcode, 
-                    {
-                        fontSize: 25,
-                        textColor: "#000000",
-                        x: 26,
-                        y: tmpY+2,
-                        options: {align:"center"}
-                    })
-                    tmpY += 7
-                }
-                else if(typeof tmpArr[i].logo != 'undefined')
-                {
-                    let img = new Image()
-                    img.src = tmpArr[i].logo
-                    docPdf.addImage(img, 'png', 25, tmpY, undefined, undefined)
-                    tmpY += 30
-                }
-                else
-                {
-                    let  tmpAlign = '' 
-                    let tmpX = 0
-                    let tmpCharSpace = 0
-
-                    if(tmpArr[i].align == 'ct')
-                    {
-                        tmpAlign = 'center'
-                        tmpX = docPdf.internal.pageSize.getWidth() / 2
-                    }
-                    else if(tmpArr[i].align == 'lt')
-                    {
-                        tmpAlign = 'left'
-                        tmpX = 3
-                    }
-                    else  if(tmpArr[i].align == 'rt')
-                    {
-                        tmpAlign = 'right'
-                        tmpX = docPdf.internal.pageSize.getWidth() - 3
-                    }
-
-                    let tmpStyle = 'normal'
-                    if(tmpArr[i].style == 'bu')
-                    {
-                        docPdf.line(tmpX,tmpY,tmpX + 103,tmpY)
-                    }
-                    else if(tmpArr[i].style == 'b')
-                    {
-                        tmpStyle = 'bold'
-                    }
-
-                    let tmpFontSize = 12
-                    if(tmpArr[i].font == 'a')
-                    {
-                        tmpFontSize = 12
-                    }
-                    else if(tmpArr[i].font == 'b')
-                    {
-                        tmpFontSize = 9
-                    }                    
-
-                    if(typeof tmpArr[i].size != 'undefined' && Array.isArray(tmpArr[i].size))
-                    {
-                        if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 1)
-                        {
-                            tmpFontSize = 20
-                        }
-                        else if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 0)
-                        {
-                            tmpFontSize = 12
-                        }
-                    }
-
-                    if(typeof tmpArr[i].pdf != 'undefined')
-                    {
-                        if(typeof tmpArr[i].pdf.fontSize != 'undefined')
-                        {
-                            tmpFontSize = tmpArr[i].pdf.fontSize
-                        }
-                        if(typeof tmpArr[i].pdf.charSpace != 'undefined')
-                        {
-                            tmpCharSpace = tmpArr[i].pdf.charSpace
-                        }                        
-                    }
-
-                    docPdf.setFont('helvetica',tmpStyle)
-                    docPdf.setFontSize(tmpFontSize)
-
-                    if(typeof tmpArr[i].pdf != 'undefined' && typeof tmpArr[i].pdf.grid != 'undefined')
-                    {
-                        for (let x = 0; x < tmpArr[i].pdf.grid.length; x++) 
-                        {
-                            let tmpGrid = tmpArr[i].pdf.grid[x]
-                            let tmpGrdData = tmpArr[i].data.toString().substring(tmpGrid.charS,tmpGrid.charE)
-                            
-                            if(typeof tmpGrid.align != 'undefined')
-                            {
-                                tmpAlign = tmpGrid.align
-                            }
-                            else
-                            {
-                                if(tmpArr[i].align == 'ct')
-                                {
-                                    tmpAlign = 'center'
-                                }
-                                else if(tmpArr[i].align == 'lt')
-                                {
-                                    tmpAlign = 'left'
-                                }
-                                else if(tmpArr[i].align == 'rt')
-                                {
-                                    tmpAlign = 'right'
-                                }
-                            }
-                            docPdf.text(tmpGrdData,tmpGrid.x,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
-                        }
-                    }
-                    else
-                    {
-                        if(typeof tmpArr[i].data != 'undefined')
-                        {
-                            docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
-                        }
-                    }
-
-                    tmpY += 8
-                }
-            }           
+            let docPdf = this.pdf(pData)
 
             let tmpText = "Bonjour Cher Client, \n" + 
             " \n "+
@@ -1951,16 +1956,13 @@ export class posDeviceCls
             let tmpHtml = ''
             let tmpAttach = btoa(docPdf.output())
             let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
-            if(typeof pMail != 'undefined')
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
-                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
-                {
-                    console.log(pResult1)
-                });
-            }
+                console.log(pResult1)
+            });
 
             //docPdf.save('test.pdf')
-            resolve(btoa(docPdf.output()))
+            resolve()
         });
     }
 }
