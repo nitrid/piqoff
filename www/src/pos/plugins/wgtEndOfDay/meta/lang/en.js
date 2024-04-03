@@ -3,7 +3,7 @@ const lang =
     popEndDay: 
     {
         title : "End of Day",
-        dtPopEndDayDocDate :"Date",
+        dtPopEndDayDocDate :"Select Date",
         txtPopEndDayAdvance : "Advance",
         txtPopEndDayCash : "Cash",
         txtPopEndDayCreditCard : "Credit Card",

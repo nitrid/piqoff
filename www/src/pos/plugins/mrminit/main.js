@@ -26,6 +26,7 @@ const orgComponentWillMount = posDoc.prototype.componentWillMount
 const orgInit = posDoc.prototype.init
 const orgRender = posDoc.prototype.render
 const orgSaleRowAdd = posDoc.prototype.saleRowAdd
+const orgSaleRowUpdate = posDoc.prototype.saleRowUpdate
 
 let localDb = null
 let dtList = null
@@ -79,11 +80,46 @@ posDoc.prototype.init = function init()
 {
     orgInit.call(this)
 }
-posDoc.prototype.saleRowAdd = function saleRowAdd(pItemData) 
+posDoc.prototype.saleRowAdd = async function saleRowAdd(pItemData) 
 {
     pItemData.NAME = pItemData.NAME + " " + pItemData.LIST_TAG
     pItemData.SNAME = pItemData.NAME.substring(0,50)
-    return orgSaleRowAdd.call(this,pItemData)
+
+    orgSaleRowAdd.call(this,pItemData)
+
+    let tmpQuery = 
+    {
+        query : "SELECT * FROM SPC_REFASHION_PAY WHERE ITEM = @ITEM" ,
+        param : ['ITEM:string|50'],
+        value : [pItemData.GUID]
+    }
+    let tmpData = await this.core.sql.execute(tmpQuery) 
+
+    if(tmpData.result.recordset.length > 0)
+    {
+        let tmpRefashPay = tmpData.result.recordset[0]
+        this.payRowAdd({PAY_TYPE:5,AMOUNT:tmpRefashPay.REPERATION_PRICE * pItemData.QUANTITY,CHANGE:0})
+    }
+}
+posDoc.prototype.saleRowUpdate = async function saleRowUpdate(pRowData,pItemData)
+{
+    orgSaleRowUpdate.call(this,pRowData,pItemData)
+
+    let tmpQuery = 
+    {
+        query : "SELECT * FROM SPC_REFASHION_PAY WHERE ITEM = @ITEM" ,
+        param : ['ITEM:string|50'],
+        value : [pRowData.ITEM_GUID]
+    }
+    let tmpData = await this.core.sql.execute(tmpQuery) 
+    
+    if(tmpData.result.recordset.length > 0)
+    {
+        let tmpRefashPay = tmpData.result.recordset[0]
+        let tmpRowData = this.isRowMerge('PAY',{TYPE:5})
+
+        await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(tmpRefashPay.REPERATION_PRICE * pItemData.QUANTITY)).round(2)),CHANGE:0})
+    }
 }
 posDoc.prototype.render = function() 
 {
@@ -189,7 +225,9 @@ function render()
                 position={{of:"#root"}}
                 onShowed={()=>
                 {
+                    this.txtPopReFashionTicketRef.value = dtTicket[0].REF
                     this.txtPopReFashionTicketNote.value = dtTicket[0].DESCRIPTION
+                    this.txtPopReFashionTicket.value = dtTicket[0].TICKET
                     this.imgPopReFashionTicketFirst.value = dtTicket[0].FIRST_IMG
                     this.imgPopReFashionTicketLast.value = dtTicket[0].LAST_IMG
                 }}>
@@ -216,11 +254,12 @@ function render()
                                         let pResult = await dialog(tmpConfObj);
                                         return
                                     }
-                                    
+                                    console.log(this.txtPopReFashionTicket.base64)
                                     dtTicket[0].FIRST_IMG = this.imgPopReFashionTicketFirst.value
                                     dtTicket[0].LAST_IMG = this.imgPopReFashionTicketLast.value
                                     dtTicket[0].DESCRIPTION = this.txtPopReFashionTicketNote.value
-                                    
+                                    dtTicket[0].TICKET = this.txtPopReFashionTicket.value
+
                                     if(dtTicket[0].stat == 'new')
                                     {
                                         await insert(dtTicket[0])
@@ -294,7 +333,7 @@ function render()
                         </div>
                         <div className='row' style={{paddingTop:"10px"}}>
                             <div className='col-6'>
-                                <NdTextBox id="txtPopReFashionTicket" parent={this} title={this.lang.t("popReFashionTicket.txPopReFashionTicket")} dt={{data:dtTicket,field:"TICKET_PDF"}} readOnly={true}
+                                <NdTextBox id="txtPopReFashionTicket" parent={this} title={this.lang.t("popReFashionTicket.txPopReFashionTicket")} readOnly={true}
                                 button=
                                 {
                                     [
@@ -303,13 +342,19 @@ function render()
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                console.log(this.pg_txtPopReFashionTicket)
                                                 this.pg_txtPopReFashionTicket.show()
-                                                this.pg_txtPopReFashionTicket.onClick = (data) =>
+                                                this.pg_txtPopReFashionTicket.onClick = async(data) =>
                                                 {
                                                     if(data.length > 0)
                                                     {
-                                                        this.txtPopReFashionTicket.value = data[0].GUID
+                                                        getPosPrintData = getPosPrintData.bind(this)
+                                                        pdfToBase64 = pdfToBase64.bind(this)
+
+                                                        let tmpPosPrintData = await getPosPrintData(data[0])
+                                                        let tmpPdfToBase64 = await pdfToBase64(tmpPosPrintData)
+                                                        
+                                                        dtTicket[0].TICKET_PDF = btoa(tmpPdfToBase64.output())
+                                                        this.txtPopReFashionTicket.value = data[0].DEVICE + " - " + data[0].REF
                                                     }
                                                 }
                                             }
@@ -319,6 +364,17 @@ function render()
                                 selectAll={true}                           
                                 >
                                 </NdTextBox>
+                            </div>
+                            <div className='col-6'>
+                                <NbButton className="form-group btn btn-block btn-primary" style={{height:"35px",width:"40px"}}
+                                onClick={async()=>
+                                {
+                                    let pdfBlob = base64ToBlob(dtTicket[0].TICKET_PDF, 'application/pdf');
+                                    let pdfUrl = URL.createObjectURL(pdfBlob);
+                                    window.open(pdfUrl, '_blank', "width=900,height=1000,left=500");
+                                }}>
+                                    <i className="fa-solid fa-file-pdf"></i>
+                                </NbButton>
                             </div>
                         </div>
                         <div className='row' style={{paddingTop:"10px"}}>
@@ -449,6 +505,130 @@ async function getList(pRef)
     let tmpData = await select({REF:''})
     dtList.import(tmpData.result.recordset)
     await this.grdPopReFashionList.dataRefresh({source:dtList});
+}
+function getPosPrintData(pData)
+{
+    return new Promise(async resolve => 
+    {
+        let tmpPosDt = new datatable();
+        let tmpPosSaleDt = new datatable();
+        let tmpPosPayDt = new datatable();
+        let tmpPosPromoDt = new datatable();  
+
+        tmpPosDt.selectCmd = 
+        {
+            query:  "SELECT TOP 1 *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                    "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND REF = @REF AND STATUS = 1 ORDER BY LDATE DESC",
+            param:  ["DEVICE:string|25","REF:int"],
+            value:  [pData.DEVICE,pData.REF],
+            local : 
+            {
+                type : "select",
+                query : `SELECT *, 
+                        strftime('%d-%m-%Y', LDATE) || '-' || strftime('%H:%M:%S', LDATE) AS CONVERT_DATE, 
+                        SUBSTR(GUID, 20, 36) AS REF_NO 
+                        FROM POS_VW_01 
+                        WHERE DEVICE = ? AND REF = ? AND STATUS = 1 
+                        ORDER BY LDATE DESC
+                        LIMIT 1;`,
+                values : [pData.DEVICE,pData.REF]
+            }
+        }
+        await tmpPosDt.refresh()
+        if(tmpPosDt.length > 0)
+        {
+            tmpPosSaleDt.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
+                param:  ["POS_GUID:string|50"],
+                value:  [tmpPosDt[0].GUID],
+                local : 
+                {
+                    type : "select",
+                    query : `SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = ? ORDER BY LDATE DESC`,
+                    values : [tmpPosDt[0].GUID]
+                }
+            }                                                
+            await tmpPosSaleDt.refresh()
+            tmpPosPayDt.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
+                param:  ["POS_GUID:string|50"],
+                value:  [tmpPosDt[0].GUID],
+                local : 
+                {
+                    type : "select",
+                    query : `SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = ? ORDER BY LDATE DESC`,
+                    values : [tmpPosDt[0].GUID]
+                }
+            }
+            await tmpPosPayDt.refresh()
+            tmpPosPromoDt.selectCmd = 
+            {
+                query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                param : ['POS_GUID:string|50'],
+                value:  [tmpPosDt[0].GUID],
+                local : 
+                {
+                    type : "select",
+                    query : `SELECT * FROM POS_PROMO_VW_01 WHERE POS_GUID = ?`,
+                    values : [tmpPosDt[0].GUID]
+                }
+            } 
+            await tmpPosPromoDt.refresh()
+        }
+
+        let tmpData = 
+        {
+            pos : tmpPosDt,
+            possale : tmpPosSaleDt,
+            pospay : tmpPosPayDt,
+            pospromo : tmpPosPromoDt,
+            firm : this.firm,
+            special : 
+            {
+                type : 'Fis',
+                ticketCount : 0,
+                reprint : 1,
+                repas : 0,
+                factCertificate : '',
+                dupCertificate : '',
+                customerUsePoint : 0,
+                customerPoint : 0,
+                customerGrowPoint : 0,
+                customerPointFactory : 0
+            }
+        }
+        
+        resolve(tmpData)
+    });
+}
+function pdfToBase64(pData)
+{
+    return new Promise(async resolve => 
+    {
+        let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
+
+        import("../../meta/print/" + prmPrint).then(async(e)=>
+        {
+            let tmpPrint = e.print(pData)
+            let tmpPdf = await this.posDevice.pdf(tmpPrint)
+
+            resolve(tmpPdf)
+        })
+    })
+}
+function base64ToBlob(base64, mimeType) 
+{
+    var byteCharacters = atob(base64);
+    var byteNumbers = new Array(byteCharacters.length);
+    for (var i = 0; i < byteCharacters.length; i++) 
+    {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    var byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], {type: mimeType});
 }
 async function Service()
 {
@@ -585,7 +765,6 @@ function update(pData)
 {
     return new Promise(async resolve => 
     {
-        console.log(pData)
         let tmpQuery = {...initDb().update}
         tmpQuery.values = 
         [
@@ -603,7 +782,7 @@ function update(pData)
             pData.STATUS,
             pData.GUID
         ]
-    
+        console.log(tmpQuery)
         await localDb.update(tmpQuery)
 
         resolve()

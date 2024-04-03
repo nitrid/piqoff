@@ -195,6 +195,7 @@ export default class repairTicket extends React.PureComponent
                 <div>
                     <NbPopUp id={"popRepairTicket"} parent={this} title={""} fullscreen={true} onShowed={()=>
                     {
+                        this.txtPopRef.value = this.dtTicket[0].REF
                         this.txtPopNote.value = this.dtTicket[0].DESCRIPTION
                         this.imgFirst.value = this.dtTicket[0].FIRST_IMG
                         this.imgLast.value = this.dtTicket[0].LAST_IMG
@@ -294,62 +295,6 @@ export default class repairTicket extends React.PureComponent
                                     }).bind(this)}
                                     >
                                     </NdDatePicker>
-                                </div>
-                            </div>
-                            <div className='row' style={{paddingTop:"10px"}}>
-                                <div className='col-6'>
-                                    <NdTextBox id="txtPopSaleTicket" parent={this} title={this.t("txtPopSaleTicket")} dt={{data:this.dtTicket,field:"TICKET_PDF"}} readOnly={true}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtPopSaleTicket.show()
-                                                    this.pg_txtPopSaleTicket.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.txtPopSaleTicket.value = data[0].GUID
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        ]
-                                    }
-                                    selectAll={true}                           
-                                    >
-                                    </NdTextBox>
-                                    {/* FİŞ SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtPopSaleTicket"} parent={this} container={"#root"} 
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtPopSaleTicket.title")} 
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,DOC_DATE,DEVICE,REF FROM POS_VW_01 WHERE UPPER(REF) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    deferRendering={true}
-                                    >
-                                        <Column dataField="DOC_DATE" dataType="date" caption={this.t("pg_txtPopSaleTicket.clmDate")} width={'30%'} />
-                                        <Column dataField="DEVICE" caption={this.t("pg_txtPopSaleTicket.clmDevice")} width={'30%'} defaultSortOrder="asc" />
-                                        <Column dataField="REF" caption={this.t("pg_txtPopSaleTicket.clmRef")} width={'40%'} />
-                                    </NdPopGrid>
                                 </div>
                             </div>
                             <div className='row' style={{paddingTop:"10px"}}>
