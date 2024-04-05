@@ -1280,7 +1280,7 @@ export default class posDoc extends React.PureComponent
                             await dialog(tmpConfObj);
                             resolve()
                         }
-                        else if(tmpResult >= 100)
+                        else if(tmpResult >= 1000)
                         {
                             let tmpConfObj =
                             {
@@ -3979,7 +3979,7 @@ export default class posDoc extends React.PureComponent
                                                         return
                                                     }
 
-                                                    if(tmpResult >= 100)
+                                                    if(tmpResult >= 1000)
                                                     {
                                                         let tmpConfObj =
                                                         {
@@ -6551,7 +6551,6 @@ export default class posDoc extends React.PureComponent
                                         }
                                         this.core.util.writeLog("calcGrandTotal : 17")
                                         await this.calcGrandTotal();
-
                                         if(typeof tmpDescResult != 'undefined')
                                         {
                                             await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
@@ -8455,7 +8454,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                                 
-                                                if(tmpResult >= 100)
+                                                if(tmpResult >= 1000)
                                                 {
                                                     let tmpConfObj =
                                                     {
