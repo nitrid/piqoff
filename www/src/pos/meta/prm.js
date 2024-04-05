@@ -1459,7 +1459,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"PricingListNoChoice",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
