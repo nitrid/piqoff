@@ -2055,17 +2055,6 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                         await this.print(tmpData,1,this.posObj.dt()[0].CUSTOMER_MAIL)
-                       
-                        let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
-            
-                        import("../meta/print/" + prmPrint).then(async(e)=>
-                        {
-                            let tmpPrint = e.print(tmpData)
-                          
-                            let tmpPdf = await this.posDevice.pdfPrint(tmpPrint)
-
-                            this.core.socket.emit('posSaleClosed',[tmpData,tmpPdf])
-                        })
                     }
                 }
                 //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -6372,59 +6361,58 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpDescResult = await this.popDiscountDesc.show()
                                         
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())
+    
+                                        let tmpResult = await this.popNumberRate.show(this.lang.t("discountpercent") + tmpDt.sum('AMOUNT',2),Number(tmpDt.sum('AMOUNT')).rate2Num(tmpDt.sum('DISCOUNT')))
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(Number(tmpResult) > 100)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+    
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpResult,2)
+                                            
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].LDATE = moment(new Date()).utcOffset(0, true)
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 16")
+                                        await this.calcGrandTotal();
+
                                         if(typeof tmpDescResult != 'undefined')
                                         {
-                                            let tmpDt = new datatable()
-                                            tmpDt.import(this.grdDiscList.getSelectedData())
-        
-                                            let tmpResult = await this.popNumberRate.show(this.lang.t("discountpercent") + tmpDt.sum('AMOUNT',2),Number(tmpDt.sum('AMOUNT')).rate2Num(tmpDt.sum('DISCOUNT')))
-                                            if(typeof tmpResult == 'undefined')
-                                            {
-                                                return
-                                            }
-                                            if(this.posObj.posPay.dt().length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-                                            if(Number(tmpResult) > 100)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return;
-                                            }
-        
-                                            for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
-                                            {
-                                                let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpResult,2)
-                                                
-                                                let tmpData = this.grdDiscList.getSelectedData()[i]
-                                                let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
-                                                
-                                                this.grdDiscList.getSelectedData()[i].LDATE = moment(new Date()).utcOffset(0, true)
-                                                this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                                this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
-                                                this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
-                                                this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
-                                                this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
-                                            }
-                                            this.core.util.writeLog("calcGrandTotal : 16")
-                                            await this.calcGrandTotal();
-
                                             await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
                                         }
-                                        
                                     }
                                     else
                                     {
@@ -6448,57 +6436,57 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpDescResult = await this.popDiscountDesc.show()
                                         
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                        let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
+                                        
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 17")
+                                        await this.calcGrandTotal();
+
                                         if(typeof tmpDescResult != 'undefined')
                                         {
-                                            let tmpDt = new datatable()
-                                            tmpDt.import(this.grdDiscList.getSelectedData())                                    
-    
-                                            let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
-                                            let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
-                                            
-                                            if(typeof tmpResult == 'undefined')
-                                            {
-                                                return
-                                            }
-                                            if(this.posObj.posPay.dt().length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-                                            if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return;
-                                            }
-    
-                                            for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
-                                            {
-                                                let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
-                                                            
-                                                let tmpData = this.grdDiscList.getSelectedData()[i]
-                                                let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
-                                                
-                                                this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                                this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
-                                                this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
-                                                this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
-                                                this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
-                                            }
-                                            this.core.util.writeLog("calcGrandTotal : 17")
-                                            await this.calcGrandTotal();
-
                                             await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
                                         }
                                     }  
@@ -6524,48 +6512,48 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpDescResult = await this.popDiscountDesc.show()
                                         
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
+
+                                        let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
+                                        
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                           
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        this.core.util.writeLog("calcGrandTotal : 17")
+                                        await this.calcGrandTotal();
+                                                                                
                                         if(typeof tmpDescResult != 'undefined')
                                         {
-                                            let tmpDt = new datatable()
-                                            tmpDt.import(this.grdDiscList.getSelectedData())                                    
-    
-                                            let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + Number(tmpDt[0].PRICE).round(2),Number(tmpDt[0].PRICE - (tmpDt[0].DISCOUNT/ tmpDt[0].QUANTITY)).round(2))
-    
-                                            let tmpRate = Number(tmpDt[0].PRICE).rate2Num((tmpDt[0].PRICE-tmpResult),2);
-                                            
-                                            if(typeof tmpResult == 'undefined')
-                                            {
-                                                return
-                                            }
-                                            if(this.posObj.posPay.dt().length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-    
-                                            for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
-                                            {
-                                               
-                                                let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
-                                                            
-                                                let tmpData = this.grdDiscList.getSelectedData()[i]
-                                                let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
-                                                
-                                                this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                                this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
-                                                this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
-                                                this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
-                                                this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
-                                            }
-                                            this.core.util.writeLog("calcGrandTotal : 17")
-                                            await this.calcGrandTotal();
-                                            
                                             await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
                                         }
                                     }  
