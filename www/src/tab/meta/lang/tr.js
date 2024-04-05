@@ -38,6 +38,8 @@ export const langTr =
     sale:  // "Satış"
     {
         loadMore : "Daha Fazla Göster",
+        mostSalesFilter: "En çok alınan  ürünler",
+        promoProductFilter : "Promosyonlu ürünler",
         popCart:
         {
             txtCustomer: "Müşteri",
