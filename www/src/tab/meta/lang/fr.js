@@ -38,6 +38,7 @@ export const langFr =
     sale:  // "Vente"
     {
         loadMore : "Afficher plus",
+        mostSalesFilter: "Produits les plus vendus",
         popCart:
         {
             txtCustomer: "Client",
