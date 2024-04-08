@@ -681,6 +681,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            console.log(pCode)
             if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
             {
                 resolve([])
@@ -955,6 +956,7 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
+        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1328,13 +1330,14 @@ export default class posDoc extends React.PureComponent
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
         
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
-        {            
+        {               
             return {barcode:pBarcode}
         }
         //201234012550 0211234012550
         for (let i = 0; i < tmpPrm.length; i++) 
         {
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+            console.log(tmpFlag)
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -1345,15 +1348,20 @@ export default class posDoc extends React.PureComponent
                 let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpCode = pBarcode.substring(tmpPrm[i].indexOf('N'),tmpPrm[i].lastIndexOf('N') + 1)
 
+                console.log(tmpCode)
                 let tmpSumFlag = ""
+                let tmpSum = ""
                 if(tmpPrm[i].indexOf('F') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 else if(tmpPrm[i].indexOf('E') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 
                 let tmpFactory = 1
@@ -1362,8 +1370,30 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
+                if(this.prmObj.filter({ID:'BalanceUpdate',TYPE:0}).getValue())
+                {
+                    console.log(tmpSum)
+                    let tmpQuery = {
+                        query :"EXEC [dbo].[PRD_BALANCE_TRASFER] " +
+                                "@T_CUSER = @P_CUSER, " + 
+                                "@T_POS = @P_POS, " +
+                                "@T_TICKET_NO = @P_TICKET_NO " ,
+                        param : ['P_CUSER:string|50','P_POS:string|50','P_TICKET_NO:int',],
+                        value : [this.core.auth.data.CODE,this.posObj.dt()[0].GUID,tmpSum]
+                    }
+                    console.log(tmpQuery.value)
+                    this.core.sql.execute(tmpQuery)
+                }
+
+                let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+
+                if(pBarcode.length == 24)
+                {
+                    tmpBarkod = tmpCode
+                }
+                console.log(tmpBarkod)
                 return {
-                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    barcode : tmpBarkod,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }

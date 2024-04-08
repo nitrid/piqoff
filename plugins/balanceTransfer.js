@@ -33,7 +33,6 @@ class nf525
     }
     async getBalanceData()
     {
-        console.log(moment(new Date()).format("YYYY-MM-DD"))
         let tmpQuery = {
             query :"SELECT *,CASE WHEN unit = 'kg' THEN netKg ELSE AMOUNT END AS QUANTITY FROM [CEOPOS].[dbo].[report] WHERE remark <> 'OK' ",
         }
@@ -46,6 +45,12 @@ class nf525
     }
     async DataInsert(pData)
     {
+        let tmpFor = (4 - pData.indexx.length)
+        let tmpCode = pData.indexx
+        for (let i = 0; i < tmpFor; i++) 
+        {
+            tmpCode = "0" + tmpCode
+        }
         return new Promise(async resolve =>
         {
             let tmpQuery = {
@@ -58,9 +63,9 @@ class nf525
                         "@T_QUANTITY = @P_QUANTITY, " +
                         "@T_PRICE = @P_PRICE ",
                 param : ['P_CUSER:string|50','P_CODE:string|50','P_TICKET_NO:int','P_TICKET_DATE:date','P_UNIT:string|50','P_QUANTITY:float','P_PRICE:float'],
-                value : [this.core.auth.data,pData.indexx,pData.SID,pData.packDate,pData.unit,Number(pData.QUANTITY),Number(pData.unitPrice)]
+                value : [pData.salesmanName,tmpCode,Number(pData.SID),pData.packDate,pData.unit,Number(pData.QUANTITY),Number(pData.unitPrice)]
             }
-            (await core.instance.sql.execute(tmpQuery)).result.recordset
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
             resolve()
         })
