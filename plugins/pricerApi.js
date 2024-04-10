@@ -109,7 +109,6 @@ class pricerApi
     {
         pSocket.on('allPromoSend',async (pParam,pCallback) =>
         {
-            console.log(111)
             this.processPromoSend()
         })
     }
