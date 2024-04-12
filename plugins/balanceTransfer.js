@@ -18,7 +18,7 @@ class nf525
 
         this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
         
-        this.processRun()
+        //this.processRun()
     }
     connEvt(pSocket)
     {       

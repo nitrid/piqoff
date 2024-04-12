@@ -15,7 +15,7 @@ class pricerApi
         this.core.socket.on('connection',this.connEvt)
         this.core.socket.on('connection',this.allCustomerSocket)
         this.core.socket.on('connection',this.customerUpdateSocket)
-        this.active = false
+        this.active = true
         this.selletVkn = ''
         // this.processCustomerSend('00000000-0000-0000-0000-000000000000')
     }
@@ -84,7 +84,7 @@ class pricerApi
             console.log(JSON.stringify([tmpSale]))
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createOrders', 
+                fetch('http://20.19.32.36:3000/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -147,7 +147,7 @@ class pricerApi
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createUsers', 
+                fetch('http://20.19.32.36:3000/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  
