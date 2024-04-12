@@ -1373,6 +1373,7 @@ export class editItemCls
             CUSTOMER: '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
+            CUSTOMS : '',
             WEIGHING : false
         }
 
@@ -1424,14 +1425,15 @@ export class editItemCls
                     "@MAIN_UNIT_ID = @PMAIN_UNIT_ID, " +
                     "@UNDER_FACTOR = @PUNDER_FACTOR, " +
                     "@UNDER_UNIT_ID = @PUNDER_UNIT_ID, " +
-                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME ",
+                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME, " + 
+                    "@CUSTOMS = @PCUSTOMS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
                      'PCOST_PRICE:float','PWEIGHING:bit','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
                     'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50','PUNDER_UNIT_GUID:string|50','PMAIN_UNIT_ID:string|25',
-                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25'],
+                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25','PCUSTOMS:string|50'],
             dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','WEIGHING','STATUS','ORGINS',
                        'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID',
-                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME'],
+                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME','CUSTOMS'],
         } 
 
         this.ds.add(tmpDt);

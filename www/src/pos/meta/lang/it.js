@@ -27,7 +27,7 @@ export const langIt =
     nbCalculator: "Calcolatrice",
     about: "Informazioni",
     abtCertificate: "Certificazione: NF525",
-    abtNrCertificate: "Numero certificato: B_0527-1",
+    abtNrCertificate: "Numero certificato: B_0527-3",
     abtLicence: "Licenza: XXXXXXXXXXXXXXXXX",
     abtVersion: "Versione: ",
     abtPiqsoft: "Software: Piqsoft-POS",
