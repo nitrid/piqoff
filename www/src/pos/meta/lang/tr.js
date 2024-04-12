@@ -27,7 +27,7 @@ export const langTr =
     nbCalculator : "Hesap Makinesi",
     about : "Hakkımızda",
     abtCertificate : "Setifika : NF525",
-    abtNrCertificate : "Sertifika No : B_0527-1",
+    abtNrCertificate : "Sertifika No : B_0527-3",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
     abtPiqsoft : "Logiciel : Piqsoft-POS",
