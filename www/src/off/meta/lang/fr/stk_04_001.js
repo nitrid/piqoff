@@ -34,6 +34,7 @@ const stk_04_001 =
         clmWeighing : "Peser", 
         clmNetMargin :  "Marge Nette",
         clmGrossMargin : "Marge Brute",
+        clmCustoms : "Code de la douane"
     },
     msgSave:
     {

@@ -409,8 +409,16 @@ export default class purchaseDispatch extends DocBase
                 <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
-                onChange={(r)=>
+                onChange={async(r)=>
                 {
+                    e.data.ORIGIN = r.component._changedValue
+                    let tmpQuery = 
+                    {
+                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                        value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
+                    }
+                    await this.core.sql.execute(tmpQuery) 
                 }}
                 button=
                 {
