@@ -477,8 +477,16 @@ export default class purchaseInvoice extends DocBase
                 <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
-                onChange={(r)=>
+                onChange={async (r)=>
                 {
+                    e.data.ORIGIN = r.component._changedValue
+                    let tmpQuery = 
+                    {
+                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                        value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
+                    }
+                    await this.core.sql.execute(tmpQuery) 
                 }}
                 button=
                 {
@@ -559,8 +567,6 @@ export default class purchaseInvoice extends DocBase
                         value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                    console.log(tmpCheckData.result.recordset.length)
-                    console.log(tmpCheckData)
                     if(tmpCheckData.result.recordset.length == 0)
                     {   
                         let tmpCustomerBtn = ''
