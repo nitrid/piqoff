@@ -27,7 +27,7 @@ export const langEn =
     nbCalculator : "Calculator", 
     about : "About",
     abtCertificate : "Certificate: NF525",
-    abtNrCertificate : "Certificate Number: B_0527-1",
+    abtNrCertificate : "Certificate Number: B_0527-3",
     abtLicence : "License: XXXXXXXXXXXXXXXXX",
     abtVersion : "Version: ",
     abtPiqsoft :  "POS Name: Piqsoft-POS",
