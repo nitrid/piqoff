@@ -1579,43 +1579,80 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
+                //SATIŞ KAPANIYOR İSE REF NO VE İMZA BOŞ MU KONTROLÜ YAPILIYOR.
+                if(typeof this.posObj.dt()[0].STATUS != 'undefined' && this.posObj.dt()[0].STATUS != null && this.posObj.dt()[0].STATUS == 1)
+                {
+                    if(typeof this.posObj.dt()[0].REF == 'undefined' || this.posObj.dt()[0].REF == null || this.posObj.dt()[0].REF == 0)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg1")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                    if(typeof this.posObj.dt()[0].SIGNATURE == 'undefined' || this.posObj.dt()[0].SIGNATURE == null || this.posObj.dt()[0].SIGNATURE == '')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg2")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                }
+                //**************************************************************** */
+                
                 let tmpSaveResult = await this.posObj.save()
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
                     {
-                        if(!this.core.offline)
-                        {
-                            //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
-                            let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
-                            if(tmpCheckResult == false)
-                            {
-                                this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
-                                //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
-                                let tmpConfObj =
-                                {
-                                    id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj)
-                                window.location.reload()
-                                resolve(false)
-                                return
-                            }
-                            else
-                            {
-                                this.saleCloseSucces()
-                                resolve(true)
-                                return
-                            }
-                        }
-                        else
-                        {
-                            this.saleCloseSucces()
-                            resolve(true)
-                            return
-                        }
+                        this.saleCloseSucces()
+                        resolve(true)
+                        return
+                        // if(!this.core.offline)
+                        // {
+                        //     //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        //     let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        //     if(tmpCheckResult == false)
+                        //     {
+                        //         this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                        //         //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                        //         let tmpConfObj =
+                        //         {
+                        //             id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                        //             button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                        //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                        //         }
+                        //         await dialog(tmpConfObj)
+                        //         window.location.reload()
+                        //         resolve(false)
+                        //         return
+                        //     }
+                        //     else
+                        //     {
+                        //         this.saleCloseSucces()
+                        //         resolve(true)
+                        //         return
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     this.saleCloseSucces()
+                        //     resolve(true)
+                        //     return
+                        // }
                     } 
                 }
                 else
@@ -1625,16 +1662,11 @@ export default class posDoc extends React.PureComponent
                     let tmpConfObj =
                     {
                         id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSaveFailAlert.btn02"),location:'after'}],
+                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
                     }
                     await dialog(tmpConfObj)
                     window.location.reload()
-                    // if((await dialog(tmpConfObj)) == 'btn02')
-                    // {
-                    //     this.core.util.writeLog("calcGrandTotal : 04")
-                    //     await this.calcGrandTotal()
-                    // }
                     resolve(false)
                     return
                 }
@@ -1850,7 +1882,7 @@ export default class posDoc extends React.PureComponent
                 }
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
-
+                                
                 //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
                 if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
                 {
@@ -2107,14 +2139,6 @@ export default class posDoc extends React.PureComponent
                     await this.posDevice.caseOpen();
                 }
                 //***************************************************/
-                //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                // if (!this.core.offline)
-                // {
-                //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                //     {
-                //         Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
-                //     }
-                // }
                 resolve(true)
             }
             else

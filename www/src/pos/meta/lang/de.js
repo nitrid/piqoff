@@ -762,6 +762,8 @@ export const langDe =
     {
         title : "Achtung",
         msg : "Speichern fehlgeschlagen!",
+        msg1: "Transaktion fehlgeschlagen, weil die Referenznummer null ist!",
+        msg2: "Transaktion fehlgeschlagen, weil die Unterschrift leer ist!",
         btn01 : "OK",
         btn02 : "Erneut senden",
     },

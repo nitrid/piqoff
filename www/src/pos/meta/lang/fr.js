@@ -766,6 +766,8 @@ export const langFr =
     {
         title : "Attention",
         msg : "Votre enregistrement a échoué!",
+        msg1: "La transaction a échoué car le numéro de référence est zéro !",
+        msg2: "La transaction a échoué car la signature est vide !",
         btn01 : "OK",
         btn02 : "Réessayez l'enregistrement",
     },
