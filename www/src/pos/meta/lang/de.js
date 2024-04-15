@@ -938,4 +938,10 @@ export const langDe =
         clmTag : "Tag",
         clmPrice : "Preis"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Achtung",
+        msg : "Geräteinformationen konnten nicht aus der Datenbank abgerufen werden!",
+        btn01 : "OK"
+    }
 }

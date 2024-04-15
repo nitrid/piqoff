@@ -930,4 +930,10 @@ export const langEs =
         clmTag : "Tag",
         clmPrice : "Precio"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Atención",
+        msg : "¡No se pudo recuperar la información del dispositivo de la base de datos!",
+        btn01 : "OK"
+    }
 }

@@ -929,4 +929,10 @@ export const langEn =
         clmTag : "Tag",
         clmPrice : "Price"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Device information could not be retrieved from the database!",
+        btn01 : "OK"
+    }
 }

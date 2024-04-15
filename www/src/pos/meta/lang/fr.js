@@ -973,4 +973,10 @@ export const langFr =
         clmTag : "Catégorie Code",
         clmPrice : "Prix"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Les informations de l'appareil n'ont pas pu être récupérées de la base de données !",
+        btn01 : "OK"
+    }
 }

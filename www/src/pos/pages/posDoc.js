@@ -379,29 +379,46 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-
-            this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+            
+            if(this.posDevice.dt().length > 0)
             {
-                this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-                this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
+                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+                {
+                    this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+                    this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                }
+                else
+                {
+                    if(this.core.util.isElectron())
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                        }
+                        
+                        await dialog(tmpConfObj);
+                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
             }
             else
             {
-                if(this.core.util.isElectron())
+                let tmpConfObj =
                 {
-                    let tmpConfObj =
-                    {
-                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
-                    }
-                    
-                    await dialog(tmpConfObj);
-                    
-                    this.core.auth.logout()
-                    window.location.reload()
+                    id:'msgDeviceLoadFailed',showTitle:true,title:this.lang.t("msgDeviceLoadFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgDeviceLoadFailed.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceLoadFailed.msg")}</div>)
                 }
+                
+                await dialog(tmpConfObj);
+
+                this.core.auth.logout()
+                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -681,7 +698,6 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            console.log(pCode)
             if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
             {
                 resolve([])
@@ -956,7 +972,6 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1337,7 +1352,6 @@ export default class posDoc extends React.PureComponent
         for (let i = 0; i < tmpPrm.length; i++) 
         {
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
-            console.log(tmpFlag)
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -3229,10 +3243,11 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 type : "insert",
-                query : `INSERT INTO NF525_JET (CUSER, CDATE, CODE, NAME, DESCRIPTION, APP_VERSION)
-                        VALUES (?, ?, ?, ?, ?, ?);`,
-                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),typeof pData.CODE != 'undefined' ? pData.CODE : '',
-                          typeof pData.NAME != 'undefined' ? pData.NAME : '',typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
+                query : `INSERT INTO NF525_JET (CUSER, CDATE, DEVICE, CODE, NAME, DESCRIPTION, APP_VERSION)
+                        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+                          typeof pData.CODE != 'undefined' ? pData.CODE : '',typeof pData.NAME != 'undefined' ? pData.NAME + ' (Data offline)' : '',
+                          typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
             }
             await this.core.local.insert(tmpQuery)
         }

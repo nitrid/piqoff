@@ -967,5 +967,11 @@ export const langTr =
         clmItemName : "Ürün Adı",
         clmTag : "Tag",
         clmPrice : "Fiyat"
-    }
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Dikkat",
+        msg : "Cihaz bilgileri database den getirilemedi !",
+        btn01 : "Tamam"
+    },
 }
