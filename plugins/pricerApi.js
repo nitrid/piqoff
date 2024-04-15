@@ -13,8 +13,9 @@ class pricerApi
         this.promoSocket = this.promoSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.core.socket.on('connection',this.promoSocket)
-        this.active = false
+        this.active = true
 
+        this.allItemSend()
         this.processRun()
     }
     async connEvt(pSocket)
@@ -115,6 +116,7 @@ class pricerApi
     }
     async itemUpdate(pGuid)
     {
+        console.log(pGuid)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
@@ -197,12 +199,13 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
+            query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1 AND LDATE > GETDATE() - 20  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
+            console.log(tmpResult[i].GUID)
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
@@ -220,6 +223,7 @@ class pricerApi
     }
     async processPromoSend()
     {
+        await this.processPromoClear()
         let tmpCleanQuery = 
         {
             query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE (SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) <= CONVERT(nvarchar,GETDATE(),112) AND  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1",
@@ -264,6 +268,7 @@ class pricerApi
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
+            console.log(tmpResult)
             fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -331,7 +336,7 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),110) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,110)  ",
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,112)  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
