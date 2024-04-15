@@ -8,6 +8,7 @@ import ScrollView from 'devextreme-react/scroll-view.js';
 import DropDownBox from 'devextreme-react/drop-down-box';
 import NdListBox from '../../core/react/devex/listbox.js';
 import List from 'devextreme-react/list';
+import { datatable } from '../../core/core.js';
 
 export default class userPage extends React.Component
 {
