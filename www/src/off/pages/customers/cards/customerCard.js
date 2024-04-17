@@ -382,8 +382,7 @@ export default class CustomerCard extends React.PureComponent
                                                 
                                                 console.log(this.customerObj.dt()[0])
                                                 if((await this.customerObj.save()) == 0)
-                                                {                                              
-                                                    this.core.socket.emit('customerUpdate',this.customerObj.dt()[0].GUID)
+                                                {
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
