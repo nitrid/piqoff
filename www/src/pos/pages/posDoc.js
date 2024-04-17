@@ -681,7 +681,6 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            console.log(pCode)
             if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
             {
                 resolve([])
@@ -956,7 +955,6 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1160,7 +1158,45 @@ export default class posDoc extends React.PureComponent
                         let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
-                            tmpQuantity = tmpWResult
+                            if(typeof tmpWResult.Result == 'undefined')
+                            {
+                                tmpItemsDt[0].SCALE_MANUEL = true;
+                                tmpQuantity = tmpWResult;
+                            }
+                            else
+                            {
+                                if(tmpWResult.Type == "02")
+                                {
+                                    if(tmpWResult.Result.Scale > 0)
+                                    {
+                                        tmpQuantity = tmpWResult.Result.Scale
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play();
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                            }
                         }
                         else
                         {
@@ -1337,7 +1373,6 @@ export default class posDoc extends React.PureComponent
         for (let i = 0; i < tmpPrm.length; i++) 
         {
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
-            console.log(tmpFlag)
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -1390,6 +1425,7 @@ export default class posDoc extends React.PureComponent
                 if(pBarcode.length == 24)
                 {
                     tmpBarkod = tmpCode
+                    tmpBarkod = 'B'+tmpCode
                 }
                 console.log(tmpBarkod)
                 return {
@@ -2944,11 +2980,13 @@ export default class posDoc extends React.PureComponent
                         tmpMail = this.txtMail.value
                     }
 
-                    await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
-                    await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 resolve()
             })

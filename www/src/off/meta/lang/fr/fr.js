@@ -214,6 +214,8 @@ export const langFr =
         stk_04_003: "Traitement inventaire",
         stk_04_004: "Traitement DLC",
         stk_04_005: "Entrée et sortie du produit", //BAK
+        stk_04_006: "Excel Ürün Aktarımı",  // BAK
+        stk_04_007: "Terazi Ürün Aktarımı",  // BAK
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 

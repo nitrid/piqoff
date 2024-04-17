@@ -1960,9 +1960,9 @@ export class posDeviceCls
             {
                 console.log(pResult1)
             });
-
+            
             //docPdf.save('test.pdf')
-            resolve()
+            resolve(tmpAttach)
         });
     }
 }

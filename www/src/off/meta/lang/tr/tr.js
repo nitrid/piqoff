@@ -214,6 +214,8 @@ export const langTr =
         stk_04_003: "Sayım Kesinleştirme",
         stk_04_004: "SKT Operasyonu",
         stk_04_005: "Ürün Giriş Çıkış Operasyonu",
+        stk_04_006: "Excel Ürün Aktarımı",
+        stk_04_007: "Terazi Ürün Aktarımı",
         stk_05_001: "Depo Envanter Raporu",
         stk_05_002: "Değişen Alış Fiyatları Raporu",
         stk_05_003: "Sayım Envanter Raporu",
