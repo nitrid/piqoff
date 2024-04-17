@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
+import fetch from 'node-fetch';
 
 class pricerApi
 {

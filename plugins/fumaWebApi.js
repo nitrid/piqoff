@@ -2,8 +2,9 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
+import fetch from 'node-fetch';
 
-class pricerApi
+class fumaWebApi
 {
     constructor()
     {
@@ -81,10 +82,10 @@ class pricerApi
                 "posSale": tmpSaleLine,
                 "pdf": "data:image/png;base64," + pData[1]
             }
-            console.log(JSON.stringify([tmpSale]))
+            //console.log(JSON.stringify([tmpSale]))
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createOrders', 
+                fetch('http://20.19.32.36:3000/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -98,7 +99,7 @@ class pricerApi
                 {
                     if (!response.ok) 
                     {
-                        throw new Error('yükleme başarısız. HTTP Hata: ' + response.status);
+                        throw new Error('FumaApi - processPosSaleSend : Yükleme başarısız. HTTP Hata: ' + response.status);
                     }
                     return response.json();
                 })
@@ -106,16 +107,16 @@ class pricerApi
                 {
                     if(data.success)
                     {
-                        console.log(data.result)
+                        console.log("FumaApi - processPosSaleSend : Gönderim başarılı")
                     }
                     else
                     {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - processPosSaleSend : ' + data.error)
                     }
                 })
                 .catch(error => 
                 {
-                    console.error('Hata:', error.message);
+                    console.error('FumaApi - processPosSaleSend Hata:', error.message);
                 });
             }
         }
@@ -147,7 +148,7 @@ class pricerApi
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createUsers', 
+                fetch('http://20.19.32.36:3000/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  
@@ -161,8 +162,6 @@ class pricerApi
                 {
                     if (!response.ok) 
                     {
-                        console.log(JSON.stringify(pData))
-
                         throw new Error(JSON.stringify(response));
                     }
                     return response.json();
@@ -171,16 +170,16 @@ class pricerApi
                 {
                     if(data.success)
                     {
-                        console.log(data.result)
+                        console.log("FumaApi - customerUpdate : Gönderim başarılı")
                     }
                     else
                     {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - customerUpdate : ' + data.error)
                     }
                 })
                 .catch(error => 
                 {
-                    console.error('Hata:', error.message);
+                    console.error('FumaApi - customerUpdate Hata:', error.message);
                 });
             }
         }
@@ -231,4 +230,4 @@ class pricerApi
     }
 }
 
-export const _pricerApi = new pricerApi()
+export const _fumaWebApi = new fumaWebApi()

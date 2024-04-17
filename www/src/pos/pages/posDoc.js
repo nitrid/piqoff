@@ -681,7 +681,6 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            console.log(pCode)
             if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
             {
                 resolve([])
@@ -956,7 +955,6 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1375,7 +1373,6 @@ export default class posDoc extends React.PureComponent
         for (let i = 0; i < tmpPrm.length; i++) 
         {
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
-            console.log(tmpFlag)
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -2983,11 +2980,13 @@ export default class posDoc extends React.PureComponent
                         tmpMail = this.txtMail.value
                     }
 
-                    await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
-                    await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 resolve()
             })
