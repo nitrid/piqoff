@@ -590,17 +590,19 @@ export default class itemCard extends React.PureComponent
             
             for (let i = 0; i < this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length; i++) 
             {
+                console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[i])
                 let tmpQuery = 
                 {
                     query :"SELECT TAX_SUCRE FROM CUSTOMERS WHERE CODE = @CODE ",
                     param : ['CODE:string|50'],
-                    value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_CODE]
+                    value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[i].CUSTOMER_CODE]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(tmpData.result.recordset[0].TAX_SUCRE == 1)
                     {
+                            console.log(1111)
                         this.setState({isTaxSugar:true})
                         this.txtTaxSugar.readOnly = false
                         this.taxSugarCalculate()
