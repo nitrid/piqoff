@@ -8,6 +8,7 @@ import ScrollView from 'devextreme-react/scroll-view.js';
 import DropDownBox from 'devextreme-react/drop-down-box';
 import NdListBox from '../../core/react/devex/listbox.js';
 import List from 'devextreme-react/list';
+import { datatable } from '../../core/core.js';
 
 export default class userPage extends React.Component
 {
@@ -83,6 +84,7 @@ export default class userPage extends React.Component
                             if(data.length > 0)
                             {
                                 this.userObj.dt()[this.userObj.dt().length - 1].PWD = btoa(data[0].PWD)
+                                this.userObj.dt()[this.userObj.dt().length - 1].GUID = datatable.uuidv4()
                                 await this.userObj.save()
                                 
                                 let tmpQuery = 

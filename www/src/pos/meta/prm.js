@@ -41,8 +41,8 @@ export const prm =
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
-            '27NNNNKKKGGGMMMMCCF',
-            '26NNNNKKKGGGMMMMCCF',
+            '27NNNNKKKGGGMMMMCCXXXXEE',
+            '26NNNNKKKKKKMMMMCCXXXXEE',
         ],
         SPECIAL : "",
         PAGE : "pos",
@@ -1503,6 +1503,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Klavye Deseni"
+        }
+    },
+    // BalanceUpdate
+    {
+        TYPE : 0,
+        ID :"BalanceUpdate",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Etiket Tablosunu Güncelle"
         }
     },
     //#endregion

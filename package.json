@@ -1,13 +1,14 @@
 {
     "type": "module",
     "name": "piqsoft",
-    "version": "1.0.7g",
+    "version": "1.0.8",
     "dependencies": {
         "adm-zip": "^0.5.10",
         "gensrv": "1.0.106",
         "jsrsasign": "10.6.1",
         "jsrsasign-util": "1.0.5",
         "node-cron": "^3.0.2",
+        "node-fetch": "^3.3.2",
         "node-windows": "1.0.0-beta.6",
         "nodemailer": "^6.8.0",
         "xlsx": "0.18.5"
