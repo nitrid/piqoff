@@ -1502,5 +1502,21 @@ export const prm =
             CAPTION : "Klavye Deseni"
         }
     },
+    // BalanceUpdate
+    {
+        TYPE : 0,
+        ID :"BalanceUpdate",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Etiket Tablosunu Güncelle"
+        }
+    },
     //#endregion
 ]

@@ -1158,7 +1158,45 @@ export default class posDoc extends React.PureComponent
                         let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
-                            tmpQuantity = tmpWResult
+                            if(typeof tmpWResult.Result == 'undefined')
+                            {
+                                tmpItemsDt[0].SCALE_MANUEL = true;
+                                tmpQuantity = tmpWResult;
+                            }
+                            else
+                            {
+                                if(tmpWResult.Type == "02")
+                                {
+                                    if(tmpWResult.Result.Scale > 0)
+                                    {
+                                        tmpQuantity = tmpWResult.Result.Scale
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play();
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                            }
                         }
                         else
                         {
@@ -1328,7 +1366,7 @@ export default class posDoc extends React.PureComponent
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
         
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
-        {            
+        {               
             return {barcode:pBarcode}
         }
         //201234012550 0211234012550
@@ -1345,15 +1383,20 @@ export default class posDoc extends React.PureComponent
                 let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpCode = pBarcode.substring(tmpPrm[i].indexOf('N'),tmpPrm[i].lastIndexOf('N') + 1)
 
+                console.log(tmpCode)
                 let tmpSumFlag = ""
+                let tmpSum = ""
                 if(tmpPrm[i].indexOf('F') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 else if(tmpPrm[i].indexOf('E') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 
                 let tmpFactory = 1
@@ -1362,8 +1405,31 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
+                if(this.prmObj.filter({ID:'BalanceUpdate',TYPE:0}).getValue())
+                {
+                    console.log(tmpSum)
+                    let tmpQuery = {
+                        query :"EXEC [dbo].[PRD_BALANCE_TRASFER] " +
+                                "@T_CUSER = @P_CUSER, " + 
+                                "@T_POS = @P_POS, " +
+                                "@T_TICKET_NO = @P_TICKET_NO " ,
+                        param : ['P_CUSER:string|50','P_POS:string|50','P_TICKET_NO:int',],
+                        value : [this.core.auth.data.CODE,this.posObj.dt()[0].GUID,tmpSum]
+                    }
+                    console.log(tmpQuery.value)
+                    this.core.sql.execute(tmpQuery)
+                }
+
+                let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+
+                if(pBarcode.length == 24)
+                {
+                    tmpBarkod = tmpCode
+                    tmpBarkod = 'B'+tmpCode
+                }
+                console.log(tmpBarkod)
                 return {
-                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    barcode : tmpBarkod,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
@@ -2914,11 +2980,13 @@ export default class posDoc extends React.PureComponent
                         tmpMail = this.txtMail.value
                     }
 
-                    await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
-                    await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 resolve()
             })

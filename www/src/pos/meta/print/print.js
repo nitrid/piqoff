@@ -343,7 +343,7 @@ export function print()
                                 font: "b",
                                 style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                                 align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
-                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:32,align:'left'},{x:80,charS:33,charE:46},{x:90,charS:47,charE:54},{x:100,charS:55,charE:62}]},
+                                pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:65}]},
                                 data: (tmpNameArr.length > 1 ? "  " : tmpSaleItem.VAT_TYPE + " ") +
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpName2 + tmpFactStr).toString().space(32,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpName2 + tmpFactStr : tmpName2 + tmpFactStr).toString().space(32)) + " " +
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            

@@ -27,7 +27,7 @@ export const langDe =
     nbCalculator: "Taschenrechner",
     about: "Über uns",
     abtCertificate: "Zertifikat: NF525",
-    abtNrCertificate: "Zertifikatsnummer: B_0527-1",
+    abtNrCertificate: "Zertifikatsnummer: B_0527-3",
     abtLicence: "Lizenz: XXXXXXXXXXXXXXXXX",
     abtVersion: "Version: ",
     abtPiqsoft : "Warenwirtschaft : Piqsoft-POS",
