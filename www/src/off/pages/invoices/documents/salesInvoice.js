@@ -1878,23 +1878,23 @@ export default class salesInvoice extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
-                                            if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                                }
+                                            // if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                            // {
+                                            //     let tmpConfObj =
+                                            //     {
+                                            //         id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            //         button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                            //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                            //     }
                                             
-                                                dialog(tmpConfObj);
-                                                e.key.DISCOUNT = 0 
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                                e.key.DISCOUNT_RATE = 0
-                                                return
-                                            }
+                                            //     dialog(tmpConfObj);
+                                            //     e.key.DISCOUNT = 0 
+                                            //     e.key.DISCOUNT_1 = 0
+                                            //     e.key.DISCOUNT_2 = 0
+                                            //     e.key.DISCOUNT_3 = 0
+                                            //     e.key.DISCOUNT_RATE = 0
+                                            //     return
+                                            // }
 
                                             e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
