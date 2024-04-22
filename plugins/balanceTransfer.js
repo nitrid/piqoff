@@ -8,32 +8,30 @@ import AdmZip from 'adm-zip'
 import { createHash } from 'crypto'
 import cron from 'node-cron';
 
-class nf525
+class balanceTransfer
 {
     constructor()
     {
         this.core = core.instance;
-        this.connEvt = this.connEvt.bind(this)
-        this.core.socket.on('connection',this.connEvt)
-
+        this.active = false
         this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
         
         this.processRun()
     }
-    connEvt(pSocket)
-    {       
-
-    }
     async processRun()
     {
-        cron.schedule('*/2 * * * *', async () => 
+        if(this.active)
         {
-            this.getBalanceData()
-        })
+            cron.schedule('*/2 * * * *', async () => 
+            {
+                this.getBalanceData()
+            })
+        }
     }
     async getBalanceData()
     {
-        let tmpQuery = {
+        let tmpQuery = 
+        {
             query :"SELECT *,CASE WHEN unit = 'kg' THEN netKg ELSE AMOUNT END AS QUANTITY FROM [CEOPOS].[dbo].[report] WHERE remark <> 'OK' ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -74,4 +72,4 @@ class nf525
     }
 
 }
-export const _nf525 = new nf525()
+export const _balanceTransfer = new balanceTransfer()
