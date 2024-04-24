@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
+import fetch from 'node-fetch';
 
 class pricerApi
 {
@@ -15,6 +16,7 @@ class pricerApi
         this.core.socket.on('connection',this.promoSocket)
         this.active = false
 
+        this.allItemSend()
         this.processRun()
     }
     async connEvt(pSocket)
@@ -120,15 +122,17 @@ class pricerApi
             param : ['GUID:string|50'],
             value : [pGuid]
         }
+
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        if(typeof tmpResult != 'undefined' && typeof tmpResult.length != 'undefined')
+        if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
         {
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
+            
             fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -178,11 +182,11 @@ class pricerApi
             {
                 if(data.success)
                 {
-                    console.log(data.result)
+                    //console.log(data.result)
                 }
                 else
                 {
-                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                    //console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
                 }
             })
             .catch(error => 
@@ -196,7 +200,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1  ",
+            query : "select ITEM AS GUID from ITEM_PRICE WHERE LDATE > '20240415' AND  TYPE = 0 AND LUSER <> 'PIQSOFT'  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
@@ -219,6 +223,7 @@ class pricerApi
     }
     async processPromoSend()
     {
+        await this.processPromoClear()
         let tmpCleanQuery = 
         {
             query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE (SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) <= CONVERT(nvarchar,GETDATE(),112) AND  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1",
@@ -226,8 +231,6 @@ class pricerApi
         let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
         for (let i = 0; i < tmpCleanResult.length; i++) 
         {
-            console.log(123)
-            console.log(tmpCleanResult[i].ITEM)
             await this.itemUpdate(tmpCleanResult[i].ITEM)
         }
 
@@ -241,8 +244,6 @@ class pricerApi
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
-            console.log(1247)
-            console.log(tmpResult[i].ITEM)
             await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
         }
     }
@@ -256,13 +257,14 @@ class pricerApi
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        if(typeof tmpResult.length != 'undefined')
+        if(tmpResult.length > 0)
         {
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
+            
             fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -311,11 +313,11 @@ class pricerApi
             {
                 if(data.success)
                 {
-                    console.log(data.result)
+                    //console.log(data.result)
                 }
                 else
                 {
-                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                    //console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
                 }
             })
             .catch(error => 
@@ -330,7 +332,7 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),110) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,110)  ",
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,112)  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
