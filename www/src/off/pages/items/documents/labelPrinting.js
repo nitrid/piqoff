@@ -319,10 +319,12 @@ export default class labelPrinting extends React.PureComponent
             console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
+                this.grdLabelQueue.devGrid.beginUpdate()
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
+                this.grdLabelQueue.devGrid.endUpdate()
                 await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
             }
@@ -708,7 +710,7 @@ export default class labelPrinting extends React.PureComponent
     }
     async addAutoItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        //App.instance.setState({isExecute:true})
         let tmpDocItems = {...this.lblObj.empty}
         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
@@ -727,7 +729,7 @@ export default class labelPrinting extends React.PureComponent
         tmpDocItems.LINE_NO = this.lblObj.dt().length
         this.lblObj.addEmpty(tmpDocItems)
         this.calculateCount()
-        App.instance.setState({isExecute:false})
+        //App.instance.setState({isExecute:false})
     }
     calculateCount()
     {
