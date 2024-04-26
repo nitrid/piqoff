@@ -59,8 +59,7 @@ export default class salesInvoice extends DocBase
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
-        }
-        
+        } 
     }
     loadState() 
     {
@@ -2231,18 +2230,28 @@ export default class salesInvoice extends DocBase
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
-                                                        { 
-                                                            // var a = document.createElement('a');
-                                                            // a.href = "data:application/pdf;base64," + pResult.split('|')[1];
-                                                            // a.setAttribute('target', '_blank');
-                                                            // a.click()
+                                                        {
+                                                            this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                             mywindow.onload = function() 
                                                             { 
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  

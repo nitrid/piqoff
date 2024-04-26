@@ -299,6 +299,9 @@ export const langFr =
         cnt_03 : "Rapports",
         cnt_04 : "Opérations",
         cnt_04_001 : "Contrat de vente multiple",
+        piqx : "PiqX",
+        piqx_01 : "Listes", //BAK
+        piqx_01_001 : "Factures reçues", //BAK
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",

@@ -586,7 +586,8 @@ export const menu = (e) =>
                     text : e.t('menuOff.purcinvoices'),//'Faturalar',
                     expanded: false,
                     items: 
-                    [   {
+                    [   
+                        {
                             id: 'purcinvoices_01',
                             text : e.t('menuOff.purcinvoices_01'),//'Evraklar',
                             expanded: false,
@@ -1011,6 +1012,28 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
                             path: 'report/sales/openInvoiceSalesReport'
                         },
+                    ]
+                }
+            ]
+        },
+        //PiqX
+        {
+            id: 'piqx',
+            text: e.t('menuOff.piqx'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id:'piqx_01',
+                    text:e.t('menuOff.piqx_01'),//'Listeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'piqx_01_001',
+                            text: e.t('menuOff.piqx_01_001'), //'Gelen Fatura Listesi',
+                            path: 'piqx/lists/piqXIncomingList'
+                        }
                     ]
                 }
             ]
