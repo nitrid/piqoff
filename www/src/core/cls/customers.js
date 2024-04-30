@@ -233,7 +233,12 @@ export class customersCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
-            resolve(await this.ds.update()); 
+            let tmpResult = await this.ds.update()
+            if(typeof tmpResult != 'undefined' && tmpResult == 0)
+            {
+                this.core.socket.emit('customerUpdate',this.dt()[0].GUID)
+            }
+            resolve(tmpResult); 
         });
     }
 }

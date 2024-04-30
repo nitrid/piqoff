@@ -2,22 +2,18 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
+import fetch from 'node-fetch';
 
-class pricerApi
+class fumaWebApi
 {
     constructor()
     {
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
-        this.allCustomerSocket = this.allCustomerSocket.bind(this)
-        this.customerUpdateSocket = this.customerUpdateSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.socket.on('connection',this.allCustomerSocket)
-        this.core.socket.on('connection',this.customerUpdateSocket)
         this.active = false
         this.selletVkn = ''
-        // this.processCustomerSend('00000000-0000-0000-0000-000000000000')
     }
     async connEvt(pSocket)
     {
@@ -34,8 +30,15 @@ class pricerApi
             {
                 this.processPosSaleSend(pParam)
             })
+            pSocket.on('customerUpdate',async (pParam,pCallback) =>
+            {          
+                this.processCustomerSend(pParam)
+            })
+            pSocket.on('allCustomerSend',async (pParam,pCallback) =>
+            {
+                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
+            })
         }
-      
     }
     async processPosSaleSend(pData)
     {
@@ -62,10 +65,17 @@ class pricerApi
                 tmpSaleLine.push(tmpLineEdit)
             }
 
-            let tmpSale = {
-                "userEmail": pData[0].pos[0].CUSTOMER_MAIL,
+            let tmpSale = 
+            {
                 "sellerVkn": this.selletVkn,
-                "point": Number(pData[0].special.customerPoint),
+                "userInfo" : 
+                {
+                    "transferId" : pData[0].pos[0].CUSTOMER_CODE,
+                    "cardId" : pData[0].pos[0].CUSTOMER_CODE,
+                    "email": pData[0].pos[0].CUSTOMER_MAIL,
+                    "sellerVkn": this.selletVkn,
+                    "point": Number(pData[0].special.customerPoint),
+                },
                 "pos": 
                 {
                     "vat": pData[0].pos[0].VAT,
@@ -81,10 +91,10 @@ class pricerApi
                 "posSale": tmpSaleLine,
                 "pdf": "data:image/png;base64," + pData[1]
             }
-            console.log(JSON.stringify([tmpSale]))
+            //console.log(JSON.stringify([tmpSale]))
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createOrders', 
+                fetch('http://20.19.32.36:3000/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -98,7 +108,7 @@ class pricerApi
                 {
                     if (!response.ok) 
                     {
-                        throw new Error('yükleme başarısız. HTTP Hata: ' + response.status);
+                        throw new Error('FumaApi - processPosSaleSend : Yükleme başarısız. HTTP Hata: ' + response.status);
                     }
                     return response.json();
                 })
@@ -106,48 +116,27 @@ class pricerApi
                 {
                     if(data.success)
                     {
-                        console.log(data.result)
+                        console.log("FumaApi - processPosSaleSend : Gönderim başarılı")
                     }
                     else
                     {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - processPosSaleSend : ' + data.error)
                     }
                 })
                 .catch(error => 
                 {
-                    console.error('Hata:', error.message);
+                    console.error('FumaApi - processPosSaleSend Hata:', error.message);
                 });
             }
         }
     }
-    async allCustomerSocket(pSocket)
-    {
-        if(this.active == true)
-        {
-            pSocket.on('allCustomerSend',async (pParam,pCallback) =>
-            {
-                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
-            })
-        }
-    }
-    async customerUpdateSocket(pSocket)
-    {
-        if(this.active == true)
-        {
-            pSocket.on('customerUpdate',async (pParam,pCallback) =>
-            {          
-                this.processCustomerSend(pParam)
-            })
-        }
-    }
     async customerUpdate(pData)
     {   
-
         if(this.active == true)
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://demo.piqpos.com:3000/integration/createUsers', 
+                fetch('http://20.19.32.36:3000/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  
@@ -161,8 +150,6 @@ class pricerApi
                 {
                     if (!response.ok) 
                     {
-                        console.log(JSON.stringify(pData))
-
                         throw new Error(JSON.stringify(response));
                     }
                     return response.json();
@@ -171,20 +158,19 @@ class pricerApi
                 {
                     if(data.success)
                     {
-                        console.log(data.result)
+                        console.log("FumaApi - customerUpdate : Gönderim başarılı")
                     }
                     else
                     {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - customerUpdate : ' + data.error)
                     }
                 })
                 .catch(error => 
                 {
-                    console.error('Hata:', error.message);
+                    console.error('FumaApi - customerUpdate Hata:', error.message);
                 });
             }
         }
-      
     }
     async processCustomerSend(pGuid)
     {
@@ -231,4 +217,4 @@ class pricerApi
     }
 }
 
-export const _pricerApi = new pricerApi()
+export const _fumaWebApi = new fumaWebApi()
