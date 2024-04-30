@@ -199,6 +199,11 @@ export const menu = (e) =>
                             path: 'items/operations/collectiveItemEdit'
                         },
                         {
+                            id: 'stk_04_006',
+                            text: e.t('menuOff.stk_04_006'), //'Excel Ürün Girişi',
+                            path: 'items/operations/excelItemImport'
+                        },
+                        {
                             id: 'stk_04_002',
                             text : e.t('menuOff.stk_04_002'),//'İade Operasyonları',
                             path: 'items/operations/rebateOperation'
@@ -217,6 +222,11 @@ export const menu = (e) =>
                             id: 'stk_04_005',
                             text: e.t('menuOff.stk_04_005'), //'Stok Giriş Çıkış Operasyonu',
                             path: 'items/operations/itemEntryOutDoc'
+                        },
+                        {
+                            id: 'stk_04_007',
+                            text: e.t('menuOff.stk_04_007'), //'Ceopos Ürün gönderimi',
+                            path: 'items/operations/ceoposWeightItemSend'
                         }
                     ]
                 },
