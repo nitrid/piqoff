@@ -1258,7 +1258,7 @@ export default class purchaseInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                {/* <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
                                     onClick={async()=>
                                     {
@@ -1348,7 +1348,7 @@ export default class purchaseInvoice extends DocBase
                                             console.log(e)
                                         }
                                     }}/>
-                                </Item> */}
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={()=>

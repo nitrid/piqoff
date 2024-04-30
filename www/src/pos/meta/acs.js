@@ -102,7 +102,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnDiscount",
-        VALUE : {dialog:{type:0}},
+        VALUE : {dialog:{type:-1}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnDiscount",

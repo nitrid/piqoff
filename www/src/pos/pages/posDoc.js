@@ -1390,6 +1390,7 @@ export default class posDoc extends React.PureComponent
                 if(pBarcode.length == 24)
                 {
                     tmpBarkod = tmpCode
+                    tmpBarkod = 'B'+tmpCode
                 }
                 console.log(tmpBarkod)
                 return {

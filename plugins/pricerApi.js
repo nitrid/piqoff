@@ -115,22 +115,23 @@ class pricerApi
     }
     async itemUpdate(pGuid)
     {
-        console.log(pGuid)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
+
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        if(typeof tmpResult != 'undefined' && typeof tmpResult.length != 'undefined')
+        if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
         {
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
+            
             fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -180,11 +181,11 @@ class pricerApi
             {
                 if(data.success)
                 {
-                    console.log(data.result)
+                    //console.log(data.result)
                 }
                 else
                 {
-                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                    //console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
                 }
             })
             .catch(error => 
@@ -198,13 +199,12 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT * FROM ITEMS WHERE DELETED = 0 AND STATUS = 1 AND LDATE > GETDATE() - 20  ",
+            query : "select ITEM AS GUID from ITEM_PRICE WHERE LDATE > '20240415' AND  TYPE = 0 AND LUSER <> 'PIQSOFT'  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
-            console.log(tmpResult[i].GUID)
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
@@ -230,8 +230,6 @@ class pricerApi
         let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
         for (let i = 0; i < tmpCleanResult.length; i++) 
         {
-            console.log(123)
-            console.log(tmpCleanResult[i].ITEM)
             await this.itemUpdate(tmpCleanResult[i].ITEM)
         }
 
@@ -245,8 +243,6 @@ class pricerApi
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
-            console.log(1247)
-            console.log(tmpResult[i].ITEM)
             await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
         }
     }
@@ -260,14 +256,14 @@ class pricerApi
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
         
-        if(typeof tmpResult.length != 'undefined')
+        if(tmpResult.length > 0)
         {
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
-            console.log(tmpResult)
+            
             fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -316,11 +312,11 @@ class pricerApi
             {
                 if(data.success)
                 {
-                    console.log(data.result)
+                    //console.log(data.result)
                 }
                 else
                 {
-                    console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
+                    //console.log(data.message, typeof data.error == 'undefined' ? '' : data.error)
                 }
             })
             .catch(error => 
