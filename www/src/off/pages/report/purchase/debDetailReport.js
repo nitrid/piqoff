@@ -16,6 +16,9 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { Workbook } from 'exceljs';
+import { exportDataGrid } from 'devextreme/excel_exporter';
+import saveAs from 'file-saver';
 
 export default class debReport extends React.PureComponent
 {
@@ -206,7 +209,7 @@ export default class debReport extends React.PureComponent
                     "FROM DOC_ITEMS_VW_01   " +
                     "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
                     "(SELECT TOP 1 DEB FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) = 1 AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 " +
-                    "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) ORDER BY OUTPUT" ,
+                    "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND QUANTITY > 0 ORDER BY OUTPUT" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'], 
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -216,6 +219,30 @@ export default class debReport extends React.PureComponent
 
         await this.grdListe.dataRefresh(tmpSource)
       
+    }
+    onExporting(e) 
+    {
+        const workbook = new Workbook();
+        const worksheet = workbook.addWorksheet('Main sheet');
+        exportDataGrid(
+        {
+            component: e.component,
+            worksheet: worksheet,
+            customizeCell: function(options) {
+                const excelCell = options;
+                excelCell.font = { name: 'Arial', size: 12 };
+                excelCell.alignment = { horizontal: 'left' };
+            } 
+        }).then(function() 
+        {
+            workbook.csv.writeBuffer().then(function(buffer) 
+            {
+                let csvContent = new TextDecoder().decode(buffer);
+                csvContent = csvContent.replace(/,/g, ';');
+                saveAs(new Blob([csvContent], { type: 'application/octet-stream' }), 'Rapport-DEBWEB.csv');
+            });
+        });
+        e.cancel = true;
     }
     render()
     {
@@ -295,28 +322,29 @@ export default class debReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            onExporting={this.onExporting}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menuOff.slsRpt_02_005")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CUSTOMS_NO" caption={this.t("grdListe.clmCustomsNo")} visible={true} /> 
-                                <Column dataField="ORIGIN" caption={this.t("grdListe.clmOrigin")} visible={true}/> 
-                                <Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /> 
-                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /> 
-                                <Column dataField="KG" caption={this.t("grdListe.clmKg")}  visible={true} /> 
-                                <Column dataField="LINGE" caption={this.t("grdListe.clmLinge")}  visible={true} /> 
-                                <Column dataField="NATURE" caption={this.t("grdListe.clmNature")}  visible={true} /> 
-                                <Column dataField="TRANSPORT" caption={this.t("grdListe.clmTransport")}  visible={true} /> 
-                                <Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")}  visible={true} /> 
-                                <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")}  visible={true} /> 
-                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefno")}  visible={true} /> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomerName")}  visible={true} /> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")}  visible={true}  dataType="datetime" format={"dd/MM/yyyy"} /> 
-                                <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmItemName")}  visible={true} /> 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmItemCode")}  visible={true} /> 
-                                <Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /> 
-                                <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /> 
+                                <Export enabled={true} />
+                                <Column caption="1"><Column dataField="CUSTOMS_NO" caption={this.t("grdListe.clmCustomsNo")} visible={true} /></Column>
+                                <Column caption="2"><Column dataField="ORIGIN" caption={this.t("grdListe.clmOrigin")} visible={true}/></Column>
+                                <Column caption="3"><Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /></Column>
+                                <Column caption="4"><Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /></Column> 
+                                <Column caption="5"><Column dataField="KG" caption={this.t("grdListe.clmKg")}  visible={true} /></Column> 
+                                <Column caption="6"><Column dataField="KG" caption={this.t("grdListe.clmLinge")}  visible={true} /></Column> 
+                                <Column caption="7"><Column dataField="NATURE" caption={this.t("grdListe.clmNature")}  visible={true} /></Column> 
+                                <Column caption="8"><Column dataField="TRANSPORT" caption={this.t("grdListe.clmTransport")}  visible={true} /></Column> 
+                                <Column caption="10"><Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")}  visible={true} /></Column> 
+                                <Column caption="11"><Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")}  visible={true} /></Column> 
+                                <Column caption="12"><Column dataField="REF_NO" caption={this.t("grdListe.clmRefno")}  visible={true} /></Column> 
+                                <Column caption="13"><Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomerName")}  visible={true} /></Column> 
+                                <Column caption="14"><Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")}  visible={true}  dataType="datetime" format={"dd/MM/yyyy"} /></Column> 
+                                <Column caption="15"><Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /></Column> 
+                                <Column caption="16"><Column dataField="ITEM_NAME" caption={this.t("grdListe.clmItemName")}  visible={true} /></Column> 
+                                <Column caption="17"><Column dataField="ITEM_CODE" caption={this.t("grdListe.clmItemCode")}  visible={true} /></Column> 
+                                <Column caption="18"><Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /></Column> 
+                                <Column caption="19"><Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /></Column> 
                             </NdGrid>
                         </div>
                     </div>
