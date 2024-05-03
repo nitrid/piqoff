@@ -37,7 +37,7 @@ export default class NbKeyboard extends NbBase
                 "z x c v b n m ö ç * _ % {capslock}",
                 "{numbers} {space} {backspace} @",
                 "hotmail gmail outlook .com",
-                "outlook orange yahoo .fr"
+                "icloud orange yahoo .fr"
                 ],
                 mailShift: 
                 [
@@ -46,7 +46,7 @@ export default class NbKeyboard extends NbBase
                 "Z X C V B N M Ö Ç * _ % {capslock}",
                 "{numbers} {space} {backspace} @",
                 "hotmail gmail outlook .com",
-                "outlook orange yahoo .fr"
+                "icloud orange yahoo .fr"
                 ],
                 numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
                 numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
@@ -74,7 +74,7 @@ export default class NbKeyboard extends NbBase
                     "w x c v b n , : . _ {capslock}",
                     "{numbers} {space} {backspace} @",
                     "hotmail gmail outlook .com",
-                    "outlook orange yahoo .fr"
+                    "icloud orange yahoo .fr"
                 ],
                 mailShift: 
                 [
@@ -83,7 +83,7 @@ export default class NbKeyboard extends NbBase
                     "W X C V B N , : . _ {capslock}",
                     "{numbers} {space} {backspace} @",
                     "hotmail gmail outlook .com",
-                    "outlook orange yahoo .fr"
+                    "icloud orange yahoo .fr"
                 ],
                 numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
                 numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
