@@ -34,8 +34,6 @@ export default class CustomerCard extends React.PureComponent
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
-        console.log(this.sysPrmObj)
-        
 
         this._onItemRendered = this._onItemRendered.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -48,14 +46,12 @@ export default class CustomerCard extends React.PureComponent
         this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm.GUID)
             this.customerObj.clearAll()
             await this.customerObj.load({GUID:this.pagePrm.GUID});
         }
     }
     async init()
     {
-        console.log('000000060000000')
         this.customerObj.clearAll();
 
         this.customerObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -251,7 +247,6 @@ export default class CustomerCard extends React.PureComponent
     }
     _cellRoleRender(e)
     {
-        console.log(e)
         if(e.column.name == "TAX_TYPE")
         {
             return (
@@ -380,7 +375,6 @@ export default class CustomerCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                console.log(this.customerObj.dt()[0])
                                                 if((await this.customerObj.save()) == 0)
                                                 {
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -444,9 +438,7 @@ export default class CustomerCard extends React.PureComponent
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
-                                <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
+                                <Item location="after" locateInMenu="auto" widget="dxButton"
                                 options=
                                 {
                                     {
