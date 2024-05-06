@@ -305,9 +305,10 @@ export default class App extends React.PureComponent
                         <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
                         onClick={()=>
                         {
-                            
+                            this.core.auth.logout()
+                            window.location.reload()
                         }}>
-                            <i className="fa-solid fa-user fa-2x"></i>
+                            <i className="fa-solid fa-share fa-2x"></i>
                         </NbButton>
                     </div>
                 </div>

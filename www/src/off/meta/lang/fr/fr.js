@@ -359,7 +359,7 @@ export const langFr =
         promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         promo_04: "Les opérations",
-        promo_04_001: "Elektronik Etiket Güncelleme", // BAK
+        promo_04_001: "Mise à jour étiquette électronique", // BAK
         set : "Paramètres supplémentaires",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
