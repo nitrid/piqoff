@@ -9,6 +9,7 @@ export default class NbLabel extends NbBase
         super(props)
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value;
         this.state.text = typeof props.value == 'undefined' ? ''  : props.value;
+        this.state.style = this.props.style
     }
     get value()
     {
@@ -24,8 +25,16 @@ export default class NbLabel extends NbBase
         
         this.setState({value:e.toString(),text:e.toString()})
     }
+    get style()
+    {
+        return this.state.style
+    }
+    set style(e)
+    {
+        this.setState({style:e})
+    }
     render()
     {
-        return <span id={this.props.id}>{this.state.text}</span>
+        return <span id={this.props.id} style={this.state.style}>{this.state.text}</span>
     }
 }

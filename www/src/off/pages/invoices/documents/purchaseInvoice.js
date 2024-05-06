@@ -177,6 +177,23 @@ export default class purchaseInvoice extends DocBase
         {
             this.txtDiffrentInv.value = 0
         }
+        
+        let tmpDiffPovitive = 0
+        let tmpDiffNegative = 0
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE > 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+            {
+                tmpDiffPovitive = tmpDiffPovitive + (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
+            }
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE < 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+            {
+                tmpDiffNegative = tmpDiffNegative + (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
+            }
+        }
+        this.txtDiffrentPositive.value = parseFloat(tmpDiffPovitive).toFixed(2)
+        this.txtDiffrentNegative.value = parseFloat(tmpDiffNegative).toFixed(2)
+        this.txtDiffrentTotal.value = (parseFloat(tmpDiffNegative) + parseFloat(tmpDiffPovitive)).toFixed(2)
     }
     calculateTotal()
     {
@@ -477,8 +494,16 @@ export default class purchaseInvoice extends DocBase
                 <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
-                onChange={(r)=>
+                onChange={async (r)=>
                 {
+                    e.data.ORIGIN = r.component._changedValue
+                    let tmpQuery = 
+                    {
+                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                        value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
+                    }
+                    await this.core.sql.execute(tmpQuery) 
                 }}
                 button=
                 {
@@ -559,8 +584,6 @@ export default class purchaseInvoice extends DocBase
                         value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                    console.log(tmpCheckData.result.recordset.length)
-                    console.log(tmpCheckData)
                     if(tmpCheckData.result.recordset.length == 0)
                     {   
                         let tmpCustomerBtn = ''
@@ -1733,6 +1756,10 @@ export default class purchaseInvoice extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1794,6 +1821,10 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -2440,6 +2471,17 @@ export default class purchaseInvoice extends DocBase
                                                                 icon:'print',
                                                                 onClick:async ()  =>
                                                                 {
+                                                                    if(this.docObj.isSaved == false)
+                                                                    {
+                                                                        let tmpConfObj =
+                                                                        {
+                                                                            id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                            button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                                                        }
+                                                                        await dialog(tmpConfObj);
+                                                                        return
+                                                                    }
                                                                     App.instance.menuClick(
                                                                     {
                                                                         id: 'tkf_02_003',

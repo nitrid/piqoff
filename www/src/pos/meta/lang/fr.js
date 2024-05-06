@@ -26,12 +26,12 @@ export const langFr =
     msgNotAccess :"Utilisateur non autorisé",
     msgInvalidUser : "Erreur nom utilisateur ou mdp",
     txtCardRead :"Veuillez scanner votre badge",
-    price : "Prix",
-    quantity : "Quantité",
+    price : "Veuillez Saisir Prix",
+    quantity : "Veuillez Saisir Quantité",
     nbCalculator : "Calculatrice", 
     about : "à propos ",
     abtCertificate : "Certificat : NF525",
-    abtNrCertificate : "Numéro Certificat : B_0527-1",
+    abtNrCertificate : "Numéro Certificat : B_0527-3",
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
     abtPiqsoft :  "Nom de Tpv : Piqsoft-POS",
@@ -40,8 +40,6 @@ export const langFr =
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
-    qunatity : "Qte.",
-    price : "Prix",
     msgDeviceChange : 
     {
         title : "Attention",
@@ -63,7 +61,7 @@ export const langFr =
     msgMaxQuantity :
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas entrer une quantité supérieure à 99.999 !",
+        msg : "Vous ne pouvez pas entrer une quantité supérieure à 999.999 !",
         btn01 : "OK",
     },
     msgPriceNotFound : 
@@ -398,6 +396,11 @@ export const langFr =
     {
         head : "Raison du duplicata",
         title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
+    },
+    popDiscountDesc : 
+    {
+        head : "Description de la Réduction",
+        title : "Veuillez entrer la raison de votre réduction"
     },
     msgItemReturnTicket: 
     {
@@ -737,7 +740,8 @@ export const langFr =
         },
         popSelectItem : "Choix Du Stock",
         popSelectItemGrp : "Choix de la Catégorie du Produit",
-        popNameEntry : "Nom Plu "
+        popNameEntry : "Nom Plu ",
+        txtPopPluGroup : "Veuillez saisis le code ou le nom de PLU que vous souhaitez rechercher !"
     },
     popOrderList : 
     {
@@ -762,6 +766,8 @@ export const langFr =
     {
         title : "Attention",
         msg : "Votre enregistrement a échoué!",
+        msg1: "La transaction a échoué car le numéro de référence est zéro !",
+        msg2: "La transaction a échoué car la signature est vide !",
         btn01 : "OK",
         btn02 : "Réessayez l'enregistrement",
     },
@@ -960,4 +966,19 @@ export const langFr =
             msg: "Voulez-vous enregistrer les modifications apportées ?"
         },
     },
+    priceListChoicePopUp :
+    {
+        title : "Choisissez une liste de prix",
+        clmListNo : "Numéro de liste",
+        clmListName : "Nom de la liste",
+        clmItemName : "Nom du produit",
+        clmTag : "Catégorie Code",
+        clmPrice : "Prix"
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Les informations de l'appareil n'ont pas pu être récupérées de la base de données !",
+        btn01 : "OK"
+    }
 }

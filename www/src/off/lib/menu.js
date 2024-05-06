@@ -199,6 +199,11 @@ export const menu = (e) =>
                             path: 'items/operations/collectiveItemEdit'
                         },
                         {
+                            id: 'stk_04_006',
+                            text: e.t('menuOff.stk_04_006'), //'Excel Ürün Girişi',
+                            path: 'items/operations/excelItemImport'
+                        },
+                        {
                             id: 'stk_04_002',
                             text : e.t('menuOff.stk_04_002'),//'İade Operasyonları',
                             path: 'items/operations/rebateOperation'
@@ -217,6 +222,16 @@ export const menu = (e) =>
                             id: 'stk_04_005',
                             text: e.t('menuOff.stk_04_005'), //'Stok Giriş Çıkış Operasyonu',
                             path: 'items/operations/itemEntryOutDoc'
+                        },
+                        {
+                            id: 'stk_04_007',
+                            text: e.t('menuOff.stk_04_007'), //'Ceopos Ürün gönderimi',
+                            path: 'items/operations/ceoposWeightItemSend'
+                        },
+                        {
+                            id: 'stk_04_008',
+                            text: e.t('menuOff.stk_04_008'), //'Price Toplu Ürün gönderimi',
+                            path: 'items/operations/pricerAllItemSend'
                         }
                     ]
                 },
@@ -586,7 +601,8 @@ export const menu = (e) =>
                     text : e.t('menuOff.purcinvoices'),//'Faturalar',
                     expanded: false,
                     items: 
-                    [   {
+                    [   
+                        {
                             id: 'purcinvoices_01',
                             text : e.t('menuOff.purcinvoices_01'),//'Evraklar',
                             expanded: false,
@@ -1015,6 +1031,28 @@ export const menu = (e) =>
                 }
             ]
         },
+        //PiqX
+        {
+            id: 'piqx',
+            text: e.t('menuOff.piqx'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id:'piqx_01',
+                    text:e.t('menuOff.piqx_01'),//'Listeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'piqx_01_001',
+                            text: e.t('menuOff.piqx_01_001'), //'Gelen Fatura Listesi',
+                            path: 'piqx/lists/piqXIncomingList'
+                        }
+                    ]
+                }
+            ]
+        },
         //Finans
         {
             id: 'fns',
@@ -1337,6 +1375,19 @@ export const menu = (e) =>
                             text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
                             path: 'promotion/lists/promotionDetailList'
                         }
+                    ]
+                },
+                {
+                    id: 'promo_04',
+                    text : e.t('menuOff.promo_04'),//'Operasyonlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'promo_04_001',
+                            text: e.t('menuOff.promo_04_001'),//'Promosyon Listesi',
+                            path: 'promotion/operation/promoPricerSend'
+                        },
                     ]
                 },
                 {

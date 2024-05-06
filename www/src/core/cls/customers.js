@@ -233,7 +233,12 @@ export class customersCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
-            resolve(await this.ds.update()); 
+            let tmpResult = await this.ds.update()
+            if(typeof tmpResult != 'undefined' && tmpResult == 0)
+            {
+                this.core.socket.emit('customerUpdate',this.dt()[0].GUID)
+            }
+            resolve(tmpResult); 
         });
     }
 }
@@ -427,7 +432,7 @@ export class customerAdressCls
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
                     "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.updateCmd = 
@@ -442,7 +447,7 @@ export class customerAdressCls
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
                     "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.deleteCmd = 
