@@ -209,6 +209,7 @@ export const langDe =
         stk_04_004: "Haltbarkeitsdatum-Operation",
         stk_04_005: "Produktein- und -ausgang", //BAK
         stk_04_006: "Excel Ürün Aktarımı",  // BAK
+        stk_04_008: "Elektronische Etiketten Massenaktualisierung",
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
@@ -293,6 +294,9 @@ export const langDe =
         cnt_03: "Berichte",
         cnt_04: "Operationen",
         cnt_04_001: "Mehrere Verkaufsvereinbarungen",
+        piqx : "PiqX", //BAK
+        piqx_01 : "Listen", //BAK
+        piqx_01_001 : "Eingehende Rechnungen", //BAK
         fns: "Finanzen",
         fns_01: "Listen",
         fns_01_001: "Zahlungsliste",

@@ -11,14 +11,9 @@ class fumaWebApi
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
-        this.allCustomerSocket = this.allCustomerSocket.bind(this)
-        this.customerUpdateSocket = this.customerUpdateSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.socket.on('connection',this.allCustomerSocket)
-        this.core.socket.on('connection',this.customerUpdateSocket)
         this.active = false
         this.selletVkn = ''
-        // this.processCustomerSend('00000000-0000-0000-0000-000000000000')
     }
     async connEvt(pSocket)
     {
@@ -35,8 +30,15 @@ class fumaWebApi
             {
                 this.processPosSaleSend(pParam)
             })
+            pSocket.on('customerUpdate',async (pParam,pCallback) =>
+            {          
+                this.processCustomerSend(pParam)
+            })
+            pSocket.on('allCustomerSend',async (pParam,pCallback) =>
+            {
+                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
+            })
         }
-      
     }
     async processPosSaleSend(pData)
     {
@@ -63,10 +65,17 @@ class fumaWebApi
                 tmpSaleLine.push(tmpLineEdit)
             }
 
-            let tmpSale = {
-                "userEmail": pData[0].pos[0].CUSTOMER_MAIL,
+            let tmpSale = 
+            {
                 "sellerVkn": this.selletVkn,
-                "point": Number(pData[0].special.customerPoint),
+                "userInfo" : 
+                {
+                    "transferId" : pData[0].pos[0].CUSTOMER_CODE,
+                    "cardId" : pData[0].pos[0].CUSTOMER_CODE,
+                    "email": pData[0].pos[0].CUSTOMER_MAIL,
+                    "sellerVkn": this.selletVkn,
+                    "point": Number(pData[0].special.customerPoint),
+                },
                 "pos": 
                 {
                     "vat": pData[0].pos[0].VAT,
@@ -121,29 +130,8 @@ class fumaWebApi
             }
         }
     }
-    async allCustomerSocket(pSocket)
-    {
-        if(this.active == true)
-        {
-            pSocket.on('allCustomerSend',async (pParam,pCallback) =>
-            {
-                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
-            })
-        }
-    }
-    async customerUpdateSocket(pSocket)
-    {
-        if(this.active == true)
-        {
-            pSocket.on('customerUpdate',async (pParam,pCallback) =>
-            {          
-                this.processCustomerSend(pParam)
-            })
-        }
-    }
     async customerUpdate(pData)
     {   
-
         if(this.active == true)
         {
             if(typeof pData != 'undefined')
@@ -183,7 +171,6 @@ class fumaWebApi
                 });
             }
         }
-      
     }
     async processCustomerSend(pGuid)
     {
