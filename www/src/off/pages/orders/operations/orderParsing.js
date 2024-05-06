@@ -160,13 +160,15 @@ export default class rebateOperation extends React.PureComponent
                 tmpDoc.REBATE = 0
                 tmpDoc.REF = tmpRef
                 tmpDoc.REF_NO = tmpRefNo
-                tmpDoc.OUTPUT =Object.keys(tmpCustomer)[i]
+                tmpDoc.OUTPUT = Object.keys(tmpCustomer)[i]
                 tmpDoc.INPUT = this.cmbDepot.value
                 this.docObj.addEmpty(tmpDoc);
+                //console.log(this.docObj.dt()[this.docObj.dt().length - 1])
                 for(let x = 0; x < this.grdOrderList.getSelectedData().length; x++)
                 {
                    if(Object.keys(tmpCustomer)[i] == this.grdOrderList.getSelectedData()[x].CUSTOMER_GUID)
                    {    
+                    
                         let tmpQuery = 
                         {
                             query: "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " +
@@ -186,6 +188,7 @@ export default class rebateOperation extends React.PureComponent
                             value:  [this.grdOrderList.getSelectedData()[x].GUID,this.user.CODE,this.docObj.dt()[this.docObj.dt().length - 1].GUID,60,this.docObj.dt()[this.docObj.dt().length - 1].REF,this.docObj.dt()[this.docObj.dt().length - 1].REF_NO,
                             this.docObj.dt()[this.docObj.dt().length - 1].OUTPUT,this.grdOrderList.getSelectedData()[x].CUSTOMER_PRICE,i,this.grdOrderList.getSelectedData()[x].VAT,this.grdOrderList.getSelectedData()[x].AMOUNT,this.grdOrderList.getSelectedData()[x].TOTAL]
                         }
+                        console.log(tmpQuery)
                         await this.core.sql.execute(tmpQuery) 
                    }
                 }
