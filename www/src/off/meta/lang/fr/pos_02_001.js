@@ -67,7 +67,7 @@ const pos_02_001 =
         esc:"Espèce",
         cb : "CB",
         check : "Chèque",
-        ticket : "Chèque",
+        ticket : "Ticket Resto",
         bonD : "Bon D'Avoir",
         avoir : "Avoir",
         virment : "Virement",

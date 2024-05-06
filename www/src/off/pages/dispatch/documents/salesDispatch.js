@@ -1228,38 +1228,6 @@ export default class salesDispatch extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_Docs.title")} 
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   this.getDocs(1)
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
-                                    >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} />
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />
-                                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} />
-                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
-                                        <Column dataField="DOC_ADDRESS" caption={this.t("pg_Docs.clmAddress")} width={300} />
-                                        <Column dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
-                                    </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
@@ -1326,6 +1294,10 @@ export default class salesDispatch extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
@@ -1389,6 +1361,10 @@ export default class salesDispatch extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
