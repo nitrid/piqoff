@@ -205,13 +205,14 @@ export default class debReport extends React.PureComponent
                     "ITEM_BARCODE,   " +
                     "ITEM_NAME,   " +
                     "ITEM_CODE,   " +
-                    "DESCRIPTION   " +
+                    "DESCRIPTION,   " +
+                    "(SELECT MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) AS MAIN_GRP_NAME "+
                     "FROM DOC_ITEMS_VW_01   " +
-                    "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
+                    "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND (((SELECT MAIN_GRP FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) = @MAIN_GRP) OR (@MAIN_GRP = '')) AND  " +
                     "(SELECT TOP 1 DEB FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) = 1 AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 " +
                     "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND QUANTITY > 0 ORDER BY OUTPUT" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date'], 
-                    value : [this.dtDate.startDate,this.dtDate.endDate]
+                    param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_GRP:string|50'], 
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
@@ -286,6 +287,14 @@ export default class debReport extends React.PureComponent
                             <Item>
                                 <NbDateRange id={"dtDate"} parent={this} startDate={moment().subtract(1, 'month').startOf('month')} endDate={ moment().subtract(1, 'month').endOf('month')}/>
                             </Item>
+                            <Item>
+                                <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbMainGrp" showClearButton={true} notRefresh={true}  searchEnabled={true}
+                                displayExpr="NAME"                       
+                                valueExpr="CODE"
+                                data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
+                                />
+                            </Item>
                             </Form>
                         </div>
                     </div>
@@ -332,7 +341,7 @@ export default class debReport extends React.PureComponent
                                 <Column caption="3"><Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /></Column>
                                 <Column caption="4"><Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /></Column> 
                                 <Column caption="5"><Column dataField="KG" caption={this.t("grdListe.clmKg")}  visible={true} /></Column> 
-                                <Column caption="6"><Column dataField="KG" caption={this.t("grdListe.clmLinge")}  visible={true} /></Column> 
+                                <Column caption="6"><Column dataField="LINGE" caption={this.t("grdListe.clmLinge")}  visible={true} /></Column> 
                                 <Column caption="7"><Column dataField="NATURE" caption={this.t("grdListe.clmNature")}  visible={true} /></Column> 
                                 <Column caption="8"><Column dataField="TRANSPORT" caption={this.t("grdListe.clmTransport")}  visible={true} /></Column> 
                                 <Column caption="10"><Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")}  visible={true} /></Column> 

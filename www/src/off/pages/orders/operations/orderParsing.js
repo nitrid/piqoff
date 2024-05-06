@@ -24,7 +24,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class rebateOperation extends React.PureComponent
+export default class orderParsing extends React.PureComponent
 {
     constructor(props)
     {
@@ -141,7 +141,7 @@ export default class rebateOperation extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query:  "SELECT CODE,ISNULL((SELECT (MAX(REF_NO) + 1) FROM DOC_VW_01 WHERE DOC_TYPE = 60 AND REBATE = 0 AND TYPE = 0 AND DOC_VW_01.INPUT = CUSTOMERS.GUID),1) AS REF_NO FROM CUSTOMERS WHERE GUID = @GUID ",
+                query:  "SELECT CODE,ISNULL((SELECT (MAX(REF_NO) + 1) FROM DOC_VW_01 WHERE DOC_TYPE = 60 AND REBATE = 0 AND TYPE = 0 AND DOC_VW_01.OUTPUT = CUSTOMERS.GUID),1) AS REF_NO FROM CUSTOMERS WHERE GUID = @GUID ",
                 param:  ['GUID:string|50'],
                 value:  [Object.keys(tmpCustomer)[i]]
             }
@@ -183,8 +183,8 @@ export default class rebateOperation extends React.PureComponent
                             "@AMOUNT = @PAMOUNT, " +
                             "@TOTAL = @PTOTAL " ,
                             param:  ['PGUID:string|50','PCUSER:string|50','PDOC_GUID:string|50','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','POUTPUT:string|50','PPRICE:float','PLINE_NO:int','PVAT:float','PAMOUNT:float','PTOTAL:float'],
-                            value:  [this.grdOrderList.getSelectedData()[x].GUID,this.user.CODE,this.docObj.dt()[this.docObj.dt().length - 1].GUID,60,this.docObj.dt()[this.docObj.dt().length - 1].REF,this.docObj.dt()[this.docObj.dt().length - 1].REF_NO,
-                            this.docObj.dt()[this.docObj.dt().length - 1].OUTPUT,this.grdOrderList.getSelectedData()[x].CUSTOMER_PRICE,i,this.grdOrderList.getSelectedData()[x].VAT,this.grdOrderList.getSelectedData()[x].AMOUNT,this.grdOrderList.getSelectedData()[x].TOTAL]
+                            value:  [this.grdOrderList.getSelectedData()[x].GUID,this.user.CODE,this.docObj.dt()[i].GUID,60,this.docObj.dt()[i].REF,this.docObj.dt()[i].REF_NO,
+                            this.docObj.dt()[i].OUTPUT,this.grdOrderList.getSelectedData()[x].CUSTOMER_PRICE,x,this.grdOrderList.getSelectedData()[x].VAT,this.grdOrderList.getSelectedData()[x].AMOUNT,this.grdOrderList.getSelectedData()[x].TOTAL]
                         }
                         await this.core.sql.execute(tmpQuery) 
                    }
@@ -362,7 +362,6 @@ export default class rebateOperation extends React.PureComponent
                                         icon:'more',
                                         onClick:()=>
                                         {
-                                            console.log(1111)
                                         }
                                     }
                                 }

@@ -1098,6 +1098,10 @@ export default class outagePurcInvoice extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1159,6 +1163,10 @@ export default class outagePurcInvoice extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE

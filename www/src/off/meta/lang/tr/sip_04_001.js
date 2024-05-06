@@ -28,13 +28,13 @@ const sip_04_001 =
         title: "Dikkat",
         btn01: "Onayla",
         btn02: "Vazgeç",
-        msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        msg: "Seçili Satırları Sipariş Etmek İstediğinize Eminmisiniz ?"
     },
     msgSaveResult:
     {
         title: "Dikkat",
         btn01: "Tamam",
-        msgSuccess: " İade Evraklarınız Oluşturuldu..!",
+        msgSuccess: " Sipariş Evraklarınız Oluşturuldu..!",
         msgFailed: "Kayıt işleminiz başarısız !"
     },
     msgDublicateItem : 

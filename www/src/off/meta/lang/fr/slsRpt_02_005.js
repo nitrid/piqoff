@@ -5,6 +5,7 @@ const slsRpt_02_005 =
     txtCustomerCode : "Client",    
     btnCheck : "Actif",    
     btnGet :"Apporter",   
+    cmbMainGrp : "Famille produit",
     grdListe :    
     {   
         clmCustomsNo : "Nomenclature",    

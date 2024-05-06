@@ -28,7 +28,7 @@ const sip_04_001 =
         title: "Attention",
         btn01: "Valider",
         btn02: "Abandonner",
-        msg: "Êtes-vous sûr de vouloir faire retour des lignes sélectionnées !"
+        msg: "Êtes-vous sûr de vouloir commander les lignes sélectionnées ?"
     },
     msgSaveResult:
     {

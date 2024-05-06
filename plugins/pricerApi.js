@@ -12,7 +12,7 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
 
         this.processRun()
     }
@@ -53,7 +53,7 @@ class pricerApi
                                 setTimeout(() => 
                                 {
                                     this.itemUpdate(pParam[i].rowData.GUID)
-                                }, 5000);
+                                }, 7000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEMS_UPDATE') > -1)
@@ -63,7 +63,7 @@ class pricerApi
                                 setTimeout(() => 
                                 {
                                     this.itemUpdate(pParam[i].rowData.GUID)
-                                }, 5000);
+                                }, 7000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_UNIT_INSERT') > -1)
@@ -98,6 +98,28 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
                         {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
+                        {
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                console.log(pParam[i].rowData.ITEM)
+                                setTimeout(() => 
+                                {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
+                        {
+                            console.log(pParam[i].rowData.ITEM)
                             if(typeof pParam[i].rowData.ITEM != 'undefined')
                             {
                                 setTimeout(() => 
