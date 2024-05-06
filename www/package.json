@@ -41,6 +41,8 @@
     "devextreme": "21.1.5",
     "devextreme-react": "21.1.5",
     "dot-matrix-lcd": "^1.0.0",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "fs": "^0.0.1-security",
     "html-react-parser": "1.4.12",
     "html-webpack-plugin": "5.5.0",
