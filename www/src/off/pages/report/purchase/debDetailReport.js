@@ -191,9 +191,9 @@ export default class debReport extends React.PureComponent
                     "(SELECT TOP 1  CASE WHEN LEN(CUSTOMS_CODE) = 7 THEN '0'+ CUSTOMS_CODE ELSE CUSTOMS_CODE END FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
                     "ORIGIN,   " +
                     "(SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,   " +
-                    "QUANTITY,   " +
+                    "TOTALHT AS QUANTITY, " +
+                    "QUANTITY AS LINGE,   " +
                     "ROUND(QUANTITY * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE (ID = '002' OR ID = '005') AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0),3) AS KG,   " +
-                    "CASE WHEN ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ID = '005' AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0) <> 0 THEN QUANTITY ELSE 0 END  AS LINGE,   " +
                     "(SELECT TOP 1 GENRE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS NATURE,   " +
                     "(SELECT TOP 1 TRANSPORT_TYPE FROM DOC WHERE DOC.GUID = DOC_ITEMS_VW_01.DOC_GUID) AS TRANSPORT,   " +
                     "(SELECT TOP 1 SUBSTRING(ZIPCODE,0,3) FROM COMPANY) AS ZIPCODE,   " +
@@ -205,14 +205,13 @@ export default class debReport extends React.PureComponent
                     "ITEM_BARCODE,   " +
                     "ITEM_NAME,   " +
                     "ITEM_CODE,   " +
-                    "DESCRIPTION,   " +
-                    "(SELECT MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) AS MAIN_GRP_NAME "+
+                    "DESCRIPTION   " +
                     "FROM DOC_ITEMS_VW_01   " +
-                    "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND (((SELECT MAIN_GRP FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) = @MAIN_GRP) OR (@MAIN_GRP = '')) AND  " +
+                    "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
                     "(SELECT TOP 1 DEB FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) = 1 AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 " +
                     "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND QUANTITY > 0 ORDER BY OUTPUT" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_GRP:string|50'], 
-                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
+                    param : ['FIRST_DATE:date','LAST_DATE:date'], 
+                    value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
@@ -286,14 +285,6 @@ export default class debReport extends React.PureComponent
                             <Form colCount={2} id="frmKriter">
                             <Item>
                                 <NbDateRange id={"dtDate"} parent={this} startDate={moment().subtract(1, 'month').startOf('month')} endDate={ moment().subtract(1, 'month').endOf('month')}/>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("cmbMainGrp")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbMainGrp" showClearButton={true} notRefresh={true}  searchEnabled={true}
-                                displayExpr="NAME"                       
-                                valueExpr="CODE"
-                                data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                />
                             </Item>
                             </Form>
                         </div>
