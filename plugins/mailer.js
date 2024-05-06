@@ -69,16 +69,16 @@ class mailer
                 }
                 let transporter = nodemailer.createTransport(
                 {
-                    service: tmpservice,
+                    service: 'outlook',
                     host: tmpResult[0].MAIL_SMTP,
                     port: tmpResult[0].MAIL_PORT,
-                    secure: true,
+                    secure: false,
                     auth: 
                     {
-                    user: tmpResult[0].MAIL_ADDRESS,
-                    pass: tmpResult[0].MAIL_PASSWORD
+                      user: tmpResult[0].MAIL_ADDRESS,
+                      pass: tmpResult[0].MAIL_PASSWORD
                     },
-                    //tls : { rejectUnauthorized: false }
+                    tls : {  ciphers:'SSLv3' }
                 });
                 var mailOptions = 
                 {
@@ -104,43 +104,8 @@ class mailer
             }
             else
             {
-
-                service: 'outlook',
-                host: tmpResult[0].MAIL_SMTP,
-                port: tmpResult[0].MAIL_PORT,
-                secure: false,
-                auth: 
-                {
-                  user: tmpResult[0].MAIL_ADDRESS,
-                  pass: tmpResult[0].MAIL_PASSWORD
-                },
-                tls : {  ciphers:'SSLv3' }
-              });
-              var mailOptions = {
-                from: tmpResult[0].MAIL_ADDRESS,
-                to: pData.sendMail,
-                subject: pData.subject,
-                html:pData.html,
-                text:pData.text,
-                attachments: [
-                    {  
-                        filename: pData.attachName,
-                        content: pData.attachData,
-                        encoding: 'base64'
-                    },
-                  
-                ]
-              };
-              transporter.sendMail(mailOptions, function(error, info)
-              {
-                if (error) 
-                {
-                    console.log(error)
-                    resolve(error);
-                } else {
-                    resolve(0);
-                }
-              });
+                resolve(0);
+            }
         })
     }
 }
