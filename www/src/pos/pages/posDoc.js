@@ -3089,11 +3089,10 @@ export default class posDoc extends React.PureComponent
                     //MIKTAR KRITERLİ
                     if(tmpCond.length > 0 && tmpCond[0].QUANTITY > 0)
                     {
-                        
                         if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
                         {
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond.sum('QUANTITY'))
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
                             tmpResult[tmpResult.length - 1].WITHAL = true
                             tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
@@ -3106,7 +3105,7 @@ export default class posDoc extends React.PureComponent
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
                             let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('AMOUNT') / tmpCond[0].AMOUNT)
                             tmpResult[tmpResult.length - 1].WITHAL = true
-                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
+                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount == 0 ? 1 : tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
                         }
                     }
@@ -3178,6 +3177,7 @@ export default class posDoc extends React.PureComponent
             if(tmpIsCond.result)
             {
                 let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
+                
                 tmpWithal.forEach((withal)=>
                 {
                     let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
@@ -3186,7 +3186,16 @@ export default class posDoc extends React.PureComponent
                     {
                         tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {
-                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                            //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
+                            //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
+                            let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            let tmpQty = itemSale.QUANTITY
+                            if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            {
+                                tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            }
+                            
+                            let tmpDisc = Number(Number(itemSale.PRICE * tmpQty).rateInc(itemApp.AMOUNT,2))
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
                             itemSale.QUANTITY = tmpCalc.QUANTITY
@@ -3261,7 +3270,16 @@ export default class posDoc extends React.PureComponent
                     {
                         tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {
-                            let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * itemSale.QUANTITY)
+                            //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
+                            //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
+                            let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            let tmpQty = itemSale.QUANTITY
+                            if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            {
+                                tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            }
+
+                            let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * tmpQty)
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
                             itemSale.QUANTITY = tmpCalc.QUANTITY
@@ -3511,7 +3529,7 @@ export default class posDoc extends React.PureComponent
             let tmpSaleDt = new datatable()
             tmpSaleDt.selectCmd = 
             {
-                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                query : "SELECT *,CASE TYPE WHEN 0 THEN VAT WHEN 1 THEN (VAT * -1) END AS PVAT,CASE TYPE WHEN 0 THEN FAMOUNT WHEN 1 THEN (FAMOUNT * -1) END AS PFAMOUNT,CASE TYPE WHEN 0 THEN TOTAL WHEN 1 THEN (TOTAL * -1) END AS PTOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
@@ -3520,7 +3538,7 @@ export default class posDoc extends React.PureComponent
             let tmpPayDt = new datatable()
             tmpPayDt.selectCmd = 
             {
-                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) - ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS REBATE WHERE TYPE = 1 AND REBATE.DOC_DATE = POS_PAYMENT_VW_01.DOC_DATE AND REBATE.DEVICE = POS_PAYMENT_VW_01.DEVICE AND REBATE.PAY_TYPE = POS_PAYMENT_VW_01.PAY_TYPE),0) AS AMOUNT FROM POS_PAYMENT_VW_01  WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE AND TYPE = 0 GROUP BY DEVICE,PAY_TYPE_NAME,PAY_TYPE,DOC_DATE ORDER BY PAY_TYPE ASC" ,
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }

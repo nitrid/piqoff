@@ -11,12 +11,9 @@ class pricerApi
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
-        this.promoSocket = this.promoSocket.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.socket.on('connection',this.promoSocket)
-        this.active = false
+        this.active = true
 
-        this.allItemSend()
         this.processRun()
     }
     async connEvt(pSocket)
@@ -33,7 +30,8 @@ class pricerApi
                         { 
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
@@ -42,7 +40,8 @@ class pricerApi
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
@@ -51,25 +50,28 @@ class pricerApi
                         {
                             if(typeof pParam[i].rowData.GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.GUID)
-                                }, 5000);
+                                }, 7000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEMS_UPDATE') > -1)
                         {
                             if(typeof pParam[i].rowData.GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.GUID)
-                                }, 5000);
+                                }, 7000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_UNIT_INSERT') > -1)
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
@@ -78,7 +80,8 @@ class pricerApi
                         {
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
@@ -87,16 +90,40 @@ class pricerApi
                         {
                             if(typeof pParam[i].rowData.ITEM != 'undefined')
                             {
-                                setTimeout(() => {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_COLLECTIVE_ITEMS_EDIT') > -1)
                         {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.itemUpdate(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
+                        {
                             if(typeof pParam[i].rowData.ITEM != 'undefined')
                             {
-                                setTimeout(() => {
+                                console.log(pParam[i].rowData.ITEM)
+                                setTimeout(() => 
+                                {
+                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
+                        {
+                            console.log(pParam[i].rowData.ITEM)
+                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
                                     this.itemUpdate(pParam[i].rowData.ITEM)
                                 }, 5000);
                             }
@@ -106,12 +133,13 @@ class pricerApi
             }
            
         })
-    }
-    async promoSocket(pSocket)
-    {
         pSocket.on('allPromoSend',async (pParam,pCallback) =>
         {
             this.processPromoSend()
+        })
+        pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
+        {
+            this.allItemSend()
         })
     }
     async itemUpdate(pGuid)
@@ -200,7 +228,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "select ITEM AS GUID from ITEM_PRICE WHERE LDATE > '20240415' AND  TYPE = 0 AND LUSER <> 'PIQSOFT'  ",
+            query : "SELECT * FROM ITEMS_VW_01 WHERE STATUS = 1 ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
