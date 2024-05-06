@@ -3092,9 +3092,9 @@ export default class posDoc extends React.PureComponent
                         if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
                         {
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond.sum('QUANTITY'))
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
                             tmpResult[tmpResult.length - 1].WITHAL = true
-                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount == 0 ? 1 : tmpCondCount
+                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
                         }
                     }
