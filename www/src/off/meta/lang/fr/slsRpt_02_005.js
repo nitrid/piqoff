@@ -5,13 +5,12 @@ const slsRpt_02_005 =
     txtCustomerCode : "Client",    
     btnCheck : "Actif",    
     btnGet :"Apporter",   
-    cmbMainGrp : "Famille produit",
     grdListe :    
     {   
         clmCustomsNo : "Nomenclature",    
         clmOrigin: "Pays origine",    
         clmRegime : "Regime",            
-        clmQuantity : "Valeur",    
+        clmQuantity : "Valeur €",    
         clmKg : "Masse nette",    
         clmLinge : "Unités supplémentaires",    
         clmNature : "Nature transaction A",
