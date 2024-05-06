@@ -216,6 +216,7 @@ export const langFr =
         stk_04_005: "Entrée et sortie du produit", //BAK
         stk_04_006: "Excel Ürün Aktarımı",  // BAK
         stk_04_007: "Terazi Ürün Aktarımı",  // BAK
+        stk_04_008: "Mise à jour groupée des étiquettes électroniques",
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
@@ -359,7 +360,7 @@ export const langFr =
         promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         promo_04: "Les opérations",
-        promo_04_001: "Elektronik Etiket Güncelleme", // BAK
+        promo_04_001: "Mise à jour étiquette électronique", // BAK
         set : "Paramètres supplémentaires",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",

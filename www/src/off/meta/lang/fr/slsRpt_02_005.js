@@ -10,7 +10,7 @@ const slsRpt_02_005 =
         clmCustomsNo : "Nomenclature",    
         clmOrigin: "Pays origine",    
         clmRegime : "Regime",            
-        clmQuantity : "Valeur",    
+        clmQuantity : "Valeur €",    
         clmKg : "Masse nette",    
         clmLinge : "Unités supplémentaires",    
         clmNature : "Nature transaction A",
