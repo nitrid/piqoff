@@ -81,25 +81,32 @@ class piqXApi
     }
     async login(username, password) 
     {
-        const base64Credentials = btoa(username + ':' + password);
-        const response = await fetch(this.endpoint + '/api/login', 
+        try 
         {
-            method: 'POST',
-            headers: 
+            const base64Credentials = btoa(username + ':' + password);
+            const response = await fetch(this.endpoint + '/api/login', 
             {
-                'Authorization': `Basic ${base64Credentials}`,
-                'Content-Type': 'application/json'
+                method: 'POST',
+                headers: 
+                {
+                    'Authorization': `Basic ${base64Credentials}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        
+            if (!response.ok) 
+            {
+                this.token = ''
+                return this.token
             }
-        });
-    
-        if (!response.ok) 
-        {
-            this.token = ''
-            return this.token
-        }
 
-        const data = await response.json();
-        this.token = data.token;
+            const data = await response.json();
+            this.token = data.token;
+        }
+        catch (error) 
+        {
+            
+        }
         return this.token
     }
     async getInvoiceList(pData) 
