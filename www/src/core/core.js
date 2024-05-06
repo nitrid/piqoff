@@ -321,6 +321,12 @@ export class local
 
             if(this.platform == 'electron')
             {
+                //BAZEN SİSTEM OFFLİNE A GEÇMİŞ İSE ELECTRON UYGULAMASI HEMEN SQLLITE DATABASE OLUŞTURULAMIYOR BUNUN İÇİN 1SN LİK BEKLETİYORUZ.
+                if(this.db == null)
+                {
+                    await core.instance.util.waitUntil(1000)
+                }
+
                 this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
                 {
                     if (err) 
