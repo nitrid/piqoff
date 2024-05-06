@@ -137,6 +137,10 @@ class pricerApi
         {
             this.processPromoSend()
         })
+        pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
+        {
+            this.allItemSend()
+        })
     }
     async itemUpdate(pGuid)
     {
@@ -224,7 +228,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "select ITEM AS GUID from ITEM_PRICE WHERE LDATE > '20240415' AND  TYPE = 0 AND LUSER <> 'PIQSOFT'  ",
+            query : "SELECT * FROM ITEMS_VW_01 WHERE STATUS = 1 ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
