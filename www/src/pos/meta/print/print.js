@@ -322,6 +322,17 @@ export function print()
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.FAMOUNT / tmpQt).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                 (parseFloat(tmpSaleItem.FAMOUNT).toFixed(2)).space(7,"s")
                         }) 
+
+                        if(tmpSaleItem.DISCOUNT != 0)
+                        {
+                            tmpArr.push( 
+                            {
+                                font: "b",
+                                style: "b",
+                                align: "rt",
+                                data: "Remise ".space(46,"s") + (Number(tmpSaleItem.DISCOUNT).rate2In(tmpSaleItem.FAMOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(10,"s")
+                            })
+                        }
                     }
                     else
                     {
@@ -350,6 +361,17 @@ export function print()
                                     (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                     (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
                             })
+
+                            if(tmpSaleItem.DISCOUNT != 0)
+                            {
+                                tmpArr.push( 
+                                {
+                                    font: "b",
+                                    style: "b",
+                                    align: "rt",
+                                    data: "Remise ".space(40,"s") + (Number(tmpSaleItem.AMOUNT).rate2Num(tmpSaleItem.DISCOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(16,"s")
+                                })
+                            }
                         }
                     }
                 }) 

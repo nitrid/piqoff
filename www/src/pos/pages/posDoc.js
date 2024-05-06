@@ -379,29 +379,46 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-
-            this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+            
+            if(this.posDevice.dt().length > 0)
             {
-                this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-                this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
+                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+                {
+                    this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+                    this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                }
+                else
+                {
+                    if(this.core.util.isElectron())
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                        }
+                        
+                        await dialog(tmpConfObj);
+                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
             }
             else
             {
-                if(this.core.util.isElectron())
+                let tmpConfObj =
                 {
-                    let tmpConfObj =
-                    {
-                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
-                    }
-                    
-                    await dialog(tmpConfObj);
-                    
-                    this.core.auth.logout()
-                    window.location.reload()
+                    id:'msgDeviceLoadFailed',showTitle:true,title:this.lang.t("msgDeviceLoadFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgDeviceLoadFailed.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceLoadFailed.msg")}</div>)
                 }
+                
+                await dialog(tmpConfObj);
+
+                this.core.auth.logout()
+                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -1385,7 +1402,6 @@ export default class posDoc extends React.PureComponent
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpCode = pBarcode.substring(tmpPrm[i].indexOf('N'),tmpPrm[i].lastIndexOf('N') + 1)
 
-                console.log(tmpCode)
                 let tmpSumFlag = ""
                 let tmpSum = ""
                 if(tmpPrm[i].indexOf('F') > -1)
@@ -1405,31 +1421,11 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
-                if(this.prmObj.filter({ID:'BalanceUpdate',TYPE:0}).getValue())
-                {
-                    console.log(tmpSum)
-                    let tmpQuery = {
-                        query :"EXEC [dbo].[PRD_BALANCE_TRASFER] " +
-                                "@T_CUSER = @P_CUSER, " + 
-                                "@T_POS = @P_POS, " +
-                                "@T_TICKET_NO = @P_TICKET_NO " ,
-                        param : ['P_CUSER:string|50','P_POS:string|50','P_TICKET_NO:int',],
-                        value : [this.core.auth.data.CODE,this.posObj.dt()[0].GUID,tmpSum]
-                    }
-                    console.log(tmpQuery.value)
-                    this.core.sql.execute(tmpQuery)
-                }
-
                 let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
 
-                if(pBarcode.length == 24)
-                {
-                    tmpBarkod = tmpCode
-                    tmpBarkod = 'B'+tmpCode
-                }
-                console.log(tmpBarkod)
                 return {
                     barcode : tmpBarkod,
+                    code : tmpCode,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
@@ -1601,43 +1597,80 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
+                //SATIŞ KAPANIYOR İSE REF NO VE İMZA BOŞ MU KONTROLÜ YAPILIYOR.
+                if(typeof this.posObj.dt()[0].STATUS != 'undefined' && this.posObj.dt()[0].STATUS != null && this.posObj.dt()[0].STATUS == 1)
+                {
+                    if(typeof this.posObj.dt()[0].REF == 'undefined' || this.posObj.dt()[0].REF == null || this.posObj.dt()[0].REF == 0)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg1")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                    if(typeof this.posObj.dt()[0].SIGNATURE == 'undefined' || this.posObj.dt()[0].SIGNATURE == null || this.posObj.dt()[0].SIGNATURE == '')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg2")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                }
+                //**************************************************************** */
+                
                 let tmpSaveResult = await this.posObj.save()
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
                     {
-                        if(!this.core.offline)
-                        {
-                            //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
-                            let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
-                            if(tmpCheckResult == false)
-                            {
-                                this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
-                                //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
-                                let tmpConfObj =
-                                {
-                                    id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj)
-                                window.location.reload()
-                                resolve(false)
-                                return
-                            }
-                            else
-                            {
-                                this.saleCloseSucces()
-                                resolve(true)
-                                return
-                            }
-                        }
-                        else
-                        {
-                            this.saleCloseSucces()
-                            resolve(true)
-                            return
-                        }
+                        this.saleCloseSucces()
+                        resolve(true)
+                        return
+                        // if(!this.core.offline)
+                        // {
+                        //     //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        //     let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        //     if(tmpCheckResult == false)
+                        //     {
+                        //         this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                        //         //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                        //         let tmpConfObj =
+                        //         {
+                        //             id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                        //             button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                        //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                        //         }
+                        //         await dialog(tmpConfObj)
+                        //         window.location.reload()
+                        //         resolve(false)
+                        //         return
+                        //     }
+                        //     else
+                        //     {
+                        //         this.saleCloseSucces()
+                        //         resolve(true)
+                        //         return
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     this.saleCloseSucces()
+                        //     resolve(true)
+                        //     return
+                        // }
                     } 
                 }
                 else
@@ -1647,16 +1680,11 @@ export default class posDoc extends React.PureComponent
                     let tmpConfObj =
                     {
                         id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSaveFailAlert.btn02"),location:'after'}],
+                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
                     }
                     await dialog(tmpConfObj)
                     window.location.reload()
-                    // if((await dialog(tmpConfObj)) == 'btn02')
-                    // {
-                    //     this.core.util.writeLog("calcGrandTotal : 04")
-                    //     await this.calcGrandTotal()
-                    // }
                     resolve(false)
                     return
                 }
@@ -1872,7 +1900,7 @@ export default class posDoc extends React.PureComponent
                 }
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
-
+                                
                 //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
                 if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
                 {
@@ -2129,14 +2157,6 @@ export default class posDoc extends React.PureComponent
                     await this.posDevice.caseOpen();
                 }
                 //***************************************************/
-                //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                // if (!this.core.offline)
-                // {
-                //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                //     {
-                //         Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
-                //     }
-                // }
                 resolve(true)
             }
             else
@@ -3267,10 +3287,11 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 type : "insert",
-                query : `INSERT INTO NF525_JET (CUSER, CDATE, CODE, NAME, DESCRIPTION, APP_VERSION)
-                        VALUES (?, ?, ?, ?, ?, ?);`,
-                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),typeof pData.CODE != 'undefined' ? pData.CODE : '',
-                          typeof pData.NAME != 'undefined' ? pData.NAME : '',typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
+                query : `INSERT INTO NF525_JET (CUSER, CDATE, DEVICE, CODE, NAME, DESCRIPTION, APP_VERSION)
+                        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+                          typeof pData.CODE != 'undefined' ? pData.CODE : '',typeof pData.NAME != 'undefined' ? pData.NAME + ' (Data offline)' : '',
+                          typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
             }
             await this.core.local.insert(tmpQuery)
         }

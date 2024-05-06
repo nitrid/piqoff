@@ -8,6 +8,7 @@ import React from "react";
 const orgGetItem = posDoc.prototype.getItem
 const orgDelete = posDoc.prototype.delete
 const orgRowDelete = posDoc.prototype.rowDelete
+const orgGetBarPattern = posDoc.prototype.getBarPattern
 
 posDoc.prototype.rowDelete = async function()
 {
@@ -93,24 +94,23 @@ posDoc.prototype.getItem = async function(pCode)
         orgGetItem.call(this,pCode)
         return
     }
-
+    
     getBarPattern = getBarPattern.bind(this)
     getBalanceCounter = getBalanceCounter.bind(this)
-
+    
     let tmpTicketNo = getBarPattern(pCode)
-
     if(typeof tmpTicketNo != 'undefined')
     {
         if(!this.loading.current.instance.option('visible'))
         {
             this.txtBarcode.value = "";
             this.loading.current.instance.show()
-            let tmpBalanceDt = await getBalanceCounter(tmpTicketNo)
+            let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,pCode)
             
             if(tmpBalanceDt.length > 0)
             {
                 //TERAZİYE TOPLAM MİKTAR EŞLEŞMESİ
-                if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active)
+                if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active && typeof tmpBalanceDt[0].STATUS != 'undefined')
                 {
                     //ETIKET İÇERİSİNDE ADET ÜRÜN KONTROL EDİLİYOR
                     if(tmpBalanceDt.where({UNIT:'U'}).length == 0)
@@ -267,19 +267,43 @@ posDoc.prototype.getItem = async function(pCode)
                         tmpItemsDt[0].QUANTITY = tmpBalanceDt[i].QUANTITY
                         tmpItemsDt[0].PRICE = tmpBalanceDt[i].PRICE
                         this.saleAdd(tmpItemsDt[0])
-                        //BALANCE COUNTER STATUS UPDATE İŞLEMİ
-                        let tmpUpdateQuery = 
+
+                        if(typeof tmpBalanceDt[0].STATUS == 'undefined')
                         {
-                            query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
-                                    "@GUID = @PGUID, " + 
-                                    "@LUSER = @PLUSER, " + 
-                                    "@LDATE = @PLDATE, " +
-                                    "@POS = @PPOS, " +
-                                    "@STATUS = @PSTATUS ", 
-                            param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50','PSTATUS:bit'],
-                            value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID,1]
+                            //BALANCE COUNTER STATUS INSERT İŞLEMİ
+                            let tmpInsertQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_BALANCE_COUNTER_INSERT] " + 
+                                        "@GUID = @PGUID, " + 
+                                        "@CUSER = 'Admin', " + 
+                                        "@LUSER = 'Admin', " + 
+                                        "@ITEM = @PITEM, " +
+                                        "@POS = @PPOS, " +
+                                        "@TICKET_NO = @PTICKET_NO, " +
+                                        "@QUANTITY = @PQUANTITY, " +
+                                        "@PRICE = @PPRICE, " +
+                                        "@STATUS = 1 ", 
+                                param : ['PGUID:string|50','PITEM:string|50','PPOS:string|50','PTICKET_NO:int','PQUANTITY:float','PPRICE:float'],
+                                value : [tmpBalanceDt[i].GUID,tmpItemsDt[0].GUID,this.posObj.dt()[0].GUID,tmpTicketNo,tmpBalanceDt[i].QUANTITY,tmpBalanceDt[i].PRICE]
+                            }
+                            await this.core.sql.execute(tmpInsertQuery)
                         }
-                        await this.core.sql.execute(tmpUpdateQuery)
+                        else
+                        {
+                            //BALANCE COUNTER STATUS UPDATE İŞLEMİ
+                            let tmpUpdateQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
+                                        "@GUID = @PGUID, " + 
+                                        "@LUSER = @PLUSER, " + 
+                                        "@LDATE = @PLDATE, " +
+                                        "@POS = @PPOS, " +
+                                        "@STATUS = 1 ", 
+                                param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50'],
+                                value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID]
+                            }
+                            await this.core.sql.execute(tmpUpdateQuery)
+                        }
                     }
                 }    
             }
@@ -318,7 +342,8 @@ function getBarPattern(pBarcode)
 
     for (let i = 0; i < tmpPrm.length; i++) 
     {
-        let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('X'))
+        let tmpFlag = tmpPrm[i].substring(0,2)
+        
         if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag && tmpPrm[i].indexOf('X') > -1)
         {
             return pBarcode.substring(tmpPrm[i].indexOf('X'),tmpPrm[i].lastIndexOf('X') + 1)
@@ -327,18 +352,43 @@ function getBarPattern(pBarcode)
 
     return
 }
-function getBalanceCounter(pTicketNo)
+function getBalanceCounter(pTicketNo,pCode)
 {
     return new Promise(async resolve => 
     {
         let tmpDt = new datatable(); 
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE AND STATUS = 0 ORDER BY TICKET_DATE DESC",
+            query : "SELECT * FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND (CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE OR TICKET_DATE = '19700101') ORDER BY TICKET_DATE DESC",
             param : ['TICKET_NO:int','TICKET_DATE:datetime'],
-            value: [Number(pTicketNo),new Date(moment().subtract(0,'days').format('YYYY-MM-DD'))]
+            value: [Number(pTicketNo),new Date(moment().subtract(3,'days').format('YYYY-MM-DD'))]
         }
         await tmpDt.refresh();   
-        resolve(tmpDt)
+
+        if(tmpDt.length > 0)
+        {
+            resolve(tmpDt.where({STATUS:false}))
+        }
+        else
+        {
+            let tmpBar = this.getBarPattern(pCode)
+            if(typeof tmpBar.code != 'undefined' && typeof tmpBar.price != 'undefined' && typeof tmpBar.quantity != 'undefined')
+            {
+                tmpDt.push(
+                    {
+                        GUID : datatable.uuidv4(),
+                        ITEM_CODE : "B" + tmpBar.code,
+                        QUANTITY : tmpBar.quantity,
+                        PRICE : tmpBar.price
+                    }
+                )
+
+                resolve(tmpDt)
+            }
+            else
+            {
+                resolve(tmpDt)
+            }
+        }
     })
 }
