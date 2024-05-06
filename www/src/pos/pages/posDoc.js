@@ -3529,7 +3529,7 @@ export default class posDoc extends React.PureComponent
             let tmpSaleDt = new datatable()
             tmpSaleDt.selectCmd = 
             {
-                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                query : "SELECT *,CASE TYPE WHEN 0 THEN VAT WHEN 1 THEN (VAT * -1) END AS PVAT,CASE TYPE WHEN 0 THEN FAMOUNT WHEN 1 THEN (FAMOUNT * -1) END AS PFAMOUNT,CASE TYPE WHEN 0 THEN TOTAL WHEN 1 THEN (TOTAL * -1) END AS PTOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
@@ -3538,7 +3538,7 @@ export default class posDoc extends React.PureComponent
             let tmpPayDt = new datatable()
             tmpPayDt.selectCmd = 
             {
-                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) - ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS REBATE WHERE TYPE = 1 AND REBATE.DOC_DATE = POS_PAYMENT_VW_01.DOC_DATE AND REBATE.DEVICE = POS_PAYMENT_VW_01.DEVICE AND REBATE.PAY_TYPE = POS_PAYMENT_VW_01.PAY_TYPE),0) AS AMOUNT FROM POS_PAYMENT_VW_01  WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE AND TYPE = 0 GROUP BY DEVICE,PAY_TYPE_NAME,PAY_TYPE,DOC_DATE ORDER BY PAY_TYPE ASC" ,
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }

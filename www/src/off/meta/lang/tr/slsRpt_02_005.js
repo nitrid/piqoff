@@ -5,15 +5,14 @@ const slsRpt_02_005 =
     txtCustomerCode : "Müşteri",   
     btnCheck : "Aktif",   
     btnGet :"Getir",   
-    cmbMainGrp : "Ürün Grubu",
     grdListe :    
     {   
         clmCustomsNo : "Gümrük Kodu",   
         clmOrigin: "Menşei",   
         clmRegime : "Sektör",              
-        Quantity : "Miktar",   
+        clmQuantity : "Değer €",   
         clmKg : "Kilogram",   
-        clmLinge : "Şişe Adedi",   
+        clmLinge : "Adet",   
         clmNature : "Ürün Cinsi",
         clmTransport : "Taşıma Türü",
         clmZipcode : "Bölge",   
