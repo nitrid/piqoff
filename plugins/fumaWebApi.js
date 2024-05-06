@@ -28,15 +28,33 @@ class fumaWebApi
             this.selletVkn = tmpResult[0].TAX_NO
             pSocket.on('posSaleClosed',async (pParam,pCallback) =>
             {
-                this.processPosSaleSend(pParam)
+                try
+                {
+                    this.processPosSaleSend(pParam)
+                } catch (error) 
+                {
+                    console.error(moment(new Date()).format("DD.MM.YYYY") + " - processPosSaleSend : ", error.message);
+                }
             })
             pSocket.on('customerUpdate',async (pParam,pCallback) =>
             {          
-                this.processCustomerSend(pParam)
+                try
+                {
+                    this.processCustomerSend(pParam)
+                } catch (error) 
+                {
+                    console.error(moment(new Date()).format("DD.MM.YYYY") + " - processPosSaleSend : ", error.message);
+                }
             })
             pSocket.on('allCustomerSend',async (pParam,pCallback) =>
             {
-                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
+                try
+                {
+                    this.processCustomerSend('00000000-0000-0000-0000-000000000000')
+                } catch (error) 
+                {
+                    console.error(moment(new Date()).format("DD.MM.YYYY") + " - processPosSaleSend : ", error.message);
+                }
             })
         }
     }
