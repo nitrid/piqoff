@@ -24,7 +24,8 @@ const slsRpt_02_005 =
         clmDescription : "Açıklama",   
         clmCountry : "T. Ülkesi",   
         clmItemCode : "Ürün Kodu",
-        clmItemName : "Ürün Adı"
+        clmItemName : "Ürün Adı",
+        clmItemGroup : "Ürün Grubu",
     },
 }
 
