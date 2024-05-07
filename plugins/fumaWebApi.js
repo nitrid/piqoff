@@ -54,7 +54,7 @@ class fumaWebApi
                 {
                     query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000'",
                     param : ['FIRST:date','LAST:date'],
-                    value : [moment().add(0,'day').format("YYYYMMDD"),moment().add(0,'day').format("YYYYMMDD")]
+                    value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(-1,'day').format("YYYYMMDD")]
                 }
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
                 if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
