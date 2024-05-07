@@ -164,6 +164,7 @@ export default class DocBase extends React.PureComponent
             tmpDoc.TYPE = this.type
             tmpDoc.DOC_TYPE = this.docType
             tmpDoc.REBATE = this.rebate
+            tmpDoc.TRANSPORT_TYPE = this.sysParam.filter({ID:'DocTrasportType',USERS:this.user.CODE}).getValue()
 
             this.docObj.addEmpty(tmpDoc);       
             
