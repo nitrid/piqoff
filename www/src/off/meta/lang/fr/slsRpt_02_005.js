@@ -24,7 +24,8 @@ const slsRpt_02_005 =
         clmDescription : "Motif",    
         clmCountry : "PAYS provenance",    
         clmItemName: "Nom Produit", 
-        clmItemCode: "Référence Produit"
+        clmItemCode: "Référence Produit",
+        clmItemGroup : "Groupe Produit"
     },
 }
 export default slsRpt_02_005
