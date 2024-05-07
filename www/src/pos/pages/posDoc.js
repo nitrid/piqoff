@@ -2999,12 +2999,14 @@ export default class posDoc extends React.PureComponent
                         this.mailPopup._onClick()
                         tmpMail = this.txtMail.value
                     }
-
+                    
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
                     let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
                     this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
                     let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
                     this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
