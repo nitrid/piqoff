@@ -224,6 +224,7 @@ export default class itemCard extends React.PureComponent
 
         this.core.util.logPath = "\\www\\log\\off_" + this.core.auth.data.CODE + ".txt"
 
+        this.itemsObj.dt()[0].GENRE = this.prmObj.filter({ID:'txtGenre'}).getValue().value
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
         this.taxSugarValidCheck()                      
@@ -2192,6 +2193,7 @@ export default class itemCard extends React.PureComponent
                                                 <Label text={this.t("txtGenus")} alignment="right" />
                                                 <NdTextBox id="txtGenus" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"GENRE"}} 
                                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                param={this.param.filter({ELEMENT:'txtGenus',USERS:this.user.CODE})}
                                                 button=
                                                 {
                                                     [
