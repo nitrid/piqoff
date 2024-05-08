@@ -134,7 +134,7 @@ class fumaWebApi
                         }
                         tmpSaleLine.push(tmpLineEdit)
                     }
-
+                    
                     let tmpDto = 
                     {
                         "sellerVkn": this.sellerVkn,
@@ -154,9 +154,9 @@ class fumaWebApi
                             "amount": pData.list[m].pos[0].AMOUNT,
                             "total": pData.list[m].pos[0].TOTAL,
                             "loyalty": pData.list[m].pos[0].LOYALTY,
-                            "point": Number(pData.list[m].special.customerPoint),
+                            "point": parseInt(pData.list[m].pos[0].TOTAL * 1),
                             "transferId": pData.list[m].pos[0].GUID,
-                            "documentDate": pData.list[m].pos[0].DOC_DATE
+                            "documentDate": pData.list[m].pos[0].LDATE
                         },
                         "posSale": tmpSaleLine,
                         "pdf": ""
@@ -208,9 +208,9 @@ class fumaWebApi
                         "amount": pData[0].pos[0].AMOUNT,
                         "total": pData[0].pos[0].TOTAL,
                         "loyalty": pData[0].pos[0].LOYALTY,
-                        "point": Number(pData[0].special.customerPoint),
+                        "point": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
                         "transferId": pData[0].pos[0].GUID,
-                        "documentDate": pData[0].pos[0].DOC_DATE
+                        "documentDate": pData[0].pos[0].LDATE
                     },
                     "posSale": tmpSaleLine,
                     "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
