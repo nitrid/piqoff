@@ -231,12 +231,12 @@ export default class App extends React.PureComponent
         })
         this.core.socket.on('connect_error',(error) => 
         {
-            this.setState({connected:false});
+            //this.setState({connected:false});
         })
         this.core.socket.on('disconnect',async () => 
         {
-            App.instance.setState({connected:false});
-            this.core.auth.logout()
+            //App.instance.setState({connected:false});
+            //this.core.auth.logout()
         })   
         this.core.socket.on('general',async(e)=>
         {
