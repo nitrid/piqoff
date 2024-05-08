@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
 import fetch from 'node-fetch';
+import moment from 'moment'
 
 class fumaWebApi
 {
@@ -13,7 +14,7 @@ class fumaWebApi
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.active = false
-        this.selletVkn = ''
+        this.sellerVkn = ''
     }
     async connEvt(pSocket)
     {
@@ -24,8 +25,9 @@ class fumaWebApi
                 query : " SELECT TOP 1 * FROM COMPANY_VW_01",
             }
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-    
-            this.selletVkn = tmpResult[0].TAX_NO
+
+            this.sellerVkn = tmpResult[0].TAX_NO
+            
             pSocket.on('posSaleClosed',async (pParam,pCallback) =>
             {
                 this.processPosSaleSend(pParam)
@@ -38,7 +40,66 @@ class fumaWebApi
             {
                 this.processCustomerSend('00000000-0000-0000-0000-000000000000')
             })
+
+            this.processEndDay()
         }
+    }
+    async processEndDay()
+    {
+        cron.schedule('0 4 * * *', async () => 
+        {
+            try
+            {
+                let tmpQuery = 
+                {
+                    query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000'",
+                    param : ['FIRST:date','LAST:date'],
+                    value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(-1,'day').format("YYYYMMDD")]
+                }
+                let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+                if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
+                {
+                    for (let i = 0; i < tmpResult.length; i++) 
+                    {
+                        let tmpPosQuery = 
+                        {
+                            query : "SELECT * FROM POS_VW_01 WHERE GUID = @GUID",
+                            param : ['GUID:string|50'],
+                            value : [tmpResult[0].GUID]
+                        }
+                        let tmpPosResult = (await core.instance.sql.execute(tmpPosQuery)).result.recordset
+    
+                        if(typeof tmpPosResult != 'undefined' && tmpPosResult.length > 0)
+                        {
+                            let tmpPosSaleQuery = 
+                            {
+                                query : "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID",
+                                param : ['POS_GUID:string|50'],
+                                value : [tmpResult[0].GUID]
+                            }
+                            let tmpPosSaleResult = (await core.instance.sql.execute(tmpPosSaleQuery)).result.recordset
+    
+                            if(typeof tmpPosSaleResult != 'undefined' && tmpPosSaleResult.length > 0)
+                            {
+                                let tmpData = 
+                                [
+                                    {
+                                        pos : tmpPosResult,
+                                        possale : tmpPosSaleResult,
+                                        special : {customerPoint:tmpPosResult[0].CUSTOMER_POINT}
+                                    }
+                                ]
+                                this.processPosSaleSend(tmpData)
+                            }
+                        }
+                    }
+                }
+            }
+            catch(err)
+            {
+                console.log(err)
+            }
+        })
     }
     async processPosSaleSend(pData)
     {
@@ -67,13 +128,13 @@ class fumaWebApi
 
             let tmpSale = 
             {
-                "sellerVkn": this.selletVkn,
+                "sellerVkn": this.sellerVkn,
                 "userInfo" : 
                 {
                     "transferId" : pData[0].pos[0].CUSTOMER_CODE,
                     "cardId" : pData[0].pos[0].CUSTOMER_CODE,
                     "email": pData[0].pos[0].CUSTOMER_MAIL,
-                    "sellerVkn": this.selletVkn,
+                    "sellerVkn": this.sellerVkn,
                     "point": Number(pData[0].special.customerPoint),
                 },
                 "pos": 
@@ -89,7 +150,7 @@ class fumaWebApi
                     "documentDate": pData[0].pos[0].DOC_DATE
                 },
                 "posSale": tmpSaleLine,
-                "pdf": "data:image/png;base64," + pData[1]
+                "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
             }
             //console.log(JSON.stringify([tmpSale]))
             if(typeof pData != 'undefined')
@@ -116,7 +177,7 @@ class fumaWebApi
                 {
                     if(data.success)
                     {
-                        console.log("FumaApi - processPosSaleSend : Gönderim başarılı")
+                        //console.log("FumaApi - processPosSaleSend : Gönderim başarılı")
                     }
                     else
                     {
@@ -158,7 +219,7 @@ class fumaWebApi
                 {
                     if(data.success)
                     {
-                        console.log("FumaApi - customerUpdate : Gönderim başarılı")
+                        //console.log("FumaApi - customerUpdate : Gönderim başarılı")
                     }
                     else
                     {
@@ -203,7 +264,7 @@ class fumaWebApi
                         "mobilePhoneCountryCode": "",
                         "mobilePhone": slicedArray[x].GSM_PHONE,
                         "transferId": slicedArray[x].GUID,
-                        "sellerVkn":this.selletVkn,
+                        "sellerVkn":this.sellerVkn,
                         "cardId": slicedArray[x].CODE,
                         "point": slicedArray[x].CUSTOMER_POINT
                     }

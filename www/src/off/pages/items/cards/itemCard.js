@@ -34,7 +34,14 @@ export default class itemCard extends React.PureComponent
     constructor(props)
     {
         super(props)                
-        this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
+        this.state = 
+        {
+            underPrice : "",
+            isItemGrpForOrginsValid : false,
+            isItemGrpForMinMaxAccess : false,
+            isTaxSugar : false,
+            isPromotion : false
+        }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
@@ -227,7 +234,9 @@ export default class itemCard extends React.PureComponent
         this.itemsObj.dt()[0].GENRE = this.prmObj.filter({ID:'txtGenre'}).getValue().value
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
-        this.taxSugarValidCheck()                      
+        this.taxSugarValidCheck()  
+        
+        this.setState({isPromotion:false})
     }
     async getItem(pCode)
     {
@@ -267,7 +276,24 @@ export default class itemCard extends React.PureComponent
         this.salesContractObj.refresh();
         this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
         this.otherShopObj.refresh();
-
+        //ÜRÜN PROMOSYON DURUMU GETİRME İŞLEMİ
+        let tmpPromoQuery = 
+        {
+            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
+            param : ['COND_ITEM_GUID:string|50'],
+            value : [this.itemsObj.dt()[0].GUID]
+        }
+        let tmpPromoData = await this.core.sql.execute(tmpPromoQuery)
+        
+        if(tmpPromoData.result.recordset.length > 0)
+        {
+            this.setState({isPromotion:true})
+        }
+        else
+        {
+            this.setState({isPromotion:false})
+        }
+        //*************************************** */
         App.instance.setState({isExecute:false})
         if(typeof this.txtSalePrice != 'undefined')
         {
@@ -1533,6 +1559,7 @@ export default class itemCard extends React.PureComponent
                             </NdLayout>
                         </div>
                         <div className="col-2">
+                            <div style={{display:this.state.isPromotion ? 'block' : 'none',backgroundColor:'red',marginBottom:'5px',color:'white',textAlign:'center',borderRadius:'10px'}}>PROMOTION</div>
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} buttonTrigger={"#btnNewImg"}
