@@ -208,12 +208,13 @@ export const langDe =
         stk_04_003: "Bestandszählung abschließen",
         stk_04_004: "Haltbarkeitsdatum-Operation",
         stk_04_005: "Produktein- und -ausgang", //BAK
-        stk_04_006: "Excel Ürün Aktarımı",  // BAK
+        stk_04_006: "Produktübertragung in Excel",  // BAK
         stk_04_008: "Elektronische Etiketten Massenaktualisierung",
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
         stk_05_004 : "Liste der fehlenden Produkte", 
+        stk_05_005: "Bestandsbewegungsbericht",
         cri: "Kunden",
         cri_01: "Vorgänge",
         cri_02: "Listen",
