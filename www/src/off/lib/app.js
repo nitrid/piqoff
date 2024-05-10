@@ -228,8 +228,8 @@ export default class App extends React.PureComponent
             {
                 App.instance.setState({logined:false,connected:true});
             }
-
-            if(this.msgConnection.isShowed)
+            
+            if(typeof this.msgConnection != 'undefined' && this.msgConnection.isShowed)
             {
                 this.msgConnection.hide()
             }
