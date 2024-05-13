@@ -358,6 +358,8 @@ export default class collectionList extends React.PureComponent
                             <Form colCount={4} parent={this} >                            
                                 {/* TOPLAM */}
                                 <EmptyItem />
+                                <EmptyItem />
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}
@@ -404,16 +406,49 @@ export default class collectionList extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
+                                                    // let tmpQuery = 
+                                                    // {
+                                                    //     query : "SELECT CUS.REF,CUS.REF_NO,CUS.OUTPUT_CODE,CUS.OUTPUT_NAME,CUS.DOC_DATE,DEPT.PAYING_AMOUNT AS AMOUNT, " +
+                                                    //             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH,   " +
+                                                    //             "CASE WHEN CUS.PAY_TYPE = 0 THEN 'Nakit' WHEN CUS.PAY_TYPE = 1 THEN 'Cek' WHEN CUS.PAY_TYPE = 2 THEN 'Banka Havale' ELSE '' END AS PAY_TYPE, " +
+                                                    //             "CUS.INPUT_NAME, " +
+                                                    //             "DEPT.DOC_REF_NO  AS PAYING_DOC " +
+                                                    //             "FROM DOC_CUSTOMER_VW_01 AS CUS INNER JOIN DEPT_CREDIT_MATCHING_VW_03 AS DEPT ON CUS.GUID = DEPT.PAYING_DOC " +
+                                                    //             "WHERE ((CUS.OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
+                                                    //             "((CUS.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((CUS.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                                                    //             " AND CUS.TYPE = 0 AND CUS.DOC_TYPE = 200 ORDER BY CUS.DOC_DATE DESC",
+                                                    //     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
+                                                    //     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
+                                                    // }
                                                     let tmpQuery = 
                                                     {
-                                                        query : "SELECT REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE,AMOUNT, " +
-                                                                "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " + 
-                                                                "ISNULL((SELECT TOP 1 DOC_REF + ' - '+ CONVERT(NVARCHAR,DOC_REF_NO) FROM DEPT_CREDIT_MATCHING_VW_03 WHERE CUS.GUID = PAYING_DOC),'') AS PAYING_DOC " + 
-                                                                "FROM DOC_CUSTOMER_VW_01 AS CUS " +
-                                                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                                                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                                                " AND TYPE = 0 AND DOC_TYPE = 200 ORDER BY DOC_DATE DESC",
-                                                        param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
+                                                        query : `SELECT 
+                                                                FACT.DOC_DATE AS FACT_DATE,
+                                                                FACT.REF AS FACT_REF,
+                                                                FACT.REF_NO AS FACT_REF_NO,
+                                                                FACT.PAY_TYPE AS FACT_PAY_TYPE,
+                                                                FACT.INPUT_CODE AS CUSTOMER_CODE,
+                                                                FACT.INPUT_NAME AS CUSTOMER_NAME,
+                                                                ISNULL((SELECT AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3) FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_AMOUNT,
+                                                                ISNULL((SELECT VAT FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_VAT,
+                                                                ISNULL((SELECT TOTAL FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_TOTAL,
+                                                                TAH.DOC_DATE AS TAH_DATE,
+                                                                TAH.REF AS TAH_REF,
+                                                                TAH.REF_NO AS TAH_REF_NO,
+                                                                TAH.PAY_TYPE_NAME AS TAH_PAY_TYPE,
+                                                                TAH.INPUT_NAME AS BANK_NAME,
+                                                                TAH.DESCRIPTION AS DESCRIPTION,
+                                                                TAH.AMOUNT,
+                                                                ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+                                                                FROM DEPT_CREDIT_MATCHING AS DEPTH
+                                                                INNER JOIN DOC_CUSTOMER_VW_01 AS FACT ON
+                                                                DEPTH.PAYING_DOC = FACT.GUID
+                                                                INNER JOIN DOC_CUSTOMER_VW_01 AS TAH ON
+                                                                DEPTH.PAID_DOC = TAH.GUID
+                                                                WHERE ((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                                                                ((TAH.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((TAH.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                                                                AND TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 ORDER BY TAH.DOC_DATE DESC`,
+                                                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
@@ -421,6 +456,7 @@ export default class collectionList extends React.PureComponent
                                                     App.instance.setState({isExecute:true})
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                     {
+                                                        console.log(JSON.stringify(tmpData.result.recordset))
                                                         App.instance.setState({isExecute:false})
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
