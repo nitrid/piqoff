@@ -15,19 +15,14 @@ class fumaWebApi
         this.core.socket.on('connection',this.connEvt)
         this.active = false
         this.sellerVkn = ''
+
+        this.getVkn()
+        this.processEndDay()
     }
     async connEvt(pSocket)
     {
         if(this.active == true)
         {
-            let tmpQuery = 
-            {
-                query : " SELECT TOP 1 * FROM COMPANY_VW_01",
-            }
-            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-            this.sellerVkn = tmpResult[0].TAX_NO
-            
             pSocket.on('posSaleClosed',async (pParam,pCallback) =>
             {
                 this.processPosSaleSend(pParam)
@@ -40,9 +35,17 @@ class fumaWebApi
             {
                 this.processCustomerSend('00000000-0000-0000-0000-000000000000')
             })
-
-            this.processEndDay()
         }
+    }
+    async getVkn()
+    {
+        let tmpQuery = 
+        {
+            query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        this.sellerVkn = tmpResult[0].TAX_NO
     }
     async processEndDay()
     {
@@ -50,6 +53,7 @@ class fumaWebApi
         {
             try
             {
+                let tmpData = []
                 let tmpQuery = 
                 {
                     query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000'",
@@ -65,7 +69,7 @@ class fumaWebApi
                         {
                             query : "SELECT * FROM POS_VW_01 WHERE GUID = @GUID",
                             param : ['GUID:string|50'],
-                            value : [tmpResult[0].GUID]
+                            value : [tmpResult[i].GUID]
                         }
                         let tmpPosResult = (await core.instance.sql.execute(tmpPosQuery)).result.recordset
     
@@ -81,18 +85,16 @@ class fumaWebApi
     
                             if(typeof tmpPosSaleResult != 'undefined' && tmpPosSaleResult.length > 0)
                             {
-                                let tmpData = 
-                                [
-                                    {
-                                        pos : tmpPosResult,
-                                        possale : tmpPosSaleResult,
-                                        special : {customerPoint:tmpPosResult[0].CUSTOMER_POINT}
-                                    }
-                                ]
-                                this.processPosSaleSend(tmpData)
+                                tmpData.push(
+                                {
+                                    pos : tmpPosResult,
+                                    possale : tmpPosSaleResult,
+                                    special : {customerPoint:tmpPosResult[0].CUSTOMER_POINT}
+                                })
                             }
                         }
                     }
+                    this.processPosSaleSend({list:tmpData})
                 }
             }
             catch(err)
@@ -105,54 +107,116 @@ class fumaWebApi
     {
         if(this.active == true)
         {
-            let tmpSaleLine = []
-            for (let i = 0; i < pData[0].possale.length; i++) 
+            let tmpSale = []
+            
+            if(typeof pData.list != 'undefined')
             {
-                let tmpLineEdit = {
-                    "productName": pData[0].possale[i].ITEM_NAME,
-                    "productId": pData[0].possale[i].ITEM_CODE,
-                    "lineNo": pData[0].possale[i].LINE_NO,
-                    "quantity": Number(pData[0].possale[i].QUANTITY),
-                    "price": pData[0].possale[i].PRICE,
-                    "famount": pData[0].possale[i].FAMOUNT,
-                    "amount": pData[0].possale[i].AMOUNT,
-                    "discount": pData[0].possale[i].DISCOUNT,
-                    "loyalty": pData[0].possale[i].LOYALTY,
-                    "vat": pData[0].possale[i].VAT,
-                    "total": pData[0].possale[i].TOTAL,
-                    "subTotal":pData[0].possale[i].FAMOUNT,
-                    "transferId": pData[0].possale[i].GUID
-                }
-                tmpSaleLine.push(tmpLineEdit)
-            }
+                for (let m = 0; m < pData.list.length; m++) 
+                {
+                    let tmpSaleLine = []
+                    for (let i = 0; i < pData.list[m].possale.length; i++) 
+                    {
+                        let tmpLineEdit = 
+                        {
+                            "productName": pData.list[m].possale[i].ITEM_NAME,
+                            "productId": pData.list[m].possale[i].ITEM_CODE,
+                            "lineNo": pData.list[m].possale[i].LINE_NO,
+                            "quantity": Number(pData.list[m].possale[i].QUANTITY),
+                            "price": pData.list[m].possale[i].PRICE,
+                            "famount": pData.list[m].possale[i].FAMOUNT,
+                            "amount": pData.list[m].possale[i].AMOUNT,
+                            "discount": pData.list[m].possale[i].DISCOUNT,
+                            "loyalty": pData.list[m].possale[i].LOYALTY,
+                            "vat": pData.list[m].possale[i].VAT,
+                            "total": pData.list[m].possale[i].TOTAL,
+                            "subTotal":pData.list[m].possale[i].FAMOUNT,
+                            "transferId": pData.list[m].possale[i].GUID
+                        }
+                        tmpSaleLine.push(tmpLineEdit)
+                    }
+                    
+                    let tmpDto = 
+                    {
+                        "sellerVkn": this.sellerVkn,
+                        "userInfo" : 
+                        {
+                            "transferId" : pData.list[m].pos[0].CUSTOMER_CODE,
+                            "cardId" : pData.list[m].pos[0].CUSTOMER_CODE,
+                            "email": pData.list[m].pos[0].CUSTOMER_MAIL,
+                            "sellerVkn": this.sellerVkn,
+                            "point": Number(pData.list[m].special.customerPoint),
+                        },
+                        "pos": 
+                        {
+                            "vat": pData.list[m].pos[0].VAT,
+                            "discount": pData.list[m].pos[0].DISCOUNT,
+                            "famount": pData.list[m].pos[0].FAMOUNT,
+                            "amount": pData.list[m].pos[0].AMOUNT,
+                            "total": pData.list[m].pos[0].TOTAL,
+                            "loyalty": pData.list[m].pos[0].LOYALTY,
+                            "point": parseInt(pData.list[m].pos[0].TOTAL * 1),
+                            "transferId": pData.list[m].pos[0].GUID,
+                            "documentDate": pData.list[m].pos[0].LDATE
+                        },
+                        "posSale": tmpSaleLine,
+                        "pdf": ""
+                    }
 
-            let tmpSale = 
-            {
-                "sellerVkn": this.sellerVkn,
-                "userInfo" : 
-                {
-                    "transferId" : pData[0].pos[0].CUSTOMER_CODE,
-                    "cardId" : pData[0].pos[0].CUSTOMER_CODE,
-                    "email": pData[0].pos[0].CUSTOMER_MAIL,
-                    "sellerVkn": this.sellerVkn,
-                    "point": Number(pData[0].special.customerPoint),
-                },
-                "pos": 
-                {
-                    "vat": pData[0].pos[0].VAT,
-                    "discount": pData[0].pos[0].DISCOUNT,
-                    "famount": pData[0].pos[0].FAMOUNT,
-                    "amount": pData[0].pos[0].AMOUNT,
-                    "total": pData[0].pos[0].TOTAL,
-                    "loyalty": pData[0].pos[0].LOYALTY,
-                    "point": Number(pData[0].special.customerPoint),
-                    "transferId": pData[0].pos[0].GUID,
-                    "documentDate": pData[0].pos[0].DOC_DATE
-                },
-                "posSale": tmpSaleLine,
-                "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
+                    tmpSale.push(tmpDto)
+                }
             }
-            //console.log(JSON.stringify([tmpSale]))
+            else
+            {
+                let tmpSaleLine = []
+                for (let i = 0; i < pData[0].possale.length; i++) 
+                {
+                    let tmpLineEdit = 
+                    {
+                        "productName": pData[0].possale[i].ITEM_NAME,
+                        "productId": pData[0].possale[i].ITEM_CODE,
+                        "lineNo": pData[0].possale[i].LINE_NO,
+                        "quantity": Number(pData[0].possale[i].QUANTITY),
+                        "price": pData[0].possale[i].PRICE,
+                        "famount": pData[0].possale[i].FAMOUNT,
+                        "amount": pData[0].possale[i].AMOUNT,
+                        "discount": pData[0].possale[i].DISCOUNT,
+                        "loyalty": pData[0].possale[i].LOYALTY,
+                        "vat": pData[0].possale[i].VAT,
+                        "total": pData[0].possale[i].TOTAL,
+                        "subTotal":pData[0].possale[i].FAMOUNT,
+                        "transferId": pData[0].possale[i].GUID
+                    }
+                    tmpSaleLine.push(tmpLineEdit)
+                }
+    
+                tmpSale = 
+                [{
+                    "sellerVkn": this.sellerVkn,
+                    "userInfo" : 
+                    {
+                        "transferId" : pData[0].pos[0].CUSTOMER_CODE,
+                        "cardId" : pData[0].pos[0].CUSTOMER_CODE,
+                        "email": pData[0].pos[0].CUSTOMER_MAIL,
+                        "sellerVkn": this.sellerVkn,
+                        "point": Number(pData[0].special.customerPoint),
+                    },
+                    "pos": 
+                    {
+                        "vat": pData[0].pos[0].VAT,
+                        "discount": pData[0].pos[0].DISCOUNT,
+                        "famount": pData[0].pos[0].FAMOUNT,
+                        "amount": pData[0].pos[0].AMOUNT,
+                        "total": pData[0].pos[0].TOTAL,
+                        "loyalty": pData[0].pos[0].LOYALTY,
+                        "point": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
+                        "transferId": pData[0].pos[0].GUID,
+                        "documentDate": pData[0].pos[0].LDATE
+                    },
+                    "posSale": tmpSaleLine,
+                    "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
+                }]
+            }
+            //console.log(JSON.stringify(tmpSale))
             if(typeof pData != 'undefined')
             {
                 fetch('http://20.19.32.36:3000/integration/createOrders', 
@@ -163,7 +227,7 @@ class fumaWebApi
                         'x-api-key': '1453', 
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify([tmpSale])
+                    body: JSON.stringify(tmpSale)
                 })
                 .then(response => 
                 {
