@@ -15,7 +15,6 @@ export default class NdTextBox extends Base
         
         this.dev = null;
 
-
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode

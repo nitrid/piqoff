@@ -25,7 +25,6 @@ class mailer
 
     async mailSend(pData)
     {
-       
         return new Promise(async resolve =>
         {
             let tmpAttach = [];
@@ -40,6 +39,7 @@ class mailer
                     }
                 ]
             }
+
             let tmpQuery
             if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
             {
@@ -60,52 +60,52 @@ class mailer
            
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-            let tmpservice = ''
-            if(tmpResult[0].MAIL_SERVICE == 'gmail')
+            if(typeof tmpResult[0] != 'undefined')
             {
-                tmpservice = 'gmail'
-            }
-            let transporter = nodemailer.createTransport(
-            {
-                service: tmpservice,
-                host: tmpResult[0].MAIL_SMTP,
-                port: tmpResult[0].MAIL_PORT,
-                secure: true,
-                auth: 
+                let tmpservice = ''
+                if(tmpResult[0].MAIL_SERVICE == 'gmail')
                 {
-                  user: tmpResult[0].MAIL_ADDRESS,
-                  pass: tmpResult[0].MAIL_PASSWORD
-                },
-                //tls : { rejectUnauthorized: false }
-              });
-              console.log(pData.text)
-              var mailOptions = {
-                from: tmpResult[0].MAIL_ADDRESS,
-                to: pData.sendMail,
-                subject: pData.subject,
-                html:pData.html,
-                text:pData.text,
-                attachments: [
-                    {  
-                        filename: pData.attachName,
-                        content: pData.attachData,
-                        encoding: 'base64'
+                    tmpservice = 'gmail'
+                }
+                let transporter = nodemailer.createTransport(
+                {
+                    service: tmpservice,
+                    host: tmpResult[0].MAIL_SMTP,
+                    port: tmpResult[0].MAIL_PORT,
+                    secure: true,
+                    auth: 
+                    {
+                    user: tmpResult[0].MAIL_ADDRESS,
+                    pass: tmpResult[0].MAIL_PASSWORD
                     },
-                  
-                ]
-              };
-              transporter.sendMail(mailOptions, function(error, info)
-              {
-                if (error) 
+                    //tls : { rejectUnauthorized: false }
+                });
+                var mailOptions = 
                 {
-                    console.log(error)
-                    resolve(error);
-                }
-                else
+                    from: tmpResult[0].MAIL_ADDRESS,
+                    to: pData.sendMail,
+                    subject: pData.subject,
+                    html:pData.html,
+                    text:pData.text,
+                    attachments: tmpAttach
+                };
+                transporter.sendMail(mailOptions, function(error, info)
                 {
-                    resolve(0);
-                }
-            });
+                    if (error) 
+                    {
+                        console.log(error)
+                        resolve(error);
+                    }
+                    else
+                    {
+                        resolve(0);
+                    }
+                });
+            }
+            else
+            {
+                resolve(0);
+            }
         })
     }
 }

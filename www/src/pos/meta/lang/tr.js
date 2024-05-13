@@ -22,12 +22,12 @@ export const langTr =
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
     msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",    
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
-    price : "Fiyat",
-    quantity : "Miktar",
+    price : "Fiyat Giriniz",
+    quantity : "Miktar Giriniz",
     nbCalculator : "Hesap Makinesi",
     about : "Hakkımızda",
     abtCertificate : "Setifika : NF525",
-    abtNrCertificate : "Sertifika No : B_0527-1",
+    abtNrCertificate : "Sertifika No : B_0527-3",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
     abtPiqsoft : "Logiciel : Piqsoft-POS",
@@ -36,8 +36,6 @@ export const langTr =
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
-    qunatity : "Miktar",
-    price : "Fiyat",
     msgDeviceChange : 
     {
         title : "Dikkat",
@@ -59,7 +57,7 @@ export const langTr =
     msgMaxQuantity :
     {
         title : "Uyarı",
-        msg : "Miktar 99.999'dan büyük giremezsiniz !",
+        msg : "Miktar 999.999'dan büyük giremezsiniz !",
         btn01 : "Tamam",
     },
     msgPriceNotFound : 
@@ -337,6 +335,10 @@ export const langTr =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Son iade listesi",
+    },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
     txtPopLastRefNoPholder : "Ref No",
     txtPopLastCustomerPholder : "Müşteri Kodu",
@@ -391,21 +393,26 @@ export const langTr =
         head : "Yeniden yazdırma açıklaması",
         title : "Lütfen yeniden yazdırma nedeninizi giriniz"
     },
+    popDiscountDesc : 
+    {
+        head : "İndirim Açıklaması",
+        title : "Lütfen İndirim Nedeninizi Giriniz"
+    },
     msgItemReturnTicket: 
     {
         title : "Uyarı",
         msg :"İade Alınan Ticketı Okutunuz !",
         btn01 : "Tamam",
         btn02 : "İptal",
-        btn03 : "Fiş Seçimi" // BAK
+        btn03 : "Fiş Seçimi"
     },
     msgItemReturnType: 
     {
         title : "Uyarı",
         msg :"İade Tipini Seçiniz !",
-        btn01 : "Espece",
-        btn02 : "Bon D'avoir",
-        btn03 : "CB",
+        btn01 : "Nakit",
+        btn02 : "İade fişi",
+        btn03 : "Kredi Kartı",
     },
     msgWeighing: 
     {
@@ -439,7 +446,7 @@ export const langTr =
     },
     popAdvanceDesc :
     {
-        head :"Avas Açıklaması",
+        head :"Avans Açıklaması",
         title :"Lütfen Avans Nedenini Giriniz",
     },
     msgSave : 
@@ -481,6 +488,10 @@ export const langTr =
     {
         title :"Kart Ödeme",
     },
+    popCardTicketPay :
+    {
+        title :"Ticket Rest. Kart",
+    },
     popExchangePay :
     {
         title :"Nakit Döviz Ödeme",
@@ -499,7 +510,7 @@ export const langTr =
     },
     grdList: 
     {
-        LDATE : "LDATE",
+        LDATE : "TARIH",
         ITEM_NAME :"ADI",
         QUANTITY : "ADET",
         DISCOUNT : "IND.FIYAT",
@@ -526,7 +537,7 @@ export const langTr =
     },
     grdDiscList :
     {
-        LDATE : "D TARIH",
+        LDATE : "TARIH",
         ITEM_NAME : "ADI",
         INDIRIM : "INDIRIM",
         DISCOUNT : "INDIRIM",
@@ -620,7 +631,9 @@ export const langTr =
         msg3 : "Tablosu Aktarılıyor.",
         btnPopTransferManuel : "Manuel Başlat",
         btnPopTransferClear : "Temizle Aktar",
-        btnPopTransferStop : "Durdur"
+        btnPopTransferStop : "Durdur",
+        titleApp : "Local Database Güncelleniyor.",
+        msgApp : "Birazdan uygulama kapanacak ! Lütfen uygulamayı tekrar çalıştırın."
     },
     msgOfflineWarning: 
     {
@@ -722,7 +735,8 @@ export const langTr =
         },
         popSelectItem : "Stok Seçim",
         popSelectItemGrp : "Ürün Grubu Seçim",
-        popNameEntry : "Plu Adı"
+        popNameEntry : "Plu Adı",
+        txtPopPluGroup : "Aratmak istediğiniz plu kodu yada ismini giriniz !"
     },
     popOrderList :
     {
@@ -747,6 +761,8 @@ export const langTr =
     {
         title : "Uyarı",
         msg : "Kayıt işleminiz başarısız !",
+        msg1 : "Ref no sıfır olduğundan işlem başarısız !",
+        msg2 : "İmza boş olduğundan işlem başarısız !",
         btn01 : "Tamam",
         btn02 : "Tekrar Gönder",
     },
@@ -944,5 +960,20 @@ export const langTr =
             btn02: "Hayır",
             msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
         },
+    },
+    priceListChoicePopUp :
+    {
+        title : "Fiyat Listesi Seçiniz",
+        clmListNo : "Liste No",
+        clmListName : "Liste Adı",
+        clmItemName : "Ürün Adı",
+        clmTag : "Tag",
+        clmPrice : "Fiyat"
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Dikkat",
+        msg : "Cihaz bilgileri database den getirilemedi !",
+        btn01 : "Tamam"
     },
 }

@@ -321,6 +321,12 @@ export class local
 
             if(this.platform == 'electron')
             {
+                //BAZEN SİSTEM OFFLİNE A GEÇMİŞ İSE ELECTRON UYGULAMASI HEMEN SQLLITE DATABASE OLUŞTURULAMIYOR BUNUN İÇİN 1SN LİK BEKLETİYORUZ.
+                if(this.db == null)
+                {
+                    await core.instance.util.waitUntil(1000)
+                }
+
                 this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
                 {
                     if (err) 
@@ -523,21 +529,6 @@ export class local
             resolve()
         });
     }
-    // dropDb()
-    // {
-    //     return new Promise(async resolve => 
-    //     {
-    //         this.conn.dropDb().then(async function() 
-    //         {
-    //             console.log('Db deleted successfully');
-    //             resolve(true)                
-    //         }).catch(function(error) 
-    //         {                
-    //             console.log(error);
-    //             resolve(false)
-    //         });    
-    //     });
-    // }
 }
 export class auth 
 {
@@ -765,6 +756,16 @@ export class util
             {
                 resolve(false)
             }
+        });
+    }
+    getVersion()
+    {
+        return new Promise(resolve => 
+        {
+            this.core.socket.emit('util',{cmd:'version'},(data) =>
+            {
+                resolve(data)
+            });
         });
     }
 }
@@ -1092,13 +1093,6 @@ export class datatable
         
         if(tmpIndex > -1)
         {
-            // Irsaliyeden cevirirken evrakı daha kayıt etmeden satır silince irsaliye satırı databaseden silindiği için yapıldı...
-            if(typeof this[tmpIndex].stat != 'undefined' && this[tmpIndex].stat == 'edit' && this[tmpIndex].INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')
-            {
-                this.splice(tmpIndex,1);
-                return
-            }
-            //----------------------------------------------------
             this._deleteList.push(this[tmpIndex]); 
             this.splice(tmpIndex,1);
             this.emit('onDelete');
@@ -2361,6 +2355,6 @@ Number.prototype.round = function(pDigits)
     tmpNum = Number(tmpNum)
     
     return isNaN(Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)) ? 0 : Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
-    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
     //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

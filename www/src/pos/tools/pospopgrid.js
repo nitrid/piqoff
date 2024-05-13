@@ -19,7 +19,6 @@ export default class NbPosPopGrid extends NbBase
             width:this.props.width,
             height:this.props.height,
             position:this.props.position,
-            layoutName: "default"
         }
         this.data = this.props.data
         this._onSelection = this._onSelection.bind(this)
@@ -138,7 +137,7 @@ export default class NbPosPopGrid extends NbBase
                         </div>                        
                     </div>
                     <div className="row pt-1">
-                        <NbKeyboard id={"keyboard"} parent={this} inputName={"txt" + this.props.id}/>
+                        <NbKeyboard id={"keyboard"} parent={this} inputName={"txt" + this.props.id} keyType={this.props.keyType}/>
                     </div>
                 </NdPopUp>
             </div> 

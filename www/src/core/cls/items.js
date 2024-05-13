@@ -37,7 +37,8 @@ export class itemsCls
             INTERFEL: false,
             DESCRIPTION : '',
             CUSTOMS_CODE: '',
-            GENRE : ''
+            GENRE : '',
+            CEOPOS : 0
         }
 
         this.itemLang = new itemLangCls()
@@ -92,12 +93,14 @@ export class itemsCls
                     "@INTERFEL = @PINTERFEL, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
-                    "@GENRE = @PGENRE " ,
+                    "@GENRE = @PGENRE, " +
+                    "@CEOPOS = @PCEOPOS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PCEOPOS:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','CEOPOS'],
             local : 
             {
                 type : "insert",
@@ -158,12 +161,14 @@ export class itemsCls
                     "@INTERFEL = @PINTERFEL, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
-                    "@GENRE = @PGENRE " ,
+                    "@GENRE = @PGENRE, " +
+                    "@CEOPOS = @PCEOPOS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PCEOPOS:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS',
-                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE'],
+                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','CEOPOS'],
             local : 
             {
                 type : "update",
@@ -644,9 +649,10 @@ export class itemPricingListCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
-            NO : 0,
+            NO : '',
             NAME : '',
-            VAT_TYPE : 0
+            VAT_TYPE : 0,
+            TAG : ''
         }
 
         this._initDs();
@@ -657,7 +663,7 @@ export class itemPricingListCls
         let tmpDt = new datatable('ITEM_PRICE_LIST');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO IS NULL)) AND ((NAME = @NAME) OR (@NAME IS NULL))",
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO = -1)) AND ((NAME = @NAME) OR (@NAME = 'NULL'))",
             param : ['NO:int','NAME:string|100']
         }
         tmpDt.insertCmd = 
@@ -667,9 +673,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.updateCmd = 
         {
@@ -678,9 +685,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.deleteCmd = 
         {
@@ -736,14 +744,14 @@ export class itemPricingListCls
         {
             let tmpPrm = 
             {
-                NO : null,
-                NAME : null
+                NO : -1,
+                NAME : 'NULL'
             }         
 
             if(arguments.length > 0)
             {
-                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? null : arguments[0].NO;
-                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? null : arguments[0].NAME;
+                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? -1 : arguments[0].NO;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? 'NULL' : arguments[0].NAME;
             }
             this.ds.get('ITEM_PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
             
@@ -1370,6 +1378,7 @@ export class editItemCls
             CUSTOMER: '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
+            CUSTOMS : '',
             WEIGHING : false
         }
 
@@ -1421,14 +1430,15 @@ export class editItemCls
                     "@MAIN_UNIT_ID = @PMAIN_UNIT_ID, " +
                     "@UNDER_FACTOR = @PUNDER_FACTOR, " +
                     "@UNDER_UNIT_ID = @PUNDER_UNIT_ID, " +
-                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME ",
+                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME, " + 
+                    "@CUSTOMS = @PCUSTOMS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
                      'PCOST_PRICE:float','PWEIGHING:bit','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
                     'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50','PUNDER_UNIT_GUID:string|50','PMAIN_UNIT_ID:string|25',
-                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25'],
+                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25','PCUSTOMS:string|50'],
             dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','WEIGHING','STATUS','ORGINS',
                        'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID',
-                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME'],
+                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME','CUSTOMS'],
         } 
 
         this.ds.add(tmpDt);
