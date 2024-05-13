@@ -2471,7 +2471,6 @@ export class posUsbTSECls
         });
     }
 }
-
 export class posPayTypeCls
 {
     constructor()

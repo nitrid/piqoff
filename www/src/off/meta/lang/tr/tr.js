@@ -2,6 +2,7 @@ export const langTr =
 {
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
+    msgConnection : {msg : "Sunucu ile bağlantı kesildi !"},
     loading : "Yükleniyor",
     phoneIsInvalid : "Boşluk bırakmadan sadece '+' ve rakam kullanmalısınız.",
     mailIsInvalid : "Geçerli bir e-posta adresi girin. '@' ve uzantıyı kontrol edin (Örn: .com, .fr, ...)",
@@ -221,6 +222,7 @@ export const langTr =
         stk_05_002: "Değişen Alış Fiyatları Raporu",
         stk_05_003: "Sayım Envanter Raporu",
         stk_05_004: "Kayıp Ürün Raporu",
+        stk_05_005: "Stok Hareket Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
