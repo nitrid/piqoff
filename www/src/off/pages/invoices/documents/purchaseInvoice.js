@@ -904,6 +904,7 @@ export default class purchaseInvoice extends DocBase
             param : ['OUTPUT:string|50'],
             value : [this.docObj.dt()[0].OUTPUT]
         }
+        console.log(this.docObj.dt()[0].OUTPUT)
         super.getDispatch(tmpQuery)
     }
     async getOrders() 

@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
 import fetch from 'node-fetch';
+import moment from 'moment';
+
 
 class pricerApi
 {
@@ -26,6 +28,8 @@ class pricerApi
                 {
                     for (let i = 0; i < pParam.length; i++) 
                     {
+                        console.log(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
+
                         if(pParam[i].query.indexOf('PRD_ITEM_PRICE_UPDATE') > -1)
                         { 
                             if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
@@ -108,23 +112,21 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
                         {
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                console.log(pParam[i].rowData.ITEM)
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
                         {
-                            console.log(pParam[i].rowData.ITEM)
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
@@ -142,8 +144,13 @@ class pricerApi
             this.allItemSend()
         })
     }
-    async itemUpdate(pGuid)
+    async itemUpdate(pGuid,pDate)
     {
+        if(typeof pDate == 'undefined')
+        {
+            pDate = moment(new Date()).format("YYYY-MM-DD 00:00:00")
+        }
+        console.log(pDate)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
@@ -176,6 +183,7 @@ class pricerApi
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(tmpResult[0].CENTIM_PRICE),
                       "sics":tmpBarcodes,
+                      "validFrom" : pDate,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
@@ -265,17 +273,20 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM " +
+            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
+            " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
             " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112) AND COND_QUANTITY = 1 ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
-            await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
+            await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE,tmpResult[i].START_DATE)
+            await this.itemUpdate(tmpCleanResult[i].ITEM,tmpResult[i].FINISH_DATE)
+
         }
     }
-    async itemPromoUpdate(pGuid,pPrice)
+    async itemPromoUpdate(pGuid,pPrice,pDate)
     {
         let tmpQuery = 
         {
@@ -308,6 +319,7 @@ class pricerApi
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(pPrice * 100),
                       "sics":tmpBarcodes,
+                      "validFrom" : tmpResult[0].VALID_DATE,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,

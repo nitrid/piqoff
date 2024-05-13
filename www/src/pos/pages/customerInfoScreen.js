@@ -8,6 +8,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/gri
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import LCD from 'dot-matrix-lcd'
+
 export default class customerInfoScreen extends React.PureComponent
 {
     constructor()
@@ -17,7 +18,7 @@ export default class customerInfoScreen extends React.PureComponent
         this.t = App.instance.lang.getFixedT(null,null,"pos");
         this.lang = App.instance.lang;
         this.prmObj = new param(prm)
-        this.state = {digit : false}
+        this.state = {digit : false,splash : false}
 
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
@@ -26,6 +27,14 @@ export default class customerInfoScreen extends React.PureComponent
         {
             this.txtTime.value = moment(new Date(),"DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
         },1000)
+    }
+    async SplashMessage() 
+    {
+        return (
+            <div>
+                <img src="./resources/wallpaper.jpeg"/>
+            </div>
+        );
     }
     async componentDidMount()
     {
@@ -39,7 +48,18 @@ export default class customerInfoScreen extends React.PureComponent
                     this.txtPoint.value = data.data.posObj[0].CUSTOMER_POINT
                     this.totalGrand.value = data.data.grandTotal
     
+                    if(data.data.posSaleObj.length > 0)
+                    {
+                        this.setState({splash:false})
+                    }
+                    else
+                    {
+                        setTimeout(() => {
+                            this.setState({splash:true})
+                        }, 1800);
+                    }
                     await this.grdList.dataRefresh({source:data.data.posSaleObj});
+                   
                 }
                 else if(typeof data.digit != "undefined")
                 {
@@ -57,6 +77,9 @@ export default class customerInfoScreen extends React.PureComponent
                     }, 1500);
                 }
             });
+            setTimeout(() => {
+                this.setState({splash:true})
+            }, 2500);
         }
         this.lcd = new LCD(
         {
@@ -77,8 +100,12 @@ export default class customerInfoScreen extends React.PureComponent
     }
     render()
     {
+       
         return (
             <div>
+                <div style={{visibility:this.state.splash ? 'visible' : 'hidden'}}>
+                    <img src="./resources/wallpaper.jpeg" style={{width:this.state.splash ? "100%" : "0%",height:this.state.splash ? "100%" : "0%"}}/>
+                </div>
                 <div style={{position:'absolute',zIndex:1500,width:"100%",height:"100%",backgroundColor:"black",justifyContent:"center",alignItems:"center",display:"flex",visibility:this.state.digit ? 'visible' : 'hidden'}}>
                     <div id="lcd-container" className="lcd-container"></div>
                 </div>
@@ -174,6 +201,7 @@ export default class customerInfoScreen extends React.PureComponent
                     </div>
                 </div>
             </div> 
-        )
+        );
+       
     }
 }
