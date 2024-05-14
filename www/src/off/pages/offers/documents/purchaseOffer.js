@@ -50,7 +50,9 @@ export default class purchaseOffer extends DocBase
     async init()
     {
         await super.init()
-        this.grdPurcoffers.devGrid.clearFilter("row")
+        
+        this.grid = this["grdPurcoffers"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
 
         this.txtRef.readOnly = false
@@ -139,12 +141,12 @@ export default class purchaseOffer extends DocBase
                                 this.customerClear = false
                                 this.combineControl = true
                                 this.combineNew = false                        
-                                this.grdPurcoffers.devGrid.beginUpdate()
+                                this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
-                                this.grdPurcoffers.devGrid.endUpdate()
+                                this.grid.devGrid.endUpdate()
                             }
                             await this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -207,12 +209,12 @@ export default class purchaseOffer extends DocBase
                                         }
                                         else if(data.length > 1)
                                         {
-                                            this.grdPurcoffers.devGrid.beginUpdate()
+                                            this.grid.devGrid.beginUpdate()
                                             for (let i = 0; i < data.length; i++) 
                                             {
                                                 await this.addItem(data[i],e.rowIndex)
                                             }
-                                            this.grdPurcoffers.devGrid.endUpdate()
+                                            this.grid.devGrid.endUpdate()
                                         }
                                     }
                                 }
@@ -233,7 +235,7 @@ export default class purchaseOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcoffers.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -288,7 +290,7 @@ export default class purchaseOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcoffers.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -343,7 +345,7 @@ export default class purchaseOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcoffers.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -464,7 +466,7 @@ export default class purchaseOffer extends DocBase
                     let tmpCustomerBtn = ''
                     if(this.customerClear == true)
                     {
-                        await this.grdPurcoffers.devGrid.deleteRow(0)
+                        await this.grid.devGrid.deleteRow(0)
                         resolve()
                         return 
                     }
@@ -481,7 +483,7 @@ export default class purchaseOffer extends DocBase
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
-                            await this.grdPurcoffers.devGrid.deleteRow(0)
+                            await this.grid.devGrid.deleteRow(0)
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
@@ -712,7 +714,7 @@ export default class purchaseOffer extends DocBase
                                         }
                                         if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdPurcoffers.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -823,7 +825,7 @@ export default class purchaseOffer extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcoffers.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {
@@ -1159,12 +1161,12 @@ export default class purchaseOffer extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdPurcoffers.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcoffers.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
@@ -1206,12 +1208,12 @@ export default class purchaseOffer extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdPurcoffers.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcoffers.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1267,12 +1269,12 @@ export default class purchaseOffer extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false  
-                                                        this.grdPurcoffers.devGrid.beginUpdate()                                              
+                                                        this.grid.devGrid.beginUpdate()                                              
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcoffers.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1285,12 +1287,12 @@ export default class purchaseOffer extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false                                        
-                                                this.grdPurcoffers.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcoffers.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1333,7 +1335,7 @@ export default class purchaseOffer extends DocBase
                                     }}/>
                                 </Item>
                                 <Item>
-                                    <NdGrid parent={this} id={"grdPurcoffers"} 
+                                    <NdGrid parent={this} id={"grdPurcoffers"+this.tabIndex} 
                                     showBoffers={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReoffering={true} 
@@ -1465,7 +1467,7 @@ export default class purchaseOffer extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdPurcoffers.dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
+                                        await this["grdPurcoffers"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />

@@ -189,7 +189,8 @@ export default class purchaseInvoice extends DocBase
         return new Promise(async resolve =>
         {
             await super.init()
-            this.grdPurcInv.devGrid.clearFilter("row")
+            this.grid = this["grdPurcInv"+this.tabIndex]
+            this.grid.devGrid.clearFilter("row")
             this.dtDocDate.value = moment(new Date())
             this.dtShipDate.value = moment(new Date())
 
@@ -354,12 +355,12 @@ export default class purchaseInvoice extends DocBase
                             this.combineControl = true
                             this.combineNew = false
                             
-                            this.grdPurcInv.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdPurcInv.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -415,12 +416,12 @@ export default class purchaseInvoice extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
                                     
-                                    this.grdPurcInv.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdPurcInv.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -439,7 +440,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -505,7 +506,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -559,7 +560,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -1048,7 +1049,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpMissCodes = []
         let tmpCounter = 0
-        this.grdPurcInv.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < pdata.length; i++) 
         {
             let tmpQuery = 
@@ -1078,7 +1079,7 @@ export default class purchaseInvoice extends DocBase
                 tmpMissCodes.push("'"+pdata[i].CODE+"'")
             }
         }
-        this.grdPurcInv.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -1106,13 +1107,13 @@ export default class purchaseInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.grdPurcInv.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
         }
         this.popMultiItem.hide()
-        this.grdPurcInv.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     async saveDoc()
     {
@@ -1448,7 +1449,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.dtDocDate.value = moment(e.InvoiceDate)
                                                 this.dtShipDate.value = moment(e.DueDate)
 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 let tmpMissCodes = []
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
@@ -1471,7 +1472,7 @@ export default class purchaseInvoice extends DocBase
                                                         tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
                                                     }
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                                 if(tmpMissCodes.length > 0)
                                                 {
                                                     let tmpConfObj =
@@ -1533,7 +1534,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -1615,7 +1616,7 @@ export default class purchaseInvoice extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -2084,12 +2085,12 @@ export default class purchaseInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdPurcInv.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdPurcInv.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -2148,12 +2149,12 @@ export default class purchaseInvoice extends DocBase
                                                     }
                                                     else if(data.length > 1)
                                                     {
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                 }
                                             }
@@ -2205,12 +2206,12 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -2223,12 +2224,12 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -2261,12 +2262,12 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     await this.pg_service.show()
                                                     return
@@ -2280,12 +2281,12 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++)
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             await this.pg_service.show()   
                                         }
@@ -2311,7 +2312,7 @@ export default class purchaseInvoice extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                         }
                                         else
@@ -2348,7 +2349,7 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdPurcInv"} 
+                                        <NdGrid parent={this} id={"grdPurcInv"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -2509,7 +2510,7 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdPurcInv" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcInv"}/>
@@ -2546,7 +2547,7 @@ export default class purchaseInvoice extends DocBase
                                         </NdGrid>
                                         <ContextMenu dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdPurcInv"
+                                        target={"#grdPurcInv"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getDispatch"))
