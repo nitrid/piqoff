@@ -53,6 +53,7 @@ export class customersCls
         this.customerAdress = new customerAdressCls();
         this.customerBank = new customerBankCls();
         this.customerNote = new customerNoteCls();
+        this.customerSubGrp = new customerSubGrpCls();
 
         this._initDs();
     }
@@ -166,6 +167,7 @@ export class customersCls
         this.ds.add(this.customerAdress.dt('CUSTOMER_ADRESS'))
         this.ds.add(this.customerBank.dt('CUSTOMER_BANK'))
         this.ds.add(this.customerNote.dt('CUSTOMER_NOTE'))
+        this.ds.add(this.customerSubGrp.dt('CUSTOMERS_SUB_GRP'))
     }
     //#endregion
     dt()
@@ -224,6 +226,7 @@ export class customersCls
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerNote.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+                await this.customerSubGrp.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
             }
             resolve(this.ds.get('CUSTOMERS'))
         });
@@ -1168,6 +1171,276 @@ export class customerNoteCls
         return new Promise(async resolve => 
         {
             this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class subGroupCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            CODE : '',
+            NAME : '',
+            RANK : -1,
+            PARENT : '00000000-0000-0000-0000-000000000000',
+            PARENT_CODE : '',
+            PARENT_NAME : '',
+            PARENT_MASK : null,
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CUSTOMER_SUB_GROUP');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT *,CASE WHEN PARENT = '00000000-0000-0000-0000-000000000000' THEN NULL ELSE PARENT END AS PARENT_MASK FROM [dbo].[CUSTOMER_SUB_GROUP_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
+            param : ['GUID:string|50','CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC  [dbo].[PRD_CUSTOMER_SUB_GROUP_INSERT]  " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " +
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC  [dbo].[PRD_CUSTOMER_SUB_GROUP_UPDATE]  " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " +
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_SUB_GROUP_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CUSTOMER_SUB_GROUP') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('CUSTOMER_SUB_GROUP').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                CODE : ''
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+            }
+            this.ds.get('CUSTOMER_SUB_GROUP').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('CUSTOMER_SUB_GROUP').refresh();
+            resolve(this.ds.get('CUSTOMER_SUB_GROUP'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class customerSubGrpCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',            
+            CUSTOMER_CODE : '',            
+            CUSTOMER_NAME : '',
+            CUSTOMER_SUB_RANK : 0,
+            SUB_GUID : '00000000-0000-0000-0000-000000000000',
+            SUB_CODE : '',
+            SUB_NAME : '',
+            SUB_GRP_RANK : 0
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CUSTOMERS_SUB_GRP');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[CUSTOMERS_SUB_GRP_VW_01] " + 
+                    "WHERE ((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
+                    "((CUSTOMER_NAME = @CUSTOMER_NAME) OR (@CUSTOMER_NAME = '')) ORDER BY CUSTOMER_SUB_RANK ASC" ,
+            param : ['CUSTOMER_GUID:string|50','CUSTOMER_CODE:string|25','CUSTOMER_NAME:string|250']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMERS_SUB_GRP_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CUSTOMER = @PCUSTOMER, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PCUSTOMER:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','CUSTOMER_GUID','SUB_GUID','CUSTOMER_SUB_RANK']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMERS_SUB_GRP_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CUSTOMER = @PCUSTOMER, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PCUSTOMER:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','CUSTOMER_GUID','SUB_GUID','CUSTOMER_SUB_RANK']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMERS_SUB_GRP_DELETE] " + 
+                    "@CUSER = @PCUSER, " +
+                    "@UPDATE = 1, " +  
+                    "@SUB = @PSUB ", 
+            param : ['PCUSER:string|25','PSUB:string|50'],
+            dataprm : ['CUSER','SUB_GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CUSTOMERS_SUB_GRP') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('CUSTOMERS_SUB_GRP').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+                CUSTOMER_CODE : '',
+                CUSTOMER_NAME : ''
+            }
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
+                tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;  
+                tmpPrm.CUSTOMER_NAME = typeof arguments[0].CUSTOMER_NAME == 'undefined' ? '' : arguments[0].CUSTOMER_NAME;
+            }
+            
+            this.ds.get('CUSTOMERS_SUB_GRP').selectCmd.value = Object.values(tmpPrm)
+              
+            await this.ds.get('CUSTOMERS_SUB_GRP').refresh();
+            resolve(this.ds.get('CUSTOMERS_SUB_GRP'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
             resolve(await this.ds.update()); 
         });
     }

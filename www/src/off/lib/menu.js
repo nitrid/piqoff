@@ -307,6 +307,11 @@ export const menu = (e) =>
                             id: 'cri_01_005',
                             text: e.t('menuOff.cri_01_005'),//'Sektör Tanımları',
                             path: 'customers/cards/sectorCard'
+                        },
+                        {
+                            id: 'cri_01_006',
+                            text: e.t('menuOff.cri_01_006'),//'Alt Grup Tanımları',
+                            path: 'customers/cards/customerSubGroupCard'
                         }
                     ]
                 },

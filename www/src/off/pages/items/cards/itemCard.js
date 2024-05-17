@@ -535,23 +535,6 @@ export default class itemCard extends React.PureComponent
         else if(e.itemData.title == this.t("tabTitleDetail"))
         {
             await this.grdSubGrp.dataRefresh({source:this.itemsObj.itemSubGrp.dt()});
-
-            // this.pg_subGroup.on('showing',()=>
-            // {
-            //     this.pg_subGroup.setSource(
-            //     {
-            //         source:
-            //         {
-            //             select:
-            //             {
-            //                 query : "SELECT * FROM ITEM_SUB_GROUP_VW_01" ,
-            //                 // param : ['VAL:string|50']
-            //             },
-            //             sql:this.core.sql
-            //         }
-            //     })
-            //     this.pg_subGroup.getData()
-            // })
         }
     }
     underPrice()
@@ -2351,7 +2334,7 @@ export default class itemCard extends React.PureComponent
                                             </div>
                                             <div className='row'>
                                                 <div className='col-12 ps-0'>
-                                                    <NdButton text={"Alt Grup Ekle"} type="normal" stylingMode="contained" width={'100%'}
+                                                    <NdButton text={this.t("btnSubGroup")} type="normal" stylingMode="contained" width={'100%'}
                                                     onClick={async()=>
                                                     {
                                                         await this.pg_subGroup.show()
@@ -2420,7 +2403,6 @@ export default class itemCard extends React.PureComponent
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_CODE = e[0].CODE
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_NAME = e[0].NAME
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_GRP_RANK = e[0].RANK
-                                                            console.log(this.itemsObj.itemSubGrp)
                                                         }
                                                     }}/>
                                                 </div>
@@ -2434,11 +2416,11 @@ export default class itemCard extends React.PureComponent
                                         showBorders={true}
                                         width={'90%'}
                                         height={'90%'}
-                                        title={this.t("pg_txtRef.title")} 
+                                        title={this.t("pg_subGroup.title")} 
                                         search={false}
                                         deferRendering={true}
                                         >
-                                            <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                            <Column dataField="NAME" caption={this.t("pg_subGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
                                         </NdPopGrid>
                                     </div>                                    
                                 </Item>

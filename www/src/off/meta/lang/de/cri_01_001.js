@@ -228,6 +228,11 @@ const cri_01_001 =
         clmCode : "CODE",
         clmName : "NAME",
     },
-    
+    btnSubGroup: "Untergruppe Hinzufügen",
+    pg_subGroup: 
+    {
+        title: "Untergruppenauswahl",
+        clmName: "Name",
+    },
 }
 export default cri_01_001

@@ -233,6 +233,7 @@ export const langTr =
         cri_01_003: "Grup Tanımları",
         cri_01_004: "Bölge Tanımları",
         cri_01_005: "Sektör Tanımları",
+        cri_01_006: "Alt Grup Tanımları",
         cri_02_001: "Müşteri Listesi",
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
