@@ -5,6 +5,7 @@ const stk_03_001 =
     txtBarcode: "Barcode",
     cmbCustomer: "Lieferant",
     cmbMainGrp: "Artikelgruppe",
+    cmbSubGrp : "Produktuntergruppe",
     btnCheck: "Aktiv",
     btnGet: "Suchen",
     chkMasterBarcode: "Barcodes zusammenführen",

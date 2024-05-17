@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { itemGroupCls} from '../../../../core/cls/items.js';
+import { mainGroupCls} from '../../../../core/cls/items.js';
 
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -29,7 +29,7 @@ export default class itemGroupCard extends React.PureComponent
         super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.mainGrpObj = new itemGroupCls();
+        this.mainGrpObj = new mainGroupCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }

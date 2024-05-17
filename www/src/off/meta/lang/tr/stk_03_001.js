@@ -5,6 +5,7 @@ const stk_03_001 =
     txtBarkod : "Barkod",
     cmbCustomer : "Tedarikçi",
     cmbMainGrp : "Ürün Grubu",
+    cmbSubGrp : "Ürün Alt Grubu",
     btnCheck : "Aktif",
     btnGet :"Getir",
     chkMasterBarcode : "Barkodları Birleştir",

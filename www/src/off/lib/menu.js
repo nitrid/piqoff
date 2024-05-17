@@ -62,7 +62,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_01_009',
                             text: e.t('menuOff.stk_01_009'),//'Ürün Alt Grup Tanımları',
-                            path: 'construction.js',
+                            path: 'items/cards/itemSubGroupCard.js',
                         },
                         {
                             id: 'stk_01_010',
