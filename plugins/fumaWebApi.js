@@ -44,8 +44,10 @@ class fumaWebApi
             query : " SELECT TOP 1 * FROM COMPANY_VW_01",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-        this.sellerVkn = tmpResult[0].TAX_NO
+        if(typeof tmpResult[0] != 'undefined')
+        {
+            this.sellerVkn = tmpResult[0].TAX_NO
+        }
     }
     async processEndDay()
     {
