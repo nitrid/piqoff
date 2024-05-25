@@ -45,7 +45,7 @@ export default class Sale extends React.PureComponent
         this.tmpStartPage = 0
         this.tmpEndPage = 0
         this.bufferId = ''
-        this.mostSale = false
+        //this.mostSale = false
         // this.promoProduct = false
 
         this.state = 
@@ -122,12 +122,12 @@ export default class Sale extends React.PureComponent
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'MOST_SALES') != 'undefined')
                 {
-                    this.mostSale = true
+                    //this.mostSale = true
                     this.getItems()
                 }
                 else
                 {
-                    this.mostSale = false
+                    //this.mostSale = false
                     this.getItems()
                 }
                 // if(typeof e.value.find(x => x == 'PROMO_PRODUCT') != 'undefined')
@@ -163,7 +163,6 @@ export default class Sale extends React.PureComponent
             </NdListBox>
         )
     }
-
     async getItems()
     {
         this.setState({isExecute:true})
@@ -175,125 +174,57 @@ export default class Sale extends React.PureComponent
         //CORDOVA YADA ELECTRON İSE SQLLİTE LOCALDB KULLANILIYOR.
         if(this.core.local.platform != '')
         {
-            if(this.mostSale !== true)
+            let tmpQuery = 
             {
-                console.log("true")
-                let tmpQuery = 
-                {
-                    query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT FROM ITEMS_VW_02 " +
-                            "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
-                            "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
-                    values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
-                }
-                let tmpBuf = await this.core.local.select(tmpQuery) 
-                if(typeof this.tmpBuf.result.err == 'undefined')
-                {
-                    for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
-                    {
-                        let tmpItemObj = tmpBuf.result.recordset[i]
-                        tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
-                        this.itemView.items.push(tmpItemObj)
-                    }
-                    this.itemView.items = this.itemView.items
-                    this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
-                }
-            
-                this.itemView.setItemAll()
-            }
-            else
-            {
-                console.log("false")
-                let tmpQuery1 = 
-                {
-                    query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT " +  
-                            "ISNULL((SELECT SUM(QUANTITY) " +
-                            "FROM DOC_ITEMS_VW_01 " +
-                            "WHERE TYPE = 0 AND (DOC_TYPE = 20 OR INVOICE_LINE_GUID <> '00000000-0000-0000-0000-000000000000') AND ITEM = ITEMS_VW_02.GUID),0) AS MOST_SALES " +
-                        "FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
-                            "((MAIN_GRP = ?) OR (? = '')) " + 
-                        "ORDER BY NAME ASC AND ISNULL((SELECT SUM(QUANTITY) " +
-                            "FROM DOC_ITEMS_VW_01 " +
-                            "WHERE TYPE = 0 AND (DOC_TYPE = 20 OR INVOICE_LINE_GUID <> '00000000-0000-0000-0000-000000000000') AND ITEM = ITEMS_VW_02.GUID),0) DESC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
-                    values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
-                }
-                let tmpBuf2 = await this.core.local.select(tmpQuery1)
-                console.log(JSON.stringify(tmpBuf2))
-                if(typeof this.tmpBuf2.result.err == 'undefined')
-                {
-                    for (let i = 0; i < tmpBuf2.result.recordset.length; i++) 
-                    {
-                        let tmpItemObj = tmpBuf2.result.recordset[i]
-                        tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
-                        this.itemView.items.push(tmpItemObj)
-                    }
-                    this.itemView.items = this.itemView.items
-                    this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
-                }
-            
-                this.itemView.setItemAll() 
+                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
+            
+            let tmpBuf = await this.core.local.select(tmpQuery) 
+
+            if(typeof tmpBuf.result.err == 'undefined')
+            {
+                for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
+                {
+                    let tmpItemObj = tmpBuf.result.recordset[i]
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    this.itemView.items.push(tmpItemObj)
+                }
+                this.itemView.items = this.itemView.items
+                this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+            }
+            
+            this.itemView.setItemAll()
         }
         else //CORDOVA YADA ELECTRON DEĞİL İSE SUNUCUDAN GETİRİLİYOR.
         {
-            if(this.mostSale !== true)
+            let tmpQuery = 
             {
-                let tmpQuery = 
-                {
-                    query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT FROM ITEMS_VW_02 " +
-                            "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
-                    param : ['VAL:string|50','MAIN_GRP:string|50'],
-                    value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
-                    buffer : true
-                }
-                let tmpBuf = await this.core.sql.execute(tmpQuery) 
-                if(typeof tmpBuf.result.err == 'undefined')
-                {
-                    this.bufferId = tmpBuf.result.bufferId
-                    this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
-                    let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
-                    
-                    for (let i = 0; i < tmpItems.result.recordset.length; i++) 
-                    {
-                        this.itemView.items.push(tmpItems.result.recordset[i])
-                    }
-                    this.itemView.items = this.itemView.items
-                    this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
-                }
-                this.itemView.setItemAll()
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                        "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
+                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
+                param : ['VAL:string|50','MAIN_GRP:string|50'],
+                value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
+                buffer : true
             }
-            else
+            let tmpBuf = await this.core.sql.execute(tmpQuery) 
+            if(typeof tmpBuf.result.err == 'undefined')
             {
-                let tmpQuery = 
+
+                this.bufferId = tmpBuf.result.bufferId
+                this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
+                let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+                
+                for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,0 AS DISCOUNT " +
-                            "FROM ITEMS_VW_02 " +
-                            "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) " +
-                            "ORDER BY  ISNULL((SELECT SUM(QUANTITY) " +
-                            "FROM DOC_ITEMS_VW_01 " +
-                            "WHERE TYPE = 0 AND (DOC_TYPE = 20 OR INVOICE_LINE_GUID <> '00000000-0000-0000-0000-000000000000') AND ITEM = ITEMS_VW_02.GUID),0) DESC , NAME ASC " ,
-                    param : ['VAL:string|50','MAIN_GRP:string|50'],
-                    value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
-                    buffer : true
+                    this.itemView.items.push(tmpItems.result.recordset[i])
                 }
-                let tmpBuf = await this.core.sql.execute(tmpQuery) 
-                if(typeof tmpBuf.result.err == 'undefined')
-                {
-                    this.bufferId = tmpBuf.result.bufferId
-                    this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
-                    let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
-                    
-                    for (let i = 0; i < tmpItems.result.recordset.length; i++) 
-                    {
-                        this.itemView.items.push(tmpItems.result.recordset[i])
-                    }
-                    this.itemView.items = this.itemView.items
-                    this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
-                }
-                this.itemView.setItemAll()
+                this.itemView.items = this.itemView.items
+                this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
             }
+            this.itemView.setItemAll()
         }
         
         this.setState({isExecute:false})
@@ -842,17 +773,8 @@ export default class Sale extends React.PureComponent
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </NbButton>
                         </div>
-                        <div className="col-3" align="left" style={{paddingTop:'5px'}}>
-                            <NdDropDownBox 
-                                    data={{source: this.columnListData}}
-                                    value={this.state.columnListValue}
-                                    valueExpr="CODE"
-                                    displayExpr="NAME"
-                                    showClearButton={true}
-                                    contentRender={this._columnListBox}
-                                >
-                                <i className="fa-solid fa-filter"></i> 
-                            </NdDropDownBox>
+                        <div className="col-2" align="left" style={{paddingTop:'5px'}}>
+                          
                         </div>
                         <div className="col-4" align="center" style={{paddingTop:'5px'}}>
                             <NdTextBox id={"txtSearch"} parent={this} simple={true} placeholder={"Search"}  onChange={this.getItems}

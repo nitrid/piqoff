@@ -171,6 +171,16 @@ export const langFr =
         btn01 : "OK", 
         btn02 : "Annuler", 
     },
+    msgPageSelect: 
+    {
+        title : "Attention",
+        msg : "Veuillez sélectionner une page",
+        btn01 : "D'accord"
+    },
+    favAdd : "Ajouter aux favoris",
+    favDell : "Retirer des favoris",
+    menu : "Menu",
+    favMenu : "Favoris",
     menuOff:
     {
         stk: "Produit",                
