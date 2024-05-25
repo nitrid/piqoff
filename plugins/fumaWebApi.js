@@ -13,7 +13,7 @@ class fumaWebApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
         this.sellerVkn = ''
 
         this.getVkn()
@@ -45,7 +45,10 @@ class fumaWebApi
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
-        this.sellerVkn = tmpResult[0].TAX_NO
+        if(typeof tmpResult[0] != 'undefined')
+        {
+            this.sellerVkn = tmpResult[0].TAX_NO
+        }
     }
     async processEndDay()
     {
@@ -216,10 +219,9 @@ class fumaWebApi
                     "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
                 }]
             }
-            //console.log(JSON.stringify(tmpSale))
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3000/integration/createOrders', 
+                fetch('http://20.19.32.36:3090/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -231,6 +233,7 @@ class fumaWebApi
                 })
                 .then(response => 
                 {
+                    console.log(response)
                     if (!response.ok) 
                     {
                         throw new Error('FumaApi - processPosSaleSend : Yükleme başarısız. HTTP Hata: ' + response.status);
@@ -261,7 +264,7 @@ class fumaWebApi
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3000/integration/createUsers', 
+                fetch('http://20.19.32.36:3090/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  

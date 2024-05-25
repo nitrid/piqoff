@@ -108,23 +108,24 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
                         {
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            console.log(pParam[i].rowData.ITEM_GUID)
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                console.log(pParam[i].rowData.ITEM)
+                                console.log(pParam[i].rowData.ITEM_GUID)
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
                         {
-                            console.log(pParam[i].rowData.ITEM)
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            console.log(pParam[i].rowData.ITEM_GUID)
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
@@ -140,6 +141,10 @@ class pricerApi
         pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
         {
             this.allItemSend()
+        })
+        pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
+        {
+            this.dateItemSend(arguments[0],arguments[1])
         })
     }
     async itemUpdate(pGuid)
@@ -234,6 +239,23 @@ class pricerApi
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
+            await this.itemUpdate(tmpResult[i].GUID)
+        }
+    }
+    async dateItemSend(pFirstDate,pLastDate)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT * FROM ITEMS_VW_01 WHERE STATUS = 1 AND CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE",
+            param : ['FISRT_DATE:date','LAST_DATE:date'],
+            value : [pFirstDate,pLastDate]
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        console.log(tmpResult)
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            console.log(tmpResult[i].GUID)
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
