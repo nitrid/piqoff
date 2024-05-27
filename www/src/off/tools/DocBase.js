@@ -1695,7 +1695,7 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
                         <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
-                        <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
+                        <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                         <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                         <Column dataField="TOTALHT" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                         <Summary>
