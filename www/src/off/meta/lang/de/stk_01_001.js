@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Preis darf nicht leer sein!",
     validPriceFloat : "Der Preis muss größer als 0 sein!",
     validCustomerCode :"Lieferanten-Code eingeben!",
+    validOriginMax8 :"Geben Sie maximal 8 Zeichen ein!",
     mainUnitName: "Haupteinheit",
     underUnitName: "Untereinheit",
     chkDayAnalysis: "Täglich",
