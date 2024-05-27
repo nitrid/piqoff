@@ -572,7 +572,7 @@ export function print()
             }
         },
         // SCALE_MANUEL
-        {font:"b",style:"a",align:"lt",data:"(M) POIDS ENTRE MANUELLEMENT".space(52)},
+        {font:"b",style:"a",align:"lt",data:"(M) POIDS ENTRE MANUELLEMENT *Article(s)".space(52)},
         {font:"b",style:"bu",align:"lt",data:" ".space(64)},
         ()=>{return {font:"b",align:"lt",data: (data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).length.toString() + " Aricle(s)").space(14)}},
         ()=>
