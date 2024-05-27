@@ -19,7 +19,7 @@ export default class Navigation extends React.PureComponent
         super();
         this.core = App.instance.core;
         this.menuobj = new userMenu(menu(App.instance.lang))
-        this.favMenuobj = new userMenu(menu(App.instance.lang))
+        this.favMenuObj = new userMenu(menu(App.instance.lang))
         this.menuRef = undefined
         this.lang = App.instance.lang;
 
@@ -60,8 +60,8 @@ export default class Navigation extends React.PureComponent
 
         // MENUNUN DATABASE PARAMETRESINDEN GELMESI
         let tmpMenuData = await this.menuobj.load({USER:this.core.auth.data.CODE,APP:"OFF",ID:'menu'})
-        let tmpFavMenuData = await this.favMenuobj.load({USER:this.core.auth.data.CODE,APP:"OFF",ID:'favMenu'})
-        if(this.favMenuobj.dt().length == 0)
+        let tmpFavMenuData = await this.favMenuObj.load({USER:this.core.auth.data.CODE,APP:"OFF",ID:'favMenu'})
+        if(this.favMenuObj.dt().length == 0)
         {
             tmpFavMenuData = []
         }
@@ -165,34 +165,32 @@ export default class Navigation extends React.PureComponent
             tmpMenu.push(this.selectedItem)
             this.setState({loading:true})
     
-            if(this.favMenuobj.dt().length == 0)
+            if(this.favMenuObj.dt().length == 0)
             {
-                let tmpEmpty = {...this.favMenuobj.empty};
+                let tmpEmpty = {...this.favMenuObj.empty};
                 tmpEmpty.TYPE = 0
                 tmpEmpty.ID = "favMenu"
                 tmpEmpty.VALUE = JSON.stringify(tmpMenu)
                 tmpEmpty.USERS = this.core.auth.data.CODE;
                 tmpEmpty.APP ="OFF"
     
-                this.favMenuobj.addEmpty(tmpEmpty);
-                this.favMenuobj.save()
+                this.favMenuObj.addEmpty(tmpEmpty);
+                this.favMenuObj.save()
             }
             else
             {
-                this.favMenuobj.dt()[0].VALUE = JSON.stringify(tmpMenu)
-                this.favMenuobj.save()
+                this.favMenuObj.dt()[0].VALUE = JSON.stringify(tmpMenu)
+                this.favMenuObj.save()
             }
-            this.setState({favMenu:tmpMenu},()=>
+            this.setState({favMenu:[]},()=>
             {
-                this.menuRef2.repaint()
-                this.setState({loading:false})
+                this.setState({favMenu:tmpMenu,loading:false})
             })
         }
        
     }
     async favItemDell()
     {
-        console.log(this.selectedItem)
         let tmpMenu = this.state.favMenu
         for (var i = tmpMenu.length - 1; i >= 0; i--) 
         {
@@ -203,27 +201,12 @@ export default class Navigation extends React.PureComponent
         }
         this.setState({loading:true})
     
-        if(this.favMenuobj.dt().length == 0)
+        this.favMenuObj.dt()[0].VALUE = JSON.stringify(tmpMenu)
+        this.favMenuObj.save()
+        
+        this.setState({favMenu:[]},()=>
         {
-            let tmpEmpty = {...this.favMenuobj.empty};
-            tmpEmpty.TYPE = 0
-            tmpEmpty.ID = "favMenu"
-            tmpEmpty.VALUE = JSON.stringify(tmpMenu)
-            tmpEmpty.USERS = this.core.auth.data.CODE;
-            tmpEmpty.APP ="OFF"
-
-            this.favMenuobj.addEmpty(tmpEmpty);
-            this.favMenuobj.save()
-        }
-        else
-        {
-            this.favMenuobj.dt()[0].VALUE = JSON.stringify(tmpMenu)
-            this.favMenuobj.save()
-        }
-        this.setState({favMenu:tmpMenu},()=>
-        {
-            this.menuRef2.repaint()
-            this.setState({loading:false})
+            this.setState({favMenu:tmpMenu,loading:false})
         })
     }
     render()
@@ -278,21 +261,21 @@ export default class Navigation extends React.PureComponent
                         </Item>
                     </TabPanel>
                     <ContextMenu
-                        dataSource={[{ text: this.lang.t("favAdd")}]}
-                        width={200}
-                        target="#Menu1"
-                        onItemClick={(async(e)=>
-                        {
-                            this.favItemAdd()
-                        }).bind(this)} />
-                        <ContextMenu
-                        dataSource={[{ text: this.lang.t("favDell")}]}
-                        width={200}
-                        target="#Menu2"
-                        onItemClick={(async(e)=>
-                        {
-                            this.favItemDell()
-                        }).bind(this)} />
+                    dataSource={[{ text: this.lang.t("favAdd")}]}
+                    width={200}
+                    target="#Menu1"
+                    onItemClick={(async(e)=>
+                    {
+                        this.favItemAdd()
+                    }).bind(this)} />
+                    <ContextMenu
+                    dataSource={[{ text: this.lang.t("favDell")}]}
+                    width={200}
+                    target="#Menu2"
+                    onItemClick={(async(e)=>
+                    {
+                        this.favItemDell()
+                    }).bind(this)} />
                 </React.Fragment>
 
                 </div>
