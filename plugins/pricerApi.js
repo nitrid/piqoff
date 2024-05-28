@@ -252,7 +252,6 @@ class pricerApi
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
-        console.log(tmpResult)
         for (let i = 0; i < tmpResult.length; i++) 
         {
             console.log(tmpResult[i].GUID)
