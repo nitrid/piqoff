@@ -22,7 +22,8 @@ export const langTr =
         customerAccount : "MÜŞTERİ EKSTRESİ",
         itemDetail : "ÜRÜN DETAYI",
         collection: "TAHSİLAT",
-        customerCard : "MÜŞTERİ TANIMLAMA"
+        customerCard : "MÜŞTERİ TANIMLAMA",
+        customerInvoiceList : "MÜŞTERİ FATURA LİSTESİ"
     },
     msgAnotherUserAlert: 
     {

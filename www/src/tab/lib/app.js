@@ -198,6 +198,16 @@ export default class App extends React.PureComponent
                     this.popMenu.hide();
                     this.setState({ page: 'customerCard.js' });
                 }
+            },
+            {
+                id: 'customerInvoiceList',
+                icon: 'fa-user-plus',
+                text: this.lang.t('menu.customerInvoiceList'),
+                onClick: () => 
+                {
+                    this.popMenu.hide();
+                    this.setState({ page: 'customerInvoiceList.js' });
+                }
             }
         ];
 
