@@ -200,13 +200,13 @@ export default class App extends React.PureComponent
                 }
             },
             {
-                id: 'customerInvoiceList',
-                icon: 'fa-user-plus',
-                text: this.lang.t('menu.customerInvoiceList'),
+                id: 'openInvoiceList',
+                icon: 'fa fa-building',
+                text: this.lang.t('menu.openInvoiceList'),
                 onClick: () => 
                 {
                     this.popMenu.hide();
-                    this.setState({ page: 'customerInvoiceList.js' });
+                    this.setState({ page: 'openInvoiceList.js' });
                 }
             }
         ];

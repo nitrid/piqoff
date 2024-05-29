@@ -2,11 +2,11 @@ import React from 'react';
 import App from '../lib/app.js';
 import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
-import NbButton from '../../core/react/bootstrap/button';
-import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox'
-import NdSelectBox from '../../core/react/devex/selectbox'
-import NdButton from '../../core/react/devex/button'
-import NbPopUp from '../../core/react/bootstrap/popup';
+import NbButton from '../../core/react/bootstrap/button.js';
+import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox.js'
+import NdSelectBox from '../../core/react/devex/selectbox.js'
+import NdButton from '../../core/react/devex/button.js'
+import NbPopUp from '../../core/react/bootstrap/popup.js';
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
 import { LoadPanel } from 'devextreme-react/load-panel';
@@ -15,13 +15,13 @@ import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NdPopUp from '../../core/react/devex/popup.js';
 
 
-export default class extract extends React.PureComponent
+export default class openInvoiceList extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
         this.core = App.instance.core;
-        this.t = App.instance.lang.getFixedT(null,null,"extract")
+        this.t = App.instance.lang.getFixedT(null,null,"openInvoiceList")
         this.lang = App.instance.lang;
         this.state = 
         {
@@ -36,7 +36,7 @@ export default class extract extends React.PureComponent
         await this.core.util.waitUntil(0)
         setTimeout(async () => 
         {
-            this.txtCustomerCode.GUID = ''
+            this.txtCustomerCode.CODE = ''
         }, 500);
         this.init()
     }
@@ -46,68 +46,38 @@ export default class extract extends React.PureComponent
     }
     async _btnGetirClick()
     {
-        if(this.txtCustomerCode.GUID != '')
+       
+        let tmpSource =
         {
-            let tmpSource =
+            source : 
             {
-                source : 
+                groupBy : this.groupList,
+                select : 
                 {
-                    groupBy : this.groupList,
-                    select : 
-                    {
-                        query : "SELECT 0 AS DOC_TYPE,'00000000-0000-0000-0000-000000000000' AS DOC_GUID," +
-                        "CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  " +
-                        "'' AS REF,  " +
-                        "0 AS REF_NO,  " +
-                        "'' AS TYPE_NAME,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  " +
-                        "(SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE  " +
-                        "UNION ALL " +
-                        "SELECT DOC_TYPE,  " +
-                        "DOC_GUID, " +
-                        "DOC_DATE, " +
-                        "REF, " +
-                        "REF_NO, " +
-                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,  " +
-                        "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE  " +
-                        "FROM DOC_CUSTOMER_VW_01  " +
-                        "WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)  " +
-                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  " ,
-                        param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date'],
-                        value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate]
-                    },
-                    sql : this.core.sql
-                }
+                    query : "SELECT " +
+                    "TYPE," +
+                    "DOC_DATE," +
+                    "DOC_TYPE," +
+                    "INPUT_CODE," +
+                    "INPUT_NAME," +
+                    "DOC_REF," +
+                    "DOC_REF_NO," +
+                    "DOC_TOTAL," +
+                    "PAYING_AMOUNT, " +
+                    "ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER " +
+                    "FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                    "WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
+                    "GROUP BY DOC_TYPE,TYPE,DOC_DATE,INPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,INPUT_CODE,DOC_TOTAL",
+                    param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
+                },
+                sql : this.core.sql
             }
-            this.setState({isExecute:true})
-            await this.grdListe.dataRefresh(tmpSource)
-            this.setState({isExecute:false})
-            let tmpBalance = this.grdListe.data.datatable.sum("BALANCE",2)
-            this.txtTotalBalance.setState({value:tmpBalance})
-            let tmpLineBalance = 0;
-            for (let i = 0; i < this.grdListe.data.datatable.length; i++) 
-            {
-                tmpLineBalance += this.grdListe.data.datatable[i].BALANCE;
-                this.grdListe.data.datatable[i].BALANCE = tmpLineBalance.toFixed(2);
-                console.log(this.grdListe.data.datatable[i].BALANCE)
-                console.log(tmpLineBalance)
-            }
-            await this.grdListe.dataRefresh(this.grdListe.data.datatable)
         }
-        else
-        {
-            let tmpConfObj =
-            {
-                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
-        }
-           
+        this.setState({isExecute:true})
+        await this.grdListe.dataRefresh(tmpSource)
+        this.setState({isExecute:false})
+        await this.grdListe.dataRefresh(this.grdListe.data.datatable)
     }
     async _customerSearch()
     {
@@ -174,7 +144,18 @@ export default class extract extends React.PureComponent
                                     {
                                         this.popCustomer.show()
                                     }
-                                }                                                    
+                                },
+                                {
+                                    id:'02',
+                                    icon:'clear',
+                                    location:'after',
+                                    onClick:async()=>
+                                    {
+                                        this.txtCustomerCode.value = ''
+                                        this.txtCustomerCode.CODE = ''
+                                        
+                                    }
+                                },                                            
                             ]}
                             />
                         </div>
@@ -221,32 +202,19 @@ export default class extract extends React.PureComponent
                                     }
                                     return
                                 }}/>
-                                <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={100}/> 
-                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} width={100}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
-                                <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/>
+                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={250}/> 
+                                <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmRef")} visible={true} width={100}/> 
+                                <Column dataField="DOC_REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
+                                <Column dataField="DOC_TOTAL" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="PAYING_AMOUNT" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="REMAINDER" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/>
                                 <Summary>
-                                    <TotalItem
-                                    column="DEBIT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                      <TotalItem
-                                    column="RECEIVE"
+                                    column="REMAINDER"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                 </Summary> 
                             </NdGrid>
-                        </div>
-                        <div style={{paddingTop:"15px"}}>
-                            <Form colCount={2}>
-                                <EmptyItem colSpan={1}></EmptyItem>
-                                <Item>
-                                    <Label text={this.t("txtTotalBalance")} alignment="right" />
-                                        <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}/>
-                                </Item>
-                            </Form>    
                         </div>
                     </div>
                      {/* CARI SECIMI POPUP */}
@@ -290,7 +258,7 @@ export default class extract extends React.PureComponent
                                         <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
                                         onClick={(async()=>
                                         {
-                                            this.txtCustomerCode.GUID = this.grdCustomer.getSelectedData()[0].GUID
+                                            this.txtCustomerCode.CODE = this.grdCustomer.getSelectedData()[0].CODE
                                             this.txtCustomerCode.value = this.grdCustomer.getSelectedData()[0].TITLE
                                             this.popCustomer.hide();
                                         }).bind(this)}>
