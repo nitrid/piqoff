@@ -42,11 +42,10 @@ export default class openInvoiceList extends React.PureComponent
     }
     async init()
     {
-        
+
     }
     async _btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
@@ -134,7 +133,7 @@ export default class openInvoiceList extends React.PureComponent
                     <div className="row">
                         <div className="col-6" align="center" style={{paddingRight:'4px', paddingTop:'5px'}}>
                             <NdTextBox id={"txtCustomerCode"} parent={this} simple={true} placeholder={this.t("txtCustomerCode")} readOnly={true}
-                             button={
+                            button={
                             [
                                 {
                                     id:'01',
@@ -217,8 +216,8 @@ export default class openInvoiceList extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                     {/* CARI SECIMI POPUP */}
-                     <div>                            
+                    {/* CARI SECIMI POPUP */}
+                    <div>                            
                         <NbPopUp id={"popCustomer"} parent={this} title={""} fullscreen={true}>
                             <div>
                                 <div className='row' style={{paddingTop:"10px"}}>
@@ -287,7 +286,7 @@ export default class openInvoiceList extends React.PureComponent
                             </div>
                         </NbPopUp>
                     </div>     
-                    {/* Detail PopUp      */}
+                    {/* DETAIL POPUP */}
                     <div>
                         <NdPopUp parent={this} id={"popDetail"} 
                         visible={false}                        
@@ -299,28 +298,27 @@ export default class openInvoiceList extends React.PureComponent
                         height={'100%'}
                         position={{of:'#root'}}
                         >
-                          <div className="row">
-                          <div className="col-1 pe-0"></div>
-                            <div className="col-12 pe-0">
-                            <NdGrid id="grdDetail" parent={this} 
-                                selection={{mode:"single"}} 
-                                showBorders={true}
-                                filterRow={{visible:true}} 
-                                headerFilter={{visible:true}}
-                                columnAutoWidth={true}
-                                allowColumnReordering={true}
-                                allowColumnResizing={true}
-                                >                            
-                                    <Paging defaultPageSize={20} />
-                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="ITEM_CODE" caption={this.t("grdDetail.clmCode")} visible={true} width={120}/> 
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdDetail.clmName")} visible={true} width={250}/> 
-                                    <Column dataField="QUANTITY" caption={this.t("grdDetail.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="PRICE" caption={this.t("grdDetail.clmPrice")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdDetail.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                            </NdGrid>
-                            </div>
+                            <div className="row">
+                                <div className="col-12 pe-0">
+                                    <NdGrid id="grdDetail" parent={this} 
+                                        selection={{mode:"single"}} 
+                                        showBorders={true}
+                                        filterRow={{visible:true}} 
+                                        headerFilter={{visible:true}}
+                                        columnAutoWidth={true}
+                                        allowColumnReordering={true}
+                                        allowColumnResizing={true}
+                                        >                            
+                                            <Paging defaultPageSize={20} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                            <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdDetail.clmCode")} visible={true} width={120}/> 
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdDetail.clmName")} visible={true} width={250}/> 
+                                            <Column dataField="QUANTITY" caption={this.t("grdDetail.clmQuantity")} visible={true} width={100}/> 
+                                            <Column dataField="PRICE" caption={this.t("grdDetail.clmPrice")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                            <Column dataField="TOTAL" caption={this.t("grdDetail.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    </NdGrid>
+                                </div>
                             </div>
                         </NdPopUp>
                     </div>                           
