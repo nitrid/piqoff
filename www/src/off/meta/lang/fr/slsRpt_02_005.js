@@ -10,7 +10,7 @@ const slsRpt_02_005 =
         clmCustomsNo : "Nomenclature",    
         clmOrigin: "Pays origine",    
         clmRegime : "Regime",            
-        clmQuantity : "Valeur",    
+        clmQuantity : "Valeur €",    
         clmKg : "Masse nette",    
         clmLinge : "Unités supplémentaires",    
         clmNature : "Nature transaction A",
@@ -24,7 +24,8 @@ const slsRpt_02_005 =
         clmDescription : "Motif",    
         clmCountry : "PAYS provenance",    
         clmItemName: "Nom Produit", 
-        clmItemCode: "Référence Produit"
+        clmItemCode: "Référence Produit",
+        clmItemGroup : "Groupe Produit"
     },
 }
 export default slsRpt_02_005

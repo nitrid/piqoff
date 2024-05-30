@@ -2,6 +2,7 @@ export const langDe =
 {
     popGrid: {btnSelection: "Auswählen", btnSearch: "Auflisten"},
     serverConnection: "Verbindung zum Server wird hergestellt.",
+    msgConnection : {msg : "Die Verbindung zum Server wurde unterbrochen!"},
     loading: "Wird geladen!",
     phoneIsInvalid: "Sie dürfen nur '+' und Ziffern ohne Leerzeichen verwenden.",
     mailIsInvalid: "Geben Sie bitte eine gültige E-Mail-Adresse ein. Überprüfen Sie '@' und die Erweiterung (z.B. .com, .fr, ...)",
@@ -164,6 +165,16 @@ export const langDe =
         btn01 : "OK", 
         btn02 : "Abbrechen", 
     },
+    msgPageSelect: 
+    {
+        title : "Achtung",
+        msg : "Bitte wählen Sie eine Seite",
+        btn01 : "OK"
+    },
+    favAdd : "Zu Favoriten hinzufügen",
+    favDell : "Aus Favoriten entfernen",
+    menu : "Menü",
+    favMenu : "Favoriten",
     menuOff:
     {
         stk: "Artikel",
@@ -208,11 +219,13 @@ export const langDe =
         stk_04_003: "Bestandszählung abschließen",
         stk_04_004: "Haltbarkeitsdatum-Operation",
         stk_04_005: "Produktein- und -ausgang", //BAK
-        stk_04_006: "Excel Ürün Aktarımı",  // BAK
+        stk_04_006: "Produktübertragung in Excel",  // BAK
+        stk_04_008: "Elektronische Etiketten Massenaktualisierung",
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
         stk_05_004 : "Liste der fehlenden Produkte", 
+        stk_05_005: "Bestandsbewegungsbericht",
         cri: "Kunden",
         cri_01: "Vorgänge",
         cri_02: "Listen",
@@ -222,7 +235,8 @@ export const langDe =
         cri_01_002: "Adressen bearbeiten",
         cri_01_003: "Gruppen erstellen",
         cri_01_004: "Regionendefinition",  
-        cri_01_005: "Branchendefinition",     
+        cri_01_005: "Branchendefinition",  
+        cri_01_006: "Untergruppendefinitionen",   
         cri_02_001: "Kundenliste",
         cri_02_002: "Adressliste",
         cri_02_003: "Gruppenliste",
@@ -293,6 +307,9 @@ export const langDe =
         cnt_03: "Berichte",
         cnt_04: "Operationen",
         cnt_04_001: "Mehrere Verkaufsvereinbarungen",
+        piqx : "PiqX", //BAK
+        piqx_01 : "Listen", //BAK
+        piqx_01_001 : "Eingehende Rechnungen", //BAK
         fns: "Finanzen",
         fns_01: "Listen",
         fns_01_001: "Zahlungsliste",

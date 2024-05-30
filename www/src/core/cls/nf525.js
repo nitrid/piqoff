@@ -140,7 +140,7 @@ export class nf525Cls
     
                 let tmpQuery = 
                 {
-                    query : "SELECT * FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND REF = (SELECT MAX(REF) FROM POS_VW_01 WHERE DEVICE = @DEVICE AND STATUS = 1) AND STATUS = 1",
+                    query : "SELECT REF,SIGNATURE FROM POS WHERE DEVICE = @DEVICE AND REF = (SELECT MAX(REF) FROM POS WHERE DEVICE = @DEVICE AND STATUS = 1 AND DELETED = 0) AND STATUS = 1 AND DELETED = 0",
                     param : ['DEVICE:string|25'],
                     value : [pData.DEVICE]
                 }

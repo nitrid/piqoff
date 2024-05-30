@@ -379,5 +379,11 @@ const stk_01_001 =
         btn02: "Abandonner",  
         msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  
     },
+    btnSubGroup: "Ajouter un Sous-groupe",
+    pg_subGroup: 
+    {
+        title: "Sélection de Sous-groupe",
+        clmName: "Nom",
+    },
 }
 export default stk_01_001

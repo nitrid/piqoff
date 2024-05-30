@@ -761,6 +761,8 @@ export const langTr =
     {
         title : "Uyarı",
         msg : "Kayıt işleminiz başarısız !",
+        msg1 : "Ref no sıfır olduğundan işlem başarısız !",
+        msg2 : "İmza boş olduğundan işlem başarısız !",
         btn01 : "Tamam",
         btn02 : "Tekrar Gönder",
     },
@@ -967,5 +969,11 @@ export const langTr =
         clmItemName : "Ürün Adı",
         clmTag : "Tag",
         clmPrice : "Fiyat"
-    }
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Dikkat",
+        msg : "Cihaz bilgileri database den getirilemedi !",
+        btn01 : "Tamam"
+    },
 }

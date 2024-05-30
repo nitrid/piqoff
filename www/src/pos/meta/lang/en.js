@@ -761,6 +761,8 @@ export const langEn =
     {
         title: "Attention",
         msg: "Your save has failed!",
+        msg1: "Transaction failed because the reference number is zero!",
+        msg2: "Transaction failed because the signature is empty!",
         btn01: "OK",
         btn02: "Retry save",
     },
@@ -929,4 +931,10 @@ export const langEn =
         clmTag : "Tag",
         clmPrice : "Price"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Device information could not be retrieved from the database!",
+        btn01 : "OK"
+    }
 }

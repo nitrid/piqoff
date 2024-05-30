@@ -57,7 +57,7 @@ export default class App extends React.PureComponent
         this.UserChange = this.UserChange.bind(this)
         this.passChange = this.passChange.bind(this)
         this.timeoutControl = this.timeoutControl.bind(this)
-                
+
         this.style =
         {
             splash_body : 
@@ -228,15 +228,29 @@ export default class App extends React.PureComponent
             {
                 App.instance.setState({logined:false,connected:true});
             }
+            
+            if(typeof this.msgConnection != 'undefined' && this.msgConnection.isShowed)
+            {
+                this.msgConnection.hide()
+            }
         })
-        this.core.socket.on('connect_error',(error) => 
+        this.core.socket.on('connect_error',async(error) => 
         {
-            this.setState({connected:false});
+            //this.setState({connected:false});
+            if(!this.msgConnection.isShowed)
+            {
+                this.msgConnection.show()
+            }
+            console.log(this)
         })
-        this.core.socket.on('disconnect',async () => 
+        this.core.socket.on('disconnect',async() => 
         {
-            App.instance.setState({connected:false});
-            this.core.auth.logout()
+            //App.instance.setState({connected:false});
+            //this.core.auth.logout()
+            if(!this.msgConnection.isShowed)
+            {
+                this.msgConnection.show()
+            }
         })   
         this.core.socket.on('general',async(e)=>
         {
@@ -498,9 +512,8 @@ export default class App extends React.PureComponent
                     <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>
                 <div>
-                    <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} 
-                        revealMode={'slide'} component={Navigation} >
-                        <Panel />
+                    <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation}>
+                        <Panel/>
                     </Drawer>
                 </div>
                 <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
@@ -651,6 +664,11 @@ export default class App extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
+                <div>
+                    <NdDialog parent={this} id={"msgConnection"} visible={false} showCloseButton={false} container={"#root"} width={'500'} height={'70'} position={{of:'#root'}}>
+                        <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnection.msg")}</div>
+                    </NdDialog>
+                </div>
             </div>
              
         );

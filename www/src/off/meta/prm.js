@@ -87,7 +87,7 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
-    //Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasında Eksi Miktar Girişi
     {
         TYPE : 0,
         ID :"negativeQuantityForPruchase",
@@ -451,6 +451,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Terazi Fiyat Çarpanı"
+        }
+    },
+    //Terazi Fiyat Çarpanı
+    {
+        TYPE : 0,
+        ID :"DocTrasportType",
+        VALUE :3,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Varsayılan Taşıma Kodu"
         }
     },
     //#endregion
@@ -1415,6 +1431,25 @@ export const prm =
                 height:"400",
                 textHeight:"260"
             }
+        }
+    },
+    //txtGenre
+    {
+        TYPE : 1,
+        ID :"txtGenre",
+        VALUE : 
+        {
+            value : "11"
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtGenre",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Cinsi"
         }
     },
     //#endregion

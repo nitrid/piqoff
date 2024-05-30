@@ -376,5 +376,11 @@ const stk_01_001 =
         btn02: "Abbrechen",  
         msg: "Möchten Sie erneut nach dem Produkt suchen?"  
     },
+    btnSubGroup: "Untergruppe Hinzufügen",
+    pg_subGroup: 
+    {
+        title: "Untergruppenauswahl",
+        clmName: "Name",
+    },
 }
 export default stk_01_001

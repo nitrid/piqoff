@@ -68,8 +68,9 @@ export default class rebateDispatch extends DocBase
     async init()
     {
         await super.init()
-
-        this.grdRebtDispatch.devGrid.clearFilter("row")
+        
+        this.grid = this["grdRebtDispatch"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -160,12 +161,12 @@ export default class rebateDispatch extends DocBase
                             this.combineControl = true
                             this.combineNew = false
 
-                            this.grdRebtDispatch.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdRebtDispatch.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -217,12 +218,12 @@ export default class rebateDispatch extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
 
-                                    this.grdRebtDispatch.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdRebtDispatch.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -241,7 +242,7 @@ export default class rebateDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtDispatch.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -298,7 +299,7 @@ export default class rebateDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -350,7 +351,7 @@ export default class rebateDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -627,7 +628,7 @@ export default class rebateDispatch extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdRebtDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -739,7 +740,7 @@ export default class rebateDispatch extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdRebtDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1002,6 +1003,10 @@ export default class rebateDispatch extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
@@ -1063,6 +1068,10 @@ export default class rebateDispatch extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
@@ -1194,12 +1203,12 @@ export default class rebateDispatch extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdRebtDispatch.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdRebtDispatch.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1245,12 +1254,12 @@ export default class rebateDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdRebtDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdRebtDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1289,12 +1298,12 @@ export default class rebateDispatch extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
 
-                                                        this.grdRebtDispatch.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdRebtDispatch.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1308,12 +1317,12 @@ export default class rebateDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdRebtDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdRebtDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1332,7 +1341,7 @@ export default class rebateDispatch extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdRebtDispatch"} 
+                                        <NdGrid parent={this} id={"grdRebtDispatch"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -1459,7 +1468,7 @@ export default class rebateDispatch extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdRebtDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdRebtDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdRebtDispatch"}/>
@@ -1491,7 +1500,7 @@ export default class rebateDispatch extends DocBase
                                         <ContextMenu
                                         dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdRebtDispatch"
+                                        target={"#grdRebtDispatch"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             this._getRebate()

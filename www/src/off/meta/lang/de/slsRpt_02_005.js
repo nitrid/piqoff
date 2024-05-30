@@ -5,6 +5,7 @@ const slsRpt_02_005 =
     txtCustomerCode : "Kunde",     
     btnCheck : "Aktiv",    
     btnGet :"Suchen",     
+    cmbMainGrp : "Artikelgruppe",
     grdListe :    
     {   
         clmCustomsNo : "Zollcode",    
@@ -24,7 +25,8 @@ const slsRpt_02_005 =
         clmDescription : "Beschreibung", 
         clmCountry : "Land des Lieferanten",   
         clmItemCode : "Artikelcode",
-        clmItemName : "Artikelname"
+        clmItemName : "Artikelname",
+        clmItemGroup : "Produktgruppe",
     },
 }
 export default slsRpt_02_005

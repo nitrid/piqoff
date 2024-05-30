@@ -69,8 +69,9 @@ export default class purchaseDispatch extends DocBase
     async init()
     {
         await super.init()
-
-        this.grdPurcDispatch.devGrid.clearFilter("row")
+        
+        this.grid = this["grdPurcDispatch"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
@@ -161,12 +162,12 @@ export default class purchaseDispatch extends DocBase
                             this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
-                            this.grdPurcDispatch.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdPurcDispatch.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -221,12 +222,12 @@ export default class purchaseDispatch extends DocBase
                                     this.customerClear = false
                                     this.combineControl = true
                                     this.combineNew = false
-                                    this.grdPurcDispatch.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[0],e.rowIndex)
                                     }
-                                    this.grdPurcDispatch.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -246,7 +247,7 @@ export default class purchaseDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcDispatch.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -302,7 +303,7 @@ export default class purchaseDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -357,7 +358,7 @@ export default class purchaseDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -558,7 +559,7 @@ export default class purchaseDispatch extends DocBase
                     let tmpCustomerBtn = ''
                     if(this.customerClear == true)
                     {
-                        await this.grdPurcDispatch.devGrid.deleteRow(0)
+                        await this.grid.devGrid.deleteRow(0)
                         resolve()
                         return 
                     }
@@ -574,7 +575,7 @@ export default class purchaseDispatch extends DocBase
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
-                            await this.grdPurcDispatch.devGrid.deleteRow(0)
+                            await this.grid.devGrid.deleteRow(0)
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
@@ -1060,7 +1061,7 @@ export default class purchaseDispatch extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdPurcDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -1144,7 +1145,7 @@ export default class purchaseDispatch extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1326,37 +1327,6 @@ export default class purchaseDispatch extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_Docs.title")} 
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   this.getDocs(1)
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
-                                    >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300}  />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />
-                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />
-                                        <Column dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
-                                    </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
@@ -1424,6 +1394,10 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
@@ -1484,6 +1458,10 @@ export default class purchaseDispatch extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1639,12 +1617,12 @@ export default class purchaseDispatch extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdPurcDispatch.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdPurcDispatch.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1693,12 +1671,12 @@ export default class purchaseDispatch extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdPurcDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1738,12 +1716,12 @@ export default class purchaseDispatch extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdPurcDispatch.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcDispatch.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1756,12 +1734,12 @@ export default class purchaseDispatch extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdPurcDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1787,7 +1765,7 @@ export default class purchaseDispatch extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1805,7 +1783,7 @@ export default class purchaseDispatch extends DocBase
                                 </Item>
                                 <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdPurcDispatch"} 
+                                    <NdGrid parent={this} id={"grdPurcDispatch" + this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1962,7 +1940,7 @@ export default class purchaseDispatch extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                        await this["grdPurcDispatch" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                     }}
                                     >
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcDispatch"}/>
@@ -2000,7 +1978,7 @@ export default class purchaseDispatch extends DocBase
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdPurcDispatch"
+                                    target={"#grdPurcDispatch" + this.tabIndex}
                                     onItemClick={(async(e)=>
                                     {
                                         if(e.itemData.text == this.t("getOrders"))

@@ -762,6 +762,8 @@ export const langIt =
     {
         title: "Avviso",
         msg: "Impossibile completare l'operazione di salvataggio!",
+        msg1: "Transazione fallita perché il numero di riferimento è zero!",
+        msg2: "Transazione fallita perché la firma è vuota!",
         btn01: "Ok",
         btn02: "Invia di nuovo",
     },
@@ -930,4 +932,10 @@ export const langIt =
         clmTag : "Tag",
         clmPrice : "Prezzo"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Attenzione",
+        msg : "Impossibile recuperare le informazioni del dispositivo dal database!",
+        btn01 : "OK"
+    }
 }

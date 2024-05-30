@@ -228,7 +228,12 @@ const cri_01_001 =
         clmCode : "KODU",
         clmName : "ADI",
     },
-    
+    btnSubGroup : "Alt Grup Ekle",
+    pg_subGroup : 
+    {
+        title : "Alt Grup Seçim",
+        clmName : "Adı",
+    },
 }
 
 export default cri_01_001

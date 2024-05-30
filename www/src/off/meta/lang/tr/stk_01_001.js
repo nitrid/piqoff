@@ -378,5 +378,11 @@ const stk_01_001 =
         btn02: "Vazgeç",
         msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
     },
+    btnSubGroup : "Alt Grup Ekle",
+    pg_subGroup : 
+    {
+        title : "Alt Grup Seçim",
+        clmName : "Adı",
+    },
 }
 export default stk_01_001

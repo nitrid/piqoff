@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -26,6 +26,7 @@ import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdTabPanel from '../../../../core/react/devex/tabpanel';
 import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
+import NdListBox from '../../../../core/react/devex/listbox'
 
 import { datatable } from '../../../../core/core.js';
 
@@ -34,7 +35,14 @@ export default class itemCard extends React.PureComponent
     constructor(props)
     {
         super(props)                
-        this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
+        this.state = 
+        {
+            underPrice : "",
+            isItemGrpForOrginsValid : false,
+            isItemGrpForMinMaxAccess : false,
+            isTaxSugar : false,
+            isPromotion : false
+        }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
@@ -224,9 +232,12 @@ export default class itemCard extends React.PureComponent
 
         this.core.util.logPath = "\\www\\log\\off_" + this.core.auth.data.CODE + ".txt"
 
+        this.itemsObj.dt()[0].GENRE = this.prmObj.filter({ID:'txtGenre'}).getValue().value
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
-        this.taxSugarValidCheck()                      
+        this.taxSugarValidCheck()  
+        
+        this.setState({isPromotion:false})        
     }
     async getItem(pCode)
     {
@@ -266,7 +277,24 @@ export default class itemCard extends React.PureComponent
         this.salesContractObj.refresh();
         this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
         this.otherShopObj.refresh();
-
+        //ÜRÜN PROMOSYON DURUMU GETİRME İŞLEMİ
+        let tmpPromoQuery = 
+        {
+            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
+            param : ['COND_ITEM_GUID:string|50'],
+            value : [this.itemsObj.dt()[0].GUID]
+        }
+        let tmpPromoData = await this.core.sql.execute(tmpPromoQuery)
+        
+        if(tmpPromoData.result.recordset.length > 0)
+        {
+            this.setState({isPromotion:true})
+        }
+        else
+        {
+            this.setState({isPromotion:false})
+        }
+        //*************************************** */
         App.instance.setState({isExecute:false})
         if(typeof this.txtSalePrice != 'undefined')
         {
@@ -503,6 +531,10 @@ export default class itemCard extends React.PureComponent
             this.txtTabCostPrice.value = this.txtCostPrice.value 
             this.txtTabCostPrice.setState({value:this.txtCostPrice.value})
             await this.grdOtherShop.dataRefresh({source:this.otherShopObj});
+        }
+        else if(e.itemData.title == this.t("tabTitleDetail"))
+        {
+            await this.grdSubGrp.dataRefresh({source:this.itemsObj.itemSubGrp.dt()});
         }
     }
     underPrice()
@@ -1532,6 +1564,7 @@ export default class itemCard extends React.PureComponent
                             </NdLayout>
                         </div>
                         <div className="col-2">
+                            <div style={{display:this.state.isPromotion ? 'block' : 'none',backgroundColor:'red',marginBottom:'5px',color:'white',textAlign:'center',borderRadius:'10px'}}>PROMOTION</div>
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} buttonTrigger={"#btnNewImg"}
@@ -2185,99 +2218,211 @@ export default class itemCard extends React.PureComponent
                                 </Item> 
                                 <Item title={this.t("tabTitleDetail")} text={"tbDetail"}>
                                     <div className='row px-2 py-2'>
-                                        <div className='col-12'>
-                                        <Form colCount={4} >
-                                                 {/* txtGenus */}
-                                                 <Item>                                    
-                                                <Label text={this.t("txtGenus")} alignment="right" />
-                                                <NdTextBox id="txtGenus" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"GENRE"}} 
-                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
-                                                button=
-                                                {
-                                                    [
-                                                        {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:()=>
+                                        <div className='col-9'>
+                                            <Form colCount={3} >
+                                                {/* txtGenus */}
+                                                <Item>                                    
+                                                    <Label text={this.t("txtGenus")} alignment="right" />
+                                                    <NdTextBox id="txtGenus" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"GENRE"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                    param={this.param.filter({ELEMENT:'txtGenus',USERS:this.user.CODE})}
+                                                    button=
+                                                    {
+                                                        [
                                                             {
-                                                                this.pg_txtGenre.show()
-                                                                this.pg_txtGenre.onClick = (data) =>
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
                                                                 {
-                                                                    if(data.length > 0)
+                                                                    this.pg_txtGenre.show()
+                                                                    this.pg_txtGenre.onClick = (data) =>
                                                                     {
-                                                                        this.itemsObj.dt()[0].GENRE = data[0].CODE
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.itemsObj.dt()[0].GENRE = data[0].CODE
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                        },
-                                                    ]
-                                                }
-                                                selectAll={true}                           
-                                                >     
-                                                </NdTextBox>      
-                                                {/*CİNS KODU POPUP */}
-                                                <NdPopGrid id={"pg_txtGenre"} parent={this} container={"#root"} 
-                                                visible={false}
-                                                position={{of:'#root'}} 
-                                                showTitle={true} 
-                                                showBorders={true}
-                                                width={'90%'}
-                                                height={'90%'}
-                                                title={this.t("pg_txtGenre.title")} 
-                                                selection={{mode:"single"}}
-                                                data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GENRE_VW_01"},sql:this.core.sql}}}
-                                                >
-                                                    <Column dataField="CODE" caption={this.t("pg_txtGenre.clmCode")} width={'20%'} />
-                                                    <Column dataField="NAME" caption={this.t("pg_txtGenre.clmName")} width={'70%'} defaultSortOrder="asc" />
-                                                </NdPopGrid>
-                                            </Item>
-                                            {/* txtCustoms */}
-                                            <Item>                                    
-                                                <Label text={this.t("txtCustoms")} alignment="right" />
-                                                <NdTextBox id="txtCustoms" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CUSTOMS_CODE"}} 
-                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
-                                                button=
-                                                {
-                                                    [
-                                                        {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:()=>
+                                                            },
+                                                        ]
+                                                    }
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*CİNS KODU POPUP */}
+                                                    <NdPopGrid id={"pg_txtGenre"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_txtGenre.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GENRE_VW_01"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_txtGenre.clmCode")} width={'20%'} />
+                                                        <Column dataField="NAME" caption={this.t("pg_txtGenre.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
+                                                {/* txtCustoms */}
+                                                <Item>                                    
+                                                    <Label text={this.t("txtCustoms")} alignment="right" />
+                                                    <NdTextBox id="txtCustoms" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CUSTOMS_CODE"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                                                    button=
+                                                    {
+                                                        [
                                                             {
-                                                                this.pg_customsCode.show()
-                                                                this.pg_customsCode.onClick = (data) =>
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
                                                                 {
-                                                                    if(data.length > 0)
+                                                                    this.pg_customsCode.show()
+                                                                    this.pg_customsCode.onClick = (data) =>
                                                                     {
-                                                                        this.itemsObj.dt()[0].CUSTOMS_CODE = data[0].CODE
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.itemsObj.dt()[0].CUSTOMS_CODE = data[0].CODE
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                        },
-                                                    ]
-                                                }
-                                                selectAll={true}                           
-                                                >     
-                                                </NdTextBox>      
-                                                {/*GÜMRÜK KODU POPUP */}
-                                                <NdPopGrid id={"pg_customsCode"} parent={this} container={"#root"} 
-                                                visible={false}
-                                                position={{of:'#root'}} 
-                                                showTitle={true} 
-                                                showBorders={true}
-                                                width={'90%'}
-                                                height={'90%'}
-                                                title={this.t("pg_customsCode.title")} 
-                                                selection={{mode:"single"}}
-                                                data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMS_CODE"},sql:this.core.sql}}}
-                                                >
-                                                    <Column dataField="CODE" caption={this.t("pg_customsCode.clmCode")} width={'20%'} />
-                                                    <Column dataField="NAME" caption={this.t("pg_customsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
-                                                </NdPopGrid>
-                                            </Item>
-                                        </Form>
+                                                            },
+                                                        ]
+                                                    }
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*GÜMRÜK KODU POPUP */}
+                                                    <NdPopGrid id={"pg_customsCode"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_customsCode.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMS_CODE"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_customsCode.clmCode")} width={'20%'} />
+                                                        <Column dataField="NAME" caption={this.t("pg_customsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
+                                            </Form>
                                         </div>
-                                    </div>
+                                        <div className='col-3'>
+                                            <div className='row'>
+                                                <div className='col-12 ps-0'>
+                                                    <NdGrid parent={this} id={"grdSubGrp"} 
+                                                    showBorders={true} 
+                                                    columnsAutoWidth={true} 
+                                                    showColumnHeaders={false}
+                                                    allowColumnReordering={true} 
+                                                    allowColumnResizing={true} 
+                                                    height={'280px'} 
+                                                    width={'100%'}
+                                                    dbApply={false}
+                                                    >
+                                                        <Editing mode="cell" allowDeleting={true}/>
+                                                        <Column dataField="SUB_NAME"/>
+                                                        <Column type="buttons" width={"50"}>
+                                                            <GrdButton name="delete" icon="trash"/>
+                                                        </Column>
+                                                    </NdGrid>
+                                                </div>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-12 ps-0'>
+                                                    <NdButton text={this.t("btnSubGroup")} type="normal" stylingMode="contained" width={'100%'}
+                                                    onClick={async()=>
+                                                    {
+                                                        await this.pg_subGroup.show()
+                                                        
+                                                        let tmpQuery = {}
+
+                                                        if(this.grdSubGrp.data.datatable && this.grdSubGrp.data.datatable.length > 0)
+                                                        {
+                                                            let tmpGuid = this.grdSubGrp.data.datatable[this.grdSubGrp.data.datatable.length - 1].SUB_GUID
+                                                            let tmpVal = this.grdSubGrp.data.datatable.map(item => `'${item.SUB_GUID}'`).join(', ')
+                                                            
+                                                            tmpQuery = 
+                                                            {
+                                                                query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '${tmpGuid}' AND GUID NOT IN (${tmpVal})`,
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpQuery = 
+                                                            {
+                                                                query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                            }
+                                                        }
+                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {
+                                                            this.pg_subGroup.setData(tmpData.result.recordset)
+                                                        }
+                                                        else
+                                                        {
+                                                            if(this.grdSubGrp.data.datatable && this.grdSubGrp.data.datatable.length > 0)
+                                                            {
+                                                                let tmpVal = this.grdSubGrp.data.datatable.map(item => `'${item.SUB_GUID}'`).join(', ')
+                                                                tmpQuery = 
+                                                                {
+                                                                    query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000' AND GUID NOT IN (${tmpVal})`,
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpQuery = 
+                                                                {
+                                                                    query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                                }
+                                                            }
+
+                                                            tmpData = await this.core.sql.execute(tmpQuery)
+                                                            
+                                                            if(tmpData.result.recordset.length > 0)
+                                                            {
+                                                                this.pg_subGroup.setData(tmpData.result.recordset)
+                                                            }
+                                                        }
+
+                                                        this.pg_subGroup.onClick = async(e) =>
+                                                        {
+                                                            this.itemsObj.itemSubGrp.addEmpty()
+                                                            
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_GUID = this.itemsObj.dt()[0].GUID
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_CODE = this.itemsObj.dt()[0].CODE
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_NAME = this.itemsObj.dt()[0].NAME
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_SUB_RANK = this.itemsObj.itemSubGrp.dt().length - 1
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_GUID = e[0].GUID
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_CODE = e[0].CODE
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_NAME = e[0].NAME
+                                                            this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_GRP_RANK = e[0].RANK
+                                                        }
+                                                    }}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* ALT GRUP SEÇİM POPUP */}
+                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={"#root"} 
+                                        visible={false}
+                                        position={{of:'#root'}} 
+                                        showTitle={true} 
+                                        showBorders={true}
+                                        width={'90%'}
+                                        height={'90%'}
+                                        title={this.t("pg_subGroup.title")} 
+                                        search={false}
+                                        deferRendering={true}
+                                        >
+                                            <Column dataField="NAME" caption={this.t("pg_subGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                        </NdPopGrid>
+                                    </div>                                    
                                 </Item>
                                 <Item title={this.t("tabTitleInfo")} text={"tbInfo"}>
                                     <div className='row px-2 py-2'>

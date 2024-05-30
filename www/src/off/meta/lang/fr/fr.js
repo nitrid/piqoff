@@ -2,6 +2,7 @@ export const langFr =
 {
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     serverConnection : "Établissement de la connexion avec le serveur",
+    msgConnection : {msg : "La connexion avec le serveur a été interrompue !"},
     loading : "Connexion En Cours",
     phoneIsInvalid: "Vous devez utiliser uniquement '+' et des chiffres sans espace.",
     mailIsInvalid: "Veuillez saisir une adresse e-mail valide. Vérifiez '@' et l'extension (ex : .com, .fr, ...)",
@@ -170,6 +171,16 @@ export const langFr =
         btn01 : "OK", 
         btn02 : "Annuler", 
     },
+    msgPageSelect: 
+    {
+        title : "Attention",
+        msg : "Veuillez sélectionner une page",
+        btn01 : "D'accord"
+    },
+    favAdd : "Ajouter aux favoris",
+    favDell : "Retirer des favoris",
+    menu : "Menu",
+    favMenu : "Favoris",
     menuOff:
     {
         stk: "Produit",                
@@ -214,12 +225,14 @@ export const langFr =
         stk_04_003: "Traitement inventaire",
         stk_04_004: "Traitement DLC",
         stk_04_005: "Entrée et sortie du produit", //BAK
-        stk_04_006: "Excel Ürün Aktarımı",  // BAK
-        stk_04_007: "Terazi Ürün Aktarımı",  // BAK
+        stk_04_006: "Transfert de produit Excel",  // BAK
+        stk_04_007: "Transfert de produit de balance",  // BAK
+        stk_04_008: "Mise à jour groupée des étiquettes électroniques",
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
         stk_05_004 : "Rapport sur les pertes", 
+        stk_05_005: "Rapport de mouvement de stock",
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -230,6 +243,7 @@ export const langFr =
         cri_01_003: "Catégorie saisie",
         cri_01_004: "Identification de la zone",
         cri_01_005: "Identification des secteurs", 
+        cri_01_006: "Définitions des Sous-groupes",
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
@@ -301,6 +315,9 @@ export const langFr =
         cnt_03 : "Rapports",
         cnt_04 : "Opérations",
         cnt_04_001 : "Contrat de vente multiple",
+        piqx : "PiqX",
+        piqx_01 : "Listes", //BAK
+        piqx_01_001 : "Factures reçues", //BAK
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",
@@ -356,7 +373,7 @@ export const langFr =
         promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         promo_04: "Les opérations",
-        promo_04_001: "Elektronik Etiket Güncelleme", // BAK
+        promo_04_001: "Mise à jour étiquette électronique", // BAK
         set : "Paramètres supplémentaires",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",

@@ -1,10 +1,10 @@
 import React from 'react';
-import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring} from 'devextreme-react/data-grid';
+import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring,GroupItem} from 'devextreme-react/data-grid';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import Base from './base.js';
 
-export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring}
+export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring,GroupItem}
 export default class NdGrid extends Base
 {
     constructor(props)
@@ -46,6 +46,7 @@ export default class NdGrid extends Base
         this._onRowPrepared = this._onRowPrepared.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this); 
         this._onReady = this._onReady.bind(this);
+        this._onExporting = this._onExporting.bind(this)
     }
     //#region Private
     _onInitialized(e) 
@@ -231,6 +232,13 @@ export default class NdGrid extends Base
             this.props.onReady();
         }
     }
+    _onExporting(e)
+    {
+        if(typeof this.props.onExporting != 'undefined')
+        {
+            this.props.onExporting(e);
+        }
+    }
     //#endregion
     componentDidUpdate()
     {
@@ -340,6 +348,7 @@ export default class NdGrid extends Base
                 onEditorPrepared={this._onEditorPrepared}
                 onEditorPreparing={this._onEditorPreparing}
                 onRowPrepared = {this._onRowPrepared}
+                onExporting={this._onExporting}
                 sorting = {typeof this.props.sorting == 'undefined' ?{ mode: 'single' }: this.props.sorting}
                 >
                     {this.props.children}
@@ -375,6 +384,7 @@ export default class NdGrid extends Base
                     onEditorPrepared={this._onEditorPrepared}
                     onEditorPreparing={this._onEditorPreparing}
                     onRowPrepared={this._onRowPrepared}
+                    onExporting={this._onExporting}
                     sorting={typeof this.props.sorting == 'undefined' ?{ mode: 'single' }: this.props.sorting}
                     >
                         {this.props.children}
