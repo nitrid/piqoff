@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { subGroupCls} from '../../../../core/cls/items.js';
+import { subGroupCls} from '../../../../core/cls/customers.js';
 
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -12,7 +12,7 @@ import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup,Form,I
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class itemSubGroupCard extends React.PureComponent
+export default class customerSubGroupCard extends React.PureComponent
 {
     constructor(props)
     {

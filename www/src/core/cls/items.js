@@ -38,7 +38,7 @@ export class itemsCls
             DESCRIPTION : '',
             CUSTOMS_CODE: '',
             GENRE : '',
-            CEOPOS : 0
+            CEOPOS : false
         }
 
         this.itemLang = new itemLangCls()
@@ -47,6 +47,7 @@ export class itemsCls
         this.itemBarcode = new itemBarcodeCls();
         this.itemMultiCode = new itemMultiCodeCls();
         this.itemImage = new itemImageCls();
+        this.itemSubGrp = new itemSubGrpCls();
 
         this._initDs();
     }    
@@ -222,6 +223,7 @@ export class itemsCls
         this.ds.add(this.itemMultiCode.dt('ITEM_MULTICODE'))
         this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
         this.ds.add(this.itemLang.dt('ITEM_LANG'))
+        this.ds.add(this.itemSubGrp.dt('ITEMS_SUB_GRP'))
 
         this.ds.get('ITEMS').noColumnEdit = ['GROSS_MARGIN','SNAME','CUSER','MAIN_GRP_NAME','VAT_EXT','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
     }
@@ -288,6 +290,7 @@ export class itemsCls
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemLang.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemSubGrp.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -1227,6 +1230,141 @@ export class itemImageCls
         });
     }
 }
+export class itemSubGrpCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
+            ITEM_CODE : '',            
+            ITEM_NAME : '',
+            ITEM_SUB_RANK : 0,
+            SUB_GUID : '00000000-0000-0000-0000-000000000000',
+            SUB_CODE : '',
+            SUB_NAME : '',
+            SUB_GRP_RANK : 0
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEMS_SUB_GRP');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEMS_SUB_GRP_VW_01] " + 
+                    "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
+                    "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) ORDER BY ITEM_SUB_RANK ASC" ,
+            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','SUB_GUID','ITEM_SUB_RANK']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','SUB_GUID','ITEM_SUB_RANK']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_DELETE] " + 
+                    "@CUSER = @PCUSER, " +
+                    "@UPDATE = 1, " +  
+                    "@SUB = @PSUB ", 
+            param : ['PCUSER:string|25','PSUB:string|50'],
+            dataprm : ['CUSER','SUB_GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEMS_SUB_GRP') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEMS_SUB_GRP').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+                ITEM_CODE : '',
+                ITEM_NAME : ''
+            }
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+                tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;  
+                tmpPrm.ITEM_NAME = typeof arguments[0].ITEM_NAME == 'undefined' ? '' : arguments[0].ITEM_NAME;
+            }
+            
+            this.ds.get('ITEMS_SUB_GRP').selectCmd.value = Object.values(tmpPrm)
+              
+            await this.ds.get('ITEMS_SUB_GRP').refresh();
+            resolve(this.ds.get('ITEMS_SUB_GRP'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
 export class unitCls 
 {
     constructor()
@@ -2038,7 +2176,7 @@ export class servicesItemCls
         });
     }
 }
-export class itemGroupCls
+export class mainGroupCls
 {
     constructor()
     {
@@ -2159,7 +2297,7 @@ export class itemGroupCls
         });
     }
 }
-export class itemSubGroupCls
+export class subGroupCls
 {
     constructor()
     {
@@ -2170,14 +2308,15 @@ export class itemSubGroupCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CDATE : moment(new Date()).format("YYYY-MM-DD"),
             CUSER : this.core.auth.data.CODE,
-            CUSER_NAME : '',
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             CODE : '',
             NAME : '',
-            MAIN_GRP : '',
-            ATTACH_SUB : '',
-            STATUS : true,
+            RANK : -1,
+            PARENT : '00000000-0000-0000-0000-000000000000',
+            PARENT_CODE : '',
+            PARENT_NAME : '',
+            PARENT_MASK : null,
         }
 
         this._initDs();
@@ -2188,7 +2327,7 @@ export class itemSubGroupCls
         let tmpDt = new datatable('ITEM_SUB_GROUP');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_SUB_GROUP_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
+            query : "SELECT *,CASE WHEN PARENT = '00000000-0000-0000-0000-000000000000' THEN NULL ELSE PARENT END AS PARENT_MASK FROM [dbo].[ITEM_SUB_GROUP_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
             param : ['GUID:string|50','CODE:string|25']
         } 
         tmpDt.insertCmd = 
@@ -2198,26 +2337,32 @@ export class itemSubGroupCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " +
-                    "@MAIN_GRP = @PMAIN_GRP, " +
-                    "@ATTACH_SUB = @PATTACH_SUB, " +
-                    "@STATUS = @PSTATUS " , 
-
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PMAIN_GRP:string|50','PATTACH_SUB:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','MAIN_GRP','ATTACH_SUB','STATUS']
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC  [dbo].[PRD_ITEM_SUB_GROUP_UPDATE]  " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@CODE = @PCODE, " + 
-            "@NAME = @PNAME, " +
-            "@MAIN_GRP = @PMAIN_GRP, " +
-            "@ATTACH_SUB = @PATTACH_SUB, " +
-            "@STATUS = @PSTATUS " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PMAIN_GRP:string|50','PATTACH_SUB:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','MAIN_GRP','ATTACH_SUB','STATUS']
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " +
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
         } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_SUB_GROUP_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
 
         this.ds.add(tmpDt);
     }

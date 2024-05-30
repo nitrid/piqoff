@@ -171,6 +171,16 @@ export const langFr =
         btn01 : "OK", 
         btn02 : "Annuler", 
     },
+    msgPageSelect: 
+    {
+        title : "Attention",
+        msg : "Veuillez sélectionner une page",
+        btn01 : "D'accord"
+    },
+    favAdd : "Ajouter aux favoris",
+    favDell : "Retirer des favoris",
+    menu : "Menu",
+    favMenu : "Favoris",
     menuOff:
     {
         stk: "Produit",                
@@ -233,6 +243,7 @@ export const langFr =
         cri_01_003: "Catégorie saisie",
         cri_01_004: "Identification de la zone",
         cri_01_005: "Identification des secteurs", 
+        cri_01_006: "Définitions des Sous-groupes",
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",

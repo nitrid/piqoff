@@ -1,7 +1,7 @@
 const stk_04_008 =
 {
-    btnItemsSend : "Ürün Güncellemesi Gönder",
-    msgSaveResult:
+    btnItemsSend : "Bütün Ürünleri Gönder",
+    msgItemSend:
     {
         title: "Dikkat",  
         btn01: "Tamam",  

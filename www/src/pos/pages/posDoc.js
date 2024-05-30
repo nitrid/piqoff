@@ -2958,6 +2958,7 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        console.log(pType)
         // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
         this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 

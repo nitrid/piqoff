@@ -165,6 +165,16 @@ export const langDe =
         btn01 : "OK", 
         btn02 : "Abbrechen", 
     },
+    msgPageSelect: 
+    {
+        title : "Achtung",
+        msg : "Bitte wählen Sie eine Seite",
+        btn01 : "OK"
+    },
+    favAdd : "Zu Favoriten hinzufügen",
+    favDell : "Aus Favoriten entfernen",
+    menu : "Menü",
+    favMenu : "Favoriten",
     menuOff:
     {
         stk: "Artikel",
@@ -225,7 +235,8 @@ export const langDe =
         cri_01_002: "Adressen bearbeiten",
         cri_01_003: "Gruppen erstellen",
         cri_01_004: "Regionendefinition",  
-        cri_01_005: "Branchendefinition",     
+        cri_01_005: "Branchendefinition",  
+        cri_01_006: "Untergruppendefinitionen",   
         cri_02_001: "Kundenliste",
         cri_02_002: "Adressliste",
         cri_02_003: "Gruppenliste",

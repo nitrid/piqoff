@@ -68,7 +68,8 @@ export default class salesDispatch extends DocBase
     {
         await super.init()
 
-        this.grdSlsDispatch.devGrid.clearFilter("row")
+        this.grid = this["grdSlsDispatch"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
@@ -280,13 +281,13 @@ export default class salesDispatch extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.grdSlsDispatch.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
             this.popMultiItem.hide()
         }
-        this.grdSlsDispatch.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     _cellRoleRender(e)
     {
@@ -305,12 +306,12 @@ export default class salesDispatch extends DocBase
                             this.combineControl = true
                             this.combineNew = false
 
-                            this.grdSlsDispatch.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdSlsDispatch.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -361,12 +362,12 @@ export default class salesDispatch extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
 
-                                    this.grdSlsDispatch.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdSlsDispatch.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -385,7 +386,7 @@ export default class salesDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsDispatch.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -489,7 +490,7 @@ export default class salesDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -877,7 +878,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -1004,7 +1005,7 @@ export default class salesDispatch extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1518,12 +1519,12 @@ export default class salesDispatch extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
 
-                                                            this.grdSlsDispatch.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsDispatch.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1571,7 +1572,7 @@ export default class salesDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
 
@@ -1579,7 +1580,7 @@ export default class salesDispatch extends DocBase
                                                     await this.msgQuantity.show()
                                                     await this.addItem(data[i],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                 };
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1620,12 +1621,12 @@ export default class salesDispatch extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
 
-                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsDispatch.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1637,12 +1638,12 @@ export default class salesDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                             
@@ -1687,7 +1688,7 @@ export default class salesDispatch extends DocBase
                                 </Item>
                                 <Item>
                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdSlsDispatch"} 
+                                    <NdGrid parent={this} id={"grdSlsDispatch"+this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1896,7 +1897,7 @@ export default class salesDispatch extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                        await this["grdSlsDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                     }}
                                     >
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatch"}/>
@@ -1933,7 +1934,7 @@ export default class salesDispatch extends DocBase
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdSlsDispatch"
+                                    target={"#grdSlsDispatch"+this.tabIndex}
                                     onItemClick={(async(e)=>
                                     {
                                         if(e.itemData.text == this.t("getOrders"))
