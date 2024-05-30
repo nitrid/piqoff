@@ -65,8 +65,8 @@ export default class branchSaleDispatch extends DocBase
     async init()
     {
         await super.init()
-        this.grdSlsDispatch.devGrid.clearFilter("row")
-
+        this.grid = this["grdSlsDispatch"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -255,12 +255,12 @@ export default class branchSaleDispatch extends DocBase
                             {
                                 this.combineControl = true
                                 this.combineNew = false
-                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
-                                this.grdSlsDispatch.devGrid.endUpdate()
+                                this.grid.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -311,12 +311,12 @@ export default class branchSaleDispatch extends DocBase
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
-                                    this.grdSlsDispatch.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[0],e.rowIndex)
                                     }
-                                    this.grdSlsDispatch.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -335,7 +335,7 @@ export default class branchSaleDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsDispatch.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
 
                 }}
                 button=
@@ -391,7 +391,7 @@ export default class branchSaleDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -446,7 +446,7 @@ export default class branchSaleDispatch extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsDispatch.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -688,7 +688,7 @@ export default class branchSaleDispatch extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -799,7 +799,7 @@ export default class branchSaleDispatch extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1289,12 +1289,12 @@ export default class branchSaleDispatch extends DocBase
 
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsDispatch.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
@@ -1335,12 +1335,12 @@ export default class branchSaleDispatch extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1376,12 +1376,12 @@ export default class branchSaleDispatch extends DocBase
                                                     {
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsDispatch.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1392,12 +1392,12 @@ export default class branchSaleDispatch extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1423,7 +1423,7 @@ export default class branchSaleDispatch extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1441,7 +1441,7 @@ export default class branchSaleDispatch extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdSlsDispatch"} 
+                                        <NdGrid parent={this} id={"grdSlsDispatch"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -1573,7 +1573,7 @@ export default class branchSaleDispatch extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdSlsDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatch"}/>
@@ -1608,7 +1608,7 @@ export default class branchSaleDispatch extends DocBase
                                         <ContextMenu
                                         dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdSlsDispatch"
+                                        target={"#grdSlsDispatch"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getOrders"))

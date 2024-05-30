@@ -22,7 +22,7 @@ export default class priceAllItemSend extends React.PureComponent
 
         this.core = App.instance.core;
         this.btnItemsSend = this.btnItemsSend.bind(this)
-        
+        this.btnDateItemsSend = this.btnDateItemsSend.bind(this)
     }
     async componentDidMount()
     {
@@ -31,7 +31,7 @@ export default class priceAllItemSend extends React.PureComponent
     }
     async init()
     {
-      
+      this.getItems()
     }
     async btnItemsSend()
     {
@@ -44,6 +44,38 @@ export default class priceAllItemSend extends React.PureComponent
              
         tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgItemSend.msgSuccess")}</div>)
         await dialog(tmpConfObj1);
+    }
+    async btnDateItemsSend()
+    {
+        this.core.socket.emit('priceDateItemSend',[this.dtDate.startDate,this.dtDate.endDate])
+        let tmpConfObj1 =
+        {
+            id:'msgItemSend',showTitle:true,title:this.t("msgItemSend.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgItemSend.btn01"),location:'after'}],
+        }
+             
+        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgItemSend.msgSuccess")}</div>)
+        await dialog(tmpConfObj1);
+    }
+    async getItems()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT CODE AS ITEM_CODE,NAME AS ITEM_NAME,PRICE_SALE AS PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE GROUP BY CODE,NAME,PRICE_SALE ",
+                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate]
+                },
+                sql : this.core.sql
+            }
+        }
+        App.instance.setState({isExecute:true})
+        await this.grdItems.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
     }
     render()
     {
@@ -79,6 +111,43 @@ export default class priceAllItemSend extends React.PureComponent
                                     }    
                                 }/>
                             </Toolbar>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
+                        onApply={(async()=>
+                            {
+                                this.getItems()
+                            }).bind(this)}/>
+                    </div>  <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={1} id="frmGrid">
+                                <Item>
+                                    <NdGrid parent={this} id={"grdItems"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'500'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        >
+                                            <Paging defaultPageSize={20} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdItems.clmItemCode")} width={100}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdItems.clmItemName")} width={200}/>
+                                            <Column dataField="PRICE" caption={this.t("grdItems.clmPrice")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    </NdGrid>
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <NdButton text={this.t("btnDateItemsSend")} type="default" width="100%" 
+                            onClick={this.btnDateItemsSend}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

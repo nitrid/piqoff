@@ -179,7 +179,7 @@ export class posCls
             local : 
             [{
                 type : "update",
-                query : `UPDATE POS_VW_01 SET DELETED = ? WHERE GUID = ?;`,
+                query : `UPDATE POS_VW_01 SET DELETED = ?,STATUS = 0, SIGNATURE = '', SIGNATURE_SUM = '', CERTIFICATE = '',REF = 0 WHERE GUID = ?;`,
                 values : [{DELETED:1,GUID : {map:'GUID'}}],
             },
             {
