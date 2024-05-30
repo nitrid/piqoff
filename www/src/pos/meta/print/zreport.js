@@ -47,12 +47,12 @@ export function print()
                     align: "rt",
                     data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
                         (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
-                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
-                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('PFAMOUNT',2).space(10) + " " + 
+                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('PVAT',2).space(10) + " " + 
+                        data.possale.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('PTOTAL',2).space(10)
                 })
             }
-            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + data.possale.sum('FAMOUNT',2).space(10) + " " + data.possale.sum('VAT',2).space(10) + " " + data.possale.sum('TOTAL',2).space(10)})
+            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + data.possale.sum('PFAMOUNT',2).space(10) + " " + data.possale.sum('PVAT',2).space(10) + " " + data.possale.sum('PTOTAL',2).space(10)})
             tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
 
             return tmpArr.length > 0 ? tmpArr : undefined

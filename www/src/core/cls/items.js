@@ -37,7 +37,8 @@ export class itemsCls
             INTERFEL: false,
             DESCRIPTION : '',
             CUSTOMS_CODE: '',
-            GENRE : ''
+            GENRE : '',
+            CEOPOS : false
         }
 
         this.itemLang = new itemLangCls()
@@ -46,6 +47,7 @@ export class itemsCls
         this.itemBarcode = new itemBarcodeCls();
         this.itemMultiCode = new itemMultiCodeCls();
         this.itemImage = new itemImageCls();
+        this.itemSubGrp = new itemSubGrpCls();
 
         this._initDs();
     }    
@@ -92,12 +94,14 @@ export class itemsCls
                     "@INTERFEL = @PINTERFEL, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
-                    "@GENRE = @PGENRE " ,
+                    "@GENRE = @PGENRE, " +
+                    "@CEOPOS = @PCEOPOS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PCEOPOS:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','CEOPOS'],
             local : 
             {
                 type : "insert",
@@ -158,12 +162,14 @@ export class itemsCls
                     "@INTERFEL = @PINTERFEL, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
-                    "@GENRE = @PGENRE " ,
+                    "@GENRE = @PGENRE, " +
+                    "@CEOPOS = @PCEOPOS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PCEOPOS:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS',
-                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE'],
+                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','CEOPOS'],
             local : 
             {
                 type : "update",
@@ -217,6 +223,7 @@ export class itemsCls
         this.ds.add(this.itemMultiCode.dt('ITEM_MULTICODE'))
         this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
         this.ds.add(this.itemLang.dt('ITEM_LANG'))
+        this.ds.add(this.itemSubGrp.dt('ITEMS_SUB_GRP'))
 
         this.ds.get('ITEMS').noColumnEdit = ['GROSS_MARGIN','SNAME','CUSER','MAIN_GRP_NAME','VAT_EXT','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
     }
@@ -283,6 +290,7 @@ export class itemsCls
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemLang.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemSubGrp.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -644,9 +652,10 @@ export class itemPricingListCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
-            NO : 0,
+            NO : '',
             NAME : '',
-            VAT_TYPE : 0
+            VAT_TYPE : 0,
+            TAG : ''
         }
 
         this._initDs();
@@ -657,7 +666,7 @@ export class itemPricingListCls
         let tmpDt = new datatable('ITEM_PRICE_LIST');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO IS NULL)) AND ((NAME = @NAME) OR (@NAME IS NULL))",
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO = -1)) AND ((NAME = @NAME) OR (@NAME = 'NULL'))",
             param : ['NO:int','NAME:string|100']
         }
         tmpDt.insertCmd = 
@@ -667,9 +676,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.updateCmd = 
         {
@@ -678,9 +688,10 @@ export class itemPricingListCls
                     "@CUSER = @PCUSER, " + 
                     "@NO = @PNO, " + 
                     "@NAME = @PNAME, " + 
-                    "@VAT_TYPE = @PVAT_TYPE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
-            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+                    "@VAT_TYPE = @PVAT_TYPE, " +
+                    "@TAG = @PTAG ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int','PTAG:string|50'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE','TAG']
         } 
         tmpDt.deleteCmd = 
         {
@@ -736,14 +747,14 @@ export class itemPricingListCls
         {
             let tmpPrm = 
             {
-                NO : null,
-                NAME : null
+                NO : -1,
+                NAME : 'NULL'
             }         
 
             if(arguments.length > 0)
             {
-                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? null : arguments[0].NO;
-                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? null : arguments[0].NAME;
+                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? -1 : arguments[0].NO;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? 'NULL' : arguments[0].NAME;
             }
             this.ds.get('ITEM_PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
             
@@ -1219,6 +1230,141 @@ export class itemImageCls
         });
     }
 }
+export class itemSubGrpCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
+            ITEM_CODE : '',            
+            ITEM_NAME : '',
+            ITEM_SUB_RANK : 0,
+            SUB_GUID : '00000000-0000-0000-0000-000000000000',
+            SUB_CODE : '',
+            SUB_NAME : '',
+            SUB_GRP_RANK : 0
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEMS_SUB_GRP');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEMS_SUB_GRP_VW_01] " + 
+                    "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
+                    "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) ORDER BY ITEM_SUB_RANK ASC" ,
+            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','SUB_GUID','ITEM_SUB_RANK']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@SUB = @PSUB, " + 
+                    "@RANK = @PRANK ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PSUB:string|50','PRANK:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','SUB_GUID','ITEM_SUB_RANK']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_DELETE] " + 
+                    "@CUSER = @PCUSER, " +
+                    "@UPDATE = 1, " +  
+                    "@SUB = @PSUB ", 
+            param : ['PCUSER:string|25','PSUB:string|50'],
+            dataprm : ['CUSER','SUB_GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEMS_SUB_GRP') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEMS_SUB_GRP').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+                ITEM_CODE : '',
+                ITEM_NAME : ''
+            }
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+                tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;  
+                tmpPrm.ITEM_NAME = typeof arguments[0].ITEM_NAME == 'undefined' ? '' : arguments[0].ITEM_NAME;
+            }
+            
+            this.ds.get('ITEMS_SUB_GRP').selectCmd.value = Object.values(tmpPrm)
+              
+            await this.ds.get('ITEMS_SUB_GRP').refresh();
+            resolve(this.ds.get('ITEMS_SUB_GRP'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
 export class unitCls 
 {
     constructor()
@@ -1370,6 +1516,7 @@ export class editItemCls
             CUSTOMER: '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
+            CUSTOMS : '',
             WEIGHING : false
         }
 
@@ -1421,14 +1568,15 @@ export class editItemCls
                     "@MAIN_UNIT_ID = @PMAIN_UNIT_ID, " +
                     "@UNDER_FACTOR = @PUNDER_FACTOR, " +
                     "@UNDER_UNIT_ID = @PUNDER_UNIT_ID, " +
-                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME ",
+                    "@UNDER_UNIT_NAME = @PUNDER_UNIT_NAME, " + 
+                    "@CUSTOMS = @PCUSTOMS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
                      'PCOST_PRICE:float','PWEIGHING:bit','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
                     'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50','PUNDER_UNIT_GUID:string|50','PMAIN_UNIT_ID:string|25',
-                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25'],
+                    'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50','PUNDER_UNIT_NAME:string|25','PCUSTOMS:string|50'],
             dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','WEIGHING','STATUS','ORGINS',
                        'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID',
-                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME'],
+                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID','UNDER_UNIT_NAME','CUSTOMS'],
         } 
 
         this.ds.add(tmpDt);
@@ -2028,7 +2176,7 @@ export class servicesItemCls
         });
     }
 }
-export class itemGroupCls
+export class mainGroupCls
 {
     constructor()
     {
@@ -2149,7 +2297,7 @@ export class itemGroupCls
         });
     }
 }
-export class itemSubGroupCls
+export class subGroupCls
 {
     constructor()
     {
@@ -2160,14 +2308,15 @@ export class itemSubGroupCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CDATE : moment(new Date()).format("YYYY-MM-DD"),
             CUSER : this.core.auth.data.CODE,
-            CUSER_NAME : '',
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             CODE : '',
             NAME : '',
-            MAIN_GRP : '',
-            ATTACH_SUB : '',
-            STATUS : true,
+            RANK : -1,
+            PARENT : '00000000-0000-0000-0000-000000000000',
+            PARENT_CODE : '',
+            PARENT_NAME : '',
+            PARENT_MASK : null,
         }
 
         this._initDs();
@@ -2178,7 +2327,7 @@ export class itemSubGroupCls
         let tmpDt = new datatable('ITEM_SUB_GROUP');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_SUB_GROUP_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
+            query : "SELECT *,CASE WHEN PARENT = '00000000-0000-0000-0000-000000000000' THEN NULL ELSE PARENT END AS PARENT_MASK FROM [dbo].[ITEM_SUB_GROUP_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
             param : ['GUID:string|50','CODE:string|25']
         } 
         tmpDt.insertCmd = 
@@ -2188,26 +2337,32 @@ export class itemSubGroupCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " +
-                    "@MAIN_GRP = @PMAIN_GRP, " +
-                    "@ATTACH_SUB = @PATTACH_SUB, " +
-                    "@STATUS = @PSTATUS " , 
-
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PMAIN_GRP:string|50','PATTACH_SUB:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','MAIN_GRP','ATTACH_SUB','STATUS']
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC  [dbo].[PRD_ITEM_SUB_GROUP_UPDATE]  " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@CODE = @PCODE, " + 
-            "@NAME = @PNAME, " +
-            "@MAIN_GRP = @PMAIN_GRP, " +
-            "@ATTACH_SUB = @PATTACH_SUB, " +
-            "@STATUS = @PSTATUS " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PMAIN_GRP:string|50','PATTACH_SUB:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','MAIN_GRP','ATTACH_SUB','STATUS']
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " +
+                    "@RANK = @PRANK, " +
+                    "@PARENT = @PPARENT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|200','PRANK:int','PPARENT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','RANK','PARENT']
         } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_SUB_GROUP_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
 
         this.ds.add(tmpDt);
     }

@@ -25,7 +25,6 @@ class mailer
 
     async mailSend(pData)
     {
-       
         return new Promise(async resolve =>
         {
             let tmpAttach = [];
@@ -40,6 +39,7 @@ class mailer
                     }
                 ]
             }
+
             let tmpQuery
             if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
             {
@@ -60,44 +60,52 @@ class mailer
            
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-            let tmpservice = ''
-            if(tmpResult[0].MAIL_SERVICE == 'gmail')
+            if(typeof tmpResult[0] != 'undefined')
             {
-                tmpservice = 'gmail'
+                let tmpservice = ''
+                if(tmpResult[0].MAIL_SERVICE == 'gmail')
+                {
+                    tmpservice = 'gmail'
+                }
+                let transporter = nodemailer.createTransport(
+                {
+                    service: tmpservice,
+                    host: tmpResult[0].MAIL_SMTP,
+                    port: tmpResult[0].MAIL_PORT,
+                    secure: true,
+                    auth: 
+                    {
+                    user: tmpResult[0].MAIL_ADDRESS,
+                    pass: tmpResult[0].MAIL_PASSWORD
+                    },
+                    //tls : { rejectUnauthorized: false }
+                });
+                var mailOptions = 
+                {
+                    from: tmpResult[0].MAIL_ADDRESS,
+                    to: pData.sendMail,
+                    subject: pData.subject,
+                    html:pData.html,
+                    text:pData.text,
+                    attachments: tmpAttach
+                };
+                transporter.sendMail(mailOptions, function(error, info)
+                {
+                    if (error) 
+                    {
+                        console.log(error)
+                        resolve(error);
+                    }
+                    else
+                    {
+                        resolve(0);
+                    }
+                });
             }
-            let transporter = nodemailer.createTransport(
+            else
             {
-                service: tmpservice,
-                host: tmpResult[0].MAIL_SMTP,
-                port: tmpResult[0].MAIL_PORT,
-                secure: true,
-                auth: 
-                {
-                  user: tmpResult[0].MAIL_ADDRESS,
-                  pass: tmpResult[0].MAIL_PASSWORD
-                },
-                //tls : { rejectUnauthorized: false }
-              });
-              var mailOptions = {
-                from: tmpResult[0].MAIL_ADDRESS,
-                to: pData.sendMail,
-                subject: pData.subject,
-                html:pData.html,
-                text:pData.text,
-                attachments: tmpAttach
-              };
-              transporter.sendMail(mailOptions, function(error, info)
-              {
-                if (error) 
-                {
-                    console.log(error)
-                    resolve(error);
-                }
-                else
-                {
-                    resolve(0);
-                }
-            });
+                resolve(0);
+            }
         })
     }
 }

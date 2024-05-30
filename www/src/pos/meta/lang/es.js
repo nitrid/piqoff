@@ -22,12 +22,12 @@ export const langEs =
     msgNotAccess: "El usuario no tiene permiso para acceder.",
     msgInvalidUser: "Nombre de usuario o contraseña incorrectos.",
     txtCardRead: "Por favor, pase su tarjeta de usuario.",
-    price: "Precio",
-    quantity: "Cantidad",
+    price: "Ingrese un Precio",
+    quantity: "Ingrese un Cantidad",
     nbCalculator: "Calculadora",
     about: "Acerca de",
     abtCertificate: "Certificado: NF525",
-    abtNrCertificate: "Número de certificado: B_0527-1",
+    abtNrCertificate: "Número de certificado: B_0527-3",
     abtLicence: "Licencia: XXXXXXXXXXXXXXXXX",
     abtVersion: "Versión: ",
     abtPiqsoft: "Software: Piqsoft-POS",
@@ -36,8 +36,6 @@ export const langEs =
     blnAbtSw: "S/W: Scale.js",
     blnAbtCertificate: "Número de certificado: ",
     pleaseWait: "Por favor, espere...",
-    quantity: "Cantidad",
-    price: "Precio",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
@@ -59,7 +57,7 @@ export const langEs =
     msgMaxQuantity:
     {
         title: "Advertencia",
-        msg: "¡No puede introducir una cantidad mayor de 99.999!",
+        msg: "¡No puede introducir una cantidad mayor de 999.999!",
         btn01: "Aceptar",
     },
     msgPriceNotFound:
@@ -339,6 +337,10 @@ export const langEs =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Lista de devoluciones",
+    },
     txtPopLastRefPholder : "Por favor, lea el código de barras en el ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -392,6 +394,11 @@ export const langEs =
     {
         head: "Descripción de Reimpresión",
         title: "Por favor, ingrese el motivo de la reimpresión"
+    },
+    popDiscountDesc : 
+    {
+        head : "Descripción del Descuento",
+        title : "Por favor, introduzca su motivo de descuento"
     },
     msgItemReturnTicket:
     {
@@ -481,6 +488,10 @@ export const langEs =
     popCardPay:
     {
         title: "Pago con Tarjeta",
+    },
+    popCardTicketPay :
+    {
+        title :"Tarjeta alimentaria",
     },
     popExchangePay :
     {
@@ -621,7 +632,9 @@ export const langEs =
         msg3: "Tabla siendo transferida.",
         btnPopTransferManuel: "Iniciar Manualmente",
         btnPopTransferClear: "Borrar y Transferir",
-        btnPopTransferStop: "Detener"
+        btnPopTransferStop: "Detener",
+        titleApp : "La base de datos local se está actualizando.",
+        msgApp : "¡La aplicación se cerrará pronto! Por favor, reinicie la aplicación."
     },
     msgOfflineWarning: 
     {
@@ -723,7 +736,8 @@ export const langEs =
         },
         popSelectItem: "Selección de Producto",
         popSelectItemGrp: "Selección de Grupo de Producto",
-        popNameEntry: "Nombre del PLU"
+        popNameEntry: "Nombre del PLU",
+        txtPopPluGroup : "¡Ingrese el código PLU o el nombre que desea buscar!"
     },
     popOrderList: 
     {
@@ -748,6 +762,8 @@ export const langEs =
     {
         title: "Advertencia",
         msg: "¡Fallo en el proceso de guardado!",
+        msg1: "Transazione fallita perché il numero di riferimento è zero!",
+        msg2: "Transazione fallita perché la firma è vuota!",
         btn01: "Aceptar",
         btn02: "Enviar de nuevo",
     },
@@ -906,5 +922,20 @@ export const langEs =
             btn02: "No",
             msg: "¿Desea guardar los cambios que realizó?"
         }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Seleccione una lista de precios",
+        clmListNo : "Número de lista",
+        clmListName : "Nombre de la lista",
+        clmItemName : "Nombre del producto",
+        clmTag : "Tag",
+        clmPrice : "Precio"
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Atención",
+        msg : "¡No se pudo recuperar la información del dispositivo de la base de datos!",
+        btn01 : "OK"
     }
 }

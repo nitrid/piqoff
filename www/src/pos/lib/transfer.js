@@ -7,7 +7,7 @@ export default class transferCls
     constructor()
     {
         this.core = core.instance
-        this.listeners = Object();        
+        this.listeners = Object();
     }
     //#region  "EVENT"
     on(pEvt, pCallback) 
@@ -32,7 +32,7 @@ export default class transferCls
     {
         transferCls.dbName = pDbName
         return new Promise(async resolve => 
-        {            
+        {
             await this.core.local.init({name:pDbName,tables: this.tableSchema()})       
             resolve()
         });
@@ -223,7 +223,8 @@ export default class transferCls
                         SIREN_NO TEXT,
                         RCS TEXT,
                         CAPITAL REAL,
-                        COUNTRY_NAME TEXT);`
+                        COUNTRY_NAME TEXT,
+                        PRINT_DESCRIPTION TEXT);`
             },
             //CUSTOMER_VW_02
             {
@@ -366,7 +367,8 @@ export default class transferCls
                         CERTIFICATE TEXT,
                         ORDER_GUID TEXT,
                         SIGNATURE TEXT,
-                        SIGNATURE_SUM TEXT);`
+                        SIGNATURE_SUM TEXT,
+                        PRINT_DESCRIPTION TEXT);`
             },
             //POS_SALE_VW_01
             {
@@ -407,6 +409,9 @@ export default class transferCls
                         UNIT_NAME TEXT,
                         UNIT_FACTOR REAL,
                         UNIT_SHORT TEXT,
+                        LIST_NO INTEGER,
+                        LIST_NAME TEXT,
+                        LIST_TAG TEXT,
                         QUANTITY REAL,
                         PRICE REAL,
                         FAMOUNT REAL,
@@ -603,6 +608,17 @@ export default class transferCls
                         DESCRIPTION TEXT,
                         APP_VERSION TEXT,
                         SIGNATURE TEXT);`
+            },
+            //POS_PAY_TYPE
+            {
+                name: "POS_PAY_TYPE",
+                query: `CREATE TABLE IF NOT EXISTS POS_PAY_TYPE (
+                        GUID TEXT PRIMARY KEY,
+                        TYPE INTEGER,
+                        NAME TEXT,
+                        ICON TEXT,
+                        TOTAL_VISIBLE INTEGER,
+                        RATE NUMERIC);`
             }
         ]
 
@@ -760,12 +776,12 @@ export default class transferCls
                 {
                     type : "insert",
                     query : `INSERT OR REPLACE INTO COMPANY_VW_01 (GUID, CUSER, LUSER, NAME, ADDRESS1, ADDRESS2, ZIPCODE, COUNTRY, CITY, TEL, MAIL, SIRET_ID, APE_CODE, TAX_OFFICE, 
-                            TAX_NO, INT_VAT_NO, OFFICIAL_NAME, OFFICIAL_SURNAME, COMPANY_TYPE, SIREN_NO, RCS, CAPITAL, COUNTRY_NAME) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                            TAX_NO, INT_VAT_NO, OFFICIAL_NAME, OFFICIAL_SURNAME, COMPANY_TYPE, SIREN_NO, RCS, CAPITAL, COUNTRY_NAME, PRINT_DESCRIPTION) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     values : [{GUID : {map:'GUID'},CUSER : {map:'CUSER'},LUSER : {map:'LUSER'},NAME : {map:'NAME'},ADDRESS1 : {map:'ADDRESS1'},ADDRESS2 : {map:'ADDRESS2'},ZIPCODE : {map:'ZIPCODE'},
                     COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},TEL : {map:'TEL'},MAIL : {map:'MAIL'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
                     TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},OFFICIAL_NAME : {map:'OFFICIAL_NAME'},OFFICIAL_SURNAME : {map:'OFFICIAL_SURNAME'},COMPANY_TYPE : {map:'COMPANY_TYPE'},
-                    SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'}}]
+                    SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'},PRINT_DESCRIPTION : {map:'PRINT_DESCRIPTION'}}]
                 },               
             },
             //PLU_VW_01
@@ -779,10 +795,10 @@ export default class transferCls
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO PLU_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, TYPE, TYPE_NAME, NAME, LINK, LINK_CODE, LINK_NAME, LOCATION, GROUP_INDEX)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    query : `INSERT OR REPLACE INTO PLU_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, TYPE, TYPE_NAME, NAME, LINK, QUANTITY, LINK_CODE, LINK_NAME, LOCATION, GROUP_INDEX)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},TYPE : {map:'TYPE'},
-                    TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
+                    TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},QUANTITY : {map:'QUANTITY'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
                     GROUP_INDEX : {map:'GROUP_INDEX'}}]
                 },
             },
@@ -899,6 +915,22 @@ export default class transferCls
                     IBAN : {map:'IBAN'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'}}]
                 },
             },
+            //POS_PAY_TYPE
+            {
+                name : "POS_PAY_TYPE",
+                from : 
+                {
+                    type : "select",
+                    query : `SELECT * FROM POS_PAY_TYPE`
+                },
+                to : 
+                {
+                    type : "insert",
+                    query : `INSERT OR REPLACE INTO POS_PAY_TYPE (GUID, TYPE, NAME, ICON, TOTAL_VISIBLE, RATE)
+                            VALUES (?, ?, ?, ?, ?, ?)`,
+                    values : [{GUID : {map:'GUID'},TYPE : {map:'TYPE'},NAME : {map:'NAME'},ICON : {map:'ICON'},TOTAL_VISIBLE : {map:'TOTAL_VISIBLE'},RATE : {map:'RATE'}}]
+                },
+            },
         ]
         return tmpSchema
     }
@@ -1007,9 +1039,12 @@ export default class transferCls
                                 "@POS = @PPOS, " +
                                 "@LINE_NO = @PLINE_NO, " +
                                 "@ITEM = @PITEM, " +  
+                                "@ITEM_NAME = @PITEM_NAME, " +  
+                                "@ITEM_SNAME = @PITEM_SNAME, " +  
                                 "@INPUT = @PINPUT, " +                      
                                 "@BARCODE = @PBARCODE, " + 
                                 "@UNIT = @PUNIT, " + 
+                                "@LIST_NO = @PLIST_NO, " + 
                                 "@QUANTITY = @PQUANTITY, " + 
                                 "@PRICE = @PPRICE, " + 
                                 "@FAMOUNT = @PFAMOUNT, " + 
@@ -1022,11 +1057,11 @@ export default class transferCls
                                 "@PROMO_TYPE = @PPROMO_TYPE, " +
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@DELETED = @PDELETED ",  
-                        param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                                'PDELETED:bit'],
-                        dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                                'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
+                        param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50',
+                                'PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50','PLIST_NO:int','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float',
+                                'PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PDELETED:bit'],
+                        dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','LIST_NO','QUANTITY','PRICE','FAMOUNT',
+                                'AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
                     },
                     update : 
                     {
@@ -1037,9 +1072,12 @@ export default class transferCls
                                 "@POS = @PPOS, " +
                                 "@LINE_NO = @PLINE_NO, " +
                                 "@ITEM = @PITEM, " + 
+                                "@ITEM_NAME = @PITEM_NAME, " +  
+                                "@ITEM_SNAME = @PITEM_SNAME, " +  
                                 "@INPUT = @PINPUT, " +                   
                                 "@BARCODE = @PBARCODE, " + 
                                 "@UNIT = @PUNIT, " + 
+                                "@LIST_NO = @PLIST_NO, " +
                                 "@QUANTITY = @PQUANTITY, " + 
                                 "@PRICE = @PPRICE, " + 
                                 "@FAMOUNT = @PFAMOUNT, " +
@@ -1052,11 +1090,11 @@ export default class transferCls
                                 "@PROMO_TYPE = @PPROMO_TYPE, " +
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@DELETED = @PDELETED ",  
-                        param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
-                                'PDELETED:bit'],
-                        dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
-                                'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
+                        param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PITEM_SNAME:string|50',
+                                'PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50','PLIST_NO:int','PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float',
+                                'PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50','PDELETED:bit'],
+                        dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','ITEM_NAME','ITEM_SNAME','INPUT','BARCODE_GUID','UNIT_GUID','LIST_NO','QUANTITY','PRICE','FAMOUNT',
+                                'AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','DELETED'],
                     },
                     control :
                     {
@@ -1318,7 +1356,7 @@ export default class transferCls
             let tmpDataQuery = {...pTemp.from}
             tmpDataQuery.query = tmpDataQuery.query.toString().replace('{0}',pClear ? '' : typeof tmpDataQuery.where == 'undefined' ? '' : tmpDataQuery.where)
             tmpDataQuery.buffer = true;
-            
+
             let tmpBuf = await this.core.sql.execute(tmpDataQuery)
             if(typeof tmpBuf.result.err == 'undefined')
             {
@@ -1456,6 +1494,10 @@ export default class transferCls
     {
         return new Promise(async resolve => 
         {
+            if(pClear)
+            {
+                await this.dropTbl()
+            }
             let tmpSchema = this.fetchSchema()
             for (let i = 0; i < tmpSchema.length; i++) 
             {                
@@ -1527,14 +1569,18 @@ export default class transferCls
         }
         return tmpArr;
     }
-    dropDb(pDbName)
+    dropTbl()
     {
         return new Promise(async resolve => 
         {
-            await this.core.local.dropDb()    
-            await this.core.local.init({name:pDbName,tables: this.tableSchema()})
+            let tmpTbl = this.tableSchema()
+            for (let i = 0; i < tmpTbl.length; i++) 
+            {
+                await this.core.local.select({query : "DROP TABLE if exists " + tmpTbl[i].name + ";"})
+                await this.core.local.select(tmpTbl[i])
+            }
             resolve()
-        });
+        })
     }
     clearTbl(pTblName)
     {

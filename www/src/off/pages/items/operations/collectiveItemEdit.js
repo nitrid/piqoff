@@ -317,6 +317,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                 }
                                 
+                                console.log(this.editObj.dt())
                                 if(await this.editObj.save() == 0)
                                 {                                                    
                                     App.instance.setState({isExecute:false})
@@ -372,9 +373,10 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={75}/> 
                                 <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={75} /> 
-                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/>   
+                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
+                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} />   
                                 <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this._cellRoleRender}/>    

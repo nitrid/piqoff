@@ -22,12 +22,12 @@ export const langEn =
     msgNotAccess :"Unauthorized user",
     msgInvalidUser : "Error: invalid username or password",
     txtCardRead :"Please scan your badge",
-    price : "Price",
-    quantity : "Quantity",
+    price : "Enter a Price",
+    quantity : "Enter a Quantity",
     nbCalculator : "Calculator", 
     about : "About",
     abtCertificate : "Certificate: NF525",
-    abtNrCertificate : "Certificate Number: B_0527-1",
+    abtNrCertificate : "Certificate Number: B_0527-3",
     abtLicence : "License: XXXXXXXXXXXXXXXXX",
     abtVersion : "Version: ",
     abtPiqsoft :  "POS Name: Piqsoft-POS",
@@ -36,8 +36,6 @@ export const langEn =
     blnAbtSw : "Version: ",
     blnAbtCertificate : "Certificate Number: ",
     pleaseWait : "Please wait...",
-    qunatity : "Qty.",
-    price : "Price",
     msgDeviceChange : 
     {
         title : "Dikkat",   // BAK
@@ -59,7 +57,7 @@ export const langEn =
     msgMaxQuantity :
     {
         title : "Attention",  // BAK
-        msg : "You cannot enter a quantity greater than 99,999!",  // BAK
+        msg : "You cannot enter a quantity greater than 999,999!",  // BAK
         btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
@@ -339,6 +337,10 @@ export const langEn =
             optionAvoir : "Bon D'Avoir"
         }
     },
+    rebateTicketPopup : 
+    {
+        title : "Return list",
+    },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     txtPopLastRefNoPholder : "Ref No",  // BAK
     txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
@@ -392,6 +394,11 @@ export const langEn =
     {
         head : "Reason for Duplicate",
         title : "Please provide the reason for reprinting the duplicate ticket/invoice"
+    },
+    popDiscountDesc : 
+    {
+        head : "Discount Description",
+        title : "Please Enter Your Discount Reason"
     },
     msgItemReturnTicket: 
     {
@@ -480,6 +487,10 @@ export const langEn =
     popCardPay:
     {
         title: "Credit Card Payment",
+    },
+    popCardTicketPay :
+    {
+        title :"Food card",
     },
     popExchangePay :
     {
@@ -620,7 +631,9 @@ export const langEn =
         msg3: "Transfer table.",
         btnPopTransferManuel: "Manual Start",
         btnPopTransferClear: "Clear Transfer",
-        btnPopTransferStop: "Stop"
+        btnPopTransferStop: "Stop",
+        titleApp : "Local database is being updated.",
+        msgApp : "The application will close shortly! Please restart the application."
     },
     msgOfflineWarning:
     {
@@ -722,7 +735,8 @@ export const langEn =
         },
         popSelectItem: "Stock Selection",
         popSelectItemGrp: "Product Category Selection",
-        popNameEntry: "PLU Name"
+        popNameEntry: "PLU Name",
+        txtPopPluGroup : "Enter the PLU code or name you want to search for!"
     },
     popOrderList:
     {
@@ -747,6 +761,8 @@ export const langEn =
     {
         title: "Attention",
         msg: "Your save has failed!",
+        msg1: "Transaction failed because the reference number is zero!",
+        msg2: "Transaction failed because the signature is empty!",
         btn01: "OK",
         btn02: "Retry save",
     },
@@ -905,5 +921,20 @@ export const langEn =
             btn02: "No",
             msg: "Do you want to save the changes you made?"
         }
+    },
+    priceListChoicePopUp :
+    {
+        title : "Choose a Price List",
+        clmListNo : "List Number",
+        clmListName : "List Name",
+        clmItemName : "Product Name",
+        clmTag : "Tag",
+        clmPrice : "Price"
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Device information could not be retrieved from the database!",
+        btn01 : "OK"
     }
 }

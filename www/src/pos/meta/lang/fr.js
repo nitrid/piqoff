@@ -1,6 +1,10 @@
 export const langFr = 
 {
-    popGrid: {btnSelection:"Sélectionner",btnSearch:"Rechercher"},
+    popGrid: 
+    {
+        btnSelection:"Sélectionner",
+        btnSearch:"Rechercher"
+    },
     serverConnection : "Établissement de la connexion avec le serveur",
     loading : "Connexion En Cours",
     btnSave: "Enregistrer",
@@ -22,12 +26,12 @@ export const langFr =
     msgNotAccess :"Utilisateur non autorisé",
     msgInvalidUser : "Erreur nom utilisateur ou mdp",
     txtCardRead :"Veuillez scanner votre badge",
-    price : "Prix",
-    quantity : "Quantité",
+    price : "Veuillez Saisir Prix",
+    quantity : "Veuillez Saisir Quantité",
     nbCalculator : "Calculatrice", 
     about : "à propos ",
     abtCertificate : "Certificat : NF525",
-    abtNrCertificate : "Numéro Certificat : B_0527-1",
+    abtNrCertificate : "Numéro Certificat : B_0527-3",
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
     abtPiqsoft :  "Nom de Tpv : Piqsoft-POS",
@@ -36,12 +40,10 @@ export const langFr =
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
-    qunatity : "Qte.",
-    price : "Prix",
     msgDeviceChange : 
     {
         title : "Attention",
-        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
+        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",
         btn01 : "OK",
     },
     msgCustomerNotFound : 
@@ -59,14 +61,14 @@ export const langFr =
     msgMaxQuantity :
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas entrer une quantité supérieure à 99.999 !",  // BAK
+        msg : "Vous ne pouvez pas entrer une quantité supérieure à 999.999 !",
         btn01 : "OK",
     },
     msgPriceNotFound : 
     {
         title : "Attention",
         msg : "Prix produit non défini ! Voulez vous continuer ?",
-        btn01 : "OK",
+        btn01 : "OUI",
         btn02 : "Non"
     },
     msgBarcodeNotFound : 
@@ -97,7 +99,7 @@ export const langFr =
     {
         title : "Attention",
         msg : "Etes vous sur d'avoir encaissé ? ",
-        btn01 : "OK",
+        btn01 : "OUI",
         btn02 : "Annuler"
     },
     msgPayFailed :
@@ -200,7 +202,7 @@ export const langFr =
     msgTicketForNotCustomer: 
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas scanner la carte de fidélité pour les paiements en tickets restaurants .Veuillez supprimer le client sélectionné ! " ,
+        msg : "Vous ne pouvez pas scanner la carte de fidélité pour les paiements en tickets restaurants. Veuillez supprimer le client sélectionné ! " ,
         btn01 : "OK"
     },
     msgPayForSelling: 
@@ -326,7 +328,7 @@ export const langFr =
     },
     popLastSaleList : 
     {
-        title :" Dernière liste de vente ",
+        title : " Dernière liste de vente ",
         cmbPopLastSalePayType : 
         {
             optionAll : "Tous",
@@ -336,6 +338,10 @@ export const langFr =
             optionCheque2 : "CHEQue",
             optionAvoir : "Bon D'Avoir"
         }
+    },
+    rebateTicketPopup : 
+    {
+        title : "Liste de retour",
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
     txtPopLastRefNoPholder : "N° Réf",
@@ -391,13 +397,18 @@ export const langFr =
         head : "Raison du duplicata",
         title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
     },
+    popDiscountDesc : 
+    {
+        head : "Description de la Réduction",
+        title : "Veuillez entrer la raison de votre réduction"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",
-        msg :"Veuillez scanner le ticket pour le remboursement ! ",
+        msg : "Veuillez scanner le ticket pour le remboursement ! ",
         btn01 : "OK",
         btn02 : "Annuler",
-        btn03 : "Choix le Ticket" // BAK
+        btn03 : "Choix du Ticket"
     },
     msgItemReturnType: 
     {
@@ -410,7 +421,7 @@ export const langFr =
     msgWeighing: 
     {
         title : "Attention",
-        msg :" Veuillez attendre une réponse de la balance",
+        msg : "Veuillez attendre une réponse de la balance",
         btn01 : "Saisie Manuelle",
         btn02 : "Abandonner",
     },
@@ -429,36 +440,36 @@ export const langFr =
     },
     popTRDetail :
     {
-        title :"Ticket restaurant"
+        title : "Ticket restaurant"
     },
     popAdvance :
     {
-        title :"Accompte",
-        in :"Entrée",
+        title : "Accompte",
+        in : "Entrée",
         out : "Sortie"
     },
     popAdvanceDesc :
     {
-        head :"Motif accompte",
-        title :"Veuillez saisir le motif d'accompte",
+        head : "Motif accompte",
+        title : "Veuillez saisir le motif d'accompte",
     },
     msgSave : 
     {
-        title :"Information",
-        msg :"Enregistrement effectué avec succès ",
+        title : "Information",
+        msg : "Enregistrement effectué avec succès ",
         btn01 : "OK",
     },    
     popDiscount :
     {
-        title :"Remisé",
+        title : "Remisé",
     },
     popCheqpay :
     {
-        title :"Saisie ticket restaurant",
+        title : "Saisie ticket restaurant",
     },
     popParkList :
     {
-        title :"Saisie en attente",
+        title : "Saisie en attente",
         btnParkAll : "Tous les Tickets en Attente" 
     },
     popBarcodeList :
@@ -467,35 +478,39 @@ export const langFr =
     },
     popItemList :
     {
-        title :"Liste produit",
+        title : "Liste produit",
     },
     popCustomerList :
     {
-        title :"Liste client",
+        title : "Liste client",
     },
     popCashPay :
     {
-        title :"Paiement espèce ",
+        title : "Paiement espèce ",
     },
     popCardPay :
     {
-        title :"Paiement carte bancaire ",
+        title : "Paiement carte bancaire ",
+    },
+    popCardTicketPay :
+    {
+        title :"CB Ticket Restaurant",
     },
     popExchangePay :
     {
-        title :"Paiement en Devises en Espèces",
+        title : "Paiement en Devises en Espèces",
     },
     popTotal :
     {
-        title :"Sous total ",
+        title : "Sous total ",
     },
     popDiffPrice :
     {
-        title :"Différence de prix",
+        title : "Différence de prix",
     },
     popGridList: 
     {
-        title :"Liste"
+        title : "Liste"
     },
     grdList: 
     {
@@ -516,7 +531,7 @@ export const langFr =
     {
         LUSER_NAME : "Saisie Utilisateur",
         LDATE : "Saisie Date",
-        TOTAL :"Total",
+        TOTAL : "Total",
         DESCRIPTION : "Motif",
     },
     grdPopCheqpayList :
@@ -530,7 +545,7 @@ export const langFr =
         ITEM_NAME : "Nom",
         INDIRIM : "Remisé",
         DISCOUNT : "Remisé",
-        PRICE :"Prix",
+        PRICE : "Prix",
         INDFIYAT : "Prix Remisé",
         AMOUNT : "Total",
     },
@@ -550,7 +565,7 @@ export const langFr =
         BARCODE : "Code Barre",
         ITEM_NAME : "Nom",
         QUANTITY : "Quantité",
-        PRICE :"Prix",
+        PRICE : "Prix",
         AMOUNT : "Total",
     },
     grdLastPay : 
@@ -562,7 +577,7 @@ export const langFr =
     grdLastTRDetail : 
     {
         AMOUNT : "Total",
-        COUNT  :"Compte"   ,
+        COUNT  :"Compte",
     },
     grdTRDetail : 
     {
@@ -572,7 +587,7 @@ export const langFr =
     popDescbordValidation :
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas laisser le champ information vide !",
+        msg : "Vous ne pouvez pas laisser le champ 'information' vide !",
         btn01 : "OK",
     },
     popDescbordValidation2 :
@@ -620,7 +635,9 @@ export const langFr =
         msg3 : "Table de transfert.",
         btnPopTransferManuel : "Démarrage manuel",
         btnPopTransferClear : "Transfert Supprime ", 
-        btnPopTransferStop : "Arrêter"
+        btnPopTransferStop : "Arrêter",
+        titleApp : "La base de données locale est en cours de mise à jour.",
+        msgApp : "L'application va bientôt se fermer ! Veuillez redémarrer l'application."
     },
     msgOfflineWarning: 
     {
@@ -650,13 +667,13 @@ export const langFr =
         msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
     },
-    msgDataTransferAlert: //BAK
+    msgDataTransferAlert:
     {
         title : "Attention",
         msg1 : "Vous avez {0} enregistrements à transférer ! Transférez les données maintenant.",
         msg2 : "La transmission a réussi.",
         msg3 : "La transmission a échoué. Toutes les opérations sont en cours de redémarrage.",
-        btn01 : "D'accord"
+        btn01 : "OK"
     },
     msgNotWeighing: 
     {
@@ -723,7 +740,8 @@ export const langFr =
         },
         popSelectItem : "Choix Du Stock",
         popSelectItemGrp : "Choix de la Catégorie du Produit",
-        popNameEntry : "Nom Plu "
+        popNameEntry : "Nom Plu ",
+        txtPopPluGroup : "Veuillez saisis le code ou le nom de PLU que vous souhaitez rechercher !"
     },
     popOrderList : 
     {
@@ -748,6 +766,8 @@ export const langFr =
     {
         title : "Attention",
         msg : "Votre enregistrement a échoué!",
+        msg1: "La transaction a échoué car le numéro de référence est zéro !",
+        msg2: "La transaction a échoué car la signature est vide !",
         btn01 : "OK",
         btn02 : "Réessayez l'enregistrement",
     },
@@ -866,25 +886,25 @@ export const langFr =
         btn01 : "Abandonner",
         btn02 : "Continuer"
     },
-    msgBarcodeWeighing: //BAK
+    msgBarcodeWeighing:
     {
         title: "Attention",
         msg: "Ligne lue : {0} - Montant total : {1}",
-        btn01: "D'accord"
+        btn01: "OK"
     },
     msgBarcodeWeighingUnit: 
     {
         title : "Attention",
         msg : "L'étiquette scannée contient des produits individuels. Vous n'avez pas besoin de faire correspondre les quantités sur la balance.",
-        btn01 : "D'accord"
+        btn01 : "OK"
     },
-    msgTSENotFound: //BAK
+    msgTSENotFound:
     {
         title: "Attention",
         msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
-        btn01: "D'accord"
+        btn01: "OK"
     },
-    msgMacIdFailed: //BAK
+    msgMacIdFailed:
     {
         title : "Attention",
         msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
@@ -946,4 +966,19 @@ export const langFr =
             msg: "Voulez-vous enregistrer les modifications apportées ?"
         },
     },
+    priceListChoicePopUp :
+    {
+        title : "Choisissez une liste de prix",
+        clmListNo : "Numéro de liste",
+        clmListName : "Nom de la liste",
+        clmItemName : "Nom du produit",
+        clmTag : "Catégorie Code",
+        clmPrice : "Prix"
+    },
+    msgDeviceLoadFailed:
+    {
+        title : "Attention",
+        msg : "Les informations de l'appareil n'ont pas pu être récupérées de la base de données !",
+        btn01 : "OK"
+    }
 }
