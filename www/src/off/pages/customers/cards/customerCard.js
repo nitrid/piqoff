@@ -1214,7 +1214,7 @@ export default class CustomerCard extends React.PureComponent
                                                 <Item>
                                                     <Label text={this.t("txtRiskLimit")} alignment="right" />
                                                     <NdNumberBox id="txtRiskLimit" parent={this} simple={true} 
-                                                    format={{ style: "currency", currency: "EUR",precision: 2}}
+                                                    format={{ style: "currency", currency: Number.money.code,precision: 2}}
                                                     dt={{data:this.customerObj.dt('CUSTOMERS'),field:"RISK_LIMIT"}} 
                                                     onChange={()=>
                                                     {

@@ -24,7 +24,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdTabPanel from '../../../../core/react/devex/tabpanel';
-import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
 
 import { datatable } from '../../../../core/core.js';
@@ -33,7 +33,6 @@ export default class itemCard extends React.PureComponent
 {
     constructor(props)
     {
-        // console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
         this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
@@ -99,7 +98,6 @@ export default class itemCard extends React.PureComponent
         {
             this.init(); 
         }
-        // console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -232,7 +230,6 @@ export default class itemCard extends React.PureComponent
     }
     async getItem(pCode)
     {
-        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
         this.txtRef.value = Math.floor(Date.now() / 1000)
@@ -284,7 +281,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -299,7 +295,6 @@ export default class itemCard extends React.PureComponent
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
         this.itemGrpForOrginsValidCheck();   
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
     {
@@ -484,7 +479,6 @@ export default class itemCard extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitleInfo"))
         {
-            console.log(this.itemsObj.dt())
             await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
         }
         else if(e.itemData.title == this.t("tabTitleOtherShop"))
@@ -500,7 +494,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -522,11 +515,11 @@ export default class itemCard extends React.PureComponent
 
             if(tmpPrice > 0 && tmpFactor > 0)
             {
-                this.setState({underPrice: (tmpExVat / tmpFactor).toFixed(2) + " € HT / " + (tmpPrice / tmpFactor).toFixed(2) + " € TTC"});
+                this.setState({underPrice: (tmpExVat / tmpFactor).toFixed(2) + Number.money.sign + " HT / " + (tmpPrice / tmpFactor).toFixed(2) + Number.money.sign + " TTC"});
             }
             else
             {
-                this.setState({underPrice: "0 € HT / 0 € TTC" });
+                this.setState({underPrice: "0 " + Number.money.sign + " HT / 0 " + Number.money.sign + " TTC" });
             }
         }
     }
@@ -547,7 +540,7 @@ export default class itemCard extends React.PureComponent
                 this.itemsObj.itemPrice.dt()[i].VAT_EXT = this.itemsObj.itemPrice.dt()[i].PRICE
             }
 
-            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
+            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -559,7 +552,7 @@ export default class itemCard extends React.PureComponent
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
-            this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
+            this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -769,7 +762,6 @@ export default class itemCard extends React.PureComponent
                             {
                                 this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[e.rowIndex].CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
                                 this.txtCostPrice.value = e.data.CUSTOMER_PRICE
-                                console.log(e)
                                 let tmpQuery = 
                                 {
                                     query : "UPDATE ITEM_PRICE SET CHANGE_DATE = GETDATE() WHERE GUID =@PRICE_GUID ",
@@ -794,7 +786,6 @@ export default class itemCard extends React.PureComponent
         }
         if(e.column.dataField == "FACTOR")
         {
-            console.log(e)
             return (
                 <NdTextBox id={"txtGrdFactor"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -990,7 +981,6 @@ export default class itemCard extends React.PureComponent
                                             value : [this.itemsObj.dt()[0].GUID]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        console.log(tmpData)
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             let tmpConfObj =
@@ -1156,7 +1146,7 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-10 pe-0">                        
-                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} cols={2}>
+                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} rowHeight={42} margin={[2,2]} cols={2}>
                                 {/* txtRefLy */}
                                 <NdLayoutItem key={"txtRefLy"} id={"txtRefLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtRefLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1510,9 +1500,11 @@ export default class itemCard extends React.PureComponent
                                             {
                                                 id:'001',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
-                                                    this.popDescription.show()
+                                                    await this.popDescription.show()
+                                                    this.txtDescription.value = this.itemsObj.dt()[0].DESCRIPTION
+                                                    await this.grdLang.dataRefresh({source:this.itemsObj.itemLang.dt('ITEM_LANG')});
                                                 }
                                             }]}>
                                                 <Validator validationGroup={"frmItems" + this.tabIndex}>
@@ -1653,102 +1645,88 @@ export default class itemCard extends React.PureComponent
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} cols={10}>
+                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} rowHeight={30} cols={10}>
                                                 {/* txtCostPriceLy */}
                                                 <NdLayoutItem key={"txtCostPriceLy"} id={"txtCostPriceLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtCostPriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtTotalExtraCostLy */}
                                                 <NdLayoutItem key={"txtTotalExtraCostLy"} id={"txtTotalExtraCostLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtTotalExtraCostLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            format={"#,##0.000"} readOnly={true}
-                                                            param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        format={"#,##0.000"} readOnly={true}
+                                                        param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMinSalePriceLy */}
                                                 <NdLayoutItem key={"txtMinSalePriceLy"} id={"txtMinSalePriceLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMinSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        editable={this.state.isItemGrpForMinMaxAccess}
+                                                        param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMaxSalePriceLy */}
                                                 <NdLayoutItem key={"txtMaxSalePriceLy"} id={"txtMaxSalePriceLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMaxSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            editable={this.state.isItemGrpForMinMaxAccess}
-                                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
-                                                            access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
-                                                            </NdNumberBox>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        editable={this.state.isItemGrpForMinMaxAccess}
+                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
+                                                        access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
+                                                        </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastBuyPriceLy */}
                                                 <NdLayoutItem key={"txtLastBuyPriceLy"} id={"txtLastBuyPriceLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastBuyPriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
-                                                            format={"#,##0.000"} step={0.1}
-                                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
+                                                        format={"#,##0.000"} step={0.1}
+                                                        param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastSalePriceLy */}
                                                 <NdLayoutItem key={"txtLastSalePriceLy"} id={"txtLastSalePriceLy"} parent={this} data-grid={{x:5,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center">
-                                                            <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
-                                                            format={"#,##0.000"} step={0.1} readOnly={true}
-                                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
-                                                        </div>
+                                                    <div>
+                                                        <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
+                                                        format={"#,##0.000"} step={0.1} readOnly={true}
+                                                        param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* sellPriceAddLy */}
                                                 <NdLayoutItem key={"sellPriceAddLy"} id={"sellPriceAddLy"} parent={this} data-grid={{x:10,y:0,h:1,w:2}} access={this.access.filter({ELEMENT:'sellPriceAddLy',USERS:this.user.CODE})}>
-                                                    <div className="row ps-3">
-                                                        <div className="col-12 p-0 d-flex align-items-center d-flex justify-content-end">
-                                                            <Button icon="add"
-                                                            text={this.t("sellPriceAdd")}
-                                                            onClick={async()=>
-                                                            {   
-                                                                await this.popPrice.show();
+                                                    <div>
+                                                        <Button icon="add"
+                                                        text={this.t("sellPriceAdd")}
+                                                        onClick={async()=>
+                                                        {   
+                                                            await this.popPrice.show();
 
-                                                                this.cmbPopPriListNo.value = 1
-                                                                this.dtPopPriStartDate.value = "1970-01-01"
-                                                                this.dtPopPriEndDate.value = "1970-01-01"
-                                                                this.txtPopPriQuantity.value = 1
-                                                                this.txtPopPriPrice.value = 0
-                                                                this.txtPopPriHT.value = 0
-                                                                this.txtPopPriTTC.value = 0
-                                                                this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+                                                            this.cmbPopPriListNo.value = 1
+                                                            this.dtPopPriStartDate.value = "1970-01-01"
+                                                            this.dtPopPriEndDate.value = "1970-01-01"
+                                                            this.txtPopPriQuantity.value = 1
+                                                            this.txtPopPriPrice.value = 0
+                                                            this.txtPopPriHT.value = 0
+                                                            this.txtPopPriTTC.value = 0
+                                                            this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
-                                                                setTimeout(async () => 
-                                                                {
-                                                                this.txtPopPriPrice.focus()
-                                                                }, 600)
-                                                            }}/>
-                                                        </div>
+                                                            setTimeout(async () => 
+                                                            {
+                                                            this.txtPopPriPrice.focus()
+                                                            }, 600)
+                                                        }}/>
                                                     </div>
                                                 </NdLayoutItem>
                                             </NdLayout>
@@ -1836,7 +1814,6 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdated={async(e)=>
                                             {
-                                                console.log(e)
                                                 if(typeof e.data.PRICE != 'undefined')
                                                 {
                                                     if(e.key.LIST_VAT_TYPE == 0)
@@ -1880,11 +1857,11 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
-                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2079,7 +2056,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
                                                 <Column dataField="LUSER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} editCellRender={this._cellRoleRender}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={'€#,##0.000'}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={Number.money.sign + '#,##0.000'}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2100,8 +2077,8 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} width={247} />
                                                 <Column dataField="SHOP" caption={this.t("grdOtherShop.clmShop")}  width={247}/>
                                                 <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")}  width={247}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} width={247}/>
-                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={247}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}} width={247}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={247}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2124,7 +2101,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
                                                 <Column dataField="CDATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -2145,7 +2122,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
                                                 <Column dataField="CDATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2166,7 +2143,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
-                                                <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2188,8 +2165,8 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
                                                 <Column dataField="DESCRIPTION" caption={this.t("grdExtraCost.clmDescription")} />
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 €"}/>
-                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 €"}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 " + Number.money.sign}/>
+                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 " + Number.money.sign }/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2339,8 +2316,8 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")} />
-                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
                                                 <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} />
                                                 <Column dataField="NAME" caption={this.t("grdOtherShop.clmName")}  width={250}/>
@@ -2739,7 +2716,6 @@ export default class itemCard extends React.PureComponent
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
                                                 let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
-                                                console.log(tmpResult)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
                                                     this.popBarcode.hide(); 
@@ -2977,7 +2953,7 @@ export default class itemCard extends React.PureComponent
                                 </div>
                                 </Item>
                                 <Item >
-                                <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
+                                    <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
                                     onClick={async()=>
                                     {
                                         App.instance.setState({isExecute:true})
@@ -2996,7 +2972,6 @@ export default class itemCard extends React.PureComponent
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
-                                                    console.log(tmpData.result.recordset)
                                                     this.setState({dataSource:tmpData.result.recordset})
                                                 }
                                                 else
@@ -3040,12 +3015,10 @@ export default class itemCard extends React.PureComponent
                                                 let tmpFacData = await this.core.sql.execute(tmpFacQuery) 
                                                 if(tmpFacData.result.recordset.length > 0)
                                                 {
-                                                    console.log('asddsa3')
                                                     this.setState({dataSource:tmpFacData.result.recordset})
                                                 }
                                                 else
                                                 {
-                                                    console.log('asddsa4')
                                                     this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                                 }
                                             }
@@ -3069,15 +3042,12 @@ export default class itemCard extends React.PureComponent
                                                     this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                                 }
                                             }
-                                        }
-                                            
+                                        } 
                                         App.instance.setState({isExecute:false})
-
-                                       
                                     }}/>
                                 </Item>
-                                 {/* cmbAnlysType */}
-                                 <Item>
+                                {/* cmbAnlysType */}
+                                <Item>
                                     <Label text={this.t("cmbAnlysType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbAnlysType" height='fit-content'
                                     displayExpr="VALUE"                       
@@ -3194,17 +3164,55 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popDescription.title")}
                         container={"#root"} 
                         width={'800'}
-                        height={'500'}
+                        height={'470'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='300px'  dt={{data:this.itemsObj.dt('ITEMS'),field:"DESCRIPTION"}}
+                                    <div className='col-12'>
+                                        <Toolbar>
+                                            <Item location="after">
+                                                <Button icon="add"
+                                                onClick={async()=>
+                                                {                                                        
+                                                    await this.popItemLang.show();
+                                                }}/>
+                                            </Item>
+                                        </Toolbar>
+                                    </div>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdLang"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            onRowRemoving={async (e)=>
+                                            {
+                                            }}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                <Column dataField="ITEM_LANGUAGE" caption={this.t("grdLang.clmLang")} width={250} allowEditing={false}/>
+                                                <Column dataField="TRANSLATED_NAME" caption={this.t("grdLang.clmName")} allowEditing={false}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>    
+                                <Item>
+                                    <Label  text={this.t("popDescription.label")} alignment="right" />
+                                </Item>
+                                <Item>
+                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='100px' dt={{data:this.itemsObj.dt('ITEMS'),field:"DESCRIPTION"}}
                                     param={this.param.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
                                     />
-                                </Item>   
+                                </Item> 
+                                
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -3223,7 +3231,67 @@ export default class itemCard extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>    
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* URUN DILI POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popItemLang"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popItemLang.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popItemLang.cmbPopItemLanguage")} alignment="right" />
+                                    <div className="col-8 p-0">
+                                        <NdSelectBox simple={true} parent={this} id="cmbPopItemLanguage"
+                                        displayExpr="NAME"                       
+                                        valueExpr="CODE"
+                                        value=""
+                                        searchEnabled={true} showClearButton={true}
+                                        data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        >
+                                        </NdSelectBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popItemLang.cmbPopItemLangName")} alignment="right" />
+                                    <NdTextBox simple={true} parent={this} id="cmbPopItemLangName" value=""
+                                    data={{source:{select:{query : "SELECT TRANSLATED_NAME FROM ITEM_LANG"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemLang.empty};
+                                                
+                                                tmpEmpty.ITEM_LANGUAGE = this.cmbPopItemLanguage.value
+                                                tmpEmpty.TRANSLATED_NAME = this.cmbPopItemLangName.value
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                this.itemsObj.itemLang.addEmpty(tmpEmpty); 
+                                                this.popItemLang.hide();
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popItemLang.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div>

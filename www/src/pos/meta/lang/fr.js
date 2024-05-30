@@ -59,7 +59,7 @@ export const langFr =
     msgMaxQuantity :
     {
         title : "Attention",
-        msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
+        msg : "Vous ne pouvez pas entrer une quantité supérieure à 99.999 !",  // BAK
         btn01 : "OK",
     },
     msgPriceNotFound : 
@@ -338,8 +338,8 @@ export const langFr =
         }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
-    txtPopLastRefNoPholder : "Ref No",  // BAK
-    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
+    txtPopLastRefNoPholder : "N° Réf",
+    txtPopLastCustomerPholder : "Code Client",
     popLastTotal :  
     {
         title : "Dernier mode de règlement" ,
@@ -480,6 +480,10 @@ export const langFr =
     popCardPay :
     {
         title :"Paiement carte bancaire ",
+    },
+    popExchangePay :
+    {
+        title :"Paiement en Devises en Espèces",
     },
     popTotal :
     {
@@ -767,8 +771,8 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
-        txtPopCustomerTva : "No TVA",
-        txtPopCustomerSiret  :"Siret No",
+        txtPopCustomerTva : "N° TVA",
+        txtPopCustomerSiret  :"N° Siret",
         validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
@@ -925,5 +929,21 @@ export const langFr =
     {
         title: "Message de l'administrateur",
         btn01: "OK",
+    },
+    popUserList:
+    {
+        title: "Liste des utilisateurs",
+        clmCode: "Code",
+        clmName: "Nom"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous enregistrer les modifications apportées ?"
+        },
     },
 }

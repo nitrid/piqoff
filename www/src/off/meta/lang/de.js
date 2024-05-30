@@ -819,7 +819,19 @@ export const langDe =
         },
         popDescription :
         {
-            title : "Artikelbeschreibung"
+            title : "Produkt Sprache und Beschreibung",
+            label : "Produktbeschreibung"
+        },
+        grdLang : 
+        {
+            clmLang : "Sprache",
+            clmName : "Produktname",
+        },
+        popItemLang : 
+        {
+            title : "Produkt Sprache",
+            cmbPopItemLanguage : "Sprache",
+            cmbPopItemLangName : "Produktname",
         },
         grdAnalysis: 
         {
