@@ -5,6 +5,7 @@ import {datatable,param,access} from '../../core/core.js';
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 import { dialog } from '../../core/react/devex/dialog.js';
+import { i18n, loadLocaleResources } from './i18n';
 
 export default class Page extends React.PureComponent
 {
@@ -16,6 +17,8 @@ export default class Page extends React.PureComponent
 
     this.page = React.lazy(() => import("../pages/" + props.data.path).then(async (obj)=>
     {
+      //SAYFAYA AİT DİL DOSYASI OKUNUYOR.
+      await loadLocaleResources(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'), props.data.id);
       //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
       let tmpPrm = new param(prm);
       await tmpPrm.load({APP:'OFF'})

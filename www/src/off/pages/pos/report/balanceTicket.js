@@ -126,7 +126,7 @@ export default class itemSalesReport extends React.PureComponent
                 select : 
                 {
                     query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,TICKET_DATE,STATUS " +
-                    "FROM BALANCE_COUNTER_VW_01 WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) ORDER BY TICKET_NO ASC" ,
+                    "FROM BALANCE_COUNTER_VW_01 WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) AND TICKET_DATE <> '19700101' ORDER BY TICKET_NO ASC" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },

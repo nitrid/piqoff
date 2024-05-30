@@ -69,10 +69,8 @@ export default class purchaseOrder extends DocBase
     async init()
     {
         await super.init()
-
-        this.grdPurcOrders.devGrid.clearFilter("row")
-
-        this.dtDocDate.value = moment(new Date())
+        this.grid = this["grdPurcOrders"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -157,12 +155,12 @@ export default class purchaseOrder extends DocBase
                             this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
-                            this.grdPurcOrders.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdPurcOrders.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -217,12 +215,12 @@ export default class purchaseOrder extends DocBase
                                 this.combineControl = true
                                 this.combineNew = false
 
-                                this.grdPurcOrders.devGrid.beginUpdate()
+                                this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
-                                this.grdPurcOrders.devGrid.endUpdate()
+                                this.grid.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.show()
                         }
@@ -240,7 +238,7 @@ export default class purchaseOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcOrders.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -289,7 +287,7 @@ export default class purchaseOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcOrders.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -344,7 +342,7 @@ export default class purchaseOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcOrders.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -433,6 +431,7 @@ export default class purchaseOrder extends DocBase
                 tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                 tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocOrders.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 this.docObj.docOrders.addEmpty(tmpDocOrders)
                 pIndex = this.docObj.docOrders.dt().length - 1
             }
@@ -467,7 +466,7 @@ export default class purchaseOrder extends DocBase
                     let tmpCustomerBtn = ''
                     if(this.customerClear == true)
                     {
-                        await this.grdPurcOrders.devGrid.deleteRow(0)
+                        await this.grid.devGrid.deleteRow(0)
                         resolve()
                         return 
                     }
@@ -483,7 +482,7 @@ export default class purchaseOrder extends DocBase
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
-                            await this.grdPurcOrders.devGrid.deleteRow(0)
+                            await this.grid.devGrid.deleteRow(0)
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
@@ -766,7 +765,7 @@ export default class purchaseOrder extends DocBase
                                         }
                                         if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdPurcOrders.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -875,7 +874,7 @@ export default class purchaseOrder extends DocBase
 
                                             if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcOrders.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
 
                                             if((await this.docObj.save()) == 0)
@@ -1243,8 +1242,40 @@ export default class purchaseOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* txtBarcode */}
-                                 <Item>
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* dtShipmentDate */}
+                                <Item>
+                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtShipmentDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* txtBarcode */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1282,12 +1313,12 @@ export default class purchaseOrder extends DocBase
                                                             this.customerClear = false
                                                             this.combineControl = true
                                                             this.combineNew = false
-                                                            this.grdPurcOrders.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdPurcOrders.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                         await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     }
@@ -1358,12 +1389,12 @@ export default class purchaseOrder extends DocBase
                                                     }
                                                     else if(data.length > 1)
                                                     {
-                                                        this.grdPurcOrders.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcOrders.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                 }
                                             }
@@ -1375,23 +1406,6 @@ export default class purchaseOrder extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.checkRow()
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                             </Form>
                         </div>
                     </div>
@@ -1419,12 +1433,12 @@ export default class purchaseOrder extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdPurcOrders.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[0],null)
                                                         }
-                                                        this.grdPurcOrders.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1437,12 +1451,12 @@ export default class purchaseOrder extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdPurcOrders.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcOrders.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1467,7 +1481,7 @@ export default class purchaseOrder extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcOrders.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1484,7 +1498,7 @@ export default class purchaseOrder extends DocBase
                                 </Item>
                                 <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdPurcOrders"} 
+                                    <NdGrid parent={this} id={"grdPurcOrders"+this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1626,7 +1640,7 @@ export default class purchaseOrder extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+                                        await this["grdPurcOrders"+this.tabIndex].dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
                                     }}
                                     >
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOrders"}/>
@@ -1662,7 +1676,7 @@ export default class purchaseOrder extends DocBase
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdPurcOrders"
+                                    target={"#grdPurcOrders"+this.tabIndex} 
                                     onItemClick={(async(e)=>
                                     {
                                         if(e.itemData.text == this.t("getOffers"))

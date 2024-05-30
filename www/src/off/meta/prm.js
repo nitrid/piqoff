@@ -87,7 +87,7 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
-    //Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasında Eksi Miktar Girişi
     {
         TYPE : 0,
         ID :"negativeQuantityForPruchase",
@@ -451,6 +451,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Terazi Fiyat Çarpanı"
+        }
+    },
+    //Terazi Fiyat Çarpanı
+    {
+        TYPE : 0,
+        ID :"DocTrasportType",
+        VALUE :3,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Varsayılan Taşıma Kodu"
         }
     },
     //#endregion
@@ -1417,6 +1433,25 @@ export const prm =
             }
         }
     },
+    //txtGenre
+    {
+        TYPE : 1,
+        ID :"txtGenre",
+        VALUE : 
+        {
+            value : "11"
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtGenre",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Cinsi"
+        }
+    },
     //#endregion
     //#region Stok Liste
     {
@@ -1661,6 +1696,130 @@ export const prm =
                             [
                                 {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCustomerLastnameGrp"},
                                 {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCustomerLastnameVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //#endregion
+    //#region Fiyat Liste Tanımı
+    //txtNo
+    {
+        TYPE : 2,
+        ID :"txtNo",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmMain",
+                val : 
+                [
+                    {
+                        type : "required",
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_015",
+        ELEMENT : "txtNo",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Fiyat Liste Tanımları",
+            CAPTION : "No",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtNoValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtNoGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopNoVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //txtName
+    {
+        TYPE : 2,
+        ID :"txtName",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmMain",
+                val : 
+                [
+                    {
+                        type : "required",
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_015",
+        ELEMENT : "txtName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Fiyat Liste Tanımları",
+            CAPTION : "Adı",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtNameValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtNameGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopNameVal",
                                     form:
                                     {
                                         width:"800",
@@ -2637,7 +2796,7 @@ export const prm =
         ID :"cmbDepot1",
         VALUE : 
         {
-            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
@@ -2665,7 +2824,7 @@ export const prm =
         ID :"cmbDepot2",
         VALUE : 
         {
-            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
