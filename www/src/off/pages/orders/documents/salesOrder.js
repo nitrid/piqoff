@@ -65,7 +65,8 @@ export default class salesOrder extends DocBase
     {
         await super.init()
 
-        this.grdSlsOrder.devGrid.clearFilter("row")
+        this.grid = this["grdSlsOrder"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -153,12 +154,12 @@ export default class salesOrder extends DocBase
                             {
                                 this.combineControl = true
                                 this.combineNew = false
-                                this.grdSlsOrder.devGrid.beginUpdate()
+                                this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++)
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
-                                this.grdSlsOrder.devGrid.endUpdate()
+                                this.grid.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -210,12 +211,12 @@ export default class salesOrder extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
 
-                                    this.grdSlsOrder.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdSlsOrder.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -234,7 +235,7 @@ export default class salesOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOrder.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -284,7 +285,7 @@ export default class salesOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOrder.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -339,7 +340,7 @@ export default class salesOrder extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOrder.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -637,13 +638,13 @@ export default class salesOrder extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.grdSlsOrder.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
             this.popMultiItem.hide()
         }
-        this.grdSlsOrder.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     async getOffers()
     {
@@ -709,7 +710,7 @@ export default class salesOrder extends DocBase
                                         }
                                         if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsOrder.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -821,7 +822,7 @@ export default class salesOrder extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsOrder.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1229,6 +1230,38 @@ export default class salesOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* dtShipmentDate */}
+                                <Item>
+                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtShipmentDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text = {this.t("txtBarcode")} alignment="right" />
@@ -1269,12 +1302,12 @@ export default class salesOrder extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false 
         
-                                                            this.grdSlsOrder.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsOrder.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                         await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     }
@@ -1338,12 +1371,12 @@ export default class salesOrder extends DocBase
                                                     this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                     this.txtBarcode.focus()
                                                     
-                                                    this.grdSlsOrder.devGrid.beginUpdate()
+                                                    this.grid.devGrid.beginUpdate()
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
                                                         await this.addItem(data[i],null)
                                                     }
-                                                    this.grdSlsOrder.devGrid.endUpdate()  
+                                                    this.grid.devGrid.endUpdate()  
                                                 }
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
@@ -1355,23 +1388,6 @@ export default class salesOrder extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.checkRow()
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                             </Form>
                         </div>
                     </div>
@@ -1397,12 +1413,12 @@ export default class salesOrder extends DocBase
                                                     {
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdSlsOrder.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsOrder.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1414,12 +1430,12 @@ export default class salesOrder extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdSlsOrder.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsOrder.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1463,7 +1479,7 @@ export default class salesOrder extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdSlsOrder"} 
+                                        <NdGrid parent={this} id={"grdSlsOrder"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -1482,7 +1498,7 @@ export default class salesOrder extends DocBase
                                             if(e.isEditing == true)
                                             {
                                                 e.rowElement.style.backgroundColor = "#b1cbbb"
-                                                this.grdSlsOrder.devGrid.selectRowsByIndexes(e.rowIndex)
+                                                this.grid.devGrid.selectRowsByIndexes(e.rowIndex)
                                             }
                                             else
                                             {
@@ -1651,7 +1667,7 @@ export default class salesOrder extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+                                            await this["grdSlsOrder"+this.tabIndex].dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrder"}/>
@@ -1683,7 +1699,7 @@ export default class salesOrder extends DocBase
                                             <Column dataField="OFFER_REF" caption={this.t("grdSlsOrder.clmOffer")} width={100}  headerFilter={{visible:true}} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsOrder.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                         </NdGrid>
-                                        <ContextMenu dataSource={this.rightItems} width={200} target="#grdSlsOrder"
+                                        <ContextMenu dataSource={this.rightItems} width={200} target={"grdSlsOrder"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getOffers"))

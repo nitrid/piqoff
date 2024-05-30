@@ -155,7 +155,7 @@ export default class customerBalanceReport extends React.PureComponent
                         "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE  " +
                         "FROM DOC_CUSTOMER_VW_01  " +
                         "WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)  " +
-                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  " ,
+                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  ORDER BY DOC_DATE ASC" ,
                         param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate]
                     },

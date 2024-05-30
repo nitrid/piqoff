@@ -37,6 +37,7 @@ export default class itemPricingListCard extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         await this.init()
+        console.log(this.param.filter({ELEMENT:'txtNo',USERS:this.user.CODE}))
     }
     async init()
     {
@@ -171,9 +172,10 @@ export default class itemPricingListCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmMain"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmMain" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(e.validationGroup.validate().status)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -267,7 +269,7 @@ export default class itemPricingListCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmMain">
+                            <Form colCount={2} id={"frmMain" + this.tabIndex}>
                                 {/* txtNo */}
                                 <Item>
                                     <Label text={this.t("txtNo")} alignment="right" />
@@ -305,7 +307,7 @@ export default class itemPricingListCard extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtNo',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmMain"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validCode")} />
+                                            <RequiredRule/>
                                         </Validator>  
                                     </NdTextBox>
                                     {/* LISTE SECIMI POPUP */}
@@ -326,10 +328,23 @@ export default class itemPricingListCard extends React.PureComponent
                                 {/* txtName */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.itemPricingListObj.dt(),field:"NAME"}}
+                                    <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.itemPricingListObj.dt(),field:"NAME"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmMain"  + this.tabIndex}>
+                                            <RequiredRule />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                {/* txtTag */}
+                                <Item>
+                                    <Label text={this.t("txtTag")} alignment="right" />
+                                    <NdTextBox id="txtTag" parent={this} simple={true} dt={{data:this.itemPricingListObj.dt(),field:"TAG"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    param={this.param.filter({ELEMENT:'txtTag',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtTag',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item>

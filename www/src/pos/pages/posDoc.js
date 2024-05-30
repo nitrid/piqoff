@@ -32,6 +32,7 @@ import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 import NdAccessEdit from '../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
@@ -88,7 +89,8 @@ export default class posDoc extends React.PureComponent
             date:"00.00.0000",
             isPluEdit:false,
             isConnected:this.core.offline ? false : true,
-            isFormation:false
+            isFormation:false,
+            keyboardVisibility: false // État initial pour la visibilité du clavier
         }   
         
         document.onkeydown = (e) =>
@@ -340,6 +342,13 @@ export default class posDoc extends React.PureComponent
     {
         this.init();
     }
+    toggleKeyboardVisibility()
+    {
+        this.setState(prevState => (
+        {
+            keyboardVisibility: !prevState.keyboardVisibility
+        }));
+    }
     async init()
     {
         this.loadingPay.current.instance.show()
@@ -370,29 +379,46 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-
-            this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+            
+            if(this.posDevice.dt().length > 0)
             {
-                this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-                this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
+                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
+                {
+                    this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+                    this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+                }
+                else
+                {
+                    if(this.core.util.isElectron())
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                        }
+                        
+                        await dialog(tmpConfObj);
+                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
             }
             else
             {
-                if(this.core.util.isElectron())
+                let tmpConfObj =
                 {
-                    let tmpConfObj =
-                    {
-                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
-                    }
-                    
-                    await dialog(tmpConfObj);
-                    
-                    this.core.auth.logout()
-                    window.location.reload()
+                    id:'msgDeviceLoadFailed',showTitle:true,title:this.lang.t("msgDeviceLoadFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgDeviceLoadFailed.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceLoadFailed.msg")}</div>)
                 }
+                
+                await dialog(tmpConfObj);
+
+                this.core.auth.logout()
+                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -401,33 +427,33 @@ export default class posDoc extends React.PureComponent
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
         //*********************************************************/
-         //** CHEQ GETIR ********************************************/
-         this.cheqDt.selectCmd = 
-         {
-             query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
-             param : ['DOC:string|50'], 
-             value : [this.posObj.dt()[0].GUID],
-             local : 
-             {
-                 type : "select",
-                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
-                 values : [this.posObj.dt()[0].GUID]
-             }
-         }
-         this.cheqDt.deleteCmd = 
-         {
-             query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
-             param : ['PGUID:string|50','PDOC:string|50'], 
-             dataprm : ['GUID','DOC'],
-             local : 
-             {
-                 type : "delete",
-                 query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
-                 values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
-             }
-         }
-         await this.cheqDt.refresh();  
-         //******************************************************** */
+        //** CHEQ GETIR ********************************************/
+        this.cheqDt.selectCmd = 
+        {
+            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+            param : ['DOC:string|50'], 
+            value : [this.posObj.dt()[0].GUID],
+            local : 
+            {
+                type : "select",
+                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                values : [this.posObj.dt()[0].GUID]
+            }
+        }
+        this.cheqDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+            param : ['PGUID:string|50','PDOC:string|50'], 
+            dataprm : ['GUID','DOC'],
+            local : 
+            {
+                type : "delete",
+                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
+            }
+        }
+        await this.cheqDt.refresh();  
+        //******************************************************** */
         if(!this.isFirstOpen)
         {
             //********************************************************* */
@@ -672,6 +698,11 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
+            {
+                resolve([])
+                return
+            } 
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
@@ -743,11 +774,10 @@ export default class posDoc extends React.PureComponent
 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0          
-        if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
-        {
-           return
-        }      
+        let tmpPrice = 0
+        let tmpPriceListNo = this.pricingListNo
+        let tmpPriceListName = ""
+        let tmpPriceListTag = ""
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -756,6 +786,10 @@ export default class posDoc extends React.PureComponent
             return
         }
         if(pCode.substring(0,1) == 'F')
+        {
+            pCode = pCode.substring(1,pCode.length)
+        }
+        if(pCode.substring(0,1) == '#')
         {
             pCode = pCode.substring(1,pCode.length)
         }
@@ -773,7 +807,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1,TAX_NO,SIRET_ID, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
@@ -823,6 +857,8 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
+                this.posObj.dt()[0].CUSTOMER_TAX_NO = tmpCustomerDt[0].TAX_NO
+                this.posObj.dt()[0].CUSTOMER_SIRET = tmpCustomerDt[0].SIRET_ID
 
                 if(this.prmObj.filter({ID:'mailControl',TYPE:0}).getValue() == true)
                 {
@@ -955,11 +991,28 @@ export default class posDoc extends React.PureComponent
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
             //*********************************************************/
+            //BİRDEN FAZLA FİYAT LİSTESİ VARSA LİSTE SEÇİMİ SORULUYOR
+            if(this.prmObj.filter({ID:'PricingListNoChoice',TYPE:0}).getValue())
+            {
+                let tmpPriceChoice = await this.priceListChoice(tmpItemsDt[0].GUID)
+                if(tmpPriceChoice == -1)
+                {
+                    this.loading.current.instance.hide()
+                    return;
+                }
+                else
+                {
+                    tmpPriceListNo = tmpPriceChoice
+                }
+            }
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                        "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
+                        "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
+                        "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int','GUID1:string|50'],
                 local : 
                 {
@@ -969,12 +1022,14 @@ export default class posDoc extends React.PureComponent
                     values : [tmpItemsDt[0].GUID]
                 }
             }
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,this.pricingListNo,tmpItemsDt[0].GUID]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,tmpPriceListNo,tmpItemsDt[0].GUID]
             await tmpPriceDt.refresh();  
             
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
+                tmpPriceListName = tmpPriceDt[0].LIST_NAME
+                tmpPriceListTag = tmpPriceDt[0].LIST_TAG
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
@@ -1067,14 +1122,52 @@ export default class posDoc extends React.PureComponent
                 else
                 {   
                     //EĞER OKUTULAN BARKODUN FİYAT SIFIR İSE KULLANICIYA FİYAT 
-                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0,undefined,tmpItemsDt[0].NAME)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
                             
-                            return
+                            if(typeof tmpWResult.Result == 'undefined')
+                            {
+                                tmpItemsDt[0].SCALE_MANUEL = true;
+                                tmpQuantity = tmpWResult;
+                            }
+                            else
+                            {
+                                if(tmpWResult.Type == "02")
+                                {
+                                    if(tmpWResult.Result.Scale > 0)
+                                    {
+                                        tmpQuantity = tmpWResult.Result.Scale
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play();
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                            }
                         }
 
                         tmpPrice = tmpResult
@@ -1082,7 +1175,45 @@ export default class posDoc extends React.PureComponent
                         let tmpWResult = await this.getWeighing(tmpPrice)
                         if(typeof tmpWResult != 'undefined')
                         {
-                            tmpQuantity = tmpWResult
+                            if(typeof tmpWResult.Result == 'undefined')
+                            {
+                                tmpItemsDt[0].SCALE_MANUEL = true;
+                                tmpQuantity = tmpWResult;
+                            }
+                            else
+                            {
+                                if(tmpWResult.Type == "02")
+                                {
+                                    if(tmpWResult.Result.Scale > 0)
+                                    {
+                                        tmpQuantity = tmpWResult.Result.Scale
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play();
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                            }
                         }
                         else
                         {
@@ -1103,21 +1234,27 @@ export default class posDoc extends React.PureComponent
             if(tmpPrice == 0)
             {
                 this.loading.current.instance.hide()
-                let tmpConfObj =
+
+                let tmpMsgResult = "btn01"
+                if(this.prmObj.filter({ID:'PriceNotFoundAlert',TYPE:0}).getValue())
                 {
-                    id:'msgPriceNotFound',
-                    showTitle:true,
-                    title:this.lang.t("msgPriceNotFound.title"),
-                    showCloseButton:false,
-                    width:'500px',
-                    height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgPriceNotFound.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceNotFound.btn02"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotFound.msg")}</div>)
+                    let tmpConfObj =
+                    {
+                        id:'msgPriceNotFound',
+                        showTitle:true,
+                        title:this.lang.t("msgPriceNotFound.title"),
+                        showCloseButton:false,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPriceNotFound.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceNotFound.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotFound.msg")}</div>)
+                    }
+                    tmpMsgResult = await dialog(tmpConfObj);
                 }
-                let tmpMsgResult = await dialog(tmpConfObj);
+                
                 if(tmpMsgResult == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0,undefined,tmpItemsDt[0].NAME)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult == 0)
@@ -1135,19 +1272,20 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
-                        //
                         return
                     }
                 }
                 else if(tmpMsgResult == 'btn02')
                 {
-                    //
                     return
                 }
             }
             //*****************************************************/
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
+            tmpItemsDt[0].LIST_NO = tmpPriceListNo
+            tmpItemsDt[0].LIST_NAME = tmpPriceListName
+            tmpItemsDt[0].LIST_TAG = tmpPriceListTag
             this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
@@ -1178,7 +1316,7 @@ export default class posDoc extends React.PureComponent
             {
                 if(e == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult <= 0)
@@ -1197,7 +1335,7 @@ export default class posDoc extends React.PureComponent
                             await dialog(tmpConfObj);
                             resolve()
                         }
-                        else if(tmpResult >= 100)
+                        else if(tmpResult >= 1000)
                         {
                             let tmpConfObj =
                             {
@@ -1245,7 +1383,7 @@ export default class posDoc extends React.PureComponent
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
         
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
-        {            
+        {               
             return {barcode:pBarcode}
         }
         //201234012550 0211234012550
@@ -1262,15 +1400,19 @@ export default class posDoc extends React.PureComponent
                 let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpCode = pBarcode.substring(tmpPrm[i].indexOf('N'),tmpPrm[i].lastIndexOf('N') + 1)
 
                 let tmpSumFlag = ""
+                let tmpSum = ""
                 if(tmpPrm[i].indexOf('F') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 else if(tmpPrm[i].indexOf('E') > -1)
                 {
                     tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                    tmpSum = pBarcode.substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
                 }
                 
                 let tmpFactory = 1
@@ -1279,8 +1421,11 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
+                let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+
                 return {
-                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    barcode : tmpBarkod,
+                    code : tmpCode,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
@@ -1452,43 +1597,80 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
+                //SATIŞ KAPANIYOR İSE REF NO VE İMZA BOŞ MU KONTROLÜ YAPILIYOR.
+                if(typeof this.posObj.dt()[0].STATUS != 'undefined' && this.posObj.dt()[0].STATUS != null && this.posObj.dt()[0].STATUS == 1)
+                {
+                    if(typeof this.posObj.dt()[0].REF == 'undefined' || this.posObj.dt()[0].REF == null || this.posObj.dt()[0].REF == 0)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg1")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                    if(typeof this.posObj.dt()[0].SIGNATURE == 'undefined' || this.posObj.dt()[0].SIGNATURE == null || this.posObj.dt()[0].SIGNATURE == '')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg2")}</div>)
+                        }
+                        await dialog(tmpConfObj)
+                        window.location.reload()
+
+                        resolve(false)
+                        return
+                    }
+                }
+                //**************************************************************** */
+                
                 let tmpSaveResult = await this.posObj.save()
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
                     {
-                        if(!this.core.offline)
-                        {
-                            //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
-                            let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
-                            if(tmpCheckResult == false)
-                            {
-                                this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
-                                //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
-                                let tmpConfObj =
-                                {
-                                    id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj)
-                                window.location.reload()
-                                resolve(false)
-                                return
-                            }
-                            else
-                            {
-                                this.saleCloseSucces()
-                                resolve(true)
-                                return
-                            }
-                        }
-                        else
-                        {
-                            this.saleCloseSucces()
-                            resolve(true)
-                            return
-                        }
+                        this.saleCloseSucces()
+                        resolve(true)
+                        return
+                        // if(!this.core.offline)
+                        // {
+                        //     //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        //     let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        //     if(tmpCheckResult == false)
+                        //     {
+                        //         this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                        //         //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                        //         let tmpConfObj =
+                        //         {
+                        //             id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                        //             button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                        //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                        //         }
+                        //         await dialog(tmpConfObj)
+                        //         window.location.reload()
+                        //         resolve(false)
+                        //         return
+                        //     }
+                        //     else
+                        //     {
+                        //         this.saleCloseSucces()
+                        //         resolve(true)
+                        //         return
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     this.saleCloseSucces()
+                        //     resolve(true)
+                        //     return
+                        // }
                     } 
                 }
                 else
@@ -1498,16 +1680,11 @@ export default class posDoc extends React.PureComponent
                     let tmpConfObj =
                     {
                         id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSaveFailAlert.btn02"),location:'after'}],
+                        button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
                     }
                     await dialog(tmpConfObj)
                     window.location.reload()
-                    // if((await dialog(tmpConfObj)) == 'btn02')
-                    // {
-                    //     this.core.util.writeLog("calcGrandTotal : 04")
-                    //     await this.calcGrandTotal()
-                    // }
                     resolve(false)
                     return
                 }
@@ -1607,7 +1784,10 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = pItemData.UNIT_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_SHORT = pItemData.UNIT_SHORT
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR,
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NO = pItemData.LIST_NO
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NAME = pItemData.LIST_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_TAG = pItemData.LIST_TAG
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = pItemData.QUANTITY
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = tmpCalc.FAMOUNT
@@ -1641,7 +1821,10 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                        "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
+                        "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
+                        "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
                 local : 
                 {
@@ -1650,7 +1833,7 @@ export default class posDoc extends React.PureComponent
                     values : [pRowData.ITEM_GUID]
                 }
             }     
-            tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID,pRowData.DEPOT_GUID,this.pricingListNo]
+            tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID,pRowData.DEPOT_GUID,pRowData.LIST_NO]
             await tmpPriceDt.refresh();  
     
             pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
@@ -1717,7 +1900,7 @@ export default class posDoc extends React.PureComponent
                 }
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
-
+                                
                 //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
                 if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
                 {
@@ -1974,14 +2157,6 @@ export default class posDoc extends React.PureComponent
                     await this.posDevice.caseOpen();
                 }
                 //***************************************************/
-                //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                // if (!this.core.offline)
-                // {
-                //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                //     {
-                //         Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
-                //     }
-                // }
                 resolve(true)
             }
             else
@@ -2783,6 +2958,7 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        console.log(pType)
         // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
         this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
@@ -2824,12 +3000,16 @@ export default class posDoc extends React.PureComponent
                         this.mailPopup._onClick()
                         tmpMail = this.txtMail.value
                     }
-
-                    await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
-                    await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 resolve()
             })
@@ -2912,11 +3092,10 @@ export default class posDoc extends React.PureComponent
                     //MIKTAR KRITERLİ
                     if(tmpCond.length > 0 && tmpCond[0].QUANTITY > 0)
                     {
-                        
                         if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
                         {
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond.sum('QUANTITY'))
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
                             tmpResult[tmpResult.length - 1].WITHAL = true
                             tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
@@ -2929,7 +3108,7 @@ export default class posDoc extends React.PureComponent
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
                             let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('AMOUNT') / tmpCond[0].AMOUNT)
                             tmpResult[tmpResult.length - 1].WITHAL = true
-                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
+                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount == 0 ? 1 : tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
                         }
                     }
@@ -3001,6 +3180,7 @@ export default class posDoc extends React.PureComponent
             if(tmpIsCond.result)
             {
                 let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
+                
                 tmpWithal.forEach((withal)=>
                 {
                     let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
@@ -3009,6 +3189,15 @@ export default class posDoc extends React.PureComponent
                     {
                         tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {
+                            //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
+                            //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
+                            // let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            // let tmpQty = itemSale.QUANTITY
+                            // if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            // {
+                            //     tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            // }
+                            
                             let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
@@ -3084,6 +3273,15 @@ export default class posDoc extends React.PureComponent
                     {
                         tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {
+                            //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
+                            //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
+                            // let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            // let tmpQty = itemSale.QUANTITY
+                            // if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            // {
+                            //     tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            // }
+
                             let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * itemSale.QUANTITY)
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
@@ -3110,10 +3308,11 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 type : "insert",
-                query : `INSERT INTO NF525_JET (CUSER, CDATE, CODE, NAME, DESCRIPTION, APP_VERSION)
-                        VALUES (?, ?, ?, ?, ?, ?);`,
-                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),typeof pData.CODE != 'undefined' ? pData.CODE : '',
-                          typeof pData.NAME != 'undefined' ? pData.NAME : '',typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
+                query : `INSERT INTO NF525_JET (CUSER, CDATE, DEVICE, CODE, NAME, DESCRIPTION, APP_VERSION)
+                        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+                          typeof pData.CODE != 'undefined' ? pData.CODE : '',typeof pData.NAME != 'undefined' ? pData.NAME + ' (Data offline)' : '',
+                          typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
             }
             await this.core.local.insert(tmpQuery)
         }
@@ -3308,7 +3507,6 @@ export default class posDoc extends React.PureComponent
                     {
                         this.txtMail.value = ""
                     }
-
                     this.mailPopup.tmpData = tmpData;
                     await this.mailPopup.show()
                     return
@@ -3334,7 +3532,7 @@ export default class posDoc extends React.PureComponent
             let tmpSaleDt = new datatable()
             tmpSaleDt.selectCmd = 
             {
-                query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+                query : "SELECT *,CASE TYPE WHEN 0 THEN VAT WHEN 1 THEN (VAT * -1) END AS PVAT,CASE TYPE WHEN 0 THEN FAMOUNT WHEN 1 THEN (FAMOUNT * -1) END AS PFAMOUNT,CASE TYPE WHEN 0 THEN TOTAL WHEN 1 THEN (TOTAL * -1) END AS PTOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
@@ -3343,7 +3541,7 @@ export default class posDoc extends React.PureComponent
             let tmpPayDt = new datatable()
             tmpPayDt.selectCmd = 
             {
-                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+                query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) - ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS REBATE WHERE TYPE = 1 AND REBATE.DOC_DATE = POS_PAYMENT_VW_01.DOC_DATE AND REBATE.DEVICE = POS_PAYMENT_VW_01.DEVICE AND REBATE.PAY_TYPE = POS_PAYMENT_VW_01.PAY_TYPE),0) AS AMOUNT FROM POS_PAYMENT_VW_01  WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE AND TYPE = 0 GROUP BY DEVICE,PAY_TYPE_NAME,PAY_TYPE,DOC_DATE ORDER BY PAY_TYPE ASC" ,
                 param : ['DEVICE:string|10','DOC_DATE:date'],
                 value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
             }
@@ -3461,10 +3659,54 @@ export default class posDoc extends React.PureComponent
         }
         return false
     }
+    priceListChoice(pItem)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpDt = new datatable()
+            tmpDt.selectCmd = 
+            {
+                query : "SELECT LIST_NO,LIST_NAME,PRICE,ITEM_NAME,LIST_TAG FROM ITEM_PRICE_VW_01 WHERE TYPE = 0 AND ITEM_GUID = @ITEM",
+                param : ['ITEM:string|50'],
+                value : [pItem]
+            }
+
+            await tmpDt.refresh(); 
+            
+            if(tmpDt.length > 1)
+            {
+                this.priceListChoicePopUp.onClick = (data) =>
+                {
+                    if(data.length > 0)
+                    {
+                        resolve(data[0].LIST_NO)
+                    }
+                    else
+                    {
+                        resolve(-1)
+                    }
+                }
+                this.priceListChoicePopUp.onHiding = ()=>
+                {
+                    resolve(-1)
+                }
+                await this.priceListChoicePopUp.show()
+                await this.priceListChoicePopUp.setData(tmpDt)
+            }
+            else if(tmpDt.length == 1)
+            {
+                resolve(tmpDt[0].LIST_NO)
+            }
+            else
+            {
+                resolve(0)
+            }
+        })
+    }
     render()
     {
         return(
-            <div>
+            <div style={{overflowX:'hidden'}}>
                 {/* Ekranda belirli bir süre boş beklediğinde logout olması için yapıldı */}
                 <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
                 onIdle={()=>
@@ -3593,6 +3835,8 @@ export default class posDoc extends React.PureComponent
                                                 this.posObj.dt()[0].CUSTOMER_POINT = 0
                                                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = false
                                                 this.posObj.dt()[0].CUSTOMER_MAIL = ''
+                                                this.posObj.dt()[0].CUSTOMER_TAX_NO = ''
+                                                this.posObj.dt()[0].CUSTOMER_SIRET = ''
 
                                                 this.btnPopLoyaltyDel.props.onClick()
 
@@ -3830,7 +4074,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                             {                                
-                                                let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.data.UNIT_FACTOR))
+                                                let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.data.UNIT_FACTOR),undefined,e.data.ITEM_NAME)
                                                 if(typeof tmpResult != 'undefined' && tmpResult != '')
                                                 {
                                                     if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -3845,7 +4089,7 @@ export default class posDoc extends React.PureComponent
                                                         return
                                                     }
 
-                                                    if(tmpResult >= 100)
+                                                    if(tmpResult >= 1000)
                                                     {
                                                         let tmpConfObj =
                                                         {
@@ -3877,7 +4121,7 @@ export default class posDoc extends React.PureComponent
                                     >
                                         <Editing confirmDelete={false}/>
                                         <Scrolling mode="standard" />
-                                        <Paging defaultPageSize={20} />
+                                        <Paging defaultPageSize={9} />
                                         <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                         <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                         {
@@ -4640,7 +4884,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"pluBtnGrpLy"} id={"pluBtnGrpLy"} parent={this} data-grid={{x:40,y:3,h:82,w:30,minH:10,maxH:200,minW:30,maxW:30}} style={{margin:'-4px'}}
                             access={this.acsObj.filter({ELEMENT:'pluBtnGrpLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} 
+                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                                     onSelection={(pItem,pQuantity)=>
                                     {
                                         if(this.txtBarcode.value != '')
@@ -4967,35 +5211,6 @@ export default class posDoc extends React.PureComponent
                                                 this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%"})
                                             }
                                         }
-                                        
-                                        if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-                                        { 
-                                            let tmpQuery = 
-                                            {
-                                                query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
-                                                param:  ['GUID:string|50'],
-                                                value:  [this.posObj.dt()[0].CUSTOMER_GUID]
-                                            }
-                                            let tmpMailData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpMailData.result.recordset.length > 0)
-                                            {
-                                                this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
-                                            }
-                                            else
-                                            {
-                                                this.txtMail.value = ""
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.txtMail.value = ""
-                                        }
-
-                                        this.mailPopup.tmpData = tmpData;
-                                        await this.mailPopup.show()
-                                        return
-                                        
-                                        
                                     }}>
                                         <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5193,7 +5408,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row pt-2">
                                     {/* Payment Type Selection */}
                                     <div className="col-2 pe-1">
-                                        <NbRadioButton id={"rbtnPayType"} parent={this} 
+                                        <NbRadioButton id={"rbtnPayType"} parent={this} height={'99%'} width={'100%'}
                                         button={
                                             (()=>
                                             {
@@ -5254,7 +5469,83 @@ export default class posDoc extends React.PureComponent
                                                 <NdTextBox id="txtPopTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
                                                 </NdTextBox> 
                                             </div>
-                                        </div>                                        
+                                        </div> 
+                                        <div className="row pt-2">
+                                            {/* Number Board */}
+                                            <div className="col-9">
+                                                <NbNumberboard id={"numPopTotal"} parent={this} textobj="txtPopTotal" span={1} buttonHeight={"60px"}/>
+                                            </div>
+                                            <div className="col-3">
+                                                <div className="row">
+                                                    {/* Line Delete */}
+                                                    <div className="col-12 ps-0 pb-1">
+                                                        <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>
+                                                        {
+                                                            if(this.grdPay.devGrid.getSelectedRowKeys().length > 0)
+                                                            {
+                                                                this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
+                                                            }
+                                                        }}>
+                                                        {this.lang.t("lineDelete")}
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    {/* T.R Detail */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={async ()=>
+                                                        {
+                                                            if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                            {
+                                                                let tmpDt = new datatable(); 
+                                                                tmpDt.selectCmd = 
+                                                                {
+                                                                    query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                                    param : ['DOC:string|50'],
+                                                                    local : 
+                                                                    {
+                                                                        type : "select",
+                                                                        query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT;",
+                                                                        values : [this.posObj.dt()[0].GUID]
+                                                                    }
+                                                                }
+                                                                tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
+                                                                await tmpDt.refresh();
+                                                                
+                                                                await this.grdTRDetail.dataRefresh({source:tmpDt});
+                                                                this.popTRDetail.show()
+                                                            }
+                                                        }}>
+                                                            {this.lang.t("trDeatil")}
+                                                        </NbButton>
+                                                    </div>                                                    
+                                                </div>
+                                                <div className="row">
+                                                    {/* Cancel */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>{this.popTotal.hide()}}>
+                                                            {this.lang.t("cancel")}
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    {/* Okey */}
+                                                    <div className="col-12 ps-0 py-1">
+                                                        <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                                        onClick={()=>
+                                                        {
+                                                            this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
+                                                            this.txtPopTotal.newStart = true;
+                                                        }}>
+                                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                                        </NbButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>            
                                     </div>
                                     {/* Cash Button Group */}
                                     <div className="col-3">
@@ -5282,101 +5573,33 @@ export default class posDoc extends React.PureComponent
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="row pt-1">
-                                    {/* Number Board */}
-                                    <div className="col-6">
-                                        <NbNumberboard id={"numPopTotal"} parent={this} textobj="txtPopTotal" span={1} buttonHeight={"60px"}/>
-                                    </div>
-                                    <div className="col-6">
-                                        <div className="row pb-1">
-                                            {/* T.R Detail */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={async ()=>
-                                                {
-                                                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                                                    {
-                                                        let tmpDt = new datatable(); 
-                                                        tmpDt.selectCmd = 
-                                                        {
-                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
-                                                            param : ['DOC:string|50'],
-                                                            local : 
-                                                            {
-                                                                type : "select",
-                                                                query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT;",
-                                                                values : [this.posObj.dt()[0].GUID]
-                                                            }
-                                                        }
-                                                        tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
-                                                        await tmpDt.refresh();
-                                                        
-                                                        await this.grdTRDetail.dataRefresh({source:tmpDt});
-                                                        this.popTRDetail.show()
-                                                    }
-                                                }}>
-                                                    {this.lang.t("trDeatil")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 10 € */}
-                                            <div className="col-6">
+                                        {/* 10 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash10"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
+                                        {/* 20 € */}
                                         <div className="row py-1">
-                                            {/* Line Delete */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
-                                                {
-                                                    if(this.grdPay.devGrid.getSelectedRowKeys().length > 0)
-                                                    {
-                                                        this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
-                                                    }
-                                                }}>
-                                                   {this.lang.t("lineDelete")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 20 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash20"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
+                                        {/* 50 € */}
                                         <div className="row py-1">
-                                            {/* Cancel */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>{this.popTotal.hide()}}>
-                                                    {this.lang.t("cancel")}
-                                                </NbButton>
-                                            </div>
-                                            {/* 50 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash50"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
+                                        {/* 100 € */}
                                         <div className="row py-1">
-                                            {/* Okey */}
-                                            <div className="col-6">
-                                                <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
-                                                {
-                                                    this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
-                                                    this.txtPopTotal.newStart = true;
-                                                }}>
-                                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                                </NbButton>
-                                            </div>
-                                            {/* 100 € */}
-                                            <div className="col-6">
+                                            <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash100"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,100)}}/>
@@ -5680,11 +5903,12 @@ export default class posDoc extends React.PureComponent
                 {/* Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL, " +
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL,TAX_NO,SIRET_ID, " +
                                     "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
@@ -5736,6 +5960,9 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
                             this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                             this.posObj.dt()[0].CUSTOMER_MAIL = pData[0].EMAIL
+                            this.posObj.dt()[0].CUSTOMER_TAX_NO = pData[0].TAX_NO
+                            this.posObj.dt()[0].CUSTOMER_SIRET = pData[0].SIRET_ID
+
                             //PROMOSYON GETİR.
                             await this.getPromoDb()
                             this.promoApply()
@@ -5753,6 +5980,7 @@ export default class posDoc extends React.PureComponent
                 {/* Item List Popup */}
                 <div>
                     <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}  selectAll={true}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -6241,6 +6469,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(this.grdDiscList.getSelectedData().length > 0)
                                     {
+                                        let tmpDescResult = await this.popDiscountDesc.show()
+                                        
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())
     
@@ -6288,6 +6518,11 @@ export default class posDoc extends React.PureComponent
                                         }
                                         this.core.util.writeLog("calcGrandTotal : 16")
                                         await this.calcGrandTotal();
+
+                                        if(typeof tmpDescResult != 'undefined')
+                                        {
+                                            await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
+                                        }
                                     }
                                     else
                                     {
@@ -6309,6 +6544,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(this.grdDiscList.getSelectedData().length > 0)
                                     {
+                                        let tmpDescResult = await this.popDiscountDesc.show()
+                                        
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
@@ -6357,6 +6594,11 @@ export default class posDoc extends React.PureComponent
                                         }
                                         this.core.util.writeLog("calcGrandTotal : 17")
                                         await this.calcGrandTotal();
+
+                                        if(typeof tmpDescResult != 'undefined')
+                                        {
+                                            await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
+                                        }
                                     }  
                                     else
                                     {
@@ -6378,6 +6620,8 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(this.grdDiscList.getSelectedData().length == 1)
                                     {
+                                        let tmpDescResult = await this.popDiscountDesc.show()
+                                        
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
@@ -6417,6 +6661,11 @@ export default class posDoc extends React.PureComponent
                                         }
                                         this.core.util.writeLog("calcGrandTotal : 17")
                                         await this.calcGrandTotal();
+                                                                                
+                                        if(typeof tmpDescResult != 'undefined')
+                                        {
+                                            await this.descSave("DISCOUNT",tmpDescResult,'00000000-0000-0000-0000-000000000000')
+                                        }
                                     }  
                                     else if(this.grdDiscList.getSelectedData().length == 0)
                                     {
@@ -6709,7 +6958,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
-                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
+                                            let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 let tmpLastPos = new datatable();
@@ -6976,9 +7225,11 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.btnPopLastSaleSearch._onClick()
                                     }
-                                }}>     
+                                }}
+                                >     
                                 </NdTextBox> 
                             </div>
+                                
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-2">
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
@@ -7020,18 +7271,48 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastRefNo"
+                                            this.keyboardRef.setInput(this.txtPopLastRefNo.value)
+                                        }
+                                    },
+                                ]}>      
                                 </NdTextBox> 
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">
                                 <NdTextBox id="txtPopLastCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
-                                 onChange={async(e)=>
+                                onChange={async(e)=>
                                 {                         
                                    this.cmbPopLastSaleUser.value = ''
-                                }}>     
+                                }}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            this.toggleKeyboardVisibility()
+                                            this.keyboardRef.inputName = "txtPopLastCustomer"
+                                            this.keyboardRef.setInput(this.txtPopLastCustomer.value)
+                                        }
+                                    },
+                                ]}>     
                                 </NdTextBox> 
                             </div>
+                            {this.state.keyboardVisibility && 
+                            (
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                            )}
                         </div>
                         {/* grdLastPos */}
                         <div className="row py-1">
@@ -7096,11 +7377,12 @@ export default class posDoc extends React.PureComponent
                                                     "@CUSER = @PCUSER, " + 
                                                     "@POS = @PPOS, " +
                                                     "@TYPE = @PTYPE, " +
+                                                    "@TYPE_NAME = @PTYPE_NAME, " +
                                                     "@LINE_NO = @PLINE_NO, " +
                                                     "@AMOUNT = @PAMOUNT, " + 
                                                     "@CHANGE = @PCHANGE ", 
-                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
                                         } 
                                         this.lastPosPayDt.updateCmd = 
                                         {
@@ -7109,11 +7391,12 @@ export default class posDoc extends React.PureComponent
                                                     "@CUSER = @PCUSER, " + 
                                                     "@POS = @PPOS, " +
                                                     "@TYPE = @PTYPE, " +
+                                                    "@TYPE_NAME = @PTYPE_NAME, " +
                                                     "@LINE_NO = @PLINE_NO, " +
                                                     "@AMOUNT = @PAMOUNT, " + 
                                                     "@CHANGE = @PCHANGE ", 
-                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
                                         } 
                                         this.lastPosPayDt.deleteCmd = 
                                         {
@@ -7548,7 +7831,7 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                         
-                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                        let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE,undefined,this.grdList.devGrid.getSelectedRowKeys()[0].ITEM_NAME)                                            
                         if(typeof tmpResult != 'undefined' && tmpResult != '')
                         {
                             if(typeof e != 'undefined')
@@ -7692,6 +7975,11 @@ export default class posDoc extends React.PureComponent
                         this.core.util.writeLog("calcGrandTotal : 20")
                         await this.calcGrandTotal();
                     }}></NbPopDescboard>
+                </div>
+                {/* Discount Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popDiscountDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popDiscountDesc.head")} title={this.lang.t("popDiscountDesc.title")}     
+                    param={this.prmObj.filter({ID:'DiscountDescription',TYPE:0})}></NbPopDescboard>
                 </div>
                 {/* Item Return Ticket Dialog  */}
                 <div>
@@ -8175,7 +8463,7 @@ export default class posDoc extends React.PureComponent
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"}/>
+                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>
                         <div className="row py-1">
@@ -8261,7 +8549,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
-                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
+                                            let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
                                                                                         
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
@@ -8277,7 +8565,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                                 
-                                                if(tmpResult >= 100)
+                                                if(tmpResult >= 1000)
                                                 {
                                                     let tmpConfObj =
                                                     {
@@ -8703,7 +8991,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"}/>
+                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>                        
                     </NdPopUp>
@@ -8711,6 +8999,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8740,6 +9029,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Country Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCountry"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCountry.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8763,6 +9053,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add City Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCity"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCity.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8786,6 +9077,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Zipcode Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddZipCode"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddZipCode.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8809,6 +9101,7 @@ export default class posDoc extends React.PureComponent
                 {/* Print Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popPrintCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
                     data={{source:
                     {
                         select:
@@ -8987,7 +9280,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true}/>
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9046,7 +9339,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"}/>
+                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9120,7 +9413,7 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <div className="row py-1">
                                     <div className="col-12">
-                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"}/>
+                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
                                     </div>
                                 </div>
                             </Item>
@@ -9174,7 +9467,7 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
-                {/* Last Sale List Popup */} 
+                {/* Last Sale List PopUp */} 
                 <div>
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
@@ -9279,8 +9572,9 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             {/* txtPopLastRefNo */} 
                             <div className="col-2">
-                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
-                                </NdTextBox> 
+                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")} 
+                                />
+                                
                             </div>
                             {/* txtPopLastCustomer */} 
                             <div className="col-2">
@@ -9428,6 +9722,27 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NdAccessEdit id={"accesComp"} parent={this} saveUser={true}/>
                 </div> 
+                {/* Price List Choice PopUp */}
+                <div>
+                    <NdPopGrid id={"priceListChoicePopUp"} parent={this} container={"#root"}
+                    visible={false}
+                    selection={{mode:'single'}}
+                    filterRow={{visible:false}}
+                    headerFilter={{visible:false}}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.lang.t("priceListChoicePopUp.title")} 
+                    deferRendering={true}
+                    >
+                        <Column dataField="LIST_NO" caption={this.lang.t("priceListChoicePopUp.clmListNo")} width={150}/>
+                        <Column dataField="ITEM_NAME" caption={this.lang.t("priceListChoicePopUp.clmItemName")} width={400}/>
+                        <Column dataField="LIST_TAG" caption={this.lang.t("priceListChoicePopUp.clmTag")} width={200}/>
+                        <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={100}/>
+                    </NdPopGrid>
+                </div>
             </div>
         )
     }

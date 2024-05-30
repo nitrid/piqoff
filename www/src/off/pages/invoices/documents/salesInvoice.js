@@ -59,8 +59,7 @@ export default class salesInvoice extends DocBase
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
-        }
-        
+        } 
     }
     loadState() 
     {
@@ -80,8 +79,8 @@ export default class salesInvoice extends DocBase
             await super.init()
 
             this.docObj.dt()[0].TYPE_NAME = 'FAC'
-
-            this.grdSlsInv.devGrid.clearFilter("row")
+            this.grid = this["grdSlsInv"+this.tabIndex]
+            this.grid.devGrid.clearFilter("row")
             this.dtDocDate.value = moment(new Date())
             this.dtShipDate.value = moment(new Date())
             
@@ -203,12 +202,12 @@ export default class salesInvoice extends DocBase
                             this.combineControl = true
                             this.combineNew = false
                             
-                            this.grdSlsInv.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdSlsInv.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -260,12 +259,12 @@ export default class salesInvoice extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
                                     
-                                    this.grdSlsInv.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdSlsInv.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -284,7 +283,7 @@ export default class salesInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -341,7 +340,7 @@ export default class salesInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -396,7 +395,7 @@ export default class salesInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -749,13 +748,13 @@ export default class salesInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.grdSlsInv.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
         }
         this.popMultiItem.hide()
-        this.grdSlsInv.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     async _calculateInterfel()
     {
@@ -896,7 +895,7 @@ export default class salesInvoice extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -914,7 +913,7 @@ export default class salesInvoice extends DocBase
                                                 this.docLocked = true
                                                 if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                                 {
-                                                    await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                    await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                                 }
                                                 let tmpData = this.sysParam.filter({ID:'autoInterfel',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1225,6 +1224,10 @@ export default class salesInvoice extends DocBase
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
                                                     this.docObj.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1292,6 +1295,10 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1442,12 +1449,12 @@ export default class salesInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdSlsInv.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsInv.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1502,12 +1509,12 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     else if(data.length > 1)
                                                     {
-                                                        this.grdSlsInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                 }
                                             }
@@ -1559,12 +1566,12 @@ export default class salesInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdSlsInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1577,12 +1584,12 @@ export default class salesInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdSlsInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1616,12 +1623,12 @@ export default class salesInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdSlsInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     return
                                                 }
@@ -1636,12 +1643,12 @@ export default class salesInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdSlsInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                               
                                         }
@@ -1667,7 +1674,7 @@ export default class salesInvoice extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1685,7 +1692,7 @@ export default class salesInvoice extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdSlsInv"} 
+                                        <NdGrid parent={this} id={"grdSlsInv"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true}
@@ -1711,7 +1718,7 @@ export default class salesInvoice extends DocBase
                                             if(e.isEditing == true)
                                             {
                                                 e.rowElement.style.backgroundColor ="#b1cbbb"
-                                                this.grdSlsInv.devGrid.selectRowsByIndexes(e.rowIndex)
+                                                this.grid.devGrid.selectRowsByIndexes(e.rowIndex)
                                             }
                                             else
                                             {
@@ -1932,7 +1939,7 @@ export default class salesInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdSlsInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
@@ -1967,7 +1974,7 @@ export default class salesInvoice extends DocBase
                                         <ContextMenu
                                         dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdSlsInv"
+                                        target={"#grdSlsInv"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getDispatch"))
@@ -2231,18 +2238,28 @@ export default class salesInvoice extends DocBase
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
-                                                        { 
-                                                            // var a = document.createElement('a');
-                                                            // a.href = "data:application/pdf;base64," + pResult.split('|')[1];
-                                                            // a.setAttribute('target', '_blank');
-                                                            // a.click()
+                                                        {
+                                                            this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                             mywindow.onload = function() 
                                                             { 
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  

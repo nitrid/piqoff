@@ -47,6 +47,7 @@ export default class promotionCard extends React.PureComponent
         this.init();
         if(typeof this.pagePrm != 'undefined')
         {
+            console.log(this.pagePrm.CODE)
             this.txtCode.value = this.pagePrm.CODE
             await this.getPromotion(this.pagePrm.CODE);
         }
@@ -1128,6 +1129,7 @@ export default class promotionCard extends React.PureComponent
                                                 })
 
                                                 this.promo.cond.dt()._deleteList = this["itemList" + this.condDt[0].WITHAL]._deleteList
+                                                console.log(this["itemList" + this.condDt[0].WITHAL]._deleteList)
                                                 await this.core.util.waitUntil(0)
                                                 
                                                 if((await this.promo.save()) == 0)
