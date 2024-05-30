@@ -391,7 +391,7 @@ export class docItemsCls
                     "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID, "  +
                     "@ORIGINS = @PORIGINS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|1500','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
                         'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
                         'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
                         'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10'],
@@ -441,7 +441,7 @@ export class docItemsCls
                     "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID, "  +
                     "@ORIGINS = @PORIGINS " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|1500','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
                         'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
                         'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
                         'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10'],
