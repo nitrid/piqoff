@@ -1,11 +1,18 @@
 const stk_04_008 =
 {
-    btnItemsSend : "Ürün Güncellemesi Gönder", // BAK
-    msgSaveResult:
+    btnItemsSend : "Envoyer Tous Les Produits",
+    btnDateItemsSend : "Envoyer Les Produits de la Date Sélectionnée",
+    grdItems:
     {
-        title: "Dikkat",  // BAK
-        btn01: "Tamam",  // BAK
-        msgSuccess: "Tüm Aktif Ürünler İçin Güncelleme gönderildi ! Bu işlem Biraz Zaman Alabilir.",  // BAK
-    },
+        clmItemCode : "Code",
+        clmItemName : "Nom",
+        clmPrice : "Prix",
+    },   
+    msgItemSend:
+    {
+        title: "Attention",  
+        btn01: "D'accord",  
+        msgSuccess: "La mise à jour a été envoyée pour tous les produits actifs ! Cela peut prendre un certain temps.",  
+    }    
 }
 export default stk_04_008
