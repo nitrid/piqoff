@@ -1600,7 +1600,7 @@ class nf525
             {
                 let tmpMailData =
                 {
-                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
                     subject : "NF525 Anomali Control",
                     text : tmpMailText
                 }
