@@ -1,7 +1,7 @@
 // "Ürün Satış Raporu"
 const pos_02_008 =
 {
-    txtRef : "Ürün",
+    txtRef : "Ürün",   
     cmbCustomer :"Müşteri",
     btnGet :"Getir",
     dtFirst : "İlk Tarih",

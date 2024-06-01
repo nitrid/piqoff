@@ -256,7 +256,7 @@ export default class itemSaleReport extends React.PureComponent
                                 }}
                             >                            
                                 <Scrolling mode="standart" />
-                                <Export fileName={this.lang.t("menu.pos_02_008")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.pos_02_008")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_NAME" caption={this.t("grdItemSaleReport.itemName")} visible={true} width={200}/> 
                                 <Column dataField="FIRST_DATE" caption={this.t("grdItemSaleReport.clmFirstDate")} visible={true} width={180} dataType="date"
                                 editorOptions={{value:null}}

@@ -74,7 +74,7 @@ export default class itemMoveReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT LUSER,LDATE,REF,REF_NO,DOC_DATE,ITEM_NAME,INPUT_NAME,OUTPUT_NAME,QUANTITY,PRICE,TOTALHT,(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = 'TR') AS TYPE_NAMES from DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND (DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE)",
+                    query : "SELECT LUSER,LDATE,REF,REF_NO,DOC_DATE,ITEM_NAME,INPUT_NAME,OUTPUT_NAME,QUANTITY,PRICE,TOTALHT,CASE WHEN TYPE = 0 THEN (SELECT [dbo].[FN_DEPOT_DATE_QUANTITY](ITEM,INPUT,DOC_DATE)) WHEN TYPE = 1  THEN (SELECT [dbo].[FN_DEPOT_DATE_QUANTITY](ITEM,OUTPUT,DOC_DATE)) WHEN TYPE = 2 THEN (SELECT [dbo].[FN_DEPOT_DATE_QUANTITY](ITEM,INPUT,DOC_DATE)) END AS DEPOT_QUANTITY,(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = 'TR') AS TYPE_NAMES from DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND (DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE)",
                     param : ['FIRST_DATE:date','LAST_DATE:date','ITEM:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtRef.GUID]
                 },
@@ -253,19 +253,20 @@ export default class itemMoveReport extends React.PureComponent
                                 }}
                             >                            
                                 <Scrolling mode="standart" />
-                                <Export fileName={this.lang.t("menu.pos_02_008")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="LUSER" caption={this.t("grdItemMoveReport.clmLuser")} visible={true} width={100}/> 
+                                <Export fileName={this.lang.t("menuOff.stk_05_005")} enabled={true} allowExportSelectedData={true} />                                
+                                <Column dataField="LUSER" caption={this.t("grdItemMoveReport.clmLuser")} visible={true} width={80}/> 
                                 <Column dataField="LDATE" caption={this.t("grdItemMoveReport.clmLdate")} visible={true} width={150}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                <Column dataField="TYPE_NAMES" caption={this.t("grdItemMoveReport.clmTypeName")} visible={true} width={180}/>
+                                <Column dataField="TYPE_NAMES" caption={this.t("grdItemMoveReport.clmTypeName")} visible={true} width={130}/>
                                 <Column dataField="REF" caption={this.t("grdItemMoveReport.clmRef")} visible={true} width={150}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdItemMoveReport.clmRefNo")} visible={true}  width={150}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdItemMoveReport.clmDocDate")} visible={true}  width={150} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdItemMoveReport.clmRefNo")} visible={true}  width={70}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdItemMoveReport.clmDocDate")} visible={true}  width={100} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdItemMoveReport.clmItemName")} visible={true}  width={150}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdItemMoveReport.clmInputName")} visible={true}  width={150}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdItemMoveReport.clmOutputName")} visible={true}  width={200}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdItemMoveReport.clmQuantity")} visible={true}  width={200}/> 
-                                <Column dataField="PRICE" caption={this.t("grdItemMoveReport.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={200}/> 
-                                <Column dataField="TOTALHT" caption={this.t("grdItemMoveReport.clmTotalHt")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={200}/> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdItemMoveReport.clmOutputName")} visible={true}  width={150}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdItemMoveReport.clmQuantity")} visible={true}  width={100}/> 
+                                <Column dataField="PRICE" caption={this.t("grdItemMoveReport.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/> 
+                                <Column dataField="TOTALHT" caption={this.t("grdItemMoveReport.clmTotalHt")} visible={true}  dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={100}/>
+                                <Column dataField="DEPOT_QUANTITY" caption={this.t("grdItemMoveReport.clmDepoQuantity")} visible={true} width={100}/>
                             </NdGrid>
                         </div>
                     </div>

@@ -522,7 +522,7 @@ export default class salesOrdList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.sip_01_002")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsOrdList.clmInputCode")} visible={false}/> 

@@ -1629,7 +1629,7 @@ export default class outagePurcInvoice extends DocBase
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                            <Export fileName={this.lang.t("menu.ftr_02_003")} enabled={true} allowExportSelectedData={true} />
+                                            <Export fileName={this.lang.t("menuOff.ftr_02_003")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtInv.clmCreateDate")} width={70} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdRebtInv.clmCuser")} width={75} allowEditing={false}/>

@@ -1950,7 +1950,7 @@ export default class purchaseDispatch extends DocBase
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.irs_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.irs_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcDispatch.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcDispatch.clmCuser")} width={90} allowEditing={false}/>

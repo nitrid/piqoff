@@ -344,7 +344,7 @@ export default class rebateInvList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.ftr_01_003")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.ftr_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsIvcList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsIvcList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdSlsIvcList.clmOutputCode")} visible={false}/> 

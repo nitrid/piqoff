@@ -784,7 +784,7 @@ export default class collection extends React.PureComponent
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="infinite" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                            <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
+                                            <Export fileName={this.lang.t("menuOff.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
