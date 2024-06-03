@@ -68,7 +68,7 @@ module.exports =
             'serialport' : false,
             'path' : false
         },
-        extensions: ["*", ".js", ".jsx"]
+        extensions: ["*", ".js", ".jsx", ".json"]
     },
     output: 
     {
