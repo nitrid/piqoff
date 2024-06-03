@@ -1,5 +1,12 @@
 # Aşama 1: Frontend Build
-FROM node:16 AS build
+FROM mcr.microsoft.com/windows/servercore:ltsc2022 AS build
+
+# Node.js'i Windows üzerinde yüklemek
+RUN powershell -Command " \
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+    Invoke-WebRequest -Uri https://nodejs.org/dist/v16.14.0/node-v16.14.0-x64.msi -OutFile nodejs.msi; \
+    Start-Process msiexec.exe -ArgumentList '/i nodejs.msi /quiet /norestart' -Wait; \
+    Remove-Item -Force nodejs.msi"
 
 # Çalışma dizinini ayarla
 WORKDIR /app
@@ -14,7 +21,14 @@ COPY www /app/www
 RUN npm run build
 
 # Aşama 2: Backend Setup
-FROM node:16
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+# Node.js'i Windows üzerinde yüklemek
+RUN powershell -Command " \
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+    Invoke-WebRequest -Uri https://nodejs.org/dist/v16.14.0/node-v16.14.0-x64.msi -OutFile nodejs.msi; \
+    Start-Process msiexec.exe -ArgumentList '/i nodejs.msi /quiet /norestart' -Wait; \
+    Remove-Item -Force nodejs.msi"
 
 # Çalışma dizinini ayarla
 WORKDIR /app
@@ -25,7 +39,7 @@ RUN npm install
 
 # Tüm dosyaları kopyala (archiveFiscal hariç)
 COPY . .
-RUN rm -rf archiveFiscal
+RUN powershell -Command "Remove-Item -Recurse -Force archiveFiscal"
 
 # Backend uygulamasını başlat
 CMD ["node", "server.js"]
