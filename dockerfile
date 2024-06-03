@@ -2,22 +2,22 @@
 FROM node:16 AS build
 
 # Çalışma dizinini ayarla
-WORKDIR /app
+WORKDIR /
 
 # Frontend bağımlılıklarını yükle
 COPY www/package*.json ./www/
-WORKDIR /app/www
+WORKDIR /www
 RUN npm install --force
 
 # Frontend dosyalarını kopyala ve build işlemini gerçekleştir
-COPY www /app/www
+COPY www /www
 RUN npm run build
 
 # Aşama 2: Backend Setup
 FROM node:16
 
 # Çalışma dizinini ayarla
-WORKDIR /app
+WORKDIR /
 
 # Backend bağımlılıklarını yükle
 COPY package*.json ./
