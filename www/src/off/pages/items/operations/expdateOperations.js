@@ -523,7 +523,7 @@ export default class expdateOperations extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}/>
-                                <Export fileName={this.lang.t("menu.stk_04_004")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.stk_04_004")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE_FORMAT" caption={this.t("grdExpdateList.clmCDate")} visible={true} width={150}/> 
                                 <Column dataField="CUSER_NAME" caption={this.t("grdExpdateList.clmUser")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={110}/> 

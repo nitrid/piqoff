@@ -95,9 +95,8 @@ const  ftr_02_009 =
     {
         title : "Sélectionner Produit",
         clmCode :  "Référence Produit",
-        clmMulticode : "FRN.Code",
+        clmMulticode : "Code fournisseur",
         clmName : "Nom Produit",
-        clmMulticode : "FRN.Code",
         clmPrice : "Prix de Vente" 
     },
     pg_dispatchGrid : 

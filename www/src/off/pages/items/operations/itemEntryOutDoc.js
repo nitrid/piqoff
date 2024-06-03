@@ -993,7 +993,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                                     <Scrolling mode="standart"/>
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                                    <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
+                                                    <Export fileName={this.lang.t("menuOff.stk_02_003")} enabled={true} allowExportSelectedData={true} />
                                                     <Column dataField="TYPE" caption={this.t("grdList.clmType")} width={100}>
                                                         <Lookup dataSource={[{ID:0,VALUE:this.t("cmbType.input")},{ID:1,VALUE:this.t("cmbType.output")}]} displayExpr="VALUE"valueExpr="ID"/>
                                                     </Column>

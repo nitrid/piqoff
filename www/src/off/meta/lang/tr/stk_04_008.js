@@ -1,6 +1,13 @@
 const stk_04_008 =
 {
     btnItemsSend : "Bütün Ürünleri Gönder",
+    btnDateItemsSend :"Seçili Tarih Ürünleri Gönder",
+    grdItems:
+    {
+        clmItemCode :"Kodu",
+        clmItemName :"Adı",
+        clmPrice :"Fiyat",
+    },   
     msgItemSend:
     {
         title: "Dikkat",  

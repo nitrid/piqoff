@@ -29,6 +29,7 @@ const stk_05_004 =
         clmInputName : "Giriş",
         clmOutputName : "Çıkış",
         clmQuantity : "Miktar",
+        clmDepoQuantity: "Depo Miktarı",
         clmPrice : "Fiyat",
         clmTotalHt : "Tutar",
     },

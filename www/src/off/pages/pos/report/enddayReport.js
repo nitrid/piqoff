@@ -244,7 +244,7 @@ export default class enddayReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE" caption={this.t("grdEnddaData.clmDate")} visible={true} dataType="datetime" format={"dd/MM/yyyy"} width={80}/> 
                                 <Column dataField="CUSER_NAME" caption={this.t("grdEnddaData.clmUser")} visible={true} width={90}/> 
                                 <Column dataField="SAFE_NAME" caption={this.t("grdEnddaData.clmSafe")} visible={true} width={110}/> 
