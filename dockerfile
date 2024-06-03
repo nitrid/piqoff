@@ -7,7 +7,7 @@ WORKDIR /app
 # Frontend bağımlılıklarını yükle
 COPY www/package*.json ./www/
 WORKDIR /app/www
-RUN npm install
+RUN npm install --force
 
 # Frontend'i derle
 COPY www /app/www
