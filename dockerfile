@@ -9,7 +9,7 @@ COPY www/package*.json ./www/
 WORKDIR /app/www
 RUN npm install --force
 
-# Frontend'i derle
+# Frontend dosyalarını kopyala ve build işlemini gerçekleştir
 COPY www /app/www
 RUN npm run build
 
@@ -26,13 +26,6 @@ RUN npm install
 # Tüm dosyaları kopyala (archiveFiscal hariç)
 COPY . .
 RUN rm -rf archiveFiscal
-
-# EntryPoint betiğini kopyala
-# COPY entrypoint.sh /app/entrypoint.sh
-# RUN chmod +x /app/entrypoint.sh
-
-# Giriş noktasını ayarla
-# ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Backend uygulamasını başlat
 CMD ["node", "server.js"]
