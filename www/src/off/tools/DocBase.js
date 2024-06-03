@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../core/cls/doc.js';
+import { discountCls } from '../../core/cls/discount.js'
 import { nf525Cls } from '../../core/cls/nf525.js';
 import { datatable } from '../../core/core.js';
 
@@ -35,6 +36,7 @@ export default class DocBase extends React.PureComponent
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
         this.nf525 = new nf525Cls();
+        this.discObj = new discountCls();
         this.tabIndex = props.data.tabkey
         this.type = 0;
         this.docType = 0;
@@ -482,6 +484,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.docCustomer.dt()[0].REF = this.docObj.dt()[0].REF
             this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
         }
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc({
+            DEPOT:this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
+            START_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"),
+        })
     }
     async calculateTotal()
     {
