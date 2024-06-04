@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../core/cls/doc.js';
+import { discountCls } from '../../core/cls/discount.js'
 import { nf525Cls } from '../../core/cls/nf525.js';
 import { datatable } from '../../core/core.js';
 
@@ -17,7 +18,7 @@ import NdPopUp from '../../core/react/devex/popup.js';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdButton from '../../core/react/devex/button.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring,GroupPanel, Summary, TotalItem,GroupItem} from '../../core/react/devex/grid.js';
 import NbPopDescboard from "./popdescboard.js";
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdTagBox from '../../core/react/devex/tagbox.js';
@@ -35,6 +36,7 @@ export default class DocBase extends React.PureComponent
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
         this.nf525 = new nf525Cls();
+        this.discObj = new discountCls();
         this.tabIndex = props.data.tabkey
         this.type = 0;
         this.docType = 0;
@@ -164,6 +166,7 @@ export default class DocBase extends React.PureComponent
             tmpDoc.TYPE = this.type
             tmpDoc.DOC_TYPE = this.docType
             tmpDoc.REBATE = this.rebate
+            tmpDoc.TRANSPORT_TYPE = this.sysParam.filter({ID:'DocTrasportType',USERS:this.user.CODE}).getValue()
 
             this.docObj.addEmpty(tmpDoc);       
             
@@ -481,6 +484,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.docCustomer.dt()[0].REF = this.docObj.dt()[0].REF
             this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
         }
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc({
+            DEPOT:this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
+            START_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"),
+        })
     }
     async calculateTotal()
     {
@@ -1688,14 +1697,21 @@ export default class DocBase extends React.PureComponent
                     title={this.t("pg_dispatchGrid.title")} //
                     deferRendering={true}
                     >
-                        <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <GroupPanel visible={true} allowColumnDragging={false}/>       
+                        <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc" groupIndex={0}/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
                         <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
-                        <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
+                        <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                         <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                        <Column dataField="TOTALHT" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                        <Summary>
+                            <GroupItem
+                            column="TOTALHT"
+                            summaryType="sum"
+                            valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                        </Summary>
                     </NdPopGrid>
                 </div>
                 {/* Stok Grid */}

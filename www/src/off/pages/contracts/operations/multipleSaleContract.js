@@ -505,7 +505,7 @@ export default class salesContract extends React.PureComponent
                                         <Editing mode="batch" allowUpdating={true} allowDeleting={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
                                         <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")} width={110} allowEditing={false}/>

@@ -2,6 +2,7 @@
 const stk_02_002 = 
 {
     txtRefRefno : "Seri-Sıra",
+    validRef : "Seri-Sıra Boş Geçilemez",
     cmbOutDepot: "Çıkış Deposu",
     cmbInDepot: "Giriş Deposu",
     dtDocDate : "Tarih",

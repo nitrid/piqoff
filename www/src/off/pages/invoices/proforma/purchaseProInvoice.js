@@ -1228,37 +1228,6 @@ export default class purchaseProInvoice extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_Docs.title")} 
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   this.getDocs(1)
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
-                                    >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />
-                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />
-                                        
-                                    </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
@@ -1841,7 +1810,7 @@ export default class purchaseProInvoice extends DocBase
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={90} allowEditing={false}/>

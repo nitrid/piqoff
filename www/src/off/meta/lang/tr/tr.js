@@ -2,6 +2,7 @@ export const langTr =
 {
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
+    msgConnection : {msg : "Sunucu ile bağlantı kesildi !"},
     loading : "Yükleniyor",
     phoneIsInvalid : "Boşluk bırakmadan sadece '+' ve rakam kullanmalısınız.",
     mailIsInvalid : "Geçerli bir e-posta adresi girin. '@' ve uzantıyı kontrol edin (Örn: .com, .fr, ...)",
@@ -170,6 +171,16 @@ export const langTr =
         btn01 : "Tamam",
         btn02 : "İptal",
     },
+    msgPageSelect: 
+    {
+        title : "Dikkat",
+        msg : "Lütfen Bir Sayfa Seçiniz",
+        btn01 : "Tamam"
+    },
+    favAdd : "Favoriye Ekle",
+    favDell : "Favoriden  Kaldır",
+    menu : "Menu",
+    favMenu : "Favoriler",
     menuOff:
     {
         stk: "Ürün",                
@@ -216,10 +227,12 @@ export const langTr =
         stk_04_005: "Ürün Giriş Çıkış Operasyonu",
         stk_04_006: "Excel Ürün Aktarımı",
         stk_04_007: "Terazi Ürün Aktarımı",
+        stk_04_008: "Elektronik Etiket Toplu Güncelleme",
         stk_05_001: "Depo Envanter Raporu",
         stk_05_002: "Değişen Alış Fiyatları Raporu",
         stk_05_003: "Sayım Envanter Raporu",
         stk_05_004: "Kayıp Ürün Raporu",
+        stk_05_005: "Stok Hareket Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -230,6 +243,7 @@ export const langTr =
         cri_01_003: "Grup Tanımları",
         cri_01_004: "Bölge Tanımları",
         cri_01_005: "Sektör Tanımları",
+        cri_01_006: "Alt Grup Tanımları",
         cri_02_001: "Müşteri Listesi",
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
@@ -302,6 +316,9 @@ export const langTr =
         cnt_03 : "Raporlar",
         cnt_04 : "Operasyonlar",
         cnt_04_001 : "Çoklu Satış Anlaşması",
+        piqx : "PiqX",
+        piqx_01 : "Listeler",
+        piqx_01_001 : "Gelen Faturalar",
         fns : "Finans",
         fns_01 : "Listeler",
         fns_01_001: "Ödeme Listesi",

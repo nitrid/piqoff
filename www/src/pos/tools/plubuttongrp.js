@@ -376,8 +376,26 @@ export default class NbPluButtonGrp extends NbBase
     _searchPluGrp(pKey)
     {
         let tmpData = this.pluImageDt.where({MAIN_GUID:this.clickData.data.LINK})
-        tmpData = tmpData.filter(x => x.ITEM_NAME.indexOf(pKey) > -1 || x.ITEM_CODE.indexOf(pKey) > -1)
-
+        tmpData = tmpData.filter(x => x.ITEM_NAME.indexOf(pKey) > -1 || x.ITEM_CODE.indexOf(pKey) > -1).sort((a, b) => 
+        {
+            const aStarts = a.ITEM_NAME.startsWith(pKey) || a.ITEM_CODE.startsWith(pKey);
+            const bStarts = b.ITEM_NAME.startsWith(pKey) || b.ITEM_CODE.startsWith(pKey);
+            if (aStarts && !bStarts) 
+            {
+                return -1;
+            } 
+            else if (!aStarts && bStarts) 
+            {
+                return 1;
+            } 
+            else 
+            {
+                const aIndex = Math.min(a.ITEM_NAME.indexOf(pKey), a.ITEM_CODE.indexOf(pKey));
+                const bIndex = Math.min(b.ITEM_NAME.indexOf(pKey), b.ITEM_CODE.indexOf(pKey));
+                return aIndex - bIndex;
+            }
+        });
+        
         this.setState(
             {
                 btnPluImageGrp : tmpData,

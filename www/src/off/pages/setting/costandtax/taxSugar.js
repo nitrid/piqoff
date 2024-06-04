@@ -230,7 +230,7 @@ export default class taxSugar extends React.PureComponent
                                             </grdFrom>
                                             </Popup>
                                         </Editing>
-                                        <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.stk_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CUSER_NAME" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={300} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
