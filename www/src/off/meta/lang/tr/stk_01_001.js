@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Fiyatı boş geçemezsiniz !",
     validPriceFloat : "Fiyat 0'dan yüksek olmalıdır !",
     validCustomerCode :"Tedarikci Kodu Giriniz !",
+    validOriginMax8 :"Lütfen 8 karakter giriniz !",
     mainUnitName :"Ana Birim",
     underUnitName : "Alt Birim",
     chkDayAnalysis : "Günlük",
@@ -377,6 +378,12 @@ const stk_01_001 =
         btn01: "Evet",
         btn02: "Vazgeç",
         msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+    },
+    btnSubGroup : "Alt Grup Ekle",
+    pg_subGroup : 
+    {
+        title : "Alt Grup Seçim",
+        clmName : "Adı",
     },
 }
 export default stk_01_001

@@ -200,6 +200,7 @@ export default class debReport extends React.PureComponent
                     "(SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) AS COUNTRY,   " +
                     "REF_NO,   " +
                     "(SELECT TOP 1  TITLE FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.OUTPUT) AS CUSTOMER_NAME,   " +
+                    "(SELECT TOP 1  MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) AS MAIN_GRP_NAME,   " +
                     "DOC_DATE AS DOC_DATE,   " +
                     "MULTICODE,   " +
                     "ITEM_BARCODE,   " +
@@ -326,7 +327,7 @@ export default class debReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export enabled={true} />
+                                <Export enabled={true} allowExportSelectedData={true} />
                                 <Column caption="1"><Column dataField="CUSTOMS_NO" caption={this.t("grdListe.clmCustomsNo")} visible={true} /></Column>
                                 <Column caption="2"><Column dataField="ORIGIN" caption={this.t("grdListe.clmOrigin")} visible={true}/></Column>
                                 <Column caption="3"><Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /></Column>
@@ -343,8 +344,9 @@ export default class debReport extends React.PureComponent
                                 <Column caption="15"><Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /></Column> 
                                 <Column caption="16"><Column dataField="ITEM_NAME" caption={this.t("grdListe.clmItemName")}  visible={true} /></Column> 
                                 <Column caption="17"><Column dataField="ITEM_CODE" caption={this.t("grdListe.clmItemCode")}  visible={true} /></Column> 
-                                <Column caption="18"><Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /></Column> 
-                                <Column caption="19"><Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /></Column> 
+                                <Column caption="18"><Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmItemGroup")}  visible={true} /></Column> 
+                                <Column caption="19"><Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /></Column> 
+                                <Column caption="20"><Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /></Column> 
                             </NdGrid>
                         </div>
                     </div>
