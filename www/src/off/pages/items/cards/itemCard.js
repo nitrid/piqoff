@@ -850,6 +850,20 @@ export default class itemCard extends React.PureComponent
             )
         }
     }
+    stringControle(pString)
+    {
+        console.log(pString)
+        const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}'];
+    
+        if (punctuationKeyCodes.includes(pString)) 
+        {
+           return true
+        }
+        else
+        {
+            return false
+        }
+    }
     render()
     {           
         return (
@@ -2272,8 +2286,8 @@ export default class itemCard extends React.PureComponent
                                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
                                                     onValueChanged={async (e)=>
                                                     {
-                                                        console.log(e);
-                                                        if(e.event.keyCode == 32)
+                                                        let tmpControl = this.stringControle(e.event.key)
+                                                        if(tmpControl)
                                                         {
                                                             this.txtCustoms.value = e.previousValue
                                                         }
@@ -2304,6 +2318,8 @@ export default class itemCard extends React.PureComponent
                                                         <StringLengthRule 
                                                             message={this.t("validOriginMax8")}   
                                                             max={8}
+                                                            min={8}
+                                                            ignoreEmptyValue={true}
                                                         />
                                                     </Validator>
                                                     </NdTextBox>      
