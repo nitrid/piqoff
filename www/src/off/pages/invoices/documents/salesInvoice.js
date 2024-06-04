@@ -60,6 +60,9 @@ export default class salesInvoice extends DocBase
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
         } 
+        
+        
+        console.log(this.discObj.getDocDisc('86D606F3-8FFC-4067-8D74-0348BE4AFC15','DF85EDA0-EDF5-4499-B6EF-29D9FEAC5601'))
     }
     loadState() 
     {
@@ -97,8 +100,14 @@ export default class salesInvoice extends DocBase
             this.txtRef.readOnly = false
             this.txtRefno.readOnly = true
             this.docLocked = false
-            
+
             this.frmDocItems.option('disabled',true)
+
+            // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+            await this.discObj.loadDocDisc({
+                START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+                FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+            })
 
             setTimeout(async() => {
                 let tmpQuery = 
@@ -552,8 +561,6 @@ export default class salesInvoice extends DocBase
                 }
             }
             
-          
-            
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
@@ -561,12 +568,13 @@ export default class salesInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
             this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
             this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
-            this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
-            this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
         
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+            
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -579,10 +587,12 @@ export default class salesInvoice extends DocBase
                 if(tmpData.result.recordset.length > 0)
                 {
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE))
-                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-                    this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+                    this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                     this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                     this.calculateTotal()
                 }
@@ -590,6 +600,8 @@ export default class salesInvoice extends DocBase
             else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(pPrice * pQuantity).rateInc(tmpDiscRate,4)
+                this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -1167,7 +1179,7 @@ export default class salesInvoice extends DocBase
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
-                                        this.checkRow()
+                                        await this.checkRow()
                                         this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
