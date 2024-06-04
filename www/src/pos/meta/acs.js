@@ -264,7 +264,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnCardTicketLy",
-        VALUE : {visible:true,editable:true,position:{x:0,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
+        VALUE : {visible:false,editable:true,position:{x:0,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnCardTicketLy",

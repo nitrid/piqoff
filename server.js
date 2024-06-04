@@ -5,13 +5,16 @@ let gensrv = new core(config);
 gensrv.listen(config.port);
 
 const originalLog = console.log;
-console.log = function(...args) 
+const originalError = console.error;
+const originalWarn = console.warn;
+const originalInfo = console.info;
+function logWithTimestamp(logFunction, ...args)
 {
     let getFormattedDate = () =>
     {
         const now = new Date();
         const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Ay 0-11 arasında olduğu için +1 ekliyoruz
+        const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -23,5 +26,21 @@ console.log = function(...args)
 
     const timestamp = getFormattedDate();
     const newArgs = [`[${timestamp}]`, ...args];
-    originalLog.apply(console, newArgs);
+    logFunction.apply(console, newArgs);
+}
+console.log = function(...args) 
+{
+    logWithTimestamp(originalLog, ...args);
+};
+console.error = function(...args) 
+{
+    logWithTimestamp(originalError, ...args);
+};
+console.warn = function(...args) 
+{
+    logWithTimestamp(originalWarn, ...args);
+};
+console.info = function(...args) 
+{
+    logWithTimestamp(originalInfo, ...args);
 };

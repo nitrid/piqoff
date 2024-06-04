@@ -108,23 +108,23 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
                         {
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                console.log(pParam[i].rowData.ITEM)
+                                console.log(pParam[i].rowData.ITEM_GUID)
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
                         {
                             console.log(pParam[i].rowData.ITEM)
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
@@ -179,8 +179,9 @@ class pricerApi
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -311,11 +312,13 @@ class pricerApi
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
-                        "DISCOUNT_FLAG":"1",
-                        "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
+                        "DISCOUNT_PRICE":"",
+                        "DISCOUNT_FLAG":"0",
+                        "STRIKE_FLAG":"",
                         "VAT":tmpResult[0].VAT,
                         "VARIETY":"",
                         "SIZE":"",
