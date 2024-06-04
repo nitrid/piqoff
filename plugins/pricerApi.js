@@ -12,7 +12,7 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
 
         this.processRun()
     }
@@ -108,23 +108,24 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
                         {
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            console.log(pParam[i].rowData.ITEM_GUID)
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                console.log(pParam[i].rowData.ITEM)
+                                console.log(pParam[i].rowData.ITEM_GUID)
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
                         {
-                            console.log(pParam[i].rowData.ITEM)
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            console.log(pParam[i].rowData.ITEM_GUID)
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
@@ -140,6 +141,10 @@ class pricerApi
         pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
         {
             this.allItemSend()
+        })
+        pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
+        {
+            this.dateItemSend(arguments[0],arguments[1])
         })
     }
     async itemUpdate(pGuid)
@@ -161,7 +166,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            fetch('http://192.168.1.51:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -179,8 +184,9 @@ class pricerApi
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -234,6 +240,22 @@ class pricerApi
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
+            await this.itemUpdate(tmpResult[i].GUID)
+        }
+    }
+    async dateItemSend(pFirstDate,pLastDate)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT * FROM ITEMS_VW_01 WHERE STATUS = 1 AND CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE",
+            param : ['FISRT_DATE:date','LAST_DATE:date'],
+            value : [pFirstDate,pLastDate]
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            console.log(tmpResult[i].GUID)
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
@@ -293,7 +315,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            fetch('http://192.168.1.51:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -311,8 +333,9 @@ class pricerApi
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_FLAG":"1",
                         "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
