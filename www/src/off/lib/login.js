@@ -483,7 +483,7 @@ export default class Login extends React.PureComponent
                                     {
                                       setTimeout(() => {
                                           this.cardRead.value = ''
-                                      }, 50);
+                                      }, 3000);
                                     }
                                     else
                                     {
