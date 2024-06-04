@@ -138,6 +138,38 @@ export default class collectiveItemEdit extends React.PureComponent
             </NdSelectBox>    
             ) 
         }
+        else if(e.column.dataField == 'CUSTOMS')
+        {
+            let onValueChanged = function(data)
+            {
+                e.setValue(data)
+            }
+            return (
+                <NdTextBox id={"txtCustoms"+e.rowIndex} parent={this} simple={true} tabIndex={this.tabIndex}
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                onValueChanged={async (v)=>
+                    {
+                        const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}','\n'];
+    
+                        if (punctuationKeyCodes.includes(v.event.key)) 
+                        {
+                            this["txtCustoms"+e.rowIndex].value = v.previousValue
+                        }
+                       
+                        onValueChanged(this["txtCustoms"+e.rowIndex].value)
+                    }}
+                >     
+                    <Validator validationGroup={"frmItems" + this.tabIndex}>
+                    <StringLengthRule 
+                        message={this.t("validOriginMax8")}   
+                        max={8}
+                        min={8}
+                        ignoreEmptyValue={true}
+                    />
+                </Validator>
+                </NdTextBox>      
+            )
+        }
         
     }
     async grossMargin()
@@ -376,7 +408,14 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
-                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} />   
+                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this._cellRoleRender}>
+                                <StringLengthRule 
+                                    message={this.t("validOriginMax8")}   
+                                    max={8}
+                                    min={8}
+                                    ignoreEmptyValue={true}
+                                />    
+                                </Column>   
                                 <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this._cellRoleRender}/>    

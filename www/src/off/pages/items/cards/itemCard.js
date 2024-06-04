@@ -852,7 +852,6 @@ export default class itemCard extends React.PureComponent
     }
     stringControle(pString)
     {
-        console.log(pString)
         const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}'];
     
         if (punctuationKeyCodes.includes(pString)) 
