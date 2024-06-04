@@ -14,9 +14,9 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = true
+        this.active = false
 
-        //this.processRun()
+        this.processRun()
     }
     async connEvt(pSocket)
     {
@@ -219,7 +219,7 @@ class pricerApi
             this.dateItemSend(arguments[0],arguments[1])
         })
     }
-    async itemUpdate(pGuid,pDate)
+    async itemUpdate(pGuid)
     {
         let tmpQuery = 
         {
@@ -232,10 +232,11 @@ class pricerApi
         
         if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
         {
-            let tmpDate = tmpResult[0].VALID_DATE
-            if(typeof pDate != 'undefined')
+           
+            if(tmpResult[0].PROMO_GUID != '00000000-0000-0000-0000-000000000000')
             {
-                tmpDate = pDate
+                this.processPromoSend(tmpResult[0].PROMO_GUID)
+                return
             }
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
@@ -243,7 +244,6 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            console.log(tmpDate)
             fetch('http://localhost:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
@@ -258,7 +258,6 @@ class pricerApi
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(tmpResult[0].CENTIM_PRICE),
-                      "validFrom" : moment(tmpDate).format("YYYY-MM-DD 00:00:00"),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
@@ -338,17 +337,18 @@ class pricerApi
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
-    // async processRun()
-    // {
-    //     if(this.active == true)
-    //     {
+    async processRun()
+    {
+        if(this.active == true)
+        {
 
-    //         cron.schedule('0 3 * * *', async () => 
-    //         {
-    //             await this.processPromoSend()
-    //         })      
-    //     }
-    // }
+            cron.schedule('0 3 * * *', async () => 
+            {
+                await this.processPromoSend()
+                await this.processPromoClear()
+            })      
+        }
+    }
     async processPromoSend(pGuid)
     {
         if(typeof pGuid == 'undefined')
@@ -366,8 +366,7 @@ class pricerApi
             for (let i = 0; i < tmpResult.length; i++) 
             {
               
-                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE,tmpResult[i].START_DATE)
-                await this.itemUpdate(tmpResult[i].ITEM,tmpResult[i].FINISH_DATE)
+                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
             }
         }
         else
@@ -386,19 +385,13 @@ class pricerApi
 
             for (let i = 0; i < tmpResult.length; i++) 
             {
-                console.log(tmpResult[i].START_DATE)
-                console.log(tmpResult[i].FINISH_DATE)
-
-                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE,tmpResult[i].START_DATE)
-                await this.itemUpdate(tmpResult[i].ITEM,tmpResult[i].FINISH_DATE)
+                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
             }
         }
 
     }
-    async itemPromoUpdate(pGuid,pPrice,pDate)
+    async itemPromoUpdate(pGuid,pPrice)
     {
-        console.log(pGuid)
-        console.log(pDate)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
@@ -429,7 +422,6 @@ class pricerApi
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(pPrice * 100),
-                      "validFrom" : moment(pDate).format("YYYY-MM-DD 00:00:00"),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
@@ -489,6 +481,20 @@ class pricerApi
         for (let i = 0; i < tmpCleanResult.length; i++) 
         {
             await this.itemUpdate(tmpCleanResult[i].ITEM)
+        }
+    }
+    async processPromoClear()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT COND_ITEM_GUID AS ITEM " +
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,112)  ",
+        }
+        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.itemUpdate(tmpResult[i].ITEM)
         }
     }
    

@@ -151,7 +151,9 @@ export default class priceDiffDemand extends DocBase
     async init()
     {
         await super.init()
-        this.grdDiffOff.devGrid.clearFilter("row")
+
+        this.grid = this["grdDiffOff"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
 
@@ -241,12 +243,12 @@ export default class priceDiffDemand extends DocBase
                             this.combineControl = true
                             this.combineNew = false
                             
-                            this.grdDiffOff.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdDiffOff.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -301,12 +303,12 @@ export default class priceDiffDemand extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
                                     
-                                    this.grdDiffOff.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdDiffOff.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -325,7 +327,7 @@ export default class priceDiffDemand extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdDiffOff.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -390,7 +392,7 @@ export default class priceDiffDemand extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdDiffOff.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -445,7 +447,7 @@ export default class priceDiffDemand extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdDiffOff.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -638,7 +640,7 @@ export default class priceDiffDemand extends DocBase
                         let tmpCustomerBtn = ''
                         if(this.customerClear == true)
                         {
-                            await this.grdDiffOff.devGrid.deleteRow(0)
+                            await this.grid.devGrid.deleteRow(0)
                             resolve()
                             return 
                         }
@@ -881,7 +883,7 @@ export default class priceDiffDemand extends DocBase
                                     }
                                     if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
                                     {
-                                        await this.grdDiffOff.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
+                                        await this.grid.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
                                     }
                                     if(e.validationGroup.validate().status == "valid")
                                     {
@@ -991,7 +993,7 @@ export default class priceDiffDemand extends DocBase
                                         this.docLocked = true
                                         if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdDiffOff.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
                                         }
 
                                         //***** TICKET İMZALAMA *****/
@@ -1431,12 +1433,12 @@ export default class priceDiffDemand extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
     
-                                                        this.grdDiffOff.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdDiffOff.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                 }
                                                 this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1492,12 +1494,12 @@ export default class priceDiffDemand extends DocBase
                                                 }
                                                 else if(data.length > 1)
                                                 {
-                                                    this.grdDiffOff.devGrid.beginUpdate()
+                                                    this.grid.devGrid.beginUpdate()
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
                                                         await this.addItem(data[i],null)
                                                     }
-                                                    this.grdDiffOff.devGrid.endUpdate()
+                                                    this.grid.devGrid.endUpdate()
                                                 }
                                             }
                                         }
@@ -1538,12 +1540,12 @@ export default class priceDiffDemand extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdDiffOff.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdDiffOff.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1556,12 +1558,12 @@ export default class priceDiffDemand extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdDiffOff.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdDiffOff.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1594,12 +1596,12 @@ export default class priceDiffDemand extends DocBase
                                                     this.combineControl = true
                                                     this.combineNew = false
                                                     
-                                                    this.grdDiffOff.devGrid.beginUpdate()
+                                                    this.grid.devGrid.beginUpdate()
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
                                                         await this.addItem(data[i],null)
                                                     }
-                                                    this.grdDiffOff.devGrid.endUpdate()
+                                                    this.grid.devGrid.endUpdate()
                                                 }
                                                 await this.pg_service.show()
                                                 return
@@ -1613,12 +1615,12 @@ export default class priceDiffDemand extends DocBase
                                             this.combineControl = true
                                             this.combineNew = false
                                             
-                                            this.grdDiffOff.devGrid.beginUpdate()
+                                            this.grid.devGrid.beginUpdate()
                                             for (let i = 0; i < data.length; i++) 
                                             {
                                                 await this.addItem(data[i],null)
                                             }
-                                            this.grdDiffOff.devGrid.endUpdate()
+                                            this.grid.devGrid.endUpdate()
                                         }
                                         await this.pg_service.show()   
                                     }
@@ -1644,7 +1646,7 @@ export default class priceDiffDemand extends DocBase
                                         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                         if( typeof this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1] != 'undefined' && this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdDiffOff.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
                                         }
                                     }
                                     else
@@ -1662,7 +1664,7 @@ export default class priceDiffDemand extends DocBase
                             </Item>
                             <Item>
                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDiffOff"} 
+                                    <NdGrid parent={this} id={"grdDiffOff"+this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1752,7 +1754,7 @@ export default class priceDiffDemand extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdDiffOff.dataRefresh({source:this.docObj.docDemand.dt('DOC_DEMAND')});
+                                        await this["grdDiffOff"+this.tabIndex].dataRefresh({source:this.docObj.docDemand.dt('DOC_DEMAND')});
                                     }}
                                     >
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdDiffOff"}/>
@@ -1762,7 +1764,7 @@ export default class priceDiffDemand extends DocBase
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffOff.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdDiffOff.clmCuser")} width={90} allowEditing={false}/>
@@ -1786,7 +1788,7 @@ export default class priceDiffDemand extends DocBase
                                     </NdGrid>
                                     <ContextMenu dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdDiffOff"
+                                    target={"#grdDiffOff"+this.tabIndex}
                                     onItemClick={(async(e)=>
                                     {
                                         if(e.itemData.text == this.t("getContract"))

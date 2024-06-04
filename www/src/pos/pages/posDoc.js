@@ -2960,6 +2960,7 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
+        console.log(pType)
         // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
         this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
@@ -3001,12 +3002,14 @@ export default class posDoc extends React.PureComponent
                         this.mailPopup._onClick()
                         tmpMail = this.txtMail.value
                     }
-
+                    
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
                     let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,tmpMail)
                     this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 else if(pType == 2)
                 {
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
                     let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
                     this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
@@ -4653,7 +4656,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false)&& (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY > 1)
                                             {
@@ -4675,7 +4678,9 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        
+                                       console.log(this.grdList.devGrid.getSelectedRowsData()[0])
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false) && (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             let tmpData = 
                                             {
@@ -4684,6 +4689,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                             this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                         }
+
                                     }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                 </div>
                             </NdLayoutItem>

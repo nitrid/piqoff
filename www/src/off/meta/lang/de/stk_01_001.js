@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Preis darf nicht leer sein!",
     validPriceFloat : "Der Preis muss größer als 0 sein!",
     validCustomerCode :"Lieferanten-Code eingeben!",
+    validOriginMax8 :"Geben Sie maximal 8 Zeichen ein!",
     mainUnitName: "Haupteinheit",
     underUnitName: "Untereinheit",
     chkDayAnalysis: "Täglich",
@@ -375,6 +376,12 @@ const stk_01_001 =
         btn01: "Ja!",  
         btn02: "Abbrechen",  
         msg: "Möchten Sie erneut nach dem Produkt suchen?"  
+    },
+    btnSubGroup: "Untergruppe Hinzufügen",
+    pg_subGroup: 
+    {
+        title: "Untergruppenauswahl",
+        clmName: "Name",
     },
 }
 export default stk_01_001
