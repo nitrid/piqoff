@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Le prix ne peut être vide !",
     validPriceFloat : "Le montant doit être supérieur à 0 !",
     validCustomerCode :"Veuillez Entrer un Code Fournisseur !",
+    validOriginMax8 :"Entrez au maximum 8 caractères !",
     mainUnitName :"Unité Principale",
     underUnitName : "Sous Unité",
     chkDayAnalysis : "Journalier",  
@@ -378,6 +379,12 @@ const stk_01_001 =
         btn01: "OK",  
         btn02: "Abandonner",  
         msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  
+    },
+    btnSubGroup: "Ajouter un Sous-groupe",
+    pg_subGroup: 
+    {
+        title: "Sélection de Sous-groupe",
+        clmName: "Nom",
     },
 }
 export default stk_01_001
