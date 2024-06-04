@@ -1,7 +1,7 @@
 import { core,dataset,datatable } from '../core.js';
 import moment from 'moment';
 import rsa from 'jsrsasign';
-import { pem } from '../../../../../../pem.js';
+import { pem } from '../../../../pem.js';
 
 export class nf525Cls
 {
