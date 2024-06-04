@@ -14,7 +14,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -238,7 +238,7 @@ export default class CustomerCard extends React.PureComponent
         }
         if(e.itemData.title == this.t("tabTitleDetail"))
         {        
-           
+            await this.grdSubGrp.dataRefresh({source:this.customerObj.customerSubGrp.dt()});
         }
         if(e.itemData.title == this.t("tabTitleNote"))
         {        
@@ -864,8 +864,8 @@ export default class CustomerCard extends React.PureComponent
                                     </Item>
                                     <Item title={this.t("tabTitleDetail")}>
                                         <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                               <Form colCount={4}>
+                                            <div className='col-9'>
+                                               <Form colCount={3}>
                                                     {/* txtSector */}
                                                     <Item>                                    
                                                         <Label text={this.t("txtSector")} alignment="right" />
@@ -1012,52 +1012,6 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="TITLE" caption={this.t("pg_mainCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
                                                     </Item>
-                                                    {/* txtSubCustomer */}
-                                                    <Item>
-                                                        <Label text={this.t("txtSubCustomer")} alignment="right" />
-                                                        <NdTextBox id="txtSubCustomer" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SUB_CUSTOMER_NAME"}} 
-                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
-                                                        button=
-                                                        {
-                                                            [
-                                                                {
-                                                                    id:'01',
-                                                                    icon:'more',
-                                                                    onClick:()=>
-                                                                    {
-                                                                        this.pg_subCustomer.show()
-                                                                        this.pg_subCustomer.onClick = (data) =>
-                                                                        {
-                                                                            if(data.length > 0)
-                                                                            {
-                                                                                this.customerObj.dt()[0].SUB_CUSTOMER_CODE = data[0].CODE
-                                                                                this.customerObj.dt()[0].SUB_CUSTOMER_NAME = data[0].NAME
-                                                                                this.customerObj.dt()[0].SUB_CUSTOMER = data[0].GUID
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                            ]
-                                                        }
-                                                        selectAll={true}                           
-                                                        >     
-                                                        </NdTextBox>      
-                                                        {/*ALT CARİ KODU POPUP */}
-                                                        <NdPopGrid id={"pg_subCustomer"} parent={this} container={"#root"} 
-                                                        visible={false}
-                                                        position={{of:'#root'}} 
-                                                        showTitle={true} 
-                                                        showBorders={true}
-                                                        width={'90%'}
-                                                        height={'90%'}
-                                                        title={this.t("pg_subCustomer.title")} 
-                                                        selection={{mode:"single"}}
-                                                        data={{source:{select:{query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_02"},sql:this.core.sql}}}
-                                                        >
-                                                            <Column dataField="CODE" caption={this.t("pg_subCustomer.clmCode")} width={'20%'} />
-                                                            <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
-                                                        </NdPopGrid>
-                                                    </Item>
                                                     {/* txtPriceListNo */}
                                                     <Item>
                                                         <Label text={this.t("txtPriceListNo")} alignment="right" />
@@ -1148,11 +1102,51 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="NAME" caption={this.t("pg_MainGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
                                                     </Item>
-                                                    <EmptyItem/>
-                                                    {/* chkVatZero */}
+                                                    {/* txtSubCustomer */}
                                                     <Item>
-                                                        <Label text={this.t("chkVatZero")} alignment="right" />
-                                                        <NdCheckBox id="chkVatZero" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                        <Label text={this.t("txtSubCustomer")} alignment="right" />
+                                                        <NdTextBox id="txtSubCustomer" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SUB_CUSTOMER_NAME"}} 
+                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                        button=
+                                                        {
+                                                            [
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.pg_subCustomer.show()
+                                                                        this.pg_subCustomer.onClick = (data) =>
+                                                                        {
+                                                                            if(data.length > 0)
+                                                                            {
+                                                                                this.customerObj.dt()[0].SUB_CUSTOMER_CODE = data[0].CODE
+                                                                                this.customerObj.dt()[0].SUB_CUSTOMER_NAME = data[0].NAME
+                                                                                this.customerObj.dt()[0].SUB_CUSTOMER = data[0].GUID
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        selectAll={true}                           
+                                                        >     
+                                                        </NdTextBox>      
+                                                        {/*ALT CARİ KODU POPUP */}
+                                                        <NdPopGrid id={"pg_subCustomer"} parent={this} container={"#root"} 
+                                                        visible={false}
+                                                        position={{of:'#root'}} 
+                                                        showTitle={true} 
+                                                        showBorders={true}
+                                                        width={'90%'}
+                                                        height={'90%'}
+                                                        title={this.t("pg_subCustomer.title")} 
+                                                        selection={{mode:"single"}}
+                                                        data={{source:{select:{query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_02"},sql:this.core.sql}}}
+                                                        >
+                                                            <Column dataField="CODE" caption={this.t("pg_subCustomer.clmCode")} width={'20%'} />
+                                                            <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                        </NdPopGrid>
                                                     </Item>
                                                     {/* chkRebate */}
                                                     <Item>
@@ -1174,8 +1168,124 @@ export default class CustomerCard extends React.PureComponent
                                                         <Label text={"Point Passive"} alignment="right" />
                                                         <NdCheckBox id="chkPointPassive" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"POINT_PASSIVE"}} ></NdCheckBox>
                                                     </Item>
+                                                    {/* chkVatZero */}
+                                                    <Item>
+                                                        <Label text={this.t("chkVatZero")} alignment="right" />
+                                                        <NdCheckBox id="chkVatZero" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                    </Item>
                                                </Form>
                                             </div>
+                                            <div className='col-3'>
+                                            <div className='row'>
+                                                <div className='col-12 ps-0'>
+                                                    <NdGrid parent={this} id={"grdSubGrp"} 
+                                                    showBorders={true} 
+                                                    columnsAutoWidth={true} 
+                                                    showColumnHeaders={false}
+                                                    allowColumnReordering={true} 
+                                                    allowColumnResizing={true} 
+                                                    height={'280px'} 
+                                                    width={'100%'}
+                                                    dbApply={false}
+                                                    >
+                                                        <Editing mode="cell" allowDeleting={true}/>
+                                                        <Column dataField="SUB_NAME"/>
+                                                        <Column type="buttons" width={"50"}>
+                                                            <GrdButton name="delete" icon="trash"/>
+                                                        </Column>
+                                                    </NdGrid>
+                                                </div>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-12 ps-0'>
+                                                    <NdButton text={this.t("btnSubGroup")} type="normal" stylingMode="contained" width={'100%'}
+                                                    onClick={async()=>
+                                                    {
+                                                        await this.pg_subGroup.show()
+                                                        
+                                                        let tmpQuery = {}
+
+                                                        if(this.grdSubGrp.data.datatable && this.grdSubGrp.data.datatable.length > 0)
+                                                        {
+                                                            let tmpGuid = this.grdSubGrp.data.datatable[this.grdSubGrp.data.datatable.length - 1].SUB_GUID
+                                                            let tmpVal = this.grdSubGrp.data.datatable.map(item => `'${item.SUB_GUID}'`).join(', ')
+                                                            
+                                                            tmpQuery = 
+                                                            {
+                                                                query : `SELECT * FROM CUSTOMER_SUB_GROUP_VW_01 WHERE PARENT = '${tmpGuid}' AND GUID NOT IN (${tmpVal})`,
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpQuery = 
+                                                            {
+                                                                query : `SELECT * FROM CUSTOMER_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                            }
+                                                        }
+                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {
+                                                            this.pg_subGroup.setData(tmpData.result.recordset)
+                                                        }
+                                                        else
+                                                        {
+                                                            if(this.grdSubGrp.data.datatable && this.grdSubGrp.data.datatable.length > 0)
+                                                            {
+                                                                let tmpVal = this.grdSubGrp.data.datatable.map(item => `'${item.SUB_GUID}'`).join(', ')
+                                                                tmpQuery = 
+                                                                {
+                                                                    query : `SELECT * FROM CUSTOMER_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000' AND GUID NOT IN (${tmpVal})`,
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpQuery = 
+                                                                {
+                                                                    query : `SELECT * FROM CUSTOMER_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                                }
+                                                            }
+
+                                                            tmpData = await this.core.sql.execute(tmpQuery)
+                                                            
+                                                            if(tmpData.result.recordset.length > 0)
+                                                            {
+                                                                this.pg_subGroup.setData(tmpData.result.recordset)
+                                                            }
+                                                        }
+
+                                                        this.pg_subGroup.onClick = async(e) =>
+                                                        {
+                                                            this.customerObj.customerSubGrp.addEmpty()
+                                                            
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].CUSTOMER_GUID = this.customerObj.dt()[0].GUID
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].CUSTOMER_CODE = this.customerObj.dt()[0].CODE
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].CUSTOMER_NAME = this.customerObj.dt()[0].NAME
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].CUSTOMER_SUB_RANK = this.customerObj.customerSubGrp.dt().length - 1
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].SUB_GUID = e[0].GUID
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].SUB_CODE = e[0].CODE
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].SUB_NAME = e[0].NAME
+                                                            this.customerObj.customerSubGrp.dt()[this.customerObj.customerSubGrp.dt().length - 1].SUB_GRP_RANK = e[0].RANK
+                                                        }
+                                                    }}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* ALT GRUP SEÇİM POPUP */}
+                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={"#root"} 
+                                        visible={false}
+                                        position={{of:'#root'}} 
+                                        showTitle={true} 
+                                        showBorders={true}
+                                        width={'90%'}
+                                        height={'90%'}
+                                        title={this.t("pg_subGroup.title")} 
+                                        search={false}
+                                        deferRendering={true}
+                                        >
+                                            <Column dataField="NAME" caption={this.t("pg_subGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                        </NdPopGrid>
                                         </div>
                                     </Item>  
                                     <Item title={this.t("tabTitleFinanceDetail")}>

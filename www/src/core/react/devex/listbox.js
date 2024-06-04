@@ -66,6 +66,7 @@ export default class NdListBox extends Base
             allowItemDeleting={this.props.allowItemDeleting}
             itemDeleteMode={this.props.itemDeleteMode}
             itemRender={this.props.itemRender}
+            itemComponent={this.props.itemComponent}
             collapsibleGroups={this.props.collapsibleGroups}
             grouped={this.props.grouped}
             groupRender={this.props.groupRender}
