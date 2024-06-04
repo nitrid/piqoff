@@ -336,7 +336,7 @@ export default class customerPointReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdCustomerPointReport.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="TITLE" caption={this.t("grdCustomerPointReport.clmTitle")} visible={true} width={300}/> 
                                 <Column dataField="POINT" caption={this.t("grdCustomerPointReport.clmPoint")} visible={true} width={200}/> 
@@ -405,7 +405,7 @@ export default class customerPointReport extends React.PureComponent
                                     }}
                                     >                            
                                         <Scrolling mode="standart" />
-                                        <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="F_DATE" caption={this.t("grdPointDetail.clmDate")} visible={true} width={250}/> 
                                         <Column dataField="POS_ID" caption={this.t("grdPointDetail.clmPosId")} visible={true} width={200}/> 
                                         <Column dataField="POINT_TYPE" caption={this.t("grdPointDetail.clmPoint")} visible={true} width={150}/> 
@@ -458,7 +458,7 @@ export default class customerPointReport extends React.PureComponent
                                 >                            
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
@@ -482,7 +482,7 @@ export default class customerPointReport extends React.PureComponent
                                 >                            
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>

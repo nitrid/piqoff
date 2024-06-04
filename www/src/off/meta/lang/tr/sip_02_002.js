@@ -153,6 +153,11 @@ const sip_02_002 =
         btn01: "Tamam",
         msg: "Tutardan Büyük İndirim Yapılamaz !"
     },
+    msgDiscountEntry : 
+    {
+        title : "Tutarsal İndirim Girişi",
+        btn01 : "Onayla"
+    },
     msgDiscountPercent:
     {
         title: "Dikkat",

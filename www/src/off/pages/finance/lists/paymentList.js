@@ -336,7 +336,7 @@ export default class paymentList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.fns_01_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.fns_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPayList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPayList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdPayList.clmInputCode")} visible={false}/> 

@@ -62,7 +62,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_01_009',
                             text: e.t('menuOff.stk_01_009'),//'Ürün Alt Grup Tanımları',
-                            path: 'construction.js',
+                            path: 'items/cards/itemSubGroupCard.js',
                         },
                         {
                             id: 'stk_01_010',
@@ -261,6 +261,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_004'),//'',
                             path: 'items/report/itemOutageReport'
                         },
+                        {
+                            id: 'stk_05_005',
+                            text : e.t('menuOff.stk_05_005'),//'',
+                            path: 'items/report/itemMoveReport'
+                        },
                     ]
                 }
             ]
@@ -302,6 +307,11 @@ export const menu = (e) =>
                             id: 'cri_01_005',
                             text: e.t('menuOff.cri_01_005'),//'Sektör Tanımları',
                             path: 'customers/cards/sectorCard'
+                        },
+                        {
+                            id: 'cri_01_006',
+                            text: e.t('menuOff.cri_01_006'),//'Alt Grup Tanımları',
+                            path: 'customers/cards/customerSubGroupCard'
                         }
                     ]
                 },
