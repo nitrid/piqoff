@@ -257,7 +257,7 @@
                   </ExpressionBindings>
                   <StylePriority Ref="134" UseFont="false" />
                 </Item4>
-                <Item5 Ref="135" ControlType="XRTableCell" Name="tableCell14" Weight="0.17778312727783654" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item5 Ref="135" ControlType="XRTableCell" Name="tableCell14" Weight="0.17778312727783655" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
                     <Item1 Ref="136" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]" />
                   </ExpressionBindings>
@@ -417,7 +417,7 @@
                 <Item7 Ref="218" ControlType="XRTableCell" Name="tableCell7" Weight="0.156893995276189" Text="Prix Unit." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="219" UseFont="false" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="220" ControlType="XRTableCell" Name="tableCell8" Weight="0.11964112076389496" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item8 Ref="220" ControlType="XRTableCell" Name="tableCell8" Weight="0.11964112076389497" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="221" UseFont="false" UseTextAlignment="false" />
                 </Item8>
                 <Item9 Ref="222" ControlType="XRTableCell" Name="tableCell32" Weight="0.14135934212581497" Multiline="true" Text="Taux TVA" TextAlignment="MiddleCenter" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
