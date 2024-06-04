@@ -2428,6 +2428,7 @@ export default class posDoc extends React.PureComponent
             {
                 if(tmpCardPay.tag == "response")
                 {
+                    console.log(JSON.parse(tmpCardPay.msg))
                     if(JSON.parse(tmpCardPay.msg).transaction_result != 0)
                     {
                         this.msgCardPayment.hide()
@@ -2721,6 +2722,7 @@ export default class posDoc extends React.PureComponent
             }
             else if((tmpDt[0].STATUS == '0' && tmpDt[0].TYPE == '0') || (tmpDt.where({STATUS:1}).length > 0 && tmpDt[0].TYPE == '1'))
             {
+                console.log(tmpDt)
                 this.txtPopCheqpay.value = "";
                 document.getElementById("Sound").play(); 
                 this.txtPopCheqpay.focus();
@@ -3188,14 +3190,14 @@ export default class posDoc extends React.PureComponent
                         {
                             //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
                             //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
-                            let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
-                            let tmpQty = itemSale.QUANTITY
-                            if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
-                            {
-                                tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
-                            }
+                            // let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            // let tmpQty = itemSale.QUANTITY
+                            // if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            // {
+                            //     tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            // }
                             
-                            let tmpDisc = Number(Number(itemSale.PRICE * tmpQty).rateInc(itemApp.AMOUNT,2))
+                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
                             itemSale.QUANTITY = tmpCalc.QUANTITY
@@ -3272,14 +3274,14 @@ export default class posDoc extends React.PureComponent
                         {
                             //İNDİRİMİN KATMANLARI İÇİN YAPILDI. ÖRNEĞİN A ÜRÜNÜ VE B ÜRÜNÜNDEN 2 ŞER ADET ALDIĞINDA İNDİRİM UYGULUYOR FAKAT TEKRAR İNDİRİM UYGULAMASI İÇİN 
                             //A VE B ÜRÜNÜNDEN 2 ŞER DAHA ALDIĞINDA İNDİRİM UYGULUYOR.
-                            let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
-                            let tmpQty = itemSale.QUANTITY
-                            if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
-                            {
-                                tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
-                            }
+                            // let tmpCondDt = this.promoObj.cond.dt().where({PROMO : promoItem.GUID}).where({TYPE:0}).where({ITEM_GUID:itemSale.ITEM_GUID})
+                            // let tmpQty = itemSale.QUANTITY
+                            // if(typeof tmpCondDt != 'undefined' && tmpCondDt.length > 0)
+                            // {
+                            //     tmpQty = tmpCondDt[0].QUANTITY * tmpIsCond.count
+                            // }
 
-                            let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * tmpQty)
+                            let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * itemSale.QUANTITY)
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
                             itemSale.QUANTITY = tmpCalc.QUANTITY

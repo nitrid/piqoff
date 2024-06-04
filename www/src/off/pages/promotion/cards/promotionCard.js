@@ -44,7 +44,7 @@ export default class promotionCard extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init();
+        await this.init();
         if(typeof this.pagePrm != 'undefined')
         {
             this.txtCode.value = this.pagePrm.CODE

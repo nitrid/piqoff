@@ -104,7 +104,7 @@ class fumaWebApi
                     "loyalty": pData[0].pos[0].LOYALTY,
                     "point": Number(pData[0].special.customerPoint),
                     "transferId": pData[0].pos[0].GUID,
-                    "documentDate": pData[0].pos[0].DOC_DATE
+                    "documentDate": pData[0].pos[0].LDATE
                 },
                 "posSale": tmpSaleLine,
                 "pdf": "data:image/png;base64," + pData[1]
@@ -112,7 +112,7 @@ class fumaWebApi
             //console.log(JSON.stringify([tmpSale]))
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3000/integration/createOrders', 
+                fetch('http://20.19.32.36:3090/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -154,7 +154,7 @@ class fumaWebApi
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3000/integration/createUsers', 
+                fetch('http://20.19.32.36:3090/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  

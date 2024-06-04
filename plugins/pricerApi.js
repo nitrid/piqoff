@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
 import fetch from 'node-fetch';
+import moment from 'moment';
+
 
 class pricerApi
 {
@@ -12,9 +14,9 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
 
-        this.processRun()
+        //this.processRun()
     }
     async connEvt(pSocket)
     {
@@ -108,25 +110,96 @@ class pricerApi
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_INSERT') > -1)
                         {
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
-                                console.log(pParam[i].rowData.ITEM)
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
                         }
                         else if(pParam[i].query.indexOf('PRD_ITEM_BARCODE_UPDATE') > -1)
                         {
-                            console.log(pParam[i].rowData.ITEM)
-                            if(typeof pParam[i].rowData.ITEM != 'undefined')
+                            if(typeof pParam[i].rowData.ITEM_GUID != 'undefined')
                             {
                                 setTimeout(() => 
                                 {
-                                    this.itemUpdate(pParam[i].rowData.ITEM)
+                                    this.itemUpdate(pParam[i].rowData.ITEM_GUID)
                                 }, 5000);
                             }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_INSERT') > -1)
+                        {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_UPDATE') > -1)
+                        {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.GUID)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_APPLICATION_INSERT') > -1)
+                        {
+                            console.log(pParam[i].rowData)
+                            if(typeof pParam[i].rowData.PROMO != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.PROMO)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_APPLICATION_UPDATE') > -1)
+                        {
+                            if(typeof pParam[i].rowData.PROMO != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.PROMO)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_CONDITION_INSERT') > -1)
+                        {
+                            if(typeof pParam[i].rowData.PROMO != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.PROMO)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_CONDITION_UPDATE') > -1)
+                        {
+                            if(typeof pParam[i].rowData.PROMO != 'undefined')
+                            {
+                                setTimeout(() => 
+                                {
+                                    this.processPromoSend(pParam[i].rowData.PROMO)
+                                }, 5000);
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_DELETE') > -1)
+                        {
+                            this.promoDelete()
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_APPLICATION_DELETE') > -1)
+                        {
+                            this.promoDelete()
+                        }
+                        else if(pParam[i].query.indexOf('PRD_PROMO_CONDITION_DELETE') > -1)
+                        {
+                            this.promoDelete()
                         }
                     }
                 }
@@ -141,8 +214,12 @@ class pricerApi
         {
             this.allItemSend()
         })
+        pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
+        {
+            this.dateItemSend(arguments[0],arguments[1])
+        })
     }
-    async itemUpdate(pGuid)
+    async itemUpdate(pGuid,pDate)
     {
         let tmpQuery = 
         {
@@ -155,13 +232,19 @@ class pricerApi
         
         if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
         {
+            let tmpDate = tmpResult[0].VALID_DATE
+            if(typeof pDate != 'undefined')
+            {
+                tmpDate = pDate
+            }
             let tmpBarcodes =[]
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            console.log(tmpDate)
+            fetch('http://localhost:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -175,12 +258,14 @@ class pricerApi
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(tmpResult[0].CENTIM_PRICE),
+                      "validFrom" : moment(tmpDate).format("YYYY-MM-DD 00:00:00"),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -237,46 +322,83 @@ class pricerApi
             await this.itemUpdate(tmpResult[i].GUID)
         }
     }
-    async processRun()
+    async dateItemSend(pFirstDate,pLastDate)
     {
-        if(this.active == true)
-        {
-
-            cron.schedule('0 3 * * *', async () => 
-            {
-                await this.processPromoSend()
-                await this.processPromoClear()
-            })      
-        }
-    }
-    async processPromoSend()
-    {
-        await this.processPromoClear()
-        let tmpCleanQuery = 
-        {
-            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE (SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) <= CONVERT(nvarchar,GETDATE(),112) AND  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1",
-        }
-        let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
-        for (let i = 0; i < tmpCleanResult.length; i++) 
-        {
-            await this.itemUpdate(tmpCleanResult[i].ITEM)
-        }
-
         let tmpQuery = 
         {
-            query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112) AND COND_QUANTITY = 1 ",
+            query : "SELECT * FROM ITEMS_VW_01 WHERE STATUS = 1 AND CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE",
+            param : ['FISRT_DATE:date','LAST_DATE:date'],
+            value : [pFirstDate,pLastDate]
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
         for (let i = 0; i < tmpResult.length; i++) 
         {
-            await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
+            console.log(tmpResult[i].GUID)
+            await this.itemUpdate(tmpResult[i].GUID)
         }
     }
-    async itemPromoUpdate(pGuid,pPrice)
+    // async processRun()
+    // {
+    //     if(this.active == true)
+    //     {
+
+    //         cron.schedule('0 3 * * *', async () => 
+    //         {
+    //             await this.processPromoSend()
+    //         })      
+    //     }
+    // }
+    async processPromoSend(pGuid)
     {
+        if(typeof pGuid == 'undefined')
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
+                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
+                " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
+                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112) AND COND_QUANTITY <= 1 ",
+            }
+            
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+              
+                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE,tmpResult[i].START_DATE)
+                await this.itemUpdate(tmpResult[i].ITEM,tmpResult[i].FINISH_DATE)
+            }
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
+                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
+                " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
+                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND GUID = @GUID AND COND_QUANTITY <= 1 ",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                console.log(tmpResult[i].START_DATE)
+                console.log(tmpResult[i].FINISH_DATE)
+
+                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE,tmpResult[i].START_DATE)
+                await this.itemUpdate(tmpResult[i].ITEM,tmpResult[i].FINISH_DATE)
+            }
+        }
+
+    }
+    async itemPromoUpdate(pGuid,pPrice,pDate)
+    {
+        console.log(pGuid)
+        console.log(pDate)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
@@ -293,7 +415,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://192.168.1.84:3333/api/public/core/v1/items', 
+            fetch('http://localhost:3333/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -307,12 +429,14 @@ class pricerApi
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
                       "price": Math.round(pPrice * 100),
+                      "validFrom" : moment(pDate).format("YYYY-MM-DD 00:00:00"),
                       "sics":tmpBarcodes,
                       "properties": 
                       {
                         "BARCODE": tmpResult[0].BARCODE,
+                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
+                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
-                        "SALES_UNIT":tmpResult[0].UNIT_SYMBOL,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_FLAG":"1",
                         "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
@@ -355,20 +479,19 @@ class pricerApi
         }
       
     }
-    async processPromoClear()
+    async promoDelete()
     {
-        let tmpQuery = 
+        let tmpCleanQuery = 
         {
-            query : "SELECT COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,112)  ",
+            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1 ",
         }
-        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-        for (let i = 0; i < tmpResult.length; i++) 
+        let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
+        for (let i = 0; i < tmpCleanResult.length; i++) 
         {
-            await this.itemUpdate(tmpResult[i].ITEM)
+            await this.itemUpdate(tmpCleanResult[i].ITEM)
         }
     }
+   
 }
 
 export const _pricerApi = new pricerApi()
