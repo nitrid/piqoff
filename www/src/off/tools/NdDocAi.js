@@ -198,7 +198,7 @@ export default class NdDocAi extends Base
                             "FROM ITEM_MULTICODE_VW_01 AS ITEM_MULTICODE " +
                             "INNER JOIN ITEMS_VW_01 AS ITEMS ON " +
                             "ITEMS.CODE = ITEM_MULTICODE.ITEM_CODE " +
-                            "WHERE MULTICODE = @MULTICODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                            "WHERE MULTICODE = @MULTICODE AND CUSTOMER_GUID = @CUSTOMER_GUID AND STATUS = '1' "  ,
                     param : ['MULTICODE:string|25','CUSTOMER_GUID:string|50'],
                     value : [pItem,pCustomer]
                 }

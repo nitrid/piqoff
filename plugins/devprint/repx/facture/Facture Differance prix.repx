@@ -456,7 +456,7 @@
                   <Controls>
                     <Item1 Ref="242" ControlType="XRLabel" Name="label52" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="78.8176,17.3749924" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="243" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
+                        <Item1 Ref="243" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])*-1" />
                       </ExpressionBindings>
                       <StylePriority Ref="244" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
@@ -466,7 +466,7 @@
                   <Controls>
                     <Item1 Ref="246" ControlType="XRLabel" Name="label53" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="109.069794,18.9999237" LocationFloat="9.15527344E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="247" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
+                        <Item1 Ref="247" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])*-1" />
                       </ExpressionBindings>
                       <StylePriority Ref="248" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
@@ -476,7 +476,7 @@
                   <Controls>
                     <Item1 Ref="250" ControlType="XRLabel" Name="label54" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="118.177368,18.9999237" LocationFloat="6.10351563E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="251" EventName="BeforePrint" PropertyName="Text" Expression="SUM([DISCOUNT])" />
+                        <Item1 Ref="251" EventName="BeforePrint" PropertyName="Text" Expression="SUM([DISCOUNT])*--1" />
                       </ExpressionBindings>
                       <StylePriority Ref="252" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
@@ -486,7 +486,7 @@
                   <Controls>
                     <Item1 Ref="254" ControlType="XRLabel" Name="label55" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="TopCenter" SizeF="144.2793,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="255" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
+                        <Item1 Ref="255" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])*-1" />
                       </ExpressionBindings>
                       <StylePriority Ref="256" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>

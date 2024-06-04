@@ -361,7 +361,7 @@ export default class customerBalanceReport extends React.PureComponent
                                 <ColumnChooser enabled={true} />
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.cri_04_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.cri_04_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" width={100}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 

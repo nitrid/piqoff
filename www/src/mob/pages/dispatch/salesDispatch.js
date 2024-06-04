@@ -1111,7 +1111,7 @@ export default class salesDispatch extends React.PureComponent
                             visible={false}                        
                             showCloseButton={false}
                             showTitle={true}
-                            title={this.t("popDocDiscount.title")}
+                            title={this.lang.t("popDocDiscount.title")}
                             container={"#root"} 
                             width={"300"}
                             height={"400"}
@@ -1119,7 +1119,7 @@ export default class salesDispatch extends React.PureComponent
                             >
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent1")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent1")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent1" parent={this} simple={true} maxLength={32} 
@@ -1147,7 +1147,7 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price1")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price1")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice1" parent={this} simple={true} maxLength={32} 
@@ -1175,7 +1175,7 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent2")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent2")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent2" parent={this} simple={true} maxLength={32} 
@@ -1203,7 +1203,7 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price2")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price2")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice2" parent={this} simple={true} maxLength={32} 
@@ -1231,7 +1231,7 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent3")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent3")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent3" parent={this} simple={true} maxLength={32} 
@@ -1259,7 +1259,7 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price3")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price3")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice3" parent={this} simple={true} maxLength={32} 

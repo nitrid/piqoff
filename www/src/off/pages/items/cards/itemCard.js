@@ -850,6 +850,19 @@ export default class itemCard extends React.PureComponent
             )
         }
     }
+    stringControle(pString)
+    {
+        const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}'];
+    
+        if (punctuationKeyCodes.includes(pString)) 
+        {
+           return true
+        }
+        else
+        {
+            return false
+        }
+    }
     render()
     {           
         return (
@@ -2270,6 +2283,14 @@ export default class itemCard extends React.PureComponent
                                                     <Label text={this.t("txtCustoms")} alignment="right" />
                                                     <NdTextBox id="txtCustoms" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CUSTOMS_CODE"}} 
                                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                                                    onValueChanged={async (e)=>
+                                                    {
+                                                        let tmpControl = this.stringControle(e.event.key)
+                                                        if(tmpControl)
+                                                        {
+                                                            this.txtCustoms.value = e.previousValue
+                                                        }
+                                                    }}
                                                     button=
                                                     {
                                                         [
@@ -2292,6 +2313,14 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                     selectAll={true}                           
                                                     >     
+                                                     <Validator validationGroup={"frmItems" + this.tabIndex}>
+                                                        <StringLengthRule 
+                                                            message={this.t("validOriginMax8")}   
+                                                            max={8}
+                                                            min={8}
+                                                            ignoreEmptyValue={true}
+                                                        />
+                                                    </Validator>
                                                     </NdTextBox>      
                                                     {/*GÜMRÜK KODU POPUP */}
                                                     <NdPopGrid id={"pg_customsCode"} parent={this} container={"#root"} 
@@ -2566,14 +2595,8 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriPrice.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriHT.value = this.txtPopPriPrice.value
                                             }
-                                        }
-                                        }>
-                                        <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validPrice")}
-                                             />
-                                            <RangeRule min={0.001} message={this.t("validPriceFloat")}
-                                             />
-                                        </Validator> 
+                                        }}>
+                                        
                                     </NdNumberBox>
                                 </Item>
                                  {/* txtPopPriHT */}

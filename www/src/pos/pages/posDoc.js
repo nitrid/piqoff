@@ -4654,7 +4654,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false)&& (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY > 1)
                                             {
@@ -4676,7 +4676,9 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        
+                                       console.log(this.grdList.devGrid.getSelectedRowsData()[0])
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false) && (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             let tmpData = 
                                             {
@@ -4685,6 +4687,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                             this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                         }
+
                                     }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                 </div>
                             </NdLayoutItem>

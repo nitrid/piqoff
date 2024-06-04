@@ -290,7 +290,7 @@
         </Item7>
         <Item8 Ref="146" ControlType="XRLabel" Name="label14" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="643.7917, 8.875008" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="147" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
+            <Item1 Ref="147" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])*-1" />
           </ExpressionBindings>
           <StylePriority Ref="148" UseFont="false" UseTextAlignment="false" />
         </Item8>

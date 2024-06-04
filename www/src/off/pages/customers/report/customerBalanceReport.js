@@ -318,7 +318,7 @@ export default class customerBalanceReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.cri_04_002")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.cri_04_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 

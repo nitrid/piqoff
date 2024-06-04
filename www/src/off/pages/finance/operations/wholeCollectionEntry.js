@@ -366,7 +366,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="infinite" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                            <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
+                                            <Export fileName={this.lang.t("menuOff.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDate")} dataType="date" allowEditing={false}/>
                                             <Column dataField="OUTPUT_CODE" caption={this.t("grdDocPayments.clmCustomerCode")} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmCustomerName")} allowEditing={false}/>
