@@ -966,7 +966,7 @@ export default class depotTransfer extends React.PureComponent
                                         }
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEM_BARCODE_VW_01.BARCODE AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
+                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT AS VAT,COST_PRICE,ITEM_BARCODE_VW_01.BARCODE AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
