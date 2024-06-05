@@ -9,15 +9,11 @@ COPY www/package*.json ./www/
 WORKDIR /app/www
 RUN npm install --force --verbose
 
-# Frontend dosyalarını kopyala ve build işlemini gerçekleştir
-COPY www /app/www
-RUN npm run build
-
 # .NET SDK image to build the DevPrint application
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnet-build
 
 # Çalışma dizinini ayarla
-WORKDIR /src
+# WORKDIR /src
 
 # .NET proje dosyalarını kopyala ve restore et
 COPY plugins/devprint/net6/net6/ plugins/devprint/net6/net6/
@@ -44,7 +40,10 @@ WORKDIR /app
 # Backend bağımlılıklarını yükle
 COPY package*.json ./
 RUN npm install --force --verbose
-
+# Frontend dosyalarını kopyala ve build işlemini gerçekleştir
+WORKDIR /app/www
+COPY www /app/www
+RUN npm run build
 # Back-end dosyalarını kopyala
 COPY . .
 
