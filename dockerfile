@@ -40,6 +40,7 @@ WORKDIR /app
 # Backend bağımlılıklarını yükle
 COPY package*.json ./
 RUN npm install --force --verbose
+
 # Frontend dosyalarını kopyala ve build işlemini gerçekleştir
 WORKDIR /app/www
 COPY www /app/www
@@ -52,7 +53,7 @@ COPY --from=dotnet-build /app/plugins/devprint/lib ./plugins/devprint/lib
 
 RUN chmod +x /app/plugins/devprint/lib/DevPrint.dll
 # Gereksiz dosyaları kaldır
-# RUN rm -rf archiveFiscal
+RUN rm -rf archiveFiscal
 
 # Backend uygulamasını başlat
 CMD ["node", "server.js"]
