@@ -1367,6 +1367,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.promo_01_001'),//'Promosyon Tanımları',
                             path: 'promotion/cards/promotionCard'
                         },
+                        {
+                            id: 'promo_01_002',
+                            text: e.t('menuOff.promo_01_002'),//'indirim Tanımları',
+                            path: 'promotion/cards/discountCard'
+                        },
                     ]
                 },
                 {
