@@ -1,5 +1,5 @@
 import {core} from 'gensrv'
-import config from './config.js'
+import config from './config/config.js'
 
 let gensrv = new core(config);
 gensrv.listen(config.port);
