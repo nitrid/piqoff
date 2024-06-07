@@ -10,6 +10,9 @@ curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --runtime dotne
 export DOTNET_ROOT=/home/site/dotnet
 export PATH=$PATH:/home/site/dotnet
 
+# Node.js uygulamasını başlatmak için çalışma dizinini değiştir
+cd /home/site/wwwroot
+
 # Node.js uygulamasını başlat
 echo "Starting Node.js application..."
 npm start
