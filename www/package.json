@@ -7,7 +7,7 @@
   "scale": {
     "version": "1.0.1",
     "certificate": "LNE-39258",
-    "sha": "88c2230804cf89e0cf9ce7326963831df9e101547039d335b279421d4ad85b01"
+    "sha": "9d627e4005d7537a6987b0bbbfbf63e5321b8987219d9d18498f916b6bc2a17b"
   },
   "scripts": {
     "start": "webpack-dev-server --mode development",
