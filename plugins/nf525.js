@@ -1480,6 +1480,7 @@ class nf525
         return new Promise(async resolve =>
         {
             let tmpMailText = ""
+            let tmpCompanyDt = ""
             try
             {
                 let tmpDeviceQuery = 
@@ -1488,6 +1489,13 @@ class nf525
                 }
 
                 let tmpDeviceDt = await core.instance.sql.execute(tmpDeviceQuery)
+
+                let tmpCompanyQuery = 
+                {
+                    query : "SELECT TOP 1 NAME FROM COMPANY_VW_01 "
+                }
+
+                tmpCompanyDt = await core.instance.sql.execute(tmpCompanyQuery)
 
                 for (let i = 0; i < tmpDeviceDt.result.recordset.length; i++) 
                 {
@@ -1600,8 +1608,8 @@ class nf525
             {
                 let tmpMailData =
                 {
-                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
-                    subject : "NF525 Anomali Control",
+                    sendMail : "recep@piqsoft.fr",
+                    subject : "NF525 Anomali Control - " + tmpCompanyDt.result.recordset[0].NAME,
                     text : tmpMailText,
                     mailGuid:"A7386C3E-4973-4D94-BEFE-D6CA932AAF5D"
                 }
