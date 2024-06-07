@@ -1608,7 +1608,7 @@ class nf525
             {
                 let tmpMailData =
                 {
-                    sendMail : "recep@piqsoft.fr",
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
                     subject : "NF525 Anomali Control - " + tmpCompanyDt.result.recordset[0].NAME,
                     text : tmpMailText,
                     mailGuid:"A7386C3E-4973-4D94-BEFE-D6CA932AAF5D"
