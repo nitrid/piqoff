@@ -19,11 +19,11 @@ export default class NbLabel extends NbBase
     {
         if(typeof this.props.format != 'undefined' && this.props.format == 'currency')
         {
-            this.setState({value:e.toString(),text:Number(e).currency()})
+            this.setState({value:e == null ? 0 : e.toString(),text:Number(e).currency()})
             return
         }
         
-        this.setState({value:e.toString(),text:e.toString()})
+        this.setState({value:e == null ? '' : e.toString(),text:e.toString()})
     }
     get style()
     {
