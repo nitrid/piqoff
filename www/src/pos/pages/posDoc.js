@@ -2479,8 +2479,6 @@ export default class posDoc extends React.PureComponent
             if(this.core.offline)
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
-                this.core.util.writeLog("calcGrandTotal : 09")
-                await this.calcGrandTotal()
             }
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')

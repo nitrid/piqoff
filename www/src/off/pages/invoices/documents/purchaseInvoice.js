@@ -2392,56 +2392,69 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onCellPrepared={(e) =>
                                         {
-                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0)
-                                            {
-                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                            if (e.column.dataField === 'PRICE' && e.data && e.data.PRICE < 0) 
                                                 {
-                                                    e.cellElement.style.color ="red"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
+                                                    }
+                                                
+                                                    dialog(tmpConfObj);
+                                                    e.data.PRICE = Math.abs(e.data.PRICE);
                                                 }
-                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+    
+                                                if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0 && e.data.PRICE >= 0)
                                                 {
-                                                    e.cellElement.style.color ="green"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="red"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="green"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else
+                                                    {
+                                                        e.cellElement.style.color ="blue"
+                                                    }
                                                 }
-                                                else
+                                            }}
+                                            onRowUpdated={async(e)=>
+                                            {
+                                                if(typeof e.data.QUANTITY != 'undefined')
                                                 {
-                                                    e.cellElement.style.color ="blue"
+                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                        param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                        value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                        e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
+                                                        
+                                                        this.calculateTotal()
+                                                    }
                                                 }
-                                            }
-                                        }}
-                                        onRowUpdated={async(e)=>
-                                        {
-                                            if(typeof e.data.QUANTITY != 'undefined')
-                                            {
-                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
-                                                let tmpQuery = 
+                                                if(typeof e.data.SUB_QUANTITY != 'undefined')
                                                 {
-                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                                 }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
+                                                if(typeof e.data.PRICE != 'undefined' && e.data.PRICE >= 0)
                                                 {
-                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
-                                                    
-                                                    this.calculateTotal()
+                                                    e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                                 }
-                                            }
-                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
-                                            {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.PRICE != 'undefined')
-                                            {
-                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.SUB_PRICE != 'undefined')
-                                            {
-                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
-                                            }
+                                                if(typeof e.data.SUB_PRICE != 'undefined')
+                                                {
+                                                    e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                                }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
