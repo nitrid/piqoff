@@ -223,7 +223,7 @@ export default class itemInventoryReport extends React.PureComponent
                                         <NdSelectBox simple={true} parent={this} id="cmbDepot" showClearButton={true} notRefresh={true}  searchEnabled={true}
                                         displayExpr="NAME"                       
                                         valueExpr="GUID"
-                                        value="1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+                                        value="EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
                                         param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         data={{source: {select : {query:"SELECT GUID,CODE,NAME FROM DEPOT ORDER BY CODE ASC"},sql : this.core.sql}}}
