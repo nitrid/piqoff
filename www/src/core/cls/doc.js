@@ -64,6 +64,7 @@ export class docCls
         this.docOrders = new docOrdersCls();
         this.docOffers = new docOffersCls();
         this.docDemand = new docDemandCls();
+        this.transportInfermotion = new transportInfermotionCls();
         this._initDs();
     }
     // #region Private
@@ -170,6 +171,7 @@ export class docCls
         this.ds.add(this.docOrders.dt('DOC_ORDERS'))
         this.ds.add(this.docOffers.dt('DOC_OFFERS'))
         this.ds.add(this.docDemand.dt('DOC_DEMAND'))
+        this.ds.add(this.transportInfermotion.dt('TRANSPORT_INFORMATION'))
 
         this.ds.get('DOC').noColumnEdit = ['MARGIN']
         this.ds.get('DOC_ITEMS').noColumnEdit = ['MARGIN']
@@ -240,6 +242,7 @@ export class docCls
                 await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
                 await this.docOffers.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docDemand.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
+                await this.transportInfermotion.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
         });
@@ -2216,6 +2219,180 @@ export class docDemandCls
             await this.ds.get('DOC_DEMAND').refresh();
 
             resolve(this.ds.get('DOC_DEMAND'));
+            
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class transportInfermotionCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
+            DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            SENDER_NAME : '',
+            SENDER_ADRESS : '',
+            SENDER_CITY : '',
+            SENDER_COUNTRY  : '',
+            SENDER_ZIPCODE  : '',
+            RECIEVER_NAME  : '',
+            RECIEVER_ADRESS : '',
+            RECIEVER_CITY : '',
+            RECIEVER_COUNTRY : '',
+            RECIEVER_ZIPCODE : '',
+            TRANSPORTER : '',
+            TRANSPORTER_PLATE : '',
+            PALLET_QUANTITY:0,
+            METTER : 0,
+            HEIGHT : 0,
+            COLIS : 0,
+        }
+        this._initDs();
+    }
+    //#region private
+    _initDs()
+    {
+        let tmpDt = new datatable('TRANSPORT_INFORMATION');
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[TRANSPORT_INFORMATION_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) ",
+            param : ['DOC_GUID:string|50']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@SENDER_NAME = @PSENDER_NAME, " +
+                    "@SENDER_ADRESS = @PSENDER_ADRESS, " + 
+                    "@SENDER_CITY = @PSENDER_CITY, " +
+                    "@SENDER_COUNTRY = @PSENDER_COUNTRY, " +
+                    "@SENDER_ZIPCODE = @PSENDER_ZIPCODE, " +
+                    "@RECIEVER_NAME = @PRECIEVER_NAME, " +
+                    "@RECIEVER_ADRESS = @PRECIEVER_ADRESS, " +
+                    "@RECIEVER_CITY = @PRECIEVER_CITY, " +
+                    "@RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, " +
+                    "@RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, " +
+                    "@TRANSPORTER = @PTRANSPORTER, " + 
+                    "@TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, " +
+                    "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
+                    "@METTER = @PMETTER, " +
+                    "@WEIGHT = @PWEIGHT, " +
+                    "@COLIS = @PCOLIS ",
+        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
+                    'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
+                    'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float'],
+        dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
+                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_UPDATE] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@SENDER_NAME = @PSENDER_NAME, " +
+                    "@SENDER_ADRESS = @PSENDER_ADRESS, " + 
+                    "@SENDER_CITY = @PSENDER_CITY, " +
+                    "@SENDER_COUNTRY = @PSENDER_COUNTRY, " +
+                    "@SENDER_ZIPCODE = @PSENDER_ZIPCODE, " +
+                    "@RECIEVER_NAME = @PRECIEVER_NAME, " +
+                    "@RECIEVER_ADRESS = @PRECIEVER_ADRESS, " +
+                    "@RECIEVER_CITY = @PRECIEVER_CITY, " +
+                    "@RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, " +
+                    "@RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, " +
+                    "@TRANSPORTER = @PTRANSPORTER, " + 
+                    "@TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, " +
+                    "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
+                    "@METTER = @PMETTER, " +
+                    "@WEIGHT = @PWEIGHT, " +
+                    "@COLIS = @PCOLIS ",
+        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
+                    'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
+                    'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float'],
+        dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
+                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@GUID = @PGUID, " + 
+                    "@DOC_GUID = @PDOC_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
+            dataprm : ['CUSER','GUID','DOC_GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('TRANSPORT_INFORMATION') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        if(typeof arguments[1] == 'undefined' || arguments[1] == true)
+        {
+            tmp.GUID = datatable.uuidv4()
+        }
+        this.dt('TRANSPORT_INFORMATION').push(tmp,arguments[1])
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+        return new Promise(async resolve =>
+        {
+            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000'}
+            if(arguments.length > 0)
+            {
+                tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
+            }
+
+            this.ds.get('TRANSPORT_INFORMATION').selectCmd.value = Object.values(tmpPrm);
+
+            await this.ds.get('TRANSPORT_INFORMATION').refresh();
+
+            resolve(this.ds.get('TRANSPORT_INFORMATION'));
             
         });
     }

@@ -545,4 +545,25 @@ export const langFr =
             msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
         }
     },
+    popTransport : 
+    {
+        title : "Informations sur le transporteur",
+        txtSenderName: "Nom de l'expéditeur",
+        txtRecieverName : "Nom du destinataire",
+        txtSenderAdress : "Adresse de l'expéditeur",
+        txtRecieverAdress : "Adresse du destinataire",
+        txtSenderCity : "Ville de l'expéditeur",
+        txtRecieverCity : "Ville du destinataire",
+        txtSenderZipCode : "Code postal",
+        txtRecieverZipCode : "Code postal",
+        cmbSenderCountry : "Pays",
+        cmbRecieverCountry : "Pays",
+        txtTransporter : "Nom du transporteur",
+        txtTransporterPlate : "Plaque du véhicule",
+        txtPalletQuntity : "Quantité de palettes",
+        txtColis : "Quantité de colis",
+        txtMetter : "Métrage",
+        txtHeight : "Tonnes",
+        btnSave :"OK"
+    }
 }
