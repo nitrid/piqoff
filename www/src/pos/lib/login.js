@@ -178,7 +178,7 @@ export default class Login extends React.Component
                     <div className="card-header">
                         <div className='row'>
                             <div className='col-4'>
-                                <Button icon="preferences" width={'50px'} style={{border:'none',backgroundColor:'transparent'}}
+                                <Button icon="preferences" width={'50px'} style={{border:'none',backgroundColor:'transparent',display:this.core.util.isAndroid() ? 'block' : 'none'}}
                                 onClick={()=>window.location="../pos/appUpdate.html"}
                                 />
                             </div>

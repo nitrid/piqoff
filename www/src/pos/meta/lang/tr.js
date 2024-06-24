@@ -976,4 +976,13 @@ export const langTr =
         msg : "Cihaz bilgileri database den getirilemedi !",
         btn01 : "Tamam"
     },
+    popDeviceList :
+    {
+        title : "Cihaz Seçiniz",
+        clmManufacture : "Üretici",
+        clmProductName : "Ürün Adı",
+        clmProductId : "Ürün Id",
+        clmVendorId : "Vendor Id",
+        clmSerialNo : "Seri No"
+    },
 }

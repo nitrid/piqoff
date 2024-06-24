@@ -383,12 +383,11 @@ export default class posDoc extends React.PureComponent
             if(this.posDevice.dt().length > 0)
             {
                 this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
-                {
-                    this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-                    this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
-                }
-                else
+                this.posScale = new posScaleCls()
+                this.posLcd = new posLcdCls()
+                this.posScale.port = this.posDevice.dt()[0].SCALE_PORT
+                this.posLcd.port = this.posDevice.dt()[0].LCD_PORT
+                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length == 0)
                 {
                     if(this.core.util.isElectron())
                     {
@@ -422,7 +421,7 @@ export default class posDoc extends React.PureComponent
             }
         }
         this.posDevice.scanner();
-
+        
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
@@ -8380,6 +8379,29 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.lcdPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsLcd.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {       
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8389,11 +8411,35 @@ export default class posDoc extends React.PureComponent
                                 {                                    
                                     this.keyPopSettings.inputName = "txtPopSettingsLcd"
                                     this.keyPopSettings.setInput(this.txtPopSettingsLcd.value)
-                                }}/>
+                                }}
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popSettings.scalePort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsScale.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8450,6 +8496,29 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsPrinter.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8501,6 +8570,28 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                     </NdPopUp>
+                </div>
+                {/* Device List Popup */}
+                <div>
+                    <NdPopGrid id={"popDeviceList"} parent={this} container={"#root"}
+                    visible={false}
+                    selection={{mode:'single'}}
+                    filterRow={{visible:false}}
+                    headerFilter={{visible:false}}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.lang.t("popDeviceList.title")} 
+                    deferRendering={true}
+                    >
+                        <Column dataField="manufacturerName" caption={this.lang.t("popDeviceList.clmManufacture")} width={250}/>
+                        <Column dataField="productName" caption={this.lang.t("popDeviceList.clmProductName")} width={400}/>
+                        <Column dataField="productId" caption={this.lang.t("popDeviceList.clmProductId")} width={100}/>
+                        <Column dataField="vendorId" caption={this.lang.t("popDeviceList.clmVendorId")} width={100}/>
+                        <Column dataField="serialNumber" caption={this.lang.t("popDeviceList.clmSerialNo")} width={100}/>
+                    </NdPopGrid>
                 </div>
                 {/* Grid List Popup */}
                 <div>
