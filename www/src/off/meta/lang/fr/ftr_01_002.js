@@ -26,6 +26,7 @@ const ftr_01_002 =
         clmAmount : "Total" ,
         clmTotal : "Total",
         clmOutputName :"Réserve",
+        clmMail : "Mail Envoyé"
     },
     popDesign : 
     {

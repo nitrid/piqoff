@@ -25,7 +25,7 @@ export default class salesInvList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
+            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL','MAIL']
         }
         
         this.core = App.instance.core;
@@ -40,6 +40,8 @@ export default class salesInvList extends React.PureComponent
             {CODE : "AMOUNT",NAME : this.t("grdSlsIvcList.clmAmount")},
             {CODE : "VAT",NAME : this.t("grdSlsIvcList.clmVat")},
             {CODE : "TOTAL",NAME : this.t("grdSlsIvcList.clmTotal")},
+            {CODE : "MAIL",NAME : this.t("grdSlsIvcList.clmMail")},
+
         ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
@@ -85,6 +87,10 @@ export default class salesInvList extends React.PureComponent
                 {
                     this.groupList.push('TOTAL')
                 }
+                if(typeof e.value.find(x => x == 'MAIL') != 'undefined')
+                {
+                    this.groupList.push('MAIL')
+                }
                 
                 for (let i = 0; i < this.grdSlsIvcList.devGrid.columnCount(); i++) 
                 {
@@ -129,7 +135,7 @@ export default class salesInvList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
+                    query : "SELECT *,CASE WHEN ISNULL((SELECT TOP 1 SENDER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_01.GUID),'') <> '' THEN  'OK' ELSE 'X' END AS MAIL FROM DOC_VW_01 " +
                             "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                             " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
@@ -362,6 +368,7 @@ export default class salesInvList extends React.PureComponent
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsIvcList.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsIvcList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsIvcList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
+                                <Column dataField="MAIL" caption={this.t("grdSlsIvcList.clmMail")} visible={true} /> 
                             </NdGrid>
                         </div>
                     </div>
