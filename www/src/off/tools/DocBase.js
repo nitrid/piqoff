@@ -2915,17 +2915,17 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtColis")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}}/>
-                                <NdNumberBox id="txtPalletQuntity" parent={this} simple={true} >
+                                <NdNumberBox id="txtColis" parent={this} simple={true} >
                                 </NdNumberBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtMetter")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}/>
-                                <NdNumberBox id="txtPalletQuntity" parent={this} simple={true} >
+                                <NdNumberBox id="txtMetter" parent={this} simple={true} >
                                 </NdNumberBox>
                             </Item>
                             <Item>
-                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"HEIGHT"}}/>
-                                <NdNumberBox id="txtPalletQuntity" parent={this} simple={true} >
+                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}}/>
+                                <NdNumberBox id="txtHeight" parent={this} simple={true} >
                                 </NdNumberBox>
                             </Item>
                             <EmptyItem/>

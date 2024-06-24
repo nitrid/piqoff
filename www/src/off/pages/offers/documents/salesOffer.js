@@ -628,7 +628,7 @@ export default class salesOffer extends DocBase
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.docOffers.dt()[0])
+                                        console.log(this.docObj)
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
