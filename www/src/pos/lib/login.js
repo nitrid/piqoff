@@ -177,7 +177,11 @@ export default class Login extends React.Component
                 <div className="card" style={this.style.login_box}>
                     <div className="card-header">
                         <div className='row'>
-                            <div className='col-4'></div>
+                            <div className='col-4'>
+                                <Button icon="preferences" width={'50px'} style={{border:'none',backgroundColor:'transparent',display:this.core.util.isAndroid() ? 'block' : 'none'}}
+                                onClick={()=>window.location="../pos/appUpdate.html"}
+                                />
+                            </div>
                             <div className='col-8'>
                                 <img src="./css/img/piqsoftlogo.png" height="48px"/>
                             </div>

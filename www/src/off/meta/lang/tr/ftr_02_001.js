@@ -262,6 +262,12 @@ const ftr_02_001 =
         btn01: "Tamam",
         msg: "Şifreniz Hatalı !"
     },
+    msgNegativePrice:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Negatif Fiyat Değeri Giremezsiniz !"
+    },
     msgGetLocked:
     {
         title: "Dikkat",

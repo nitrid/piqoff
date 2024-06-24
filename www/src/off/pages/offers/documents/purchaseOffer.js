@@ -1201,6 +1201,7 @@ export default class purchaseOffer extends DocBase
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value,this.txtPopQteUnitPrice.value)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
@@ -1212,6 +1213,7 @@ export default class purchaseOffer extends DocBase
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
+                                                    this.txtBarcode.focus()
                                                 }
                                                 this.grid.devGrid.endUpdate()
                                             }

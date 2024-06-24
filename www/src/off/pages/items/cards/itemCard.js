@@ -2989,8 +2989,9 @@ export default class itemCard extends React.PureComponent
                                         ]
                                     }>                                        
                                     </NdTextBox>
-                                    <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
-                                    position={{of:'#page'}} 
+                                    <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} 
+                                    container={"#root"} 
+                                    position={{of:'#root'}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}

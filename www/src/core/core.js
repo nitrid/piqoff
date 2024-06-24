@@ -339,6 +339,21 @@ export class local
             }
             else if(this.platform == 'cordova')
             {
+                //CORDOVA SQLLITE İÇİN EKLENDİ. GELEN BOOLEAN DEĞER ÇİFT TIRNAKLI (") GELİYOR BU DÜZELTİLİYOR.(SİK SİK İŞLER...)
+                const convertBooleans = (obj) => 
+                {
+                    for (const key in obj) 
+                    {
+                        if (obj.hasOwnProperty(key)) 
+                        {
+                            if (obj[key] === "true" || obj[key] === "false") 
+                            {
+                                obj[key] = obj[key] === "true"; // "true" ise true, "false" ise false
+                            }
+                        }
+                    }
+                    return obj;
+                };
                 this.db.transaction((tx) =>
                 {
                     tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
@@ -346,7 +361,7 @@ export class local
                         let tmpArr = []
                         for (let i = 0; i < result.rows.length; i++) 
                         {
-                            tmpArr.push(result.rows.item(i))
+                            tmpArr.push(convertBooleans(result.rows.item(i)))
                         }
                         resolve({result:{state:true,recordset:tmpArr}})
                     }, (tx, err) =>
@@ -728,6 +743,10 @@ export class util
         }
     
         return false;
+    }
+    isAndroid()
+    {
+        return /android/i.test(navigator.userAgent || navigator.vendor || window.opera)
     }
     writeLog(pMsg,pPath)
     {

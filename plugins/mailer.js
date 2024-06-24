@@ -104,7 +104,7 @@ class mailer
             }
             else
             {
-                resolve(0);
+                resolve(1);
             }
         })
     }
