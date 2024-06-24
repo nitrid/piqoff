@@ -1,7 +1,7 @@
 {
     "type": "module",
     "name": "piqsoft",
-    "version": "1.0.10a",
+    "version": "1.0.10b",
     "dependencies": {
         "adm-zip": "^0.5.10",
         "gensrv": "1.0.106",

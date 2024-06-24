@@ -628,7 +628,7 @@ export default class salesOffer extends DocBase
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.docOffers.dt()[0])
+                                        console.log(this.docObj)
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -870,18 +870,12 @@ export default class salesOffer extends DocBase
                                         icon: 'clear',
                                         onClick: async () => 
                                         {
-                                            let tmpConfObj =
+                                            if(this.docObj.transportInfermotion.dt().length == 0)
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                                this.docObj.transportInfermotion.addEmpty()
+                                                this.docObj.transportInfermotion.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
                                             }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                App.instance.panel.closePage()
-                                            }
+                                            this.popTransport.show()
                                         }
                                     }    
                                 } />
@@ -1204,6 +1198,7 @@ export default class salesOffer extends DocBase
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value,this.txtPopQteUnitPrice.value)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
@@ -1217,6 +1212,7 @@ export default class salesOffer extends DocBase
                                                     await this.addItem(data[i],null)
                                                 }
                                                 this.grid.devGrid.endUpdate()
+                                                this.txtBarcode.focus()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }

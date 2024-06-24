@@ -266,6 +266,12 @@ const ftr_02_001 =
         btn01: "OK",
         msg: "Mot de Passe Erroné"
     },
+    msgNegativePrice:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Vous ne pouvez pas entrer une valeur de prix négative !"
+    },
     msgGetLocked:
     {
         title: "Attention",

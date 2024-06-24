@@ -369,6 +369,7 @@ export const langTr =
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımlama",
+        promo_01_002: "İndirim Tanımlama",
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
         promo_02_002: "Promosyon Detay Listesi",
@@ -544,6 +545,27 @@ export const langTr =
             title : "Dikkat",
             btn01 : "Tamam",
             msg : "Tedarikçi bulunamadığından import işlemini yapamazsınız !"
-        }
+        },
+    },
+    popTransport : 
+    {
+        title : "Taşıyıcı Bilgileri",
+        txtSenderName: "Gönderici Adı",
+        txtRecieverName : "Alıcı Adı",
+        txtSenderAdress : "Gönderici Adres",
+        txtRecieverAdress : "Alıcı Adres",
+        txtSenderCity : "Gönderici Şehri",
+        txtRecieverCity : "Alıcı Şehri",
+        txtSenderZipCode : "Posta Kodu",
+        txtRecieverZipCode : "Posta Kodu",
+        cmbSenderCountry : "Ülke",
+        cmbRecieverCountry : "Ülke",
+        txtTransporter : "Taşıyıcı Adı",
+        txtTransporterPlate : "Araç Plakası",
+        txtPalletQuntity : "Palet Miktarı",
+        txtColis : "Koli Miktarı",
+        txtMetter : "Metraj",
+        txtHeight : "Tonaj",
+        btnSave :"Tamam"
     },
 }
