@@ -14,11 +14,11 @@ const hashSum = crypto.createHash('sha256');
 hashSum.update(fileBuffer);
 const hex = hashSum.digest('hex');
 
-// if(pack.scale.sha != hex)
-// {
-//     console.log("invalide scale.js - ")
-//     return
-// }
+if(pack.scale.sha != hex)
+{
+    console.log("invalide scale.js - ")
+    return
+}
 
 module.exports = 
 {

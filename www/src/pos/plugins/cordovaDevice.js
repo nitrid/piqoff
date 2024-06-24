@@ -9,28 +9,37 @@ posLcdCls.prototype.print = async function(pData)
 {
     if(window.SerialUSBPlugin)
     {
-        window.SerialUSBPlugin.list(function(devices) 
+        let vendorId = 0;
+        let productId = 0;
+        
+        if(this.port != null && typeof this.port != 'undefined' && this.port.indexOf('|') > -1)
         {
-            console.log(devices)
-            let vendorId = 1659;
-            let productId = 9123;
+            vendorId = this.port.split('|')[0];
+            productId = this.port.split('|')[1];
+        }
+        else
+        {
+            console.error('vendorId - productId is invalid');
+            return
+        }
+        // let vendorId = 1659;
+        // let productId = 9123;
 
-            window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+        window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+        {
+            window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
             {
-                window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
+                window.SerialUSBPlugin.write('\x0c');
+                window.SerialUSBPlugin.write(pData.text);
+                setTimeout(() => 
                 {
-                    window.SerialUSBPlugin.write('\x0c');
-                    window.SerialUSBPlugin.write(pData.text);
-                    setTimeout(() => 
-                    {
-                        window.SerialUSBPlugin.close();  
-                    }, 100);
-                });
-            }, function(permissionError) 
-            {
-                console.error(permissionError);
+                    window.SerialUSBPlugin.close();  
+                }, 100);
             });
-        })
+        }, function(permissionError) 
+        {
+            console.error(permissionError);
+        });
     }
     else
     {
@@ -43,8 +52,20 @@ posDeviceCls.prototype.escPrinter = async function(pData)
     {
         if(window.SerialUSBPlugin)
         {
-            let vendorId = 1208;
-            let productId = 3624;
+            let vendorId = 0;
+            let productId = 0;
+
+            if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT.indexOf('|') > -1)
+            {
+                vendorId = this.dt()[0].PRINTER_PORT.split('|')[0];
+                productId = this.dt()[0].PRINTER_PORT.split('|')[1];
+            }
+            else
+            {
+                console.error('vendorId - productId is invalid');
+                resolve();
+                return
+            }
 
             window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
             {
@@ -70,7 +91,6 @@ posDeviceCls.prototype.escPrinter = async function(pData)
                     
                     for (let i = 0; i < tmpArr.length; i++) 
                     {   
-                        console.log(tmpArr[i].logo)
                         if(typeof tmpArr[i].barcode != 'undefined')
                         {
                             if(typeof tmpArr[i].align != 'undefined')
@@ -97,7 +117,6 @@ posDeviceCls.prototype.escPrinter = async function(pData)
                             window.SerialUSBPlugin.print(tmpArr[i]);
                         }                        
                     }                      
-                    console.log(3)
                     window.SerialUSBPlugin.cut();
                     window.SerialUSBPlugin.close();
                     resolve();
@@ -112,15 +131,30 @@ posDeviceCls.prototype.escPrinter = async function(pData)
         {
             resolve(orgEscPrinter.call(this, pData))
         }
-    })
-    
+    })    
 }
 posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
 {
     if(window.SerialUSBPlugin)
     {
-        let vendorId = 1659;
-        let productId = 8963;
+        let vendorId = 0;
+        let productId = 0;
+        console.log(11111)
+        console.log(this.port)
+        if(this.port != null && typeof this.port != 'undefined' && this.port.indexOf('|') > -1)
+        {
+            vendorId = this.port.split('|')[0];
+            productId = this.port.split('|')[1];
+        }
+        else
+        {
+            console.log(11111)
+            console.error('vendorId - productId is invalid');
+            return
+        }
+
+        // let vendorId = 1659;
+        // let productId = 8963;
 
         let toHex = (pStr) =>
         {
@@ -149,20 +183,14 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
         
         return new Promise((resolve) =>
         {
-            console.log(1)
             window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
             {
-                console.log(2)
                 window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
                 {
-                    console.log(3)
                     // Teraziye fiyat gönderiliyor
                     window.SerialUSBPlugin.write(`\x04\x02\x01\x1B${TmpPrice}\x1B\x03`);
-                    console.log(4)
                     window.SerialUSBPlugin.read((line) => 
                     {
-                        console.log(5)
-                        console.log(line)
                         line = new TextDecoder().decode(line);
                         // Teraziden onay geldiğinde
                         if (toHex(line) === "6") 
@@ -238,10 +266,29 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
                 });
             })
         });
-        
     }
     else
     {
         resolve(orgMettlerScaleSend.call(this, pData))
     }
+}
+posDeviceCls.prototype.deviceList = async function(pData)
+{
+    return new Promise(async resolve => 
+    {
+        if(window.SerialUSBPlugin)
+        {
+            window.SerialUSBPlugin.list(function(devices) 
+            {
+                resolve(devices)
+            },function()
+            {
+                resolve([])
+            })
+        }
+        else
+        {
+            resolve([])
+        }
+    })
 }

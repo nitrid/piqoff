@@ -744,6 +744,10 @@ export class util
     
         return false;
     }
+    isAndroid()
+    {
+        return /android/i.test(navigator.userAgent || navigator.vendor || window.opera)
+    }
     writeLog(pMsg,pPath)
     {
         return new Promise(resolve => 

@@ -945,5 +945,14 @@ export const langDe =
         title : "Achtung",
         msg : "Geräteinformationen konnten nicht aus der Datenbank abgerufen werden!",
         btn01 : "OK"
+    },
+    popDeviceList: 
+    {
+        title: "Gerät auswählen",
+        clmManufacture: "Hersteller",
+        clmProductName: "Produktname",
+        clmProductId: "Produkt-ID",
+        clmVendorId: "Anbieter-ID",
+        clmSerialNo: "Seriennummer"
     }
 }
