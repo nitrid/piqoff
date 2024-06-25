@@ -2820,7 +2820,7 @@ export default class DocBase extends React.PureComponent
                     visible={false}
                     showCloseButton={true}
                     showTitle={true}
-                    title={this.t("popTransport.title")}
+                    title={this.lang.t("popTransport.title")}
                     container={"#root"} 
                     width={'800'}
                     height={'700'}
