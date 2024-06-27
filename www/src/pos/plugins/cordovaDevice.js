@@ -273,7 +273,7 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
     }
     else
     {
-        return new Promise((resolve) => {resolve(orgMettlerScaleSend.call(this, pData))});
+        return new Promise((resolve) => {resolve(orgMettlerScaleSend.call(this, pPrice))});
     }
 }
 posDeviceCls.prototype.deviceList = async function(pData)
