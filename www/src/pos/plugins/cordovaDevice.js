@@ -139,8 +139,7 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
     {
         let vendorId = 0;
         let productId = 0;
-        console.log(11111)
-        console.log(this.port)
+
         if(this.port != null && typeof this.port != 'undefined' && this.port.indexOf('|') > -1)
         {
             vendorId = this.port.split('|')[0];
@@ -148,13 +147,9 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
         }
         else
         {
-            console.log(11111)
             console.error('vendorId - productId is invalid');
             return
         }
-
-        // let vendorId = 1659;
-        // let productId = 8963;
 
         let toHex = (pStr) =>
         {
@@ -183,93 +178,102 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
         
         return new Promise((resolve) =>
         {
-            window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+            window.SerialUSBPlugin.requestPermission(vendorId, productId,async  function(permissionMessage) 
             {
-                window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
+                window.SerialUSBPlugin.open(vendorId, productId, async function(connectMessage) 
                 {
                     // Teraziye fiyat gönderiliyor
-                    window.SerialUSBPlugin.write(`\x04\x02\x01\x1B${TmpPrice}\x1B\x03`);
-                    window.SerialUSBPlugin.read((line) => 
+                    await window.SerialUSBPlugin.writeS('01' + TmpPrice +'');
+                    
+                    let timeoutHandle = setTimeout(() => 
                     {
-                        line = new TextDecoder().decode(line);
-                        // Teraziden onay geldiğinde
-                        if (toHex(line) === "6") 
+                        window.SerialUSBPlugin.close(() => console.log('Zaman aşımı nedeniyle port kapatıldı.'));
+                    }, 20000);
+
+                    window.SerialUSBPlugin.readS(async(line) =>
+                    {
+                        //TERAZİDEN ONAY GELDİĞİNDE..
+                        if(toHex(line.toString()) == "6")
                         {
-                            window.SerialUSBPlugin.write('\x04\x05');
+                            await window.SerialUSBPlugin.writeS('')
                         }
-                        // Teraziden onay gelmediğinde
-                        else if (toHex(line) === "15") 
+                        //TERAZİDEN ONAY GELMEDİĞİNDE
+                        else if(toHex(line.toString()) == "15")
                         {
-                            window.SerialUSBPlugin.write(`\x04\x02\x01\x1B${TmpPrice}\x1B\x03`);
+                            //TEKRAR FİYAT GÖNDERİLİYOR.
+                            await window.SerialUSBPlugin.writeS('01' + TmpPrice +'');
                         }
-                        
-                        // Validasyon işlemi başlangıç
-                        if (line.substring(1, 3) === "11") 
+                        //VALİDASYON İŞLEMİ BAŞLANGIÇ
+                        if(line.toString().substring(1,3) == "11")
                         {
-                            if (line.substring(4, 5) === "2") 
-                            {
-                                let cs = ("000" + parseInt(Rol16(0x2C3C, line.substring(5, 6)) & 0xFFFF).toString(16)).slice(-4).toString().toUpperCase();
-                                let kw = ("000" + parseInt(Ror16(0xFA07, line.substring(6, 7)) & 0xFFFF).toString(16)).slice(-4).toString().toUpperCase();
+                            //VALİDASYON İÇİN GEREKLİ OLAN RANDOM NUMARA
+                            if(line.toString().substring(4,5) == "2")
+                            {      
+                                //RANDOM NUMARA BİT ÇEVİRİM İŞLEMİ      
+                                let cs = ("000" + parseInt(Rol16(0x2C3C, line.toString().substring(5,6)) & 0xFFFF).toString(16)).slice(-4).toString().toUpperCase();
+                                let kw = ("000" + parseInt(Ror16(0xFA07, line.toString().substring(6,7)) & 0xFFFF).toString(16)).slice(-4).toString().toUpperCase();
                                 let cskw = cs + kw;
-                                window.SerialUSBPlugin.write(`\x04\x02\x10\x1B${cskw}\x03`);
-                            } 
-                            else if (line.substring(4, 5) === "0") 
+                                //VALİDASYON CS VE KW GÖNDERİLİYOR 
+                                await window.SerialUSBPlugin.writeS('10'+ cskw.toString() + '')
+                            }
+                            else if(line.toString().substring(4,5) == "0")
                             {
-                                window.SerialUSBPlugin.write(`\x04\x02\x01\x1B${TmpPrice}\x1B\x03`);
-                            } 
-                            else if (line.substring(4, 5) === "1") 
+                                //VALİDASYON BAŞARISIZ DURUMU
+                                //console.log("Validasyon Başarısız");
+                                await window.SerialUSBPlugin.writeS('01' + TmpPrice +'');
+                            }
+                            else if(line.toString().substring(4,5) == "1")
                             {
+                                //VALİDASYON BAŞARILI DURUMU
                                 console.log("Validasyon Başarılı");
                                 let TmpResult = 
                                 {
                                     Type: "01",
-                                    Result: 
+                                    Result :
                                     {
-                                        Msg: "Validasyon Başarılı"
-                                    }
-                                };
+                                        Msg : "Validasyon Başarılı"
+                                    }                            
+                                }
                                 resolve(TmpResult);
-                                window.SerialUSBPlugin.close(() => console.log('Port kapatıldı.'));
+                                clearTimeout(timeoutHandle);
+                                window.SerialUSBPlugin.close();
                             }
                         }
-                        // Terazi sonuç döndüğünde
-                        if (line.substring(1, 3) === "02" || ReciveBuffer.substring(1, 3) === "02") 
+                        //TERAZİ SONUÇ DÖNDÜĞÜNDE
+                        if(line.toString().substring(1,3) == "02" || ReciveBuffer.substring(1,3) == "02")
                         {
-                            ReciveBuffer += line;
-                            if (ReciveBuffer.length >= 26) 
+                            ReciveBuffer += line.toString()
+                            if(ReciveBuffer.length >= 26)
                             {
-                                let TmpScale = ReciveBuffer.substring(6, 11);
-                                let TmpPrice = ReciveBuffer.substring(12, 18);
-                                let TmpAmount = ReciveBuffer.substring(19, 25);
-
+                                let TmpScale = ReciveBuffer.substring(6,11)
+                                let TmpPrice = ReciveBuffer.substring(12,18)
+                                let TmpAmount = ReciveBuffer.substring(19,25)
+                                
                                 let TmpResult = 
                                 {
                                     Type: "02",
-                                    Result: 
+                                    Result :
                                     {
-                                        Scale: TmpScale / 1000,
-                                        Price: TmpPrice / 100,
-                                        Amount: TmpAmount / 100
+                                        Scale : TmpScale / 1000,
+                                        Price : TmpPrice / 100,
+                                        Amount : TmpAmount / 100
                                     }
-                                };
-
+                                }
+        
                                 resolve(TmpResult);
+                                clearTimeout(timeoutHandle);
                                 ReciveBuffer = '';
-                                window.SerialUSBPlugin.close(() => console.log('Port kapatıldı.'));
+                                window.SerialUSBPlugin.close();
                             }
                         }
-                    });
-                    setTimeout(() => 
-                    {
-                        window.SerialUSBPlugin.close(() => console.log('Zaman aşımı nedeniyle port kapatıldı.'));
-                    }, 20000);
+                    })
                 });
             })
         });
     }
     else
     {
-        resolve(orgMettlerScaleSend.call(this, pData))
+        return new Promise((resolve) => {resolve(orgMettlerScaleSend.call(this, pData))});
     }
 }
 posDeviceCls.prototype.deviceList = async function(pData)
