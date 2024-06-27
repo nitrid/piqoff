@@ -10,9 +10,9 @@ const slsRpt_02_005 =
         clmCustomsNo : "Gümrük Kodu",   
         clmOrigin: "Menşei",   
         clmRegime : "Sektör",              
-        Quantity : "Miktar",   
+        clmQuantity : "Değer €",   
         clmKg : "Kilogram",   
-        clmLinge : "Şişe Adedi",   
+        clmLinge : "Adet",   
         clmNature : "Ürün Cinsi",
         clmTransport : "Taşıma Türü",
         clmZipcode : "Bölge",   
@@ -24,7 +24,8 @@ const slsRpt_02_005 =
         clmDescription : "Açıklama",   
         clmCountry : "T. Ülkesi",   
         clmItemCode : "Ürün Kodu",
-        clmItemName : "Ürün Adı"
+        clmItemName : "Ürün Adı",
+        clmItemGroup : "Ürün Grubu",
     },
 }
 

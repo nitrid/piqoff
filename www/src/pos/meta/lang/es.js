@@ -762,6 +762,8 @@ export const langEs =
     {
         title: "Advertencia",
         msg: "¡Fallo en el proceso de guardado!",
+        msg1: "Transazione fallita perché il numero di riferimento è zero!",
+        msg2: "Transazione fallita perché la firma è vuota!",
         btn01: "Aceptar",
         btn02: "Enviar de nuevo",
     },
@@ -930,4 +932,19 @@ export const langEs =
         clmTag : "Tag",
         clmPrice : "Precio"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Atención",
+        msg : "¡No se pudo recuperar la información del dispositivo de la base de datos!",
+        btn01 : "OK"
+    },
+    popDeviceList: 
+    {
+        title: "Seleccionar dispositivo",
+        clmManufacture: "Fabricante",
+        clmProductName: "Nombre del producto",
+        clmProductId: "ID del producto",
+        clmVendorId: "ID del proveedor",
+        clmSerialNo: "Número de serie"
+    }
 }

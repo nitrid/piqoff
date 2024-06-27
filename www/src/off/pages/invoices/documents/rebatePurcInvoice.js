@@ -66,8 +66,8 @@ export default class rebateInvoice extends DocBase
     async init()
     {
         await super.init()
-
-        this.grdRebtInv.devGrid.clearFilter("row")
+        this.grid = this["grdRebtInv"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
 
@@ -173,12 +173,12 @@ export default class rebateInvoice extends DocBase
                         {
                             this.combineControl = true
                             this.combineNew = false
-                            this.grdRebtInv.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdRebtInv.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -229,12 +229,12 @@ export default class rebateInvoice extends DocBase
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
-                                    this.grdRebtInv.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdRebtInv.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -253,7 +253,7 @@ export default class rebateInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -312,7 +312,7 @@ export default class rebateInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -367,7 +367,7 @@ export default class rebateInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -744,7 +744,7 @@ export default class rebateInvoice extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdRebtInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -860,7 +860,7 @@ export default class rebateInvoice extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdRebtInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1116,6 +1116,10 @@ export default class rebateInvoice extends DocBase
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1176,6 +1180,10 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     if(data.length > 0)
                                                     {
+                                                        if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                        {
+                                                            this.frmDocItems.option('disabled',false)
+                                                        }
                                                         this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                         this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                         this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1306,12 +1314,12 @@ export default class rebateInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdRebtInv.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdRebtInv.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1356,12 +1364,12 @@ export default class rebateInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdRebtInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1410,12 +1418,12 @@ export default class rebateInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
 
-                                                        this.grdRebtInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdRebtInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1426,12 +1434,12 @@ export default class rebateInvoice extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdRebtInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1462,12 +1470,12 @@ export default class rebateInvoice extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        this.grdRebtInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdRebtInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_service.show()
                                                     return
@@ -1480,12 +1488,12 @@ export default class rebateInvoice extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdRebtInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_service.show()
                                         }
@@ -1511,7 +1519,7 @@ export default class rebateInvoice extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
-                                                await this.grdRebtInv.devGrid.deleteRow(0)
+                                                await this.grid.devGrid.deleteRow(0)
                                             }
                                         }
                                         else
@@ -1529,7 +1537,7 @@ export default class rebateInvoice extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdRebtInv"} 
+                                        <NdGrid parent={this} id={"grdRebtInv"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -1628,7 +1636,7 @@ export default class rebateInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            await this.grdRebtInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdRebtInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdRebtInv"}/>
@@ -1638,7 +1646,7 @@ export default class rebateInvoice extends DocBase
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                            <Export fileName={this.lang.t("menu.ftr_02_003")} enabled={true} allowExportSelectedData={true} />
+                                            <Export fileName={this.lang.t("menuOff.ftr_02_003")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtInv.clmCreateDate")} width={70} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdRebtInv.clmCuser")} width={75} allowEditing={false}/>
@@ -1665,7 +1673,7 @@ export default class rebateInvoice extends DocBase
                                         <ContextMenu
                                         dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdRebtInv"
+                                        target={"#grdRebtInv"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getDispatch"))
@@ -1808,7 +1816,7 @@ export default class rebateInvoice extends DocBase
                                                                     this.vatRate.clear()
                                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
-                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                         let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                         this.vatRate.push(tmpData)

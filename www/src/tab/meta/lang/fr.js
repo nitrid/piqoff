@@ -22,7 +22,8 @@ export const langFr =
         customerAccount : "Extrait client",
         itemDetail : "Détail du produit",
         collection: "Encaissement",
-        CustomerCard : "Fournisseur-Client saisie"
+        customerCard : "Fournisseur-Client saisie",
+        openInvoiceList : "Liste des factures ouvertes"
     },
     msgAnotherUserAlert: 
     {
@@ -609,4 +610,43 @@ export const langFr =
             clmName : "Nom",
         },        
     },
+    openInvoiceList :
+    {
+        txtCustomerCode : "Veuillez sélectionner un client",
+        btnGet :"Obtenir",
+        grdListe : 
+        {
+            clmDocDate: "Date",
+            clmTypeName : "Nom",           
+            clmRef : "Référence du document",
+            clmRefNo : "Numéro du document",
+            clmDebit : "Dette",
+            clmReceive : "Payé",
+            clmBalance : "Restant",
+        },
+        txtTotalBalance : "Solde",
+        popCustomer:
+        {
+            title : "Sélection de client",
+            btn01 : "Chercher",
+            btn02 : "Sélectionner",
+            clmCode : "CODE",
+            clmName : "NOM"
+        },
+        msgNotCustomer:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Veuillez sélectionner un client..!"
+        },
+        grdDetail : 
+        {
+            clmCode: "Code",
+            clmName : "Nom du produit",           
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Total",
+        },
+    },
+
 }

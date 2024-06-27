@@ -52,9 +52,125 @@ export default class purchaseInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',0)
-            }, 1000);
+            if(typeof this.pagePrm.GUID != 'undefined')
+            {
+                setTimeout(() => 
+                {
+                    this.getDoc(this.pagePrm.GUID,'',0)
+                }, 1000);
+            }
+            else if(typeof this.pagePrm.piqx != 'undefined')
+            {
+                this.initPiqX()
+            }
+        }
+    }
+    async initPiqX()
+    {
+        this.piqX = this.pagePrm.piqx
+        let jData = JSON.parse(this.piqX[0].JSON)
+
+        if(jData.length > 0)
+        {
+            let tmpCustQuery = 
+            {
+                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                param : ['TAX_NO:string|25'],
+                value : [this.piqX[0].DOC_FROM_NO]
+            }
+
+            let tmpCustData = await this.core.sql.execute(tmpCustQuery) 
+
+            if(tmpCustData?.result?.recordset?.length > 0)
+            {
+                this.txtCustomerCode.value = tmpCustData.result.recordset[0].CODE
+                this.txtCustomerName.value = tmpCustData.result.recordset[0].TITLE
+
+                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                {
+                    this.frmDocItems.option('disabled',false)
+                }
+                this.docObj.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.docCustomer.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.dt()[0].OUTPUT_CODE = tmpCustData.result.recordset[0].CODE
+                this.docObj.dt()[0].OUTPUT_NAME = tmpCustData.result.recordset[0].TITLE
+                this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                {
+                    this.txtRef.value = tmpCustData.result.recordset[0].CODE
+                }
+                if(this.cmbDepot.value != '' && this.docLocked == false)
+                {
+                    this.frmDocItems.option('disabled',false)
+                }
+                let tmpAdrQuery = 
+                {
+                    query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                    param : ['CUSTOMER:string|50'],
+                    value : [tmpCustData.result.recordset[0].GUID]
+                }
+                let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                if(tmpAdressData.result.recordset.length > 1)
+                {
+                    this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
+                }
+            }
+            else
+            {
+                this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                this.docObj.docCustomer.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+            }
+
+            this.dtDocDate.value = jData[0].DOC_DATE
+            this.dtShipDate.value = jData[0].SHIPMENT_DATE
+
+            for (let i = 0; i < jData.length; i++) 
+            {
+                let tmpData = {}
+
+                let tmpItemQuery = 
+                {
+                    query : "SELECT " + 
+                            "I.GUID AS ITEM, " + 
+                            "I.CODE AS ITEM_CODE, " + 
+                            "I.NAME AS ITEM_NAME, " + 
+                            "I.UNIT AS UNIT, " + 
+                            "I.COST_PRICE AS COST_PRICE, " +
+                            "I.VAT AS VAT " +
+                            "FROM ITEM_MULTICODE AS M " + 
+                            "INNER JOIN ITEMS_VW_01 AS I ON " + 
+                            "M.ITEM = I.GUID " + 
+                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    param : ['CODE:string|50','CUSTOMER:string|50'],
+                    value : [jData[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT]
+                }
+
+                let tmpItemData = await this.core.sql.execute(tmpItemQuery) 
+                
+                if(tmpItemData?.result?.recordset?.length > 0)
+                {
+                    tmpData.GUID = tmpItemData.result.recordset[0].ITEM
+                    tmpData.ITEM_TYPE = tmpItemData.result.recordset[0].ITEM_TYPE
+                    tmpData.CODE = tmpItemData.result.recordset[0].ITEM_CODE
+                    tmpData.NAME = tmpItemData.result.recordset[0].ITEM_NAME
+                    tmpData.UNIT = tmpItemData.result.recordset[0].UNIT
+                    tmpData.COST_PRICE = tmpItemData.result.recordset[0].COST_PRICE
+                    tmpData.VAT = tmpItemData.result.recordset[0].VAT
+                }
+                else
+                {
+                    tmpData.GUID = '00000000-0000-0000-0000-000000000000'
+                    tmpData.ITEM_TYPE = 0
+                    tmpData.CODE = ''
+                    tmpData.NAME = ''
+                    tmpData.UNIT = '00000000-0000-0000-0000-000000000000'
+                    tmpData.COST_PRICE = 0
+                    tmpData.VAT = 0
+                }
+
+                await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
+            }
         }
     }
     loadState() 
@@ -73,7 +189,8 @@ export default class purchaseInvoice extends DocBase
         return new Promise(async resolve =>
         {
             await super.init()
-            this.grdPurcInv.devGrid.clearFilter("row")
+            this.grid = this["grdPurcInv"+this.tabIndex]
+            this.grid.devGrid.clearFilter("row")
             this.dtDocDate.value = moment(new Date())
             this.dtShipDate.value = moment(new Date())
 
@@ -86,7 +203,8 @@ export default class purchaseInvoice extends DocBase
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
             
             this.docLocked = false
-            
+            this.piqX = undefined
+
             this.frmDocItems.option('disabled',true)        
             
             this.txtDiffrentPositive.value = 0
@@ -113,7 +231,6 @@ export default class purchaseInvoice extends DocBase
                 })
                 
             })
-            
             this.pg_txtBarcode.on('showing',()=>
             {
                 this.pg_txtBarcode.setSource(
@@ -177,6 +294,23 @@ export default class purchaseInvoice extends DocBase
         {
             this.txtDiffrentInv.value = 0
         }
+        
+        let tmpDiffPovitive = 0
+        let tmpDiffNegative = 0
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE > 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+            {
+                tmpDiffPovitive = tmpDiffPovitive + (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
+            }
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE < 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+            {
+                tmpDiffNegative = tmpDiffNegative + (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
+            }
+        }
+        this.txtDiffrentPositive.value = parseFloat(tmpDiffPovitive).toFixed(2)
+        this.txtDiffrentNegative.value = parseFloat(tmpDiffNegative).toFixed(2)
+        this.txtDiffrentTotal.value = (parseFloat(tmpDiffNegative) + parseFloat(tmpDiffPovitive)).toFixed(2)
     }
     calculateTotal()
     {
@@ -221,12 +355,12 @@ export default class purchaseInvoice extends DocBase
                             this.combineControl = true
                             this.combineNew = false
                             
-                            this.grdPurcInv.devGrid.beginUpdate()
+                            this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdPurcInv.devGrid.endUpdate()
+                            this.grid.devGrid.endUpdate()
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -282,12 +416,12 @@ export default class purchaseInvoice extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
                                     
-                                    this.grdPurcInv.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdPurcInv.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -306,7 +440,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -372,7 +506,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -426,7 +560,7 @@ export default class purchaseInvoice extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -575,7 +709,7 @@ export default class purchaseInvoice extends DocBase
                             resolve()
                             return 
                         }
-                        console.log(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value )
+                        
                         if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
                         {
                             let tmpConfObj =
@@ -915,7 +1049,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpMissCodes = []
         let tmpCounter = 0
-        this.grdPurcInv.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < pdata.length; i++) 
         {
             let tmpQuery = 
@@ -945,7 +1079,7 @@ export default class purchaseInvoice extends DocBase
                 tmpMissCodes.push("'"+pdata[i].CODE+"'")
             }
         }
-        this.grdPurcInv.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -973,13 +1107,13 @@ export default class purchaseInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.grdPurcInv.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
         }
         this.popMultiItem.hide()
-        this.grdPurcInv.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     async saveDoc()
     {
@@ -1239,6 +1373,12 @@ export default class purchaseInvoice extends DocBase
             {                                                    
                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                 await dialog(tmpConfObj1);
+
+                if(typeof this.piqX != 'undefined')
+                {
+                    this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
+                }
+                
                 this.btnSave.setState({disabled:true});
                 this.btnNew.setState({disabled:false});
             }
@@ -1309,7 +1449,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.dtDocDate.value = moment(e.InvoiceDate)
                                                 this.dtShipDate.value = moment(e.DueDate)
 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 let tmpMissCodes = []
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
@@ -1332,7 +1472,7 @@ export default class purchaseInvoice extends DocBase
                                                         tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
                                                     }
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                                 if(tmpMissCodes.length > 0)
                                                 {
                                                     let tmpConfObj =
@@ -1394,7 +1534,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -1476,7 +1616,7 @@ export default class purchaseInvoice extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1733,12 +1873,16 @@ export default class purchaseInvoice extends DocBase
                                             await dialog(tmpConfObj);
                                             return;
                                         }
-                                        console.log(this.pg_txtCustomerCode)
+                                        
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
                                             if(data.length > 0)
                                             {
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1800,6 +1944,10 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
+                                                            }
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1937,12 +2085,12 @@ export default class purchaseInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdPurcInv.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdPurcInv.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -2001,12 +2149,12 @@ export default class purchaseInvoice extends DocBase
                                                     }
                                                     else if(data.length > 1)
                                                     {
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                 }
                                             }
@@ -2058,12 +2206,12 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -2076,12 +2224,12 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -2114,12 +2262,12 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         
-                                                        this.grdPurcInv.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdPurcInv.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     await this.pg_service.show()
                                                     return
@@ -2133,12 +2281,12 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.grdPurcInv.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++)
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdPurcInv.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             await this.pg_service.show()   
                                         }
@@ -2164,7 +2312,7 @@ export default class purchaseInvoice extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                         }
                                         else
@@ -2201,7 +2349,7 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                                 <Item>
                                     <React.Fragment>
-                                        <NdGrid parent={this} id={"grdPurcInv"} 
+                                        <NdGrid parent={this} id={"grdPurcInv"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -2244,56 +2392,69 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onCellPrepared={(e) =>
                                         {
-                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0)
-                                            {
-                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                            if (e.column.dataField === 'PRICE' && e.data && e.data.PRICE < 0) 
                                                 {
-                                                    e.cellElement.style.color ="red"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
+                                                    }
+                                                
+                                                    dialog(tmpConfObj);
+                                                    e.data.PRICE = Math.abs(e.data.PRICE);
                                                 }
-                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+    
+                                                if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0 && e.data.PRICE >= 0)
                                                 {
-                                                    e.cellElement.style.color ="green"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="red"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="green"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else
+                                                    {
+                                                        e.cellElement.style.color ="blue"
+                                                    }
                                                 }
-                                                else
+                                            }}
+                                            onRowUpdated={async(e)=>
+                                            {
+                                                if(typeof e.data.QUANTITY != 'undefined')
                                                 {
-                                                    e.cellElement.style.color ="blue"
+                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                        param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                        value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                        e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
+                                                        
+                                                        this.calculateTotal()
+                                                    }
                                                 }
-                                            }
-                                        }}
-                                        onRowUpdated={async(e)=>
-                                        {
-                                            if(typeof e.data.QUANTITY != 'undefined')
-                                            {
-                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
-                                                let tmpQuery = 
+                                                if(typeof e.data.SUB_QUANTITY != 'undefined')
                                                 {
-                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                                 }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
+                                                if(typeof e.data.PRICE != 'undefined' && e.data.PRICE >= 0)
                                                 {
-                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
-                                                    
-                                                    this.calculateTotal()
+                                                    e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                                 }
-                                            }
-                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
-                                            {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.PRICE != 'undefined')
-                                            {
-                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.SUB_PRICE != 'undefined')
-                                            {
-                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
-                                            }
+                                                if(typeof e.data.SUB_PRICE != 'undefined')
+                                                {
+                                                    e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                                }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -2362,8 +2523,7 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
-                                            console.log(this.docObj.docItems.dt('DOC_ITEMS'))
-                                            await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                            await this["grdPurcInv" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcInv"}/>
@@ -2373,7 +2533,7 @@ export default class purchaseInvoice extends DocBase
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                            <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Export fileName={this.lang.t("menuOff.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("grdPurcInv.clmLineNo")} visible={false} width={40} dataType={'number'} allowHeaderFiltering={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
@@ -2400,7 +2560,7 @@ export default class purchaseInvoice extends DocBase
                                         </NdGrid>
                                         <ContextMenu dataSource={this.rightItems}
                                         width={200}
-                                        target="#grdPurcInv"
+                                        target={"#grdPurcInv"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getDispatch"))
@@ -2446,6 +2606,17 @@ export default class purchaseInvoice extends DocBase
                                                                 icon:'print',
                                                                 onClick:async ()  =>
                                                                 {
+                                                                    if(this.docObj.isSaved == false)
+                                                                    {
+                                                                        let tmpConfObj =
+                                                                        {
+                                                                            id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                            button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                                                        }
+                                                                        await dialog(tmpConfObj);
+                                                                        return
+                                                                    }
                                                                     App.instance.menuClick(
                                                                     {
                                                                         id: 'tkf_02_003',
@@ -2574,7 +2745,7 @@ export default class purchaseInvoice extends DocBase
                                                                     this.vatRate.clear()
                                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
-                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                         let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                         this.vatRate.push(tmpData)

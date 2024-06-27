@@ -2,7 +2,7 @@ import {spawn} from 'child_process'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
-
+import os from 'os'
 //"{TYPE:'REVIEW',PATH:'C:\\\\Users\\\\A.K.K\\\\Desktop\\\\DevPrint\\\\test.repx',DATA:[{KODU:'001'}]}"
 class devprint
 {
@@ -25,7 +25,16 @@ class devprint
         return new Promise(resolve =>
         {
             let tmpData = ""
-            let terminal = spawn(this.__dirname + "/devprint/lib/DevPrint")
+            let terminal = undefined
+            
+            if(os.platform() == 'linux')
+            {
+                terminal = spawn("dotnet",[this.__dirname + "/devprint/lib/DevPrint.dll"])    
+            }
+            else
+            {
+                terminal = spawn(this.__dirname + "/devprint/lib/DevPrint")
+            }
 
             try 
             {

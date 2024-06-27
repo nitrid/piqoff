@@ -22,7 +22,8 @@ export const langTr =
         customerAccount : "MÜŞTERİ EKSTRESİ",
         itemDetail : "ÜRÜN DETAYI",
         collection: "TAHSİLAT",
-        customerCard : "MÜŞTERİ TANIMLAMA"
+        customerCard : "MÜŞTERİ TANIMLAMA",
+        openInvoiceList : "AÇIK FATURA LİSTESİ"
     },
     msgAnotherUserAlert: 
     {
@@ -608,5 +609,43 @@ export const langTr =
             clmName : "ADI",
         },
         
+    },
+    openInvoiceList :
+    {
+        txtCustomerCode : "Lütfen Müşteri Seçiniz",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDocDate: "Tarihleer",
+            clmTypeName : "Adı",           
+            clmRef : "Evrak Seri",
+            clmRefNo : "Evrak Sıra",
+            clmDebit : "Borç",
+            clmReceive : "Ödenen",
+            clmBalance : "Kalan",
+        },
+        txtTotalBalance : "Bakiye",
+        popCustomer:
+        {
+            title : "Müşteri Seçimi",
+            btn01 : "Ara",
+            btn02 : "Seç",
+            clmCode : "KODU",
+            clmName : "ADI"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz..!"
+        },
+        grdDetail : 
+        {
+            clmCode: "Kodu",
+            clmName : "Ürün Adı",           
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Toplam",
+        },
     },
 }

@@ -179,7 +179,7 @@ export class posCls
             local : 
             [{
                 type : "update",
-                query : `UPDATE POS_VW_01 SET DELETED = ? WHERE GUID = ?;`,
+                query : `UPDATE POS_VW_01 SET DELETED = ?,STATUS = 0, SIGNATURE = '', SIGNATURE_SUM = '', CERTIFICATE = '',REF = 0 WHERE GUID = ?;`,
                 values : [{DELETED:1,GUID : {map:'GUID'}}],
             },
             {
@@ -1959,9 +1959,9 @@ export class posDeviceCls
             {
                 console.log(pResult1)
             });
-
+            
             //docPdf.save('test.pdf')
-            resolve()
+            resolve(tmpAttach)
         });
     }
 }
@@ -2470,7 +2470,6 @@ export class posUsbTSECls
         });
     }
 }
-
 export class posPayTypeCls
 {
     constructor()

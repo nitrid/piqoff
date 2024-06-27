@@ -228,6 +228,12 @@ const cri_01_001 =
         title : "Choix du groupe",
         clmCode : "Code",
         clmName : "Nom",
-    },        
+    },
+    btnSubGroup: "Ajouter un Sous-groupe",
+    pg_subGroup: 
+    {
+        title: "Sélection de Sous-groupe",
+        clmName: "Nom",
+    },
 }
 export default cri_01_001

@@ -321,6 +321,12 @@ export class local
 
             if(this.platform == 'electron')
             {
+                //BAZEN SİSTEM OFFLİNE A GEÇMİŞ İSE ELECTRON UYGULAMASI HEMEN SQLLITE DATABASE OLUŞTURULAMIYOR BUNUN İÇİN 1SN LİK BEKLETİYORUZ.
+                if(this.db == null)
+                {
+                    await core.instance.util.waitUntil(1000)
+                }
+
                 this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
                 {
                     if (err) 
@@ -333,6 +339,21 @@ export class local
             }
             else if(this.platform == 'cordova')
             {
+                //CORDOVA SQLLITE İÇİN EKLENDİ. GELEN BOOLEAN DEĞER ÇİFT TIRNAKLI (") GELİYOR BU DÜZELTİLİYOR.(SİK SİK İŞLER...)
+                const convertBooleans = (obj) => 
+                {
+                    for (const key in obj) 
+                    {
+                        if (obj.hasOwnProperty(key)) 
+                        {
+                            if (obj[key] === "true" || obj[key] === "false") 
+                            {
+                                obj[key] = obj[key] === "true"; // "true" ise true, "false" ise false
+                            }
+                        }
+                    }
+                    return obj;
+                };
                 this.db.transaction((tx) =>
                 {
                     tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
@@ -340,7 +361,7 @@ export class local
                         let tmpArr = []
                         for (let i = 0; i < result.rows.length; i++) 
                         {
-                            tmpArr.push(result.rows.item(i))
+                            tmpArr.push(convertBooleans(result.rows.item(i)))
                         }
                         resolve({result:{state:true,recordset:tmpArr}})
                     }, (tx, err) =>
@@ -722,6 +743,10 @@ export class util
         }
     
         return false;
+    }
+    isAndroid()
+    {
+        return /android/i.test(navigator.userAgent || navigator.vendor || window.opera)
     }
     writeLog(pMsg,pPath)
     {
@@ -2090,8 +2115,8 @@ export class menu
          let tmpDt = new datatable('PARAM');
          tmpDt.selectCmd = 
          {
-             query : "SELECT * FROM [dbo].[PARAM] WHERE USERS = @USER AND APP = @APP AND ID='menu'",
-             param : ['USER:string|50','APP:string|50']
+             query : "SELECT * FROM [dbo].[PARAM] WHERE USERS = @USER AND APP = @APP AND ID=@ID",
+             param : ['USER:string|50','APP:string|50','ID:string|50']
          }
          tmpDt.insertCmd = 
          {
@@ -2176,11 +2201,12 @@ export class menu
          //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
          return new Promise(async resolve =>
          {
-             let tmpPrm = {USER:"",APP:""}
+             let tmpPrm = {USER:"",APP:"",ID:"menu"}
              if(arguments.length > 0)
              {
                  tmpPrm.USER = typeof arguments[0].USER == 'undefined' ? '' : arguments[0].USER;
                  tmpPrm.APP = typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP;
+                 tmpPrm.ID = typeof arguments[0].ID == 'undefined' ? 'menu' : arguments[0].ID;
              }
  
              this.ds.get('PARAM').selectCmd.value = Object.values(tmpPrm);

@@ -256,7 +256,7 @@ export default class barcodeList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.cri_02_002")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.cri_02_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 

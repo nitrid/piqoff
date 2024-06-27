@@ -25,7 +25,6 @@ class mailer
 
     async mailSend(pData)
     {
-       
         return new Promise(async resolve =>
         {
             let tmpAttach = [];
@@ -40,6 +39,7 @@ class mailer
                     }
                 ]
             }
+
             let tmpQuery
             if(typeof pData.mailGuid != 'undefined' || pData.mailGuid == '')
             {
@@ -62,7 +62,6 @@ class mailer
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(typeof tmpResult[0] != 'undefined')
             {
-
                 let tmpservice = ''
                 if(tmpResult[0].MAIL_SERVICE == 'gmail')
                 {
@@ -81,7 +80,8 @@ class mailer
                     },
                     //tls : { rejectUnauthorized: false }
                 });
-                var mailOptions = {
+                var mailOptions = 
+                {
                     from: tmpResult[0].MAIL_ADDRESS,
                     to: pData.sendMail,
                     subject: pData.subject,
@@ -101,6 +101,10 @@ class mailer
                         resolve(0);
                     }
                 });
+            }
+            else
+            {
+                resolve(1);
             }
         })
     }

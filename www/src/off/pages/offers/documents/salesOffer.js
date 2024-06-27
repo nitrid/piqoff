@@ -48,7 +48,8 @@ export default class salesOffer extends DocBase
     async init()
     {
         await super.init()
-        this.grdSlsOffer.devGrid.clearFilter("row")
+        this.grid = this["grdSlsOffer"+this.tabIndex]
+        this.grid.devGrid.clearFilter("row")
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -142,12 +143,12 @@ export default class salesOffer extends DocBase
                                 this.combineControl = true
                                 this.combineNew = false
 
-                                this.grdSlsOffer.devGrid.beginUpdate()
+                                this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
-                                this.grdSlsOffer.devGrid.endUpdate()
+                                this.grid.devGrid.endUpdate()
                             }
                             await this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -198,12 +199,12 @@ export default class salesOffer extends DocBase
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
-                                    this.grdSlsOffer.devGrid.beginUpdate()
+                                    this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdSlsOffer.devGrid.endUpdate()
+                                    this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -222,7 +223,7 @@ export default class salesOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOffer.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -287,7 +288,7 @@ export default class salesOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOffer.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -341,7 +342,7 @@ export default class salesOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOffer.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grid.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
@@ -592,13 +593,13 @@ export default class salesOffer extends DocBase
     {
         this.combineControl = true
         this.combineNew = false
-        this.grdSlsOffer.devGrid.beginUpdate()
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
-        this.grdSlsOffer.devGrid.endUpdate()
+        this.grid.devGrid.endUpdate()
     }
     render()
     {
@@ -627,7 +628,7 @@ export default class salesOffer extends DocBase
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.docOffers.dt()[0])
+                                        console.log(this.docObj)
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -655,7 +656,7 @@ export default class salesOffer extends DocBase
                                         }
                                         if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsOffer.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                                            await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -768,7 +769,7 @@ export default class salesOffer extends DocBase
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsOffer.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -859,6 +860,25 @@ export default class salesOffer extends DocBase
                                         this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'columnproperties',
+                                        onClick: async () => 
+                                        {
+                                            if(this.docObj.transportInfermotion.dt().length == 0)
+                                            {
+                                                this.docObj.transportInfermotion.addEmpty()
+                                                this.docObj.transportInfermotion.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
+                                            }
+                                            this.popTransport.show()
+                                        }
+                                    }    
+                                } />
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -1153,12 +1173,12 @@ export default class salesOffer extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdSlsOffer.devGrid.beginUpdate()
+                                                            this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsOffer.devGrid.endUpdate()
+                                                            this.grid.devGrid.endUpdate()
                                                         }
                                                         await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     }
@@ -1203,6 +1223,7 @@ export default class salesOffer extends DocBase
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value,this.txtPopQteUnitPrice.value)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
@@ -1210,12 +1231,13 @@ export default class salesOffer extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdSlsOffer.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsOffer.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
+                                                this.txtBarcode.focus()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1269,12 +1291,12 @@ export default class salesOffer extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
 
-                                                        this.grdSlsOffer.devGrid.beginUpdate()
+                                                        this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsOffer.devGrid.endUpdate()
+                                                        this.grid.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1285,12 +1307,12 @@ export default class salesOffer extends DocBase
                                             {
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdSlsOffer.devGrid.beginUpdate()
+                                                this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsOffer.devGrid.endUpdate()
+                                                this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1316,7 +1338,7 @@ export default class salesOffer extends DocBase
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsOffer.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                                                await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1333,7 +1355,7 @@ export default class salesOffer extends DocBase
                                     }}/>
                                 </Item>
                                 <Item>
-                                    <NdGrid parent={this} id={"grdSlsOffer"} 
+                                    <NdGrid parent={this} id={"grdSlsOffer"+this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1504,7 +1526,7 @@ export default class salesOffer extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
-                                        await this.grdSlsOffer.dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
+                                        await this["grdSlsOffer"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />
@@ -1512,7 +1534,7 @@ export default class salesOffer extends DocBase
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={90} allowEditing={false}/>
@@ -1653,7 +1675,7 @@ export default class salesOffer extends DocBase
                                                     this.vatRate.clear()
                                                     for (let i = 0; i < this.docObj.docOffers.dt().groupBy('VAT_RATE').length; i++) 
                                                     {
-                                                        let tmpTotalHt  =  parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                        let tmpTotalHt  =  parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) - this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                         let tmpVat = parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                         let tmpData = {"RATE":this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                         this.vatRate.push(tmpData)

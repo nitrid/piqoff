@@ -62,7 +62,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_01_009',
                             text: e.t('menuOff.stk_01_009'),//'Ürün Alt Grup Tanımları',
-                            path: 'construction.js',
+                            path: 'items/cards/itemSubGroupCard.js',
                         },
                         {
                             id: 'stk_01_010',
@@ -227,6 +227,11 @@ export const menu = (e) =>
                             id: 'stk_04_007',
                             text: e.t('menuOff.stk_04_007'), //'Ceopos Ürün gönderimi',
                             path: 'items/operations/ceoposWeightItemSend'
+                        },
+                        {
+                            id: 'stk_04_008',
+                            text: e.t('menuOff.stk_04_008'), //'Price Toplu Ürün gönderimi',
+                            path: 'items/operations/pricerAllItemSend'
                         }
                     ]
                 },
@@ -255,6 +260,11 @@ export const menu = (e) =>
                             id: 'stk_05_004',
                             text : e.t('menuOff.stk_05_004'),//'',
                             path: 'items/report/itemOutageReport'
+                        },
+                        {
+                            id: 'stk_05_005',
+                            text : e.t('menuOff.stk_05_005'),//'',
+                            path: 'items/report/itemMoveReport'
                         },
                     ]
                 }
@@ -297,6 +307,11 @@ export const menu = (e) =>
                             id: 'cri_01_005',
                             text: e.t('menuOff.cri_01_005'),//'Sektör Tanımları',
                             path: 'customers/cards/sectorCard'
+                        },
+                        {
+                            id: 'cri_01_006',
+                            text: e.t('menuOff.cri_01_006'),//'Alt Grup Tanımları',
+                            path: 'customers/cards/customerSubGroupCard'
                         }
                     ]
                 },
@@ -596,7 +611,8 @@ export const menu = (e) =>
                     text : e.t('menuOff.purcinvoices'),//'Faturalar',
                     expanded: false,
                     items: 
-                    [   {
+                    [   
+                        {
                             id: 'purcinvoices_01',
                             text : e.t('menuOff.purcinvoices_01'),//'Evraklar',
                             expanded: false,
@@ -1025,6 +1041,28 @@ export const menu = (e) =>
                 }
             ]
         },
+        //PiqX
+        {
+            id: 'piqx',
+            text: e.t('menuOff.piqx'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id:'piqx_01',
+                    text:e.t('menuOff.piqx_01'),//'Listeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'piqx_01_001',
+                            text: e.t('menuOff.piqx_01_001'), //'Gelen Fatura Listesi',
+                            path: 'piqx/lists/piqXIncomingList'
+                        }
+                    ]
+                }
+            ]
+        },
         //Finans
         {
             id: 'fns',
@@ -1328,6 +1366,11 @@ export const menu = (e) =>
                             id: 'promo_01_001',
                             text: e.t('menuOff.promo_01_001'),//'Promosyon Tanımları',
                             path: 'promotion/cards/promotionCard'
+                        },
+                        {
+                            id: 'promo_01_002',
+                            text: e.t('menuOff.promo_01_002'),//'indirim Tanımları',
+                            path: 'promotion/cards/discountCard'
                         },
                     ]
                 },

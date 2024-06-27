@@ -762,6 +762,8 @@ export const langDe =
     {
         title : "Achtung",
         msg : "Speichern fehlgeschlagen!",
+        msg1: "Transaktion fehlgeschlagen, weil die Referenznummer null ist!",
+        msg2: "Transaktion fehlgeschlagen, weil die Unterschrift leer ist!",
         btn01 : "OK",
         btn02 : "Erneut senden",
     },
@@ -938,4 +940,19 @@ export const langDe =
         clmTag : "Tag",
         clmPrice : "Preis"
     },
+    msgDeviceLoadFailed:
+    {
+        title : "Achtung",
+        msg : "Geräteinformationen konnten nicht aus der Datenbank abgerufen werden!",
+        btn01 : "OK"
+    },
+    popDeviceList: 
+    {
+        title: "Gerät auswählen",
+        clmManufacture: "Hersteller",
+        clmProductName: "Produktname",
+        clmProductId: "Produkt-ID",
+        clmVendorId: "Anbieter-ID",
+        clmSerialNo: "Seriennummer"
+    }
 }
