@@ -268,41 +268,45 @@ posDoc.prototype.getItem = async function(pCode)
                         tmpItemsDt[0].PRICE = tmpBalanceDt[i].PRICE
                         this.saleAdd(tmpItemsDt[0])
 
-                        if(typeof tmpBalanceDt[0].STATUS == 'undefined')
+                        
+                        if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         {
-                            //BALANCE COUNTER STATUS INSERT İŞLEMİ
-                            let tmpInsertQuery = 
+                            if(typeof tmpBalanceDt[0].STATUS == 'undefined')
                             {
-                                query : "EXEC [dbo].[PRD_BALANCE_COUNTER_INSERT] " + 
-                                        "@GUID = @PGUID, " + 
-                                        "@CUSER = 'Admin', " + 
-                                        "@LUSER = 'Admin', " + 
-                                        "@ITEM = @PITEM, " +
-                                        "@POS = @PPOS, " +
-                                        "@TICKET_NO = @PTICKET_NO, " +
-                                        "@QUANTITY = @PQUANTITY, " +
-                                        "@PRICE = @PPRICE, " +
-                                        "@STATUS = 1 ", 
-                                param : ['PGUID:string|50','PITEM:string|50','PPOS:string|50','PTICKET_NO:int','PQUANTITY:float','PPRICE:float'],
-                                value : [tmpBalanceDt[i].GUID,tmpItemsDt[0].GUID,this.posObj.dt()[0].GUID,tmpTicketNo,tmpBalanceDt[i].QUANTITY,tmpBalanceDt[i].PRICE]
+                                //BALANCE COUNTER STATUS INSERT İŞLEMİ
+                                let tmpInsertQuery = 
+                                {
+                                    query : "EXEC [dbo].[PRD_BALANCE_COUNTER_INSERT] " + 
+                                            "@GUID = @PGUID, " + 
+                                            "@CUSER = 'Admin', " + 
+                                            "@LUSER = 'Admin', " + 
+                                            "@ITEM = @PITEM, " +
+                                            "@POS = @PPOS, " +
+                                            "@TICKET_NO = @PTICKET_NO, " +
+                                            "@QUANTITY = @PQUANTITY, " +
+                                            "@PRICE = @PPRICE, " +
+                                            "@STATUS = 1 ", 
+                                    param : ['PGUID:string|50','PITEM:string|50','PPOS:string|50','PTICKET_NO:int','PQUANTITY:float','PPRICE:float'],
+                                    value : [tmpBalanceDt[i].GUID,tmpItemsDt[0].GUID,this.posObj.dt()[0].GUID,tmpTicketNo,tmpBalanceDt[i].QUANTITY,tmpBalanceDt[i].PRICE]
+                                }
+                                await this.core.sql.execute(tmpInsertQuery)
                             }
-                            await this.core.sql.execute(tmpInsertQuery)
-                        }
-                        else
-                        {
-                            //BALANCE COUNTER STATUS UPDATE İŞLEMİ
-                            let tmpUpdateQuery = 
+                            else
                             {
-                                query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
-                                        "@GUID = @PGUID, " + 
-                                        "@LUSER = @PLUSER, " + 
-                                        "@LDATE = @PLDATE, " +
-                                        "@POS = @PPOS, " +
-                                        "@STATUS = 1 ", 
-                                param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50'],
-                                value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID]
+                                //BALANCE COUNTER STATUS UPDATE İŞLEMİ
+                                let tmpUpdateQuery = 
+                                {
+                                    query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
+                                            "@GUID = @PGUID, " + 
+                                            "@LUSER = @PLUSER, " + 
+                                            "@LDATE = @PLDATE, " +
+                                            "@POS = @PPOS, " +
+                                            "@STATUS = 1 ", 
+                                    param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50'],
+                                    value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID]
+                                }
+                                await this.core.sql.execute(tmpUpdateQuery)
                             }
-                            await this.core.sql.execute(tmpUpdateQuery)
                         }
                     }
                 }    
