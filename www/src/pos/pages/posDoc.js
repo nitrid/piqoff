@@ -2370,10 +2370,9 @@ export default class posDoc extends React.PureComponent
         {
             let tmpFn = () =>
             {
-                this.txtPaymentPopTotal.value = pAmount
-                
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
+                    this.txtPaymentPopTotal.value = pAmount
                     if(e == 'btn01')
                     {
                         if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
@@ -3738,8 +3737,9 @@ export default class posDoc extends React.PureComponent
                     <div className="col-12">                    
                         <div className="row m-2">
                             <div className="col-1">
-                                <img src="./css/img/logo.png" width="50px" height="50px" onClick={()=>
+                                <img src="./css/img/logo.png" width="50px" height="50px" onClick={async()=>
                                 {
+                                    await this.popSettings.show();
                                     if(this.posDevice.dt().length > 0)
                                     {
                                         this.txtPopSettingsLcd.value = this.posDevice.dt()[0].LCD_PORT
@@ -3750,7 +3750,6 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
-                                    this.popSettings.show();
                                 }}/>
                             </div>
                             <div className="col-2">
@@ -3991,6 +3990,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.txtBarcode.value != '')
                                             {
+                                                await this.popBarcodeList.show()
                                                 let tmpDt = new datatable(); 
                                                 tmpDt.selectCmd = 
                                                 {
@@ -4007,7 +4007,6 @@ export default class posDoc extends React.PureComponent
                                                 await tmpDt.refresh();
                                                 this.grdBarcodeList.devGrid.clearSelection()
                                                 await this.grdBarcodeList.dataRefresh({source:tmpDt});
-                                                this.popBarcodeList.show()
                                                 this.txtBarcode.value = ""
                                             }
                                         }
@@ -4868,10 +4867,10 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 else if(e == 'btn03')
                                                 {
+                                                    await this.rebateTicketPopup.show()
                                                     this.dtpopRebateTicletStartDate.value = moment(new Date()).format("YYYY-MM-DD")
                                                     this.dtpopRebateTicletFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
                                                     this.cmbpopRebateTicletUser.value = this.core.auth.data.CODE
-                                                    this.rebateTicketPopup.show()
                                                 }
                                             })                                                
                                         }
@@ -4911,10 +4910,10 @@ export default class posDoc extends React.PureComponent
                                     {          
                                         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                         {
+                                            await this.popDiffPrice.show();
                                             this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
                                             this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
                                             this.txtPopDiffPriceQ.newStart = true
-                                            this.popDiffPrice.show();
                                         }
                                         else
                                         {
@@ -4971,6 +4970,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popGridList.show();
                                         let tmpDt = this.posObj.posSale.dt().toArray()
                                         for (let i = 0; i < tmpDt.length; i++) 
                                         {
@@ -4985,7 +4985,6 @@ export default class posDoc extends React.PureComponent
                                         }
 
                                         await this.grdPopGrdList.dataRefresh({source:tmpDt});
-                                        this.popGridList.show();
                                     }}>
                                         <i className="text-white fa-solid fa-bars" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5029,6 +5028,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popOrderList.show();
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5050,7 +5050,6 @@ export default class posDoc extends React.PureComponent
                                         }
                                         await tmpOrderList.refresh()
                                         await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
-                                        this.popOrderList.show();
                                     }}>
                                         <i className="text-white fa-solid fa-business-time" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5063,6 +5062,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={async()=>
                                     {
+                                        await this.popAdvance.show()
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5079,7 +5079,6 @@ export default class posDoc extends React.PureComponent
                                         this.rbtnAdvanceType.value = 0
                                         this.txtPopAdvance.value = 0
                                         this.txtPopAdvance.newStart = true
-                                        this.popAdvance.show()
                                     }}>
                                         <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5092,10 +5091,10 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={async ()=>
                                     {
+                                        await this.popParkList.show();
                                         this.parkDt.selectCmd.value[0] = this.core.auth.data.CODE;
                                         await this.parkDt.refresh();
                                         await this.grdPopParkList.dataRefresh({source:this.parkDt});
-                                        this.popParkList.show();
                                     }}>
                                         <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
                                     </NbButton>
@@ -5128,6 +5127,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnCustomerAdd"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popCustomerAdd.show()
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5157,8 +5157,6 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopCustomerZipCode.value = ""
                                         this.txtPopCustomerEmail.value = ""
                                         this.txtPopCustomerTel.value = ""
-
-                                        this.popCustomerAdd.show()
                                     }}>                                        
                                         <i className="text-white fa-solid fa-user-plus" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5499,6 +5497,7 @@ export default class posDoc extends React.PureComponent
                                                         {
                                                             if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
                                                             {
+                                                                await this.popTRDetail.show()
                                                                 let tmpDt = new datatable(); 
                                                                 tmpDt.selectCmd = 
                                                                 {
@@ -5515,7 +5514,6 @@ export default class posDoc extends React.PureComponent
                                                                 await tmpDt.refresh();
                                                                 
                                                                 await this.grdTRDetail.dataRefresh({source:tmpDt});
-                                                                this.popTRDetail.show()
                                                             }
                                                         }}>
                                                             {this.lang.t("trDeatil")}
@@ -6019,6 +6017,7 @@ export default class posDoc extends React.PureComponent
                     width={"800"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdBarcodeList */}
                         <div className="row">
@@ -6077,6 +6076,7 @@ export default class posDoc extends React.PureComponent
                     width={"900"}
                     height={"650"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* btnPopParkListAll */}
                         <div className="row py-1">
@@ -6151,6 +6151,7 @@ export default class posDoc extends React.PureComponent
                     width={"800"}
                     height={"530"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdPopOrderList */}
                         <div className="row py-1">
@@ -7228,8 +7229,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >     
                                 </NdTextBox> 
-                            </div>
-                                
+                            </div>                                
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-2">
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
@@ -7611,6 +7611,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.lastPosPayDt.where({PAY_TYPE:3}).length > 0)
                                                     {
+                                                        await this.popLastTRDetail.show()
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
                                                         {
@@ -7627,7 +7628,6 @@ export default class posDoc extends React.PureComponent
                                                         await tmpDt.refresh();
                                                         
                                                         await this.grdLastTRDetail.dataRefresh({source:tmpDt});
-                                                        this.popLastTRDetail.show()
                                                     }
                                                 }}>
                                                     {this.lang.t("trDeatil")}
@@ -7778,6 +7778,7 @@ export default class posDoc extends React.PureComponent
                     width={"600"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdLastTRDetail */}
                         <div className="row">
@@ -7984,42 +7985,43 @@ export default class posDoc extends React.PureComponent
                 {/* Item Return Ticket Dialog  */}
                 <div>
                     <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.lang.t("msgItemReturnTicket.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
-                        onShowed={()=>
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.lang.t("msgItemReturnTicket.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtItemReturnTicket.value = ""
+                        setTimeout(() => 
                         {
-                            this.txtItemReturnTicket.value = ""
-                            setTimeout(() => 
-                            {
-                                this.txtItemReturnTicket.focus()
-                            }, 500);
-                        }}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnTicket.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                    <Form>
-                                        {/* txtItemReturnTicket */}
-                                        <Item>
-                                            <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} mode={"password"}
-                                            onKeyUp={(e)=>
-                                            {
-                                                if(e.event.key == 'Enter')
-                                                {
-                                                    this.ticketCheck(this.txtItemReturnTicket.value)
-                                                }
-                                            }}/>
-                                        </Item>
-                                    </Form>
-                                </div>
+                            this.txtItemReturnTicket.focus()
+                        }, 500);
+                    }}
+                    deferRendering={true}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnTicket.msg")}</div>
                             </div>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    {/* txtItemReturnTicket */}
+                                    <Item>
+                                        <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} mode={"password"}
+                                        onKeyUp={(e)=>
+                                        {
+                                            if(e.event.key == 'Enter')
+                                            {
+                                                this.ticketCheck(this.txtItemReturnTicket.value)
+                                            }
+                                        }}/>
+                                    </Item>
+                                </Form>
+                            </div>
+                        </div>
                     </NdDialog>
                 </div>
                 {/* Alert Item Return Type Popup */} 
@@ -8032,6 +8034,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8050,6 +8053,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgWeighing.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWeighing.btn02"),location:'after'}]}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8068,6 +8072,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12">
@@ -8092,6 +8097,7 @@ export default class posDoc extends React.PureComponent
                     width={"300"}
                     height={"515"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* txtPopDiffPriceQ */}
                         <div className="row pt-1">
@@ -8144,6 +8150,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-3 py-2">
@@ -8200,6 +8207,7 @@ export default class posDoc extends React.PureComponent
                     width={"600"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdTRDetail */}
                         <div className="row">
@@ -8249,6 +8257,7 @@ export default class posDoc extends React.PureComponent
                     width={"300"}
                     height={"550"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <div className="row pt-1 pe-2">
                             <div className="col-12">
@@ -8374,6 +8383,7 @@ export default class posDoc extends React.PureComponent
                     width={"900"}
                     height={"580"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
                             <Item>
@@ -8604,6 +8614,7 @@ export default class posDoc extends React.PureComponent
                     width={"1000"}
                     height={"650"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdPopGridList */}
                         <div className="row">
@@ -8788,6 +8799,7 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={"100%"} height={"100%"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <div className="row pb-1">
                             <div className="col-12">
@@ -9234,6 +9246,7 @@ export default class posDoc extends React.PureComponent
                     height={'250'}
                     title={this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9293,6 +9306,7 @@ export default class posDoc extends React.PureComponent
                     height={'260'}
                     title={"Balance " + this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9327,6 +9341,7 @@ export default class posDoc extends React.PureComponent
                     height={'750'}
                     title={this.lang.t("msgAddCustomerMail.title")}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                          <div className="row pt-1">
                             <div className="col-6">
@@ -9479,6 +9494,7 @@ export default class posDoc extends React.PureComponent
                     width={'500'}
                     height={'560'}
                     position={{of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9564,6 +9580,7 @@ export default class posDoc extends React.PureComponent
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
                     showTitle={true}
+                    deferRendering={true}
                     >
                         {/* Tool Button Group */} 
                         <div className="row pb-1">

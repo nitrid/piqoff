@@ -46,9 +46,9 @@ export default class NdPopUp extends Base
     {
         return(this.props.toolbarItem)
     }
-    show()
+    async show()
     {  
-        this.setState(
+        await this.setState(
         {
             show: true
         });
