@@ -2475,7 +2475,7 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
                                             validationGroup={"frmMailsend"  + this.tabIndex}
                                             onClick={async (e)=>
-                                            {       
+                                            {      
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpQuery = 
@@ -2511,6 +2511,17 @@ export default class salesInvoice extends DocBase
                                                             
                                                             if((pResult1) == 0)
                                                             {  
+                                                                let tmpQuery = 
+                                                                {
+                                                                    query :"EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  " +
+                                                                    "@CUSER = @PCUSER, " +
+                                                                    "@DOC_GUID = @PDOC_GUID, " + 
+                                                                    "@SENDER_MAIL = @PSENDER_MAIL, " +
+                                                                    "@RECIEVER_MAIL = @PRECIEVER_MAIL",
+                                                                    param : ['PCUSER:string|25','PDOC_GUID:string|50','PSENDER_MAIL:string|50','PRECIEVER_MAIL:string|50'],
+                                                                    value : [this.user.CODE,this.docObj.dt()[0].GUID,this.cmbMailAddress.displayValue,this.txtSendMail.value]
+                                                                }
+                                                                await this.core.sql.execute(tmpQuery) 
                                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
                                                                 await dialog(tmpConfObj1);
                                                                 this.htmlEditor.value = '',

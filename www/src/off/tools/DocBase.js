@@ -2820,7 +2820,7 @@ export default class DocBase extends React.PureComponent
                     visible={false}
                     showCloseButton={true}
                     showTitle={true}
-                    title={this.t("popTransport.title")}
+                    title={this.lang.t("popTransport.title")}
                     container={"#root"} 
                     width={'800'}
                     height={'700'}
@@ -2910,23 +2910,23 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
-                                <NdNumberBox id="txtPalletQuntity" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
-                                </NdNumberBox>
+                                <NdTextBox id="txtPalletQuntity" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
+                                </NdTextBox>
                             </Item>
                             <Item>
-                                <Label text={this.lang.t("popTransport.txtColis")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}}/>
-                                <NdNumberBox id="txtColis" parent={this} simple={true} >
-                                </NdNumberBox>
+                                <Label text={this.lang.t("popTransport.txtColis")} alignment="right" />
+                                <NdTextBox id="txtColis" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
+                                </NdTextBox>
                             </Item>
                             <Item>
-                                <Label text={this.lang.t("popTransport.txtMetter")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}/>
-                                <NdNumberBox id="txtMetter" parent={this} simple={true} >
-                                </NdNumberBox>
+                                <Label text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
+                                <NdTextBox id="txtMetter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
+                                </NdTextBox>
                             </Item>
                             <Item>
-                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right" dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}}/>
-                                <NdNumberBox id="txtHeight" parent={this} simple={true} >
-                                </NdNumberBox>
+                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
+                                <NdTextBox id="txtHeight" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
+                                </NdTextBox>
                             </Item>
                             <EmptyItem/>
                             <Item>
