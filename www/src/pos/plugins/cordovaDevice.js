@@ -3,7 +3,7 @@ import {posDeviceCls} from "../../core/cls/pos.js";
 
 const orgLcdPrint = posLcdCls.prototype.print
 const orgEscPrinter = posDeviceCls.prototype.escPrinter
-//const orgMettlerScaleSend = posScaleCls.prototype.mettlerScaleSend
+const orgMettlerScaleSend = posScaleCls.prototype.mettlerScaleSend
 
 posLcdCls.prototype.print = async function(pData)
 {
@@ -173,8 +173,8 @@ posScaleCls.prototype.mettlerScaleSend = async function(pPrice)
             return (pData << pDistance) | (pData >> (16 - pDistance));
         }
 
-//         let TmpPrice = parseInt(pPrice * 100).toString().padStart(6, '0');
-//         let ReciveBuffer = '';
+        let TmpPrice = parseInt(pPrice * 100).toString().padStart(6, '0');
+        let ReciveBuffer = '';
         
         return new Promise((resolve) =>
         {
