@@ -239,11 +239,17 @@ class pricerApi
                 return
             }
             let tmpBarcodes =[]
+            let tmpPrice = 0
+            let tmpUnitFactor = 1
+            let tmpUnitName  = ''
             for (let i = 0; i < tmpResult.length; i++) 
             {
                 if(tmpResult[i].UNIT_FACTOR == 1)
                 {
                     tmpBarcodes.push(tmpResult[i].BARCODE)
+                    tmpPrice = Math.round(tmpResult[i].CENTIM_PRICE)
+                    tmpUnitFactor = tmpResult[i].UNIT_FACTOR
+                    tmpUnitName = tmpResult[i].UNIT_NAME
                 }
                 else
                 {
@@ -264,13 +270,12 @@ class pricerApi
                     {
                       "itemId": tmpResult[0].GUID,
                       "itemName": tmpResult[0].NAME,
-                      "price": Math.round(tmpResult[0].CENTIM_PRICE),
+                      "price": tmpPrice,
                       "sics":tmpBarcodes,
                       "properties": 
                       {
-                        "BARCODE": tmpResult[0].BARCODE,
-                        "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
-                        "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
+                        "PACKAGE_SIZE":tmpUnitFactor ,
+                        "PACKAGE_UNIT" :tmpUnitName,
                         "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
