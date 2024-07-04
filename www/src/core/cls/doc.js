@@ -2292,12 +2292,14 @@ export class transportInfermotionCls
                     "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
                     "@METTER = @PMETTER, " +
                     "@WEIGHT = @PWEIGHT, " +
-                    "@COLIS = @PCOLIS ",
-        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
-                    'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
-                    'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float'],
-        dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
-                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS']
+                    "@COLIS = @PCOLIS, " +
+                    "@SENDER_NOTE = @PSENDER_NOTE, " +
+                    "@RECIEVER_NOTE = @PRECIEVER_NOTE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
+                        'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
+                        'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250'],
+            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
+                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE']
         }
         tmpDt.updateCmd = 
         {
@@ -2320,12 +2322,14 @@ export class transportInfermotionCls
                     "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
                     "@METTER = @PMETTER, " +
                     "@WEIGHT = @PWEIGHT, " +
-                    "@COLIS = @PCOLIS ",
-        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
-                    'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
-                    'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float'],
-        dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
-                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS']
+                    "@COLIS = @PCOLIS, " +
+                    "@SENDER_NOTE = @PSENDER_NOTE, " +
+                    "@RECIEVER_NOTE = @PRECIEVER_NOTE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
+                        'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
+                        'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250'],
+            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
+                        'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE']
         }
         tmpDt.deleteCmd = 
         {

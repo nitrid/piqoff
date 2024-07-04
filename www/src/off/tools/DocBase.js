@@ -234,6 +234,10 @@ export default class DocBase extends React.PureComponent
                         priceType = this.type == 0 ? 0 : 1
                     }
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
+                    if(this.docObj.dt()[0].DOC_TYPE == 42 || this.docObj.dt()[0].DOC_TYPE == 22)
+                    {
+                        tmpPrice = this.msgQuantity.tmpData.COST_PRICE
+                    }
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(3)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
@@ -2893,6 +2897,16 @@ export default class DocBase extends React.PureComponent
                                 data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                 >
                                 </NdSelectBox>     
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
+                                <NdTextBox id="txtSenderNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverNote")} alignment="right" />
+                                <NdTextBox id="txtRecieverNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
                             </Item>
                             <EmptyItem/>
                             <EmptyItem/>

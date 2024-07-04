@@ -22,7 +22,7 @@ const cnt_01_001 =
         txtMailSubject : "Objet E-Mail ",   
         txtSendMail : "Adresse E-Mail ",   
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_txtCustomerCode : 
     {

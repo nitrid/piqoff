@@ -2081,7 +2081,7 @@ export default class priceDiffDemand extends DocBase
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
-                                <Label text={this.t(this.t("popMailSend.cmbMailAddress"))} alignment="right" />
+                                <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
                                 displayExpr="MAIL_ADDRESS"                       
                                 valueExpr="GUID"

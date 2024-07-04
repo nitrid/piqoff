@@ -53,7 +53,7 @@ const irs_02_004 =
         txtMailSubject : "Objet du courriel",
         txtSendMail : "Adresse e-mail",
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_Docs : 
     {
@@ -377,7 +377,7 @@ const irs_02_004 =
         txtMailSubject : "Objet E-Mail ",   
         txtSendMail : "Adresse E-Mail ",   
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     msgMailSendResult:
     {
