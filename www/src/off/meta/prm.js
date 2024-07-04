@@ -252,7 +252,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"maxItemPrice",
-        VALUE : 100,
+        VALUE : 1000,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
