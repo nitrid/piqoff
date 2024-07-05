@@ -40,6 +40,7 @@ const cri_01_001 =
         clmZipcode : "Posta Kodu",
         clmCity :"Şehir",
         clmCountry : "Ülke",
+        clmSiret : "Siret"
     },
     grdLegal : 
     {
@@ -77,6 +78,7 @@ const cri_01_001 =
         cmbPopZipcode :"Posta Kodu",
         cmbPopCity :"Şehir",
         cmbPopCountry :"Ülke",
+        txtPopAdressSiret : "Siret"
     },
     popBank : 
     {

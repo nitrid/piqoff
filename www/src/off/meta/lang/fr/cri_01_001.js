@@ -40,6 +40,7 @@ const cri_01_001 =
         clmZipcode : "Code Postal",
         clmCity :"Ville",
         clmCountry : "Pays",
+        clmSiret : "Siret"
     },
     grdLegal : 
     {
@@ -77,6 +78,7 @@ const cri_01_001 =
         cmbPopZipcode :"Code Postal",
         cmbPopCity :"Ville",
         cmbPopCountry :"Pays",
+        txtPopAdressSiret : "Siret"
     },
     popBank : 
     {
