@@ -252,7 +252,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"maxItemPrice",
-        VALUE : 100,
+        VALUE : 1000,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -453,7 +453,7 @@ export const prm =
             CAPTION : "Terazi Fiyat Çarpanı"
         }
     },
-    //Terazi Fiyat Çarpanı
+    //Varsayılan Taşıma Kodu
     {
         TYPE : 0,
         ID :"DocTrasportType",
@@ -467,6 +467,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Varsayılan Taşıma Kodu"
+        }
+    },
+    //Mail Adresi
+    {
+        TYPE : 0,
+        ID :"autoMailAdress",
+        VALUE :"",
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Varsayılan Mail Adresi"
         }
     },
     //#endregion

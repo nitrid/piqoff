@@ -575,6 +575,8 @@ export const langTr =
         txtColis : "Koli Miktarı",
         txtMetter : "Metraj",
         txtHeight : "Tonaj",
-        btnSave :"Tamam"
+        btnSave :"Tamam",
+        txtSenderNote : "Gönderici Notu",
+        txtRecieverNote : "Alıcı Notu",
     },
 }

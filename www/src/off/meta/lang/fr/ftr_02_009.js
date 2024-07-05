@@ -71,7 +71,7 @@ const  ftr_02_009 =
         txtMailSubject : "Objet du courriel",
         txtSendMail : "Adresse e-mail",
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_Docs : 
     {
@@ -478,7 +478,7 @@ const  ftr_02_009 =
         txtMailSubject : "Objet E-Mail",   
         txtSendMail : "Adresse E-Mail ",   
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     msgMailSendResult:
     {

@@ -29,6 +29,7 @@ export default class Navigation extends React.PureComponent
             value: 'contains',
             menu:[],
             favMenu:[],
+            firmName: ''
         }
 
         this.favArray = []
@@ -41,7 +42,7 @@ export default class Navigation extends React.PureComponent
         {
             div :
             {
-                height:'97%'
+                height:'94%'
             },
             treeview :
             {
@@ -96,6 +97,14 @@ export default class Navigation extends React.PureComponent
             text: "PiqSoft",
             path: 'main.js',
         })
+        let tmpQuery = 
+        {
+            query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        this.firmName.value = tmpData.result.recordset[0].NAME
+        console.log(tmpData.result.recordset[0].NAME)
+        this.setState({firmName:tmpData.result.recordset[0].NAME})
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
@@ -278,6 +287,11 @@ export default class Navigation extends React.PureComponent
                     }).bind(this)} />
                 </React.Fragment>
 
+                </div>
+                <div className="row">
+                    <div className="col-12 px-4">
+                        <NbLabel id="firmName" parent={this} value={this.state.firmName}/>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col-12 px-4">
