@@ -289,7 +289,8 @@ class pricerApi
                         "TRAITEMENT" : "",
                         "STOCK":"",
                         "NEXT_DELIVERY_DATE":"",
-                        "ORDER_IN_PROGRESS":""
+                        "ORDER_IN_PROGRESS":"",
+                        "MULTICODE":tmpResult[0].LAST_MULTICODE
                       }
                     }
                 ])

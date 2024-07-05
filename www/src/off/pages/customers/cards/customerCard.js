@@ -728,6 +728,7 @@ export default class CustomerCard extends React.PureComponent
                                                             this.cmbPopZipcode.value = "";
                                                             this.cmbPopCity.value = "";
                                                             this.cmbPopCountry.value = ''
+                                                            this.txtPopAdressSiret.value = "";
                                                             this.popAdress.show();
                                                         }}/>
                                                     </Item>
@@ -751,6 +752,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
                                                     <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")} allowEditing={false}/>
+                                                    <Column dataField="SIRET" caption={this.t("grdAdress.clmSiret")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -1507,7 +1509,11 @@ export default class CustomerCard extends React.PureComponent
                                     }}
                                     />
                                 </Item>
-                              
+                                <Item>
+                                    <Label text={this.t("popAdress.txtPopAdressSiret")} alignment="right" />
+                                    <NdTextBox id={"txtPopAdressSiret"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -1522,6 +1528,7 @@ export default class CustomerCard extends React.PureComponent
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
                                                 tmpEmpty.CITY = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
+                                                tmpEmpty.SIRET = this.txtPopAdressSiret.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 
                                                 this.customerObj.customerAdress.addEmpty(tmpEmpty);    
