@@ -20,8 +20,12 @@ const  prsnl_02_001 =
         clmPhone1 :"Telefon",
         clmGsm : "GSM No.",
         clmEmail :"E-Mail",
-        clmIban :"Iban",
-        clmStatus :"Durum"
+        clmAge :"Yaş",
+        clmInsuranceNo : "Sigorta No",
+        clmGender :"Cinsiyet",
+        clmMarıalStatus : "Medeni Durumu",
+        clmWage :"Maaşı",
+ 
     },
     cmbGenusData:
     {

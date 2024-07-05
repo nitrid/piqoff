@@ -23,16 +23,14 @@ export default class employeeList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['CODE','TITLE','TYPE_NAME','GENUS_NAME']
+            columnListValue : ['CODE','TYPE']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "TITLE",NAME : this.t("grdListe.clmTitle")},
-            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
-            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},       
+            {CODE : "CODE",NAME : this.t("grdListe.clmCode")},           
+            {CODE : "TYPE",NAME : this.t("grdListe.clmType")},            
             {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
             {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
@@ -40,7 +38,11 @@ export default class employeeList extends React.PureComponent
             {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
             {CODE : "GSM_PHONE",NAME : this.t("grdListe.clmGsm")},       
             {CODE : "EMAIL",NAME : this.t("grdListe.clmEmail")}, 
-            {CODE : "IBAN",NAME : this.t("grdListe.clmIban")},       
+            {CODE : "AGE",NAME : this.t("grdListe.clmAge")},    
+            {CODE : "INSURANCE_NO",NAME : this.t("grdListe.clmInsuranceNo")},   
+            {CODE : "GENDER",NAME : this.t("grdListe.clmGender")},   
+            {CODE : "MARIAL_STATUS",NAME : this.t("grdListe.clmMarıalStatus")},   
+            {CODE : "WAGE",NAME : this.t("grdListe.clmWage")},      
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -120,10 +122,9 @@ export default class employeeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE (((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) OR ((CODE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) ) AND " +
-                            "((GENUS = @GENUS) OR (@GENUS = -1)) AND ((MAIN_GROUP = @MAIN_GROUP) OR (@MAIN_GROUP = '00000000-0000-0000-0000-000000000000'))",
-                    param : ['CUSTOMER_NAME:string|250','GENUS:string|25','MAIN_GROUP:string|50'],
-                    value : [this.txtCustomerName.value,this.cmbGenus.value,this.cmbMainGrp.value]
+                    query : "SELECT * FROM EMPLOYEE_VW_01  " ,
+                    param : ['EMPLOYEE_NAME:string|250'],
+                    value : [this.txtEmployeeName.value]
                 },
                 sql : this.core.sql
             }
@@ -195,25 +196,7 @@ export default class employeeList extends React.PureComponent
                                     <Label text={this.t("txtEmployeeName")} alignment="right" />
                                         <NdTextBox id="txtEmployeeName" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("employeePlace")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cmbGenus")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value={-1}
-                                    data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Employee")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
-                                    />
-                                </Item>       
-                                <Item>
-                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbMainGrp" height='fit-content'
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value={"00000000-0000-0000-0000-000000000000"}
-                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID,'' AS CODE,'" + this.t("cmbGenusData.allGenus") +"' AS NAME UNION ALL SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01"},sql:this.core.sql}}}
-                                    />
-                                </Item>
+                                </Item>                                                                 
                             </Form>
                         </div>
                     </div>
@@ -252,9 +235,9 @@ export default class employeeList extends React.PureComponent
                             {
                                 App.instance.menuClick(
                                 {
-                                    id: 'cri_01_001',
-                                    text: e.data.TITLE.substring(0,10),
-                                    path: 'customers/cards/customerCard.js',
+                                    id: 'prsnl_01_001',
+                                    text: e.data.NAME.substring(0,10),
+                                    path: 'employee/cards/employeeCards.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
@@ -272,11 +255,9 @@ export default class employeeList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menuOff.cri_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 
-                                <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 
-                                <Column dataField="GENUS_NAME" caption={this.t("grdListe.clmGenus")} visible={true}/> 
+                                <Export fileName={this.lang.t("menuOff.prsnl_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/>                                 
+                                <Column dataField="TYPE" caption={this.t("grdListe.clmType")} visible={true}/>                                 
                                 <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
                                 <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
                                 <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
@@ -284,8 +265,11 @@ export default class employeeList extends React.PureComponent
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
                                 <Column dataField="GSM_PHONE" caption={this.t("grdListe.clmGsm")} visible={false}/> 
                                 <Column dataField="EMAIL" caption={this.t("grdListe.clmEmail")} visible={false}/> 
-                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/>
-                                <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={true}/>
+                                <Column dataField="AGE" caption={this.t("grdListe.clmAge")} visible={false}/>
+                                <Column dataField="INSURANCE_NO" caption={this.t("grdListe.clmInsuranceNo")} visible={true}/>
+                                <Column dataField="GENDER" caption={this.t("grdListe.clmGender")} visible={true}/>
+                                <Column dataField="MARIAL_STATUS" caption={this.t("grdListe.clmMarıalStatus")} visible={true}/>
+                                <Column dataField="WAGE" caption={this.t("grdListe.clmWage")} visible={true}/>
                             </NdGrid>
                         </div>
                     </div>
