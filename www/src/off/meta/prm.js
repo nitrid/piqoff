@@ -469,7 +469,7 @@ export const prm =
             CAPTION : "Varsayılan Taşıma Kodu"
         }
     },
-    //Mail Adresi
+    //Mail Ek Adresi
     {
         TYPE : 0,
         ID :"autoMailAdress",
