@@ -212,7 +212,7 @@ const ftr_02_007 =
         txtMailSubject: "Objet de l'e-mail",
         txtSendMail: "Adresse e-mail",
         btnSend: "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },        
     msgSaveValid:
     {
@@ -491,7 +491,7 @@ const ftr_02_007 =
         txtMailSubject : "Objet E-Mail",   
         txtSendMail : "Adresse E-Mail ",   
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     msgMailSendResult:
     {

@@ -267,7 +267,7 @@ export default class App extends React.PureComponent
                 this.core.auth.logout()
                 window.location.reload()
             }
-        })        
+        })     
     }
     menuClick(data)
     {
@@ -329,8 +329,9 @@ export default class App extends React.PureComponent
     {
         this.popPasswordChange.show()
     }
-    setUser()
+    async setUser()
     {
+        
         this.setState({toolbarItems:[
             {
                 widget : 'dxButton',

@@ -445,7 +445,7 @@ const ftr_02_006 =
         txtMailSubject: "Objet de l'e-mail",
         txtSendMail: "Adresse e-mail",
         btnSend: "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     }     
 }
 export default ftr_02_006
