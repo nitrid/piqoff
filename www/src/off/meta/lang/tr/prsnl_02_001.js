@@ -1,8 +1,8 @@
 // "Personel Listesi"
 const  prsnl_02_001 =
 {
-    customerPlace: "Lütfen Aratmak İçin Personel Adı veya Kodu Giriniz.",
-    txtCustomerName : "Personel Adı",
+    employeePlace: "Lütfen Aratmak İçin Personel Adı veya Kodu Giriniz.",
+    txtEmployeeName : "Personel Adı",
     cmbGenus :"Cinsi",
     menu: "Personel Tanımları",
     btnGet : "Getir",
@@ -26,7 +26,7 @@ const  prsnl_02_001 =
     cmbGenusData:
     {
         allGenus : "Hepsi",
-        Customer : "Personel",
+        Employee : "Personel",
         supplier : "Tedarikçi",
         both : "Her İkisi",
         branch : "Şube"

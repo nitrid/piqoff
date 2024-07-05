@@ -153,9 +153,9 @@ export default class employeeList extends React.PureComponent
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'cri_01_001',
+                                                id: 'prsnl_01_001',
                                                 text: this.t('menu'),
-                                                path: 'customers/cards/customerCard.js'
+                                                path: 'employee/cards/employeeCards.js'
                                             })
                                         }
                                     }    
@@ -192,8 +192,8 @@ export default class employeeList extends React.PureComponent
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("customerPlace")}
+                                    <Label text={this.t("txtEmployeeName")} alignment="right" />
+                                        <NdTextBox id="txtEmployeeName" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("employeePlace")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
                                 </Item>
                                 <Item>
@@ -202,7 +202,7 @@ export default class employeeList extends React.PureComponent
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value={-1}
-                                    data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
+                                    data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Employee")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
                                 </Item>       
                                 <Item>
