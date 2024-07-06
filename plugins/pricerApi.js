@@ -14,7 +14,7 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
 
         this.processRun()
     }
@@ -223,7 +223,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -276,7 +276,7 @@ class pricerApi
                       {
                         "PACKAGE_SIZE":tmpUnitFactor ,
                         "PACKAGE_UNIT" :tmpUnitName,
-                        "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
+                        "UNIT_PRICE": (tmpPrice / tmpResult[0].UNIT_FACTOR2).toFixed(2),
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -325,7 +325,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID AND UNIT_ID = @UNIT_ID",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID AND UNIT_ID = @UNIT_ID",
             param : ['GUID:string|50','UNIT_ID:string|50'],
             value : [pGuid,pUnitId]
         }
@@ -362,7 +362,7 @@ class pricerApi
                         "BARCODE": tmpResult[0].BARCODE,
                         "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
                         "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
-                        "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
+                        "UNIT_PRICE": (tmpResult[0].CENTIM_PRICE / (tmpResult[0].UNIT_FACTOR2 * tmpResult[0].UNIT_FACTOR)).toFixed(2),
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -492,7 +492,7 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE,ROUND(UNIT_PRICE,2) AS UNIT_PRICES FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -526,7 +526,7 @@ class pricerApi
                         "BARCODE": tmpResult[0].BARCODE,
                         "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
                         "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
-                        "UNIT_PRICE": tmpResult[0].UNIT_PRICES,
+                        "UNIT_PRICE": (pPrice / tmpResult[0].UNIT_FACTOR2).toFixed(2),
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_FLAG":"1",
                         "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
