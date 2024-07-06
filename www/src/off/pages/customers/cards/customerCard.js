@@ -768,6 +768,23 @@ export default class CustomerCard extends React.PureComponent
                                                 height={'100%'} 
                                                 width={'100%'}
                                                 dbApply={false}
+                                                onRowUpdating={async (e)=>
+                                                    {
+                                                        if(typeof e.newData.TAX_NO != 'undefined' && e.newData.TAX_NO.includes(' '))
+                                                        {
+                                                            e.cancel = true
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgTaxInSpace',showTitle:true,title:this.t("msgTaxInSpace.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgTaxInSpace.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTaxInSpace.msg")}</div>)
+                                                            }
+                                                        
+                                                            dialog(tmpConfObj);
+                                                            e.component.cancelEditData()
+                                                            
+                                                        }
+                                                    }}
                                                 >
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
@@ -776,7 +793,12 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="RCS" caption={this.t("grdLegal.clmRcs")}/>
                                                     <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
-                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
+                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}>
+                                                    {/* <StringLengthRule 
+                                                    message={this.t("validTaxNo")}   
+                                                    ignoreEmptyValue={true}
+                                                    />     */}
+                                                    </Column>
                                                     <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
                                                     <Column dataField="INSURANCE_NO" caption={this.t("grdLegal.clmInsurance")}/>
                                                     <Column dataField="CAPITAL" caption={this.t("grdLegal.clmCapital")}/>

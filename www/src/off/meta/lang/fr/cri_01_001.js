@@ -237,5 +237,11 @@ const cri_01_001 =
         title: "Sélection de Sous-groupe",
         clmName: "Nom",
     },
+    msgTaxInSpace: 
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Veuillez écrire le numéro de TVA sans espaces !"
+    }
 }
 export default cri_01_001

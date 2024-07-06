@@ -236,6 +236,12 @@ const cri_01_001 =
         title : "Alt Grup Seçim",
         clmName : "Adı",
     },
+    msgTaxInSpace:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Vergi Numarasını boşluksuz yazınız !"
+    },
 }
 
 export default cri_01_001
