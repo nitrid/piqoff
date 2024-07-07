@@ -117,12 +117,7 @@ export default class App extends React.PureComponent
             }
         ];
 
-        if(window.origin.substring(0,4) == 'http' && /android/i.test(navigator.userAgent || navigator.vendor || window.opera) == false)
-        {
-            this.device = false
-            this.init();
-        }
-        else
+        if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
         {
             var body = document.getElementsByTagName('body')[0];
             var js = document.createElement("script");
@@ -135,8 +130,12 @@ export default class App extends React.PureComponent
                 this.init();
             }, false);
         }
-
-        
+        else
+        {
+            
+            this.device = false
+            this.init();
+        }
     }
     async init()
     {

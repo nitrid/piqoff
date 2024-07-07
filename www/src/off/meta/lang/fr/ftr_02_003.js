@@ -494,5 +494,12 @@ const ftr_02_003 =
         btn01: "OK", 
         msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
     },
+    msgCustomerNotFound:
+    {
+        title: "Attention",
+        btn01: "Continue",
+        btn02: "Abandonner",
+        msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
+    },
 }
 export default ftr_02_003

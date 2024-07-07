@@ -77,7 +77,7 @@ class fumaWebApi
                 let tmpData = []
                 let tmpQuery = 
                 {
-                    query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000'",
+                    query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND CUSTOMER_MAIL <> ''",
                     param : ['FIRST:date','LAST:date'],
                     value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(-1,'day').format("YYYYMMDD")]
                 }
@@ -239,7 +239,7 @@ class fumaWebApi
             }
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3090/integration/createOrders', 
+                fetch('http://fuma.piqsoft.net:3090/integration/createOrders', 
                 {
                     method: 'POST',
                     headers:  
@@ -251,7 +251,7 @@ class fumaWebApi
                 })
                 .then(response => 
                 {
-                    console.log(response)
+                    //console.log(response)
                     if (!response.ok) 
                     {
                         throw new Error('FumaApi - processPosSaleSend : Yükleme başarısız. HTTP Hata: ' + response.status);
@@ -282,7 +282,7 @@ class fumaWebApi
         {
             if(typeof pData != 'undefined')
             {
-                fetch('http://20.19.32.36:3090/integration/createUsers', 
+                fetch('http://fuma.piqsoft.net:3090/integration/createUsers', 
                 {
                     method: 'POST',
                     headers:  
