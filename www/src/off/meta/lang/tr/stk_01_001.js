@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Fiyatı boş geçemezsiniz !",
     validPriceFloat : "Fiyat 0'dan yüksek olmalıdır !",
     validCustomerCode :"Tedarikci Kodu Giriniz !",
+    validOriginMax8 :"Lütfen 8 karakter giriniz !",
     mainUnitName :"Ana Birim",
     underUnitName : "Alt Birim",
     chkDayAnalysis : "Günlük",

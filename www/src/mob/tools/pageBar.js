@@ -19,16 +19,16 @@ export class PageBar extends NbBase
     }
     componentDidMount()
     {
-        document.addEventListener("click", (e)=>
-        {
-            const elementLeft = window.getComputedStyle(document.querySelector('.pageBarSide')).getPropertyValue('left')
-            const percentageLeft = (parseFloat(elementLeft) / document.querySelector('.pageBarSide').parentElement.offsetWidth) * 100
+        // document.addEventListener("click", (e)=>
+        // {
+        //     const elementLeft = window.getComputedStyle(document.querySelector('.pageBarSide')).getPropertyValue('left')
+        //     const percentageLeft = (parseFloat(elementLeft) / document.querySelector('.pageBarSide').parentElement.offsetWidth) * 100
             
-            if (percentageLeft == 30) 
-            {
-                this.setState({ rightSide: false });
-            }
-        });
+        //     if (percentageLeft == 30) 
+        //     {
+        //         this.setState({ rightSide: false });
+        //     }
+        // });
     }
     activePage(pPage)
     {

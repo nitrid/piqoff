@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../core/cls/doc.js';
+import { discountCls } from '../../core/cls/discount.js'
 import { nf525Cls } from '../../core/cls/nf525.js';
 import { datatable } from '../../core/core.js';
 
@@ -35,6 +36,7 @@ export default class DocBase extends React.PureComponent
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
         this.nf525 = new nf525Cls();
+        this.discObj = new discountCls();
         this.tabIndex = props.data.tabkey
         this.type = 0;
         this.docType = 0;
@@ -232,6 +234,10 @@ export default class DocBase extends React.PureComponent
                         priceType = this.type == 0 ? 0 : 1
                     }
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
+                    if(this.docObj.dt()[0].DOC_TYPE == 42 || this.docObj.dt()[0].DOC_TYPE == 22)
+                    {
+                        tmpPrice = this.msgQuantity.tmpData.COST_PRICE
+                    }
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(3)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
@@ -482,6 +488,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.docCustomer.dt()[0].REF = this.docObj.dt()[0].REF
             this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
         }
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc({
+            DEPOT:this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
+            START_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"),
+        })
     }
     async calculateTotal()
     {
@@ -1702,7 +1714,7 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
                         <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
-                        <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
+                        <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                         <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                         <Column dataField="TOTALHT" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                         <Summary>
@@ -2812,7 +2824,142 @@ export default class DocBase extends React.PureComponent
                         await this.docObj.dt('DOC').delete();
                         this.init()
                     }}></NbPopDescboard>
-                </div>                
+                </div>   
+                  {/* Transport Detail PopUp */}
+                  <div>
+                    <NdPopUp parent={this} id={"popTransport"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popTransport.title")}
+                    container={"#root"} 
+                    width={'800'}
+                    height={'700'}
+                    position={{of:'#root'}}
+                    deferRendering={true}
+                    >
+                        <Form colCount={2} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderName")} alignment="right" />
+                                <NdTextBox id="txtSenderName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverName")} alignment="right" />
+                                <NdTextBox id="txtRecieverName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderAdress")} alignment="right" />
+                                <NdTextBox id="txtSenderAdress" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ADRESS"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverAdress")} alignment="right" />
+                                <NdTextBox id="txtRecieverAdress" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ADRESS"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderCity")} alignment="right" />
+                                <NdTextBox id="txtSenderCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_CITY"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverCity")} alignment="right" />
+                                <NdTextBox id="txtRecieverCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_CITY"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderZipCode")} alignment="right" />
+                                <NdTextBox id="txtRecieverCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverZipCode")} alignment="right" />
+                                <NdTextBox id="txtSenderZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.cmbSenderCountry")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                displayExpr="NAME"                       
+                                valueExpr="NAME"
+                                value="FRANCE"
+                                searchEnabled={true} showClearButton={true}
+                                dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_COUNTRY"}}
+                                param={this.param.filter({ELEMENT:'cmbSenderCountry',USERS:this.user.CODE})}
+                                data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                >
+                                </NdSelectBox>     
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.cmbRecieverCountry")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                displayExpr="NAME"                       
+                                valueExpr="NAME"
+                                value="FRANCE"
+                                searchEnabled={true} showClearButton={true}
+                                dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_COUNTRY"}}
+                                param={this.param.filter({ELEMENT:'cmbRecieverCountry',USERS:this.user.CODE})}
+                                data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                >
+                                </NdSelectBox>     
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
+                                <NdTextBox id="txtSenderNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverNote")} alignment="right" />
+                                <NdTextBox id="txtRecieverNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <EmptyItem/>
+                            <EmptyItem/>
+                            <EmptyItem/>
+                            <EmptyItem/>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtTransporter")} alignment="right" />
+                                <NdTextBox id="txtTransporter" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtTransporterPlate")} alignment="right" />
+                                <NdTextBox id="txtTransporterPlate" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER_PLATE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
+                                <NdTextBox id="txtPalletQuntity" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtColis")} alignment="right" />
+                                <NdTextBox id="txtColis" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
+                                <NdTextBox id="txtMetter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
+                                <NdTextBox id="txtHeight" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
+                                </NdTextBox>
+                            </Item>
+                            <EmptyItem/>
+                            <Item>
+                                <NdButton id="btnShemaSave" parent={this} text={this.lang.t('popTransport.btnSave')} type="default"
+                                onClick={async()=>
+                                {
+                                    this.popTransport.hide()
+                                }}/>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>               
             </div>
         )
     }

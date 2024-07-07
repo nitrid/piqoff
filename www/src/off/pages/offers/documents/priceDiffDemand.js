@@ -1760,7 +1760,7 @@ export default class priceDiffDemand extends DocBase
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffOff.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdDiffOff.clmCuser")} width={90} allowEditing={false}/>
@@ -2081,7 +2081,7 @@ export default class priceDiffDemand extends DocBase
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
-                                <Label text={this.t(this.t("popMailSend.cmbMailAddress"))} alignment="right" />
+                                <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
                                 displayExpr="MAIL_ADDRESS"                       
                                 valueExpr="GUID"

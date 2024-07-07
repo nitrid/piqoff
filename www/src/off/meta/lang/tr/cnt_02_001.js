@@ -4,6 +4,7 @@ const cnt_02_001 =
     cmbDepot: "Depo",
     txtCustomerCode : "Müşteri Kodu",
     txtCustomerName : "Müşteri Adı",
+    validDocDate : "Lütfen Tarih Seçiniz",    
     btnMailsend : "Mail Gönder",
     cmbVatType : 
     {

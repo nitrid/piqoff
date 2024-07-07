@@ -274,7 +274,7 @@ export default class invoiceAgingReport extends React.PureComponent
                             >
                                 <Paging defaultPageSize={30} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.fns_01_002")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdList.clmDate")} dataType={"date"} visible={true} width={100}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdList.clmType")} visible={true} width={200}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmCustomerName")} visible={true}/> 

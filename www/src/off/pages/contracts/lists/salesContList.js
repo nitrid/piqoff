@@ -331,7 +331,7 @@ export default class salesContList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.cnt_01_002")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.cnt_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcContList.clmCreateDate")} visible={true} width={200}/> 
                                 <Column dataField="LUSER_NAME" caption={this.t("grdPurcContList.clmUser")} visible={true} width={200}/>
                                 <Column dataField="ITEM_CODE" caption={this.t("grdPurcContList.clmCode")} visible={true} width={200}/> 
