@@ -593,5 +593,11 @@ const ftr_02_001 =
         btn01: "OK", //
         msg: "Nach Hinzufügen von Artikel kann Kunde nicht geändert werden" 
     },
+    msgFourniseurNotFound: 
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Lieferant nicht gefunden !"
+    }
 }
 export default ftr_02_001

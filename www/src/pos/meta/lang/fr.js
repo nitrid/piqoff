@@ -980,5 +980,14 @@ export const langFr =
         title : "Attention",
         msg : "Les informations de l'appareil n'ont pas pu être récupérées de la base de données !",
         btn01 : "OK"
+    },
+    popDeviceList: 
+    {
+        title: "Sélectionnez un appareil",
+        clmManufacture: "Fabricant",
+        clmProductName: "Nom du produit",
+        clmProductId: "ID du produit",
+        clmVendorId: "ID du fournisseur",
+        clmSerialNo: "Numéro de série"
     }
 }

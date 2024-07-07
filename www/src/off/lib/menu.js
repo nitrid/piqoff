@@ -1182,6 +1182,72 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Personel
+        {
+            id: 'prsnl',
+            text: e.t('menuOff.prsnl'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id:'prsnl_01',
+                    text:e.t('menuOff.prsnl_01'),//'TANIMLAR',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_01_001',
+                            text: e.t('menuOff.prsnl_01_001'), //'',
+                            path: 'employee/cards/employeeCards'
+                        }
+                        
+                    ]
+                },
+                {
+                    id:'prsnl_02',
+                    text:e.t('menuOff.prsnl_02'),//'Listeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_02_001',
+                            text: e.t('menuOff.prsnl_02_001'), //'Gelen Fatura Listesi',
+                            path: 'employee/lists/employeeLists'
+                        }
+                        
+                    ]
+                },
+                {
+                    id:'prsnl_03',
+                    text:e.t('menuOff.prsnl_03'),//'OPERASYONLAR',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_03_001',
+                            text: e.t('menuOff.prsnl_03_001'), //'',
+                            path: 'employee/operations/collectiveEmployee'
+                        }
+                        
+                    ]
+                },
+                {
+                    id:'prsnl_04',
+                    text:e.t('menuOff.prsnl_04'),//'RAPORLAR',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_04_001',
+                            text: e.t('menuOff.prsnl_04_001'), //'Gelen Fatura Listesi',
+                            path: 'employee/lists/employeeLists'
+                        }
+                        
+                    ]
+                },
+                
+            ]
+        },
         //Pos İşlemleri
         {
             id: 'pos',
@@ -1366,6 +1432,11 @@ export const menu = (e) =>
                             id: 'promo_01_001',
                             text: e.t('menuOff.promo_01_001'),//'Promosyon Tanımları',
                             path: 'promotion/cards/promotionCard'
+                        },
+                        {
+                            id: 'promo_01_002',
+                            text: e.t('menuOff.promo_01_002'),//'indirim Tanımları',
+                            path: 'promotion/cards/discountCard'
                         },
                     ]
                 },

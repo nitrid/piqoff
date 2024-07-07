@@ -46,7 +46,7 @@ export default class NbPosPopGrid extends NbBase
     {
         //this["txt" + this.props.id].value = ""
         //await this["grd" + this.props.id].dataRefresh({source:[]})
-        this[this.props.id].show()
+        await this[this.props.id].show()
         if(this.props.selectAll == true)
         {
             this["txt" + this.props.id].value = ''
@@ -73,6 +73,7 @@ export default class NbPosPopGrid extends NbBase
                 container={this.state.position} 
                 width={this.state.width}
                 height={this.state.height}
+                deferRendering={true}
                 position={{of:this.state.position}}>
                     <div className="row pb-1">
                         <div className="col-12">

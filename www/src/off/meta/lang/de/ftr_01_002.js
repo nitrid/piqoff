@@ -26,6 +26,7 @@ const ftr_01_002 =
         clmAmount : "Betrag",
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
+        clmMail : "Mail Gesendet"
     },
     popDesign:
     {
