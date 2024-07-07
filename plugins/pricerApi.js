@@ -276,7 +276,7 @@ class pricerApi
                       {
                         "PACKAGE_SIZE":tmpUnitFactor ,
                         "PACKAGE_UNIT" :tmpUnitName,
-                        "UNIT_PRICE": (tmpPrice / tmpResult[0].UNIT_FACTOR2).toFixed(2),
+                        "UNIT_PRICE": ((tmpPrice/ 100) / tmpResult[0].UNIT_FACTOR2).toFixed(2),
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
@@ -362,7 +362,7 @@ class pricerApi
                         "BARCODE": tmpResult[0].BARCODE,
                         "PACKAGE_SIZE":tmpResult[0].UNIT_FACTOR ,
                         "PACKAGE_UNIT" : tmpResult[0].UNIT_NAME,
-                        "UNIT_PRICE": (tmpResult[0].CENTIM_PRICE / (tmpResult[0].UNIT_FACTOR2 * tmpResult[0].UNIT_FACTOR)).toFixed(2),
+                        "UNIT_PRICE": ((tmpResult[0].CENTIM_PRICE/100) / (tmpResult[0].UNIT_FACTOR2 * tmpResult[0].UNIT_FACTOR)).toFixed(2),
                         "UNIT_CODE":tmpResult[0].UNIT_SYMBOL2,
                         "DISCOUNT_PRICE":"",
                         "DISCOUNT_FLAG":"0",
