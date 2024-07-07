@@ -1352,6 +1352,7 @@ export const prm =
         VALUE : 
         {
             active : false,
+            dbControl:false,
             tolerans : 0.030
         },
         SPECIAL : "",
@@ -1372,6 +1373,7 @@ export const prm =
                 item:
                 [
                     {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopScaleBarcodeControlActive"},
+                    {type:"checkbox",caption:"Databese Fiş Kontrolü",field:"dbControl",id:"chkPopScaleBarcodeControlTicket"},
                     {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
                 ]
             }

@@ -262,6 +262,12 @@ const ftr_02_001 =
         btn01: "Tamam",
         msg: "Şifreniz Hatalı !"
     },
+    msgNegativePrice:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Negatif Fiyat Değeri Giremezsiniz !"
+    },
     msgGetLocked:
     {
         title: "Dikkat",
@@ -593,6 +599,12 @@ const ftr_02_001 =
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
     },
+    msgFourniseurNotFound: 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Tedarikçi Bulunamadı !"
+    }
 }
 
 export default ftr_02_001

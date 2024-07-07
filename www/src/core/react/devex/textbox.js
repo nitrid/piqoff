@@ -133,6 +133,7 @@ export default class NdTextBox extends Base
                         options=
                         {
                             {
+                                visible: typeof this.props.button[i].visible == 'undefined' ? true : this.props.button[i].visible,
                                 disabled:false,
                                 icon: this.props.button[i].icon,
                                 stylingMode: "text",

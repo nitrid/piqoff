@@ -937,5 +937,14 @@ export const langIt =
         title : "Attenzione",
         msg : "Impossibile recuperare le informazioni del dispositivo dal database!",
         btn01 : "OK"
+    },
+    popDeviceList: 
+    {
+        title: "Seleziona dispositivo",
+        clmManufacture: "Produttore",
+        clmProductName: "Nome del prodotto",
+        clmProductId: "ID prodotto",
+        clmVendorId: "ID fornitore",
+        clmSerialNo: "Numero di serie"
     }
 }
