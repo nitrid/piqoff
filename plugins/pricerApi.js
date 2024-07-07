@@ -221,6 +221,7 @@ class pricerApi
     }
     async itemUpdate(pGuid)
     {
+        console.log(pGuid)
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
