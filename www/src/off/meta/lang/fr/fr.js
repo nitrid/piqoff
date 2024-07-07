@@ -564,6 +564,8 @@ export const langFr =
         txtColis : "Quantité de colis",
         txtMetter : "Métrage",
         txtHeight : "Tonnes",
-        btnSave :"OK"
+        btnSave :"OK",
+        txtSenderNote : "Instruction Expéditeur",
+        txtRecieverNote : "Instruction Destinataire",
     }
 }

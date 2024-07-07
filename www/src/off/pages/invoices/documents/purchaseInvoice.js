@@ -118,12 +118,19 @@ export default class purchaseInvoice extends DocBase
             }
             else
             {
-                this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                this.docObj.docCustomer.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                let tmpConfObj =
+                {
+                    id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
             }
 
             this.dtDocDate.value = jData[0].DOC_DATE
             this.dtShipDate.value = jData[0].SHIPMENT_DATE
+            let tmpMissCodes = []
 
             for (let i = 0; i < jData.length; i++) 
             {
@@ -160,16 +167,22 @@ export default class purchaseInvoice extends DocBase
                 }
                 else
                 {
-                    tmpData.GUID = '00000000-0000-0000-0000-000000000000'
-                    tmpData.ITEM_TYPE = 0
-                    tmpData.CODE = ''
-                    tmpData.NAME = ''
-                    tmpData.UNIT = '00000000-0000-0000-0000-000000000000'
-                    tmpData.COST_PRICE = 0
-                    tmpData.VAT = 0
+                    tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
                 }
 
                 await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
+            }
+
+            if(tmpMissCodes.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                }
+            
+                await dialog(tmpConfObj);
             }
         }
     }
@@ -2745,7 +2758,7 @@ export default class purchaseInvoice extends DocBase
                                                                     this.vatRate.clear()
                                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
-                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                         let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                         this.vatRate.push(tmpData)
@@ -3083,7 +3096,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -3093,7 +3106,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />

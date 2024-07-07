@@ -867,7 +867,7 @@ export default class salesOffer extends DocBase
                                 {
                                     {
                                         type: 'default',
-                                        icon: 'clear',
+                                        icon: 'columnproperties',
                                         onClick: async () => 
                                         {
                                             if(this.docObj.transportInfermotion.dt().length == 0)
@@ -876,6 +876,31 @@ export default class salesOffer extends DocBase
                                                 this.docObj.transportInfermotion.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
                                             }
                                             this.popTransport.show()
+                                        }
+                                    }    
+                                } />
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
                                         }
                                     }    
                                 } />
@@ -1650,7 +1675,7 @@ export default class salesOffer extends DocBase
                                                     this.vatRate.clear()
                                                     for (let i = 0; i < this.docObj.docOffers.dt().groupBy('VAT_RATE').length; i++) 
                                                     {
-                                                        let tmpTotalHt  =  parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                        let tmpTotalHt  =  parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) - this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                         let tmpVat = parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                         let tmpData = {"RATE":this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                         this.vatRate.push(tmpData)
@@ -1876,7 +1901,17 @@ export default class salesOffer extends DocBase
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
-                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                        let tmpAutoMail = this.sysParam.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue()
+                                                        console.log(tmpAutoMail)
+                                                        console.log(tmpData.result.recordset[0].EMAIL)
+                                                        if(typeof tmpAutoMail != 'undefined' && tmpAutoMail != '')
+                                                        {
+                                                            this.txtSendMail.value = tmpAutoMail + ',' + tmpData.result.recordset[0].EMAIL
+                                                        }
+                                                        else
+                                                        {
+                                                            this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                        }
                                                     }
                                                     else
                                                     {
@@ -1905,7 +1940,7 @@ export default class salesOffer extends DocBase
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={this.t(this.t("popMailSend.cmbMailAddress"))} alignment="right" />
+                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
@@ -1921,7 +1956,7 @@ export default class salesOffer extends DocBase
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -1931,7 +1966,7 @@ export default class salesOffer extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />

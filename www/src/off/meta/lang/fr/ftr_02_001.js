@@ -82,7 +82,7 @@ const ftr_02_001 =
         txtMailSubject : "Objet du courriel",
         txtSendMail : "Adresse e-mail",
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_Docs : 
     {
@@ -603,5 +603,11 @@ const ftr_02_001 =
         btn01: "OK", 
         msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
     },
+    msgFourniseurNotFound: 
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Fournisseur non trouvé !"
+    }
 }
 export default ftr_02_001

@@ -557,6 +557,8 @@ export const langDe =
         txtColis : "Paketanzahl",
         txtMetter : "Meter",
         txtHeight : "Tonnen",
-        btnSave : "OK"
+        btnSave : "OK",
+        txtSenderNote : "Absenders Beschreibung",
+        txtRecieverNote : "Empfängers Beschreibung",
     }
 }
