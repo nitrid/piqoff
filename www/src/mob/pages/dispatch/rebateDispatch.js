@@ -935,6 +935,7 @@ export default class rebateDispatch extends React.PureComponent
                                             dbApply={false}
                                             onRowRemoving={async (e)=>
                                             {
+                                                console.log(e)
                                                 if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                                 {
                                                     e.cancel = true

@@ -870,13 +870,7 @@ export default class purchaseOrder extends React.PureComponent
                                             dbApply={false}
                                             onRowRemoving={async (e)=>
                                             {
-                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                                {
-                                                    e.cancel = true
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotDelete")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    e.component.cancelEditData()
-                                                }
+
                                             }}
                                             onRowRemoved={async (e)=>
                                             {
@@ -892,13 +886,7 @@ export default class purchaseOrder extends React.PureComponent
                                             }}
                                             onRowUpdating={async (e)=>
                                             {
-                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                                {
-                                                    e.cancel = true
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    e.component.cancelEditData()
-                                                }
+                                               
                                             }}
                                             onRowUpdated={async(e)=>
                                             {
