@@ -236,5 +236,11 @@ const cri_01_001 =
         title: "Untergruppenauswahl",
         clmName: "Name",
     },
+    msgTaxInSpace: 
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte geben Sie die Steuernummer ohne Leerzeichen ein!"
+    }
 }
 export default cri_01_001

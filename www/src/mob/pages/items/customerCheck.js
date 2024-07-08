@@ -228,8 +228,8 @@ export default class customerCheck extends React.PureComponent
                                                 <Scrolling mode="standart" />
                                                 <Paging defaultPageSize={10} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmCustomer")} dataType={'number'} width={150}/>
-                                                <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} dataType={'number'} width={100}/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmCustomer")} dataType={'text'} width={150}/>
+                                                <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} dataType={'text'} width={100}/>
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
                                             </NdGrid>
                                         </div>

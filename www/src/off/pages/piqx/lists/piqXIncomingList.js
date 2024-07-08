@@ -38,8 +38,8 @@ export default class piqXIncomingList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
+        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
+        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
 
         let tmpCompQuery = 
         {
