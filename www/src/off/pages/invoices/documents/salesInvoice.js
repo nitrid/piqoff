@@ -2133,7 +2133,7 @@ export default class salesInvoice extends DocBase
                                                                 this.vatRate.clear()
                                                                 for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                 {
-                                                                    let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                                    let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                     let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                     let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                     this.vatRate.push(tmpData)
@@ -2247,7 +2247,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2449,7 +2449,7 @@ export default class salesInvoice extends DocBase
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -2459,7 +2459,7 @@ export default class salesInvoice extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -2475,7 +2475,7 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
                                             validationGroup={"frmMailsend"  + this.tabIndex}
                                             onClick={async (e)=>
-                                            {       
+                                            {      
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpQuery = 
@@ -2511,6 +2511,17 @@ export default class salesInvoice extends DocBase
                                                             
                                                             if((pResult1) == 0)
                                                             {  
+                                                                let tmpQuery = 
+                                                                {
+                                                                    query :"EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  " +
+                                                                    "@CUSER = @PCUSER, " +
+                                                                    "@DOC_GUID = @PDOC_GUID, " + 
+                                                                    "@SENDER_MAIL = @PSENDER_MAIL, " +
+                                                                    "@RECIEVER_MAIL = @PRECIEVER_MAIL",
+                                                                    param : ['PCUSER:string|25','PDOC_GUID:string|50','PSENDER_MAIL:string|50','PRECIEVER_MAIL:string|50'],
+                                                                    value : [this.user.CODE,this.docObj.dt()[0].GUID,this.cmbMailAddress.displayValue,this.txtSendMail.value]
+                                                                }
+                                                                await this.core.sql.execute(tmpQuery) 
                                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
                                                                 await dialog(tmpConfObj1);
                                                                 this.htmlEditor.value = '',
