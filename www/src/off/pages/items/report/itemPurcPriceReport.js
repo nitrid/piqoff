@@ -255,7 +255,7 @@ export default class itemPurcPriceReport extends React.PureComponent
 
                                         // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                         let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                        let tmpNetMargin = tmpNetExVat == 0 || e.data.PURC_PRICE == 0 ? 0 : (tmpNetExVat - e.data.PURC_PRICE) / 1.15;
+                                        let tmpNetMargin = tmpNetExVat == 0 || e.data.PURC_PRICE == 0 ? 0 : (tmpNetExVat - e.data.PURC_PRICE) / 1.6635;
                                         let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.PURC_PRICE) * 100
                                         // e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                         // e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    

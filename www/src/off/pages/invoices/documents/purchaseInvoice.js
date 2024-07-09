@@ -1192,7 +1192,7 @@ export default class purchaseInvoice extends DocBase
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
                                 tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                 let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
-                                let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
+                                let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.6635;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
                                 tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
@@ -1312,7 +1312,7 @@ export default class purchaseInvoice extends DocBase
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
                                     tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                     let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
-                                    let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
+                                    let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.6635;
                                     let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
                                     tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID

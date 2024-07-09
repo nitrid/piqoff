@@ -157,7 +157,7 @@ export default class itemList extends React.PureComponent
                                 "ELSE '0'   " +
                                 "END AS MARGIN,  " +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN  " + 
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE ) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.6635,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.6635) / CUSTOMER_PRICE ) * 100,2)) " +
                                 "ELSE '0'  " +
                                 "END AS NETMARGIN  " +
                                 "FROM ITEMS_BARCODE_MULTICODE_VW_01  " +
@@ -390,7 +390,7 @@ export default class itemList extends React.PureComponent
                                 "ELSE '0'  " +
                                 "END AS MARGIN, " +
                                 "CASE WHEN PRICE_SALE <> 0 AND CUSTOMER_PRICE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.15) / CUSTOMER_PRICE) * 100,2)) " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.6635,2)) + '€ / %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - CUSTOMER_PRICE) / 1.6635) / CUSTOMER_PRICE) * 100,2)) " +
                                 "ELSE '0' " +
                                 "END AS NETMARGIN " +
                                 "FROM ITEMS_BARCODE_MULTICODE_VW_01 " +

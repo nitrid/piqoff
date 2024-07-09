@@ -582,7 +582,7 @@ export default class itemCard extends React.PureComponent
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
-            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
+            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.6635;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
@@ -2989,8 +2989,9 @@ export default class itemCard extends React.PureComponent
                                         ]
                                     }>                                        
                                     </NdTextBox>
-                                    <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
-                                    position={{of:'#page'}} 
+                                    <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} 
+                                    container={"#root"} 
+                                    position={{of:'#root'}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}

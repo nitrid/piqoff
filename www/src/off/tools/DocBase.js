@@ -2117,7 +2117,7 @@ export default class DocBase extends React.PureComponent
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                             e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
-                                            let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
+                                            let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.6635;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
                                             e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                         }}
@@ -2178,7 +2178,7 @@ export default class DocBase extends React.PureComponent
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                             e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
-                                            let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
+                                            let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.6635;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
                                             e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                         }}
