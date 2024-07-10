@@ -4,7 +4,7 @@ import { employeesCls,employeeAdressCls, } from '../../../../core/cls/employees.
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem} from 'devextreme-react/form';
+import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -14,9 +14,8 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -34,138 +33,19 @@ export default class collectiveEmployee extends React.PureComponent
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
-
-        this._onItemRendered = this._onItemRendered.bind(this)
-       
+        this.btnRun = this.btnRun.bind(this)
         
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
-        if(typeof this.pagePrm != 'undefined')
-        {
-            this.employeeObj.clearAll()
-            await this.employeeObj.load({GUID:this.pagePrm.GUID});
-        }
     }
     async init()
     {
         this.employeeObj.clearAll();
 
-        this.employeeObj.ds.on('onAddRow',(pTblName,pData) =>
-        {
-            if(pData.stat == 'new')
-            {
-                if(this.prevCode != '')
-                {
-                    this.btnNew.setState({disabled:true});
-                    this.btnBack.setState({disabled:false});
-                }
-                else
-                {
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
-                }
-                
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-            }
-        })
-        this.employeeObj.ds.on('onEdit',(pTblName,pData) =>
-        {            
-            if(pData.rowData.stat == 'edit')
-            {
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
-                pData.rowData.CUSER = this.user.CODE
-            }                 
-        })
-        this.employeeObj.ds.on('onRefresh',(pTblName) =>
-        {            
-            this.prevCode = this.employeeObj.dt().length > 0 ? this.employeeObj.dt()[0].CODE : '';
-            this.btnBack.setState({disabled:true});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
-        })
-        this.employeeObj.ds.on('onDelete',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:false});
-            this.btnNew.setState({disabled:true});
-            this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
-        })
-
-        
-
-        this.employeeObj.addEmpty();
-        this.txtCode.value = ''
-        this.setState({officalVisible:false})
-      
-        
-    }
-    async getEmployee(pCode)
-    {
-        this.employeeObj.clearAll()
-        await this.employeeObj.load({CODE:pCode});
-        console.log(this.employeeObj.dt())
-    }
-
-    async checkEmployee(pCode)
-    {
-        return new Promise(async resolve =>
-        {
-            if(pCode !== '')
-            {
-                let tmpData = await new employeesCls().load({CODE:pCode});
-
-                if(tmpData.length > 0)
-                {
-                    let tmpConfObj = 
-                    {
-                        id: 'msgCode',
-                        showTitle:true,
-                        title:this.t("msgCode.title"),
-                        showCloseButton:true,
-                        width:'500px',
-                        height:'200px',
-                        button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
-                    }
-    
-                    let pResult = await dialog(tmpConfObj);
-                    if(pResult == 'btn01')
-                    {
-                        this.getEmployee(pCode)
-                        resolve(2) //KAYIT VAR
-                    }
-                    else
-                    {
-                        resolve(3) // TAMAM BUTONU
-                    }
-                }
-                else
-                {
-                    resolve(1) // KAYIT BULUNAMADI
-                }
-            }
-            else
-            {
-                resolve(0) //PARAMETRE BOŞ
-            }
-        });
     }
     async checkZipcode(pCode)
     {
@@ -201,16 +81,11 @@ export default class collectiveEmployee extends React.PureComponent
     {
         await this.core.util.waitUntil(10)
     }
-    async _onItemRendered(e)
+    async btnRun()
     {
-        await this.core.util.waitUntil(10)
-        if(e.itemData.title == this.t("tabTitleAdress"))
-        {        
-            await this.grdAdress.dataRefresh({source:this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')});
-        }
-       
+        console.log(this)
+        this.popSettingEmployee.show()
     }
-
     render()
     {
         return(
@@ -220,109 +95,15 @@ export default class collectiveEmployee extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            if(this.prevCode != '')
-                                            {
-                                                this.getEmployee(this.prevCode); 
-                                            }
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
                                         this.init(); 
                                     }}/>
                                 </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmemployees"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if((await this.employeeObj.save()) == 0)
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                    this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                            }
-                                        }                              
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }                                                 
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
-                                    onClick={async()=>
-                                    {
-                                        
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            this.employeeObj.dt('EMPLOYEE').removeAt(0)
-                                            await this.employeeObj.dt('EMPLOYEE').delete();
-                                            this.init(); 
-                                        }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto" widget="dxButton"
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
                                 options=
                                 {
                                     {
@@ -350,85 +131,7 @@ export default class collectiveEmployee extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmemployees"  + this.tabIndex}>     
-                                {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtCode.show()
-                                                    this.pg_txtCode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.getEmployee(data[0].CODE)
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                id:'02',
-                                                icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
-                                            }
-                                        ]
-                                    }
-                                    onChange={(async()=>
-                                    {
-                                        let tmpResult = await this.checkEmployee(this.txtCode.value)
-                                        if(tmpResult == 3)
-                                        {
-                                            this.txtCode.value = "";
-                                        }
-                                    }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmemployees"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validation.frmemployees")}/>
-                                        </Validator>  
-                                    </NdTextBox>
-                                    {/*PERSONEL SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
-                                                param : ['EMPLOYEE_NAME:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
-                                        <Column dataField="GENDER" caption={this.t("pg_txtCode.clmGender")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="MARIAL_STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
-                                    </NdPopGrid>
-                                </Item>
+                            <Form colCount={2} id={"frmEmployees"  + this.tabIndex}>     
                                 {/* txtEmployeeName */}
                                 <Item>
                                     <Label text={this.t("txtEmployeeName")} alignment="right" />
@@ -443,17 +146,17 @@ export default class collectiveEmployee extends React.PureComponent
                                 {/* txtEmployeeLastname */}
                                 <Item>
                                     <Label text={this.t("txtEmployeeLastname")} alignment="right" />
-                                    <NdTextBox id="txtEmployeeLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"LAST_NAME"}}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
-                                    >                                      
+                                        <NdTextBox id="txtEmployeeLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"LAST_NAME",filter:{TYPE:0}}}
+                                        maxLength={32}
+                                        param={this.param.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
+                                        >                                      
                                     </NdTextBox>
                                 </Item>
-                                {/* txtPhone1 */}
-                                <Item>
+                                 {/* txtPhone1 */}
+                                 <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
                                     <NdTextBox id="txtPhone1" 
                                         parent={this} 
@@ -468,8 +171,8 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtPhone2 */}
-                                <Item>
+                                 {/* txtPhone2 */}
+                                 <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
                                     <NdTextBox id="txtPhone2" 
                                         parent={this} 
@@ -484,8 +187,8 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtGsmPhone */}
-                                <Item>
+                                 {/* txtGsmPhone */}
+                                 <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
                                     <NdTextBox id="txtGsmPhone" 
                                         parent={this} 
@@ -500,10 +203,10 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtOtherPhone */}
-                                <Item>
+                                 {/* txtOtherPhone */}
+                                 <Item>
                                     <Label text={this.t("txtOtherPhone")} alignment="right" />
-                                    <NdTextBox id="txtOtherPhone" 
+                                    <NdTextBox id="txtOtherPhone"  
                                         parent={this} 
                                         simple={true} 
                                         dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"OTHER_PHONE"}}
@@ -516,15 +219,15 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtEmail */}
-                                <Item>
+                                 {/* txtEmail */}
+                                 <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail"                                       
+                                    <NdTextBox id="txtEmail" 
                                         parent={this} 
-                                        simple={true}  
+                                        simple={true} 
                                         dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"EMAIL"}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={100}
+                                        maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                     >
                                         <Validator>
@@ -532,8 +235,8 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtAge */}
-                                <Item>
+                                 {/* txtAge */}
+                                 <Item>
                                     <Label text={this.t("txtAge")} alignment="right" />
                                     <NdTextBox id="txtAge" 
                                         parent={this} 
@@ -600,72 +303,36 @@ export default class collectiveEmployee extends React.PureComponent
                                      
                                     </NdTextBox>
                                 </Item>
-                            </Form>
-                        </div>
-                        <div className='row px-2 pt-2'>
-                            <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
-                                    <Item title={this.t("tabTitleAdress")}>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <Toolbar>
-                                                    <Item location="after">
-                                                        <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                            this.txtPopAdress.value = "";
-                                                            this.cmbPopZipcode.value = "";
-                                                            this.cmbPopCity.value = "";
-                                                            this.cmbPopCountry.value = ''
-                                                            this.popAdress.show();
-                                                        }}/>
-                                                    </Item>
-                                                </Toolbar>
-                                            </div>
-                                        </div>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdAdress"} 
-                                                showBorders={true} 
-                                                columnsAutoWidth={true} 
-                                                allowColumnReordering={true} 
-                                                allowColumnResizing={true} 
-                                                height={'100%'} 
-                                                width={'100%'}
-                                                dbApply={false}
-                                                >
-                                                    <Paging defaultPageSize={5} />
-                                                    <Editing mode="popup" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
-                                                    <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
-                                                    <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
-                                                    <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")} allowEditing={false}/>
-                                                </NdGrid>
-                                            </div>
-                                        </div>
-                                    </Item>   
-                                           
-                                </TabPanel>
-                            </div>
-                        </div> 
-                    </div>
-                    {/* Adres POPUP */}
-                    <div>
-                        <NdPopUp parent={this} id={"popAdress"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popAdress.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'350'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
                                     <NdTextBox id={"txtPopAdress"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
+                                    displayExpr="ZIPNAME"                       
+                                    valueExpr="ZIPCODE"
+                                    value=""
+                                    searchEnabled={true}
+                                    showClearButton={true}
+                                    pageSize={50}
+                                    notRefresh={true}
+                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopCity"
+                                    displayExpr="CITYNAME"                       
+                                    valueExpr="PLACE"
+                                    value=""
+                                    searchEnabled={true}
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh = {true}
+                                    data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
@@ -676,145 +343,153 @@ export default class collectiveEmployee extends React.PureComponent
                                     searchEnabled={true}
                                     showClearButton={true}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        let tmpQuery = 
-                                        {
-                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
-                                            param : ['COUNTRY_CODE:string|5'],
-                                            value : [this.cmbPopCountry.value]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        if(tmpData.result.recordset.length > 0)
-                                        {   
-                                            await this.cmbPopZipcode.setData(tmpData.result.recordset)
-                                        }
-                                        else
-                                        {
-                                            await this.cmbPopZipcode.setData([])
-                                        }
-                                        let tmpCityQuery = 
-                                        {
-                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
-                                            param : ['COUNTRY_CODE:string|5'],
-                                            value : [this.cmbPopCountry.value]
-                                        }
-                                        let tmpCityData = await this.core.sql.execute(tmpCityQuery) 
-                                        if(tmpCityData.result.recordset.length > 0)
-                                        {   
-                                            await this.cmbPopCity.setData(tmpCityData.result.recordset)
-                                        }
-                                        else
-                                        {
-                                            await this.cmbPopCity.setData([])
-                                        }
-
-                                    }).bind(this)}
                                     />
                                 </Item>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-3">
+                          
+                        </div>
+                        <div className="col-3">
+                            
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}></NdButton>
+                        </div>
+                    </div>
+                    {/* Ayar PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popSettingEmployee"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popSettingEmployee.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'350'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" 
-                                    acceptCustomValue={true}
-                                   
-                                    displayExpr="ZIPNAME"                       
-                                    valueExpr="ZIPCODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    showClearButton={true}
-                                    pageSize={50}
-                                    notRefresh={true}
-                                    onCustomItemCreating={async(e)=>
-                                    {
-                                        if (!e.text) {
-                                            e.customItem = null;
-                                            return;
-                                        }
-                                     
-                                        const { component, text } = e;
-                                        const currentItems = component.option('items');
-                                     
-                                        const newItem = {
-                                            ZIPCODE: text.trim(),
-                                            ZIPNAME: text.trim(),
-                                        };
-                                     
-                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
-                                            e.customItem = itemInDataSource;
-                                        } else {    
-                                            currentItems.push(newItem);
-                                            component.option('items', currentItems);
-                                            e.customItem = newItem;
-                                        }
-                                    }}
-                                    >
-                                    </NdSelectBox>
+                                    <Label text={this.t("popSettingEmployee.txtStartRef")} alignment="right" />
+                                    <NdTextBox id={"txtStartRef"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopCity"
-                                    displayExpr="PLACE"                       
-                                    valueExpr="PLACE"
-                                    value=""
-                                    acceptCustomValue={true}
-                                    searchEnabled={true}
-                                    showClearButton={true}
-                                    pageSize ={50}
-                                    notRefresh = {true}
-                                    onCustomItemCreating={async(e)=>
-                                    {
-                                        if (!e.text) {
-                                            e.customItem = null;
-                                            return;
-                                        }
-                                        
-                                        const { component, text } = e;
-                                        const currentItems = component.option('items');
-                                        
-                                        const newItem = {
-                                            PLACE: text.trim(),
-                                            PLACE: text.trim(),
-                                        };
-                                        
-                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
-                                            e.customItem = itemInDataSource;
-                                        } else {    
-                                            currentItems.push(newItem);
-                                            component.option('items', currentItems);
-                                            e.customItem = newItem;
-                                        }
-                                    }}
-                                    />
+                                    <Label text={this.t("popSettingEmployee.txtFinishRef")} alignment="right" />
+                                    <NdTextBox id={"txtFinishRef"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
-                              
+                                <Item>
+                                    <Label text={this.t("popSettingEmployee.txtTotal")} alignment="right" />
+                                    <NdTextBox id={"txtTotal"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                               <Item>
+                                    <Label text={this.t("popSettingEmployee.chkDigit")} alignment="right" />
+                                        <NdCheckBox id="chkDigit" parent={this} value={false} ></NdCheckBox>
+                                </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
-                                            {
-                                                let tmpEmpty = {...this.employeeObj.employeeAdress.empty};
-                                               
-                                                
-                                                tmpEmpty.ADRESS_NO = this.employeeObj.employeeAdress.dt().length
-                                                tmpEmpty.ADRESS = this.txtPopAdress.value
-                                                tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
-                                                tmpEmpty.CITY = this.cmbPopCity.value
-                                                tmpEmpty.COUNTRY = this.cmbPopCountry.value
-                                                tmpEmpty.EMPLOYEE = this.employeeObj.dt()[0].GUID 
+                                            {     
+                                                App.instance.setState({isExecute:true})
 
-                                                this.employeeObj.employeeAdress.addEmpty(tmpEmpty);    
-                                                this.popAdress.hide(); 
+                                                let tmpCounter
+                                                if(this.txtTotal.value == '')
+                                                {
+                                                    tmpCounter =  Number(this.txtFinishRef.value) -Number(this.txtStartRef.value) 
+                                                }
+                                                else
+                                                {
+                                                    tmpCounter = Number(this.txtTotal.value)
+                                                }
+                                                for (let i = 0; i < tmpCounter; i++) 
+                                                {
+                                                    this.employeeObj.clearAll()
+                                                    this.employeeObj.addEmpty()
+                                                    let tmpOffical = {...this.employeeObj.empty}
+                                                    tmpOffical.EMPLOYEE = this.employeeObj.dt()[0].GUID 
+                                                    this.employeeObj.addEmpty(tmpOffical)
+                                                    
+                                                    let tmpEmpty = {...this.employeeObj.employeeAdress.empty};
+                                                    tmpEmpty.TYPE = 0
+                                                    tmpEmpty.ADRESS = this.txtPopAdress.value
+                                                    tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
+                                                    tmpEmpty.CIYT = this.cmbPopCity.value
+                                                    tmpEmpty.COUNTRY = this.cmbPopCountry.value
+                                                    tmpEmpty.EMPLOYEE = this.employeeObj.dt()[0].GUID 
+
+                                                    this.employeeObj.employeeAdress.addEmpty(tmpEmpty);    
+
+                                                    
+                                                    let tmpCode = Number(this.txtStartRef.value) + i
+                                                    tmpCode = tmpCode.toString()
+                                                    if(this.chkDigit.value == true)
+                                                    {
+                                                        console.log( tmpCode.length)
+                                                        let output = []
+                                                        for (var x = 0, len = tmpCode.length; x < len; x += 1) 
+                                                        {
+                                                            output.push(+tmpCode.charAt(x));
+                                                        }
                                                 
+                                                        var tek=(output[0]+output[2]+output[4]+output[6]+output[8]+output[10])
+                                                        var cift=(output[1]+output[3]+output[5]+output[7]+output[9]+output[11])*3
+                                                        var say = tek+cift
+                                                        console.log(say)
+                                                        let sonuc = (10 - (say %= 10))
+                                                        if(sonuc == 10)
+                                                        {
+                                                            sonuc = 0
+                                                        }
+                                                        this.employeeObj.dt()[0].CODE = tmpCode.toString() + sonuc.toString()
+                                                    }
+                                                    else
+                                                    {
+                                                        this.employeeObj.dt()[0].CODE = Number(this.txtStartRef.value) + i
+                                                    }
+                                                    this.employeeObj.dt('EMPLOYEE')[0].NAME =  this.txtEmployeeName.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].LAST_NAME =  this.txtEmployeeLastname.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].PHONE1 =  this.txtPhone1.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].PHONE2 =  this.txtPhone2.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].GSM_PHONE =  this.txtGsmPhone.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].OTHER_PHONE =  this.txtOtherPhone.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].EMAIL =  this.txtEmail.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].AGE =  this.txtAge.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].WAGE =  this.txtWage.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].INSURANCE_NO =  this.txtInsuranceNo.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].GENDER =  this.txtGender.value
+                                                    this.employeeObj.dt('EMPLOYEE')[0].MARIAL_STATUS =  this.txtMarialStatus.value
+                                                    this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS').ADRESS =   this.txtPopAdress.value
+                                                    this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')[0].ZIPCODE =  this.cmbPopZipcode.value
+                                                    this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')[0].CIYT = this.cmbPopCity.value
+                                                    this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')[0].COUNTRY =  this.cmbPopCountry.value
+                                                    await this.employeeObj.save()
+                                                }
+                                                App.instance.setState({isExecute:false})
+
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                }
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                await dialog(tmpConfObj1);
+                                                this.popSettingEmployee.hide();  
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popAdress.hide();  
+                                                this.popSettingEmployee.hide();  
                                             }}/>
                                         </div>
                                     </div>
@@ -822,7 +497,6 @@ export default class collectiveEmployee extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-
                 </ScrollView>
             </div>
         )
