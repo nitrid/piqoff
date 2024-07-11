@@ -30,6 +30,8 @@ const prsnl_03_001 =
         clmTitle : "Ünvan",
         clmName : "Adı",
         clmLastName  : "Soyadı",
+        clmGender : "Cinsiyet",
+        clmStatus  : "Medeni Hali",
     },
     grdAdress : 
     {
