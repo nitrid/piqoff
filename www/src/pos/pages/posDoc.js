@@ -8072,7 +8072,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12">
