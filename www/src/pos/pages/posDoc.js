@@ -4711,12 +4711,12 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"lblAboutLy"} id={"lblAboutLy"} parent={this} data-grid={{x:35,y:0,h:10,w:35,minH:2,maxH:10,minW:35,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'lblAboutLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',color:this.state.isFormation ? 'black' : '#16a085',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
+                                    <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                                         <div className="col-8 px-1">
                                             <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{"Piqsoft " + this.lang.t("about")}  -  </a>
                                             <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
                                         </div>
-                                        <div className="col-4 text-end">
+                                        <div className="col-4 text-end" style={{backgroundColor:this.state.isFormation ? 'coral' : '#0d6efd',color:this.state.isFormation ? 'black' : 'white',borderRadius:'5px'}}>
                                             <NbLabel id="formation" parent={this} value={''}/>
                                         </div>
                                     </div>
