@@ -985,4 +985,5 @@ export const langTr =
         clmVendorId : "Vendor Id",
         clmSerialNo : "Seri No"
     },
+    lblTicketCount : "Müşteri :"
 }

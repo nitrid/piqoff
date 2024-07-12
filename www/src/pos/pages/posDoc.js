@@ -590,7 +590,27 @@ export default class posDoc extends React.PureComponent
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
             this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }      
-
+        //KULLANICI BAZLI GÜNLÜK TOPLAM FİŞ SAYISI GÖSTERİMİ. (12.07.2024 - ALI KEMAL KARACA)
+        if(!this.state.isFormation)
+        {
+            let tmpQueryTCount = 
+            {
+                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                param : ['LUSER:string|50'],
+                value : [this.core.auth.data.CODE],
+            }
+    
+            let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
+            if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
+            {
+                this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
+            }
+            else
+            {
+                this.formation.value = ''
+            }   
+        }
+        //************************************************************************************/
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
@@ -4691,7 +4711,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"lblAboutLy"} id={"lblAboutLy"} parent={this} data-grid={{x:35,y:0,h:10,w:35,minH:2,maxH:10,minW:35,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'lblAboutLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
+                                    <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',color:this.state.isFormation ? 'black' : '#16a085',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                                         <div className="col-8 px-1">
                                             <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{"Piqsoft " + this.lang.t("about")}  -  </a>
                                             <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
