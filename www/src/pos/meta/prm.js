@@ -34,14 +34,14 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20XXXXXMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
             '27NNNNKKKGGGMMMMCCXXXXXX',
             '26NNNNKKKKKKMMMMCCXXXXXX',
-            '201NNNNMMMCCF'
+            '201NNNNMMMCCF',
+            '200NNNNMMMCCF'
         ],
         SPECIAL : "",
         PAGE : "pos",
@@ -850,7 +850,7 @@ export const prm =
         ID :"RePrintDescription",
         VALUE : 
         {
-            disable:false,
+            disable:true,
             minCharSize:25,
             buttons:
             [

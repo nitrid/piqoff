@@ -69,15 +69,16 @@ class mailer
                 }
                 let transporter = nodemailer.createTransport(
                 {
-                    service: tmpservice,
+                    service: 'outlook',
                     host: tmpResult[0].MAIL_SMTP,
                     port: tmpResult[0].MAIL_PORT,
-                    secure: true,
+                    secure: false,
                     auth: 
                     {
-                    user: tmpResult[0].MAIL_ADDRESS,
-                    pass: tmpResult[0].MAIL_PASSWORD
+                      user: tmpResult[0].MAIL_ADDRESS,
+                      pass: tmpResult[0].MAIL_PASSWORD
                     },
+                    tls : {  ciphers:'SSLv3' }
                     //tls : { rejectUnauthorized: false }
                 });
                 var mailOptions = 

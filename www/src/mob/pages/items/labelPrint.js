@@ -103,8 +103,8 @@ export default class labelPrint extends React.PureComponent
         if(this.chkAutoAdd.value != true)
         {
             this.lblItemName.value = ""
+            this.txtPrice.value = 0
         }
-        this.txtPrice.value = 0
     }
     async getDoc(pGuid)
     {
@@ -138,6 +138,11 @@ export default class labelPrint extends React.PureComponent
                 this.lblItemName.value = this.itemDt[0].NAME
                 this.txtPrice.value = this.itemDt[0].PRICE
                 this.txtBarcode.value = ""
+                if(this.txtPrice.value == 0)
+                {
+                    document.getElementById("Sound").play(); 
+                    return
+                }
                 if(this.chkAutoAdd.value == true)
                 {
                     this.addItem()
