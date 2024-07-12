@@ -989,5 +989,6 @@ export const langFr =
         clmProductId: "ID du produit",
         clmVendorId: "ID du fournisseur",
         clmSerialNo: "Numéro de série"
-    }
+    },
+    lblTicketCount : "Client :"
 }
