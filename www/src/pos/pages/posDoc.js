@@ -590,7 +590,27 @@ export default class posDoc extends React.PureComponent
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
             this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }      
-
+        //KULLANICI BAZLI GÜNLÜK TOPLAM FİŞ SAYISI GÖSTERİMİ. (12.07.2024 - ALI KEMAL KARACA)
+        if(!this.state.isFormation)
+        {
+            let tmpQueryTCount = 
+            {
+                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                param : ['LUSER:string|50'],
+                value : [this.core.auth.data.CODE],
+            }
+    
+            let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
+            if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
+            {
+                this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
+            }
+            else
+            {
+                this.formation.value = ''
+            }   
+        }
+        //************************************************************************************/
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
@@ -2372,8 +2392,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.txtPaymentPopTotal.value = pAmount
                 this.msgCardPayment.show().then(async (e) =>
-                {                    
-                        
+                {   
                     if(e == 'btn01')
                     {
                         if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
@@ -4697,7 +4716,7 @@ export default class posDoc extends React.PureComponent
                                             <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{"Piqsoft " + this.lang.t("about")}  -  </a>
                                             <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
                                         </div>
-                                        <div className="col-4 text-end">
+                                        <div className="col-4 text-end" style={{backgroundColor:this.state.isFormation ? 'coral' : '#0d6efd',color:this.state.isFormation ? 'black' : 'white',borderRadius:'5px'}}>
                                             <NbLabel id="formation" parent={this} value={''}/>
                                         </div>
                                     </div>
