@@ -357,7 +357,7 @@ export default class posDoc extends React.PureComponent
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
         },1000)
-        
+
         this.posObj.clearAll()        
 
         if(this.state.isFormation)
@@ -370,12 +370,12 @@ export default class posDoc extends React.PureComponent
         }
 
         this.posObj.addEmpty()
-
+        
         this.posObj.dt()[this.posObj.dt().length - 1].DOC_TYPE = 0
         this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
-        
+
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
@@ -585,7 +585,6 @@ export default class posDoc extends React.PureComponent
             await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
             await this.grdLastPos.dataRefresh({source:this.lastPosDt});
         }
-        
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
@@ -975,7 +974,13 @@ export default class posDoc extends React.PureComponent
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode
-        //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+        //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+        //PRO INTER İÇİN ACCOUNT DÜŞMEK İÇİN YAPILDI. İLERİDE BURAYA BAKILACAK. 
+        if(pCode == '2021')
+        {
+            tmpQuantity = -1
+        }
+        //***************************************************************** */
         this.loading.current.instance.show()
         //ÜRÜN GETİRME    
         let tmpItemsDt = await this.getItemDb(pCode)
