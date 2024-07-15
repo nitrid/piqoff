@@ -146,7 +146,7 @@ export default class NbPopDescboard extends NbBase
                 this.props.onClick()
             }
             this[this.props.id].hide()
-            return
+            return "Description disabled from parameter"
         }
 
         await this[this.props.id].show()
