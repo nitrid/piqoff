@@ -146,11 +146,11 @@ export default class NbPopDescboard extends NbBase
                 this.props.onClick()
             }
             this[this.props.id].hide()
-            return
+            return "Description disabled from parameter"
         }
 
+        await this[this.props.id].show()
         this["txt" + this.props.id].value = ""
-        this[this.props.id].show()
 
         if(typeof this.props.onClick == 'undefined')
         {
@@ -193,6 +193,7 @@ export default class NbPopDescboard extends NbBase
                 width={this.state.width}
                 height={this.state.height}
                 position={{of:this.state.position}}
+                deferRendering={true}
                 >
                     <div className="row py-1">
                         <div className="col-12">

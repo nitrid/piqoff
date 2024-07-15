@@ -118,12 +118,19 @@ export default class purchaseInvoice extends DocBase
             }
             else
             {
-                this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                this.docObj.docCustomer.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                let tmpConfObj =
+                {
+                    id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
             }
 
             this.dtDocDate.value = jData[0].DOC_DATE
             this.dtShipDate.value = jData[0].SHIPMENT_DATE
+            let tmpMissCodes = []
 
             for (let i = 0; i < jData.length; i++) 
             {
@@ -160,16 +167,22 @@ export default class purchaseInvoice extends DocBase
                 }
                 else
                 {
-                    tmpData.GUID = '00000000-0000-0000-0000-000000000000'
-                    tmpData.ITEM_TYPE = 0
-                    tmpData.CODE = ''
-                    tmpData.NAME = ''
-                    tmpData.UNIT = '00000000-0000-0000-0000-000000000000'
-                    tmpData.COST_PRICE = 0
-                    tmpData.VAT = 0
+                    tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
                 }
 
                 await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
+            }
+
+            if(tmpMissCodes.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                }
+            
+                await dialog(tmpConfObj);
             }
         }
     }
@@ -2392,56 +2405,69 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onCellPrepared={(e) =>
                                         {
-                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0)
-                                            {
-                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                            if (e.column.dataField === 'PRICE' && e.data && e.data.PRICE < 0) 
                                                 {
-                                                    e.cellElement.style.color ="red"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
+                                                    }
+                                                
+                                                    dialog(tmpConfObj);
+                                                    e.data.PRICE = Math.abs(e.data.PRICE);
                                                 }
-                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+    
+                                                if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0 && e.data.PRICE >= 0)
                                                 {
-                                                    e.cellElement.style.color ="green"
-                                                    e.cellElement.style.fontWeight ="bold"
+                                                    if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="red"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                                    {
+                                                        e.cellElement.style.color ="green"
+                                                        e.cellElement.style.fontWeight ="bold"
+                                                    }
+                                                    else
+                                                    {
+                                                        e.cellElement.style.color ="blue"
+                                                    }
                                                 }
-                                                else
+                                            }}
+                                            onRowUpdated={async(e)=>
+                                            {
+                                                if(typeof e.data.QUANTITY != 'undefined')
                                                 {
-                                                    e.cellElement.style.color ="blue"
+                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                        param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                        value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                        e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
+                                                        
+                                                        this.calculateTotal()
+                                                    }
                                                 }
-                                            }
-                                        }}
-                                        onRowUpdated={async(e)=>
-                                        {
-                                            if(typeof e.data.QUANTITY != 'undefined')
-                                            {
-                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
-                                                let tmpQuery = 
+                                                if(typeof e.data.SUB_QUANTITY != 'undefined')
                                                 {
-                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                                 }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
+                                                if(typeof e.data.PRICE != 'undefined' && e.data.PRICE >= 0)
                                                 {
-                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
-                                                    
-                                                    this.calculateTotal()
+                                                    e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                                 }
-                                            }
-                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
-                                            {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.PRICE != 'undefined')
-                                            {
-                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
-                                            }
-                                            if(typeof e.data.SUB_PRICE != 'undefined')
-                                            {
-                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
-                                            }
+                                                if(typeof e.data.SUB_PRICE != 'undefined')
+                                                {
+                                                    e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                                }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -2732,7 +2758,7 @@ export default class purchaseInvoice extends DocBase
                                                                     this.vatRate.clear()
                                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
-                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                                        let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                         let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                         this.vatRate.push(tmpData)
@@ -3070,7 +3096,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item>
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -3080,7 +3106,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
+                                    maxLength={128}
                                     >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />

@@ -1348,8 +1348,9 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : true,
-            tolerans : 0.065
+            active : false,
+            dbControl:false,
+            tolerans : 0.030
         },
         SPECIAL : "",
         PAGE : "pos",
@@ -1369,6 +1370,7 @@ export const prm =
                 item:
                 [
                     {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopScaleBarcodeControlActive"},
+                    {type:"checkbox",caption:"Databese Fiş Kontrolü",field:"dbControl",id:"chkPopScaleBarcodeControlTicket"},
                     {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
                 ]
             }

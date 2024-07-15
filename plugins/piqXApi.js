@@ -13,7 +13,7 @@ class piqXApi
         this.username = 'Admin'
         this.password = '1'
         this.token = ''
-        this.endpoint = 'http://piqsoft.piqpos.com:8085'
+        this.endpoint = 'http://piqx.azurewebsites.net/'
     }
     async connEvt(pSocket)
     {
