@@ -34,15 +34,15 @@ export default class NdDocAi extends Base
         {
             if(typeof pData.content != 'undefined')
             {
-                tmpValue = pData.content.replaceAll(',','.')
+                tmpValue = this.parseNumber(pData.content)
             }
             else if(typeof pData.value != 'undefined')
             {
-                tmpValue = pData.value
+                tmpValue = this.parseNumber(pData.value)
             }
             if(typeof pData.value != 'undefined' && typeof pData.value.amount != 'undefined')
             {
-                tmpValue = pData.value.amount
+                tmpValue = this.parseNumber(pData.value.amount)
             }
 
             if(typeof pData.kind != 'undefined' && pData.kind == 'number')
@@ -50,8 +50,29 @@ export default class NdDocAi extends Base
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
         }
-
         return tmpValue
+    }
+    parseNumber(value) 
+    {
+        if(typeof value == 'undefined')
+        {
+            return value
+        }
+
+        if (!isNaN(value)) 
+        {
+            return Number(value);
+        }
+
+        value = value.replaceAll('€', '').replaceAll(/\s/g, '');
+        value = value.replaceAll(',', '.');
+    
+        if (!isNaN(value)) 
+        {
+            return Number(value);
+        }
+
+        return value;
     }
     async getDoc(pData)
     {
@@ -69,7 +90,7 @@ export default class NdDocAi extends Base
         this.txtTax.value = typeof pData.VAT != 'undefined' ? pData.VAT : 0
         this.txtTTC.value = typeof pData.TTC != 'undefined' ? pData.TTC : 0
 
-        let tmpCustomer = await this.getCustomer(pData.VendorTaxId)
+        let tmpCustomer = await this.getCustomer(this.txtTaxId.value)
 
         if(typeof tmpCustomer != 'undefined')
         {
@@ -93,12 +114,29 @@ export default class NdDocAi extends Base
         if(pData.CustomerGuid != '00000000-0000-0000-0000-000000000000')
         {
             pData.Items = []
+
             for (let i = 0; i < pData.Item.length; i++) 
             {
                 pData.Items.push({...pData.Item[i]})
                 pData.Item[i].ProductCode = this.getValue(pData.Item[i].ProductCode)
                 pData.Item[i].Description = this.getValue(pData.Item[i].Description)
-                pData.Item[i].Quantity = typeof this.getValue(pData.Item[i].Quantity) == 'undefined' ? 0 : this.getValue(pData.Item[i].Quantity)
+
+                if(typeof this.getValue(pData.Item[i].Quantity) == 'undefined' || this.getValue(pData.Item[i].Quantity) == 0)
+                {
+                    if(typeof this.getValue(pData.Item[i].ColisInQty) != 'undefined' && typeof this.getValue(pData.Item[i].ColisQty) != 'undefined')
+                    {
+                        pData.Item[i].Quantity = this.getValue(pData.Item[i].ColisInQty) * this.getValue(pData.Item[i].ColisQty)
+                    }
+                    else
+                    {
+                        pData.Item[i].Quantity = 0
+                    }
+                }
+                else
+                {
+                    pData.Item[i].Quantity = this.getValue(pData.Item[i].Quantity)
+                }
+                
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
                 pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice)).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
