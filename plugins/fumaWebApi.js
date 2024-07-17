@@ -35,6 +35,32 @@ class fumaWebApi
             {
                 this.processCustomerSend('00000000-0000-0000-0000-000000000000')
             })
+            pSocket.on('sql',async (pParam,pCallback) =>
+            {
+                let tmpQuery = undefined
+                if(Array.isArray(pParam))
+                {
+                    for (let i = 0; i < pParam.length; i++) 
+                    {
+                        if(pParam[i].query.indexOf('PRD_CUSTOMER_POINT_INSERT') > -1)
+                        {
+                            tmpQuery = pParam[i]
+                        }
+                    }
+                }
+                else
+                {
+                    if(pParam.query.indexOf('PRD_CUSTOMER_POINT_INSERT') > -1)
+                    {
+                        tmpQuery = pParam
+                    }
+                }
+
+                if(typeof tmpQuery != 'undefined')
+                {
+                    this.processPointSend(tmpQuery.value)
+                }
+            })
         }
     }
     async getVkn()
@@ -56,14 +82,21 @@ class fumaWebApi
         {
             try
             {
+                // POS SATIŞ GÖNDERİMİ *******************************************************************************************************/
                 let tmpData = []
                 let tmpQuery = 
                 {
-                    query : "SELECT GUID FROM POS_VW_01 WHERE STATUS = 1 AND DOC_DATE >= @FIRST AND DOC_DATE <= @LAST AND CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND CUSTOMER_MAIL <> ''",
+                    query : `SELECT POS.GUID,ISNULL(AUDIT_LOG.STATUS,0) AS STATUS FROM POS_VW_01 AS POS 
+                            LEFT OUTER JOIN AUDIT_LOG ON
+                            POS.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POS'
+                            WHERE ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POS.STATUS = 1 AND POS.DOC_DATE >= @FIRST AND POS.DOC_DATE <= @LAST AND 
+                            POS.CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND POS.CUSTOMER_MAIL <> ''`,
                     param : ['FIRST:date','LAST:date'],
                     value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(-1,'day').format("YYYYMMDD")]
                 }
+
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+
                 if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
                 {
                     for (let i = 0; i < tmpResult.length; i++) 
@@ -98,6 +131,46 @@ class fumaWebApi
                         }
                     }
                     this.processPosSaleSend({list:tmpData})
+                }
+                //*************************************************************************************************************************** */
+                // POS PUAN GÖNDERİMİ *********************************************************************************************************/
+                let tmpPointData = []
+                let tmpPointQuery = 
+                {
+                    query : `SELECT POINT.GUID,POINT.LDATE,POINT.TYPE,
+                            ISNULL((SELECT TOP 1 EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = POINT.CUSTOMER),'') AS EMAIL,
+                            POINT.DOC,
+                            POINT.POINT,
+                            POINT.DESCRIPTION,
+                            ISNULL(AUDIT_LOG.STATUS,0) AS STATUS 
+                            FROM CUSTOMER_POINT AS POINT 
+                            LEFT OUTER JOIN AUDIT_LOG ON
+                            POINT.GUID = AUDIT_LOG.DOC
+                            WHERE ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POINT.LDATE >= @FIRST AND POINT.LDATE <= @LAST AND POINT.DELETED = 0`,
+                    param : ['FIRST:date','LAST:date'],
+                    value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(0,'day').format("YYYYMMDD")]
+                }
+
+                let tmpPointResult = (await core.instance.sql.execute(tmpPointQuery)).result.recordset
+
+                if(typeof tmpPointResult != 'undefined' && tmpPointResult.length > 0)
+                {
+                    for (let i = 0; i < tmpPointResult.length; i++) 
+                    {
+                        tmpPointData.push(
+                            {
+                                "sellerVkn": this.sellerVkn,
+                                "transferId": tmpPointResult[i].GUID,
+                                "email": tmpPointResult[i].EMAIL,
+                                "type": tmpPointResult[i].TYPE,
+                                "point": tmpPointResult[i].POINT,
+                                "orderId": tmpPointResult[i].DOC,
+                                "description": tmpPointResult[i].DESCRIPTION,
+                                "documentDate": tmpPointResult[i].LDATE,
+                            }
+                        )
+                    }
+                    this.processPointSend({list:tmpPointData})
                 }
             }
             catch(err)
@@ -164,8 +237,8 @@ class fumaWebApi
                         "posSale": tmpSaleLine,
                         "pdf": ""
                     }
-
                     tmpSale.push(tmpDto)
+                    await this.updateAuditLog('POS',pData.list[m].pos[0].GUID)
                 }
             }
             else
@@ -218,6 +291,7 @@ class fumaWebApi
                     "posSale": tmpSaleLine,
                     "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
                 }]
+                await this.updateAuditLog('POS',pData[0].pos[0].GUID)
             }
             if(typeof pData != 'undefined')
             {
@@ -341,6 +415,105 @@ class fumaWebApi
                 await this.customerUpdate(tmpArray)
                 tmpCounter = tmpLength
             }
+        }
+    }
+    async processPointSend(pData)
+    {
+        if(typeof pData != 'undefined')
+        {
+            let tmpResponse = undefined
+
+            if(typeof pData.list != 'undefined')
+            {
+                tmpResponse = pData.list
+                for (let i = 0; i < tmpResponse.length; i++) 
+                {
+                    await this.updateAuditLog('POINT',tmpResponse[i].transferId)
+                }
+            }
+            else
+            {
+                let tmpCustomerQuery = 
+                {
+                    query : "SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @CUSTOMER AND DELETED = 0",
+                    param : ['CUSTOMER:string|50'],
+                    value : [pData[3]]
+                }
+
+                let tmpResultCustomer = await core.instance.sql.execute(tmpCustomerQuery)
+
+                if(typeof tmpResultCustomer.result.err == 'undefined' && tmpResultCustomer.result.recordset.length > 0)
+                {
+                    tmpResponse = 
+                    [{
+                        "sellerVkn": this.sellerVkn,
+                        "transferId": pData[0],
+                        "email": tmpResultCustomer.result.recordset[0].EMAIL,
+                        "type": pData[2],
+                        "point": Number(pData[5]),
+                        "orderId": pData[4],
+                        "description": typeof pData[6] == 'undefined' ? '' : pData[6],
+                        "documentDate": moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+                    }]
+                }
+
+                await this.updateAuditLog('POINT',pData[0])
+            }
+
+            if(typeof tmpResponse != 'undefined')
+            {
+                fetch('http://fuma.piqsoft.net:3090/integration/creatUserPointLog', 
+                {
+                    method: 'POST',
+                    headers:  
+                    {
+                        'x-api-key': '1453', 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tmpResponse)
+                })
+                .then(response => 
+                {
+                    //console.log(response)
+                    if (!response.ok) 
+                    {
+                        throw new Error('FumaApi - processPointSend : Yükleme başarısız. HTTP Hata: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => 
+                {
+                    if(data.success)
+                    {
+                        //console.log("FumaApi - processPointSend : Gönderim başarılı")
+                    }
+                    else
+                    {
+                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - processPointSend : ' + data.error)
+                    }
+                })
+                .catch(error => 
+                {
+                    console.error('FumaApi - processPointSend Hata:', error.message);
+                });
+            }
+        }
+    }
+    async updateAuditLog(pType,pDoc)
+    {
+        try
+        {
+            let tmpQuery = 
+            {
+                query : "UPDATE AUDIT_LOG SET STATUS = 1 WHERE DOC = @DOC AND TYPE = @TYPE", 
+                param : ['DOC:string|50','TYPE:string|25'],
+                value : [pDoc,pType],
+            }
+            await core.instance.sql.execute(tmpQuery)
+        }
+        catch(err)
+        {
+            console.log(err)
         }
     }
 }

@@ -18,6 +18,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable } from '../../../../core/core.js';
 
 export default class customerPointReport extends React.PureComponent
 {
@@ -145,14 +146,15 @@ export default class customerPointReport extends React.PureComponent
                 let tmpQuery = 
                 {
                     query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                            "@GUID = @PGUID, " + 
                             "@CUSER = @PCUSER, " + 
                             "@TYPE = @PTYPE, " +     
                             "@CUSTOMER = @PCUSTOMER, " +                  
                             "@DOC = @PDOC, " + 
                             "@POINT = @PPOINT, " + 
                             "@DESCRIPTION = @PDESCRIPTION ", 
-                    param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                    value : [this.core.auth.data.CODE,this.cmbPointType.value,this.grdCustomerPointReport.getSelectedData()[0].GUID,'00000000-0000-0000-0000-000000000000',this.txtPoint.value,this.txtDescription.value]
+                    param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                    value : [datatable.uuidv4(),this.core.auth.data.CODE,this.cmbPointType.value,this.grdCustomerPointReport.getSelectedData()[0].GUID,'00000000-0000-0000-0000-000000000000',this.txtPoint.value,this.txtDescription.value]
                 }
                 await this.core.sql.execute(tmpQuery)
                 this.popPointEntry.hide()

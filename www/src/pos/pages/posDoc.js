@@ -2820,14 +2820,15 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                        "@GUID = @PGUID, " + 
                         "@CUSER = @PCUSER, " + 
                         "@TYPE = @PTYPE, " +     
                         "@CUSTOMER = @PCUSTOMER, " +                  
                         "@DOC = @PDOC, " + 
                         "@POINT = @PPOINT, " + 
                         "@DESCRIPTION = @PDESCRIPTION ", 
-                param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
+                param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                value : [datatable.uuidv4(),this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
                 local : 
                 {
                     type : "insert",

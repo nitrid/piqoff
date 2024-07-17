@@ -46,17 +46,25 @@ class customerpoint
                         {
                             if(tmpResult.result.recordset[0].POINT > tmpResult.result.recordset[1].POINT)
                             {
+                                let uuidv4 = ()=>
+                                {
+                                    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                                        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                                      ).toString().toUpperCase();
+                                }
+                                
                                 let tmpInsertQuery = 
                                 {
                                     query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                                            "@GUID = @PGUID, " + 
                                             "@CUSER = @PCUSER, " + 
                                             "@TYPE = @PTYPE, " +     
                                             "@CUSTOMER = @PCUSTOMER, " +                  
                                             "@DOC = @PDOC, " + 
                                             "@POINT = @PPOINT, " + 
                                             "@DESCRIPTION = @PDESCRIPTION ", 
-                                    param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                                    value : ['Admin',1,tmpResultCustomer.result.recordset[i].GUID,'00000000-0000-0000-0000-000000000000',Number(tmpResult.result.recordset[0].POINT) - Number(tmpResult.result.recordset[1].POINT),'TRANSFER'],
+                                    param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                                    value : [uuidv4(),'Admin',1,tmpResultCustomer.result.recordset[i].GUID,'00000000-0000-0000-0000-000000000000',Number(tmpResult.result.recordset[0].POINT) - Number(tmpResult.result.recordset[1].POINT),'TRANSFER'],
                                 }
                                 await core.instance.sql.execute(tmpInsertQuery)
 

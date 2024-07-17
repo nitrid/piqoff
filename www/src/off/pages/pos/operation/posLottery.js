@@ -87,15 +87,17 @@ export default class posLottery extends React.PureComponent
                 let tmpInsertPoint = 
                 {
                     query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@TYPE = 0, " +
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@DOC = @PDOC, " +
-                    "@POINT = @PPOINT, " +
-                    "@DESCRIPTION = 'LOTTERY' ", 
-                    param : ['PCUSER:string|25','PCUSTOMER:string|50','PDOC:string|50','PPOINT:int'],
-                    value : [this.user.CODE,tmpPosDt[tmpRandIndex].CUSTOMER_GUID,tmpPosDt[tmpRandIndex].GUID,this.txtPoint.value]
+                            "@GUID = @PGUID, " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@TYPE = @PTYPE, " +
+                            "@CUSTOMER = @PCUSTOMER, " +
+                            "@DOC = @PDOC, " +
+                            "@POINT = @PPOINT, " +
+                            "@DESCRIPTION = 'LOTTERY' ", 
+                    param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:int'],
+                    value : [datatable.uuidv4(),this.user.CODE,0,tmpPosDt[tmpRandIndex].CUSTOMER_GUID,tmpPosDt[tmpRandIndex].GUID,this.txtPoint.value]
                 }
+                console.log(1453)
                 await this.core.sql.execute(tmpInsertPoint)
             }
             this.countDown.current.visible(false)
