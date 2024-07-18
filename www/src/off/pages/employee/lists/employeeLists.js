@@ -30,7 +30,6 @@ export default class employeeList extends React.PureComponent
         this.columnListData = 
         [
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},           
-            {CODE : "TYPE",NAME : this.t("grdListe.clmType")}, 
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},  
             {CODE : "LAST_NAME",NAME : this.t("grdListe.clmLastName")},             
             {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
@@ -258,14 +257,9 @@ export default class employeeList extends React.PureComponent
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.prsnl_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/>                                 
-                                <Column dataField="TYPE" caption={this.t("grdListe.clmType")} visible={true}/>   
+                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/>                                  
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="LAST_NAME" caption={this.t("grdListe.clmLastName")} visible={true}/>                               
-                                <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
-                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
-                                <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
-                                <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
+                                <Column dataField="LAST_NAME" caption={this.t("grdListe.clmLastName")} visible={true}/>                                    
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
                                 <Column dataField="GSM_PHONE" caption={this.t("grdListe.clmGsm")} visible={false}/> 
                                 <Column dataField="EMAIL" caption={this.t("grdListe.clmEmail")} visible={false}/> 
@@ -273,7 +267,11 @@ export default class employeeList extends React.PureComponent
                                 <Column dataField="INSURANCE_NO" caption={this.t("grdListe.clmInsuranceNo")} visible={true}/>
                                 <Column dataField="GENDER" caption={this.t("grdListe.clmGender")} visible={true}/>
                                 <Column dataField="MARIAL_STATUS" caption={this.t("grdListe.clmMarıalStatus")} visible={true}/>
-                                <Column dataField="WAGE" caption={this.t("grdListe.clmWage")} visible={true}/>
+                                <Column dataField="WAGE" caption={this.t("grdListe.clmWage")} visible={true} dataType={'number'} allowEditing={true} format={{ style: "currency", currency:Number.money.code,precision: 2}}/>
+                                <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
+                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
+                                <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
+                                <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
                             </NdGrid>
                         </div>
                     </div>
