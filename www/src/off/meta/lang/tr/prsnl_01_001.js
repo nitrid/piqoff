@@ -24,7 +24,7 @@ const prsnl_01_001 =
     {
         title : "Personel Seçim",
         clmCode : "Kodu",
-        clmTitle : "Ünvan",
+        clmGender : "Cinsiyet",
         clmName : "Adı",
         clmLastName  : "Soyadı",
         clmStatus  : "Durum",   
@@ -166,7 +166,7 @@ const prsnl_01_001 =
     tabTitleDetail : "Detay Bilgileri",
     validation :
     {
-        frmCustomers: "Kodu boş geçemezsiniz !",
+        frmEmployees: "Kodu boş geçemezsiniz !",
     },
     txtSubCustomer : "Alt Cari",
     pg_subCustomer : 

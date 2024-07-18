@@ -1197,9 +1197,14 @@ export const menu = (e) =>
                     [
                         {
                             id: 'prsnl_01_001',
-                            text: e.t('menuOff.prsnl_01_001'), //'',
+                            text: e.t('menuOff.prsnl_01_001'), //'Personel Tanımları',
                             path: 'employee/cards/employeeCards'
-                        }
+                        },
+                        {
+                            id: 'prsnl_01_002',
+                            text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
+                            path: 'employee/cards/employeeAddressCards'
+                        },
                         
                     ]
                 },
@@ -1231,21 +1236,7 @@ export const menu = (e) =>
                         
                     ]
                 },
-                {
-                    id:'prsnl_04',
-                    text:e.t('menuOff.prsnl_04'),//'RAPORLAR',
-                    expanded:false,
-                    items:
-                    [
-                        {
-                            id: 'prsnl_04_001',
-                            text: e.t('menuOff.prsnl_04_001'), //'Gelen Fatura Listesi',
-                            path: 'employee/lists/employeeLists'
-                        }
-                        
-                    ]
-                },
-                
+
             ]
         },
         //Pos İşlemleri

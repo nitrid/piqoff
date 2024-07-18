@@ -200,7 +200,7 @@ export class employeeAdressCls
         let tmpDt = new datatable('EMPLOYEE_ADRESS')
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[EMPLOYEE_ADRESS_VW_01] ",
+            query : "SELECT * FROM [dbo].[EMPLOYEE_ADRESS_VW_01] WHERE ((EMPLOYEE = @EMPLOYEE) OR (@EMPLOYEE = '00000000-0000-0000-0000-000000000000')) ",
             param : ['EMPLOYEE:string|50']
         }
         tmpDt.insertCmd = 
