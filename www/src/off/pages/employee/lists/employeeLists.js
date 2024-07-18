@@ -30,7 +30,9 @@ export default class employeeList extends React.PureComponent
         this.columnListData = 
         [
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},           
-            {CODE : "TYPE",NAME : this.t("grdListe.clmType")},            
+            {CODE : "TYPE",NAME : this.t("grdListe.clmType")}, 
+            {CODE : "NAME",NAME : this.t("grdListe.clmName")},  
+            {CODE : "LAST_NAME",NAME : this.t("grdListe.clmLastName")},             
             {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
             {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
@@ -122,7 +124,7 @@ export default class employeeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM EMPLOYEE_VW_01  " ,
+                    query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )" ,
                     param : ['EMPLOYEE_NAME:string|250'],
                     value : [this.txtEmployeeName.value]
                 },
@@ -257,7 +259,9 @@ export default class employeeList extends React.PureComponent
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.prsnl_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/>                                 
-                                <Column dataField="TYPE" caption={this.t("grdListe.clmType")} visible={true}/>                                 
+                                <Column dataField="TYPE" caption={this.t("grdListe.clmType")} visible={true}/>   
+                                <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="LAST_NAME" caption={this.t("grdListe.clmLastName")} visible={true}/>                               
                                 <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
                                 <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
                                 <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 

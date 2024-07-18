@@ -25,6 +25,8 @@ const  prsnl_02_001 =
         clmGender :"Cinsiyet",
         clmMarıalStatus : "Medeni Durumu",
         clmWage :"Maaşı",
+        clmName : "Adı",
+        clmLastName :"Soyadı",
  
     },
     cmbGenusData:
