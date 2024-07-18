@@ -1,10 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { employeesCls,employeeAdressCls, } from '../../../../core/cls/employees.js';
+import { employeesCls,employeeAdressCls,} from '../../../../core/cls/employees.js';
+
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem} from 'devextreme-react/form';
+import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -14,15 +15,14 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class EmployeeCard extends React.PureComponent
+export default class employeeAddressCards extends React.PureComponent
 {
     constructor(props)
     {
@@ -31,23 +31,16 @@ export default class EmployeeCard extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.employeeObj = new employeesCls();
         this.prevCode = "";
-        this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
-        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+        
 
         this._onItemRendered = this._onItemRendered.bind(this)
-       
         
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
-        if(typeof this.pagePrm != 'undefined')
-        {
-            this.employeeObj.clearAll()
-            await this.employeeObj.load({GUID:this.pagePrm.GUID});
-        }
     }
     async init()
     {
@@ -71,7 +64,6 @@ export default class EmployeeCard extends React.PureComponent
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
             }
         })
         this.employeeObj.ds.on('onEdit',(pTblName,pData) =>
@@ -83,20 +75,18 @@ export default class EmployeeCard extends React.PureComponent
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
         })
         this.employeeObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.prevCode = this.employeeObj.dt().length > 0 ? this.employeeObj.dt()[0].CODE : '';
+            this.prevCode = this.employeeObj.dt('EMPLOYEE').length > 0 ? this.employeeObj.dt('EMPLOYEE')[0].CODE : '';
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
         })
         this.employeeObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -105,24 +95,15 @@ export default class EmployeeCard extends React.PureComponent
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
         })
-
-        
-
-        this.employeeObj.addEmpty();
         this.txtCode.value = ''
-        this.setState({officalVisible:false})
-      
         
     }
     async getEmployee(pCode)
     {
         this.employeeObj.clearAll()
         await this.employeeObj.load({CODE:pCode});
-        console.log(this.employeeObj.dt())
     }
-
     async checkEmployee(pCode)
     {
         return new Promise(async resolve =>
@@ -208,9 +189,7 @@ export default class EmployeeCard extends React.PureComponent
         {        
             await this.grdAdress.dataRefresh({source:this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')});
         }
-       
     }
-
     render()
     {
         return(
@@ -237,10 +216,9 @@ export default class EmployeeCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmemployees"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployeeAddress"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -260,7 +238,7 @@ export default class EmployeeCard extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.employeeObj.save()) == 0)
-                                                {
+                                                {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -315,14 +293,9 @@ export default class EmployeeCard extends React.PureComponent
                                         
                                     }}/>
                                 </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto" widget="dxButton"
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
                                 options=
                                 {
                                     {
@@ -350,11 +323,11 @@ export default class EmployeeCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmemployees"  + this.tabIndex}>     
+                            <Form colCount={2} id={"frmEmployeeAddress"  + this.tabIndex}>
                                 {/* txtCode */}
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}} 
+                                    <NdTextBox id="txtCode" parent={this} simple={true} placeholder={this.t("employeePlace")} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
@@ -384,6 +357,18 @@ export default class EmployeeCard extends React.PureComponent
                                             }
                                         ]
                                     }
+                                    onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCode.setVal(this.txtCode.value)
+                                        this.pg_txtCode.show()
+                                        this.pg_txtCode.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.getEmployee(data[0].CODE)
+                                            }
+                                        }
+                                    }).bind(this)}
                                     onChange={(async()=>
                                     {
                                         let tmpResult = await this.checkEmployee(this.txtCode.value)
@@ -395,11 +380,11 @@ export default class EmployeeCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmemployees"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validation.frmemployees")}/>
+                                        <Validator validationGroup={"frmEmployeeAddress"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.frmEmployeeAddress")}/>
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*PERSONEL SECIMI POPUP */}
+                                    {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
                                     visible={false}
                                     position={{of:'#root'}} 
@@ -421,190 +406,29 @@ export default class EmployeeCard extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
+                                    button=
+                                    {
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                console.log(1111)
+                                            }
+                                        }
+                                    }
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
-                                        <Column dataField="GENDER" caption={this.t("pg_txtCode.clmGender")} width={300} defaultSortOrder="asc" />
+                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="INSURANCE_NO" caption={this.t("pg_txtCode.clmInsuranceNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="MARIAL_STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
                                     </NdPopGrid>
-                                </Item>
-                                {/* txtEmployeeName */}
-                                <Item>
-                                    <Label text={this.t("txtEmployeeName")} alignment="right" />
-                                    <NdTextBox id="txtEmployeeName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"NAME"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtEmployeeName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtEmployeeName',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtEmployeeLastname */}
-                                <Item>
-                                    <Label text={this.t("txtEmployeeLastname")} alignment="right" />
-                                    <NdTextBox id="txtEmployeeLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"LAST_NAME"}}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtPhone1 */}
-                                <Item>
-                                    <Label text={this.t("txtPhone1")} alignment="right" />
-                                    <NdTextBox id="txtPhone1" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"PHONE1"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
-                                    >
-                                        <Validator>
-                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
-                                        </Validator>
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtPhone2 */}
-                                <Item>
-                                    <Label text={this.t("txtPhone2")} alignment="right" />
-                                    <NdTextBox id="txtPhone2" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"PHONE2"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
-                                    >
-                                        <Validator>
-                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
-                                        </Validator>
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtGsmPhone */}
-                                <Item>
-                                    <Label text={this.t("txtGsmPhone")} alignment="right" />
-                                    <NdTextBox id="txtGsmPhone" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"GSM_PHONE"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
-                                    >
-                                        <Validator>
-                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
-                                        </Validator>
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtOtherPhone */}
-                                <Item>
-                                    <Label text={this.t("txtOtherPhone")} alignment="right" />
-                                    <NdTextBox id="txtOtherPhone" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"OTHER_PHONE"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
-                                    >
-                                        <Validator>
-                                            <NumericRule message={this.lang.t("phoneIsInvalid")}/>
-                                        </Validator>
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtEmail */}
-                                <Item>
-                                    <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail"                                       
-                                        parent={this} 
-                                        simple={true}  
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"EMAIL"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={100}
-                                        access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
-                                    >
-                                        <Validator>
-                                            <EmailRule message={this.lang.t("mailIsInvalid")}/>
-                                        </Validator>
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtAge */}
-                                <Item>
-                                    <Label text={this.t("txtAge")} alignment="right" />
-                                    <NdTextBox id="txtAge" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"AGE"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtAge',USERS:this.user.CODE})}
-                                    >
-                                     
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtInsuranceNo */}
-                                <Item>
-                                    <Label text={this.t("txtInsuranceNo")} alignment="right" />
-                                    <NdTextBox id="txtInsuranceNo" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"INSURANCE_NO"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtInsuranceNo',USERS:this.user.CODE})}
-                                    >                                  
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtGender */}
-                                <Item>
-                                    <Label text={this.t("txtGender")} alignment="right" />
-                                    <NdTextBox id="txtGender" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"GENDER"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtGender',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtMarialStatus */}
-                                <Item>
-                                    <Label text={this.t("txtMarialStatus")} alignment="right" />
-                                    <NdTextBox id="txtMarialStatus"                                       
-                                        parent={this} 
-                                        simple={true}  
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"MARIAL_STATUS"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={100}
-                                        access={this.access.filter({ELEMENT:'txtMarialStatus',USERS:this.user.CODE})}
-                                    >
-                                       
-                                    </NdTextBox>
-                                </Item>
-                                 {/* txtWage */}
-                                 <Item>
-                                    <Label text={this.t("txtWage")} alignment="right" />
-                                    <NdTextBox id="txtWage" 
-                                        parent={this} 
-                                        simple={true} 
-                                        dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"WAGE"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtWage',USERS:this.user.CODE})}
-                                    >
-                                     
-                                    </NdTextBox>
                                 </Item>
                             </Form>
                         </div>
                         <div className='row px-2 pt-2'>
                             <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
+                                <TabPanel height="100%" onItemRendered={this._onItemRendered}>
                                     <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
@@ -635,7 +459,7 @@ export default class EmployeeCard extends React.PureComponent
                                                 dbApply={false}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="popup" allowUpdating={true} allowDeleting={true} />
+                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                     <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
@@ -643,14 +467,14 @@ export default class EmployeeCard extends React.PureComponent
                                                 </NdGrid>
                                             </div>
                                         </div>
-                                    </Item>   
-                                           
+                                    </Item>                             
                                 </TabPanel>
                             </div>
                         </div> 
+                       
                     </div>
-                    {/* Adres POPUP */}
-                    <div>
+                     {/* Adres POPUP */}
+                     <div>
                         <NdPopUp parent={this} id={"popAdress"} 
                         visible={false}
                         showCloseButton={true}
@@ -664,8 +488,7 @@ export default class EmployeeCard extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
-                                    <NdTextBox id={"txtPopAdress"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                    <NdTextBox id={"txtPopAdress"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
@@ -674,7 +497,6 @@ export default class EmployeeCard extends React.PureComponent
                                     valueExpr="CODE"
                                     value="FR"
                                     searchEnabled={true}
-                                    showClearButton={true}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={(async()=>
                                     {
@@ -708,37 +530,39 @@ export default class EmployeeCard extends React.PureComponent
                                         {
                                             await this.cmbPopCity.setData([])
                                         }
-
                                     }).bind(this)}
+                                  
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" 
-                                    acceptCustomValue={true}
-                                   
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
+                                    acceptCustomValue={true}
                                     searchEnabled={true}
-                                    showClearButton={true}
-                                    pageSize={50}
-                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                    {
+                                           
+                                    }).bind(this)}
+                                    pageSize ={50}
+                                    notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
                                     {
                                         if (!e.text) {
                                             e.customItem = null;
                                             return;
                                         }
-                                     
+                                        
                                         const { component, text } = e;
                                         const currentItems = component.option('items');
-                                     
+                                        
                                         const newItem = {
-                                            ZIPCODE: text.trim(),
                                             ZIPNAME: text.trim(),
+                                            ZIPCODE: text.trim(),
                                         };
-                                     
+                                        
                                         const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
                                         if (itemInDataSource) {
                                             e.customItem = itemInDataSource;
@@ -748,8 +572,7 @@ export default class EmployeeCard extends React.PureComponent
                                             e.customItem = newItem;
                                         }
                                     }}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
@@ -759,7 +582,6 @@ export default class EmployeeCard extends React.PureComponent
                                     value=""
                                     acceptCustomValue={true}
                                     searchEnabled={true}
-                                    showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
@@ -788,7 +610,6 @@ export default class EmployeeCard extends React.PureComponent
                                     }}
                                     />
                                 </Item>
-                              
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -822,7 +643,6 @@ export default class EmployeeCard extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-
                 </ScrollView>
             </div>
         )

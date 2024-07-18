@@ -5,18 +5,22 @@ const prsnl_03_001 =
     cmbGenus :"Cinsi",
     txtCode : "Kodu",
     txtTitle : "Ünvan",
-    txtCustomerName : "Adı",
-    txtCustomerLastname : "Soyadı",
+    txtEmployeeName : "Adı",
+    txtEmployeeLastname : "Soyadı",
     txtPhone1 : "Telefon 1",
     txtPhone2 : "Telefon 2",
     txtGsmPhone : "Gsm Tel.",
     txtOtherPhone : "Diğer Tel.",
     txtEmail : "E-Mail",
-    txtWeb : "Web",
+    txtAge: "Yaş",
+    txtWage: "Maaş",
+    txtInsuranceNo: "Siğorta Numarası",
+    txtGender: "Cinsiyet",
+    txtMarialStatus: "Medeni Durumu",
     tabTitleAdress : "Adres",
     tabTitleLegal : "Yasal",
     tabTitleOffical : "Yetkili",
-    tabCustomerBank : "Banka Bilgileri",
+    tabEmployeeBank : "Banka Bilgileri",
     txtLegal :"Yasal Bilgiler",
     chkRebate :"İade Alır",
     pg_txtCode : 
@@ -137,7 +141,7 @@ const prsnl_03_001 =
     },
     cmbGenusData:
     {
-        Customer : "Müşteri",
+        Employee : "Müşteri",
         supplier : "Tedarikçi",
         both : "Her İkisi",
         branch : "Şube"
@@ -154,7 +158,7 @@ const prsnl_03_001 =
         btn02: "Tamam",
         msg : "Girmiş olduğunuz Müşteri sistem de kayıtlı !"
     },
-    popSettingCustomer : 
+    popSettingEmployee : 
     {
         title : "Ayarlar",
         txtStartRef : "Başlangıç Kodu",
