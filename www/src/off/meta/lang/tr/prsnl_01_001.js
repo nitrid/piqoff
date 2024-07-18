@@ -166,7 +166,7 @@ const prsnl_01_001 =
     tabTitleDetail : "Detay Bilgileri",
     validation :
     {
-        frmCustomers: "Kodu boş geçemezsiniz !",
+        frmEmployees: "Kodu boş geçemezsiniz !",
     },
     txtSubCustomer : "Alt Cari",
     pg_subCustomer : 

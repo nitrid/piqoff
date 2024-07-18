@@ -237,7 +237,7 @@ export default class EmployeeCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmemployees"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployees"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         
@@ -350,7 +350,7 @@ export default class EmployeeCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmemployees"  + this.tabIndex}>     
+                            <Form colCount={2} id={"frmEmployees"  + this.tabIndex}>     
                                 {/* txtCode */}
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
@@ -395,8 +395,8 @@ export default class EmployeeCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmemployees"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validation.frmemployees")}/>
+                                        <Validator validationGroup={"frmEmployees"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.frmEmployees")}/>
                                         </Validator>  
                                     </NdTextBox>
                                     {/*PERSONEL SECIMI POPUP */}
