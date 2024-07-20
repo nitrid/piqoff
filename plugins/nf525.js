@@ -1552,22 +1552,22 @@ class nf525
                         //SATIŞ TUTARI KONTROLÜ
                         if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosSaleTotal)
                         {
-                            tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //ÖDEME TUTARI KONTROLÜ
                         if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosPayTotal)
                         {
-                            tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //REF NO SIFIR MI KONTROLÜ
                         if(tmpPosDt.result.recordset[x].REF == 0)
                         {
-                            tmpMailText = tmpMailText + "Ref No Sıfır - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Ref No Sıfır - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //İMZALANMIŞ MI KONTROLÜ
                         if(tmpPosDt.result.recordset[x].SIGNATURE == '')
                         {
-                            tmpMailText = tmpMailText + "İmza Boş - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "İmza Boş - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
 
                         //AYNI REF NO DAN BAŞKA BİR KAYIT VARMI KONTROLÜ
@@ -1581,14 +1581,14 @@ class nf525
 
                         if(tmpPosRefDt.result.recordset.length > 0)
                         {
-                            tmpMailText = tmpMailText + "Duplicate Ref No - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Duplicate Ref No - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //******************************************** */
                         //İMZA DOĞRULUK KONTROLÜ
                         let tmpSign = tmpPosDt.result.recordset[x].SIGNATURE_SUM.toString()
                         if(typeof tmpLastPos != 'undefined' && tmpLastPos.SIGNATURE != tmpSign.substring(tmpSign.lastIndexOf(',') + 1,tmpSign.length))
                         {
-                            tmpMailText = tmpMailText + "İmza doğru değil - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "İmza doğru değil - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //******************************************** */
                     }

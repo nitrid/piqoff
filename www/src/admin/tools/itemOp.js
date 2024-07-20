@@ -20,81 +20,81 @@ function parseTry(pData)
         return pData
     }
 }
-function checkBoxBuild(pItem)
+function checkBoxBuild(pItem,pThis)
 {
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdCheckBox id={pItem.ID} key={pItem.ID} parent={this}/>
+            <NdCheckBox id={pItem.ID} key={pItem.ID} parent={pThis}/>
         </Item>
     )
 }
-function checkBoxSet(pItem)
+function checkBoxSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'boolean')
         {
-           this[pItem.ID].value = parseTry(pItem.VALUE)
+            pThis[pItem.ID].value = parseTry(pItem.VALUE)
         }
         else if(typeof parseTry(pItem.VALUE) == 'object' && typeof parseTry(pItem.VALUE).value == 'boolean')
         {
-            this[pItem.ID].value = parseTry(pItem.VALUE).value
+            pThis[pItem.ID].value = parseTry(pItem.VALUE).value
         }
     }
 }
-function checkBoxGet(pItem)
+function checkBoxGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof pItem.VALUE == 'boolean')
         {
-            return this[pItem.ID].value
+            return pThis[pItem.ID].value
         }
         else if(typeof pItem.VALUE == 'object' && typeof pItem.VALUE.value == 'boolean')
         {
-            return JSON.stringify({value : this[pItem.ID].value})
+            return JSON.stringify({value : pThis[pItem.ID].value})
         }
     }
 }
-function textBoxBuild(pItem)
+function textBoxBuild(pItem,pThis)
 {
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdTextBox id={pItem.ID} key={pItem.ID} parent={this} simple={true}/>
+            <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true}/>
         </Item>
     )
 }
-function textBoxSet(pItem)
+function textBoxSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
         {
-           this[pItem.ID].value = parseTry(pItem.VALUE)
+           pThis[pItem.ID].value = parseTry(pItem.VALUE)
         }
         else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
         {
-            this[pItem.ID].value = parseTry(pItem.VALUE).value
+            pThis[pItem.ID].value = parseTry(pItem.VALUE).value
         }
     }
 }
-function textBoxGet(pItem)
+function textBoxGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
         {
-            return this[pItem.ID].value
+            return pThis[pItem.ID].value
         }
         else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
         {
-            return JSON.stringify({value : this[pItem.ID].value})
+            return JSON.stringify({value : pThis[pItem.ID].value})
         }
     }
 }
-function comboBoxBuild(pItem)
+function comboBoxBuild(pItem,pThis)
 {
     let tmpSource = {}
     if(Array.isArray(pItem.VIEW.DATA))
@@ -104,12 +104,12 @@ function comboBoxBuild(pItem)
     else
     {
         tmpSource = pItem.VIEW.DATA
-        tmpSource.sql = this.core.sql
+        tmpSource.sql = pThis.core.sql
     }
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdSelectBox id={pItem.ID} key={pItem.ID} parent={this} simple={true}
+            <NdSelectBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true}
             displayExpr={pItem.VIEW.DISPLAY}                      
             valueExpr={pItem.VIEW.FIELD}
             data={{source:tmpSource}}
@@ -117,35 +117,35 @@ function comboBoxBuild(pItem)
         </Item>
     )
 }
-function comboBoxSet(pItem)
+function comboBoxSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
         {
-           this[pItem.ID].value = parseTry(pItem.VALUE)
+            pThis[pItem.ID].value = parseTry(pItem.VALUE)
         }
         else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
         {
-            this[pItem.ID].value = parseTry(pItem.VALUE).value
+            pThis[pItem.ID].value = parseTry(pItem.VALUE).value
         }
     }
 }
-function comboBoxGet(pItem)
+function comboBoxGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
         {
-            return this[pItem.ID].value
+            return pThis[pItem.ID].value
         }
         else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
         {
-            return JSON.stringify({value : this[pItem.ID].value})
+            return JSON.stringify({value : pThis[pItem.ID].value})
         }
     }
 }
-function popInputBuild(pItem)
+function popInputBuild(pItem,pThis)
 {
     let tmpBuild = ()=>
     {
@@ -162,21 +162,21 @@ function popInputBuild(pItem)
             }
             if(pObj.type == 'checkbox')
             {
-                tmpItems.push(checkBoxBuild(tmpProp))
+                tmpItems.push(checkBoxBuild(tmpProp,pThis))
             }
             else if(pObj.type == 'text')
             {
-                tmpItems.push(textBoxBuild(tmpProp))
+                tmpItems.push(textBoxBuild(tmpProp,pThis))
             }
             else if(pObj.type == 'popObjectList')
             {
                 tmpProp.VIEW.FORM = pObj.form
-                tmpItems.push(popObjectListBuild(tmpProp))
+                tmpItems.push(popObjectListBuild(tmpProp,pThis))
             }
             else if(pObj.type == 'popInput')
             {
                 tmpProp.VIEW.FORM = pObj.form
-                tmpItems.push(popInputBuild(tmpProp))
+                tmpItems.push(popInputBuild(tmpProp,pThis))
             }
         })
         return tmpItems
@@ -185,7 +185,7 @@ function popInputBuild(pItem)
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdTextBox id={pItem.ID} key={pItem.ID} parent={this} simple={true} readOnly={true}
+            <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
                 {
@@ -198,33 +198,33 @@ function popInputBuild(pItem)
                             let tmpProp = 
                             {
                                 ID : pObj.id,
-                                VALUE : this[pItem.ID].obj[pObj.field]
+                                VALUE : pThis[pItem.ID].obj[pObj.field]
                             }
                             if(pObj.type == 'checkbox')
                             {
-                                checkBoxSet(tmpProp)
+                                checkBoxSet(tmpProp,pThis)
                             }
                             else if(pObj.type == 'text')
                             {
-                                textBoxSet(tmpProp)
+                                textBoxSet(tmpProp,pThis)
                             }
                             else if(pObj.type == 'popObjectList')
                             {
-                                popObjectListSet(tmpProp)
+                                popObjectListSet(tmpProp,pThis)
                             }
                             else if(pObj.type == 'popInput')
                             {         
                                 tmpProp.VIEW = {DISPLAY : pObj.display}
-                                popInputBoxSet(tmpProp)
+                                popInputBoxSet(tmpProp,pThis)
                             }
                         })
 
-                        this["popInput" + pItem.ID].show()
+                        pThis["popInput" + pItem.ID].show()
                     }
                 }
             ]}/>
             <div>
-                <NdPopUp parent={this} id={"popInput" + pItem.ID} container={"#root"}
+                <NdPopUp parent={pThis} id={"popInput" + pItem.ID} container={"#root"}
                 position={{of:'#root'}}
                 showCloseButton={true}
                 showTitle={true}
@@ -241,7 +241,7 @@ function popInputBuild(pItem)
                     </div>
                     <div className='row'>
                         <div className='col-12'>
-                            <NdButton id={"btnPopInput" + pItem.ID} parent={this} text={"Kaydet"} type="default" width={'100%'}
+                            <NdButton id={"btnPopInput" + pItem.ID} parent={pThis} text={"Kaydet"} type="default" width={'100%'}
                             onClick={()=>
                             {
                                 let tmpData = {}
@@ -249,24 +249,24 @@ function popInputBuild(pItem)
                                 {          
                                     if(pObj.type == 'popObjectList')
                                     {
-                                        tmpData[pObj.field] = this[pObj.id].obj
+                                        tmpData[pObj.field] = pThis[pObj.id].obj
                                     }
                                     else if(pObj.type == 'popInput')
                                     {
-                                        tmpData[pObj.field] = this[pObj.id].obj
+                                        tmpData[pObj.field] = pThis[pObj.id].obj
                                     }
                                     else
                                     {
-                                        tmpData[pObj.field] = this[pObj.id].value
+                                        tmpData[pObj.field] = pThis[pObj.id].value
                                     }
                                 })
-                                this[pItem.ID].obj = tmpData
+                                pThis[pItem.ID].obj = tmpData
                                 if(typeof pItem.VIEW.DISPLAY != 'undefined')
                                 {
-                                    this[pItem.ID].value = this[pItem.ID].obj[pItem.VIEW.DISPLAY]
+                                    pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
                                 }
 
-                                this["popInput" + pItem.ID].hide()
+                                pThis["popInput" + pItem.ID].hide()
                             }}/>
                         </div>
                     </div>
@@ -275,32 +275,32 @@ function popInputBuild(pItem)
         </Item>
     )
 }
-function popInputBoxSet(pItem)
+function popInputBoxSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'object')
         {            
-            this[pItem.ID].obj = parseTry(Object.assign({},pItem).VALUE)
-            
+            pThis[pItem.ID].obj = parseTry(Object.assign({},pItem).VALUE)
+            console.log(pThis[pItem.ID].obj)
             if(typeof pItem.VIEW.DISPLAY != 'undefined')
             {
-                this[pItem.ID].value = this[pItem.ID].obj[pItem.VIEW.DISPLAY]
+                pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
             }
         }
     }
 }
-function popInputBoxGet(pItem)
+function popInputBoxGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'object')
         {
-            return JSON.stringify(this[pItem.ID].obj)
+            return JSON.stringify(pThis[pItem.ID].obj)
         }
     }
 }
-function popSelectBuild(pItem)
+function popSelectBuild(pItem,pThis)
 {
     let tmpSource = {}
     if(Array.isArray(pItem.VIEW.FORM.data))
@@ -310,13 +310,13 @@ function popSelectBuild(pItem)
     else
     {
         tmpSource = pItem.VIEW.FORM.data
-        tmpSource.sql = this.core.sql
+        tmpSource.sql = pThis.core.sql
     }
 
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdTextBox id={pItem.ID} key={pItem.ID} parent={this} simple={true} readOnly={true}
+            <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
                 {
@@ -324,8 +324,8 @@ function popSelectBuild(pItem)
                     icon:'more',
                     onClick:async()=>
                     {
-                        this["popSelect" + pItem.ID].show()
-                        this["popSelect" + pItem.ID].onClick = async(data) =>
+                        pThis["popSelect" + pItem.ID].show()
+                        pThis["popSelect" + pItem.ID].onClick = async(data) =>
                         {
                             let tmpData = 
                             {
@@ -354,7 +354,7 @@ function popSelectBuild(pItem)
                 }
             ]}/>
             <div>
-                <NdPopGrid id={"popSelect" + pItem.ID} parent={this} container={"#root"}
+                <NdPopGrid id={"popSelect" + pItem.ID} parent={pThis} container={"#root"}
                 visible={false}
                 position={{of:'#root'}}
                 showTitle={true}
@@ -370,47 +370,46 @@ function popSelectBuild(pItem)
         </Item>
     )
 }
-function popSelectBoxSet(pItem)
+function popSelectBoxSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'object')
         {
-            this[pItem.ID].obj = parseTry(pItem.VALUE)
+            pThis[pItem.ID].obj = parseTry(pItem.VALUE)
 
             if(typeof pItem.VIEW.DISPLAY != 'undefined')
             {
-                this[pItem.ID].value = this[pItem.ID].obj[pItem.VIEW.DISPLAY]
+                pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
             }
         }
         else
         {
-            this[pItem.ID].obj = parseTry(pItem.VALUE)
-            this[pItem.ID].value = parseTry(pItem.VALUE)
+            pThis[pItem.ID].obj = parseTry(pItem.VALUE)
+            pThis[pItem.ID].value = parseTry(pItem.VALUE)
         }
     }
 }
-function popSelectBoxGet(pItem)
+function popSelectBoxGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof parseTry(pItem.VALUE) == 'object')
         {
-            return JSON.stringify(this[pItem.ID].obj)
+            return JSON.stringify(pThis[pItem.ID].obj)
         }
         else
         {
-            return this[pItem.ID].obj
-        }
-        
+            return pThis[pItem.ID].obj
+        }        
     }
 }
-function popTextListBuild(pItem)
+function popTextListBuild(pItem,pThis)
 {
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdTextBox id={pItem.ID} key={pItem.ID} parent={this} simple={true} readOnly={true}
+            <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
                 {
@@ -418,13 +417,13 @@ function popTextListBuild(pItem)
                     icon:'more',
                     onClick:async()=>
                     {
-                        this["txtPopTextList" + pItem.ID].value = this[pItem.ID].obj.join('\r\n');
-                        this["popTextList" + pItem.ID].show()
+                        pThis["txtPopTextList" + pItem.ID].value = pThis[pItem.ID].obj.join('\r\n');
+                        pThis["popTextList" + pItem.ID].show()
                     }
                 }
             ]}/>
             <div>
-                <NdPopUp parent={this} id={"popTextList" + pItem.ID} container={"#root"}
+                <NdPopUp parent={pThis} id={"popTextList" + pItem.ID} container={"#root"}
                 position={{of:'#root'}}
                 showCloseButton={true}
                 showTitle={true}
@@ -434,16 +433,16 @@ function popTextListBuild(pItem)
                 >
                     <div className='row pb-2'>
                         <div className='col-12'>
-                            <NdTextArea id={"txtPopTextList" + pItem.ID} parent={this} height={pItem.VIEW.FORM.textHeight}/>
+                            <NdTextArea id={"txtPopTextList" + pItem.ID} parent={pThis} height={pItem.VIEW.FORM.textHeight}/>
                         </div>
                     </div>
                     <div className='row'>
                         <div className='col-12'>
-                            <NdButton id={"btnPopTextList" + pItem.ID} parent={this} text={"Kaydet"} type="default" width={'100%'}
+                            <NdButton id={"btnPopTextList" + pItem.ID} parent={pThis} text={"Kaydet"} type="default" width={'100%'}
                             onClick={()=>
                             {
-                                this[pItem.ID].obj = this["txtPopTextList" + pItem.ID].value.trim().split(/\r?\n/)
-                                this["popTextList" + pItem.ID].hide()
+                                pThis[pItem.ID].obj = pThis["txtPopTextList" + pItem.ID].value.trim().split(/\r?\n/)
+                                pThis["popTextList" + pItem.ID].hide()
                             }}/>
                         </div>
                     </div>
@@ -452,41 +451,41 @@ function popTextListBuild(pItem)
         </Item>
     )
 }
-function popTextListSet(pItem)
+function popTextListSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(Array.isArray(parseTry(pItem.VALUE)))
         {
-            this[pItem.ID].obj = parseTry(pItem.VALUE)
+            pThis[pItem.ID].obj = parseTry(pItem.VALUE)
             
             if(parseTry(pItem.VALUE).length > 0)
             {
-                this[pItem.ID].value = parseTry(pItem.VALUE)[0]
+                pThis[pItem.ID].value = parseTry(pItem.VALUE)[0]
             }
         }
     }
 }
-function popTextListGet(pItem)
+function popTextListGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
-        return JSON.stringify(this[pItem.ID].obj)
+        return JSON.stringify(pThis[pItem.ID].obj)
     }
 }
-function popObjectListBuild(pItem)
+function popObjectListBuild(pItem,pThis)
 {
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
             <Label text={pItem.VIEW.CAPTION} alignment="right" />
-            <NdButton id={pItem.ID} key={pItem.ID} parent={this} text={"Giriş"} width={'100%'} type="default"
+            <NdButton id={pItem.ID} key={pItem.ID} parent={pThis} text={"Giriş"} width={'100%'} type="default"
             onClick={async()=>
             {
-                await this["popObjectListGrd" + pItem.ID].dataRefresh({source:this[pItem.ID].obj});
-                this["popObjectList" + pItem.ID].show()
+                await pThis["popObjectListGrd" + pItem.ID].dataRefresh({source:pThis[pItem.ID].obj});
+                pThis["popObjectList" + pItem.ID].show()
             }}/>
             <div>
-                <NdPopUp parent={this} id={"popObjectList" + pItem.ID} container={"#root"}
+                <NdPopUp parent={pThis} id={"popObjectList" + pItem.ID} container={"#root"}
                 position={{of:'#root'}}
                 showCloseButton={true}
                 showTitle={true}
@@ -496,7 +495,7 @@ function popObjectListBuild(pItem)
                 >
                     <div className='row pb-2'>
                         <div className='col-12'>
-                            <NdGrid id={"popObjectListGrd" + pItem.ID} parent={this}
+                            <NdGrid id={"popObjectListGrd" + pItem.ID} parent={pThis}
                             showBorders={true}
                             allowColumnResizing={true}
                             selection={{mode:"single"}} 
@@ -515,10 +514,10 @@ function popObjectListBuild(pItem)
                     </div>
                     <div className='row pb-2'>
                         <div className='col-12'>
-                            <NdButton id={"btnPopObjectListGrd" + pItem.ID} parent={this} text={"Kaydet"} type="default" width={'100%'}
+                            <NdButton id={"btnPopObjectListGrd" + pItem.ID} parent={pThis} text={"Kaydet"} type="default" width={'100%'}
                             onClick={()=>
                             {
-                                this["popObjectList" + pItem.ID].hide()
+                                pThis["popObjectList" + pItem.ID].hide()
                             }}/>
                         </div>
                     </div>
@@ -527,145 +526,135 @@ function popObjectListBuild(pItem)
         </Item>
     )
 }
-function popObjectListSet(pItem)
+function popObjectListSet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(Array.isArray(parseTry(pItem.VALUE)))
         {
-            this[pItem.ID].obj = parseTry(Object.assign({},pItem).VALUE)
+            pThis[pItem.ID].obj = parseTry(Object.assign({},pItem).VALUE)
         }
     }
 }
-function popObjectListGet(pItem)
+function popObjectListGet(pItem,pThis)
 {
-    if(typeof this[pItem.ID] != 'undefined')
+    if(typeof pThis[pItem.ID] != 'undefined')
     {
-        return JSON.stringify(this[pItem.ID].obj)
+        return JSON.stringify(pThis[pItem.ID].obj)
     }
 }
-export function ItemBuild(pItem)
+export function ItemBuild(pItem,pThis)
 {
-    checkBoxBuild = checkBoxBuild.bind(this)
-    textBoxBuild = textBoxBuild.bind(this)
-    comboBoxBuild = comboBoxBuild.bind(this)
-    popInputBuild = popInputBuild.bind(this)
-    popSelectBuild = popSelectBuild.bind(this)
-    popTextListBuild = popTextListBuild.bind(this)
-    popObjectListBuild = popObjectListBuild.bind(this)
-
+    if(typeof pItem.VIEW == 'undefined' || typeof pItem.VIEW.TYPE == 'undefined')
+    {
+        return
+    }
     if(pItem.VIEW.TYPE == 'checkbox')
     {
-        return checkBoxBuild(pItem)
+        return checkBoxBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'text')
     {
-        return textBoxBuild(pItem)
+        return textBoxBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'combobox')
     {
-        return comboBoxBuild(pItem)
+        return comboBoxBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popInput')
     {
-        return popInputBuild(pItem)
+        return popInputBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popSelect')
     {
-        return popSelectBuild(pItem)
+        return popSelectBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popTextList')
     {
-        return popTextListBuild(pItem)
+        return popTextListBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
-        return popObjectListBuild(pItem)
+        return popObjectListBuild(pItem,pThis)
     }
     // else
     // {
     //     return <Item key={pItem.ID}> </Item>
     // }
 }
-export async function ItemSet(pItem)
+export async function ItemSet(pItem,pThis)
 {
-    await this.core.util.waitUntil(0)
-    
-    checkBoxSet = checkBoxSet.bind(this)
-    textBoxSet = textBoxSet.bind(this)
-    comboBoxSet = comboBoxSet.bind(this)
-    popInputBoxSet = popInputBoxSet.bind(this)
-    popSelectBoxSet = popSelectBoxSet.bind(this)
-    popTextListSet = popTextListSet.bind(this)
-    popObjectListSet = popObjectListSet.bind(this)
+    await pThis.core.util.waitUntil(0)  
+
+    if(typeof pItem.VIEW == 'undefined' || typeof pItem.VIEW.TYPE == 'undefined')
+    {
+        return
+    }
 
     if(pItem.VIEW.TYPE == 'checkbox')
     {
-        checkBoxSet(pItem)
+        checkBoxSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'text')
     {
-        textBoxSet(pItem)
+        textBoxSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'combobox')
     {
-        comboBoxSet(pItem)
+        comboBoxSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popInput')
     {
-        popInputBoxSet(pItem)
+        popInputBoxSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popSelect')
     {
-        popSelectBoxSet(pItem)
+        popSelectBoxSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popTextList')
     {
-        popTextListSet(pItem)
+        popTextListSet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
-        popObjectListSet(pItem)
+        popObjectListSet(pItem,pThis)
     }
 }
-export async function ItemGet(pItem)
+export async function ItemGet(pItem,pThis)
 {
-    await this.core.util.waitUntil(0)
-    
-    checkBoxGet = checkBoxGet.bind(this)
-    textBoxGet = textBoxGet.bind(this)
-    comboBoxGet = comboBoxGet.bind(this)
-    popInputBoxGet = popInputBoxGet.bind(this)
-    popSelectBoxGet = popSelectBoxGet.bind(this)
-    popTextListGet = popTextListGet.bind(this)
-    popObjectListGet = popObjectListGet.bind(this)
+    await pThis.core.util.waitUntil(0)
+
+    if(typeof pItem.VIEW == 'undefined' || typeof pItem.VIEW.TYPE == 'undefined')
+    {
+        return
+    }
 
     if(pItem.VIEW.TYPE == 'checkbox')
     {
-        return checkBoxGet(pItem)
+        return checkBoxGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'text')
     {
-        return textBoxGet(pItem)
+        return textBoxGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'combobox')
     {
-        return comboBoxGet(pItem)
+        return comboBoxGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popInput')
     {
-        return popInputBoxGet(pItem)
+        return popInputBoxGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popSelect')
     {
-        return popSelectBoxGet(pItem)
+        return popSelectBoxGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popTextList')
     {
-        return popTextListGet(pItem)
+        return popTextListGet(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
-        return popObjectListGet(pItem)
+        return popObjectListGet(pItem,pThis)
     }
 }

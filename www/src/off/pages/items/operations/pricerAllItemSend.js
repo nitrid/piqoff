@@ -66,7 +66,7 @@ export default class priceAllItemSend extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT CODE AS ITEM_CODE,NAME AS ITEM_NAME,PRICE_SALE AS PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE GROUP BY CODE,NAME,PRICE_SALE ",
+                    query : "SELECT CODE AS ITEM_CODE,NAME AS ITEM_NAME,PRICE_SALE AS PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CONVERT(nvarchar,LDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,LDATE,110) <= @LAST_DATE AND STATUS = 1 GROUP BY CODE,NAME,PRICE_SALE ",
                     param : ['FISRT_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },

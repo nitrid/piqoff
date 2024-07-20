@@ -12,9 +12,20 @@ export const acs =
         APP : "MOB",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Etiket Basım",
-            CAPTION : "Fiyat"
+            CAPTION : "Fiyat",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopNumPriceVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopNumPriceEditable"}
+                ]
+            }
         }
     },
     //#endregion
