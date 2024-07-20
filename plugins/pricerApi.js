@@ -14,7 +14,7 @@ class pricerApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = false
+        this.active = true
 
         this.processRun()
     }
@@ -440,7 +440,6 @@ class pricerApi
     {
         if(this.active == true)
         {
-
             cron.schedule('0 3 * * *', async () => 
             {
                 await this.processPromoSend()
