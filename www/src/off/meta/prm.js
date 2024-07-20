@@ -169,7 +169,7 @@ export const prm =
     },
     //Otomatik Interfel
     {
-        TYPE : 1,
+        TYPE : 0,
         ID :"autoInterfel",
         VALUE : 
         {

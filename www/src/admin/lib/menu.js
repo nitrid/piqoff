@@ -100,11 +100,11 @@ export const menu = (e) =>
                             text: e.t('menu.prm_03_001'), // OFF
                             path: 'parameters/elementParamOff'
                         },
-                        {
-                            id: 'prm_03_002',
-                            text: e.t('menu.prm_03_002'), // POS
-                            path: 'parameters/elementParamPos'
-                        },
+                        // {
+                        //     id: 'prm_03_002',
+                        //     text: e.t('menu.prm_03_002'), // POS
+                        //     path: 'parameters/elementParamPos'
+                        // },
                         {
                             id: 'prm_03_003',
                             text: e.t('menu.prm_03_003'), // MOB
