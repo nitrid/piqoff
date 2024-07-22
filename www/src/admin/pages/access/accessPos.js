@@ -50,7 +50,7 @@ export default class accessPos extends React.PureComponent
         let tmpItems = []
         this.state.metaAcs.map((pItem) => 
         {
-            tmpItems.push(this.ItemBuild(pItem))
+            tmpItems.push(this.ItemBuild(pItem,this))
         });
         return tmpItems
     }
@@ -77,7 +77,7 @@ export default class accessPos extends React.PureComponent
                                     {
                                         let tmpData = {...pItem} 
                                         tmpData.VALUE = this.acsData.filter({TYPE:2,USERS:e.value,ID:pItem.ID}).getValue()                                        
-                                        this.ItemSet(tmpData)
+                                        this.ItemSet(tmpData,this)
                                     })
                                 }}
                                 />
@@ -92,14 +92,14 @@ export default class accessPos extends React.PureComponent
                                 onValueChanged={async(e)=>
                                 {
                                     await this.acsData.load({APP:'POS'})
-                                    console.log(this.acsData.filter({TYPE:2,PAGE:this.cmbDoc.value}).meta)
+                                    
                                     this.setState({metaAcs:this.acsData.filter({TYPE:2,PAGE:this.cmbDoc.value}).meta})
                                     
                                     this.state.metaAcs.map((pItem) => 
                                     {
                                         let tmpData = {...pItem} 
                                         tmpData.VALUE = this.acsData.filter({TYPE:2,USERS:e.value,ID:pItem.ID}).getValue()                                        
-                                        this.ItemSet(tmpData)
+                                        this.ItemSet(tmpData,this)
                                     })
                                 }}
                                 />
@@ -120,7 +120,7 @@ export default class accessPos extends React.PureComponent
                                                     {
                                                         TYPE:this.state.metaAcs[x].TYPE,
                                                         ID:this.state.metaAcs[x].ID,
-                                                        VALUE:await this.ItemGet(this.state.metaAcs[x]),
+                                                        VALUE:await this.ItemGet(this.state.metaAcs[x],this),
                                                         SPECIAL:this.state.metaAcs[x].SPECIAL,
                                                         USERS:data[i].CODE,
                                                         PAGE:this.state.metaAcs[x].PAGE,
