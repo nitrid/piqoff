@@ -1448,6 +1448,19 @@ export class posDeviceCls
     async cardPayment(pAmount,pType) //pType = (0 => İade) 
     {
         let tmpSerialPort = null
+        let tmpPayCardPort = ''
+        let tmpPayCardProtocol = ''
+
+        if(this.dt()[0].PAY_CARD_PORT.split('|').length > 0)
+        {
+            tmpPayCardPort = this.dt()[0].PAY_CARD_PORT.split('|')[0]
+            tmpPayCardProtocol = this.dt()[0].PAY_CARD_PORT.split('|')[1]
+        }
+        else
+        {
+            tmpPayCardPort = this.dt()[0].PAY_CARD_PORT.split('|')[0]
+        }
+
         if(!core.instance.util.isElectron())
         {
             return
@@ -1456,14 +1469,14 @@ export class posDeviceCls
         {
             tmpSerialPort = global.require('serialport');
         }
-
-        if(this.dt()[0].PAY_CARD_PORT.indexOf('COM') == -1)
+        
+        if(tmpPayCardPort.indexOf('COM') == -1 && tmpPayCardProtocol != 'LRC')
         {
             return new Promise(async (resolve) =>
             {
                 let isOpened = false
                 const client = new this.net.Socket();
-                client.connect(this.dt()[0].PAY_CARD_PORT.split(':')[1], this.dt()[0].PAY_CARD_PORT.split(':')[0], () => 
+                client.connect(tmpPayCardPort.split(':')[1], tmpPayCardPort.split(':')[0], () => 
                 {
                     client.write('01' + ('0000000' + (pAmount * 100).toFixed(0)).substr(-8) + "01" + (typeof pType != 'undefined' && pType == 0 ? '1' : '0'));
     
@@ -1523,10 +1536,21 @@ export class posDeviceCls
             {
                 await this.core.util.waitUntil(100);
                 this.core.util.writeLog("signal : 1")
-                if(this.payPort == null || !this.payPort.isOpen)
+                if(tmpPayCardPort.indexOf('COM') == -1)
                 {
-                    this.payPort = new tmpSerialPort(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+                    this.payPort = new this.net.Socket()
+                    this.payPort.connect(tmpPayCardPort.split(':')[1], tmpPayCardPort.split(':')[0]);
+                    await this.core.util.waitUntil(100);
                 }
+                else
+                {
+                    if(this.payPort == null || !this.payPort.isOpen)
+                    {
+                        this.payPort = new tmpSerialPort(this.dt().length > 0 ? tmpPayCardPort : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+                    }
+                }
+
+                
                 this.core.util.writeLog("signal : 2")
                 this.payPort.write(String.fromCharCode(5)); //ENQ
     

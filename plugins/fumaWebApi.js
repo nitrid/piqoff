@@ -220,7 +220,8 @@ class fumaWebApi
                             "cardId" : pData.list[m].pos[0].CUSTOMER_CODE,
                             "email": pData.list[m].pos[0].CUSTOMER_MAIL,
                             "sellerVkn": this.sellerVkn,
-                            "point": Number(pData.list[m].special.customerPoint),
+                            "point": pData.list[m].pos[0].CUSTOMER_POINT,
+                            "pointLast": Number(pData.list[m].special.customerPoint)
                         },
                         "pos": 
                         {
@@ -230,7 +231,8 @@ class fumaWebApi
                             "amount": pData.list[m].pos[0].AMOUNT,
                             "total": pData.list[m].pos[0].TOTAL,
                             "loyalty": pData.list[m].pos[0].LOYALTY,
-                            "point": parseInt(pData.list[m].pos[0].TOTAL * 1),
+                            "point": pData.list[m].pos[0].CUSTOMER_POINT,
+                            "pointLast": Number(pData.list[m].special.customerPoint),
                             "transferId": pData.list[m].pos[0].GUID,
                             "documentDate": pData.list[m].pos[0].LDATE
                         },
@@ -274,7 +276,8 @@ class fumaWebApi
                         "cardId" : pData[0].pos[0].CUSTOMER_CODE,
                         "email": pData[0].pos[0].CUSTOMER_MAIL,
                         "sellerVkn": this.sellerVkn,
-                        "point": Number(pData[0].special.customerPoint),
+                        "point": pData[0].pos[0].CUSTOMER_POINT,
+                        "pointLast": Number(pData[0].special.customerPoint)
                     },
                     "pos": 
                     {
@@ -284,7 +287,8 @@ class fumaWebApi
                         "amount": pData[0].pos[0].AMOUNT,
                         "total": pData[0].pos[0].TOTAL,
                         "loyalty": pData[0].pos[0].LOYALTY,
-                        "point": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
+                        "point": pData[0].pos[0].CUSTOMER_POINT,
+                        "pointLast": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
                         "transferId": pData[0].pos[0].GUID,
                         "documentDate": pData[0].pos[0].LDATE
                     },
