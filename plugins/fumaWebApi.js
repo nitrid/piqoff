@@ -276,8 +276,8 @@ class fumaWebApi
                         "cardId" : pData[0].pos[0].CUSTOMER_CODE,
                         "email": pData[0].pos[0].CUSTOMER_MAIL,
                         "sellerVkn": this.sellerVkn,
-                        "point": pData[0].pos[0].CUSTOMER_POINT,
-                        "pointLast": Number(pData[0].special.customerPoint)
+                        "point": Number(pData[0].special.customerPoint),
+                        "pointLast": pData[0].pos[0].CUSTOMER_POINT
                     },
                     "pos": 
                     {
@@ -287,8 +287,8 @@ class fumaWebApi
                         "amount": pData[0].pos[0].AMOUNT,
                         "total": pData[0].pos[0].TOTAL,
                         "loyalty": pData[0].pos[0].LOYALTY,
-                        "point": pData[0].pos[0].CUSTOMER_POINT,
-                        "pointLast": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
+                        "point": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
+                        "pointLast": pData[0].pos[0].CUSTOMER_POINT,
                         "transferId": pData[0].pos[0].GUID,
                         "documentDate": pData[0].pos[0].LDATE
                     },
