@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* *; style-src 'self' http://* https://* file://* 'unsafe-inline'; script-src 'self' http://* https://* file://* 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+
+        <link href="./css/bootstrap.min.css" rel="stylesheet">
+        <script src="./lib/bootstrap.bundle.min.js"></script>
+
+        <title>Piqapp | Powered by Piqsoft</title>  
+    </head>
+
+    <body>
+        <div class="row" id="page-update" style="visibility: hidden;"> 
+            <div class="col-12">
+                <div class="card mx-3 my-5"> 
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <h4 class="brand-text font-size-18 text-center" id="status"></h2>   
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div class="progress" id="progress" style="visibility: hidden">
+                                    <div id="progressbar" class="progress-bar w-0" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" name="host" id="host" placeholder="Host">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <select class="form-control" name="app" id="app">
+                                    <option value="tab">Tab</option>
+                                    <option value="mob">Mob</option>
+                                    <option value="boss">Boss</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" onclick="BtnKaydet()">Update</button>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" onclick="BtnExit()">Exit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../cordova.js"></script>
+        <script>
+            var app = 
+            {
+                initialize: function() 
+                {
+                    this.bindEvents();
+                    document.getElementById('host').value = localStorage.getItem("host");
+                    document.getElementById('app').value = localStorage.getItem("app");
+                },
+                bindEvents: function() {
+                    document.addEventListener('deviceready', this.onDeviceReady, false);
+                },
+                onDeviceReady: function() 
+                {
+                    app.receivedEvent('deviceready');
+                },
+                receivedEvent: function(id) 
+                {
+                    document.getElementById('page-update').style.visibility = "visible"; 
+                },
+                setProgress: function(progress) 
+                {
+                    if(progress.status) 
+                    {
+                        switch(progress.status) 
+                        {
+                            case 1:
+                                document.getElementById('status').innerHTML = "Downloading files...";
+                                break;
+                            case 2:
+                                document.getElementById('status').innerHTML = "Files opening...";
+                                break;
+                            case 3:
+                                document.getElementById('status').innerHTML = "Completed !";
+                                break;
+                            default:
+                                document.getElementById('status').innerHTML = "";
+                        }
+                    }
+                    if(progress.progress) 
+                    {            
+                        var progressBar = document.getElementById('progressbar');
+                        document.getElementById('progress').style.visibility = "visible";
+                        progressBar.style.width = progress.progress + '%';
+                    }
+                },
+                sync: function(Host,App,Callback)
+                {        
+                    var TmpHost = Host;
+                    var url = "http://" + TmpHost + "/public.zip";
+
+                    var sync = ContentSync.sync({ src: url, id: 'piqapp', copyCordovaAssets: true });
+
+                    var setProgress = this.setProgress; 
+                    
+                    sync.on('progress', function(progress) 
+                    {                        
+                        app.setProgress(progress);
+                    });
+
+                    sync.on('complete', function(data) 
+                    { 
+                        window.resolveLocalFileSystemURL("file://" + data.localPath + "/public/" + App + "/index.html", 
+                        function(fileEntry)
+                        {              
+                            if(device.platform === 'iOS')
+                            {                                
+                                window.location = window.WkWebView.convertFilePath(fileEntry.toURL());                                
+                            }
+                            else if(device.platform === 'Android')
+                            {
+                                window.location = fileEntry.nativeURL;                                
+                            }
+                            localStorage.setItem("path",data.localPath);
+                            localStorage.setItem("app",App);
+                        },
+                        function()
+                        {
+                            if(Callback)
+                            {
+                                Callback(false);
+                            }
+                        });
+                        
+                        if(Callback)
+                        {
+                            Callback(true);
+                        }
+                    });
+
+                    sync.on('error', function(e) 
+                    {
+                        document.getElementById('page-update').style.visibility = "visible";
+
+                        if(Callback)
+                        {
+                            Callback(false);
+                        }
+                    });
+                }       
+            };
+            app.initialize();
+            function BtnKaydet()
+            {
+                app.sync(document.getElementById('host').value,document.getElementById('app').value,function(status)
+                {
+                    if(!status)
+                    {
+                        document.getElementById('status').innerText = "Error accessing source file !";
+                    }
+                    else
+                    {
+                        localStorage.setItem("host",document.getElementById('host').value)
+                        localStorage.setItem("app",document.getElementById('app').value)
+                    }
+                });
+            }
+            function BtnExit()
+            {
+                window.location = "index.html"
+            }
+        </script>
+    </body>
+</html>
