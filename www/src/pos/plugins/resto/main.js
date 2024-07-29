@@ -302,7 +302,7 @@ function render()
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgConvertPosAddition',showTitle:true,title:this.lang.t("msgConvertPosAddition.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgConvertPosAddition',showTitle:true,title:this.lang.t("msgConvertPosAddition.title"),showCloseButton:true,width:'500px',height:'240px',
                                             button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],                                            
                                         }
 

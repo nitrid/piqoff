@@ -17,6 +17,14 @@ const lang =
         title : "Avertissement",
         btn01 : "D'accord",
         msg : "Vous ne pouvez pas entrer car la table est vide !"
+    },
+    msgConvertPosAddition : 
+    {
+        title : "Avertissement",
+        btn01 : "Oui",
+        btn02 : "Non",
+        msg : "Il y a un total de {{count}} articles non sélectionnés ! Êtes-vous sûr de vouloir convertir les articles sélectionnés en transaction de vente ?",
+        msg1 : "Êtes-vous sûr de vouloir convertir les articles sélectionnés en transaction de vente ?"
     }
 }
 export default lang
