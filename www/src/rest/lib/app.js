@@ -68,7 +68,7 @@ export default class App extends React.PureComponent
                 title : 'Sunucu ile bağlantı kuruluyor.',
                 value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
             },
-            page:'bill.js',
+            page:'bill.js'
         }
         this.pagePrm = null
         this.prmObj = null
@@ -204,7 +204,7 @@ export default class App extends React.PureComponent
                         
                     </div>
                     <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
-                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px"}}
+                        <NbButton id="btnLogout" parent={this} className="form-group btn btn-primary btn-block" style={{height:"45px"}}
                         onClick={()=>
                         {
                             this.core.auth.logout()

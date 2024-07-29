@@ -384,6 +384,7 @@ export default class bill extends React.PureComponent
                             this.serviceView.title = this.tableView.items[e].NAME
                             this.serviceView.updateState()
                             this.tableSelected = this.tableView.items[e]
+                            App.instance.btnLogout.setLock({display:"none"})
                         }}
                         onSaveClick={async(e)=>
                         {
@@ -392,17 +393,70 @@ export default class bill extends React.PureComponent
                             {
                                 await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
                                 
-                                for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
+                                let tmpPrintDt = []
+                                let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
+
+                                if (tmpFilter.length > 0)
                                 {
-                                    if(this.restOrderObj.restOrderDetail.dt()[i].STATUS == 0)
+                                    for (let i = 0; i < tmpFilter.length; i++) 
                                     {
-                                        this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : tmpFilter[i].REST,
+                                            ZONE_NAME : tmpFilter[i].ZONE_NAME,
+                                            ITEM : tmpFilter[i].ITEM,
+                                            ITEM_CODE : tmpFilter[i].ITEM_CODE,
+                                            ITEM_NAME : tmpFilter[i].ITEM_NAME,
+                                            QUANTITY : tmpFilter[i].QUANTITY,
+                                            PROPERTY : tmpFilter[i].PROPERTY,
+                                            DESCRIPTION : tmpFilter[i].DESCRIPTION,
+                                        })
+                                        tmpFilter[i].STATUS = 1
+                                    }
+                                    await this.print(tmpPrintDt)
+                                    await this.restOrderObj.save()
+                                    this.tableView.items[e].DELIVERED = 0
+                                }
+                                else
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRePrint.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+                                    }
+    
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn01")
+                                    {
+                                        for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
+                                        {
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
+                                                ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
+                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
+                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
+                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
+                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
+                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                            })
+                                            this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+                                        }
+
+                                        await this.print(tmpPrintDt)
+                                        await this.restOrderObj.save()
+                                        this.tableView.items[e].DELIVERED = 0
                                     }
                                 }
-
-                                await this.restOrderObj.save()
-                                this.tableView.items[e].DELIVERED = 0
                             }
+
                             this.tableView.updateState()
                         }}
                         onChangeClick={async(e)=>
@@ -474,31 +528,68 @@ export default class bill extends React.PureComponent
                                 let tmpPrintDt = []
                                 await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
 
-                                for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
+                                let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
+
+                                if (tmpFilter.length > 0)
                                 {
-                                    if(this.restOrderObj.restOrderDetail.dt()[i].STATUS == 0)
+                                    for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(
                                         {
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
-                                            REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
-                                            ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
-                                            ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
-                                            ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
-                                            ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
-                                            QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
-                                            PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
-                                            DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                            REST : tmpFilter[i].REST,
+                                            ZONE_NAME : tmpFilter[i].ZONE_NAME,
+                                            ITEM : tmpFilter[i].ITEM,
+                                            ITEM_CODE : tmpFilter[i].ITEM_CODE,
+                                            ITEM_NAME : tmpFilter[i].ITEM_NAME,
+                                            QUANTITY : tmpFilter[i].QUANTITY,
+                                            PROPERTY : tmpFilter[i].PROPERTY,
+                                            DESCRIPTION : tmpFilter[i].DESCRIPTION,
                                         })
-                                        this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+                                        tmpFilter[i].STATUS = 1
+                                    }
+                                    await this.print(tmpPrintDt)
+                                    await this.restOrderObj.save()
+                                    this.serviceView.items[e].DELIVERED = 0
+                                    this.serviceView.updateState()
+                                }
+                                else
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRePrint.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+                                    }
+    
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn01")
+                                    {
+                                        for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
+                                        {
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
+                                                ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
+                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
+                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
+                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
+                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
+                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                            })
+                                            this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+                                        }
+                                        await this.print(tmpPrintDt)
+                                        await this.restOrderObj.save()
+                                        this.serviceView.items[e].DELIVERED = 0
+                                        this.serviceView.updateState()
                                     }
                                 }
-                                
-                                await this.print(tmpPrintDt)
-                                await this.restOrderObj.save()
-                                this.serviceView.items[e].DELIVERED = 0
-                                this.serviceView.updateState()
                             }}
                             onDeleteClick={async(e)=>
                             {
@@ -525,6 +616,7 @@ export default class bill extends React.PureComponent
                             {
                                 this.popTableDetail.hide();
                                 this.init()
+                                App.instance.btnLogout.setUnLock({display:"block"})
                             }}/>
                         </NbPopUp>
                     </div>

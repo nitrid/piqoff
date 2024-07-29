@@ -77,5 +77,12 @@ export const langFr =
     popChangeTable:
     {
         title : "Veuillez entrer le code ou le nom de la table !"
+    },
+    msgRePrint: 
+    {
+        title: "Attention",
+        msg: "Êtes-vous sûr de vouloir réimprimer tous les articles ?",
+        btn01: "Oui",
+        btn02: "Non"
     }
 }

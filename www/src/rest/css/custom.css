@@ -164,3 +164,8 @@
     background-color: #079992;
     border-color: #079992;
 }
+.login-button .dx-button-text
+{
+    font-size: 18px;
+    font-weight: bold;
+}

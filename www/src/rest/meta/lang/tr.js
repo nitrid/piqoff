@@ -77,5 +77,12 @@ export const langTr =
     popChangeTable:
     {
         title : "Lütfen masa kodunu yada adını yazınız !"
-    }
+    },
+    msgRePrint:
+    {
+        title : "Dikkat",
+        msg : "Tüm ürünleri yeniden yazıdırmak istediğinize eminmisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
 }

@@ -161,10 +161,11 @@ export default class Login extends React.PureComponent
                                 <div className="dx-field">
                                     <Button
                                     width={'100%'}
-                                    height='fit-content'
+                                    height='50px'
                                     text={this.lang.t("btnUserSelect")}
                                     type="success"
                                     stylingMode="contained"
+                                    elementAttr={{ class: 'login-button' }}
                                     onClick={this.getUserList}
                                     />
                                 </div>
@@ -175,10 +176,11 @@ export default class Login extends React.PureComponent
                                 <div className="dx-field">
                                     <Button
                                     width={'100%'}
-                                    height='fit-content'
+                                    height='50px'
                                     text={this.lang.t("btnLogin")}
                                     type="default"
                                     stylingMode="contained"
+                                    elementAttr={{ class: 'login-button' }}
                                     onClick={this.onLoginClick}
                                     />
                                 </div>
@@ -187,10 +189,11 @@ export default class Login extends React.PureComponent
                                 <div className="dx-field">
                                     <Button
                                     width={'100%'}
-                                    height='fit-content'
+                                    height='50px'
                                     text={this.lang.t("btnLogout")}
                                     type="danger"
                                     stylingMode="contained"
+                                    elementAttr={{ class: 'login-button' }}
                                     onClick={this.closePage}
                                     />
                                 </div>
@@ -205,6 +208,22 @@ export default class Login extends React.PureComponent
                         height={'100%'}
                         selection={{mode:"single"}}
                         title={this.lang.t("userListTitle")}
+                        onRowPrepared={(e)=>
+                        {
+                            if(e.rowType == "header")
+                            {
+                                e.rowElement.style.fontWeight = "bold";   
+                                e.rowElement.style.fontSize = "15px"; 
+                            }
+                            else
+                            {
+                                e.rowElement.style.fontSize = "20px";
+                            }
+                        }}
+                        onCellPrepared={(e)=>
+                        {
+                            e.cellElement.style.padding = "8px"     
+                        }}
                         >
                             <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
                             <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
