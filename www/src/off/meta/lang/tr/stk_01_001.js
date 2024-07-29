@@ -86,7 +86,8 @@ const stk_01_001 =
         txtPopPriQuantity: "Miktar",
         txtPopPriPrice: "Fiyat",
         txtPopPriHT: "Vargisiz Fiyat",
-        txtPopPriTTC : "Vergili Fiyat"
+        txtPopPriTTC : "Vergili Fiyat",
+        txtPopPriceMargin : "Marj %"
     },
     msgDateInvalid:
     {
@@ -134,6 +135,7 @@ const stk_01_001 =
         clmPrice: "Fiyat",
         clmGrossMargin: "Brüt Marj",
         clmNetMargin: "Net Marj",
+        clmMargin : "Marj %"
     },
     grdUnit: 
     {

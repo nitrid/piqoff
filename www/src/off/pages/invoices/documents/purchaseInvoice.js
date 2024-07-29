@@ -1208,6 +1208,7 @@ export default class purchaseInvoice extends DocBase
                                 let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
                                 tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
+                                tmpItemData[0].MARGIN = ((tmpMargin / tmpExVat) * 100); 
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
                                 this.newPrice.push(tmpItemData[0])
                             } 
@@ -1328,6 +1329,7 @@ export default class purchaseInvoice extends DocBase
                                     let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                     let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
                                     tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
+                                    tmpItemData[0].MARGIN = ((tmpMargin / tmpExVat) * 100); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
                                     console.log(tmpItemData[0])
                                     this.newPriceDate.push(tmpItemData[0])
