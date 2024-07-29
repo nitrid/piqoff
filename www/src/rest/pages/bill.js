@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../lib/app.js';
+import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/toolbar';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import NbPopUp from '../../core/react/bootstrap/popup';
 import NbButton from '../../core/react/bootstrap/button';
@@ -32,7 +32,6 @@ export default class bill extends React.PureComponent
         this.serviceSelected = undefined
         this.restItemSelected = undefined
 
-        this.t = App.instance.lang.getFixedT(null,null,"dashboard")
         this.lang = App.instance.lang;
 
         this.restOrderObj = new restOrderCls()
@@ -49,7 +48,7 @@ export default class bill extends React.PureComponent
 
         this.tableView.items.selectCmd = 
         {
-            query : "SELECT * FROM REST_TABLE_VW_01"
+            query : "SELECT * FROM REST_TABLE_VW_01 ORDER BY CODE ASC"
         }
         await this.tableView.items.refresh()
         this.tableView.updateState()
@@ -59,7 +58,7 @@ export default class bill extends React.PureComponent
             query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007') ORDER BY CODE ASC"
         }
         await this.grpItem.refresh()
-
+        
         this.productItem.selectCmd = 
         {
             query : `SELECT 
@@ -73,7 +72,7 @@ export default class bill extends React.PureComponent
                     FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007')`
         }
         await this.productItem.refresh();
-
+        
         this.setState({isLoading:false})
     }    
     getServices(pGuid)
@@ -299,6 +298,73 @@ export default class bill extends React.PureComponent
             return false;
         }
     }
+    async print(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let replaceTurkishChars = (str) => 
+            {
+                const turkishChars = 
+                {
+                    'Ç': 'C', 'ç': 'c',
+                    'Ğ': 'G', 'ğ': 'g',
+                    'İ': 'I', 'ı': 'i',
+                    'Ö': 'O', 'ö': 'o',
+                    'Ş': 'S', 'ş': 's',
+                    'Ü': 'U', 'ü': 'u'
+                };
+            
+                return str.split('').map(char => turkishChars[char] || char).join('');
+            }
+
+            if(pData.map(obj => `'${obj.ITEM}'`).join(", ") == '')
+            {
+                resolve(false)
+                return
+            }
+
+            let tmpPrintDt = new datatable()
+            tmpPrintDt.selectCmd = 
+            {
+                query : "SELECT * FROM REST_PRINT_ITEM_VW_01 WHERE ITEM_GUID IN (" + pData.map(obj => `'${obj.ITEM}'`).join(", ") + ")"
+            }
+            await tmpPrintDt.refresh()
+
+            let tmpArrDt = []
+            for (let i = 0; i < tmpPrintDt.groupBy('CODE').length; i++) 
+            {
+                let tmpItems = []
+                for (let x = 0; x < pData.length; x++) 
+                {
+                    let tmpFilterPrinter = tmpPrintDt.where({CODE:tmpPrintDt.groupBy('CODE')[i].CODE}).where({ITEM_GUID:pData[x].ITEM})
+                    for (let m = 0; m < tmpFilterPrinter.length; m++) 
+                    {
+                        tmpItems.push(pData[x])
+                        tmpItems[tmpItems.length-1].ITEM_NAME = replaceTurkishChars(tmpItems[tmpItems.length-1].ITEM_NAME)
+                        tmpItems[tmpItems.length-1].PRINTER_PATH = tmpFilterPrinter[m].PRINTER_PATH
+                        tmpItems[tmpItems.length-1].DESIGN_PATH = tmpFilterPrinter[m].DESIGN_PATH
+                        if(this.isValidJSON(tmpItems[tmpItems.length-1].PROPERTY))
+                        {
+                            tmpItems[tmpItems.length-1].PROPERTY = JSON.parse(tmpItems[tmpItems.length-1].PROPERTY).map(item => item.TITLE).join(', ')
+                            tmpItems[tmpItems.length-1].PROPERTY = replaceTurkishChars(tmpItems[tmpItems.length-1].PROPERTY)
+                        }
+                        tmpItems[tmpItems.length-1].DESCRIPTION = replaceTurkishChars(tmpItems[tmpItems.length-1].DESCRIPTION)
+                    }
+                }
+                tmpArrDt.push(tmpItems)
+            }
+            
+            for (let i = 0; i < tmpArrDt.length; i++) 
+            {
+                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i]) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                {
+                    console.log(pResult)
+                })
+            }
+
+            resolve(true)
+        })
+    }
     render()
     {    
         return(
@@ -405,15 +471,31 @@ export default class bill extends React.PureComponent
                             }}
                             onSaveClick={async(e)=>
                             {
+                                let tmpPrintDt = []
                                 await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
 
                                 for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
                                 {
                                     if(this.restOrderObj.restOrderDetail.dt()[i].STATUS == 0)
                                     {
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                            ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
+                                            ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
+                                            ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
+                                            ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
+                                            QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
+                                            PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
+                                            DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                        })
                                         this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
                                     }
                                 }
+                                
+                                await this.print(tmpPrintDt)
                                 await this.restOrderObj.save()
                                 this.serviceView.items[e].DELIVERED = 0
                                 this.serviceView.updateState()

@@ -1406,6 +1406,43 @@ export const menu = (e) =>
                 },
             ]
         },
+        //Restorant İşlemleri
+        {
+            id: 'rest',
+            text: e.t('menuOff.rest'),
+            expanded: false,
+            items: 
+            [
+                //Tanımlar
+                {
+                    id: 'rest_01',
+                    text : e.t('menuOff.rest_01'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_01_001',
+                            text: e.t('menuOff.rest_01_001'),//'Masa Tanımları',
+                            path: 'rest/card/tableCard'
+                        }
+                    ]
+                },
+                //Operasyonlar
+                {
+                    id: 'rest_02',
+                    text : e.t('menuOff.rest_02'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_02_001',
+                            text: e.t('menuOff.rest_02_001'),//'Masa İzleme',
+                            path: 'rest/operation/tableWatch'
+                        }
+                    ]
+                }
+            ]
+        },
         //Promosyon
         {
             id: 'promo',
