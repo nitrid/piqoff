@@ -103,7 +103,6 @@ export default class Navigation extends React.PureComponent
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         this.firmName.value = tmpData.result.recordset[0].NAME
-        console.log(tmpData.result.recordset[0].NAME)
         this.setState({firmName:tmpData.result.recordset[0].NAME})
     }
     async mergeMenu(tmpMenu,tmpMenuData)

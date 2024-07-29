@@ -592,25 +592,25 @@ export default class posDoc extends React.PureComponent
         }      
         //KULLANICI BAZLI GÜNLÜK TOPLAM FİŞ SAYISI GÖSTERİMİ. (12.07.2024 - ALI KEMAL KARACA)
         if(!this.state.isFormation)
+        {
+            let tmpQueryTCount = 
             {
-                let tmpQueryTCount = 
-                {
-                    query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
-                    param : ['LUSER:string|50'],
-                    value : [this.core.auth.data.CODE],
-                }
-
-                let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
-                if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
-                {
-                    this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
-                }
-                else
-                {
-                    this.formation.value = ''
-                }   
+                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                param : ['LUSER:string|50'],
+                value : [this.core.auth.data.CODE],
             }
-            //************************************************************************************/
+    
+            let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
+            if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
+            {
+                this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
+            }
+            else
+            {
+                this.formation.value = ''
+            }   
+        }
+        //************************************************************************************/
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
@@ -2392,7 +2392,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.txtPaymentPopTotal.value = pAmount
                 this.msgCardPayment.show().then(async (e) =>
-                {                    
+                {   
                     if(e == 'btn01')
                     {
                         if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
@@ -2820,14 +2820,15 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                        "@GUID = @PGUID, " + 
                         "@CUSER = @PCUSER, " + 
                         "@TYPE = @PTYPE, " +     
                         "@CUSTOMER = @PCUSTOMER, " +                  
                         "@DOC = @PDOC, " + 
                         "@POINT = @PPOINT, " + 
                         "@DESCRIPTION = @PDESCRIPTION ", 
-                param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
+                param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                value : [datatable.uuidv4(),this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
                 local : 
                 {
                     type : "insert",

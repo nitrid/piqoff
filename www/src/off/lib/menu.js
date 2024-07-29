@@ -1197,9 +1197,14 @@ export const menu = (e) =>
                     [
                         {
                             id: 'prsnl_01_001',
-                            text: e.t('menuOff.prsnl_01_001'), //'',
+                            text: e.t('menuOff.prsnl_01_001'), //'Personel Tanımları',
                             path: 'employee/cards/employeeCards'
-                        }
+                        },
+                        {
+                            id: 'prsnl_01_002',
+                            text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
+                            path: 'employee/cards/employeeAddressCards'
+                        },
                         
                     ]
                 },
@@ -1231,21 +1236,7 @@ export const menu = (e) =>
                         
                     ]
                 },
-                {
-                    id:'prsnl_04',
-                    text:e.t('menuOff.prsnl_04'),//'RAPORLAR',
-                    expanded:false,
-                    items:
-                    [
-                        {
-                            id: 'prsnl_04_001',
-                            text: e.t('menuOff.prsnl_04_001'), //'Gelen Fatura Listesi',
-                            path: 'employee/lists/employeeLists'
-                        }
-                        
-                    ]
-                },
-                
+
             ]
         },
         //Pos İşlemleri
@@ -1413,6 +1404,43 @@ export const menu = (e) =>
                         }
                     ]
                 },
+            ]
+        },
+        //Restorant İşlemleri
+        {
+            id: 'rest',
+            text: e.t('menuOff.rest'),
+            expanded: false,
+            items: 
+            [
+                //Tanımlar
+                {
+                    id: 'rest_01',
+                    text : e.t('menuOff.rest_01'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_01_001',
+                            text: e.t('menuOff.rest_01_001'),//'Masa Tanımları',
+                            path: 'rest/card/tableCard'
+                        }
+                    ]
+                },
+                //Operasyonlar
+                {
+                    id: 'rest_02',
+                    text : e.t('menuOff.rest_02'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_02_001',
+                            text: e.t('menuOff.rest_02_001'),//'Masa İzleme',
+                            path: 'rest/operation/tableWatch'
+                        }
+                    ]
+                }
             ]
         },
         //Promosyon

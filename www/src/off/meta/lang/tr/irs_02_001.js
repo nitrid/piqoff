@@ -405,7 +405,8 @@ const irs_02_001 =
         clmSalePrice :"Satış Fiyatı", 
         clmMargin : "Brüt Marj",
         clmCostPrice : "Maliyet Fiyatı",
-        clmNetMargin : "Net Marj"
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
     },
     grdNewPriceDate: 
     {
@@ -416,7 +417,8 @@ const irs_02_001 =
         clmSalePrice :"Satış Fiyatı", 
         clmMargin : "Brüt Marj",
         clmCostPrice : "Maliyet Fiyatı",
-        clmNetMargin : "Net Marj"
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
     },
     msgPriceDateUpdate :
     {
