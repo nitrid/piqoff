@@ -11,6 +11,20 @@ const lang =
         QUANTITY : "MİKTAR",
         PRICE : "FİYAT",
         TOTAL : "TOPLAM"
+    },
+    msgTableEmptyAlert : 
+    {
+        title : "Uyarı",
+        btn01 : "Tamam",
+        msg : "Masa boş olduğundan giremezsiniz !"
+    },
+    msgConvertPosAddition : 
+    {
+        title : "Uyarı",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        msg : "Seçilmeyen toplam {{count}} ürün var ! Seçili ürünleri satış işlemine çevirmek istediğinize eminmisiniz ?",
+        msg1 : "Seçili ürünleri satış işlemine çevirmek istediğinize eminmisiniz ?"
     }
 }
 export default lang

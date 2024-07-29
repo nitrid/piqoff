@@ -11,6 +11,12 @@ const lang =
         QUANTITY : "QTE",
         PRICE : "PRIX",
         TOTAL : "TOTAL"
+    },
+    msgTableEmptyAlert : 
+    {
+        title : "Avertissement",
+        btn01 : "D'accord",
+        msg : "Vous ne pouvez pas entrer car la table est vide !"
     }
 }
 export default lang
