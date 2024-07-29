@@ -18,6 +18,7 @@ class fumaWebApi
 
         this.getVkn()
         this.processEndDay()
+        //this.processCustomerSend();
     }
     async connEvt(pSocket)
     {
@@ -146,7 +147,9 @@ class fumaWebApi
                             FROM CUSTOMER_POINT AS POINT 
                             LEFT OUTER JOIN AUDIT_LOG ON
                             POINT.GUID = AUDIT_LOG.DOC
-                            WHERE ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POINT.LDATE >= @FIRST AND POINT.LDATE <= @LAST AND POINT.DELETED = 0`,
+                            WHERE
+                            (SELECT TOP 1 EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = POINT.CUSTOMER) != '' AND 
+                            ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POINT.DELETED = 0 AND POINT.LDATE >= @FIRST AND POINT.LDATE <= @LAST`,
                     param : ['FIRST:date','LAST:date'],
                     value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(0,'day').format("YYYYMMDD")]
                 }
@@ -239,8 +242,16 @@ class fumaWebApi
                         "posSale": tmpSaleLine,
                         "pdf": ""
                     }
-                    tmpSale.push(tmpDto)
-                    await this.updateAuditLog('POS',pData.list[m].pos[0].GUID)
+                    tmpSale.push(tmpDto);
+
+                    if (await this.SelectAuditLog(pData.list[m].pos[0].GUID))
+                    {
+                        await this.updateAuditLog('POS',pData.list[m].pos[0].GUID);
+                    }
+                    else
+                    {
+                       await this.insertAuditLog('POS',pData.list[m].pos[0].GUID)
+                    }
                 }
             }
             else
@@ -295,7 +306,15 @@ class fumaWebApi
                     "posSale": tmpSaleLine,
                     "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
                 }]
-                await this.updateAuditLog('POS',pData[0].pos[0].GUID)
+
+                if (await this.SelectAuditLog(pData[0].pos[0].GUID))
+                {
+                    await this.updateAuditLog('POS',pData[0].pos[0].GUID);
+                }
+                else
+                {
+                    await this.insertAuditLog('POS',pData[0].pos[0].GUID)
+                }
             }
             if(typeof pData != 'undefined')
             {
@@ -362,6 +381,7 @@ class fumaWebApi
                 })
                 .then(data => 
                 {
+                    
                     if(data.success)
                     {
                         //console.log("FumaApi - customerUpdate : Gönderim başarılı")
@@ -432,7 +452,14 @@ class fumaWebApi
                 tmpResponse = pData.list
                 for (let i = 0; i < tmpResponse.length; i++) 
                 {
-                    await this.updateAuditLog('POINT',tmpResponse[i].transferId)
+                    if (await this.SelectAuditLog(tmpResponse[i].transferId))
+                    {
+                        await this.updateAuditLog('POINT',tmpResponse[i].transferId)
+                    }
+                    else
+                    {
+                        await this.insertAuditLog('POINT',tmpResponse[i].transferId)
+                    }
                 }
             }
             else
@@ -461,7 +488,14 @@ class fumaWebApi
                     }]
                 }
 
-                await this.updateAuditLog('POINT',pData[0])
+                if (await this.SelectAuditLog(pData[0]))
+                {
+                    await this.updateAuditLog('POINT',pData[0])
+                }
+                else
+                {
+                    await this.insertAuditLog('POINT',pData[0])
+                }              
             }
 
             if(typeof tmpResponse != 'undefined')
@@ -478,9 +512,9 @@ class fumaWebApi
                 })
                 .then(response => 
                 {
-                    //console.log(response)
                     if (!response.ok) 
                     {
+                        console.log((response));
                         throw new Error('FumaApi - processPointSend : Yükleme başarısız. HTTP Hata: ' + response.status);
                     }
                     return response.json();
@@ -513,7 +547,57 @@ class fumaWebApi
                 param : ['DOC:string|50','TYPE:string|25'],
                 value : [pDoc,pType],
             }
+            await core.instance.sql.execute(tmpQuery);
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+    async insertAuditLog(pType,pDoc)
+    {
+        try
+        {
+            let tmpQuery = 
+            {
+                query : `INSERT INTO [dbo].[AUDIT_LOG]
+                        ([CDATE]
+                        ,[TYPE]
+                        ,[DOC]
+                        ,[STATUS])
+                    VALUES
+                        (GETDATE()
+                        ,@TYPE
+                        ,@DOC
+                        ,1)`, 
+                param : ['DOC:string|50','TYPE:string|25'],
+                value : [pDoc,pType],
+            }
             await core.instance.sql.execute(tmpQuery)
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+    async SelectAuditLog(pDoc)
+    {
+        try
+        {
+            let tmpQuery = 
+            {
+                query : `SELECT DOC FROM AUDIT_LOG WHERE DOC=@DOC;`, 
+                param : ['DOC:string|50'],
+                value : [pDoc],
+            }
+            let response = await core.instance.sql.execute(tmpQuery);
+
+            if (response?.result?.recordset?.length > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
         catch(err)
         {
