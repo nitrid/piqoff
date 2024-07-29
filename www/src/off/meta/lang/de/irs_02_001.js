@@ -404,7 +404,8 @@ const irs_02_001 =
         clmSalePrice :"Verkaufspreis", 
         clmMargin : "Bruttomarge",
         clmCostPrice : "Kostenpreis",
-        clmNetMargin : "Nettomarge"
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
     },
     grdNewPriceDate: 
     {
@@ -415,7 +416,8 @@ const irs_02_001 =
         clmSalePrice :"Verkaufspreis", 
         clmMargin : "Bruttomarge",
         clmCostPrice : "Kostenpreis",
-        clmNetMargin : "Nettomarge"
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
     },
     msgPriceDateUpdate :
     {

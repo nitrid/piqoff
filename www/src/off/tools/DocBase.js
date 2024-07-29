@@ -2124,6 +2124,7 @@ export default class DocBase extends React.PureComponent
                                             let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
                                             e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
+                                            e.key.MARGIN = ((tmpMargin / tmpExVat) * 100); 
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -2131,12 +2132,13 @@ export default class DocBase extends React.PureComponent
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                             <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={100} allowEditing={false}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={180} allowEditing={false}/>
-                                            <Column dataField="COST_PRICE" caption={this.t("grdNewPrice.clmCostPrice")} width={130} allowEditing={false}/>
-                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130} allowEditing={false}/>
+                                            <Column dataField="COST_PRICE" caption={this.t("grdNewPrice.clmCostPrice")} width={100} allowEditing={false}/>
+                                            <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={100} allowEditing={false}/>
                                             <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70} allowEditing={false}/>
                                             <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
-                                            <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100} allowEditing={false}/>
-                                            <Column dataField="NET_MARGIN" caption={this.t("grdNewPrice.clmNetMargin")}width={100} allowEditing={false}/>
+                                            <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={80} allowEditing={false}/>
+                                            <Column dataField="NET_MARGIN" caption={this.t("grdNewPrice.clmNetMargin")}width={80} allowEditing={false}/>
+                                            <Column dataField="MARGIN" caption={this.t("grdNewPrice.clmMarge")} width={80} format={"##0.00"} allowEditing={false}/>
                                         </NdGrid>
                                     </Item>
                                 </Form>
@@ -2197,6 +2199,7 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="SALE_PRICE" caption={this.t("grdNewPriceDate.clmSalePrice")} width={130} allowEditing={false}/>
                                             <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPriceDate.clmMargin")} width={130} allowEditing={false}/>
                                             <Column dataField="NET_MARGIN" caption={this.t("grdNewPriceDate.clmNetMargin")}width={100} allowEditing={false}/>
+                                            <Column dataField="MARGIN" caption={this.t("grdNewPrice.clmMarge")} width={80} format={"##0.00"} allowEditing={false}/>
                                         </NdGrid>
                                     </Item>
                                 </Form>
