@@ -625,7 +625,8 @@ export default class posDoc extends React.PureComponent
                 values : [0,this.core.auth.data.CODE,0]
             }
         }
-        await this.parkDt.refresh();     
+        await this.parkDt.refresh();  
+        this.parkCount.value = this.parkDt.length
         
         setTimeout(() => 
         {
@@ -5117,7 +5118,7 @@ export default class posDoc extends React.PureComponent
                                         await this.parkDt.refresh();
                                         await this.grdPopParkList.dataRefresh({source:this.parkDt});
                                     }}>
-                                        <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
+                                        <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} /><NbLabel id="parkCount" parent={this} value={"0"}/></span>                                            
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>

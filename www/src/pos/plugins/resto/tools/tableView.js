@@ -71,7 +71,7 @@ export default class NbTableView extends NbBase
                                     return (
                                         <div className="row">
                                             <div className="col-8 text-center" style={{fontSize:"18px",fontWeight:"bold",padding:"0px"}}>
-                                                {this.state.data[i].TOTAL + Number.money.sign}
+                                                {Number(this.state.data[i].TOTAL).toFixed(2) + Number.money.sign}
                                             </div>
                                             <div className="col-4 text-center" style={{padding:"0px"}}>
                                                 <NbButton className="form-group btn btn-block" style={{border:"none"}}

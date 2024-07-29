@@ -10,6 +10,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling} from "../../../core/react/devex/
 import NbLabel from "../../../core/react/bootstrap/label.js";
 import posDoc from '../../pages/posDoc.js';
 import { datatable } from "../../../core/core.js";
+import NdDialog,{ dialog } from "../../../core/react/devex/dialog.js";
 
 import {prm} from './meta/prm.js'
 import {acs} from './meta/acs.js'
@@ -138,6 +139,17 @@ function render()
                                 await tmpData.refresh()
 
                                 await this.grdRestTableItem.dataRefresh({source:tmpData});
+                            }
+                            else
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgTableEmptyAlert',showTitle:true,title:this.lang.t("msgTableEmptyAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgTableEmptyAlert.btn01"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTableEmptyAlert.msg")}</div>)
+                                }
+                                await dialog(tmpConfObj);
+
                             }
                         }}
                         onPrintClick={async(e)=>
@@ -288,6 +300,30 @@ function render()
                                     <NbButton id={"btnSelectionRestTable"} parent={this} className="form-group btn btn-success btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
                                     onClick={async()=>
                                     {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgConvertPosAddition',showTitle:true,title:this.lang.t("msgConvertPosAddition.title"),showCloseButton:true,width:'500px',height:'240px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],                                            
+                                        }
+
+                                        let tmpCount = this.grdRestTableItem.data.datatable.length - this.grdRestTableItem.getSelectedData().length
+                                        
+                                        if(tmpCount > 0)
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConvertPosAddition.msg",{ count: tmpCount })}</div>)
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConvertPosAddition.msg1")}</div>)
+                                        }
+                                        
+                                        let tmpMsgResult = await dialog(tmpConfObj);
+                                        
+                                        if(tmpMsgResult == "btn02")
+                                        {
+                                            return
+                                        }
+                                        
                                         for (let i = 0; i < this.grdRestTableItem.getSelectedData().length; i++) 
                                         {
                                             let tmpItemsDt = await this.getItemDb(this.grdRestTableItem.getSelectedData()[i].ITEM_CODE)
