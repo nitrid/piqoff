@@ -124,6 +124,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(TTC) AS TTC,  "  +
                     " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
                     " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
+                    " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
                     " MAX(PAYMENT) AS PAYMENT  "  +
                     " FROM (  "  +
                     " SELECT  "  +
@@ -145,6 +146,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(SALE.GRAND_VAT) TVA, "  +
                     " MAX(SALE.GRAND_TOTAL) TTC,  "  +
                     " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
+                    " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
                     " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
                     " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
                     " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
@@ -460,6 +462,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdButton id="btnMailSend" parent={this} icon="message" type="default"
                                     onClick={async ()=>
                                     {
+                                        this.txtMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
                                         await this.mailPopup.show().then(async (e) =>
                                         {
                                         });
