@@ -17,6 +17,8 @@ import {acs} from './meta/acs.js'
 
 const orgLoadPos = App.prototype.loadPos
 const orgInit = posDoc.prototype.init
+const orgDelete = posDoc.prototype.delete
+const orgRowDelete = posDoc.prototype.rowDelete
 const orgComponentWillMount = posDoc.prototype.componentWillMount
 const orgRender = posDoc.prototype.render
 
@@ -46,6 +48,37 @@ posDoc.prototype.componentWillMount = function()
     {
         orgComponentWillMount.call(this)
     }
+}
+posDoc.prototype.rowDelete = async function()
+{
+    if(this.posObj.posSale.dt().length > 0)
+    {
+        if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+        {
+            let tmpUpdateQ = 
+            {
+                query : `UPDATE REST_ORDER_DETAIL SET STATUS = 3, POS = '00000000-0000-0000-0000-000000000000', POS_SALE = '00000000-0000-0000-0000-000000000000' 
+                         WHERE POS_SALE = @POS_SALE`,
+                param : ['POS_SALE:string|50'],
+                value : [this.grdList.devGrid.getSelectedRowKeys()[0].GUID]
+            }
+            await this.core.sql.execute(tmpUpdateQ)
+        }
+    } 
+    orgRowDelete.call(this)
+}
+posDoc.prototype.delete = async function()
+{
+    let tmpUpdateQ = 
+    {
+        query : `UPDATE REST_ORDER_DETAIL SET STATUS = 3, POS = '00000000-0000-0000-0000-000000000000', POS_SALE = '00000000-0000-0000-0000-000000000000' 
+                 WHERE POS = @POS`,
+        param : ['POS:string|50'],
+        value : [this.posObj.dt()[0].GUID]
+    }
+    await this.core.sql.execute(tmpUpdateQ)
+
+    orgDelete.call(this)
 }
 posDoc.prototype.render = function() 
 {
@@ -331,12 +364,13 @@ function render()
                                             {
                                                 tmpItemsDt[0].PRICE = Number(this.grdRestTableItem.getSelectedData()[i].PRICE).round(2)
                                                 tmpItemsDt[0].QUANTITY = Number(this.grdRestTableItem.getSelectedData()[i].QUANTITY).round(2)
-                                                this.saleAdd(tmpItemsDt[0])
+                                                await this.saleAdd(tmpItemsDt[0])
+
                                                 let tmpUpdate = 
                                                 {
-                                                    query : "UPDATE REST_ORDER_DETAIL SET STATUS = 4 WHERE GUID = @GUID",
-                                                    param : ['GUID:string|50'],
-                                                    value : [this.grdRestTableItem.getSelectedData()[i].GUID]
+                                                    query : "UPDATE REST_ORDER_DETAIL SET STATUS = 4,POS = @POS, POS_SALE = @POS_SALE WHERE GUID = @GUID",
+                                                    param : ['GUID:string|50','POS:string|50','POS_SALE:string|50'],
+                                                    value : [this.grdRestTableItem.getSelectedData()[i].GUID,this.posObj.dt()[0].GUID,this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GUID]
                                                 }
                                                 await this.core.sql.execute(tmpUpdate)
                                             }
