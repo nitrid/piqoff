@@ -1505,21 +1505,5 @@ export const prm =
             CAPTION : "Klavye Deseni"
         }
     },
-     //TSE Usb
-     {
-        TYPE : 0,
-        ID :"PayForcerAccess",
-        VALUE : false,
-        SPECIAL : "",
-        PAGE : "pos",
-        ELEMENT : "",
-        APP : "POS",
-        VIEW : 
-        {
-            TYPE : "checkbox",
-            PAGE_NAME : "Pos",
-            CAPTION : "Kart Zorla Ödeme İçin Yetkili Şifresi"
-        }
-    },
     //#endregion
 ]
