@@ -29,8 +29,8 @@ App.prototype.loadPos = async function()
     {
         i18n.addResource(tmpLang, 'translation', Object.keys(resources.default)[i], resources.default[Object.keys(resources.default)[i]])
     }
-
-    this.acsObj.meta = this.prmObj.meta.concat(acs)
+    
+    this.acsObj.meta = this.acsObj.meta.concat(acs)
     this.prmObj.meta = this.prmObj.meta.concat(prm)
     return orgLoadPos.call(this)
 }
