@@ -2429,12 +2429,35 @@ export default class posDoc extends React.PureComponent
                     }
                     else if(e == 'btn03')
                     {       
-                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
-                        {
-                            await this.posDevice.payPort.close()
+                                        
+                        if(this.prmObj.filter({ID:'PayForcerAccess',TYPE:0}).getValue() == true)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+
+                            if(tmpResult)
+                            {
+                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                                {
+                                    await this.posDevice.payPort.close()
+                                }
+                                this.msgCardPayment.hide();             
+                                resolve(2) // Zorla
+                            }
+                            else
+                            {
+                                tmpFn()
+                            }
                         }
-                        this.msgCardPayment.hide();             
-                        resolve(2) // Zorla
+                        else
+                        {
+                            if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                                {
+                                    await this.posDevice.payPort.close()
+                                }
+                                this.msgCardPayment.hide();             
+                                resolve(2) // Zorla
+                        }
+                       
                     }
                 })
             }

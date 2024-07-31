@@ -36,6 +36,7 @@ const pos_02_001 =
         clmVTA : "Taxe",
         clmTTC : "Total",
         clmTicketID :"ID Ticket",
+        clmFacRef : "Fact. No",
     },
     pg_txtItem:
     {
