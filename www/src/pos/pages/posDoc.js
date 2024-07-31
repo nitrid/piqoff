@@ -2406,7 +2406,7 @@ export default class posDoc extends React.PureComponent
                     else if(e == 'btn02')
                     {
                         //HER TURLU CEVAP DÖNDÜÜ 0Ç0N POPUP KAPANIYOR YEN0DEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
-                        let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',USERS:this.user.CODE})
+                        let tmpAcsVal = this.acsObj.filter({ID:'btnPCCancelAcs',USERS:this.user.CODE})
                                         
                         if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
                         {   
@@ -2414,27 +2414,66 @@ export default class posDoc extends React.PureComponent
 
                             if(tmpResult)
                             {
-                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
-                                {
-                                    await this.posDevice.payPort.close()
-                                }
-                                this.msgCardPayment.hide();
-                                resolve(3) // İptal
+                                tmpAcsVal = true
                             }
                             else
                             {
-                                tmpFn()
+                                tmpAcsVal = false
                             }
+                        }
+                        else
+                        {
+                            tmpAcsVal = true
+                        }
+
+                        if(tmpAcsVal)
+                        {
+                            if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                            {
+                                await this.posDevice.payPort.close()
+                            }
+                            this.msgCardPayment.hide();
+                            resolve(3) // İptal
+                        }
+                        else
+                        {
+                            tmpFn()
                         }
                     }
                     else if(e == 'btn03')
-                    {       
-                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
-                        {
-                            await this.posDevice.payPort.close()
+                    {    
+                        let tmpAcsVal = this.acsObj.filter({ID:'btnPCForceAcs',USERS:this.user.CODE})
+                        
+                        if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                            if(tmpResult)
+                            {
+                                tmpAcsVal = true
+                            }
+                            else
+                            {
+                                tmpAcsVal = false
+                            }
                         }
-                        this.msgCardPayment.hide();             
-                        resolve(2) // Zorla
+                        else
+                        {
+                            tmpAcsVal = true
+                        }
+
+                        if(tmpAcsVal)
+                        {
+                            if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                            {
+                                await this.posDevice.payPort.close()
+                            }
+                            this.msgCardPayment.hide();             
+                            resolve(2) // Zorla
+                        }
+                        else
+                        {
+                            tmpFn()
+                        }
                     }
                 })
             }

@@ -298,6 +298,80 @@ export const acs =
             }
         }
     },
+    //btnPayCardForceAcs
+    {
+        TYPE : 2,
+        ID :"btnPCForceAcs",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnPCForceAcs",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ödeme Zorla Yetkisi",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnPCForceAcsDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnPCForceAcsType"},
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //btnPayCardCancelAcs
+    {
+        TYPE : 2,
+        ID :"btnPCCancelAcs",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnPCCancelAcs",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ödeme İptal Yetkisi",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popPCCancelAcsDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popPCCancelAcsType"},
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
     //txtBarcodeLy
     {
         TYPE : 2,
