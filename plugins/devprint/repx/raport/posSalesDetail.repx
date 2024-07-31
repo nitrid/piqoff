@@ -1,132 +1,144 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" DataSourceSchema="[{&quot;CODE&quot;:&quot;001&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CHARCUTERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:0.1,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;004&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;EPICERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:75,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;008&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;HYGIENE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:1.25,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;011&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;BAZAR&quot;,&quot;ITEM_GROUP_TOTAL&quot;:204.99,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;012&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;SURGELE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:22.47,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;013&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CONFISERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:10.39,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;017&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;FRUIT ET LEGUMES&quot;,&quot;ITEM_GROUP_TOTAL&quot;:1001.1000000000001,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;019&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CAFE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:70.88,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;024&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;PAIN&quot;,&quot;ITEM_GROUP_TOTAL&quot;:291.94,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;027&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;GATEAU&quot;,&quot;ITEM_GROUP_TOTAL&quot;:64.31,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;030&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;BISCUIT&quot;,&quot;ITEM_GROUP_TOTAL&quot;:24.78,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997}]&#xA;" Margins="0, 30, 6, 29" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" DataSourceSchema="[{&quot;CODE&quot;:&quot;001&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CHARCUTERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:0.1,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;004&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;EPICERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:75,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;008&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;HYGIENE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:1.25,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;011&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;BAZAR&quot;,&quot;ITEM_GROUP_TOTAL&quot;:204.99,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;012&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;SURGELE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:22.47,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;013&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CONFISERIE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:10.39,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;017&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;FRUIT ET LEGUMES&quot;,&quot;ITEM_GROUP_TOTAL&quot;:1001.1000000000001,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;019&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;CAFE&quot;,&quot;ITEM_GROUP_TOTAL&quot;:70.88,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;024&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;PAIN&quot;,&quot;ITEM_GROUP_TOTAL&quot;:291.94,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;027&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;GATEAU&quot;,&quot;ITEM_GROUP_TOTAL&quot;:64.31,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997},{&quot;CODE&quot;:&quot;030&quot;,&quot;ITEM_GRP_NAME&quot;:&quot;BISCUIT&quot;,&quot;ITEM_GROUP_TOTAL&quot;:24.78,&quot;TICKET_COUNT&quot;:49,&quot;TICKET_TOTAL&quot;:1807.4000000000005,&quot;CUSTOMER_CARD&quot;:2,&quot;RETURN_COUNT&quot;:1,&quot;RETURN_TOTAL&quot;:1.98,&quot;DISCOUNT_COUNT&quot;:2,&quot;DISCOUNT_TOTAL&quot;:2.6399999999999997}]&#xA;" Margins="0, 30, 6, 29" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" DataSource="#Ref-0" Font="Arial, 9.75pt">
   <Bands>
-    <Item1 Ref="1" ControlType="TopMarginBand" Name="TopMargin" HeightF="6" />
-    <Item2 Ref="2" ControlType="DetailBand" Name="Detail" HeightF="25">
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="6" />
+    <Item2 Ref="3" ControlType="DetailBand" Name="Detail" HeightF="25">
       <Controls>
-        <Item1 Ref="3" ControlType="XRTable" Name="table1" SizeF="818.477051,25" LocationFloat="0, 0" Padding="2,2,0,0,96" BorderColor="Black" Borders="All" BorderWidth="1">
+        <Item1 Ref="4" ControlType="XRTable" Name="table1" SizeF="816.875,25" LocationFloat="3.125, 0" Padding="2,2,0,0,96" BorderColor="Black" Borders="All" BorderWidth="1">
           <Rows>
-            <Item1 Ref="4" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+            <Item1 Ref="5" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="5" ControlType="XRTableCell" Name="tableCell1" Weight="1.2604167315902295" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell1" Font="Arial, 10pt">
+                <Item1 Ref="6" ControlType="XRTableCell" Name="tableCell1" Weight="1.0257016634882252" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell1" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="6" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DATE]" />
+                    <Item1 Ref="7" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DATE]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="7" UseFont="false" />
+                  <StylePriority Ref="8" UseFont="false" />
                 </Item1>
-                <Item2 Ref="8" ControlType="XRTableCell" Name="tableCell2" Weight="0.96573260690219231" TextFormatString="{0:€0.00}" Multiline="true" Text="tableCell2" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item2 Ref="9" ControlType="XRTableCell" Name="tableCell2" Weight="1.0364599662298009" TextFormatString="{0:€0.00}" Multiline="true" Text="tableCell2" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="9" EventName="BeforePrint" PropertyName="Text" Expression="[FAMOUNT]" />
+                    <Item1 Ref="10" EventName="BeforePrint" PropertyName="Text" Expression="[FAMOUNT]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="10" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="11" UseFont="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="11" ControlType="XRTableCell" Name="tableCell3" Weight="1.5594826696659534" TextFormatString="{0:c2}" Multiline="true" Text="tableCell3" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item3 Ref="12" ControlType="XRTableCell" Name="tableCell17" Weight="0.892053544225018" TextFormatString="{0:€0.00}" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="12" EventName="BeforePrint" PropertyName="Text" Expression="[TOTAL]" />
+                    <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="13" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="14" UseFont="false" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="14" ControlType="XRTableCell" Name="tableCell8" Weight="1.0997844943850137" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item4 Ref="15" ControlType="XRTableCell" Name="tableCell3" Weight="1.4413468892625394" TextFormatString="{0:c2}" Multiline="true" Text="tableCell3" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="15" EventName="BeforePrint" PropertyName="Text" Expression="[ESC]" />
+                    <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[TOTAL]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="16" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="17" UseFont="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="17" ControlType="XRTableCell" Name="tableCell12" Weight="1.0997844943850137" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item5 Ref="18" ControlType="XRTableCell" Name="tableCell8" Weight="1.7680870263053341" TextFormatString="{0:€0.00}" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="18" EventName="BeforePrint" PropertyName="Text" Expression="[CB]" />
+                    <Item1 Ref="19" EventName="BeforePrint" PropertyName="Text" Expression="[ESC]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="19" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="20" UseFont="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="20" ControlType="XRTableCell" Name="tableCell14" Weight="1.0997844943850137" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item6 Ref="21" ControlType="XRTableCell" Name="tableCell12" Weight="1.0997844943850137" TextFormatString="{0:€0.00}" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="21" EventName="BeforePrint" PropertyName="Text" Expression="[TICKET]" />
+                    <Item1 Ref="22" EventName="BeforePrint" PropertyName="Text" Expression="[CB]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="22" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="23" UseFont="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="23" ControlType="XRTableCell" Name="tableCell16" Weight="1.0997844943850137" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
+                <Item7 Ref="24" ControlType="XRTableCell" Name="tableCell14" Weight="1.0997844943850137" TextFormatString="{0:€0.00}" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
                   <ExpressionBindings>
-                    <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[OTHER]" />
+                    <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[TICKET]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="25" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="26" UseFont="false" UseTextAlignment="false" />
                 </Item7>
+                <Item8 Ref="27" ControlType="XRTableCell" Name="tableCell16" Weight="1.0997844943850137" TextFormatString="{0:€0.00}" Multiline="true" TextAlignment="TopCenter" Font="Arial, 10pt">
+                  <ExpressionBindings>
+                    <Item1 Ref="28" EventName="BeforePrint" PropertyName="Text" Expression="[OTHER]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="29" UseFont="false" UseTextAlignment="false" />
+                </Item8>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="26" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
+          <StylePriority Ref="30" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
         </Item1>
       </Controls>
     </Item2>
-    <Item3 Ref="27" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="29" />
-    <Item4 Ref="28" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="25.4168186">
+    <Item3 Ref="31" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="29" />
+    <Item4 Ref="32" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="25.4168186">
       <Controls>
-        <Item1 Ref="29" ControlType="XRTable" Name="table2" SizeF="818.477051,25" LocationFloat="0, 0" Padding="2,2,0,0,96" BorderColor="Black" Borders="All" BorderWidth="2">
+        <Item1 Ref="33" ControlType="XRTable" Name="table2" SizeF="815.352051,25" LocationFloat="3.125, 0" Padding="2,2,0,0,96" BorderColor="Black" Borders="All" BorderWidth="2">
           <Rows>
-            <Item1 Ref="30" ControlType="XRTableRow" Name="tableRow2" Weight="1">
+            <Item1 Ref="34" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
-                <Item1 Ref="31" ControlType="XRTableCell" Name="tableCell4" Weight="6.8020835569890412" Multiline="true" Text="TOTAL :" TextAlignment="TopRight">
-                  <StylePriority Ref="32" UseTextAlignment="false" />
+                <Item1 Ref="35" ControlType="XRTableCell" Name="tableCell4" Weight="6.7708335545811629" Multiline="true" Text="TOTAL :" TextAlignment="TopRight">
+                  <StylePriority Ref="36" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="33" ControlType="XRTableCell" Name="tableCell6" Weight="1.3826875814773327" TextFormatString="{0:c2}" Multiline="true" Text="tableCell3" TextAlignment="TopRight" Font="Arial, 11pt, style=Bold">
+                <Item2 Ref="37" ControlType="XRTableCell" Name="tableCell6" Weight="1.3826875814773327" TextFormatString="{0:c2}" Multiline="true" Text="tableCell3" TextAlignment="TopRight" Font="Arial, 11pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="34" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
+                    <Item1 Ref="38" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="35" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="39" UseFont="false" UseTextAlignment="false" />
                 </Item2>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="36" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
+          <StylePriority Ref="40" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
         </Item1>
       </Controls>
     </Item4>
-    <Item5 Ref="37" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="121.7083" KeepTogether="true">
+    <Item5 Ref="41" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="121.7083" KeepTogether="true">
       <Controls>
-        <Item1 Ref="38" ControlType="XRLabel" Name="label1" Multiline="true" Text="Rapport de Vente" SizeF="315.625,65.625" LocationFloat="263.541656, 37.08331" Font="Arial, 28pt" Padding="2,2,0,0,96">
-          <StylePriority Ref="39" UseFont="false" />
+        <Item1 Ref="42" ControlType="XRLabel" Name="label1" Multiline="true" Text="Rapport de Vente" SizeF="315.625,65.625" LocationFloat="263.541656, 37.08331" Font="Arial, 28pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="43" UseFont="false" />
         </Item1>
       </Controls>
     </Item5>
-    <Item6 Ref="40" ControlType="PageHeaderBand" Name="PageHeader" HeightF="45.6668854">
+    <Item6 Ref="44" ControlType="PageHeaderBand" Name="PageHeader" HeightF="45.6668854">
       <Controls>
-        <Item1 Ref="41" ControlType="XRLabel" Name="label3" Multiline="true" Text="PAYMENT" TextAlignment="TopCenter" SizeF="363.541718,22.6668682" LocationFloat="422.916656, 0" Font="Arial, 14pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="42" UseFont="false" UseTextAlignment="false" />
+        <Item1 Ref="45" ControlType="XRLabel" Name="label3" Multiline="true" Text="PAYMENT" TextAlignment="TopCenter" SizeF="363.541718,22.6668682" LocationFloat="422.916656, 0" Font="Arial, 14pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="46" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="43" ControlType="XRLine" Name="line2" LineDirection="Vertical" SizeF="7.083313,22.6668682" LocationFloat="375.4799, 0" />
-        <Item3 Ref="44" ControlType="XRLabel" Name="label2" Multiline="true" Text="SALES" TextAlignment="TopCenter" SizeF="350,22.6668682" LocationFloat="3.125, 0" Font="Arial, 14pt, style=Bold" Padding="2,2,0,0,96">
-          <StylePriority Ref="45" UseFont="false" UseTextAlignment="false" />
+        <Item2 Ref="47" ControlType="XRLine" Name="line2" LineDirection="Vertical" SizeF="7.083313,22.6668682" LocationFloat="383.4799, 0" />
+        <Item3 Ref="48" ControlType="XRLabel" Name="label2" Multiline="true" Text="SALES" TextAlignment="TopCenter" SizeF="350,22.6668682" LocationFloat="3.125, 0" Font="Arial, 14pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="49" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="46" ControlType="XRTable" Name="table3" SizeF="818.477051,23" LocationFloat="0, 22.6668682" Font="Arial, 8pt">
+        <Item4 Ref="50" ControlType="XRTable" Name="table3" SizeF="820,23" LocationFloat="0, 22.6668682" Font="Arial, 8pt">
           <Rows>
-            <Item1 Ref="47" ControlType="XRTableRow" Name="tableRow3" Weight="1">
+            <Item1 Ref="51" ControlType="XRTableRow" Name="tableRow3" Weight="1">
               <Cells>
-                <Item1 Ref="48" ControlType="XRTableCell" Name="tableCell5" Weight="0.27353852635897219" Text="Date" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold" Borders="None">
-                  <StylePriority Ref="49" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                <Item1 Ref="52" ControlType="XRTableCell" Name="tableCell5" Weight="0.24570630697102383" Text="Date" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold" Borders="None">
+                  <StylePriority Ref="53" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="50" ControlType="XRTableCell" Name="tableCell11" Weight="0.2095855511164558" Multiline="true" Text="HT" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="51" UseFont="false" UseTextAlignment="false" />
-                </Item2>
-                <Item3 Ref="52" ControlType="XRTableCell" Name="tableCell7" Weight="0.33844255102371618" Multiline="true" Text="TTC" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="53" UseFont="false" UseTextAlignment="false" />
-                </Item3>
-                <Item4 Ref="54" ControlType="XRTableCell" Name="tableCell9" Weight="0.23867778725762717" Multiline="true" Text="ESC" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                <Item2 Ref="54" ControlType="XRTableCell" Name="tableCell11" Weight="0.23981926792034827" Multiline="true" Text="HT" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="55" UseFont="false" UseTextAlignment="false" />
-                </Item4>
-                <Item5 Ref="56" ControlType="XRTableCell" Name="tableCell10" Weight="0.23867778725762717" Multiline="true" Text="CB&#xD;&#xA;" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                </Item2>
+                <Item3 Ref="56" ControlType="XRTableCell" Name="tableCell18" Weight="0.2064060630793382" Multiline="true" Text="TVA" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="57" UseFont="false" UseTextAlignment="false" />
-                </Item5>
-                <Item6 Ref="58" ControlType="XRTableCell" Name="tableCell13" Weight="0.23867778725762717" Multiline="true" Text="TICKET REST." TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                </Item3>
+                <Item4 Ref="58" ControlType="XRTableCell" Name="tableCell7" Weight="0.34400162878423968" Multiline="true" Text="TTC" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="59" UseFont="false" UseTextAlignment="false" />
-                </Item6>
-                <Item7 Ref="60" ControlType="XRTableCell" Name="tableCell15" Weight="0.23867778725762717" Multiline="true" Text="AUTRE&#xD;&#xA;" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                </Item4>
+                <Item5 Ref="60" ControlType="XRTableCell" Name="tableCell9" Weight="0.39860692357456057" Multiline="true" Text="ESC" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="61" UseFont="false" UseTextAlignment="false" />
+                </Item5>
+                <Item6 Ref="62" ControlType="XRTableCell" Name="tableCell10" Weight="0.25447144351353018" Multiline="true" Text="CB&#xD;&#xA;" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="63" UseFont="false" UseTextAlignment="false" />
+                </Item6>
+                <Item7 Ref="64" ControlType="XRTableCell" Name="tableCell13" Weight="0.25447127991290963" Multiline="true" Text="TICKET REST." TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="65" UseFont="false" UseTextAlignment="false" />
                 </Item7>
+                <Item8 Ref="66" ControlType="XRTableCell" Name="tableCell15" Weight="0.2544717911648488" Multiline="true" Text="AUTRE&#xD;&#xA;" TextAlignment="MiddleCenter" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="67" UseFont="false" UseTextAlignment="false" />
+                </Item8>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="62" UseFont="false" />
+          <StylePriority Ref="68" UseFont="false" />
         </Item4>
       </Controls>
     </Item6>
   </Bands>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v19.2" Ref="0" Content="~Xtra#NULL" Type="System.Data.DataTable" />
+  </ObjectStorage>
 </XtraReportsLayoutSerializer>
