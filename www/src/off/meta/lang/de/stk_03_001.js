@@ -37,7 +37,8 @@ const stk_03_001 =
         clmMargin: "Bruttomarge",
         clmCustomerPrice: "K.Preis",
         clmOrgin: "Herkunft",
-        clmPriceSaleVatExt: "Preis ohne MwSt."
+        clmPriceSaleVatExt: "Preis ohne MwSt.",
+        clmFMargin : "Marge %"
     },
 }
 export default stk_03_001

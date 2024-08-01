@@ -34,6 +34,7 @@ const stk_04_001 =
         clmWeighing: "Gewogen",
         clmNetMargin: "Nettomarge",
         clmGrossMargin: "Bruttomarge",
+        clmMargin : "Marge %"
     },
     msgSpeichern:
     {
