@@ -4,6 +4,7 @@ import NbButton from '../../core/react/bootstrap/button.js';
 import { datatable } from '../../core/core.js';
 import NdTextArea from "../../core/react/devex/textarea.js";
 import { NbCheckBox,NbCheckBoxGroup } from '../../core/react/bootstrap/checkbox.js';
+import NbPopUp from '../../core/react/bootstrap/popup';
 
 export default class NbProductDetailView extends NbBase
 {
@@ -207,6 +208,66 @@ export default class NbProductDetailView extends NbBase
                             </div>
                         </div>
                     </div>
+                    <div className="row py-2">
+                        <div className="col-12">
+                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:'none'}}
+                            onClick={()=>
+                            {
+                                this.popSpecialNote.show()
+                            }}>
+                                <h3 style={{margin:'0px'}}>Not Ekle</h3>
+                            </NbButton>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <NbPopUp id={"popSpecialNote"} parent={this} title={""} fullscreen={true} style={{paddingLeft:'5px'}}>
+                        <div style={{display:'flex',position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                            <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
+                            </div>
+                            <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
+                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                onClick={()=>
+                                {
+                                    this.popSpecialNote.hide();
+                                }}>
+                                    <i className="fa-solid fa-circle-xmark fa-2x"></i>
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div style={{position:'relative',top:'60px'}}>
+                            <div className="row pt-2">
+                            {(()=>
+                            {
+                                let tmpBtn = []
+                                let tmpPrmBtn = this.props.param.filter({ID:'SpecialNote',TYPE:0}).getValue().buttons
+                                for (let i = 0; i < tmpPrmBtn.length; i++) 
+                                {
+                                    tmpBtn.push(
+                                        <div key={i} className="col-xs-6 col-sm-4 col-md-3 col-lg-2 pt-2">
+                                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:'none'}}
+                                            onClick={()=>
+                                            {
+                                                if(this.txtNote.value != '')
+                                                {
+                                                    this.txtNote.value = this.txtNote.value + '\n' + tmpPrmBtn[i].text
+                                                }
+                                                else
+                                                {
+                                                    this.txtNote.value = tmpPrmBtn[i].text
+                                                }
+                                                this.popSpecialNote.hide();
+                                            }}>
+                                                <h6 style={{margin:'0px'}}>{tmpPrmBtn[i].text}</h6>
+                                            </NbButton>
+                                        </div>
+                                    )
+                                }
+                                return tmpBtn
+                            })()}
+                            </div>
+                        </div>
+                    </NbPopUp>
                 </div>
             </div>
         )

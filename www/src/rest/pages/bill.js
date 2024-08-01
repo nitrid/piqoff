@@ -313,7 +313,8 @@ export default class bill extends React.PureComponent
                     'İ': 'I', 'ı': 'i',
                     'Ö': 'O', 'ö': 'o',
                     'Ş': 'S', 'ş': 's',
-                    'Ü': 'U', 'ü': 'u'
+                    'Ü': 'U', 'ü': 'u',
+                    'È': 'E', 'é': 'e',
                 };
             
                 return str.split('').map(char => turkishChars[char] || char).join('');
@@ -331,7 +332,7 @@ export default class bill extends React.PureComponent
                 query : "SELECT * FROM REST_PRINT_ITEM_VW_01 WHERE ITEM_GUID IN (" + pData.map(obj => `'${obj.ITEM}'`).join(", ") + ")"
             }
             await tmpPrintDt.refresh()
-
+            
             let tmpArrDt = []
             for (let i = 0; i < tmpPrintDt.groupBy('CODE').length; i++) 
             {
@@ -342,12 +343,12 @@ export default class bill extends React.PureComponent
                     for (let m = 0; m < tmpFilterPrinter.length; m++) 
                     {
                         tmpItems.push(pData[x])
-                        tmpItems[tmpItems.length-1].ITEM_NAME = replaceTurkishChars(tmpItems[tmpItems.length-1].ITEM_NAME)
+                        tmpItems[tmpItems.length-1].ITEM_NAME = replaceTurkishChars(tmpFilterPrinter[m].ITEM_NAME)
                         tmpItems[tmpItems.length-1].PRINTER_PATH = tmpFilterPrinter[m].PRINTER_PATH
                         tmpItems[tmpItems.length-1].DESIGN_PATH = tmpFilterPrinter[m].DESIGN_PATH
                         if(this.isValidJSON(tmpItems[tmpItems.length-1].PROPERTY))
                         {
-                            tmpItems[tmpItems.length-1].PROPERTY = JSON.parse(tmpItems[tmpItems.length-1].PROPERTY).map(item => item.TITLE).join(', ')
+                            tmpItems[tmpItems.length-1].PROPERTY = JSON.parse(tmpItems[tmpItems.length-1].PROPERTY).map(item => item.TITLE).join('\n')
                             tmpItems[tmpItems.length-1].PROPERTY = replaceTurkishChars(tmpItems[tmpItems.length-1].PROPERTY)
                         }
                         tmpItems[tmpItems.length-1].DESCRIPTION = replaceTurkishChars(tmpItems[tmpItems.length-1].DESCRIPTION)
@@ -651,6 +652,8 @@ export default class bill extends React.PureComponent
                                 {
                                     this.productDetailView.items.IMAGE = tmpImg[0].IMAGE
                                 }
+                                
+                                this.productDetailView.txtNote.value = this.productDetailView.items.DESCRIPTION
                                 this.productDetailView.updateState()
                             }}
                             onDoubleClick={async(e)=>
@@ -924,7 +927,7 @@ export default class bill extends React.PureComponent
                     {/* PRODUCT DETAIL */}
                     <div>
                         <NbPopUp id={"popProductDetail"} parent={this} title={""} fullscreen={true} style={{paddingLeft:'5px'}}>
-                            <NbProductDetailView parent={this} id="productDetailView" 
+                            <NbProductDetailView parent={this} id="productDetailView" param={this.param.filter({ID:'SpecialNote',TYPE:0})}
                             onCloseClick={async()=>
                             {
                                 let tmpArrProp = []
@@ -944,7 +947,7 @@ export default class bill extends React.PureComponent
                                 
                                 this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
                                 this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
-                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM_GUID)
+                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM)
                                 this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
                                 this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
                                 this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
