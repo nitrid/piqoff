@@ -97,7 +97,7 @@ export default class NbServiceView extends NbBase
                             </div>
                         </div>
                     </div>
-                    <div style={{flex:0.15,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
+                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
                         <div>
                             <NbButton className="form-group btn btn-block btn-outline-dark" 
                             style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',

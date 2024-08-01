@@ -68,6 +68,7 @@ export default class bill extends React.PureComponent
                     SUB_CODE,
                     SUB_NAME,
                     ISNULL((SELECT TOP 1 VAT FROM ITEMS WHERE ITEMS.GUID = ITEM.ITEM_GUID),0) AS VAT,
+                    ISNULL((SELECT TOP 1 WAITING FROM ITEMS_REST WHERE ITEMS_REST.ITEM = ITEM.ITEM_GUID),0) AS WAITING,
                     ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE_VW_01 AS IMG WHERE IMG.ITEM_GUID = ITEM.ITEM_GUID),'') AS IMAGE
                     FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007')`
         }
@@ -229,6 +230,7 @@ export default class bill extends React.PureComponent
         tmpEmpty.DESCRIPTION = typeof pData.DESCRIPTION == 'undefined' ? '' : pData.DESCRIPTION
         tmpEmpty.TOTAL = tmpEmpty.AMOUNT
         tmpEmpty.STATUS = 0
+        tmpEmpty.WAITING = pData.WAITING
 
         this.restOrderObj.restOrderDetail.addEmpty(tmpEmpty)
 
@@ -546,6 +548,8 @@ export default class bill extends React.PureComponent
                                             QUANTITY : tmpFilter[i].QUANTITY,
                                             PROPERTY : tmpFilter[i].PROPERTY,
                                             DESCRIPTION : tmpFilter[i].DESCRIPTION,
+                                            WAITING : tmpFilter[i].WAITING,
+                                            WAIT_STATUS : tmpFilter[i].WAIT_STATUS,
                                         })
                                         tmpFilter[i].STATUS = 1
                                     }
@@ -581,6 +585,8 @@ export default class bill extends React.PureComponent
                                                 QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
                                                 PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
                                                 DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                                WAITING : this.restOrderObj.restOrderDetail.dt()[i].WAITING,
+                                                WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[i].WAIT_STATUS,
                                             })
                                             this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
                                         }
@@ -730,7 +736,14 @@ export default class bill extends React.PureComponent
                                 this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
                                 this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
                                 this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+                                
+                                if(this.serviceDetailView.items[e].WAITING)
+                                {
+                                    this.serviceDetailView.items[e].WAIT_STATUS = 0
+                                }
+                                
                                 this.restOrderObj.save()
+                                this.serviceDetailView.updateState()
                             }}
                             onMinusClick={async(e)=>
                             {
@@ -744,7 +757,14 @@ export default class bill extends React.PureComponent
                                 this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
                                 this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
                                 this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+
+                                if(this.serviceDetailView.items[e].WAITING)
+                                {
+                                    this.serviceDetailView.items[e].WAIT_STATUS = 0
+                                }
+
                                 this.restOrderObj.save()
+                                this.serviceDetailView.updateState()
                             }}
                             onDeleteClick={async(e)=>
                             {
@@ -767,6 +787,41 @@ export default class bill extends React.PureComponent
                                     await this.restOrderObj.save()
                                     this.serviceDetailView.updateState()
                                 }                                
+                            }}
+                            onWaitClick={async(e)=>
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgWaitStatus',showTitle:true,title:this.lang.t("msgWaitStatus.title"),showCloseButton:true,width:'90%',height:'200px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgWaitStatus.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWaitStatus.btn02"),location:'after'}],
+                                }
+
+                                if(this.serviceDetailView.items[e].WAIT_STATUS == 0)
+                                {
+                                    tmpConfObj.content = <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgWaitStatus.msg1")}</div>
+
+                                    let tmpResult = await dialog(tmpConfObj);
+                                    if(tmpResult == "btn01")
+                                    {
+                                        this.serviceDetailView.items[e].STATUS = 0
+                                        this.serviceDetailView.items[e].WAIT_STATUS = 1
+                                        await this.restOrderObj.save()
+                                        this.serviceDetailView.updateState()
+                                    }
+                                }
+                                else if(this.serviceDetailView.items[e].WAIT_STATUS == 1)
+                                {
+                                    tmpConfObj.content = <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgWaitStatus.msg2")}</div>
+
+                                    let tmpResult = await dialog(tmpConfObj);
+                                    if(tmpResult == "btn01")
+                                    {
+                                        this.serviceDetailView.items[e].STATUS = 0
+                                        this.serviceDetailView.items[e].WAIT_STATUS = 2
+                                        await this.restOrderObj.save()
+                                        this.serviceDetailView.updateState()
+                                    }
+                                }
                             }}
                             onCloseClick={async()=>
                             {
@@ -889,8 +944,7 @@ export default class bill extends React.PureComponent
                                 
                                 this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
                                 this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
-
-                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM)
+                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM_GUID)
                                 this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
                                 this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
                                 this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
