@@ -21,6 +21,7 @@ export default class NbServiceDetailView extends NbBase
         this._onAddClick = this._onAddClick.bind(this)
         this._onPlusClick = this._onPlusClick.bind(this)
         this._onMinusClick = this._onMinusClick.bind(this)
+        this._onWaitClick = this._onWaitClick.bind(this)
         this._onCloseClick = this._onCloseClick.bind(this)
 
         this.clickTimeout = null;
@@ -74,6 +75,13 @@ export default class NbServiceDetailView extends NbBase
             this.props.onMinusClick(e);
         }
     }
+    _onWaitClick(e)
+    {
+        if(typeof this.props.onWaitClick != 'undefined')
+        {
+            this.props.onWaitClick(e);
+        }
+    }
     _onCloseClick()
     {
         if(typeof this.props.onCloseClick != 'undefined')
@@ -124,8 +132,7 @@ export default class NbServiceDetailView extends NbBase
                     if(tmpProp[i].VALUE)
                     {
                         tmpPropStr += tmpProp[i].TITLE + ","
-                    }
-                    
+                    }                    
                 }
                 tmpPropStr = tmpPropStr.substring(0,tmpPropStr.length-1) + ")"
             }
@@ -184,7 +191,38 @@ export default class NbServiceDetailView extends NbBase
                             </div>
                         </div>
                     </div>
-                    <div style={{flex:0.15,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
+                    {(()=>
+                    {
+                        if(this.state.data[i].WAITING == 1)
+                        {
+                            return (
+                                <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
+                                    <div>
+                                        <NbButton className="form-group btn btn-block btn-outline-dark" 
+                                        style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',
+                                        borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px',borderTopRightRadius:'0px',borderRight:'none',
+                                        transaction:'none'}}
+                                        onClick={async()=>
+                                        {
+                                            this._onWaitClick(i)
+                                        }}>
+                                            <i className="fa-solid fa-clock-rotate-left fa-2x" 
+                                            style={
+                                            {
+                                                color:(this.state.data[i].WAIT_STATUS == 0 ? '#ff6b81' : this.state.data[i].WAIT_STATUS == 1 ? '#f6b93b' : '#079992')
+                                            }}></i>
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        else
+                        {
+                            return
+                        }
+                    })()}
+                    
+                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
                         <div>
                             <NbButton className="form-group btn btn-block btn-outline-dark" 
                             style={{height:"35px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',

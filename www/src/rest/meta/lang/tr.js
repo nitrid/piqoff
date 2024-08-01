@@ -85,4 +85,12 @@ export const langTr =
         btn01 : "Evet",
         btn02 : "Hayır"
     },
+    msgWaitStatus:
+    {
+        title : "Uyarı",
+        msg1 : "Sipariş i beklemeye almak istediğinize eminmisiniz ?",
+        msg2 : "Sipariş i mutfağa göndermek istediğinize eminmisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
 }

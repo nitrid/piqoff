@@ -184,7 +184,11 @@ export class restOrderDetailCls
             TOTAL : 0,
             PROPERTY : '',
             DESCRIPTION : '',
-            STATUS : 0
+            STATUS : 0,
+            WAIT_STATUS : 0,
+            WAITING : false,
+            POS : '00000000-0000-0000-0000-000000000000',
+            POS_SALE : '00000000-0000-0000-0000-000000000000'
         }
         this._initDs();
     }
@@ -216,11 +220,15 @@ export class restOrderDetailCls
                     "@TOTAL = @PTOTAL, " + 
                     "@PROPERTY = @PPROPERTY, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@WAIT_STATUS = @PWAIT_STATUS, " +
+                    "@POS = @PPOS, " + 
+                    "@POS_SALE = @PPOS_SALE ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int'],
-            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION','STATUS']
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50'],
+            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
+                       'STATUS','WAIT_STATUS','POS','POS_SALE']
         } 
         tmpDt.updateCmd = 
         {
@@ -240,11 +248,15 @@ export class restOrderDetailCls
                     "@TOTAL = @PTOTAL, " + 
                     "@PROPERTY = @PPROPERTY, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@WAIT_STATUS = @PWAIT_STATUS, " +
+                    "@POS = @PPOS, " + 
+                    "@POS_SALE = @PPOS_SALE ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int'],
-            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION','STATUS']
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50'],
+            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
+                       'STATUS','WAIT_STATUS','POS','POS_SALE']
         } 
         tmpDt.deleteCmd = 
         {

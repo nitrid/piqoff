@@ -84,5 +84,13 @@ export const langFr =
         msg: "Êtes-vous sûr de vouloir réimprimer tous les articles ?",
         btn01: "Oui",
         btn02: "Non"
-    }
+    },
+    msgWaitStatus:
+    {
+        title: "Avertissement",
+        msg1: "Êtes-vous sûr de vouloir mettre la commande en attente ?",
+        msg2: "Êtes-vous sûr de vouloir envoyer la commande à la cuisine ?",
+        btn01: "Oui",
+        btn02: "Non"
+    },
 }

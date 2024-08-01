@@ -298,7 +298,7 @@ export const acs =
             }
         }
     },
-    //btnPayCardForceAcs
+    //btnPCForceAcs
     {
         TYPE : 2,
         ID :"btnPCForceAcs",
@@ -335,7 +335,7 @@ export const acs =
             }
         }
     },
-    //btnPayCardCancelAcs
+    //btnPCCancelAcs
     {
         TYPE : 2,
         ID :"btnPCCancelAcs",
