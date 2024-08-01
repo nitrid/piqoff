@@ -37,7 +37,8 @@ const stk_03_001 =
         clmMargin : "Marge Brute",
         clmCustomerPrice : "Prix Fournisseur",
         clmOrgin : "Origine" ,
-        clmPriceSaleVatExt : "Prix HT"
+        clmPriceSaleVatExt : "Prix HT",
+        clmFMargin : "Marge %"
     },
 }
 export default stk_03_001

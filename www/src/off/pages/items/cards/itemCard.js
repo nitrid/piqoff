@@ -1896,7 +1896,6 @@ export default class itemCard extends React.PureComponent
                                                         e.key.PRICE_HT =  Number(this.txtCostPrice.value / (1 - e.data.MARGIN / 100)).round(3);
                                                         e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
                                                         e.key.PRICE =  e.key.PRICE_TTC
-
                                                     }
                                                     else
                                                     {

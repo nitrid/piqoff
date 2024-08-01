@@ -174,20 +174,19 @@ export default class collectiveItemEdit extends React.PureComponent
     }
     async grossMargin()
     {
-        console.log(1)
         for (let i = 0; i < this.editObj.dt().length; i++) 
         {
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE;
             let tmpMarginRate = ((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / tmpExVat) * 100
             this.editObj.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);        
-            this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+            this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);  
+            this.editObj.dt()[i].MARGIN =  Number((tmpMargin / Number(this.editObj.dt()[i].PRICE_SALE).rateInNum(this.editObj.dt()[i].VAT,3)) * 100).round(2)
         }
         await this.grdItemList.dataRefresh({source:this.editObj.dt()});
     }
     async netMargin()
     {
-        console.log(2)
         for (let i = 0; i < this.editObj.dt().length; i++) 
         {
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
@@ -382,6 +381,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
                                     e.values[8] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
+                                    e.values[10] =  Number(tmpMargin / Number(tmpExVat) * 100).round(2)
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
@@ -408,6 +408,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
+                                <Column dataField="MARGIN" caption={this.t("grdItemList.clmMargin")} visible={true} width={75} allowEditing={false}/>
                                 <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this._cellRoleRender}>
                                 <StringLengthRule 
                                     message={this.t("validOriginMax8")}   

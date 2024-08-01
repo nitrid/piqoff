@@ -35,7 +35,8 @@ const stk_04_001 =
         clmWeighing : "Tartılsın",
         clmNetMargin : "Net Marj",
         clmGrossMargin : "Brüt Marj",
-        clmCustoms : "Gümrük Kodu"
+        clmCustoms : "Gümrük Kodu",
+        clmMargin : "Marj %"
     },
     msgSave:
     {
