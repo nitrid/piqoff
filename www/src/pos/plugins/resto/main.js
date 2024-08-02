@@ -82,8 +82,10 @@ posDoc.prototype.delete = async function()
 }
 posDoc.prototype.render = function() 
 {
-    const originalRenderOutput = orgRender.call(this);
-    const modifiedChildren = addChildToElementWithId(originalRenderOutput.props.children,'frmBtnGrp',(render.bind(this))());
+    let originalRenderOutput = orgRender.call(this);
+    let modifiedChildren = addChildToElementWithId(originalRenderOutput.props.children,'frmBtnGrp',(renderTables.bind(this))());
+    modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderDiscount.bind(this))());
+    
     return React.cloneElement(originalRenderOutput, {}, ...modifiedChildren);
 }
 function addChildToElementWithId(children, id, newChild) 
@@ -116,11 +118,55 @@ async function getTables()
     await this.restTableView.items.refresh()
     this.restTableView.updateState()
 }
-function render()
+function renderDiscount()
+{
+    return (
+        <NdLayoutItem key={"btnRestDiscountLy"} id={"btnRestDiscountLy"} parent={this} data-grid={{x:40,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:30}}
+        access={this.acsObj.filter({ELEMENT:'btnRestDiscountLy',USERS:this.user.CODE})}>
+            <div>
+                <NbButton id={"btnRestDiscount"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",border:"#ff9f43"}}
+                onClick={async()=>
+                {
+                    if(this.grdList.getSelectedData().length > 0)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgRestDiscount',showTitle:true,title:this.lang.t("msgRestDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgRestDiscount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestDiscount.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestDiscount.msg")}</div>)
+                        }
+
+                        let tmpMsgResult = await dialog(tmpConfObj);
+                        
+                        if(tmpMsgResult == "btn01")
+                        {
+                            let tmpDiscount = Number(this.grdList.getSelectedData()[0].AMOUNT).rateInc(100,2)
+                                            
+                            let tmpData = this.grdList.getSelectedData()[0]
+                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                            
+                            this.grdList.getSelectedData()[0].LDATE = moment(new Date()).utcOffset(0, true)
+                            this.grdList.getSelectedData()[0].FAMOUNT = tmpCalc.FAMOUNT
+                            this.grdList.getSelectedData()[0].AMOUNT = tmpCalc.AMOUNT
+                            this.grdList.getSelectedData()[0].DISCOUNT = tmpDiscount
+                            this.grdList.getSelectedData()[0].VAT = tmpCalc.VAT
+                            this.grdList.getSelectedData()[0].TOTAL = tmpCalc.TOTAL
+    
+                            await this.calcGrandTotal();
+                        }
+                    }
+                }}>
+                    <i className="text-white fa-solid fa-tag" style={{fontSize: "24px"}} />
+                </NbButton>
+            </div>
+        </NdLayoutItem>
+    )
+}
+function renderTables()
 {
     getTables = getTables.bind(this)
     return (
-        <NdLayoutItem key={"btnRestTablesLy"} id={"btnRestTablesLy"} parent={this} data-grid={{x:45,y:90,h:32,w:30,minH:16,maxH:32,minW:3,maxW:30}}
+        <NdLayoutItem key={"btnRestTablesLy"} id={"btnRestTablesLy"} parent={this} data-grid={{x:40,y:90,h:32,w:30,minH:16,maxH:32,minW:3,maxW:30}}
         access={this.acsObj.filter({ELEMENT:'btnRestTablesLy',USERS:this.user.CODE})}>
             <div>
                 <NbButton id={"btnRestTables"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",backgroundColor:"#ff9f43",border:"#ff9f43"}}
