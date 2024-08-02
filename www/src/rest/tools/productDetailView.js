@@ -96,7 +96,7 @@ export default class NbProductDetailView extends NbBase
                 const renderCheckbox = (item, isChecked, handleChange) => 
                 {
                     return(
-                        <div className="row p-2">
+                        <div className="row px-2">
                             <div className="col-12">
                                 <NbCheckBox text={item.TITLE} value={isChecked} onChange={(title, value) => handleChange(title, value)}/>
                             </div>

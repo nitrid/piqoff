@@ -6,6 +6,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NdTextBox from "../../core/react/devex/textbox.js";
+import NbLabel from "../../core/react/bootstrap/label.js";
 
 export default class NbAddProductView extends NbBase
 {
@@ -99,14 +100,14 @@ export default class NbAddProductView extends NbBase
                             onClick={()=>
                             {
                                 this.items[i].QUANTITY = this.items[i].QUANTITY + 1
-                                this.updateState()
+                                this["quantity" + i].value = this.items[i].QUANTITY
                                 this._onPlusClick(i);
                             }}>
                                 <i className="fa-solid fa-plus fa-2x"></i>
                             </NbButton>
                         </div>
                         <div style={{flex:0.3333,height:"46px",width:"100%",color:"#079992",borderBottom:"solid 2px",paddingTop:'5px'}}>
-                            <h2 style={{textAlign:"center",color:"#FF6B6B"}}>{this.state.data[i].QUANTITY}</h2>
+                            <h2 style={{textAlign:"center",color:"#FF6B6B"}}><NbLabel id={"quantity" + i} parent={this} value={this.items[i].QUANTITY}/></h2>
                         </div>
                         <div style={{flex:0.3333}}>
                             <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomLeftRadius:'0px',borderTop:'none'}}
@@ -116,7 +117,7 @@ export default class NbAddProductView extends NbBase
                                 {
                                     this.items[i].QUANTITY = this.items[i].QUANTITY - 1
                                 }
-                                this.updateState()
+                                this["quantity" + i].value = this.items[i].QUANTITY
                                 this._onMinusClick(i);
                             }}>
                                 <i className="fa-solid fa-minus fa-2x"></i>
@@ -155,49 +156,10 @@ export default class NbAddProductView extends NbBase
         const settings = 
         {
             dots: false,
-            infinite: true,
+            infinite: false,
             speed: 500,
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            responsive: 
-            [
-                {
-                    breakpoint: 2000,
-                    settings: 
-                    {
-                        slidesToShow: 8,
-                        slidesToScroll: 8,
-                        infinite: true,
-                    }
-                },
-                {
-                    breakpoint: 1024,
-                    settings: 
-                    {
-                        slidesToShow: 6,
-                        slidesToScroll: 6,
-                        infinite: true,
-                    }
-                },
-                {
-                    breakpoint: 800,
-                    settings: 
-                    {
-                        slidesToShow: 4,
-                        slidesToScroll: 4,
-                        infinite: true,
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: 
-                    {
-                        slidesToShow: 3,
-                        slidesToScroll: 3,
-                        infinite: true,
-                    }
-                }
-            ]
+            slidesToShow: 3,
+            slidesToScroll: 3
         };
 
         return(

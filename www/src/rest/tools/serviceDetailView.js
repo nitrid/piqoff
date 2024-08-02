@@ -131,7 +131,7 @@ export default class NbServiceDetailView extends NbBase
                 {
                     if(tmpProp[i].VALUE)
                     {
-                        tmpPropStr += tmpProp[i].TITLE + ","
+                        tmpPropStr += tmpProp[i].TITLE + ", "
                     }                    
                 }
                 tmpPropStr = tmpPropStr.substring(0,tmpPropStr.length-1) + ")"

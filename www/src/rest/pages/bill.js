@@ -315,6 +315,7 @@ export default class bill extends React.PureComponent
                     'Ş': 'S', 'ş': 's',
                     'Ü': 'U', 'ü': 'u',
                     'È': 'E', 'é': 'e',
+                    'À': 'A', 'à': 'a',
                 };
             
                 return str.split('').map(char => turkishChars[char] || char).join('');
