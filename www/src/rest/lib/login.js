@@ -23,7 +23,7 @@ export default class Login extends React.PureComponent
             {
                 backgroundColor : '#0d6efd',                
                 height : '100%',
-                paddingTop : '100px' 
+                paddingTop : '10px' 
             },
             login_box :
             {
