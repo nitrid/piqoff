@@ -381,6 +381,7 @@ export const langTr =
         rest_01_001 : "Masa Tanımları",
         rest_01_002 : "Özellik Tanımları",
         rest_01_003 : "Yazıcı Tanımları",
+        rest_01_004 : "Ürün Ek Özellik Tanımları",
         rest_02 : "Operasyonlar",
         rest_02_001 : "Masa İzleme",
         promo: "Promosyon",

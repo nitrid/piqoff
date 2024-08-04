@@ -380,6 +380,7 @@ export const langFr =
         rest_01_001: "Définitions des tables",
         rest_01_002: "Définitions des caractéristiques",
         rest_01_003: "Définitions de l'imprimante",
+        rest_01_004 : "Attributs Produits",
         rest_02 : "Les opérations",
         rest_02_001 : "Suivi des tables",
         promo: "Promotion",

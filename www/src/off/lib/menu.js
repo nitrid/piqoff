@@ -1434,6 +1434,11 @@ export const menu = (e) =>
                             id: 'rest_01_003',
                             text: e.t('menuOff.rest_01_003'),//'Yazıcı Tanımları',
                             path: 'rest/card/printerCard'
+                        },
+                        {
+                            id: 'rest_01_004',
+                            text: e.t('menuOff.rest_01_004'),//'Ürün Ek Özellik Tanımları',
+                            path: 'rest/card/productExtraProperty'
                         }
                     ]
                 },
