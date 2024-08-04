@@ -378,6 +378,8 @@ export const langFr =
         rest: "Restaurant",
         rest_01: "Définitions",
         rest_01_001: "Définitions des tables",
+        rest_01_002: "Définitions des caractéristiques",
+        rest_01_003: "Définitions de l'imprimante",
         rest_02 : "Les opérations",
         rest_02_001 : "Suivi des tables",
         promo: "Promotion",
