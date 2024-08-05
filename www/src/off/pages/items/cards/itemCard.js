@@ -237,7 +237,8 @@ export default class itemCard extends React.PureComponent
         this.itemGrpForMinMaxAccessCheck();  
         this.taxSugarValidCheck()  
         
-        this.setState({isPromotion:false})        
+        this.setState({isPromotion:false})     
+        this.txtCostPrice.readOnly = this.sysParam.filter({ID:'costPriceReadOnly',USERS:this.user.CODE}).getValue()
     }
     async getItem(pCode)
     {
