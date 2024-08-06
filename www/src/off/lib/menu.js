@@ -1498,6 +1498,11 @@ export const menu = (e) =>
                             id: 'promo_02_002',
                             text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
                             path: 'promotion/lists/promotionDetailList'
+                        },
+                        {
+                            id: 'promo_02_003',
+                            text: e.t('menuOff.promo_02_003'),//'Promosyon Silinen Listesi',
+                            path: 'promotion/lists/promotionDeleteList'
                         }
                     ]
                 },

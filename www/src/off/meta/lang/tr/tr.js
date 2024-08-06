@@ -391,6 +391,7 @@ export const langTr =
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
         promo_02_002: "Promosyon Detay Listesi",
+        promo_02_003 : "Silinen Promosyon Listesi",
         promo_03: "Raporlar",
         promo_04: "Operasyonlar",
         promo_04_001: "Elektronik Etiket Güncelleme",

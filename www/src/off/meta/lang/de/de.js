@@ -363,6 +363,7 @@ export const langDe =
         promo_02: "Listen",
         promo_02_001: "Angebotsliste",
         promo_02_002: "Angebotsdetailliste",
+        promo_02_003 : "Gelöschte Promotionen Liste",
         promo_03: "Berichte",
         promo_04: "Operationen",
         promo_04_001: "Elektronik Etiket Güncelleme", // BAK

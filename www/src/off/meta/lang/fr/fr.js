@@ -389,6 +389,7 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_02_002: "Liste Detaillée promotion",
+        promo_02_003 : "Liste des promotions supprimées",
         promo_03: "Rapports",
         promo_04: "Les opérations",
         promo_04_001: "Mise à jour étiquette électronique", // BAK
