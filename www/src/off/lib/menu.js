@@ -224,11 +224,6 @@ export const menu = (e) =>
                             path: 'items/operations/itemEntryOutDoc'
                         },
                         {
-                            id: 'stk_04_007',
-                            text: e.t('menuOff.stk_04_007'), //'Ceopos Ürün gönderimi',
-                            path: 'items/operations/ceoposWeightItemSend'
-                        },
-                        {
                             id: 'stk_04_008',
                             text: e.t('menuOff.stk_04_008'), //'Price Toplu Ürün gönderimi',
                             path: 'items/operations/pricerAllItemSend'
