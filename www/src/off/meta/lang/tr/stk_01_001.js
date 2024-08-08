@@ -87,7 +87,9 @@ const stk_01_001 =
         txtPopPriPrice: "Fiyat",
         txtPopPriHT: "Vargisiz Fiyat",
         txtPopPriTTC : "Vergili Fiyat",
-        txtPopPriceMargin : "Marj %"
+        txtPopPriceMargin : "Marj %",
+        txtPopPriceGrossMargin : "Brüt Marj %",
+        txtPopPriceNetMargin : "Net Marj %"
     },
     msgDateInvalid:
     {

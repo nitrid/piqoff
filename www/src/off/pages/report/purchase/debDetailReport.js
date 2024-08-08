@@ -172,7 +172,7 @@ export default class debReport extends React.PureComponent
             displayExpr={'NAME'}
             keyExpr={'CODE'}
             value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
+            // onOptionChanged={onOptionChanged}
             >
             </NdListBox>
         )

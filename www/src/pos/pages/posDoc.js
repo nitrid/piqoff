@@ -5317,7 +5317,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     this.popParkDesc.setText(this.posObj.posExtra.dt().where({TAG:"PARK DESC"})[0].DESCRIPTION)
                                                 }                                                    
-                                            }, 100);
+                                            }, 1000);
                                             
                                         }
                                     }}>

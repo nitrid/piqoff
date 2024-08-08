@@ -2547,7 +2547,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popPrice.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'500'}
+                        height={'600'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2617,6 +2617,8 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriHT.value = this.txtPopPriPrice.value
                                             }
                                             this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
+                                            this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
                                     </NdNumberBox>
@@ -2640,6 +2642,58 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
+                                            this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
+                                            this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
+                                        }}>
+                                        
+                                    </NdNumberBox>
+                                </Item>
+                                {/* txtPopPriceGrossMargin */}
+                                <Item>
+                                    <Label text={this.t("popPrice.txtPopPriceGrossMargin")} alignment="right" />
+                                    <NdNumberBox id={"txtPopPriceGrossMargin"} parent={this} simple={true}  format={"##0.00"}
+                                      onValueChanged={async (e)=>
+                                        {
+                                            let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
+                                            if(tmpDt[0].VAT_TYPE == 0)
+                                            {
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceGrossMargin.value / 100))).round(3);
+                                                this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
+                                                this.txtPopPriPrice.value = this.txtPopPriTTC.value
+                                            }
+                                            else
+                                            {
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceGrossMargin.value / 100))).round(3);
+                                                this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                                this.txtPopPriPrice.value = this.txtPopPriHT.value
+                                            }
+                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
+                                        }}>
+                                        
+                                    </NdNumberBox>
+                                </Item>
+                                   {/* txtPopPriceNetMargin */}
+                                   <Item>
+                                    <Label text={this.t("popPrice.txtPopPriceNetMargin")} alignment="right" />
+                                    <NdNumberBox id={"txtPopPriceNetMargin"} parent={this} simple={true}  format={"##0.00"}
+                                      onValueChanged={async (e)=>
+                                        {
+                                            let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
+                                            if(tmpDt[0].VAT_TYPE == 0)
+                                            {
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceNetMargin.value / 100) * 1.15)).round(3);
+                                                this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
+                                                this.txtPopPriPrice.value = this.txtPopPriTTC.value
+                                            }
+                                            else
+                                            {
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceNetMargin.value / 100) * 1.15)).round(3);
+                                                this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                                this.txtPopPriPrice.value = this.txtPopPriHT.value
+                                            }
+                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                         }}>
                                         
                                     </NdNumberBox>
