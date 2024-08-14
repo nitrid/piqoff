@@ -124,6 +124,8 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(TTC) AS TTC,  "  +
                     " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
                     " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
+                    " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
+                    " MAX(FACT_REF) AS FACT_REF, "+
                     " MAX(PAYMENT) AS PAYMENT  "  +
                     " FROM (  "  +
                     " SELECT  "  +
@@ -145,6 +147,8 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(SALE.GRAND_VAT) TVA, "  +
                     " MAX(SALE.GRAND_TOTAL) TTC,  "  +
                     " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
+                    " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
+                    " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF," +
                     " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
                     " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
                     " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
@@ -460,6 +464,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdButton id="btnMailSend" parent={this} icon="message" type="default"
                                     onClick={async ()=>
                                     {
+                                        this.txtMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
                                         await this.mailPopup.show().then(async (e) =>
                                         {
                                         });
@@ -798,7 +803,7 @@ export default class salesOrdList extends React.PureComponent
                             }}
                             >                            
                                 <Scrolling mode="standart" />
-                                <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
                                 <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
@@ -810,7 +815,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="TVA" caption={this.t("grdSaleTicketReport.clmVTA")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
                                 <Column dataField="TTC" caption={this.t("grdSaleTicketReport.clmTTC")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
                                 <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
-
+                                <Column dataField="FACT_REF" caption={this.t("grdSaleTicketReport.clmFacRef")} visible={true} /> 
                             </NdGrid>
                         </div>
                     </div>
@@ -845,7 +850,7 @@ export default class salesOrdList extends React.PureComponent
                                 >                            
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={150}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
@@ -882,7 +887,7 @@ export default class salesOrdList extends React.PureComponent
                                 >                            
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>

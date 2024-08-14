@@ -82,7 +82,7 @@ const ftr_02_001 =
         txtMailSubject : "Objet du courriel",
         txtSendMail : "Adresse e-mail",
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_Docs : 
     {
@@ -266,6 +266,12 @@ const ftr_02_001 =
         btn01: "OK",
         msg: "Mot de Passe Erroné"
     },
+    msgNegativePrice:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Vous ne pouvez pas entrer une valeur de prix négative !"
+    },
     msgGetLocked:
     {
         title: "Attention",
@@ -448,6 +454,7 @@ const ftr_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     grdNewPriceDate:      
     {     
@@ -459,6 +466,7 @@ const ftr_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     msgPriceDateUpdate :
     {
@@ -597,5 +605,11 @@ const ftr_02_001 =
         btn01: "OK", 
         msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
     },
+    msgFourniseurNotFound: 
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Fournisseur non trouvé !"
+    }
 }
 export default ftr_02_001

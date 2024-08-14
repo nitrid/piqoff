@@ -4,6 +4,7 @@ const stk_04_001 =
     txtCustomerCode : "Müşteri",
     codePlaceHolder : "Lütfen Aratmak İstediğiniz Ürün Kodu,Barkod veya Tedarikçi Kodunu Giriniz",
     namePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+    validOriginMax8:"8 Karakter Giriniz Lütfen !",
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -34,7 +35,8 @@ const stk_04_001 =
         clmWeighing : "Tartılsın",
         clmNetMargin : "Net Marj",
         clmGrossMargin : "Brüt Marj",
-        clmCustoms : "Gümrük Kodu"
+        clmCustoms : "Gümrük Kodu",
+        clmMargin : "Marj %"
     },
     msgSave:
     {

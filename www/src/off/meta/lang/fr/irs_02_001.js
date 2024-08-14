@@ -49,7 +49,7 @@ const irs_02_001 =
         txtMailSubject : "Objet du courriel",
         txtSendMail : "Adresse e-mail",
         btnSend : "Envoyer",
-        cmbMailAddress : "Gönderilen Mail Adresi" // BAK
+        cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
     pg_Docs : 
     {
@@ -412,6 +412,7 @@ const irs_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     grdNewPriceDate:      
     {     
@@ -423,6 +424,7 @@ const irs_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     msgPriceDateUpdate :
     {

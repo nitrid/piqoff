@@ -103,7 +103,7 @@ export default class Login extends React.PureComponent
                 }
 
                 App.instance.setState({logined:true});
-                this.setUser()
+                App.instance.setUser()
             }
         }
         else
@@ -139,6 +139,16 @@ export default class Login extends React.PureComponent
                 {
                     icon : 'menu',
                     onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:this.lang.t("passChange"),
+                    icon : 'repeat',
+                    onClick : this.passChange
                 }
             },
             {
@@ -483,7 +493,7 @@ export default class Login extends React.PureComponent
                                     {
                                       setTimeout(() => {
                                           this.cardRead.value = ''
-                                      }, 50);
+                                      }, 1200);
                                     }
                                     else
                                     {

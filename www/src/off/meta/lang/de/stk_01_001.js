@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Preis darf nicht leer sein!",
     validPriceFloat : "Der Preis muss größer als 0 sein!",
     validCustomerCode :"Lieferanten-Code eingeben!",
+    validOriginMax8 :"Geben Sie maximal 8 Zeichen ein!",
     mainUnitName: "Haupteinheit",
     underUnitName: "Untereinheit",
     chkDayAnalysis: "Täglich",
@@ -90,7 +91,8 @@ const stk_01_001 =
         dtPopPriEndDate: "Enddatum",
         txtPopPriQuantity: "Menge",
         txtPopPriPrice: "Preis",
-        txtPopPriPriceVatExt: "Preis ohne MwSt."
+        txtPopPriPriceVatExt: "Preis ohne MwSt.",
+        txtPopPriceMargin : "Marge %"
     },
     popUnit: 
     {
@@ -130,7 +132,8 @@ const stk_01_001 =
         clmVatExt: "Preis ohne MwSt.",
         clmPrice: "Preis",
         clmGrossMargin: "Bruttomarge",
-        clmNetMargin: "Nettomarge"
+        clmNetMargin: "Nettomarge",
+        clmMargin : "Marge %"
     },
     grdUnit: 
     {

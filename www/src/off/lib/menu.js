@@ -1182,6 +1182,63 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Personel
+        {
+            id: 'prsnl',
+            text: e.t('menuOff.prsnl'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id:'prsnl_01',
+                    text:e.t('menuOff.prsnl_01'),//'TANIMLAR',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_01_001',
+                            text: e.t('menuOff.prsnl_01_001'), //'Personel Tanımları',
+                            path: 'employee/cards/employeeCards'
+                        },
+                        {
+                            id: 'prsnl_01_002',
+                            text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
+                            path: 'employee/cards/employeeAddressCards'
+                        },
+                        
+                    ]
+                },
+                {
+                    id:'prsnl_02',
+                    text:e.t('menuOff.prsnl_02'),//'Listeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_02_001',
+                            text: e.t('menuOff.prsnl_02_001'), //'Gelen Fatura Listesi',
+                            path: 'employee/lists/employeeLists'
+                        }
+                        
+                    ]
+                },
+                {
+                    id:'prsnl_03',
+                    text:e.t('menuOff.prsnl_03'),//'OPERASYONLAR',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'prsnl_03_001',
+                            text: e.t('menuOff.prsnl_03_001'), //'',
+                            path: 'employee/operations/collectiveEmployee'
+                        }
+                        
+                    ]
+                },
+
+            ]
+        },
         //Pos İşlemleri
         {
             id: 'pos',
@@ -1349,6 +1406,58 @@ export const menu = (e) =>
                 },
             ]
         },
+        //Restorant İşlemleri
+        {
+            id: 'rest',
+            text: e.t('menuOff.rest'),
+            expanded: false,
+            items: 
+            [
+                //Tanımlar
+                {
+                    id: 'rest_01',
+                    text : e.t('menuOff.rest_01'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_01_001',
+                            text: e.t('menuOff.rest_01_001'),//'Masa Tanımları',
+                            path: 'rest/card/tableCard'
+                        },
+                        {
+                            id: 'rest_01_002',
+                            text: e.t('menuOff.rest_01_002'),//'Özellik Tanımları',
+                            path: 'rest/card/propertyCard'
+                        },
+                        {
+                            id: 'rest_01_003',
+                            text: e.t('menuOff.rest_01_003'),//'Yazıcı Tanımları',
+                            path: 'rest/card/printerCard'
+                        },
+                        {
+                            id: 'rest_01_004',
+                            text: e.t('menuOff.rest_01_004'),//'Ürün Ek Özellik Tanımları',
+                            path: 'rest/card/productExtraProperty'
+                        }
+                    ]
+                },
+                //Operasyonlar
+                {
+                    id: 'rest_02',
+                    text : e.t('menuOff.rest_02'),
+                    expanded: false,
+                    items:
+                    [
+                        {
+                            id: 'rest_02_001',
+                            text: e.t('menuOff.rest_02_001'),//'Masa İzleme',
+                            path: 'rest/operation/tableWatch'
+                        }
+                    ]
+                }
+            ]
+        },
         //Promosyon
         {
             id: 'promo',
@@ -1367,6 +1476,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.promo_01_001'),//'Promosyon Tanımları',
                             path: 'promotion/cards/promotionCard'
                         },
+                        {
+                            id: 'promo_01_002',
+                            text: e.t('menuOff.promo_01_002'),//'indirim Tanımları',
+                            path: 'promotion/cards/discountCard'
+                        },
                     ]
                 },
                 {
@@ -1384,6 +1498,11 @@ export const menu = (e) =>
                             id: 'promo_02_002',
                             text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
                             path: 'promotion/lists/promotionDetailList'
+                        },
+                        {
+                            id: 'promo_02_003',
+                            text: e.t('menuOff.promo_02_003'),//'Promosyon Silinen Listesi',
+                            path: 'promotion/lists/promotionDeleteList'
                         }
                     ]
                 },

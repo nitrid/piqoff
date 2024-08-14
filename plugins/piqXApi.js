@@ -13,7 +13,7 @@ class piqXApi
         this.username = 'Admin'
         this.password = '1'
         this.token = ''
-        this.endpoint = 'http://piqsoft.piqpos.com:8085'
+        this.endpoint = 'http://piqx.azurewebsites.net/'
     }
     async connEvt(pSocket)
     {
@@ -25,6 +25,7 @@ class piqXApi
             {
                 let tmpResult = await this.getInvoiceList(pParam)
                 
+                console.log(tmpResult)
                 if(typeof tmpResult.err != 'undefined' && (tmpResult.err == 403 || tmpResult.err == 404))
                 {
                     await this.login(this.username,this.password)

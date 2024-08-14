@@ -43,11 +43,15 @@ export default class CustomerCard extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.customerObj.clearAll()
-            await this.customerObj.load({GUID:this.pagePrm.GUID});
+            setTimeout(async() => 
+            {
+                this.customerObj.clearAll()
+                await this.customerObj.load({GUID:this.pagePrm.GUID});
+            }, 1000);
+           
         }
     }
     async init()
@@ -724,6 +728,7 @@ export default class CustomerCard extends React.PureComponent
                                                             this.cmbPopZipcode.value = "";
                                                             this.cmbPopCity.value = "";
                                                             this.cmbPopCountry.value = ''
+                                                            this.txtPopAdressSiret.value = "";
                                                             this.popAdress.show();
                                                         }}/>
                                                     </Item>
@@ -747,6 +752,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
                                                     <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")} allowEditing={false}/>
+                                                    <Column dataField="SIRET" caption={this.t("grdAdress.clmSiret")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -762,6 +768,23 @@ export default class CustomerCard extends React.PureComponent
                                                 height={'100%'} 
                                                 width={'100%'}
                                                 dbApply={false}
+                                                onRowUpdating={async (e)=>
+                                                    {
+                                                        if(typeof e.newData.TAX_NO != 'undefined' && e.newData.TAX_NO.includes(' '))
+                                                        {
+                                                            e.cancel = true
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgTaxInSpace',showTitle:true,title:this.t("msgTaxInSpace.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgTaxInSpace.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTaxInSpace.msg")}</div>)
+                                                            }
+                                                        
+                                                            dialog(tmpConfObj);
+                                                            e.component.cancelEditData()
+                                                            
+                                                        }
+                                                    }}
                                                 >
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
@@ -770,7 +793,12 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="RCS" caption={this.t("grdLegal.clmRcs")}/>
                                                     <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
-                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
+                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}>
+                                                    {/* <StringLengthRule 
+                                                    message={this.t("validTaxNo")}   
+                                                    ignoreEmptyValue={true}
+                                                    />     */}
+                                                    </Column>
                                                     <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
                                                     <Column dataField="INSURANCE_NO" caption={this.t("grdLegal.clmInsurance")}/>
                                                     <Column dataField="CAPITAL" caption={this.t("grdLegal.clmCapital")}/>
@@ -1503,7 +1531,11 @@ export default class CustomerCard extends React.PureComponent
                                     }}
                                     />
                                 </Item>
-                              
+                                <Item>
+                                    <Label text={this.t("popAdress.txtPopAdressSiret")} alignment="right" />
+                                    <NdTextBox id={"txtPopAdressSiret"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -1518,6 +1550,7 @@ export default class CustomerCard extends React.PureComponent
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
                                                 tmpEmpty.CITY = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
+                                                tmpEmpty.SIRET = this.txtPopAdressSiret.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 
                                                 this.customerObj.customerAdress.addEmpty(tmpEmpty);    

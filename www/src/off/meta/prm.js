@@ -169,7 +169,7 @@ export const prm =
     },
     //Otomatik Interfel
     {
-        TYPE : 1,
+        TYPE : 0,
         ID :"autoInterfel",
         VALUE : 
         {
@@ -252,7 +252,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"maxItemPrice",
-        VALUE : 100,
+        VALUE : 1000,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -453,7 +453,7 @@ export const prm =
             CAPTION : "Terazi Fiyat Çarpanı"
         }
     },
-    //Terazi Fiyat Çarpanı
+    //Varsayılan Taşıma Kodu
     {
         TYPE : 0,
         ID :"DocTrasportType",
@@ -467,6 +467,38 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Varsayılan Taşıma Kodu"
+        }
+    },
+    //Mail Ek Adresi
+    {
+        TYPE : 0,
+        ID :"autoMailAdress",
+        VALUE :"",
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Varsayılan Mail Adresi"
+        }
+    },
+    //Maliyet Fiyatı Elle Girişi Kilitle
+    {
+        TYPE : 0,
+        ID :"costPriceReadOnly",
+        VALUE :false,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
         }
     },
     //#endregion
@@ -1079,7 +1111,7 @@ export const prm =
         {
             TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ticket Rest.",
+            CAPTION : "Maliyet Fiyatı.",
             DISPLAY : "value",
             FORM: 
             {

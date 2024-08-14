@@ -377,6 +377,11 @@ const sip_02_001 =
         btn01: "Evrağa Git",
         msg: "Evrak Bulundu"
     },
+    msgDiscountEntry : 
+    {
+        title : "Tutarsal İndirim Girişi",
+        btn01 : "Onayla"
+    },
     txtDiscount1 : "1. İndirim Tutarı",
     txtDiscount2 : "2. İndirim Tutarı",
     txtDiscount3 : "3. İndirim Tutarı",

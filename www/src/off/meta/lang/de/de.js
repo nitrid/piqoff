@@ -363,6 +363,7 @@ export const langDe =
         promo_02: "Listen",
         promo_02_001: "Angebotsliste",
         promo_02_002: "Angebotsdetailliste",
+        promo_02_003 : "Gelöschte Promotionen Liste",
         promo_03: "Berichte",
         promo_04: "Operationen",
         promo_04_001: "Elektronik Etiket Güncelleme", // BAK
@@ -538,4 +539,27 @@ export const langDe =
             msg : "Importvorgang kann nicht durchgeführt werden, da der Lieferant nicht gefunden wurde!"
         }
     },
+    popTransport : 
+    {
+        title : "Transportinformationen",
+        txtSenderName: "Name des Absenders",
+        txtRecieverName : "Name des Empfängers",
+        txtSenderAdress : "Adresse des Absenders",
+        txtRecieverAdress : "Adresse des Empfängers",
+        txtSenderCity : "Stadt des Absenders",
+        txtRecieverCity : "Stadt des Empfängers",
+        txtSenderZipCode : "Postleitzahl",
+        txtRecieverZipCode : "Postleitzahl",
+        cmbSenderCountry : "Land",
+        cmbRecieverCountry : "Land",
+        txtTransporter : "Name des Transportunternehmens",
+        txtTransporterPlate : "Fahrzeugkennzeichen",
+        txtPalletQuntity : "Palettenanzahl",
+        txtColis : "Paketanzahl",
+        txtMetter : "Meter",
+        txtHeight : "Tonnen",
+        btnSave : "OK",
+        txtSenderNote : "Absenders Beschreibung",
+        txtRecieverNote : "Empfängers Beschreibung",
+    }
 }

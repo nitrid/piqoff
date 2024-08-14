@@ -29,7 +29,8 @@ module.exports =
         pos: './src/pos/index.js',
         mob: './src/mob/index.js',
         tab: './src/tab/index.js',
-        boss: './src/boss/index.js'
+        boss: './src/boss/index.js',
+        rest: './src/rest/index.js'
     },    
     mode: "development",
     module: 
@@ -68,7 +69,7 @@ module.exports =
             'serialport' : false,
             'path' : false
         },
-        extensions: ["*", ".js", ".jsx"]
+        extensions: ["*", ".js", ".jsx", ".json"]
     },
     output: 
     {
@@ -97,6 +98,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/boss")
+            },
+            {
+                directory: path.join(__dirname, "public/rest")
             }
         ],
         port: 3000,
@@ -119,6 +123,9 @@ module.exports =
                 { from: "./src/pos/css/img/", to: "./pos/css/img/" },
                 { from: "./src/pos/sound/", to: "./pos/sound/" },
                 { from: "./src/pos/resources/", to: "./pos/resources/" },
+                { from: "./src/pos/appUpdate.html", to: "./pos/appUpdate.html" },
+                { from: "./src/pos/css/bootstrap.min.css", to: "./pos/css/bootstrap.min.css" },
+                { from: "./src/pos/lib/bootstrap.bundle.min.js", to: "./pos/lib/bootstrap.bundle.min.js" },
                 { from: "./src/off/css/img/", to: "./off/css/img/" },
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
@@ -140,7 +147,10 @@ module.exports =
                 { from: "./src/boss/sound/", to: "./boss/sound/" },
                 { from: "./src/boss/appUpdate.html", to: "./boss/appUpdate.html" },
                 { from: "./src/boss/css/bootstrap.min.css", to: "./boss/css/bootstrap.min.css" },
-                { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },    
+                { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },  
+                { from: "./src/rest/css/", to: "./rest/css/" },
+                { from: "./src/rest/appUpdate.html", to: "./rest/appUpdate.html" },
+                { from: "./src/rest/lib/bootstrap.bundle.min.js", to: "./rest/lib/bootstrap.bundle.min.js" },    
             ]
         }),
         new htmlWebPackPlugin(
@@ -178,6 +188,12 @@ module.exports =
             template: './src/boss/index.html',
             filename: 'boss/index.html',
             chunks: ['boss']
+        }),
+        new htmlWebPackPlugin(
+        {
+            template: './src/rest/index.html',
+            filename: 'rest/index.html',
+            chunks: ['rest']
         }),
         new zipPlugin(
         {

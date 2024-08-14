@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Fiyatı boş geçemezsiniz !",
     validPriceFloat : "Fiyat 0'dan yüksek olmalıdır !",
     validCustomerCode :"Tedarikci Kodu Giriniz !",
+    validOriginMax8 :"Lütfen 8 karakter giriniz !",
     mainUnitName :"Ana Birim",
     underUnitName : "Alt Birim",
     chkDayAnalysis : "Günlük",
@@ -85,7 +86,8 @@ const stk_01_001 =
         txtPopPriQuantity: "Miktar",
         txtPopPriPrice: "Fiyat",
         txtPopPriHT: "Vargisiz Fiyat",
-        txtPopPriTTC : "Vergili Fiyat"
+        txtPopPriTTC : "Vergili Fiyat",
+        txtPopPriceMargin : "Marj %"
     },
     msgDateInvalid:
     {
@@ -133,6 +135,7 @@ const stk_01_001 =
         clmPrice: "Fiyat",
         clmGrossMargin: "Brüt Marj",
         clmNetMargin: "Net Marj",
+        clmMargin : "Marj %"
     },
     grdUnit: 
     {

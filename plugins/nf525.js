@@ -1480,6 +1480,7 @@ class nf525
         return new Promise(async resolve =>
         {
             let tmpMailText = ""
+            let tmpCompanyDt = ""
             try
             {
                 let tmpDeviceQuery = 
@@ -1488,6 +1489,13 @@ class nf525
                 }
 
                 let tmpDeviceDt = await core.instance.sql.execute(tmpDeviceQuery)
+
+                let tmpCompanyQuery = 
+                {
+                    query : "SELECT TOP 1 NAME FROM COMPANY_VW_01 "
+                }
+
+                tmpCompanyDt = await core.instance.sql.execute(tmpCompanyQuery)
 
                 for (let i = 0; i < tmpDeviceDt.result.recordset.length; i++) 
                 {
@@ -1544,22 +1552,22 @@ class nf525
                         //SATIŞ TUTARI KONTROLÜ
                         if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosSaleTotal)
                         {
-                            tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //ÖDEME TUTARI KONTROLÜ
                         if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosPayTotal)
                         {
-                            tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //REF NO SIFIR MI KONTROLÜ
                         if(tmpPosDt.result.recordset[x].REF == 0)
                         {
-                            tmpMailText = tmpMailText + "Ref No Sıfır - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Ref No Sıfır - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //İMZALANMIŞ MI KONTROLÜ
                         if(tmpPosDt.result.recordset[x].SIGNATURE == '')
                         {
-                            tmpMailText = tmpMailText + "İmza Boş - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "İmza Boş - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
 
                         //AYNI REF NO DAN BAŞKA BİR KAYIT VARMI KONTROLÜ
@@ -1573,14 +1581,14 @@ class nf525
 
                         if(tmpPosRefDt.result.recordset.length > 0)
                         {
-                            tmpMailText = tmpMailText + "Duplicate Ref No - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "Duplicate Ref No - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //******************************************** */
                         //İMZA DOĞRULUK KONTROLÜ
                         let tmpSign = tmpPosDt.result.recordset[x].SIGNATURE_SUM.toString()
                         if(typeof tmpLastPos != 'undefined' && tmpLastPos.SIGNATURE != tmpSign.substring(tmpSign.lastIndexOf(',') + 1,tmpSign.length))
                         {
-                            tmpMailText = tmpMailText + "İmza doğru değil - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                            tmpMailText = tmpMailText + "İmza doğru değil - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + " - GUID : " + tmpPosDt.result.recordset[x].GUID + "\n"
                         }
                         //******************************************** */
                     }
@@ -1600,11 +1608,22 @@ class nf525
             {
                 let tmpMailData =
                 {
-                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
-                    subject : "NF525 Anomali Control",
-                    text : tmpMailText
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
+                    subject : "NF525 Anomali Control - " + tmpCompanyDt.result.recordset[0].NAME,
+                    text : tmpMailText,
                 }
-                this.core.plugins._mailer.mailSend(tmpMailData)
+                let tmpcontrol = await this.core.plugins._mailer.mailSend(tmpMailData)
+                if(tmpcontrol != 0)
+                {
+                    let tmpControlData =
+                    {
+                        sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
+                        subject : "Mail sistemi çalışmıyor - " + tmpCompanyDt.result.recordset[0].NAME,
+                        text : "Mail sistemi çalışmıyor",
+                        mailGuid:"A7386C3E-4973-4D94-BEFE-D6CA932AAF5D"
+                    }
+                   await this.core.plugins._mailer.mailSend(tmpControlData)
+                }
             }
             
             resolve()

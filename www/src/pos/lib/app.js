@@ -116,20 +116,48 @@ export default class App extends React.PureComponent
                 }
             }
         ];
-        
-        let tmpHost = window.location.origin
-        if(localStorage.getItem('local') != null && localStorage.getItem('local'))
+
+        if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
         {
-            tmpHost = localStorage.getItem('host')
+            var body = document.getElementsByTagName('body')[0];
+            var js = document.createElement("script");
+            js.type = "text/javascript";
+            js.src = "../../cordova.js";
+            body.appendChild(js);
+            this.device = true
+            document.addEventListener('deviceready', ()=>
+            {
+                this.init();
+            }, false);
+        }
+        else
+        {
+            
+            this.device = false
+            this.init();
+        }
+    }
+    async init()
+    {
+        let tmpHost = window.location.origin
+        if(this.device)
+        {
+            tmpHost = typeof localStorage.host != 'undefined' ? 'http://' + localStorage.host : window.location.origin
+        }
+        else
+        {
+            if(localStorage.getItem('local') != null && localStorage.getItem('local'))
+            {
+                tmpHost = localStorage.getItem('host')
+            }
         }
         
-        this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
-        this.transfer = new transferCls()
+        this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));        
         this.core.appInfo = {...appInfo}
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);
         this.payType = new datatable();
-
+        
         this.textValueChanged = this.textValueChanged.bind(this)
         
         if(!App.instance)
@@ -185,6 +213,10 @@ export default class App extends React.PureComponent
                 window.location.reload()
             }
         })
+
+        this.transfer = new transferCls()
+        await this.transfer.init('POS');
+        await this.core.util.waitUntil(0)
     }
     async login()
     {
@@ -215,19 +247,22 @@ export default class App extends React.PureComponent
     }
     electronSend(pData)
     {
-        //ELECTRONJS ILE HABERLEŞMEK İÇİN YAPILDI.AYNI UYGULAMA ÜZERİNDE AÇILMIŞ DİĞER PENCERELER İLE HABERLEŞİLEBİLİR.
-        if(this.core.util.isElectron())
+        if (/android/i.test(navigator.userAgent || navigator.vendor || window.opera) == false) 
         {
-            return new Promise(async resolve => 
+            //ELECTRONJS ILE HABERLEŞMEK İÇİN YAPILDI.AYNI UYGULAMA ÜZERİNDE AÇILMIŞ DİĞER PENCERELER İLE HABERLEŞİLEBİLİR.
+            if(this.core.util.isElectron())
             {
-                this.electron.ipcRenderer.send('get',pData);
-                this.electron.ipcRenderer.on('receive', (event, data) => 
+                return new Promise(async resolve => 
                 {
-                    resolve(data)
-                });
-            })
+                    this.electron.ipcRenderer.send('get',pData);
+                    this.electron.ipcRenderer.on('receive', (event, data) => 
+                    {
+                        resolve(data)
+                    });
+                })
+            }
+            //********************************************************************************************************** */
         }
-        //********************************************************************************************************** */
     }
     async componentDidMount()
     {
@@ -258,8 +293,6 @@ export default class App extends React.PureComponent
                 }
             }
             //************************************************************************** */
-            await this.core.util.waitUntil(0)
-            await this.transfer.init('POS') 
         }
     }
     loadPos()

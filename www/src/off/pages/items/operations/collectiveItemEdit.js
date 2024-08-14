@@ -138,24 +138,55 @@ export default class collectiveItemEdit extends React.PureComponent
             </NdSelectBox>    
             ) 
         }
+        else if(e.column.dataField == 'CUSTOMS')
+        {
+            let onValueChanged = function(data)
+            {
+                e.setValue(data)
+            }
+            return (
+                <NdTextBox id={"txtCustoms"+e.rowIndex} parent={this} simple={true} tabIndex={this.tabIndex}
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                onValueChanged={async (v)=>
+                    {
+                        const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}','\n'];
+    
+                        if (punctuationKeyCodes.includes(v.event.key)) 
+                        {
+                            this["txtCustoms"+e.rowIndex].value = v.previousValue
+                        }
+                       
+                        onValueChanged(this["txtCustoms"+e.rowIndex].value)
+                    }}
+                >     
+                    <Validator validationGroup={"frmItems" + this.tabIndex}>
+                    <StringLengthRule 
+                        message={this.t("validOriginMax8")}   
+                        max={8}
+                        min={8}
+                        ignoreEmptyValue={true}
+                    />
+                </Validator>
+                </NdTextBox>      
+            )
+        }
         
     }
     async grossMargin()
     {
-        console.log(1)
         for (let i = 0; i < this.editObj.dt().length; i++) 
         {
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE;
             let tmpMarginRate = ((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / tmpExVat) * 100
             this.editObj.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);        
-            this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+            this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);  
+            this.editObj.dt()[i].MARGIN =  Number((tmpMargin / Number(this.editObj.dt()[i].PRICE_SALE).rateInNum(this.editObj.dt()[i].VAT,3)) * 100).round(2)
         }
         await this.grdItemList.dataRefresh({source:this.editObj.dt()});
     }
     async netMargin()
     {
-        console.log(2)
         for (let i = 0; i < this.editObj.dt().length; i++) 
         {
             let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
@@ -350,6 +381,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
                                     e.values[8] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
+                                    e.values[10] =  Number(tmpMargin / Number(tmpExVat) * 100).round(2)
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
@@ -364,7 +396,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Paging defaultPageSize={14} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
-                                <Export fileName={this.lang.t("menu.stk_04_001")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.stk_04_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={110} allowEditing={false}/> 
                                 <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={130} allowEditing={false}/> 
                                 <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={320} defaultSortOrder="asc"  /> 
@@ -376,7 +408,15 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
-                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} />   
+                                <Column dataField="MARGIN" caption={this.t("grdItemList.clmMargin")} visible={true} width={75} allowEditing={false}/>
+                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this._cellRoleRender}>
+                                <StringLengthRule 
+                                    message={this.t("validOriginMax8")}   
+                                    max={8}
+                                    min={8}
+                                    ignoreEmptyValue={true}
+                                />    
+                                </Column>   
                                 <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this._cellRoleRender}/> 
                                 <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this._cellRoleRender}/>    

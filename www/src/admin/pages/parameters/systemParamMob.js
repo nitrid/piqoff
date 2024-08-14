@@ -39,7 +39,7 @@ export default class systemParamMob extends React.PureComponent
         
         this.prmData.filter({TYPE:0}).meta.map((pItem,pIndex) => 
         {
-            this.ItemSet(pItem)
+            this.ItemSet(pItem,this)
         })
     }
     buildItem()
@@ -47,7 +47,7 @@ export default class systemParamMob extends React.PureComponent
         let tmpItems = []
         this.state.metaPrm.map((pItem) => 
         {
-            tmpItems.push(this.ItemBuild(pItem))
+            tmpItems.push(this.ItemBuild(pItem,this))
         });
         return tmpItems
     }
@@ -74,7 +74,7 @@ export default class systemParamMob extends React.PureComponent
                                         {
                                             let tmpData = {...pItem} 
                                             tmpData.VALUE = this.prmData.filter({TYPE:0,USERS:e.value,ID:pItem.ID}).getValue()                                        
-                                            this.ItemSet(tmpData)
+                                            this.ItemSet(tmpData,this)
                                         })
                                     }}
                                     />
@@ -103,7 +103,7 @@ export default class systemParamMob extends React.PureComponent
                                                         {
                                                             TYPE:this.state.metaPrm[x].TYPE,
                                                             ID:this.state.metaPrm[x].ID,
-                                                            VALUE:await this.ItemGet(this.state.metaPrm[x]),
+                                                            VALUE:await this.ItemGet(this.state.metaPrm[x],this),
                                                             SPECIAL:this.state.metaPrm[x].SPECIAL,
                                                             USERS:data[i].CODE,
                                                             PAGE:this.state.metaPrm[x].PAGE,

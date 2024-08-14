@@ -383,12 +383,11 @@ export default class posDoc extends React.PureComponent
             if(this.posDevice.dt().length > 0)
             {
                 this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
-                {
-                    this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-                    this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
-                }
-                else
+                this.posScale = new posScaleCls()
+                this.posLcd = new posLcdCls()
+                this.posScale.port = this.posDevice.dt()[0].SCALE_PORT
+                this.posLcd.port = this.posDevice.dt()[0].LCD_PORT
+                if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length == 0)
                 {
                     if(this.core.util.isElectron())
                     {
@@ -422,7 +421,7 @@ export default class posDoc extends React.PureComponent
             }
         }
         this.posDevice.scanner();
-
+        
         //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
         this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
         this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
@@ -591,7 +590,27 @@ export default class posDoc extends React.PureComponent
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
             this.posObj.dt()[this.posObj.dt().length - 1].PRINT_DESCRIPTION = this.firm[0].PRINT_DESCRIPTION
         }      
-
+        //KULLANICI BAZLI GÜNLÜK TOPLAM FİŞ SAYISI GÖSTERİMİ. (12.07.2024 - ALI KEMAL KARACA)
+        if(!this.state.isFormation)
+        {
+            let tmpQueryTCount = 
+            {
+                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                param : ['LUSER:string|50'],
+                value : [this.core.auth.data.CODE],
+            }
+    
+            let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
+            if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
+            {
+                this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
+            }
+            else
+            {
+                this.formation.value = ''
+            }   
+        }
+        //************************************************************************************/
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
@@ -606,7 +625,8 @@ export default class posDoc extends React.PureComponent
                 values : [0,this.core.auth.data.CODE,0]
             }
         }
-        await this.parkDt.refresh();     
+        await this.parkDt.refresh();  
+        this.parkCount.value = this.parkDt.length
         
         setTimeout(() => 
         {
@@ -2372,9 +2392,8 @@ export default class posDoc extends React.PureComponent
             let tmpFn = () =>
             {
                 this.txtPaymentPopTotal.value = pAmount
-                
                 this.msgCardPayment.show().then(async (e) =>
-                {                    
+                {   
                     if(e == 'btn01')
                     {
                         if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
@@ -2387,7 +2406,7 @@ export default class posDoc extends React.PureComponent
                     else if(e == 'btn02')
                     {
                         //HER TURLU CEVAP DÖNDÜÜ 0Ç0N POPUP KAPANIYOR YEN0DEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
-                        let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',USERS:this.user.CODE})
+                        let tmpAcsVal = this.acsObj.filter({ID:'btnPCCancelAcs',USERS:this.user.CODE})
                                         
                         if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
                         {   
@@ -2395,27 +2414,66 @@ export default class posDoc extends React.PureComponent
 
                             if(tmpResult)
                             {
-                                if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
-                                {
-                                    await this.posDevice.payPort.close()
-                                }
-                                this.msgCardPayment.hide();
-                                resolve(3) // İptal
+                                tmpAcsVal = true
                             }
                             else
                             {
-                                tmpFn()
+                                tmpAcsVal = false
                             }
+                        }
+                        else
+                        {
+                            tmpAcsVal = true
+                        }
+
+                        if(tmpAcsVal)
+                        {
+                            if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                            {
+                                await this.posDevice.payPort.close()
+                            }
+                            this.msgCardPayment.hide();
+                            resolve(3) // İptal
+                        }
+                        else
+                        {
+                            tmpFn()
                         }
                     }
                     else if(e == 'btn03')
-                    {       
-                        if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
-                        {
-                            await this.posDevice.payPort.close()
+                    {    
+                        let tmpAcsVal = this.acsObj.filter({ID:'btnPCForceAcs',USERS:this.user.CODE})
+                        
+                        if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                            if(tmpResult)
+                            {
+                                tmpAcsVal = true
+                            }
+                            else
+                            {
+                                tmpAcsVal = false
+                            }
                         }
-                        this.msgCardPayment.hide();             
-                        resolve(2) // Zorla
+                        else
+                        {
+                            tmpAcsVal = true
+                        }
+
+                        if(tmpAcsVal)
+                        {
+                            if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
+                            {
+                                await this.posDevice.payPort.close()
+                            }
+                            this.msgCardPayment.hide();             
+                            resolve(2) // Zorla
+                        }
+                        else
+                        {
+                            tmpFn()
+                        }
                     }
                 })
             }
@@ -2479,8 +2537,6 @@ export default class posDoc extends React.PureComponent
             if(this.core.offline)
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
-                this.core.util.writeLog("calcGrandTotal : 09")
-                await this.calcGrandTotal()
             }
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
@@ -2804,14 +2860,15 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                        "@GUID = @PGUID, " + 
                         "@CUSER = @PCUSER, " + 
                         "@TYPE = @PTYPE, " +     
                         "@CUSTOMER = @PCUSTOMER, " +                  
                         "@DOC = @PDOC, " + 
                         "@POINT = @PPOINT, " + 
                         "@DESCRIPTION = @PDESCRIPTION ", 
-                param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
+                param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                value : [datatable.uuidv4(),this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
                 local : 
                 {
                     type : "insert",
@@ -3741,8 +3798,9 @@ export default class posDoc extends React.PureComponent
                     <div className="col-12">                    
                         <div className="row m-2">
                             <div className="col-1">
-                                <img src="./css/img/logo.png" width="50px" height="50px" onClick={()=>
+                                <img src="./css/img/logo.png" width="50px" height="50px" onClick={async()=>
                                 {
+                                    await this.popSettings.show();
                                     if(this.posDevice.dt().length > 0)
                                     {
                                         this.txtPopSettingsLcd.value = this.posDevice.dt()[0].LCD_PORT
@@ -3753,7 +3811,6 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
-                                    this.popSettings.show();
                                 }}/>
                             </div>
                             <div className="col-2">
@@ -3974,7 +4031,7 @@ export default class posDoc extends React.PureComponent
                     <div className="col-12">
                         <NdLayout parent={this} id={"frmBtnGrp"} cols={70} rowHeight={0} margin={[4,4]} preventCollision={true} compactType={null}>
                             {/* txtBarcodeLy */}
-                            <NdLayoutItem key={"txtBarcodeLy"} id={"txtBarcodeLy"} parent={this} data-grid={{x:0,y:0,h:10,w:35,minH:2,maxH:10,minW:15,maxW:35}} 
+                            <NdLayoutItem key={"txtBarcodeLy"} id={"txtBarcodeLy"} parent={this} data-grid={{x:0,y:0,h:10,w:35,minH:10,maxH:10,minW:15,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'txtBarcodeLy',USERS:this.user.CODE})}>
                                 <NdPosBarBox id="txtBarcode" parent={this} simple={true} selectAll={false}
                                 button={
@@ -3994,6 +4051,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.txtBarcode.value != '')
                                             {
+                                                await this.popBarcodeList.show()
                                                 let tmpDt = new datatable(); 
                                                 tmpDt.selectCmd = 
                                                 {
@@ -4010,7 +4068,6 @@ export default class posDoc extends React.PureComponent
                                                 await tmpDt.refresh();
                                                 this.grdBarcodeList.devGrid.clearSelection()
                                                 await this.grdBarcodeList.dataRefresh({source:tmpDt});
-                                                this.popBarcodeList.show()
                                                 this.txtBarcode.value = ""
                                             }
                                         }
@@ -4027,7 +4084,7 @@ export default class posDoc extends React.PureComponent
                                 </NdPosBarBox>
                             </NdLayoutItem>                            
                             {/* grdListLy */}
-                            <NdLayoutItem key={"grdListLy"} id={"grdListLy"} parent={this} data-grid={{x:0,y:10,h:70,w:35,minH:2,maxH:70,minW:20,maxW:35}} 
+                            <NdLayoutItem key={"grdListLy"} id={"grdListLy"} parent={this} data-grid={{x:0,y:10,h:70,w:35,minH:2,maxH:140,minW:20,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'grdListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NdGrid parent={this} id={"grdList"} 
@@ -4181,7 +4238,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* lblTotalLy */}
-                            <NdLayoutItem key={"lblTotalLy"} id={"lblTotalLy"} parent={this} data-grid={{x:0,y:100,h:10,w:35,minH:10,maxH:30,minW:5,maxW:35}} 
+                            <NdLayoutItem key={"lblTotalLy"} id={"lblTotalLy"} parent={this} data-grid={{x:0,y:95,h:10,w:35,minH:10,maxH:30,minW:5,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'lblTotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <div className="row">
@@ -4192,7 +4249,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnTotalLy */}
-                            <NdLayoutItem key={"btnTotalLy"} id={"btnTotalLy"} parent={this} data-grid={{x:0,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnTotalLy"} id={"btnTotalLy"} parent={this} data-grid={{x:0,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnTotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4228,7 +4285,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCreditCardLy */}
-                            <NdLayoutItem key={"btnCreditCardLy"} id={"btnCreditCardLy"} parent={this} data-grid={{x:5,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCreditCardLy"} id={"btnCreditCardLy"} parent={this} data-grid={{x:5,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCreditCardLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4263,7 +4320,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey7Ly */}
-                            <NdLayoutItem key={"btnKey7Ly"} id={"btnKey7Ly"} parent={this} data-grid={{x:10,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey7Ly"} id={"btnKey7Ly"} parent={this} data-grid={{x:10,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey7Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey7"} parent={this} keyBtn={{textbox:"txtBarcode",key:"7"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4272,7 +4329,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey8Ly */}
-                            <NdLayoutItem key={"btnKey8Ly"} id={"btnKey8Ly"} parent={this} data-grid={{x:15,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey8Ly"} id={"btnKey8Ly"} parent={this} data-grid={{x:15,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey8Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey8"} parent={this} keyBtn={{textbox:"txtBarcode",key:"8"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4281,7 +4338,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey9Ly */}
-                            <NdLayoutItem key={"btnKey9Ly"} id={"btnKey9Ly"} parent={this} data-grid={{x:20,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey9Ly"} id={"btnKey9Ly"} parent={this} data-grid={{x:20,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey9Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey9"} parent={this} keyBtn={{textbox:"txtBarcode",key:"9"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4290,7 +4347,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCheckLy */}
-                            <NdLayoutItem key={"btnCheckLy"} id={"btnCheckLy"} parent={this} data-grid={{x:25,y:110,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCheckLy"} id={"btnCheckLy"} parent={this} data-grid={{x:25,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCheckLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCheck"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}
@@ -4303,7 +4360,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnSafeOpenLy */}
-                            <NdLayoutItem key={"btnSafeOpenLy"} id={"btnSafeOpenLy"} parent={this} data-grid={{x:0,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnSafeOpenLy"} id={"btnSafeOpenLy"} parent={this} data-grid={{x:5,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnSafeOpenLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4318,7 +4375,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCashLy */}
-                            <NdLayoutItem key={"btnCashLy"} id={"btnCashLy"} parent={this} data-grid={{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCashLy"} id={"btnCashLy"} parent={this} data-grid={{x:5,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCashLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4353,7 +4410,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnExchangeLy */}
-                            <NdLayoutItem key={"btnExchangeLy"} id={"btnExchangeLy"} parent={this} data-grid={{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnExchangeLy"} id={"btnExchangeLy"} parent={this} data-grid={{x:55,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnExchangeLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnExchange"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4400,7 +4457,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCardTicketLy */}
-                            <NdLayoutItem key={"btnCardTicketLy"} id={"btnCardTicketLy"} parent={this} data-grid={{x:5,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCardTicketLy"} id={"btnCardTicketLy"} parent={this} data-grid={{x:0,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCardTicketLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCardTicket"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4441,7 +4498,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey4Ly */}
-                            <NdLayoutItem key={"btnKey4Ly"} id={"btnKey4Ly"} parent={this} data-grid={{x:10,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey4Ly"} id={"btnKey4Ly"} parent={this} data-grid={{x:10,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey4Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey4"} parent={this} keyBtn={{textbox:"txtBarcode",key:"4"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4450,7 +4507,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey5Ly */}
-                            <NdLayoutItem key={"btnKey5Ly"} id={"btnKey5Ly"} parent={this} data-grid={{x:15,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey5Ly"} id={"btnKey5Ly"} parent={this} data-grid={{x:15,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey5Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey5"} parent={this} keyBtn={{textbox:"txtBarcode",key:"5"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4459,7 +4516,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey6Ly */}
-                            <NdLayoutItem key={"btnKey6Ly"} id={"btnKey6Ly"} parent={this} data-grid={{x:20,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey6Ly"} id={"btnKey6Ly"} parent={this} data-grid={{x:20,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey6Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey6"} parent={this} keyBtn={{textbox:"txtBarcode",key:"6"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4468,7 +4525,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKeyBsLy */}
-                            <NdLayoutItem key={"btnKeyBsLy"} id={"btnKeyBsLy"} parent={this} data-grid={{x:25,y:126,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKeyBsLy"} id={"btnKeyBsLy"} parent={this} data-grid={{x:25,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKeyBsLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKeyBs"} parent={this} keyBtn={{textbox:"txtBarcode",key:"Backspace"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4477,7 +4534,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnDiscountLy */}
-                            <NdLayoutItem key={"btnDiscountLy"} id={"btnDiscountLy"} parent={this} data-grid={{x:0,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnDiscountLy"} id={"btnDiscountLy"} parent={this} data-grid={{x:0,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnDiscountLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4492,7 +4549,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCheqpayLy */}
-                            <NdLayoutItem key={"btnCheqpayLy"} id={"btnCheqpayLy"} parent={this} data-grid={{x:5,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCheqpayLy"} id={"btnCheqpayLy"} parent={this} data-grid={{x:5,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCheqpayLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4539,7 +4596,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey1Ly */}
-                            <NdLayoutItem key={"btnKey1Ly"} id={"btnKey1Ly"} parent={this} data-grid={{x:10,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey1Ly"} id={"btnKey1Ly"} parent={this} data-grid={{x:10,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey1Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey1"} parent={this} keyBtn={{textbox:"txtBarcode",key:"1"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4548,7 +4605,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey2Ly */}
-                            <NdLayoutItem key={"btnKey2Ly"} id={"btnKey2Ly"} parent={this} data-grid={{x:15,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey2Ly"} id={"btnKey2Ly"} parent={this} data-grid={{x:15,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey2Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey2"} parent={this} keyBtn={{textbox:"txtBarcode",key:"2"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4557,7 +4614,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey3Ly */}
-                            <NdLayoutItem key={"btnKey3Ly"} id={"btnKey3Ly"} parent={this} data-grid={{x:20,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey3Ly"} id={"btnKey3Ly"} parent={this} data-grid={{x:20,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey3Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey3"} parent={this} keyBtn={{textbox:"txtBarcode",key:"3"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4566,7 +4623,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKeyXLy */}
-                            <NdLayoutItem key={"btnKeyXLy"} id={"btnKeyXLy"} parent={this} data-grid={{x:25,y:142,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKeyXLy"} id={"btnKeyXLy"} parent={this} data-grid={{x:25,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKeyXLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKeyX"} parent={this} keyBtn={{textbox:"txtBarcode",key:"*"}} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%"}}>
@@ -4575,7 +4632,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCustomerPointLy */}
-                            <NdLayoutItem key={"btnCustomerPointLy"} id={"btnCustomerPointLy"} parent={this} data-grid={{x:0,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCustomerPointLy"} id={"btnCustomerPointLy"} parent={this} data-grid={{x:0,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCustomerPointLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -4610,7 +4667,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnInfoLy */}
-                            <NdLayoutItem key={"btnInfoLy"} id={"btnInfoLy"} parent={this} data-grid={{x:5,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnInfoLy"} id={"btnInfoLy"} parent={this} data-grid={{x:35,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnInfoLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
@@ -4630,7 +4687,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKeyDotLy */}
-                            <NdLayoutItem key={"btnKeyDotLy"} id={"btnKeyDotLy"} parent={this} data-grid={{x:10,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKeyDotLy"} id={"btnKeyDotLy"} parent={this} data-grid={{x:10,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKeyDotLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKeyDot"} parent={this} keyBtn={{textbox:"txtBarcode",key:"."}} className="form-group btn btn-primary btn-block" 
@@ -4638,7 +4695,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnKey0Ly */}
-                            <NdLayoutItem key={"btnKey0Ly"} id={"btnKey0Ly"} parent={this} data-grid={{x:15,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnKey0Ly"} id={"btnKey0Ly"} parent={this} data-grid={{x:15,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnKey0Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnKey0"} parent={this} keyBtn={{textbox:"txtBarcode",key:"0"}} className="form-group btn btn-primary btn-block" 
@@ -4648,13 +4705,13 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnNegative1Ly */}
-                            <NdLayoutItem key={"btnNegative1Ly"} id={"btnNegative1Ly"} parent={this} data-grid={{x:20,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnNegative1Ly"} id={"btnNegative1Ly"} parent={this} data-grid={{x:20,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnNegative1Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnNegative1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false)&& (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             if(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY > 1)
                                             {
@@ -4670,13 +4727,15 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnPlus1Ly */}
-                            <NdLayoutItem key={"btnPlus1Ly"} id={"btnPlus1Ly"} parent={this} data-grid={{x:25,y:158,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnPlus1Ly"} id={"btnPlus1Ly"} parent={this} data-grid={{x:25,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnPlus1Ly',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnPlus1"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",fontSize:"20pt"}}
                                     onClick={async ()=>
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        
+                                       console.log(this.grdList.devGrid.getSelectedRowsData()[0])
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false) && (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             let tmpData = 
                                             {
@@ -4685,11 +4744,12 @@ export default class posDoc extends React.PureComponent
                                             }
                                             this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
                                         }
+
                                     }}><div style={{height:"50px",lineHeight:'35px'}}>+1</div></NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* lblAboutLy */}
-                            <NdLayoutItem key={"lblAboutLy"} id={"lblAboutLy"} parent={this} data-grid={{x:35,y:0,h:10,w:35,minH:2,maxH:10,minW:35,maxW:35}} 
+                            <NdLayoutItem key={"lblAboutLy"} id={"lblAboutLy"} parent={this} data-grid={{x:35,y:0,h:10,w:35,minH:10,maxH:10,minW:35,maxW:35}} 
                             access={this.acsObj.filter({ELEMENT:'lblAboutLy',USERS:this.user.CODE})}>
                                 <div>
                                     <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
@@ -4697,7 +4757,7 @@ export default class posDoc extends React.PureComponent
                                             <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{"Piqsoft " + this.lang.t("about")}  -  </a>
                                             <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
                                         </div>
-                                        <div className="col-4 text-end">
+                                        <div className="col-4 text-end" style={{backgroundColor:this.state.isFormation ? 'coral' : '#0d6efd',color:this.state.isFormation ? 'black' : 'white',borderRadius:'5px'}}>
                                             <NbLabel id="formation" parent={this} value={''}/>
                                         </div>
                                     </div>
@@ -4747,7 +4807,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnDeleteLy */}
-                            <NdLayoutItem key={"btnDeleteLy"} id={"btnDeleteLy"} parent={this} data-grid={{x:35,y:42,h:16,w:5,minH:2,maxH:5,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnDeleteLy"} id={"btnDeleteLy"} parent={this} data-grid={{x:35,y:42,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnDeleteLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%"}}
@@ -4783,7 +4843,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnLineDeleteLy */}
-                            <NdLayoutItem key={"btnLineDeleteLy"} id={"btnLineDeleteLy"} parent={this} data-grid={{x:35,y:58,h:16,w:5,minH:2,maxH:5,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnLineDeleteLy"} id={"btnLineDeleteLy"} parent={this} data-grid={{x:35,y:58,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnLineDeleteLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnLineDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%"}}
@@ -4868,10 +4928,10 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 else if(e == 'btn03')
                                                 {
+                                                    await this.rebateTicketPopup.show()
                                                     this.dtpopRebateTicletStartDate.value = moment(new Date()).format("YYYY-MM-DD")
                                                     this.dtpopRebateTicletFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
                                                     this.cmbpopRebateTicletUser.value = this.core.auth.data.CODE
-                                                    this.rebateTicketPopup.show()
                                                 }
                                             })                                                
                                         }
@@ -4881,7 +4941,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* pluBtnGrpLy */}
-                            <NdLayoutItem key={"pluBtnGrpLy"} id={"pluBtnGrpLy"} parent={this} data-grid={{x:40,y:3,h:82,w:30,minH:10,maxH:200,minW:30,maxW:30}} style={{margin:'-4px'}}
+                            <NdLayoutItem key={"pluBtnGrpLy"} id={"pluBtnGrpLy"} parent={this} data-grid={{x:40,y:10,h:80,w:30,minH:80,maxH:80,minW:30,maxW:30}} style={{margin:'-4px'}}
                             access={this.acsObj.filter({ELEMENT:'pluBtnGrpLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbPluButtonGrp id="pluBtnGrp" parent={this} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
@@ -4911,10 +4971,10 @@ export default class posDoc extends React.PureComponent
                                     {          
                                         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                         {
+                                            await this.popDiffPrice.show();
                                             this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
                                             this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
                                             this.txtPopDiffPriceQ.newStart = true
-                                            this.popDiffPrice.show();
                                         }
                                         else
                                         {
@@ -4932,7 +4992,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnItemSearchLy */}
-                            <NdLayoutItem key={"btnItemSearchLy"} id={"btnItemSearchLy"} parent={this} data-grid={{x:40,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnItemSearchLy"} id={"btnItemSearchLy"} parent={this} data-grid={{x:40,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnItemSearchLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnItemSearch"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
@@ -4952,7 +5012,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnZReportLy */}
-                            <NdLayoutItem key={"btnZReportLy"} id={"btnZReportLy"} parent={this} data-grid={{x:45,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnZReportLy"} id={"btnZReportLy"} parent={this} data-grid={{x:50,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnZReportLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
@@ -4965,12 +5025,13 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnGrdListLy */}
-                            <NdLayoutItem key={"btnGrdListLy"} id={"btnGrdListLy"} parent={this} data-grid={{x:50,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnGrdListLy"} id={"btnGrdListLy"} parent={this} data-grid={{x:50,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnGrdListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popGridList.show();
                                         let tmpDt = this.posObj.posSale.dt().toArray()
                                         for (let i = 0; i < tmpDt.length; i++) 
                                         {
@@ -4985,14 +5046,13 @@ export default class posDoc extends React.PureComponent
                                         }
 
                                         await this.grdPopGrdList.dataRefresh({source:tmpDt});
-                                        this.popGridList.show();
                                     }}>
                                         <i className="text-white fa-solid fa-bars" style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* btnFormationLy */}
-                            <NdLayoutItem key={"btnFormationLy"} id={"btnFormationLy"} parent={this} data-grid={{x:55,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnFormationLy"} id={"btnFormationLy"} parent={this} data-grid={{x:55,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnFormationLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block" : "form-group btn btn-danger btn-block"} style={{height:"100%",width:"100%",fontSize:"18pt",color:"white"}}
@@ -5023,12 +5083,13 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnOrderListLy */}
-                            <NdLayoutItem key={"btnOrderListLy"} id={"btnOrderListLy"} parent={this} data-grid={{x:60,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnOrderListLy"} id={"btnOrderListLy"} parent={this} data-grid={{x:60,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnOrderListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popOrderList.show();
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5050,19 +5111,19 @@ export default class posDoc extends React.PureComponent
                                         }
                                         await tmpOrderList.refresh()
                                         await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
-                                        this.popOrderList.show();
                                     }}>
                                         <i className="text-white fa-solid fa-business-time" style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* btnAdvanceLy */}
-                            <NdLayoutItem key={"btnAdvanceLy"} id={"btnAdvanceLy"} parent={this} data-grid={{x:65,y:90,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnAdvanceLy"} id={"btnAdvanceLy"} parent={this} data-grid={{x:45,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnAdvanceLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={async()=>
                                     {
+                                        await this.popAdvance.show()
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5079,7 +5140,6 @@ export default class posDoc extends React.PureComponent
                                         this.rbtnAdvanceType.value = 0
                                         this.txtPopAdvance.value = 0
                                         this.txtPopAdvance.newStart = true
-                                        this.popAdvance.show()
                                     }}>
                                         <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
                                     </NbButton>
@@ -5092,17 +5152,17 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={async ()=>
                                     {
+                                        await this.popParkList.show();
                                         this.parkDt.selectCmd.value[0] = this.core.auth.data.CODE;
                                         await this.parkDt.refresh();
                                         await this.grdPopParkList.dataRefresh({source:this.parkDt});
-                                        this.popParkList.show();
                                     }}>
-                                        <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
+                                        <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} /><NbLabel id="parkCount" parent={this} value={"0"}/></span>                                            
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* btnSubtotalLy */}
-                            <NdLayoutItem key={"btnSubtotalLy"} id={"btnSubtotalLy"} parent={this} data-grid={{x:40,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnSubtotalLy"} id={"btnSubtotalLy"} parent={this} data-grid={{x:30,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnSubtotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -5122,12 +5182,13 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCustomerAddLy */}
-                            <NdLayoutItem key={"btnCustomerAddLy"} id={"btnCustomerAddLy"} parent={this} data-grid={{x:45,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCustomerAddLy"} id={"btnCustomerAddLy"} parent={this} data-grid={{x:45,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCustomerAddLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerAdd"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
                                     onClick={async()=>
                                     {
+                                        await this.popCustomerAdd.show()
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
                                         if(this.core.offline)
                                         {
@@ -5157,15 +5218,13 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopCustomerZipCode.value = ""
                                         this.txtPopCustomerEmail.value = ""
                                         this.txtPopCustomerTel.value = ""
-
-                                        this.popCustomerAdd.show()
                                     }}>                                        
                                         <i className="text-white fa-solid fa-user-plus" style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* btnCustomerListLy */}
-                            <NdLayoutItem key={"btnCustomerListLy"} id={"btnCustomerListLy"} parent={this} data-grid={{x:50,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCustomerListLy"} id={"btnCustomerListLy"} parent={this} data-grid={{x:40,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCustomerListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -5178,7 +5237,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnGetCustomerLy */}
-                            <NdLayoutItem key={"btnGetCustomerLy"} id={"btnGetCustomerLy"} parent={this} data-grid={{x:55,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnGetCustomerLy"} id={"btnGetCustomerLy"} parent={this} data-grid={{x:30,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnGetCustomerLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
@@ -5217,7 +5276,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnCalculatorLy */}
-                            <NdLayoutItem key={"btnCalculatorLy"} id={"btnCalculatorLy"} parent={this} data-grid={{x:60,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCalculatorLy"} id={"btnCalculatorLy"} parent={this} data-grid={{x:35,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCalculatorLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCalculator"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -5230,7 +5289,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnOfflineLy */}
-                            <NdLayoutItem key={"btnOfflineLy"} id={"btnOfflineLy"} parent={this} data-grid={{x:65,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnOfflineLy"} id={"btnOfflineLy"} parent={this} data-grid={{x:65,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnOfflineLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block" : "form-group btn btn-success btn-block"} style={{height:"100%",width:"100%",fontSize:"10pt"}}
@@ -5267,7 +5326,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnPrintLy */}
-                            <NdLayoutItem key={"btnPrintLy"} id={"btnPrintLy"} parent={this} data-grid={{x:40,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnPrintLy"} id={"btnPrintLy"} parent={this} data-grid={{x:30,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnPrintLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -5295,7 +5354,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </NdLayoutItem>
                             {/* btnLastPrintLy */}
-                            <NdLayoutItem key={"btnLastPrintLy"} id={"btnLastPrintLy"} parent={this} data-grid={{x:45,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnLastPrintLy"} id={"btnLastPrintLy"} parent={this} data-grid={{x:30,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnLastPrintLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnLastPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
@@ -5499,6 +5558,7 @@ export default class posDoc extends React.PureComponent
                                                         {
                                                             if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
                                                             {
+                                                                await this.popTRDetail.show()
                                                                 let tmpDt = new datatable(); 
                                                                 tmpDt.selectCmd = 
                                                                 {
@@ -5515,7 +5575,6 @@ export default class posDoc extends React.PureComponent
                                                                 await tmpDt.refresh();
                                                                 
                                                                 await this.grdTRDetail.dataRefresh({source:tmpDt});
-                                                                this.popTRDetail.show()
                                                             }
                                                         }}>
                                                             {this.lang.t("trDeatil")}
@@ -6019,6 +6078,7 @@ export default class posDoc extends React.PureComponent
                     width={"800"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdBarcodeList */}
                         <div className="row">
@@ -6077,6 +6137,7 @@ export default class posDoc extends React.PureComponent
                     width={"900"}
                     height={"650"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* btnPopParkListAll */}
                         <div className="row py-1">
@@ -6151,6 +6212,7 @@ export default class posDoc extends React.PureComponent
                     width={"800"}
                     height={"530"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdPopOrderList */}
                         <div className="row py-1">
@@ -7228,8 +7290,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >     
                                 </NdTextBox> 
-                            </div>
-                                
+                            </div>                                
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-2">
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
@@ -7611,6 +7672,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.lastPosPayDt.where({PAY_TYPE:3}).length > 0)
                                                     {
+                                                        await this.popLastTRDetail.show()
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
                                                         {
@@ -7627,7 +7689,6 @@ export default class posDoc extends React.PureComponent
                                                         await tmpDt.refresh();
                                                         
                                                         await this.grdLastTRDetail.dataRefresh({source:tmpDt});
-                                                        this.popLastTRDetail.show()
                                                     }
                                                 }}>
                                                     {this.lang.t("trDeatil")}
@@ -7778,6 +7839,7 @@ export default class posDoc extends React.PureComponent
                     width={"600"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdLastTRDetail */}
                         <div className="row">
@@ -7984,42 +8046,43 @@ export default class posDoc extends React.PureComponent
                 {/* Item Return Ticket Dialog  */}
                 <div>
                     <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.lang.t("msgItemReturnTicket.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
-                        onShowed={()=>
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.lang.t("msgItemReturnTicket.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtItemReturnTicket.value = ""
+                        setTimeout(() => 
                         {
-                            this.txtItemReturnTicket.value = ""
-                            setTimeout(() => 
-                            {
-                                this.txtItemReturnTicket.focus()
-                            }, 500);
-                        }}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnTicket.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                    <Form>
-                                        {/* txtItemReturnTicket */}
-                                        <Item>
-                                            <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} mode={"password"}
-                                            onKeyUp={(e)=>
-                                            {
-                                                if(e.event.key == 'Enter')
-                                                {
-                                                    this.ticketCheck(this.txtItemReturnTicket.value)
-                                                }
-                                            }}/>
-                                        </Item>
-                                    </Form>
-                                </div>
+                            this.txtItemReturnTicket.focus()
+                        }, 500);
+                    }}
+                    deferRendering={true}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnTicket.msg")}</div>
                             </div>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    {/* txtItemReturnTicket */}
+                                    <Item>
+                                        <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} mode={"password"}
+                                        onKeyUp={(e)=>
+                                        {
+                                            if(e.event.key == 'Enter')
+                                            {
+                                                this.ticketCheck(this.txtItemReturnTicket.value)
+                                            }
+                                        }}/>
+                                    </Item>
+                                </Form>
+                            </div>
+                        </div>
                     </NdDialog>
                 </div>
                 {/* Alert Item Return Type Popup */} 
@@ -8032,6 +8095,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnType.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8050,6 +8114,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgWeighing.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWeighing.btn02"),location:'after'}]}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -8068,6 +8133,7 @@ export default class posDoc extends React.PureComponent
                     width={"500px"}
                     height={"200px"}
                     button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12">
@@ -8092,6 +8158,7 @@ export default class posDoc extends React.PureComponent
                     width={"300"}
                     height={"515"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* txtPopDiffPriceQ */}
                         <div className="row pt-1">
@@ -8144,6 +8211,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-3 py-2">
@@ -8200,6 +8268,7 @@ export default class posDoc extends React.PureComponent
                     width={"600"}
                     height={"600"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdTRDetail */}
                         <div className="row">
@@ -8249,6 +8318,7 @@ export default class posDoc extends React.PureComponent
                     width={"300"}
                     height={"550"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <div className="row pt-1 pe-2">
                             <div className="col-12">
@@ -8374,11 +8444,35 @@ export default class posDoc extends React.PureComponent
                     width={"900"}
                     height={"580"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
                             <Item>
                                 <Label text={this.lang.t("popSettings.lcdPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsLcd.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {       
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8388,11 +8482,35 @@ export default class posDoc extends React.PureComponent
                                 {                                    
                                     this.keyPopSettings.inputName = "txtPopSettingsLcd"
                                     this.keyPopSettings.setInput(this.txtPopSettingsLcd.value)
-                                }}/>
+                                }}
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popSettings.scalePort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsScale.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8449,6 +8567,29 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:this.core.util.isAndroid(),
+                                            onClick:async()=>
+                                            {
+                                                let tmpDevice = await this.posDevice.deviceList()
+                                                await this.popDeviceList.show()
+                                                await this.popDeviceList.setData(tmpDevice)
+                                                this.popDeviceList.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtPopSettingsPrinter.value = data[0].vendorId + "|" + data[0].productId
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8501,6 +8642,28 @@ export default class posDoc extends React.PureComponent
                         </div>
                     </NdPopUp>
                 </div>
+                {/* Device List Popup */}
+                <div>
+                    <NdPopGrid id={"popDeviceList"} parent={this} container={"#root"}
+                    visible={false}
+                    selection={{mode:'single'}}
+                    filterRow={{visible:false}}
+                    headerFilter={{visible:false}}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.lang.t("popDeviceList.title")} 
+                    deferRendering={true}
+                    >
+                        <Column dataField="manufacturerName" caption={this.lang.t("popDeviceList.clmManufacture")} width={250}/>
+                        <Column dataField="productName" caption={this.lang.t("popDeviceList.clmProductName")} width={400}/>
+                        <Column dataField="productId" caption={this.lang.t("popDeviceList.clmProductId")} width={100}/>
+                        <Column dataField="vendorId" caption={this.lang.t("popDeviceList.clmVendorId")} width={100}/>
+                        <Column dataField="serialNumber" caption={this.lang.t("popDeviceList.clmSerialNo")} width={100}/>
+                    </NdPopGrid>
+                </div>
                 {/* Grid List Popup */}
                 <div>
                     <NdPopUp parent={this} id={"popGridList"} 
@@ -8512,6 +8675,7 @@ export default class posDoc extends React.PureComponent
                     width={"1000"}
                     height={"650"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         {/* grdPopGridList */}
                         <div className="row">
@@ -8696,6 +8860,7 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={"100%"} height={"100%"}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                         <div className="row pb-1">
                             <div className="col-12">
@@ -9142,6 +9307,7 @@ export default class posDoc extends React.PureComponent
                     height={'250'}
                     title={this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9201,6 +9367,7 @@ export default class posDoc extends React.PureComponent
                     height={'260'}
                     title={"Balance " + this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9235,6 +9402,7 @@ export default class posDoc extends React.PureComponent
                     height={'750'}
                     title={this.lang.t("msgAddCustomerMail.title")}
                     position={{of:"#root"}}
+                    deferRendering={true}
                     >
                          <div className="row pt-1">
                             <div className="col-6">
@@ -9387,6 +9555,7 @@ export default class posDoc extends React.PureComponent
                     width={'500'}
                     height={'560'}
                     position={{of:'#root'}}
+                    deferRendering={true}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -9472,6 +9641,7 @@ export default class posDoc extends React.PureComponent
                     <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
                     showTitle={true}
+                    deferRendering={true}
                     >
                         {/* Tool Button Group */} 
                         <div className="row pb-1">

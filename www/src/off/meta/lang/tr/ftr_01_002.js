@@ -26,6 +26,7 @@ const ftr_01_002 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
         clmOutputName :"Depo",
+        clmMail : "Mail Gönderildi"
     },
     popDesign : 
     {

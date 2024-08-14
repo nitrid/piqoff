@@ -49,6 +49,7 @@ const stk_01_001 =
     validPrice :"Le prix ne peut être vide !",
     validPriceFloat : "Le montant doit être supérieur à 0 !",
     validCustomerCode :"Veuillez Entrer un Code Fournisseur !",
+    validOriginMax8 :"Entrez au maximum 8 caractères !",
     mainUnitName :"Unité Principale",
     underUnitName : "Sous Unité",
     chkDayAnalysis : "Journalier",  
@@ -92,7 +93,8 @@ const stk_01_001 =
         txtPopPriQuantity: "Quantité",
         txtPopPriPrice: "Prix de Vente",
         txtPopPriHT: "Prix de Vente HT",
-        txtPopPriTTC : "Prix de Vente TTC"
+        txtPopPriTTC : "Prix de Vente TTC",
+        txtPopPriceMargin : "Marge %"
     },
     popUnit:
     {
@@ -134,6 +136,7 @@ const stk_01_001 =
         clmPrice: "Prix",
         clmGrossMargin: "Marge Brute",
         clmNetMargin: "Marge Nette",
+        clmMargin : "Marge %"
     },
     grdUnit: 
     {
