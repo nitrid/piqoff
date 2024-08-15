@@ -373,6 +373,7 @@ export const langTr =
         pos_02_014 : "Terazi Fişleri",
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_02_016 : "Puan Hareketleri Raporu",
+        pos_02_017 : "Saat aralıklı Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",

@@ -372,6 +372,7 @@ export const langFr =
         pos_02_014 : "Tickets de balance", 
         pos_02_015 : "Rapport vente client",
         pos_02_016 : "Rapport des Mouvements de Points",
+        pos_02_017 : "Rapport de ventes par intervalle horaire",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",

@@ -34,6 +34,7 @@ export default class debReport extends React.PureComponent
         this.core = App.instance.core;
         this.columnListData = 
         [
+            
             {CODE : "CUSTOMS_NO",NAME : this.t("grdListe.clmCustomsNo")},                                   
             {CODE : "ORIGIN",NAME : this.t("grdListe.clmOrigin")},
             {CODE : "REGIME",NAME : this.t("grdListe.clmRegime")},
@@ -52,6 +53,7 @@ export default class debReport extends React.PureComponent
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},
             {CODE : "NATURE",NAME : this.t("grdListe.clmNature")},
             {CODE : "TRANSPORT",NAME : this.t("grdListe.clmTransport")},
+            
 
         ]
         this.groupList = [];
@@ -70,6 +72,8 @@ export default class debReport extends React.PureComponent
         {
             if (e.name == 'selectedItemKeys') 
             {
+            console.log(e.value)
+
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'CUSTOMS_NO') != 'undefined')
                 {
@@ -145,6 +149,7 @@ export default class debReport extends React.PureComponent
                 }
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
                 {
+                    console.log(e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) + '-' + this.grdListe.devGrid.columnOption(i).name)
                     if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
                     {
                         this.grdListe.devGrid.columnOption(i,'visible',false)
@@ -172,7 +177,7 @@ export default class debReport extends React.PureComponent
             displayExpr={'NAME'}
             keyExpr={'CODE'}
             value={this.state.columnListValue}
-            // onOptionChanged={onOptionChanged}
+            onOptionChanged={onOptionChanged}
             >
             </NdListBox>
         )
@@ -292,13 +297,13 @@ export default class debReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
+                            {/* <NdDropDownBox simple={true} parent={this} id="cmbColumn"
                             value={this.state.columnListValue}
                             displayExpr="NAME"                       
                             valueExpr="CODE"
                             data={{source: this.columnListData}}
                             contentRender={this._columnListBox}
-                            />
+                            /> */}
                         </div>
                         <div className="col-3">
                       
@@ -328,6 +333,7 @@ export default class debReport extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export enabled={true} allowExportSelectedData={true} />
+                                <ColumnChooser enabled={true} />
                                 <Column caption="1"><Column dataField="CUSTOMS_NO" caption={this.t("grdListe.clmCustomsNo")} visible={true} /></Column>
                                 <Column caption="2"><Column dataField="ORIGIN" caption={this.t("grdListe.clmOrigin")} visible={true}/></Column>
                                 <Column caption="3"><Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /></Column>

@@ -51,8 +51,10 @@ export default class debReport extends React.PureComponent
     {
         let onOptionChanged = (e) =>
         {
+            console.log(e.value)
             if (e.name == 'selectedItemKeys') 
             {
+                console.log(e.value)
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'OUTPUT_CODE') != 'undefined')
                 {
