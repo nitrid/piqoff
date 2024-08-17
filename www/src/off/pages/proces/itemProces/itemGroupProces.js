@@ -69,13 +69,14 @@ export default class itemList extends React.PureComponent
 
         for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
         {
+            console.log(this.cmbItemGrp.value + '---' +this.grdListe.getSelectedData()[i].GUID)
             let tmpQuery = 
             {
                 query :"UPDATE ITEMS_GRP SET MAIN_GUID = @MAIN WHERE ITEM = @ITEM ",
-                param : ['MAIN:string|25','ITEM:string|50'],
+                param : ['MAIN:string|50','ITEM:string|50'],
                 value : [this.cmbItemGrp.value,this.grdListe.getSelectedData()[i].GUID]
             }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
+            await this.core.sql.execute(tmpQuery) 
         }
         let tmpConfObj1 =
         {
