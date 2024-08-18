@@ -13,7 +13,7 @@ class fumaWebApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.active = true
+        this.active = false
         this.sellerVkn = ''
 
         this.getVkn()

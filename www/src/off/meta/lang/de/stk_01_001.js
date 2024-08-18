@@ -92,7 +92,9 @@ const stk_01_001 =
         txtPopPriQuantity: "Menge",
         txtPopPriPrice: "Preis",
         txtPopPriPriceVatExt: "Preis ohne MwSt.",
-        txtPopPriceMargin : "Marge %"
+        txtPopPriceMargin : "Marge %",
+        txtPopPriceGrossMargin :  "Marge Brute",
+        txtPopPriceNetMargin :  "Marge Nette",
     },
     popUnit: 
     {

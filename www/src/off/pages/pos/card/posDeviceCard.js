@@ -446,6 +446,14 @@ export default class posDeviceCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
+                                 {/* txtScanerPort */}
+                                 <Item>
+                                    <Label text={this.t("txtScanerPort")} alignment="right" />
+                                    <NdTextBox id="txtScanerPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"SCANNER_PORT"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>
