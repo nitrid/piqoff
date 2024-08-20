@@ -358,7 +358,7 @@ export function print()
                 else if(data.pospay[i].PAY_TYPE == 5)
                     tmpType = "AVOIR"
                 else if(data.pospay[i].PAY_TYPE == 6)
-                    tmpType = "VIRMENT"
+                     tmpType = "VIREMENT"
                 else if(data.pospay[i].PAY_TYPE == 7)
                     tmpType = "PRLV"
 
