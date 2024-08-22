@@ -237,7 +237,7 @@ export default class EmployeeCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmemployees"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployees"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         
@@ -350,7 +350,7 @@ export default class EmployeeCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmemployees"  + this.tabIndex}>     
+                            <Form colCount={2} id={"frmEmployees"  + this.tabIndex}>     
                                 {/* txtCode */}
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
@@ -395,11 +395,11 @@ export default class EmployeeCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmemployees"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validation.frmemployees")}/>
+                                        <Validator validationGroup={"frmEmployees"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.frmEmployees")}/>
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
+                                    {/*PERSONEL SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
                                     visible={false}
                                     position={{of:'#root'}} 
@@ -415,15 +415,15 @@ export default class EmployeeCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,CDATE,CUSER,LDATE,LUSER,NAME,LAST_NAME,PHONE1,PHONE2,GSM_PHONE,OTHER_PHONE,EMAIL,AGE,INSURANCE_NO,GENDER,MARIAL_STATUS FROM EMPLOYEE_VW_01",
-                                                param : ['VAL:string|50']
+                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
+                                                param : ['EMPLOYEE_NAME:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
-                                        <Column dataField="GENDER" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="GENDER" caption={this.t("pg_txtCode.clmGender")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="MARIAL_STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />

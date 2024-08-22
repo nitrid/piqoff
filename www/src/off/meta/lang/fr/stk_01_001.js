@@ -93,7 +93,8 @@ const stk_01_001 =
         txtPopPriQuantity: "Quantité",
         txtPopPriPrice: "Prix de Vente",
         txtPopPriHT: "Prix de Vente HT",
-        txtPopPriTTC : "Prix de Vente TTC"
+        txtPopPriTTC : "Prix de Vente TTC",
+        txtPopPriceMargin : "Marge %"
     },
     popUnit:
     {
@@ -135,6 +136,7 @@ const stk_01_001 =
         clmPrice: "Prix",
         clmGrossMargin: "Marge Brute",
         clmNetMargin: "Marge Nette",
+        clmMargin : "Marge %"
     },
     grdUnit: 
     {
