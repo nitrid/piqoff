@@ -4,6 +4,7 @@
     "version": "1.0.12a",
     "dependencies": {
         "adm-zip": "^0.5.10",
+        "axios": "^1.7.3",
         "gensrv": "1.0.106",
         "jsrsasign": "10.6.1",
         "jsrsasign-util": "1.0.5",
