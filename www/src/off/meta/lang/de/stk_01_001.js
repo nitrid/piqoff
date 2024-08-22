@@ -91,7 +91,8 @@ const stk_01_001 =
         dtPopPriEndDate: "Enddatum",
         txtPopPriQuantity: "Menge",
         txtPopPriPrice: "Preis",
-        txtPopPriPriceVatExt: "Preis ohne MwSt."
+        txtPopPriPriceVatExt: "Preis ohne MwSt.",
+        txtPopPriceMargin : "Marge %"
     },
     popUnit: 
     {
@@ -131,7 +132,8 @@ const stk_01_001 =
         clmVatExt: "Preis ohne MwSt.",
         clmPrice: "Preis",
         clmGrossMargin: "Bruttomarge",
-        clmNetMargin: "Nettomarge"
+        clmNetMargin: "Nettomarge",
+        clmMargin : "Marge %"
     },
     grdUnit: 
     {

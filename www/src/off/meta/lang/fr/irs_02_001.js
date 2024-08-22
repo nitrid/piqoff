@@ -412,6 +412,7 @@ const irs_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     grdNewPriceDate:      
     {     
@@ -423,6 +424,7 @@ const irs_02_001 =
         clmMargin : "Marge Brute",
         clmCostPrice : "Coût", 
         clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
     },
     msgPriceDateUpdate :
     {

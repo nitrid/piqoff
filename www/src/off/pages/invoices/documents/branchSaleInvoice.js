@@ -87,16 +87,18 @@ export default class branchSaleInvoice extends DocBase
         
         this.frmDocItems.option('disabled',true)
 
-        let tmpQuery = 
-        {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22",
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-        }
+        setTimeout(async() => {
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22",
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+        }, 1000);
 
         this.pg_txtItemsCode.on('showing',()=>
         {

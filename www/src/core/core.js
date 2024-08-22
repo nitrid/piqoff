@@ -1563,10 +1563,15 @@ export class datatable
                 }
                 else if (tmpOp == 'LIKE' || tmpOp == 'like') 
                 {
-                    const regex = new RegExp(tmpValue);
+                    let escapeRegExp = (string)=>
+                    {
+                        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    }
+                    const escapedValue = escapeRegExp(tmpValue);
+                    const regex = new RegExp(escapedValue, 'i');
                     tmpData = tmpData.filter((x) => 
                     {
-                        return regex.test(x[tmpKey])
+                        return regex.test(String(x[tmpKey]));
                     });
                 }
             }

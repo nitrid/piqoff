@@ -6,6 +6,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import PieChart, { Series, Label, SmallValuesGrouping, Connector, Legend } from 'devextreme-react/pie-chart';
 import AnimatedText from '../../core/react/bootstrap/animatedText.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
+import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NbPopUp from '../../core/react/bootstrap/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling}  from '../../core/react/devex/grid.js';
 import NbLabel from '../../core/react/bootstrap/label.js';
@@ -293,6 +294,8 @@ export default class Dashboard extends React.PureComponent
                         }
                     }
                     await this.popSalesTotal.show()
+                    this.dtTimeFirst.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
+                    this.dtTimeLast.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
                     await this.grdSalesTotal.dataRefresh(tmpSource)
                     await this.grdSalesVatRate.dataRefresh(tmpVatSource)
                   }).bind(this)}/>
@@ -338,6 +341,8 @@ export default class Dashboard extends React.PureComponent
                         }
                     }
                     await this.popSalesTotal.show()
+                    this.dtTimeFirst.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
+                    this.dtTimeLast.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
                     await this.grdSalesTotal.dataRefresh(tmpSource)
                     await this.grdSalesVatRate.dataRefresh(tmpVatSource)
                   }).bind(this)}/>
@@ -816,6 +821,78 @@ export default class Dashboard extends React.PureComponent
             <div>
               <div className="row  p-1">
                   <div className="col-12">
+                    <NdDatePicker simple={true}  parent={this} id={"dtTimeFirst"} type={'datetime'}  pickerType="rollers"
+                     onValueChanged={async(e)=>
+                      {
+                        let tmpSource =
+                        {
+                            source : 
+                            {
+                                groupBy : this.groupList,
+                                select : 
+                                {
+                                    query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
+                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    value : [this.dtTimeFirst.value,this.dtTimeLast.value]
+                                },
+                                sql : this.core.sql
+                            }
+                        }
+                        let tmpVatSource =
+                        {
+                            source : 
+                            {
+                                groupBy : this.groupList,
+                                select : 
+                                {
+                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    value : [this.dtTimeFirst.value,this.dtTimeLast.value]
+                                },
+                                sql : this.core.sql
+                            }
+                        }
+                        await this.grdSalesTotal.dataRefresh(tmpSource)
+                        await this.grdSalesVatRate.dataRefresh(tmpVatSource)
+                      }}/>
+                  </div>
+                  <div className="col-12">
+                    <NdDatePicker simple={true}  parent={this} id={"dtTimeLast"} type={'datetime'}  pickerType="rollers"
+                     onValueChanged={async(e)=>
+                      {
+                        let tmpSource =
+                        {
+                            source : 
+                            {
+                                groupBy : this.groupList,
+                                select : 
+                                {
+                                    query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
+                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    value : [this.dtTimeFirst.value,this.dtTimeLast.value]
+                                },
+                                sql : this.core.sql
+                            }
+                        }
+                        let tmpVatSource =
+                        {
+                            source : 
+                            {
+                                groupBy : this.groupList,
+                                select : 
+                                {
+                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    value : [this.dtTimeFirst.value,this.dtTimeLast.value]
+                                },
+                                sql : this.core.sql
+                            }
+                        }
+                        await this.grdSalesTotal.dataRefresh(tmpSource)
+                        await this.grdSalesVatRate.dataRefresh(tmpVatSource)
+                      }}/>
+                  </div>
+                  <div className="col-12">
                       <NdGrid parent={this} id={"grdSalesTotal"} 
                       showBorders={true} 
                       columnsAutoWidth={true} 
@@ -1037,7 +1114,7 @@ export default class Dashboard extends React.PureComponent
                         {
                             if(e.rowType === "data" && e.column.dataField === "LAST_PRICE")
                             {
-                              e.cellElement.style.color =  "ref" 
+                              e.cellElement.style.color =  "red" 
                             }
                         }}
                       >

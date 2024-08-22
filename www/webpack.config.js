@@ -14,11 +14,11 @@ const hashSum = crypto.createHash('sha256');
 hashSum.update(fileBuffer);
 const hex = hashSum.digest('hex');
 
-// if(pack.scale.sha != hex)
-// {
-//     console.log("invalide scale.js - ")
-//     return
-// }
+if(pack.scale.sha != hex)
+{
+    console.log("invalide scale.js - ")
+    return
+}
 
 module.exports = 
 {
@@ -29,7 +29,8 @@ module.exports =
         pos: './src/pos/index.js',
         mob: './src/mob/index.js',
         tab: './src/tab/index.js',
-        boss: './src/boss/index.js'
+        boss: './src/boss/index.js',
+        rest: './src/rest/index.js'
     },    
     mode: "development",
     module: 
@@ -97,6 +98,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/boss")
+            },
+            {
+                directory: path.join(__dirname, "public/rest")
             }
         ],
         port: 3000,
@@ -143,7 +147,10 @@ module.exports =
                 { from: "./src/boss/sound/", to: "./boss/sound/" },
                 { from: "./src/boss/appUpdate.html", to: "./boss/appUpdate.html" },
                 { from: "./src/boss/css/bootstrap.min.css", to: "./boss/css/bootstrap.min.css" },
-                { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },    
+                { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },  
+                { from: "./src/rest/css/", to: "./rest/css/" },
+                { from: "./src/rest/appUpdate.html", to: "./rest/appUpdate.html" },
+                { from: "./src/rest/lib/bootstrap.bundle.min.js", to: "./rest/lib/bootstrap.bundle.min.js" },    
             ]
         }),
         new htmlWebPackPlugin(
@@ -181,6 +188,12 @@ module.exports =
             template: './src/boss/index.html',
             filename: 'boss/index.html',
             chunks: ['boss']
+        }),
+        new htmlWebPackPlugin(
+        {
+            template: './src/rest/index.html',
+            filename: 'rest/index.html',
+            chunks: ['rest']
         }),
         new zipPlugin(
         {
