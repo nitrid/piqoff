@@ -1,67 +1,120 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import {core} from 'gensrv'
+import { core } from 'gensrv'
 import cron from 'node-cron';
-import fetch from 'node-fetch';
-import moment from 'moment'
-
+import axios from 'axios';
 class fumaWebApi
 {
     constructor()
     {
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
-        this.connEvt = this.connEvt.bind(this)
-        this.core.socket.on('connection',this.connEvt)
-        this.active = true
-        this.sellerVkn = ''
+        this.connEvt = this.connEvt.bind(this);
+        this.core.socket.on('connection',this.connEvt);
+        this.active = true;
+        this.sellerVkn = '';
 
-        this.getVkn()
-        this.processEndDay()
-        //this.processCustomerSend();
+        this.getVkn();
+        this.pointProcess();
+        this.processEndDay();
     }
     async connEvt(pSocket)
     {
-        if(this.active == true)
+        try 
         {
-            pSocket.on('posSaleClosed',async (pParam,pCallback) =>
+            if(this.active == true)
             {
-                this.processPosSaleSend(pParam)
-            })
-            pSocket.on('customerUpdate',async (pParam,pCallback) =>
-            {          
-                this.processCustomerSend(pParam)
-            })
-            pSocket.on('allCustomerSend',async (pParam,pCallback) =>
-            {
-                this.processCustomerSend('00000000-0000-0000-0000-000000000000')
-            })
-            pSocket.on('sql',async (pParam,pCallback) =>
-            {
-                let tmpQuery = undefined
-                if(Array.isArray(pParam))
+                pSocket.on('posSaleClosed',async (pParam,pCallback) =>
                 {
-                    for (let i = 0; i < pParam.length; i++) 
-                    {
-                        if(pParam[i].query.indexOf('PRD_CUSTOMER_POINT_INSERT') > -1)
+                    // if (pParam[0]?.pos[0]?.CUSTOMER_CODE && pParam[0]?.pos[0]?.CUSTOMER_CODE != "")
+                    // {
+                        const sendData = [];
+                        const posSale = [];
+                        const fullName = pParam[0]?.pos[0]?.CUSTOMER_NAME || '';
+                        const [firstName = '', lastName = ''] = fullName.trim().split(' ');
+    
+                        const userData = 
                         {
-                            tmpQuery = pParam[i]
+                            "sellerVkn": this.sellerVkn,
+                            "userTransferId": pParam[0]?.pos[0]?.GUID,
+                            "cardId": pParam[0]?.pos[0]?.CUSTOMER_CODE,
+                            "name": firstName,
+                            "surname": lastName,
+                            "point": parseInt(pParam[0]?.special.customerPoint),
+                            "cardTransferId": pParam[0]?.pos[0]?.GUID,
+                            "email": pParam[0]?.pos[0]?.CUSTOMER_MAIL
+                        };
+                        const posData = 
+                        {
+                            vat: pParam[0]?.pos[0]?.VAT,
+                            discount: pParam[0]?.pos[0]?.DISCOUNT,
+                            famount: pParam[0]?.pos[0]?.FAMOUNT,
+                            amount: pParam[0]?.pos[0]?.AMOUNT,
+                            total: pParam[0]?.pos[0]?.TOTAL,
+                            loyalty: pParam[0]?.pos[0]?.LOYALTY,
+                            orderTransferId: pParam[0]?.pos[0]?.GUID,
+                            documentDate: pParam[0]?.pos[0]?.DOC_DATE,
+                            userTransferId: pParam[0]?.pos[0]?.CUSTOMER_GUID == "00000000-0000-0000-0000-000000000000" ? null : pParam[0]?.pos[0]?.CUSTOMER_GUID,
+                            email: pParam[0]?.pos[0]?.CUSTOMER_MAIL,
+                            name: pParam[0]?.pos[0]?.CUSTOMER_NAME,
+                            surname: pParam[0]?.pos[0]?.CUSTOMER_NAME,
+                            cardId: pParam[0]?.pos[0]?.CUSTOMER_CODE,
+                            cardTransferId: pParam[0]?.pos[0]?.CUSTOMER_GUID == "00000000-0000-0000-0000-000000000000" ? null : pParam[0]?.pos[0]?.CUSTOMER_GUID,
+                            winPoint: parseInt(pParam[0]?.special.customerPoint) - parseInt(pParam[0]?.special.customerGrowPoint),
+                            lostPoint: parseInt(pParam[0]?.special.customerUsePoint)
+                        };
+                        const posSaleData = pParam[0]?.possale;
+    
+                        for (let i = 0; i < posSaleData.length; i++) 
+                        {
+                            posSale.push
+                            ({
+                                transferId: posSaleData[i]?.GUID,
+                                orderTransferId: posSaleData[i]?.GUID,
+                                productName: posSaleData[i]?.ITEM_NAME,
+                                productId: posSaleData[i]?.ITEM_CODE,
+                                productTransferId: posSaleData[i]?.ITEM_GUID,
+                                lineNo: posSaleData[i]?.LINE_NO,
+                                quantity: Number(posSaleData[i]?.QUANTITY),
+                                price: posSaleData[i]?.PRICE,
+                                famount: posSaleData[i]?.FAMOUNT,
+                                amount: posSaleData[i]?.AMOUNT,
+                                discount: posSaleData[i]?.DISCOUNT,
+                                loyalty: posSaleData[i]?.LOYALTY,
+                                vat: posSaleData[i]?.VAT,
+                                total: posSaleData[i]?.TOTAL,
+                                subTotal: posSaleData[i]?.SUBTOTAL
+                            });
                         }
-                    }
-                }
-                else
-                {
-                    if(pParam.query.indexOf('PRD_CUSTOMER_POINT_INSERT') > -1)
-                    {
-                        tmpQuery = pParam
-                    }
-                }
+    
+                        sendData.push
+                        ({ 
+                            sellerVkn: this.sellerVkn, 
+                            pos: posData, 
+                            posSale: posSale, 
+                            userInfo: userData, 
+                            pdf: pParam[1]
+                        });
 
-                if(typeof tmpQuery != 'undefined')
-                {
-                    this.processPointSend(tmpQuery.value)
-                }
-            })
+                        this.sendOrder(sendData);
+
+                        //Eğer satışta puan işlem gördüyse;
+                        if (posData.winPoint > 0 || posData.lostPoint > 0)
+                        {
+                            //this.pointAction(posData);
+                            this.pointProcess();
+                        }
+                    // }
+                });
+                pSocket.on('customerUpdate',async (pParam,pCallback) =>
+                {    
+                    //this.processCustomerSend(pParam)
+                });
+            }
+        } 
+        catch (error) 
+        {
+            console.log("Fuma Web Socket Process Error:"+ error)    
         }
     }
     async getVkn()
@@ -81,528 +134,392 @@ class fumaWebApi
     {
         cron.schedule('0 4 * * *', async () => 
         {
-            try
+            try 
             {
-                // POS SATIŞ GÖNDERİMİ *******************************************************************************************************/
-                let tmpData = []
-                let tmpQuery = 
-                {
-                    query : `SELECT POS.GUID,ISNULL(AUDIT_LOG.STATUS,0) AS STATUS FROM POS_VW_01 AS POS 
-                            LEFT OUTER JOIN AUDIT_LOG ON
-                            POS.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POS'
-                            WHERE ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POS.STATUS = 1 AND POS.DOC_DATE >= @FIRST AND POS.DOC_DATE <= @LAST AND 
-                            POS.CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND POS.CUSTOMER_MAIL <> ''`,
-                    param : ['FIRST:date','LAST:date'],
-                    value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(-1,'day').format("YYYYMMDD")]
-                }
-
-                let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-                if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
-                {
-                    for (let i = 0; i < tmpResult.length; i++) 
-                    {
-                        let tmpPosQuery = 
-                        {
-                            query : "SELECT * FROM POS_VW_01 WHERE GUID = @GUID",
-                            param : ['GUID:string|50'],
-                            value : [tmpResult[i].GUID]
-                        }
-                        let tmpPosResult = (await core.instance.sql.execute(tmpPosQuery)).result.recordset
-    
-                        if(typeof tmpPosResult != 'undefined' && tmpPosResult.length > 0)
-                        {
-                            let tmpPosSaleQuery = 
-                            {
-                                query : "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID",
-                                param : ['POS_GUID:string|50'],
-                                value : [tmpResult[0].GUID]
-                            }
-                            let tmpPosSaleResult = (await core.instance.sql.execute(tmpPosSaleQuery)).result.recordset
-    
-                            if(typeof tmpPosSaleResult != 'undefined' && tmpPosSaleResult.length > 0)
-                            {
-                                tmpData.push(
-                                {
-                                    pos : tmpPosResult,
-                                    possale : tmpPosSaleResult,
-                                    special : {customerPoint:tmpPosResult[0].CUSTOMER_POINT}
-                                })
-                            }
-                        }
-                    }
-                    this.processPosSaleSend({list:tmpData})
-                }
-                //*************************************************************************************************************************** */
-                // POS PUAN GÖNDERİMİ *********************************************************************************************************/
-                let tmpPointData = []
-                let tmpPointQuery = 
-                {
-                    query : `SELECT POINT.GUID,POINT.LDATE,POINT.TYPE,
-                            ISNULL((SELECT TOP 1 EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = POINT.CUSTOMER),'') AS EMAIL,
-                            POINT.DOC,
-                            POINT.POINT,
-                            POINT.DESCRIPTION,
-                            ISNULL(AUDIT_LOG.STATUS,0) AS STATUS 
-                            FROM CUSTOMER_POINT AS POINT 
-                            LEFT OUTER JOIN AUDIT_LOG ON
-                            POINT.GUID = AUDIT_LOG.DOC
-                            WHERE
-                            (SELECT TOP 1 EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = POINT.CUSTOMER) != '' AND 
-                            ISNULL(AUDIT_LOG.STATUS,0) = 0 AND POINT.DELETED = 0 AND POINT.LDATE >= @FIRST AND POINT.LDATE <= @LAST`,
-                    param : ['FIRST:date','LAST:date'],
-                    value : [moment().add(-1,'day').format("YYYYMMDD"),moment().add(0,'day').format("YYYYMMDD")]
-                }
-
-                let tmpPointResult = (await core.instance.sql.execute(tmpPointQuery)).result.recordset
-
-                if(typeof tmpPointResult != 'undefined' && tmpPointResult.length > 0)
-                {
-                    for (let i = 0; i < tmpPointResult.length; i++) 
-                    {
-                        tmpPointData.push(
-                            {
-                                "sellerVkn": this.sellerVkn,
-                                "transferId": tmpPointResult[i].GUID,
-                                "email": tmpPointResult[i].EMAIL,
-                                "type": tmpPointResult[i].TYPE,
-                                "point": tmpPointResult[i].POINT,
-                                "orderId": tmpPointResult[i].DOC,
-                                "description": tmpPointResult[i].DESCRIPTION,
-                                "documentDate": tmpPointResult[i].LDATE,
-                            }
-                        )
-                    }
-                    this.processPointSend({list:tmpPointData})
-                }
-            }
-            catch(err)
+                await this.orderProcess();
+                await this.pointProcess();
+                await this.customerProcess();
+            } 
+            catch (error) 
             {
-                console.log(err)
+                console.log("CronJob error" + error);
             }
-        })
+        });
     }
-    async processPosSaleSend(pData)
+    async pointAction(posData)
     {
-        if(this.active == true)
-        {
-            let tmpSale = []
-            
-            if(typeof pData.list != 'undefined')
-            {
-                for (let m = 0; m < pData.list.length; m++) 
-                {
-                    let tmpSaleLine = []
-                    for (let i = 0; i < pData.list[m].possale.length; i++) 
-                    {
-                        let tmpLineEdit = 
-                        {
-                            "productName": pData.list[m].possale[i].ITEM_NAME,
-                            "productId": pData.list[m].possale[i].ITEM_CODE,
-                            "lineNo": pData.list[m].possale[i].LINE_NO,
-                            "quantity": Number(pData.list[m].possale[i].QUANTITY),
-                            "price": pData.list[m].possale[i].PRICE,
-                            "famount": pData.list[m].possale[i].FAMOUNT,
-                            "amount": pData.list[m].possale[i].AMOUNT,
-                            "discount": pData.list[m].possale[i].DISCOUNT,
-                            "loyalty": pData.list[m].possale[i].LOYALTY,
-                            "vat": pData.list[m].possale[i].VAT,
-                            "total": pData.list[m].possale[i].TOTAL,
-                            "subTotal":pData.list[m].possale[i].FAMOUNT,
-                            "transferId": pData.list[m].possale[i].GUID
-                        }
-                        tmpSaleLine.push(tmpLineEdit)
-                    }
-                    
-                    let tmpDto = 
-                    {
-                        "sellerVkn": this.sellerVkn,
-                        "userInfo" : 
-                        {
-                            "transferId" : pData.list[m].pos[0].CUSTOMER_CODE,
-                            "cardId" : pData.list[m].pos[0].CUSTOMER_CODE,
-                            "email": pData.list[m].pos[0].CUSTOMER_MAIL,
-                            "sellerVkn": this.sellerVkn,
-                            "point": pData.list[m].pos[0].CUSTOMER_POINT,
-                            "pointLast": Number(pData.list[m].special.customerPoint)
-                        },
-                        "pos": 
-                        {
-                            "vat": pData.list[m].pos[0].VAT,
-                            "discount": pData.list[m].pos[0].DISCOUNT,
-                            "famount": pData.list[m].pos[0].FAMOUNT,
-                            "amount": pData.list[m].pos[0].AMOUNT,
-                            "total": pData.list[m].pos[0].TOTAL,
-                            "loyalty": pData.list[m].pos[0].LOYALTY,
-                            "point": pData.list[m].pos[0].CUSTOMER_POINT,
-                            "pointLast": Number(pData.list[m].special.customerPoint),
-                            "transferId": pData.list[m].pos[0].GUID,
-                            "documentDate": pData.list[m].pos[0].LDATE
-                        },
-                        "posSale": tmpSaleLine,
-                        "pdf": ""
-                    }
-                    tmpSale.push(tmpDto);
+        const sendData = [];
 
-                    if (await this.SelectAuditLog(pData.list[m].pos[0].GUID))
-                    {
-                        await this.updateAuditLog('POS',pData.list[m].pos[0].GUID);
-                    }
-                    else
-                    {
-                       await this.insertAuditLog('POS',pData.list[m].pos[0].GUID)
-                    }
-                }
-            }
-            else
+        if (posData.winPoint > 0)
+        {
+            const winData = 
             {
-                let tmpSaleLine = []
-                for (let i = 0; i < pData[0].possale.length; i++) 
-                {
-                    let tmpLineEdit = 
-                    {
-                        "productName": pData[0].possale[i].ITEM_NAME,
-                        "productId": pData[0].possale[i].ITEM_CODE,
-                        "lineNo": pData[0].possale[i].LINE_NO,
-                        "quantity": Number(pData[0].possale[i].QUANTITY),
-                        "price": pData[0].possale[i].PRICE,
-                        "famount": pData[0].possale[i].FAMOUNT,
-                        "amount": pData[0].possale[i].AMOUNT,
-                        "discount": pData[0].possale[i].DISCOUNT,
-                        "loyalty": pData[0].possale[i].LOYALTY,
-                        "vat": pData[0].possale[i].VAT,
-                        "total": pData[0].possale[i].TOTAL,
-                        "subTotal":pData[0].possale[i].FAMOUNT,
-                        "transferId": pData[0].possale[i].GUID
-                    }
-                    tmpSaleLine.push(tmpLineEdit)
+                sellerVkn: this.sellerVkn,
+                orderId: posData.orderTransferId,
+                description: "",
+                documentDate: posData.documentDate,
+                type: 0,
+                point: posData.winPoint,
+                transferId: posData.orderTransferId,
+                cardTransferId: posData.cardTransferId,
+                cardId: posData.cardId
+            }
+            
+            sendData.push(winData);
+        }
+
+        if (posData.lostPoint > 0)
+        {
+            const winData = 
+            {
+                sellerVkn: this.sellerVkn,
+                orderId: posData.orderTransferId,
+                description: "",
+                documentDate: posData.documentDate,
+                type: 1,
+                point: posData.lostPoint,
+                transferId: posData.orderTransferId,
+                cardTransferId: posData.cardTransferId,
+                cardId: posData.cardId
+            }
+            
+            sendData.push(winData);
+        }
+
+        this.sendPoint(sendData);
+    }
+    async orderProcess()
+    {
+        let sendData = [];
+        let posQuery = 
+        {
+            query : `SELECT
+                    ROUND(POS.VAT,4) AS vat,
+                    ROUND(POS.DISCOUNT,4) AS discount,
+                    ROUND(POS.FAMOUNT,4) AS famount,
+                    ROUND(POS.AMOUNT,4) AS amount,
+                    ROUND(POS.TOTAL,4) AS total,
+                    ROUND(POS.LOYALTY,4) AS loyalty,
+                    POS.GUID AS orderTransferId,
+                    POS.LDATE AS documentDate,
+                    POS.CUSTOMER_GUID AS userTransferId,
+                    lower(POS.CUSTOMER_MAIL) AS email,
+                    POS.CUSTOMER_PHONE AS mobilePhone,
+                    POS.CUSTOMER_FIRST_NAME AS name,
+                    POS.CUSTOMER_LAST_NAME AS surname,
+                    POS.CUSTOMER_CODE AS cardId,
+                    POS.CUSTOMER_GUID AS cardTransferId,
+                    CAST(ISNULL((SELECT POINT FROM CUSTOMERS WHERE CUSTOMERS.GUID = POS.CUSTOMER_GUID),0) AS INT) AS point,
+                    CAST(ISNULL((SELECT TOP 1 POINT FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = POS.CUSTOMER_GUID AND TYPE = 0 AND CUSTOMER_POINT.DOC = POS.GUID), 0) AS INT) AS winPoint,
+                    CAST(ISNULL((SELECT TOP 1 POINT FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = POS.CUSTOMER_GUID AND TYPE = 1 AND CUSTOMER_POINT.DOC = POS.GUID), 0) AS INT) AS lostPoint,
+                    ISNULL(AUDIT_LOG.STATUS,0) AS STATUS
+                    FROM FUMA_VW_01 AS POS 
+                    LEFT OUTER JOIN AUDIT_LOG ON
+                    POS.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POS'
+                    WHERE 
+                    ISNULL(AUDIT_LOG.STATUS,0) = 0 AND 
+                    POS.STATUS = 1
+                    AND POS.CUSTOMER_CODE <> ''
+                    ORDER BY documentDate ASC `
+        }
+        
+        let posData = (await core.instance.sql.execute(posQuery)).result.recordset;
+        
+        if(posData.length > 0)
+        {
+            const orderTransferIds = posData.map(row => `'${row.orderTransferId}'`).join(',');
+
+            let posSaleQuery = 
+            {
+                query : `SELECT 
+                        GUID AS transferId,
+                        POS_GUID AS orderTransferId,
+                        ITEM_NAME AS productName,
+                        ITEM_CODE AS productId,
+                        ITEM_GUID AS productTransferId,
+                        LINE_NO AS 'lineNo',
+                        QUANTITY AS quantity,
+                        ROUND(PRICE,4) AS price,
+                        ROUND(FAMOUNT,4) AS famount,
+                        ROUND(AMOUNT,4) AS amount,
+                        ROUND(DISCOUNT,4) AS discount,
+                        ROUND(LOYALTY,4) AS loyalty,
+                        ROUND(VAT,4) AS vat,
+                        ROUND(TOTAL,4) AS total,
+                        ROUND(FAMOUNT,4) AS subTotal
+                        FROM FUMA_VW_02 
+                        WHERE POS_GUID IN (${orderTransferIds})`,
+            }
+        
+            const posSaleData = (await core.instance.sql.execute(posSaleQuery)).result.recordset;
+        
+            // posSaleData'yı orderTransferId'ye göre gruplandıralım.
+            const groupedPosSaleData = posSaleData.reduce((acc, item) => 
+            {
+                if (!acc[item.orderTransferId]) {
+                    acc[item.orderTransferId] = [];
                 }
-    
-                tmpSale = 
-                [{
+                acc[item.orderTransferId].push(item);
+                return acc;
+            }, {});
+        
+            for (let i = 0; i < posData.length; i++) 
+            {
+                const userInfo = 
+                {
                     "sellerVkn": this.sellerVkn,
-                    "userInfo" : 
-                    {
-                        "transferId" : pData[0].pos[0].CUSTOMER_CODE,
-                        "cardId" : pData[0].pos[0].CUSTOMER_CODE,
-                        "email": pData[0].pos[0].CUSTOMER_MAIL,
-                        "sellerVkn": this.sellerVkn,
-                        "point": Number(pData[0].special.customerPoint),
-                        "pointLast": pData[0].pos[0].CUSTOMER_POINT
-                    },
-                    "pos": 
-                    {
-                        "vat": pData[0].pos[0].VAT,
-                        "discount": pData[0].pos[0].DISCOUNT,
-                        "famount": pData[0].pos[0].FAMOUNT,
-                        "amount": pData[0].pos[0].AMOUNT,
-                        "total": pData[0].pos[0].TOTAL,
-                        "loyalty": pData[0].pos[0].LOYALTY,
-                        "point": parseInt(pData[0].pos[0].TOTAL * (pData[0].special.customerPointFactory / 100)),
-                        "pointLast": pData[0].pos[0].CUSTOMER_POINT,
-                        "transferId": pData[0].pos[0].GUID,
-                        "documentDate": pData[0].pos[0].LDATE
-                    },
-                    "posSale": tmpSaleLine,
-                    "pdf": typeof pData[1] == 'undefined' ? "" : "data:image/png;base64," + pData[1]
-                }]
+                    "userTransferId": posData[i].userTransferId,
+                    "cardId": posData[i].cardId,
+                    "name": posData[i].name,
+                    "surname": posData[i].surname,
+                    "mobilePhone": posData[i].mobilePhone,
+                    "point": parseInt(posData[i].point),
+                    "cardTransferId": posData[i].cardTransferId,
+                    "email": posData[i].email
+                };
 
-                if (await this.SelectAuditLog(pData[0].pos[0].GUID))
-                {
-                    await this.updateAuditLog('POS',pData[0].pos[0].GUID);
-                }
-                else
-                {
-                    await this.insertAuditLog('POS',pData[0].pos[0].GUID)
-                }
+                sendData.push({ sellerVkn: this.sellerVkn, pos: posData[i], posSale: groupedPosSaleData[posData[i].orderTransferId], userInfo: userInfo, pdf: ""});
             }
-            if(typeof pData != 'undefined')
-            {
-                fetch('http://fuma.piqsoft.net:3090/integration/createOrders', 
-                {
-                    method: 'POST',
-                    headers:  
-                    {
-                        'x-api-key': '1453', 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(tmpSale)
-                })
-                .then(response => 
-                {
-                    //console.log(response)
-                    if (!response.ok) 
-                    {
-                        throw new Error('FumaApi - processPosSaleSend : Yükleme başarısız. HTTP Hata: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => 
-                {
-                    if(data.success)
-                    {
-                        //console.log("FumaApi - processPosSaleSend : Gönderim başarılı")
-                    }
-                    else
-                    {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - processPosSaleSend : ' + data.error)
-                    }
-                })
-                .catch(error => 
-                {
-                    console.error('FumaApi - processPosSaleSend Hata:', error.message);
-                });
-            }
+
+            await this.sendOrder(sendData);
         }
     }
-    async customerUpdate(pData)
-    {   
-        if(this.active == true)
-        {
-            if(typeof pData != 'undefined')
-            {
-                fetch('http://fuma.piqsoft.net:3090/integration/createUsers', 
-                {
-                    method: 'POST',
-                    headers:  
-                    {
-                        'x-api-key': '1453', 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(pData)
-                })
-                .then(response => 
-                {
-                    if (!response.ok) 
-                    {
-                        throw new Error(JSON.stringify(response));
-                    }
-                    return response.json();
-                })
-                .then(data => 
-                {
-                    
-                    if(data.success)
-                    {
-                        //console.log("FumaApi - customerUpdate : Gönderim başarılı")
-                    }
-                    else
-                    {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - customerUpdate : ' + data.error)
-                    }
-                })
-                .catch(error => 
-                {
-                    console.error('FumaApi - customerUpdate Hata:', error.message);
-                });
-            }
-        }
-    }
-    async processCustomerSend(pGuid)
+    async customerProcess()
     {
-        if(this.active == true)
+        let sendData = [];
+        let customerQuery = 
         {
-            let tmpQuery = 
-            {
-                query : " SELECT *, LOWER(EMAIL) AS MAIL FROM CUSTOMER_VW_02 WHERE EMAIL LIKE  '%@%' AND ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
-                param : ['GUID:string|50'],
-                value : [pGuid]
-            }
-            let tmpResult = (await this.core.sql.execute(tmpQuery)).result.recordset
+            query : `SELECT * FROM (SELECT
+                    MAX(NAME) AS name,
+                    MAX(LAST_NAME) AS surname,
+                    LOWER(MAX(EMAIL)) AS email,
+                    MAX(PHONE1) AS mobilePhone,
+                    MAX(GUID) AS userTransferId,
+                    MAX(CODE) AS cardId,
+                    MAX(GUID) AS cardTransferId,
+                    MAX(CUSTOMER_POINT) AS point
+                    FROM FUMA_VW_03
+                    WHERE 
+                    CODE <> ''
+                    GROUP BY CODE) AS tbl
+                    LEFT OUTER JOIN AUDIT_LOG ON
+                    tbl.userTransferId = AUDIT_LOG.DOC AND
+                    AUDIT_LOG.TYPE = 'USER'
+                    WHERE
+                    ISNULL(AUDIT_LOG.STATUS,0) = 0 `,
+        }
+        
+        let customerData = (await core.instance.sql.execute(customerQuery)).result.recordset;
 
-            let tmpCount = tmpResult.length
-            let tmpPageCount = Math.ceil(tmpCount / 1000)
-            let tmpCounter = 0
-            for (let i = 0; i < tmpPageCount; i++) 
+        if (customerData.length)
+        {
+            for (let i = 0; i < customerData.length; i++) 
             {
-                let tmpLength = tmpCounter + 1000
-            
-                let  slicedArray = tmpResult.slice(tmpCounter, tmpLength)
-
-                let tmpArray = []
-                for (let x = 0; x < slicedArray.length; x++) 
+                const userInfo = 
                 {
-                    let tmpJson = {
-                        "name": slicedArray[x].NAME,
-                        "surname": slicedArray[x].LAST_NAME,
-                        "email": slicedArray[x].MAIL,
-                        "mobilePhoneCountryCode": "",
-                        "mobilePhone": slicedArray[x].GSM_PHONE,
-                        "transferId": slicedArray[x].GUID,
-                        "sellerVkn":this.sellerVkn,
-                        "cardId": slicedArray[x].CODE,
-                        "point": slicedArray[x].CUSTOMER_POINT
-                    }
-                    tmpArray.push(tmpJson)
-                }
-
-                await this.customerUpdate(tmpArray)
-                tmpCounter = tmpLength
+                    "sellerVkn": this.sellerVkn,
+                    "userTransferId": customerData[i].userTransferId,
+                    "cardId": customerData[i].cardId,
+                    "name": customerData[i].name,
+                    "surname": customerData[i].surname,
+                    "mobilePhone": customerData[i].mobilePhone,
+                    "point": parseInt(customerData[i].point),
+                    "pointLast": parseInt(customerData[i].point),
+                    "cardTransferId": customerData[i].cardTransferId,
+                    "email": customerData[i].email
+                };
+                
+                sendData.push(userInfo);
             }
+
+            await this.sendCustomer(sendData);
         }
     }
-    async processPointSend(pData)
+    async pointProcess()
     {
-        if(typeof pData != 'undefined')
+        let sendData = [];
+        let pointQuery = 
         {
-            let tmpResponse = undefined
+            query : `SELECT
+                    POINT.DOC AS orderId,
+                    POINT.DESCRIPTION AS description,
+                    POINT.LDATE AS documentDate,
+                    POINT.TYPE AS type,
+                    POINT.POINT AS point,
+                    POINT.GUID AS transferId,
+                    (SELECT TOP 1 GUID FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER) AS cardTransferId,
+                    ISNULL((SELECT TOP 1 CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER),'') AS cardId,
+                    ISNULL(AUDIT_LOG.STATUS,0) AS STATUS 
+                    FROM CUSTOMER_POINT AS POINT 
+                    LEFT OUTER JOIN AUDIT_LOG ON
+                    POINT.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POINT'
+                    WHERE
+                    (SELECT TOP 1 CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER) != '' AND 
+                    ISNULL(AUDIT_LOG.STATUS,0) = 0 AND 
+                    POINT.DELETED = 0 `,
+        };
+        
+        let pointData = (await core.instance.sql.execute(pointQuery)).result.recordset;
 
-            if(typeof pData.list != 'undefined')
+        if (pointData.length)
+        {
+            for (let i = 0; i < pointData.length; i++) 
             {
-                tmpResponse = pData.list
-                for (let i = 0; i < tmpResponse.length; i++) 
+                const cardInfo = 
                 {
-                    if (await this.SelectAuditLog(tmpResponse[i].transferId))
-                    {
-                        await this.updateAuditLog('POINT',tmpResponse[i].transferId)
-                    }
-                    else
-                    {
-                        await this.insertAuditLog('POINT',tmpResponse[i].transferId)
-                    }
-                }
-            }
-            else
-            {
-                let tmpCustomerQuery = 
-                {
-                    query : "SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @CUSTOMER AND DELETED = 0",
-                    param : ['CUSTOMER:string|50'],
-                    value : [pData[3]]
-                }
-
-                let tmpResultCustomer = await core.instance.sql.execute(tmpCustomerQuery)
-
-                if(typeof tmpResultCustomer.result.err == 'undefined' && tmpResultCustomer.result.recordset.length > 0)
-                {
-                    tmpResponse = 
-                    [{
-                        "sellerVkn": this.sellerVkn,
-                        "transferId": pData[0],
-                        "email": tmpResultCustomer.result.recordset[0].EMAIL,
-                        "type": pData[2],
-                        "point": Number(pData[5]),
-                        "orderId": pData[4],
-                        "description": typeof pData[6] == 'undefined' ? '' : pData[6],
-                        "documentDate": moment().format('YYYY-MM-DD HH:mm:ss.SSS')
-                    }]
-                }
-
-                if (await this.SelectAuditLog(pData[0]))
-                {
-                    await this.updateAuditLog('POINT',pData[0])
-                }
-                else
-                {
-                    await this.insertAuditLog('POINT',pData[0])
-                }              
+                    "sellerVkn": this.sellerVkn,
+                    "orderId": pointData[i].orderId,
+                    "description": pointData[i].description,
+                    "documentDate": pointData[i].documentDate,
+                    "type": pointData[i].type,
+                    "point": Math.trunc(Number(pointData[i].point)),
+                    "transferId": pointData[i].transferId,
+                    "cardTransferId": pointData[i].cardTransferId,
+                    "cardId": pointData[i].cardId
+                };
+                
+                sendData.push(cardInfo);
             }
 
-            if(typeof tmpResponse != 'undefined')
-            {
-                fetch('http://fuma.piqsoft.net:3090/integration/creatUserPointLog', 
-                {
-                    method: 'POST',
-                    headers:  
-                    {
-                        'x-api-key': '1453', 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(tmpResponse)
-                })
-                .then(response => 
-                {
-                    if (!response.ok) 
-                    {
-                        console.log((response));
-                        throw new Error('FumaApi - processPointSend : Yükleme başarısız. HTTP Hata: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => 
-                {
-                    if(data.success)
-                    {
-                        //console.log("FumaApi - processPointSend : Gönderim başarılı")
-                    }
-                    else
-                    {
-                        console.log(data.message, typeof data.error == 'undefined' ? '' : 'FumaApi - processPointSend : ' + data.error)
-                    }
-                })
-                .catch(error => 
-                {
-                    console.error('FumaApi - processPointSend Hata:', error.message);
-                });
-            }
+            await this.sendPoint(sendData);
         }
     }
-    async updateAuditLog(pType,pDoc)
+    async sendOrder(orderData) 
     {
-        try
-        {
-            let tmpQuery = 
-            {
-                query : "UPDATE AUDIT_LOG SET STATUS = 1 WHERE DOC = @DOC AND TYPE = @TYPE", 
-                param : ['DOC:string|50','TYPE:string|25'],
-                value : [pDoc,pType],
-            }
-            await core.instance.sql.execute(tmpQuery);
-        }
-        catch(err)
-        {
-            console.log(err)
-        }
-    }
-    async insertAuditLog(pType,pDoc)
-    {
-        try
-        {
-            let tmpQuery = 
-            {
-                query : `INSERT INTO [dbo].[AUDIT_LOG]
-                        ([CDATE]
-                        ,[TYPE]
-                        ,[DOC]
-                        ,[STATUS])
-                    VALUES
-                        (GETDATE()
-                        ,@TYPE
-                        ,@DOC
-                        ,1)`, 
-                param : ['DOC:string|50','TYPE:string|25'],
-                value : [pDoc,pType],
-            }
-            await core.instance.sql.execute(tmpQuery)
-        }
-        catch(err)
-        {
-            console.log(err)
-        }
-    }
-    async SelectAuditLog(pDoc)
-    {
-        try
-        {
-            let tmpQuery = 
-            {
-                query : `SELECT DOC FROM AUDIT_LOG WHERE DOC=@DOC;`, 
-                param : ['DOC:string|50'],
-                value : [pDoc],
-            }
-            let response = await core.instance.sql.execute(tmpQuery);
+        console.log("[sendOrder]-Start total data: " + orderData.length);
 
-            if (response?.result?.recordset?.length > 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-        catch(err)
+        const chunkSize = 1000;
+        let index = 0;
+        
+        const config = 
         {
-            console.log(err)
+            headers: 
+            {
+                "x-api-key": "1453",
+                "Content-Type": "application/json"
+            }
+        };
+    
+        while (index < orderData.length) 
+        {
+            const chunk = orderData.slice(index, index + chunkSize);
+            index += chunkSize;
+
+            try 
+            {
+                console.log(`[sendOrder]-sendData: ` + chunk.length);
+
+                const response = await axios.post('http://fuma.piqsoft.net:3090/integration/createOrders', chunk, config);
+
+                if (response.data && response.data.success)
+                {
+                    const insertValue = chunk.map(data => `(GETDATE(), 'POS', '${data.pos.orderTransferId}', 1)`);
+                    await this.insertAuditLog(insertValue);
+                }
+            } 
+            catch (error) 
+            {
+                console.error('[sendOrder] - Error sending order:', JSON.stringify(error));
+            }
         }
+
+        console.log("[sendOrder]-end");
+    }
+    async sendCustomer(customerData) 
+    {
+        console.log("[sendCustomer]-Start total data: " + customerData.length);
+
+        const chunkSize = 1000;
+        let index = 0;
+        
+        const config = 
+        {
+            headers: 
+            {
+                "x-api-key": "1453",
+                "Content-Type": "application/json"
+            }
+        };
+    
+        while (index < customerData.length) 
+        {
+            const chunk = customerData.slice(index, index + chunkSize);
+            index += chunkSize;
+
+            try 
+            {
+                console.log(`[sendCustomer]-sendData: ` + chunk.length);
+
+                const response = await axios.post('http://fuma.piqsoft.net:3090/integration/createUsers', chunk, config);
+
+                if (response.data && response.data.success)
+                {
+                    const insertValue = chunk.map(data => `(GETDATE(), 'USER', '${data.userTransferId}', 1)`);
+                    await this.insertAuditLog(insertValue);
+                }
+            }
+            catch (error) 
+            {
+                console.error('[sendCustomer] - Error sending order:', JSON.stringify(error));
+            }
+        }
+
+        console.log("[sendCustomer]-end");
+    }
+    async sendPoint(pointData) 
+    {
+        console.log("[sendPoint]-Start total data: " + pointData.length);
+
+        const chunkSize = 1000;
+        let index = 0;
+        
+        const config = 
+        {
+            headers: 
+            {
+                "x-api-key": "1453",
+                "Content-Type": "application/json"
+            }
+        };
+    
+        while (index < pointData.length) 
+        {
+            const chunk = pointData.slice(index, index + chunkSize);
+            index += chunkSize;
+
+            try 
+            {
+                console.log(`[sendPoint]-sendData: ` + chunk.length);
+
+                const response = await axios.post('http://fuma.piqsoft.net:3090/integration/creatUserPointLog', chunk, config);
+
+                if (response.data && response.data.success)
+                {
+                    const insertValue = chunk.map(data => `(GETDATE(), 'POINT', '${data.transferId}', 1)`);
+                    await this.insertAuditLog(insertValue);
+                }
+            } 
+            catch (error) 
+            {
+                console.error('[sendPoint]-Error sending order:', JSON.stringify(error));
+            }
+        }
+
+        console.log("[sendPoint]-end");
+    }
+    async insertAuditLog(insertData)
+    {
+        let insertQuery = 
+        {
+            query : `INSERT INTO [dbo].[AUDIT_LOG]
+                    ([CDATE]
+                    ,[TYPE]
+                    ,[DOC]
+                    ,[STATUS])
+                VALUES ${insertData.join(",")}`
+        }
+
+        await core.instance.sql.execute(insertQuery);
     }
 }
 

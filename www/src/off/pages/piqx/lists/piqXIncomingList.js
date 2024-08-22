@@ -59,10 +59,15 @@ export default class piqXIncomingList extends React.PureComponent
     }
     async btnGetClick()
     {
+        console.log(this.taxId)
+        console.log(this.dtFirst.value)
+        console.log(this.dtLast.value)
+
         if(this.taxId != "")
         {
             this.core.socket.emit('piqXInvoiceList',{taxId:this.taxId,first:moment(this.dtFirst.value).utcOffset(0, true),last:moment(this.dtLast.value).utcOffset(0, true)},async(pData)=>
             {
+                console.log(pData)
                 await this.grdList.dataRefresh({source:[]})
                 let tmpSource =
                 {
