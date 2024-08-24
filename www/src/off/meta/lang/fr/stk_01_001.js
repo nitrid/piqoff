@@ -13,6 +13,7 @@ const stk_01_001 =
     txtItemName: "Nom du produit",
     txtShortName: "Désignation Courte",
     chkActive: "Produit Actif",
+
     chkCaseWeighed: "Peser Produit en caisse",
     chkLineMerged: "Détacher les Lignes à la Caisse",
     chkTicketRest: "Ticket Rest.",
@@ -94,7 +95,9 @@ const stk_01_001 =
         txtPopPriPrice: "Prix de Vente",
         txtPopPriHT: "Prix de Vente HT",
         txtPopPriTTC : "Prix de Vente TTC",
-        txtPopPriceMargin : "Marge %"
+        txtPopPriceMargin : "Marge %",
+        txtPopPriceGrossMargin :"Gross margin",
+        txtPopPriceNetMargin:"Net marge",
     },
     popUnit:
     {

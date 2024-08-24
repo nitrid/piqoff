@@ -26,8 +26,8 @@ class fumaWebApi
             {
                 pSocket.on('posSaleClosed',async (pParam,pCallback) =>
                 {
-                    // if (pParam[0]?.pos[0]?.CUSTOMER_CODE && pParam[0]?.pos[0]?.CUSTOMER_CODE != "")
-                    // {
+                    if (pParam[0]?.pos[0]?.CUSTOMER_CODE && pParam[0]?.pos[0]?.CUSTOMER_CODE != "")
+                    {
                         const sendData = [];
                         const posSale = [];
                         const fullName = pParam[0]?.pos[0]?.CUSTOMER_NAME || '';
@@ -104,7 +104,7 @@ class fumaWebApi
                             //this.pointAction(posData);
                             this.pointProcess();
                         }
-                    // }
+                    }
                 });
                 pSocket.on('customerUpdate',async (pParam,pCallback) =>
                 {    
@@ -137,8 +137,8 @@ class fumaWebApi
             try 
             {
                 await this.orderProcess();
-                await this.pointProcess();
                 await this.customerProcess();
+                await this.pointProcess();
             } 
             catch (error) 
             {
@@ -193,7 +193,7 @@ class fumaWebApi
         let sendData = [];
         let posQuery = 
         {
-            query : `SELECT
+            query : `SELECT TOP 30000
                     ROUND(POS.VAT,4) AS vat,
                     ROUND(POS.DISCOUNT,4) AS discount,
                     ROUND(POS.FAMOUNT,4) AS famount,
