@@ -94,7 +94,9 @@ const stk_01_001 =
         txtPopPriPrice: "Prix de Vente",
         txtPopPriHT: "Prix de Vente HT",
         txtPopPriTTC : "Prix de Vente TTC",
-        txtPopPriceMargin : "Marge %"
+        txtPopPriceMargin : "Marge %",
+        txtPopPriceGrossMargin :"Gross marge",
+        txtPopPriceNetMargin:"Net marge",
     },
     popUnit:
     {
