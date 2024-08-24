@@ -2145,7 +2145,7 @@ export default class posDoc extends React.PureComponent
                 }
                 else
                 {
-                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
                     {
                         let tmpData = 
                         {
@@ -2168,7 +2168,15 @@ export default class posDoc extends React.PureComponent
                                 customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                             }
                         }
-                        await this.print(tmpData,1,this.posObj.dt()[0].CUSTOMER_MAIL)
+
+                        if(this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                        {
+                            await this.print(tmpData,1,this.posObj.dt()[0].CUSTOMER_MAIL)
+                        }
+                        else
+                        {
+                            await this.print(tmpData,3,'')
+                        }
                     }
                 }
                 //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -3015,7 +3023,6 @@ export default class posDoc extends React.PureComponent
     }
     print(pData,pType,pMail)
     {
-        console.log(pType)
         // SUB TOTAL İÇİN SATIRLAR TEKRARDAN DÜZENLENİYOR.
         this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
@@ -3066,6 +3073,12 @@ export default class posDoc extends React.PureComponent
                 {
                     pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
                     let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
+                    this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
+                }
+                else if(pType == 3) // Maili kayıtlı olmayan fişlerin gönderimi için yapıldı...
+                {
+                    pData.special.customerPoint = parseInt(pData.special.customerGrowPoint) + parseInt(pData.pos[0].TOTAL * (pData.special.customerPointFactory / 100))
+                    let tmpPdf = await this.posDevice.pdfPrint(tmpPrint,'')
                     this.core.socket.emit('posSaleClosed',[pData,tmpPdf])
                 }
                 resolve()
