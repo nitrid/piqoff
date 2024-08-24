@@ -15,7 +15,6 @@ class fumaWebApi
         this.sellerVkn = '';
 
         this.getVkn();
-        this.pointProcess();
         this.processEndDay();
     }
     async connEvt(pSocket)
@@ -26,8 +25,8 @@ class fumaWebApi
             {
                 pSocket.on('posSaleClosed',async (pParam,pCallback) =>
                 {
-                    // if (pParam[0]?.pos[0]?.CUSTOMER_CODE && pParam[0]?.pos[0]?.CUSTOMER_CODE != "")
-                    // {
+                    if (pParam[0]?.pos[0]?.CUSTOMER_CODE && pParam[0]?.pos[0]?.CUSTOMER_CODE != "")
+                    {
                         const sendData = [];
                         const posSale = [];
                         const fullName = pParam[0]?.pos[0]?.CUSTOMER_NAME || '';
@@ -104,7 +103,7 @@ class fumaWebApi
                             //this.pointAction(posData);
                             this.pointProcess();
                         }
-                    // }
+                    }
                 });
                 pSocket.on('customerUpdate',async (pParam,pCallback) =>
                 {    
