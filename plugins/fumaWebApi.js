@@ -15,7 +15,6 @@ class fumaWebApi
         this.sellerVkn = '';
 
         this.getVkn();
-        this.pointProcess();
         this.processEndDay();
     }
     async connEvt(pSocket)
