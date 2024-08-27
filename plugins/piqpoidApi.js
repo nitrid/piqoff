@@ -1,4 +1,6 @@
 import {core} from 'gensrv'
+import cron from 'node-cron';
+
 class piqpoidApi
 {
     constructor()
@@ -9,6 +11,11 @@ class piqpoidApi
     }
     connEvt(pSocket)
     {
+        cron.schedule('0 3 * * *', async () => 
+        {
+            pSocket.emit('piqPoid',{tag:"Refresh"}) 
+        })
+
         pSocket.on('piqPoid',async(pParam,pCallback) =>
         {
             if(pParam.tag == 'getParam')
