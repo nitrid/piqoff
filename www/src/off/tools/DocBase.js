@@ -2836,6 +2836,14 @@ export default class DocBase extends React.PureComponent
                     >
                         <Form colCount={2} height={'fit-content'}>
                             <Item>
+                                <Label text={this.lang.t("popTransport.txtSenderDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtSenderDate"}dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_DATE"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popTransport.txtRecieverDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtRecieverDate"}dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_DATE"}}/>
+                            </Item>
+                            <Item>
                                 <Label text={this.lang.t("popTransport.txtSenderName")} alignment="right" />
                                 <NdTextBox id="txtSenderName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>

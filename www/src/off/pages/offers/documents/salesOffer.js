@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -874,6 +875,8 @@ export default class salesOffer extends DocBase
                                             {
                                                 this.docObj.transportInfermotion.addEmpty()
                                                 this.docObj.transportInfermotion.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.transportInfermotion.dt()[0].SENDER_DATE = moment(new Date()).format("YYYY-MM-DD")
+                                                this.docObj.transportInfermotion.dt()[0].DOC_GUID = moment(new Date()).format("YYYY-MM-DD")
                                             }
                                             this.popTransport.show()
                                         }

@@ -587,5 +587,7 @@ export const langFr =
         btnSave :"OK",
         txtSenderNote : "Instruction Expéditeur",
         txtRecieverNote : "Instruction Destinataire",
+        dtSenderDate : "Chargement Date",
+        txtRecieverDate : "Livraison Date"
     }
 }
