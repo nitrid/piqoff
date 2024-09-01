@@ -2255,6 +2255,8 @@ export class transportInfermotionCls
             RECIEVER_ZIPCODE : '',
             TRANSPORTER : '',
             TRANSPORTER_PLATE : '',
+            SENDER_NOTE : '',
+            RECIEVER_NOTE : '',
             PALLET_QUANTITY:0,
             METTER : 0,
             HEIGHT : 0,
