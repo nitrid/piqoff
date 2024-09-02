@@ -396,10 +396,7 @@ export default class bill extends React.PureComponent
                             let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                             for (let x = 0; x < tmpServices.length; x++) 
                             {
-                                //MASA BAZLI YAZDIRMA
-                                await this.restOrderObj.load({ZONE:tmpServices[x].ZONE})
-                                //SERVİS BAZLI YAZDIRMA
-                                //await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
+                                await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
                                 
                                 let tmpPrintDt = []
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
@@ -536,10 +533,7 @@ export default class bill extends React.PureComponent
                             onSaveClick={async(e)=>
                             {
                                 let tmpPrintDt = []
-                                //MASA BAZLI YAZDIRMA
-                                await this.restOrderObj.load({ZONE:this.tableSelected.GUID})
-                                //SERVİS BAZLI YAZDIRMA
-                                //await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
+                                await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
 
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
 
