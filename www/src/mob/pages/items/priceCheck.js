@@ -39,6 +39,25 @@ export default class priceCheck extends React.PureComponent
             query : "SELECT * FROM ITEM_PRICE_VW_01 WHERE ((ITEM_CODE = @CODE) OR (@CODE = '')) AND TYPE = 0",
             param : ['CODE:string|25'],
         }
+        this.priceDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@LIST_NO = @PLIST_NO, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@DEPOT = @PDEPOT, " + 
+                    "@START_DATE = @PSTART_DATE, " + 
+                    "@FINISH_DATE = @PFINISH_DATE, " + 
+                    "@PRICE = @PPRICE, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@CONTRACT = @PCONTRACT ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
+        } 
 
         this.alertContent = 
         {
@@ -233,7 +252,7 @@ export default class priceCheck extends React.PureComponent
                                             headerFilter = {{visible:false}}
                                             height={'auto'} 
                                             width={'100%'}
-                                            dbApply={false}
+                                            dbApply={true}
                                             onCellClick={async (e)=>
                                             {
                                                 if(e.column.dataField == "PRICE")
@@ -241,16 +260,9 @@ export default class priceCheck extends React.PureComponent
                                                     let tmpResult = await this.popNumber.show("PRICE",Number(e.value))
                                                     if(typeof tmpResult != 'undefined' && tmpResult != '' && Number(e.value) != Number(tmpResult))
                                                     {
-                                                        let tmpQuery = 
-                                                        {
-                                                            query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                                                    "@GUID = @PGUID, " +
-                                                                    "@PRICE = @PPRICE ", 
-                                                            param : ['PGUID:string|50','PPRICE:float'],
-                                                            value : [e.data.GUID,Number(tmpResult)]
-                                                        } 
-                                                        await this.core.sql.execute(tmpQuery)
+                                                      
                                                         e.data.PRICE = Number(tmpResult)
+                                                        this.priceDt.update()
                                                     }
                                                 }
                                             }}
@@ -258,7 +270,7 @@ export default class priceCheck extends React.PureComponent
                                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                                 <Scrolling mode="standart" />
                                                 <Paging defaultPageSize={10} />
-                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                                <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                                 <Column dataField="FINISH_DATE" caption={this.t("grdPrice.clmDate")} allowEditing={false}  width={120} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}
                                                 cellRender={(e) => 
                                                 {
