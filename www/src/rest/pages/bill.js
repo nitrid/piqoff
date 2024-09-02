@@ -55,7 +55,7 @@ export default class bill extends React.PureComponent
 
         this.grpItem.selectCmd = 
         {
-            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007') ORDER BY CODE ASC"
+            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018') ORDER BY CODE ASC"
         }
         await this.grpItem.refresh()
         
@@ -70,7 +70,8 @@ export default class bill extends React.PureComponent
                     ISNULL((SELECT TOP 1 VAT FROM ITEMS WHERE ITEMS.GUID = ITEM.ITEM_GUID),0) AS VAT,
                     ISNULL((SELECT TOP 1 WAITING FROM ITEMS_REST WHERE ITEMS_REST.ITEM = ITEM.ITEM_GUID),0) AS WAITING,
                     ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE_VW_01 AS IMG WHERE IMG.ITEM_GUID = ITEM.ITEM_GUID),'') AS IMAGE
-                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007')`
+                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007','008','009','010',
+                    '011','012','013','014','015','016','017','018')`
         }
         await this.productItem.refresh();
         
@@ -395,7 +396,10 @@ export default class bill extends React.PureComponent
                             let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                             for (let x = 0; x < tmpServices.length; x++) 
                             {
-                                await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
+                                //MASA BAZLI YAZDIRMA
+                                await this.restOrderObj.load({ZONE:tmpServices[x].ZONE})
+                                //SERVİS BAZLI YAZDIRMA
+                                //await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
                                 
                                 let tmpPrintDt = []
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
@@ -532,7 +536,10 @@ export default class bill extends React.PureComponent
                             onSaveClick={async(e)=>
                             {
                                 let tmpPrintDt = []
-                                await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
+                                //MASA BAZLI YAZDIRMA
+                                await this.restOrderObj.load({ZONE:this.tableSelected.GUID})
+                                //SERVİS BAZLI YAZDIRMA
+                                //await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
 
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
 
