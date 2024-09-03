@@ -55,7 +55,7 @@ export default class bill extends React.PureComponent
 
         this.grpItem.selectCmd = 
         {
-            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007') ORDER BY CODE ASC"
+            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018') ORDER BY CODE ASC"
         }
         await this.grpItem.refresh()
         
@@ -70,7 +70,8 @@ export default class bill extends React.PureComponent
                     ISNULL((SELECT TOP 1 VAT FROM ITEMS WHERE ITEMS.GUID = ITEM.ITEM_GUID),0) AS VAT,
                     ISNULL((SELECT TOP 1 WAITING FROM ITEMS_REST WHERE ITEMS_REST.ITEM = ITEM.ITEM_GUID),0) AS WAITING,
                     ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE_VW_01 AS IMG WHERE IMG.ITEM_GUID = ITEM.ITEM_GUID),'') AS IMAGE
-                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007')`
+                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007','008','009','010',
+                    '011','012','013','014','015','016','017','018')`
         }
         await this.productItem.refresh();
         
@@ -935,58 +936,65 @@ export default class bill extends React.PureComponent
                             <NbProductDetailView parent={this} id="productDetailView" param={this.param.filter({ID:'SpecialNote',TYPE:0})}
                             onCloseClick={async()=>
                             {
-                                let tmpArrProp = []
-
-                                for (let i = 0; i < this.productDetailView.itemProp.length; i++) 
+                                try
                                 {
-                                    let tmpObjP = this.productDetailView["ChkGrp" + this.productDetailView.itemProp[i].CODE].state.items
-                                    for (let x = 0; x < tmpObjP.length; x++) 
+                                    let tmpArrProp = []
+
+                                    for (let i = 0; i < this.productDetailView.itemProp.length; i++) 
                                     {
-                                        if(tmpObjP[x].VALUE)
+                                        let tmpObjP = this.productDetailView["ChkGrp" + this.productDetailView.itemProp[i].CODE].state.items
+                                        for (let x = 0; x < tmpObjP.length; x++) 
                                         {
-                                            tmpArrProp.push(tmpObjP[x])
-                                            tmpArrProp[tmpArrProp.length - 1].CODE = this.productDetailView.itemProp[i].CODE
+                                            if(tmpObjP[x].VALUE)
+                                            {
+                                                tmpArrProp.push(tmpObjP[x])
+                                                tmpArrProp[tmpArrProp.length - 1].CODE = this.productDetailView.itemProp[i].CODE
+                                            }
                                         }
                                     }
-                                }
-                                
-                                this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
-                                this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
-                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM)
-                                this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
-                                this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
-                                this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
-                                this.productDetailView.items.TOTAL = this.productDetailView.items.AMOUNT
-
-                                this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
-                                this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
-                                this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
-                                this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
-
-                                if(this.productDetailView.items.QUANTITY == 0)
-                                {
-                                    let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
-                                    if(tmpRemoveItem.length > 0)
+    
+                                    this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
+                                    this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
+                                    this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM_GUID)
+                                    this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
+                                    this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
+                                    this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
+                                    this.productDetailView.items.TOTAL = this.productDetailView.items.AMOUNT
+    
+                                    this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
+                                    this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+    
+                                    if(this.productDetailView.items.QUANTITY == 0)
                                     {
-                                        this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
+                                        let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
+                                        if(tmpRemoveItem.length > 0)
+                                        {
+                                            this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
+                                        }
+                                        if(this.restOrderObj.restOrderDetail.dt().length == 0)
+                                        {
+                                            this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
+                                            this.restOrderObj.dt().removeAt(0)
+                                            this.serviceView.updateState()
+                                        }
                                     }
-                                    if(this.restOrderObj.restOrderDetail.dt().length == 0)
+    
+                                    await this.restOrderObj.save()
+    
+                                    if(typeof this.serviceDetailView != 'undefined')
                                     {
-                                        this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
-                                        this.restOrderObj.dt().removeAt(0)
-                                        this.serviceView.updateState()
+                                        this.serviceDetailView.updateState()
+                                    }
+                                    if(typeof this.addProductView != 'undefined')
+                                    {
+                                        this.addProductView.updateState()
                                     }
                                 }
-                                
-                                await this.restOrderObj.save()
-
-                                if(typeof this.serviceDetailView != 'undefined')
+                                catch(e)
                                 {
-                                    this.serviceDetailView.updateState()
-                                }
-                                if(typeof this.addProductView != 'undefined')
-                                {
-                                    this.addProductView.updateState()
+                                    console.log(e)
                                 }
 
                                 this.popProductDetail.hide()
