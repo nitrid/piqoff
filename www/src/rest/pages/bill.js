@@ -410,20 +410,6 @@ export default class bill extends React.PureComponent
                         }}
                         onSaveClick={async(e)=>
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
-                                button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
-                            }
-
-                            let msgResult = await dialog(tmpConfObj);
-
-                            if(msgResult == "btn02")
-                            {
-                                return
-                            }
-
                             let tmpPrintDt = []
                             let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                             for (let x = 0; x < tmpServices.length; x++) 
@@ -434,6 +420,20 @@ export default class bill extends React.PureComponent
                                 
                                 if (tmpFilter.length > 0)
                                 {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
+                                    
                                     for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(
