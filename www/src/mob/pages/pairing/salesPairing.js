@@ -31,6 +31,7 @@ export default class salesPairing extends React.PureComponent
         this.unitDt = new datatable();
         this.priceDt = new datatable();        
         this.orderDt = new datatable();
+        this.orderGuid = ''
 
         this.itemDt.selectCmd = 
         {
@@ -45,7 +46,7 @@ export default class salesPairing extends React.PureComponent
             "ITEMS.STATUS AS STATUS,   "  +
             "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
             "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
-            "MAX(BARCODE) AS BARCODE,   "  +
+            "(BARCODE) AS BARCODE,   "  +
             "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
             "ORDERS.GUID AS ORDER_LINE_GUID,   "  +
             "ORDERS.DOC_GUID AS ORDER_DOC_GUID,   "  +
@@ -63,7 +64,7 @@ export default class salesPairing extends React.PureComponent
             "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
             "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM   "  +
             "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
-            param : ['CODE:string|25'],
+            param : ['DOC_GUID:string|50','CODE:string|50'],
         }
         this.unitDt.selectCmd = 
         {
@@ -87,6 +88,8 @@ export default class salesPairing extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.dtFirstDate.value = moment(new Date())
+        this.dtLastDate.value = moment(new Date())
 
         this.dtDocDate.value = moment(new Date())
 
@@ -170,12 +173,14 @@ export default class salesPairing extends React.PureComponent
         {
             this.clearEntry();
             
-            this.itemDt.selectCmd.value = [pCode]
+            this.itemDt.selectCmd.value = [this.orderGuid,pCode]
             await this.itemDt.refresh();  
             
+            console.log(this.itemDt)
             if(this.itemDt.length > 0)
             {
                 this.lblItemName.value = this.itemDt[0].NAME
+                t
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
@@ -202,19 +207,6 @@ export default class salesPairing extends React.PureComponent
             resolve();
         });
     }
-    getPrice(pGuid,pQuantity,pCustomer)
-    {
-        return new Promise(async resolve => 
-        {
-            this.priceDt.selectCmd.value = [pGuid,pQuantity,(pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer)]
-            await this.priceDt.refresh()
-            if(this.priceDt.length > 0)
-            {
-                resolve(this.priceDt[0].PRICE)
-            }
-            resolve(0)
-        });
-    }
     async calcEntry() {
         // Vérifie si l'une des propriétés a une valeur différente de zéro
         if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
@@ -239,11 +231,6 @@ export default class salesPairing extends React.PureComponent
             }
     
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
-            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
-                this.txtPrice.value = Number(
-                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
-                ).round(2);
-            }
     
             // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
             this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
@@ -395,6 +382,7 @@ export default class salesPairing extends React.PureComponent
     }
     async onClickBarcodeShortcut()
     {
+        console.log(1)
         if(this.docObj.dt()[0].OUTPUT == '')
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDepot")}</div>)
@@ -433,7 +421,8 @@ export default class salesPairing extends React.PureComponent
             this.docObj.dt()[0].INPUT_CODE = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
             this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
             this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
-            this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER
+            this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            this.orderGuid = this.grdOrderList.getSelectedData()[0].DOC_GUID
             let tmpQuery = 
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
@@ -443,11 +432,12 @@ export default class salesPairing extends React.PureComponent
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
 
+            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
             }
-            this.onClickBarcodeShortcut.bind(this)
+            this.onClickBarcodeShortcut()
         }
     }
     render()
@@ -1065,7 +1055,6 @@ export default class salesPairing extends React.PureComponent
                                                 if(typeof e.data.QUANTITY != 'undefined')
                                                 {
                                                     e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].INPUT))).round(2)
                                                     await this.save()
                                                 }
                                                 if(typeof e.data.PRICE != 'undefined')
