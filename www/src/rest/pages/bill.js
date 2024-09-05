@@ -338,7 +338,7 @@ export default class bill extends React.PureComponent
             let tmpArrDt = []
             for (let i = 0; i < tmpPrintDt.groupBy('CODE').length; i++) 
             {
-                let tmpItems = []
+                let tmpItems = new datatable()
                 for (let x = 0; x < pData.length; x++) 
                 {
                     let tmpFilterPrinter = tmpPrintDt.where({CODE:tmpPrintDt.groupBy('CODE')[i].CODE}).where({ITEM_GUID:pData[x].ITEM})
@@ -361,10 +361,27 @@ export default class bill extends React.PureComponent
             
             for (let i = 0; i < tmpArrDt.length; i++) 
             {
-                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i]) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
                 {
-                    console.log(pResult)
-                })
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
             }
 
             resolve(true)
@@ -393,16 +410,30 @@ export default class bill extends React.PureComponent
                         }}
                         onSaveClick={async(e)=>
                         {
+                            let tmpPrintDt = []
                             let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                             for (let x = 0; x < tmpServices.length; x++) 
                             {
                                 await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
                                 
-                                let tmpPrintDt = []
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
-
+                                
                                 if (tmpFilter.length > 0)
                                 {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
+                                    
                                     for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(
@@ -418,52 +449,18 @@ export default class bill extends React.PureComponent
                                             QUANTITY : tmpFilter[i].QUANTITY,
                                             PROPERTY : tmpFilter[i].PROPERTY,
                                             DESCRIPTION : tmpFilter[i].DESCRIPTION,
+                                            WAITING : tmpFilter[i].WAITING,
+                                            WAIT_STATUS : tmpFilter[i].WAIT_STATUS,
                                         })
                                         tmpFilter[i].STATUS = 1
                                     }
-                                    await this.print(tmpPrintDt)
-                                    await this.restOrderObj.save()
                                     this.tableView.items[e].DELIVERED = 0
                                 }
-                                else
-                                {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'80%',height:'180px',
-                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRePrint.btn02"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
-                                    }
-    
-                                    let msgResult = await dialog(tmpConfObj);
-
-                                    if(msgResult == "btn01")
-                                    {
-                                        for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
-                                        {
-                                            tmpPrintDt.push(
-                                            {
-                                                LDATE : moment(new Date()).utcOffset(0, true),
-                                                LUSER : this.core.auth.data.CODE,
-                                                REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
-                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
-                                                REF : this.restOrderObj.restOrderDetail.dt()[i].REF,
-                                                ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
-                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
-                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
-                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
-                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
-                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
-                                            })
-                                            this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
-                                        }
-
-                                        await this.print(tmpPrintDt)
-                                        await this.restOrderObj.save()
-                                        this.tableView.items[e].DELIVERED = 0
-                                    }
-                                }
+                                await this.restOrderObj.save()
                             }
 
+                            await this.print(tmpPrintDt)
+                            
                             this.tableView.updateState()
                         }}
                         onChangeClick={async(e)=>
@@ -539,6 +536,19 @@ export default class bill extends React.PureComponent
 
                                 if (tmpFilter.length > 0)
                                 {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
                                     for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(

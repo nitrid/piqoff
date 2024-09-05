@@ -85,6 +85,13 @@ export const langTr =
         btn01 : "Evet",
         btn02 : "Hayır"
     },
+    msgSendKitchen:
+    {
+        title : "Dikkat",
+        msg : "Ürünleri mutfaga göndermek istediğinize eminmisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
     msgWaitStatus:
     {
         title : "Uyarı",
