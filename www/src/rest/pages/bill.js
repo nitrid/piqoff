@@ -502,7 +502,7 @@ export default class bill extends React.PureComponent
                                             PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
                                             DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
                                             WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
-                                            WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[x].WAIT_STATUS,
+                                            WAIT_STATUS : 3,
                                         })
                                         this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
                                     }
@@ -670,12 +670,12 @@ export default class bill extends React.PureComponent
                                             PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
                                             DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
                                             WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
-                                            WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[x].WAIT_STATUS,
+                                            WAIT_STATUS : 3,
                                         })
                                         this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
                                     }
                                     await this.print(tmpPrintDt)
-                                    
+
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
 
