@@ -71,34 +71,41 @@ export default class NbTableView extends NbBase
                 <div key={i} className='col-xs-6 col-sm-4 col-md-3 col-lg-2 pb-2'>
                     <div className="card" style={tmpCardStyle}>
                         <div className="card-body">
-                            {(()=>
-                            {
-                                if(this.state.data[i].ORDER_COUNT != 0)
-                                {
-                                    return (
-                                        <div style={{position:'absolute',color:'#079992',top:'10px',left:'10px'}}>
-                                            <div className="row">
-                                            <i className="fa-solid fa-users" style={{fontSize:'18px'}}></i>
-                                            </div>
-                                            <div className="row">
-                                                <h5 className="text-center" style={tmpCountStyle}><strong>{this.state.data[i].PERSON}</strong></h5>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                                else
-                                {
-                                    return null
-                                }
-                            })()}
-                            
                             <div className="row" onClick={()=>
                             {
                                 this._onClick(i)
                             }}>
                                 <div className="col-12">
-                                    <h5 className="card-title text-center m-0">{this.state.data[i].NAME}</h5>
-                                    <p className="fs-3 fw-bold text-center" style={tmpCountStyle}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                    <div className="row">
+                                        <div className="col-12">
+                                            <h5 className="card-title text-center m-0">{this.state.data[i].NAME}</h5>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <p className="fs-3 fw-bold text-center" style={tmpCountStyle}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                        </div>
+                                        <div className="col-6" style={{alignContent:'center'}}>
+                                            {(()=>
+                                            {
+                                                if(this.state.data[i].ORDER_COUNT != 0)
+                                                {
+                                                    return (
+                                                        <div className="row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color:'#0f6f6a' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center',justifyContent:'center' }}>
+                                                                <i className="fa-solid fa-users" style={{ fontSize: '18px', marginRight: '5px' }}></i>
+                                                                <h5 style={{ margin: 0, fontSize: '22px' }}><strong>{this.state.data[i].PERSON}</strong></h5>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                                else
+                                                {
+                                                    return null
+                                                }
+                                            })()}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {(()=>
