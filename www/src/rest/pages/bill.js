@@ -480,13 +480,38 @@ export default class bill extends React.PureComponent
                             let msgResult = await dialog(tmpConfObj);
                             if(msgResult == "btn01")
                             {
+                                let tmpPrintDt = []
                                 let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                                 for (let i = 0; i < tmpServices.length; i++) 
                                 {
                                     await this.restOrderObj.load({ZONE:tmpServices[i].ZONE,REF:tmpServices[i].REF})
+
+                                    for (let x = 0; x < this.restOrderObj.restOrderDetail.dt().length; x++) 
+                                    {
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                            ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
+                                            REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
+                                            ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
+                                            ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[x].ITEM_CODE,
+                                            ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[x].ITEM_NAME,
+                                            QUANTITY : this.restOrderObj.restOrderDetail.dt()[x].QUANTITY,
+                                            PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
+                                            DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
+                                            WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
+                                            WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[x].WAIT_STATUS,
+                                        })
+                                        this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
+                                    }
+
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
                                 }
+
+                                await this.print(tmpPrintDt)
                                 this.init()
                             }                            
                         }}
@@ -627,6 +652,30 @@ export default class bill extends React.PureComponent
                                 if(msgResult == "btn01")
                                 {
                                     await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
+
+                                    let tmpPrintDt = []
+                                    for (let x = 0; x < this.restOrderObj.restOrderDetail.dt().length; x++) 
+                                    {
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                            ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
+                                            REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
+                                            ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
+                                            ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[x].ITEM_CODE,
+                                            ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[x].ITEM_NAME,
+                                            QUANTITY : this.restOrderObj.restOrderDetail.dt()[x].QUANTITY,
+                                            PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
+                                            DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
+                                            WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
+                                            WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[x].WAIT_STATUS,
+                                        })
+                                        this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
+                                    }
+                                    await this.print(tmpPrintDt)
+                                    
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
 

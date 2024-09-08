@@ -34,6 +34,7 @@ App.prototype.loadPos = async function()
     
     this.acsObj.meta = this.acsObj.meta.concat(acs)
     this.prmObj.meta = this.prmObj.meta.concat(prm)
+
     return orgLoadPos.call(this)
 }
 posDoc.prototype.init = function() 
@@ -43,7 +44,8 @@ posDoc.prototype.init = function()
 posDoc.prototype.componentWillMount = function() 
 {
     this.state.showPage = 'table'
-
+    this.state.restTableGrp = []
+    
     if(typeof orgComponentWillMount != 'undefined')
     {
         orgComponentWillMount.call(this)
@@ -109,14 +111,25 @@ function addChildToElementWithId(children, id, newChild)
         return child;
     });
 }
-async function getTables()
+async function getTables(pGrp)
 {
     this.restTableView.items.selectCmd = 
     {
-        query : "SELECT *,ISNULL((SELECT SUM(TOTAL) FROM REST_ORDER_VW_01 WHERE ORDER_COUNT > 0 AND ZONE = REST_TABLE_VW_01.GUID),0) AS TOTAL FROM REST_TABLE_VW_01 ORDER BY CODE ASC"
+        query : `SELECT *,ISNULL((SELECT SUM(TOTAL) FROM REST_ORDER_VW_01 WHERE ORDER_COUNT > 0 AND ZONE = REST_TABLE_VW_01.GUID),0) AS TOTAL 
+                 FROM REST_TABLE_VW_01 WHERE GRP = '${typeof pGrp == 'undefined' ? '' : pGrp}' OR '${typeof pGrp == 'undefined' ? '' : pGrp}' = '' ORDER BY CODE ASC`
     }
     await this.restTableView.items.refresh()
     this.restTableView.updateState()
+}
+async function getGrp() 
+{
+    let tmpTbl = new datatable()
+    tmpTbl.selectCmd = 
+    {
+        query : "SELECT GRP FROM REST_TABLE_VW_01 GROUP BY GRP"
+    }
+    await tmpTbl.refresh()
+    this.setState({restTableGrp:tmpTbl.toArray()})
 }
 function renderDiscount()
 {
@@ -165,6 +178,8 @@ function renderDiscount()
 function renderTables()
 {
     getTables = getTables.bind(this)
+    getGrp = getGrp.bind(this)
+
     return (
         <NdLayoutItem key={"btnRestTablesLy"} id={"btnRestTablesLy"} parent={this} data-grid={{x:40,y:90,h:32,w:30,minH:16,maxH:32,minW:3,maxW:30}}
         access={this.acsObj.filter({ELEMENT:'btnRestTablesLy',USERS:this.user.CODE})}>
@@ -175,6 +190,7 @@ function renderTables()
                     await this.popRestTable.show()
                     this.setState({showPage:"table"})
                     getTables()
+                    getGrp()
                 }}>
                     <i className="text-white fa-solid fa-utensils" style={{fontSize: "24px"}} />
                 </NbButton>
@@ -182,24 +198,54 @@ function renderTables()
             <div>
                 <NbPopUp id={"popRestTable"} parent={this} title={""} fullscreen={true} header={false}>
                     <div className="row" style={{visibility:(this.state.showPage == 'table' ? "visible" : "hidden"),display:(this.state.showPage == 'table' ? "flex" : "none")}}>
-                        <div className="col-1 px-1 pt-1 pb-1 offset-10">
-                            <NbButton id={"btnRefreshRestTable"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
-                            onClick={()=>
-                            {
-                                getTables()
-                            }}>
-                                <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "24px"}} />
-                            </NbButton>
+                        <div className="col-10 pt-1 pb-1 px-1">
+                            <div className="row">
+                                {(()=>
+                                {
+                                    console.log(this.state.restTableGrp)
+                                    let tmpGrpArr = []
+                                    for (let i = 0; i < this.state.restTableGrp.length; i++) 
+                                    {
+                                        tmpGrpArr.push(
+                                        <div key={"btnRestGrp" + i} className="col">
+                                            <NbButton id={"btnRestGrp" + i} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                            onClick={()=>
+                                            {
+                                                getTables(this.state.restTableGrp[i].GRP)
+                                            }}>
+                                                <div style={{fontSize:'16px',fontWeight:'bold'}}>{this.state.restTableGrp[i].GRP}</div>
+                                            </NbButton>
+                                        </div>
+                                        )
+                                    }
+                                    return tmpGrpArr
+                                })()}
+                                
+                            </div>
                         </div>
-                        <div className="col-1 px-1 pt-1 pb-1">
-                            <NbButton id={"btnCloseRestTable"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
-                            onClick={()=>
-                            {
-                                this.popRestTable.hide()
-                            }}>
-                                <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
-                            </NbButton>
+                        <div className="col-2 pt-1 pb-1">
+                            <div className="row">
+                                <div className="col-6">
+                                    <NbButton id={"btnRefreshRestTable"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                    onClick={()=>
+                                    {
+                                        getTables()
+                                    }}>
+                                        <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                                <div className="col-6">
+                                    <NbButton id={"btnCloseRestTable"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                    onClick={()=>
+                                    {
+                                        this.popRestTable.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
                     <div className="row pt-2" style={{visibility:(this.state.showPage == 'table' ? "visible" : "hidden"),display:(this.state.showPage == 'table' ? "flex" : "none")}}>
                         <NbTableView parent={this} id="restTableView" 

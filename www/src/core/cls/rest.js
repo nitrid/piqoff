@@ -348,6 +348,7 @@ export class restTableCls
             LDATE : moment(new Date()).utcOffset(0, true),
             CODE : '',
             NAME : '',
+            GRP : '',
             DELETED : 0
         }
         this._initDs();
@@ -368,9 +369,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.updateCmd = 
         {
@@ -378,9 +380,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.deleteCmd = 
         {
