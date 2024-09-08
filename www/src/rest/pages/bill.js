@@ -851,7 +851,7 @@ export default class bill extends React.PureComponent
                                 if(msgResult == "btn01")
                                 {
                                     let tmpDelete = this.restOrderObj.restOrderDetail.dt().where({GUID:this.serviceDetailView.items[e].GUID})
-                                    
+
                                     if(tmpDelete.length > 0)
                                     {
                                         let tmpPrintDt = []
@@ -1043,10 +1043,12 @@ export default class bill extends React.PureComponent
                                             }
                                         }
                                     }
-    
+                                    
+                                    let tmpItem = typeof this.productDetailView.items.ITEM_GUID == 'undefined' ? this.productDetailView.items.ITEM : this.productDetailView.items.ITEM_GUID
+
                                     this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
                                     this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
-                                    this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM_GUID)
+                                    this.productDetailView.items.PRICE = await this.getPrice(tmpItem)
                                     this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
                                     this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
                                     this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
@@ -1062,6 +1064,27 @@ export default class bill extends React.PureComponent
                                         let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
                                         if(tmpRemoveItem.length > 0)
                                         {
+                                            let tmpPrintDt = []
+
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : tmpRemoveItem[0].REST,
+                                                ZONE_NAME : tmpRemoveItem[0].ZONE_NAME,
+                                                REF : tmpRemoveItem[0].REF,
+                                                ITEM : tmpRemoveItem[0].ITEM,
+                                                ITEM_CODE : tmpRemoveItem[0].ITEM_CODE,
+                                                ITEM_NAME : tmpRemoveItem[0].ITEM_NAME,
+                                                QUANTITY : tmpRemoveItem[0].QUANTITY,
+                                                PROPERTY : tmpRemoveItem[0].PROPERTY,
+                                                DESCRIPTION : tmpRemoveItem[0].DESCRIPTION,
+                                                WAITING : tmpRemoveItem[0].WAITING,
+                                                WAIT_STATUS : 3,
+                                            })
+
+                                            await this.print(tmpPrintDt)
+
                                             this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
                                         }
                                         if(this.restOrderObj.restOrderDetail.dt().length == 0)
