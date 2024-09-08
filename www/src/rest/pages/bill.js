@@ -382,6 +382,13 @@ export default class bill extends React.PureComponent
                         console.log(pResult)
                     })
                 }
+                if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
             }
 
             resolve(true)
@@ -504,7 +511,6 @@ export default class bill extends React.PureComponent
                                             WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
                                             WAIT_STATUS : 3,
                                         })
-                                        this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
                                     }
 
                                     this.restOrderObj.dt().removeAt(0)
@@ -672,10 +678,9 @@ export default class bill extends React.PureComponent
                                             WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
                                             WAIT_STATUS : 3,
                                         })
-                                        this.restOrderObj.restOrderDetail.dt()[x].STATUS = 3
                                     }
                                     await this.print(tmpPrintDt)
-
+                                    
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
 
@@ -845,9 +850,36 @@ export default class bill extends React.PureComponent
                                 let msgResult = await dialog(tmpConfObj);
                                 if(msgResult == "btn01")
                                 {
+                                    let tmpDelete = this.restOrderObj.restOrderDetail.dt().where({GUID:this.serviceDetailView.items[e].GUID})
+                                    
+                                    if(tmpDelete.length > 0)
+                                    {
+                                        let tmpPrintDt = []
+
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : tmpDelete[0].REST,
+                                            ZONE_NAME : tmpDelete[0].ZONE_NAME,
+                                            REF : tmpDelete[0].REF,
+                                            ITEM : tmpDelete[0].ITEM,
+                                            ITEM_CODE : tmpDelete[0].ITEM_CODE,
+                                            ITEM_NAME : tmpDelete[0].ITEM_NAME,
+                                            QUANTITY : tmpDelete[0].QUANTITY,
+                                            PROPERTY : tmpDelete[0].PROPERTY,
+                                            DESCRIPTION : tmpDelete[0].DESCRIPTION,
+                                            WAITING : tmpDelete[0].WAITING,
+                                            WAIT_STATUS : 3,
+                                        })
+
+                                        await this.print(tmpPrintDt)
+                                    }
+                                    
+
                                     this.restOrderObj.restOrderDetail.dt().removeAt(this.serviceDetailView.items[e])
                                     if(this.restOrderObj.restOrderDetail.dt().length == 0)
-                                    {
+                                    {                                    
                                         this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
                                         this.restOrderObj.dt().removeAt(0)
                                         this.serviceView.updateState()
