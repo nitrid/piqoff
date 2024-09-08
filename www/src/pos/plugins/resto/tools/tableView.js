@@ -55,6 +55,30 @@ export default class NbTableView extends NbBase
                 <div key={i} className='col-xs-6 col-sm-4 col-md-3 col-lg-2 pb-2'>
                     <div className="card" style={tmpCardStyle}>
                         <div className="card-body">
+                            {(()=>
+                            {
+                                if(this.state.data[i].ORDER_COUNT != 0)
+                                {
+                                    return (
+                                        <div style={{position:'absolute',color:'#079992'}}>
+                                            <div className="row">
+                                                <div className="col-12">
+                                                    <i className="fa-solid fa-users" style={{fontSize:'26px'}}></i>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-12">
+                                                    <h5 className="text-center" style={tmpCountStyle}><strong>{this.state.data[i].PERSON}</strong></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                else
+                                {
+                                    return null
+                                }
+                            })()}
                             <div className="row" onClick={()=>
                             {
                                 this._onClick(i)
