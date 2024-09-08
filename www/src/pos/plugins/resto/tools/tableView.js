@@ -60,10 +60,10 @@ export default class NbTableView extends NbBase
                                 if(this.state.data[i].ORDER_COUNT != 0)
                                 {
                                     return (
-                                        <div style={{position:'absolute',color:'#079992'}}>
+                                        <div style={{position:'absolute',color:'#079992',top:'10px',left:'10px'}}>
                                             <div className="row">
                                                 <div className="col-12">
-                                                    <i className="fa-solid fa-users" style={{fontSize:'26px'}}></i>
+                                                    <i className="fa-solid fa-users" style={{fontSize:'18px'}}></i>
                                                 </div>
                                             </div>
                                             <div className="row">

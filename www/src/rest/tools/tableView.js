@@ -76,12 +76,12 @@ export default class NbTableView extends NbBase
                                 if(this.state.data[i].ORDER_COUNT != 0)
                                 {
                                     return (
-                                        <div style={{position:'absolute',color:'#079992'}}>
+                                        <div style={{position:'absolute',color:'#079992',top:'10px',left:'10px'}}>
                                             <div className="row">
-                                            <i className="fa-solid fa-users" style={{fontSize:'26px'}}></i>
+                                            <i className="fa-solid fa-users" style={{fontSize:'18px'}}></i>
                                             </div>
                                             <div className="row">
-                                                <h3 className="text-center" style={tmpCountStyle}><strong>{this.state.data[i].PERSON}</strong></h3>
+                                                <h5 className="text-center" style={tmpCountStyle}><strong>{this.state.data[i].PERSON}</strong></h5>
                                             </div>
                                         </div>
                                     )
