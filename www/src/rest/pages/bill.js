@@ -195,6 +195,8 @@ export default class bill extends React.PureComponent
         tmpEmpty.ZONE_CODE = this.tableSelected.CODE
         tmpEmpty.ZONE_NAME = this.tableSelected.NAME
         tmpEmpty.REF = tmpMaxRef
+        tmpEmpty.PERSON = 1
+
         this.restOrderObj.addEmpty(tmpEmpty)
 
         this.serviceView.items.push(
@@ -453,6 +455,7 @@ export default class bill extends React.PureComponent
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
                                             REST : tmpFilter[i].REST,
+                                            PERSON : tmpFilter[i].PERSON,
                                             ZONE_NAME : tmpFilter[i].ZONE_NAME,
                                             REF : tmpFilter[i].REF,
                                             ITEM : tmpFilter[i].ITEM,
@@ -509,6 +512,7 @@ export default class bill extends React.PureComponent
                                                 LDATE : moment(new Date()).utcOffset(0, true),
                                                 LUSER : this.core.auth.data.CODE,
                                                 REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[x].PERSON,
                                                 ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
                                                 REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
                                                 ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
@@ -545,6 +549,12 @@ export default class bill extends React.PureComponent
                                 this.serviceSelected = this.serviceView.items[e]
                                 await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
                                 this.serviceDetailView.title = this.serviceView.items[e].ZONE_NAME + " / SERVICE - " + this.serviceView.items[e].REF
+                                
+                                try
+                                {
+                                    this.serviceDetailView.lblPerson.value = this.restOrderObj.dt()[0].PERSON
+                                }catch{}
+
                                 this.serviceDetailView.items = this.restOrderObj.restOrderDetail.dt()
                                 this.serviceDetailView.updateState()
                             }} 
@@ -598,6 +608,7 @@ export default class bill extends React.PureComponent
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
                                             REST : tmpFilter[i].REST,
+                                            PERSON : tmpFilter[i].PERSON,
                                             ZONE_NAME : tmpFilter[i].ZONE_NAME,
                                             REF : tmpFilter[i].REF,
                                             ITEM : tmpFilter[i].ITEM,
@@ -640,6 +651,7 @@ export default class bill extends React.PureComponent
                                                 LDATE : moment(new Date()).utcOffset(0, true),
                                                 LUSER : this.core.auth.data.CODE,
                                                 REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[i].PERSON,
                                                 ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
                                                 REF : this.restOrderObj.restOrderDetail.dt()[i].REF,
                                                 ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
@@ -688,6 +700,7 @@ export default class bill extends React.PureComponent
                                                 LDATE : moment(new Date()).utcOffset(0, true),
                                                 LUSER : this.core.auth.data.CODE,
                                                 REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[x].PERSON,
                                                 ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
                                                 REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
                                                 ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
@@ -862,6 +875,11 @@ export default class bill extends React.PureComponent
                                 this.restOrderObj.save()
                                 this.serviceDetailView.updateState()
                             }}
+                            onPersonClick={async(e)=>
+                            {
+                                this.restOrderObj.dt()[0].PERSON = e
+                                this.restOrderObj.save()
+                            }}
                             onDeleteClick={async(e)=>
                             {
                                 let tmpConfObj =
@@ -884,6 +902,7 @@ export default class bill extends React.PureComponent
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
                                             REST : tmpDelete[0].REST,
+                                            PERSON : tmpDelete[0].PERSON,
                                             ZONE_NAME : tmpDelete[0].ZONE_NAME,
                                             REF : tmpDelete[0].REF,
                                             ITEM : tmpDelete[0].ITEM,
@@ -1095,6 +1114,7 @@ export default class bill extends React.PureComponent
                                                 LDATE : moment(new Date()).utcOffset(0, true),
                                                 LUSER : this.core.auth.data.CODE,
                                                 REST : tmpRemoveItem[0].REST,
+                                                PERSON : tmpRemoveItem[0].PERSON,
                                                 ZONE_NAME : tmpRemoveItem[0].ZONE_NAME,
                                                 REF : tmpRemoveItem[0].REF,
                                                 ITEM : tmpRemoveItem[0].ITEM,
