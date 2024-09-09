@@ -23,7 +23,7 @@ export const prm =
         ID :"limitQuantity",
         VALUE : 
         {
-            value : 9_999
+            value : 10000
         },
         APP : "MOB",
         VIEW : 
@@ -31,6 +31,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Miktar 9 999 dan büyük olamaz!"
+        }
+    },
+    //Sadece Onaylı Siparişler
+    {
+        TYPE : 0,
+        ID :"onlyApprovedPairing",
+        VALUE : 
+        {
+            value : 'true'
+        },
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sadece Onaylı Siparişler"
         }
     },
     {

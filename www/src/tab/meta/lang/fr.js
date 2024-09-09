@@ -206,13 +206,12 @@ export const langFr =
             btn02: "Non",
             msg: "Souhaitez-vous saisir un paiement pour votre facture ?"
         },
-        grdLastSales : 
+        grdQuantity: 
         {
-            clmDocDate: "date",
-            clmRef : "N° Document",
-            clmQuantity : "Quantité",
-            clmPrice : "Prix",
-            clmTotal : "Total",
+            clmDepot: "Quantité en Dépôt",
+            clmInput: "Quantité à Venir",
+            clmOutput: "Commandé",
+            clmTotal: "Total",
         },
         msgDiscountPrice:
         {

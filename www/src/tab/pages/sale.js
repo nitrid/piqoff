@@ -1430,6 +1430,7 @@ export default class Sale extends React.PureComponent
                                             onClick={(async()=>
                                             {
                                                this.getDoc(this.grdDocs.getSelectedData()[0].GUID,this.grdDocs.getSelectedData()[0].REF,this.grdDocs.getSelectedData()[0].REF_NO,this.cmbDocType.value)
+                                               this.popDocs.hide()
                                             }).bind(this)}>
                                                 {this.t('popDocs.btn02')}
                                             </NbButton>
@@ -2049,6 +2050,178 @@ export default class Sale extends React.PureComponent
                                                 onClick={()=>
                                                 {
                                                     this.popDesign.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        await this.popMailSend.show()
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        this.popMailSend.show()
+                                                    }
+                                                }
+                                            }}/>
+                                        </div>
+                                    </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>
+                        {/* Mail Send PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popMailSend"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popMailSend.title")}
+                            container={"#root"} 
+                            width={'600'}
+                            height={'600'}
+                            position={{of:'#root'}}
+                            deferRendering={false}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
+                                        displayExpr="MAIL_ADDRESS"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                        <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                    <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                        <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                                validationGroup={"frmMailsend"  + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpQuery = {}
+                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
+                                                        {
+                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                            let tmpExtra = {...this.extraObj.empty}
+                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                            tmpExtra.DESCRIPTION = ''
+                                                            tmpExtra.TAG = 'PRINT'
+                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                            this.extraObj.addEmpty(tmpExtra);
+                                                            await this.extraObj.save()
+
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        }
+                                                        
+                                                        this.setState({isExecute:true})                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                        this.setState({isExecute:false})                                                        
+                                                        //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        {
+                                                            App.instance.setState({isExecute:true})
+                                                            let tmpAttach = pResult.split('|')[1]
+                                                            let tmpHtml = ''
+                                                           
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {
+                                                            }
+                                                            let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:" "+ this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+                                                            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                            {
+                                                                App.instance.setState({isExecute:false})
+                                                                let tmpConfObj1 =
+                                                                {
+                                                                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                                }
+                                                                
+                                                                if((pResult1) == 0)
+                                                                {  
+                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                    await dialog(tmpConfObj1);
+                                                                    this.htmlEditor.value = '',
+                                                                    this.txtMailSubject.value = '',
+                                                                    this.txtSendMail.value = ''
+                                                                    this.popMailSend.hide();  
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                    await dialog(tmpConfObj1);
+                                                                    this.popMailSend.hide(); 
+                                                                }
+                                                            });
+                                                        });
+                                                    }
+                                                        
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popMailSend.hide();  
                                                 }}/>
                                             </div>
                                         </div>

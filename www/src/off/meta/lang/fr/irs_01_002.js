@@ -25,10 +25,24 @@ const irs_01_002 =
         clmInputName : "Nom Client",
         clmDate: "Date",
         clmVat : "TVA",
-        clmAmount : "Total" ,
-        clmTotal : "Total",
+        clmAmount : "Total TH" ,
+        clmTotal : "Total TTC",
         clmOutputName :"Réserve",
     },
+    msgConvertInvoices:
+{  
+    title: "Attention",
+    btn01: "D'accord",
+    btn02: "Annuler",
+    msg: "Êtes-vous sûr de vouloir convertir les bons de livraison sélectionnés en facture ? Une fois la facture créée, elle ne peut plus être modifiée !!"         
+},
+msgConvertSucces:
+{  
+    title: "Attention",
+    btn01: "Imprimer",
+    btn02: "Fermer",
+    msg: "Les factures ont été créées. Voulez-vous les imprimer ?"         
+},
 
 }
 export default irs_01_002

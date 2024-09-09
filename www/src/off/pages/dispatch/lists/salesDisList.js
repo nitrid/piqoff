@@ -5,6 +5,8 @@ import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
+import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import NdGrid,{Column,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
@@ -28,6 +30,9 @@ export default class salesDisList extends React.PureComponent
         }
         
         this.core = App.instance.core;
+        this.nf525 = new nf525Cls();
+        this.extraObj = new docExtraCls();
+
         this.columnListData = 
         [
             {CODE : "REF",NAME : this.t("grdSlsDisList.clmRef")},
@@ -53,8 +58,8 @@ export default class salesDisList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
+        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
+        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
     _columnListBox(e)
@@ -168,6 +173,212 @@ export default class salesDisList extends React.PureComponent
             App.instance.setState({isExecute:false})
         }
     }
+    async convertInvoice()
+    {
+        let tmpConfObj =
+        {
+            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgConvertInvoices.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertInvoices.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertInvoices.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn02')
+        {
+            return
+        }
+        let tmpDocGuids = []
+        for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
+        {
+            let tmpDocCls =  new docCls
+
+            let tmpDoc = {...tmpDocCls.empty}
+            tmpDoc.TYPE = 1
+            tmpDoc.DOC_TYPE = 20
+            tmpDoc.REBATE = 0
+            tmpDoc.INPUT = this.grdSlsDisList.getSelectedData()[i].INPUT
+            tmpDoc.OUTPUT = this.grdSlsDisList.getSelectedData()[i].OUTPUT
+            tmpDoc.AMOUNT = this.grdSlsDisList.getSelectedData()[i].AMOUNT
+            tmpDoc.VAT = this.grdSlsDisList.getSelectedData()[i].VAT
+            tmpDoc.VAT_ZERO = this.grdSlsDisList.getSelectedData()[i].VAT_ZERO
+            tmpDoc.TOTALHT = this.grdSlsDisList.getSelectedData()[i].TOTALHT
+            tmpDoc.TOTAL = this.grdSlsDisList.getSelectedData()[i].TOTAL
+            tmpDoc.DOC_DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT
+            tmpDoc.DOC_DISCOUNT_1 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_1
+            tmpDoc.DOC_DISCOUNT_2 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_2
+            tmpDoc.DOC_DISCOUNT_3 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_3
+            tmpDoc.DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DISCOUNT
+            tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+            tmpDocCls.addEmpty(tmpDoc);     
+            let tmpLineQuery = 
+            {
+                query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
+                param : ['DOC_GUID:string|50'],
+                value : [this.grdSlsDisList.getSelectedData()[i].GUID]
+            }
+            let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
+            if(tmpLineData.result.recordset.length > 0)
+            {
+                for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
+                {
+                    if(tmpLineData.result.recordset[x].INVOICE_DOC_GUID ==  '00000000-0000-0000-0000-000000000000')
+                    {
+                        let tmpDocItems = {...tmpDocCls.docItems.empty}
+                        tmpDocItems.GUID =tmpLineData.result.recordset[x].GUID
+                        tmpDocItems.DOC_GUID =tmpLineData.result.recordset[x].DOC_GUID
+                        tmpDocItems.TYPE =tmpLineData.result.recordset[x].TYPE
+                        tmpDocItems.DOC_TYPE =tmpLineData.result.recordset[x].DOC_TYPE
+                        tmpDocItems.REBATE =tmpLineData.result.recordset[x].REBATE
+                        tmpDocItems.LINE_NO =tmpLineData.result.recordset[x].LINE_NO
+                        tmpDocItems.REF =tmpLineData.result.recordset[x].REF
+                        tmpDocItems.REF_NO =tmpLineData.result.recordset[x].REF_NO
+                        tmpDocItems.DOC_DATE =tmpLineData.result.recordset[x].DOC_DATE
+                        tmpDocItems.SHIPMENT_DATE =tmpLineData.result.recordset[x].SHIPMENT_DATE
+                        tmpDocItems.INPUT =tmpLineData.result.recordset[x].INPUT
+                        tmpDocItems.INPUT_CODE =tmpLineData.result.recordset[x].INPUT_CODE
+                        tmpDocItems.INPUT_NAME =tmpLineData.result.recordset[x].INPUT_NAME
+                        tmpDocItems.OUTPUT =tmpLineData.result.recordset[x].OUTPUT
+                        tmpDocItems.OUTPUT_CODE =tmpLineData.result.recordset[x].OUTPUT_CODE
+                        tmpDocItems.OUTPUT_NAME =tmpLineData.result.recordset[x].OUTPUT_NAME
+                        tmpDocItems.ITEM =tmpLineData.result.recordset[x].ITEM
+                        tmpDocItems.ITEM_CODE =tmpLineData.result.recordset[x].ITEM_CODE
+                        tmpDocItems.ITEM_NAME =tmpLineData.result.recordset[x].ITEM_NAME
+                        tmpDocItems.PRICE =tmpLineData.result.recordset[x].PRICE
+                        tmpDocItems.QUANTITY =tmpLineData.result.recordset[x].QUANTITY
+                        tmpDocItems.VAT =tmpLineData.result.recordset[x].VAT
+                        tmpDocItems.AMOUNT =tmpLineData.result.recordset[x].AMOUNT
+                        tmpDocItems.TOTAL =tmpLineData.result.recordset[x].TOTAL
+                        tmpDocItems.TOTALHT =tmpLineData.result.recordset[x].TOTALHT
+                        tmpDocItems.DESCRIPTION =tmpLineData.result.recordset[x].DESCRIPTION
+                        tmpDocItems.INVOICE_DOC_GUID = tmpDocCls.dt()[0].GUID
+                        tmpDocItems.INVOICE_LINE_GUID =tmpLineData.result.recordset[x].GUID
+                        tmpDocItems.VAT_RATE =tmpLineData.result.recordset[x].VAT_RATE
+                        tmpDocItems.DISCOUNT_RATE =tmpLineData.result.recordset[x].DISCOUNT_RATE
+                        tmpDocItems.CONNECT_REF =tmpLineData.result.recordset[x].CONNECT_REF
+                        tmpDocItems.ORDER_LINE_GUID =tmpLineData.result.recordset[x].ORDER_LINE_GUID
+                        tmpDocItems.ORDER_DOC_GUID =tmpLineData.result.recordset[x].ORDER_DOC_GUID
+                        tmpDocItems.OLD_VAT =tmpLineData.result.recordset[x].VAT_RATE
+                        tmpDocItems.VAT_RATE =tmpLineData.result.recordset[x].VAT_RATE
+                        tmpDocItems.DEPOT_QUANTITY =tmpLineData.result.recordset[x].DEPOT_QUANTITY
+                        tmpDocItems.CUSTOMER_PRICE =tmpLineData.result.recordset[x].CUSTOMER_PRICE
+                        tmpDocItems.SUB_FACTOR =tmpLineData.result.recordset[x].SUB_FACTOR
+                        tmpDocItems.SUB_PRICE =tmpLineData.result.recordset[x].SUB_PRICE
+                        tmpDocItems.SUB_QUANTITY =tmpLineData.result.recordset[x].SUB_QUANTITY
+                        tmpDocItems.SUB_SYMBOL =tmpLineData.result.recordset[x].SUB_SYMBOL
+                        tmpDocItems.UNIT_SHORT =tmpLineData.result.recordset[x].UNIT_SHORT
+                        tmpDocItems.DOC_DISCOUNT_1 =tmpLineData.result.recordset[x].DOC_DISCOUNT_1
+                        tmpDocItems.DOC_DISCOUNT_2 =tmpLineData.result.recordset[x].DOC_DISCOUNT_2
+                        tmpDocItems.DOC_DISCOUNT_3 =tmpLineData.result.recordset[x].DOC_DISCOUNT_3
+                        tmpDocItems.DOC_DISCOUNT =tmpLineData.result.recordset[x].DOC_DISCOUNT
+                        tmpDocItems.DISCOUNT_1 =tmpLineData.result.recordset[x].DISCOUNT_1
+                        tmpDocItems.DISCOUNT_2 =tmpLineData.result.recordset[x].DISCOUNT_2
+                        tmpDocItems.DISCOUNT_3 =tmpLineData.result.recordset[x].DISCOUNT_3
+                        tmpDocItems.DISCOUNT =tmpLineData.result.recordset[x].DISCOUNT
+                        tmpDocItems.UNIT =tmpLineData.result.recordset[x].UNIT
+                        tmpDocItems.CUSTOMER_PRICE =tmpLineData.result.recordset[x].CUSTOMER_PRICE
+                        tmpDocItems.DIFF_PRICE =tmpLineData.result.recordset[x].DIFF_PRICE
+                        tmpDocItems.COST_PRICE =tmpLineData.result.recordset[x].COST_PRICE
+        
+                        await tmpDocCls.docItems.addEmpty(tmpDocItems,false)
+                        await this.core.util.waitUntil(100)
+                        tmpDocCls.docItems.dt()[tmpDocCls.docItems.dt().length - 1].stat = 'edit'
+                    }
+                }
+            }
+            if(tmpDocCls.docItems.dt().length > 0)
+            {
+                let tmptest = await tmpDocCls.save()
+                console.log(tmptest)
+                tmpDocGuids.push(tmpDocCls.dt()[0])
+            }
+        }
+        let tmpConfObj2 =
+        {
+            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'before'},{id:"btn01",caption:this.t("msgConvertSucces.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
+        }
+
+        let tmpPrintDialog = await dialog(tmpConfObj2);
+        if(tmpPrintDialog == 'btn01')
+        {
+            App.instance.setState({isExecute:true})
+            for (let i = 0; i < tmpDocGuids.length; i++) 
+            {
+                let tmpLastSignature = await this.nf525.signatureDocDuplicate(tmpDocGuids[i])
+                this.extraObj.clearAll()
+                let tmpExtra = {...this.extraObj.empty}
+                tmpExtra.DOC = tmpDocGuids[i].GUID
+                tmpExtra.DESCRIPTION = ''
+                tmpExtra.TAG = 'PRINT'
+                tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                this.extraObj.addEmpty(tmpExtra);
+                await this.extraObj.save()
+                let tmpQuery = 
+                {
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value:  [tmpDocGuids[i].GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                }
+                App.instance.setState({isExecute:true})
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                App.instance.setState({isExecute:false})
+                // let tmpQuery2 = 
+                // { 
+                //     query:  "SELECT TOP 5 " +
+                //             "DOC_DATE AS DOC_DATE, " +
+                //             "DOC_REF AS REF, " +
+                //             "DOC_REF_NO AS REF_NO, " +
+                //             "BALANCE AS BALANCE " +
+                //             "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                //             "AND BALANCE <> 0 " +
+                //             "ORDER BY DOC_DATE DESC" ,
+                //     param:  ['INPUT:string|50'],
+                //     value:  [this.docObj.dt()[0].INPUT]
+                // }
+                // let tmpData2 = await this.core.sql.execute(tmpQuery2) 
+                // let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
+                {
+                    if(pResult.split('|')[0] != 'ERR')
+                    {
+                        this.core.socket.emit('piqXInvoiceInsert',
+                        {
+                            fromUser : tmpData.result.recordset[0].LUSER,
+                            toUser : '',
+                            docGuid : tmpData.result.recordset[0].DOC_GUID,
+                            docDate : tmpData.result.recordset[0].DOC_DATE,
+                            fromTax : tmpData.result.recordset[0].TAX_NO,
+                            toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                            json : JSON.stringify(tmpData.result.recordset),
+                            pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                        },
+                        (pData) =>
+                        {
+                            console.log(pData)
+                        })
+
+                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                        mywindow.onload = function() 
+                        { 
+                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                        } 
+                    }
+                });
+            }
+            App.instance.setState({isExecute:false})
+        }
+    }
     render()
     {
         return(
@@ -192,6 +403,20 @@ export default class salesDisList extends React.PureComponent
                                                 text: this.t('menu'),
                                                 path: 'dispatch/documents/salesDispatch.js',
                                             })
+                                        }
+                                    }    
+                                } />
+                                  <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'detailslayout',
+                                        onClick: async () => 
+                                        {
+                                            this.convertInvoice()
                                         }
                                     }    
                                 } />
@@ -381,7 +606,7 @@ export default class salesDisList extends React.PureComponent
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsDisList.clmInputName")} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsDisList.clmOutputName")} visible={false}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdSlsDisList.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="TOTALHT" caption={this.t("grdSlsDisList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>

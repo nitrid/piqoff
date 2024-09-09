@@ -207,13 +207,12 @@ export const langTr =
             btn02: "Hayır",
             msg: "Faturanıza tahsilat girmek istermisiniz ?"
         },
-        grdLastSales : 
+        grdQuantity : 
         {
-            clmDocDate: "Tarih",
-            clmRef : "Evrak No",
-            clmQuantity : "Miktar",
-            clmPrice : "Fiyat",
-            clmTotal : "Tutar",
+            clmDepot: "Depo Miktarı",
+            clmInput : "Gelecek Miktar",
+            clmOutput : "Sİpariş Alınan",
+            clmTotal : "Toplam",
         },
         msgDiscountPercent:
         {
