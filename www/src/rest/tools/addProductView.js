@@ -99,9 +99,12 @@ export default class NbAddProductView extends NbBase
                             <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomRightRadius:'0px',borderTop:'none'}}
                             onClick={()=>
                             {
-                                this.items[i].QUANTITY = this.items[i].QUANTITY + 1
-                                this["quantity" + i].value = this.items[i].QUANTITY
-                                this._onPlusClick(i);
+                                if(this.items[i].QUANTITY < 1)
+                                {
+                                    this.items[i].QUANTITY = this.items[i].QUANTITY + 1
+                                    this["quantity" + i].value = this.items[i].QUANTITY
+                                    this._onPlusClick(i);
+                                }
                             }}>
                                 <i className="fa-solid fa-plus fa-2x"></i>
                             </NbButton>
