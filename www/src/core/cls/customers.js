@@ -102,7 +102,7 @@ export class customersCls
                     "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER, " +
                     "@MAIN_GROUP = @PMAIN_GROUP ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|100','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                     'PTAX_TYPE:int','PCAPITAL:float','PVAT_ZERO:bit','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit','PSECTOR:string|50',
                     'PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50'],
@@ -145,7 +145,7 @@ export class customersCls
                     "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER, " +
                     "@MAIN_GROUP = @PMAIN_GROUP ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|100','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                     'PTAX_TYPE:int','PCAPITAL:float','PVAT_ZERO:bit','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit',
                     'PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50'],

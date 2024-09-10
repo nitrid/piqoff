@@ -47,7 +47,6 @@ export default class NbPopNumber extends NbBase
     }
     render()
     {
-        console.log(this.state.content)
         return(
             <div>
                 <NdPopUp parent={this} id={this.props.id} 

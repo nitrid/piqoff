@@ -26,9 +26,20 @@ export default class NbItemCard extends NbBase
     {        
         this.cmbUnit.data.onLoaded = async(pData)=>
         {
+            console.log(pData)
             if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined' && typeof this.data.QUANTITY == 'undefined')
             {
                 this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
+                console.log(this.props.data.GUID)
+                let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+                if(tmpDt.length > 0)
+                {
+                    console.log(option.FACTOR)
+                    console.log(tmpDt[0].PRICE)
+
+                    let tmpPrice = Number(tmpDt[0].PRICE * option.FACTOR).round(3)
+                    this.setState({price:tmpPrice})
+                }
             }
         }
     }
@@ -96,7 +107,9 @@ export default class NbItemCard extends NbBase
                                     if(tmpDt.length > 0)
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
+                                      
                                     }
+                                   
                                     this._onValueChange(this.props.data)
                                 }
                             }).bind(this)}

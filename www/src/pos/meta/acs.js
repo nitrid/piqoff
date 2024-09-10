@@ -13,9 +13,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Cihaz Giriş"
+            CAPTION : "Cihaz Giriş",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnDeviceEntryDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnDeviceEntryType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnReturnEntry
@@ -29,9 +50,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "İade Giriş"
+            CAPTION : "İade Giriş",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnReturnEntryDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnReturnEntryType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnFullDelete
@@ -45,9 +87,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Evrak Silme"
+            CAPTION : "Evrak Silme",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnFullDeleteDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnFullDeleteType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnPluEdit
@@ -61,9 +124,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "PLU Düzenle"
+            CAPTION : "PLU Düzenle",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnPluEditDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnPluEditType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnSafeOpen
@@ -77,9 +161,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Kasa Aç"
+            CAPTION : "Kasa Aç",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnSafeOpenDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnSafeOpenType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnPopParkListAll
@@ -93,9 +198,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Parktaki Tüm Liste"
+            CAPTION : "Parktaki Tüm Liste",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnPopParkListAllDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnPopParkListAllType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //btnDiscount
@@ -109,9 +235,30 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "İskonto Giriş Butonu"
+            CAPTION : "İskonto Giriş Butonu",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnDiscountDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnDiscountType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //PriceEdit
@@ -125,9 +272,104 @@ export const acs =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Fiyat Düzenle"
+            CAPTION : "Fiyat Düzenle",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popPriceEditDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popPriceEditType"},
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //btnPCForceAcs
+    {
+        TYPE : 2,
+        ID :"btnPCForceAcs",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnPCForceAcs",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ödeme Zorla Yetkisi",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnPCForceAcsDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnPCForceAcsType"},
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //btnPCCancelAcs
+    {
+        TYPE : 2,
+        ID :"btnPCCancelAcs",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnPCCancelAcs",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ödeme İptal Yetkisi",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popPCCancelAcsDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popPCCancelAcsType"},
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtBarcodeLy

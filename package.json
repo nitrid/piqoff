@@ -1,10 +1,10 @@
 {
     "type": "module",
     "name": "piqsoft",
-    "version": "1.0.10c",
+    "version": "1.0.13a",
     "dependencies": {
         "adm-zip": "^0.5.10",
-        "async": "^3.2.5",
+        "axios": "^1.7.3",
         "gensrv": "1.0.106",
         "jsrsasign": "10.6.1",
         "jsrsasign-util": "1.0.5",

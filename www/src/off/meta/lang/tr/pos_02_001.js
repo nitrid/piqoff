@@ -35,6 +35,7 @@ const pos_02_001 =
         clmVTA : "Vergi",
         clmTTC : "Toplam",
         clmTicketID :"Fiş I.D",
+        clmFacRef : "Fact. No",
     },
     pg_txtItem:
     {

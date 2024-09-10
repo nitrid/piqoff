@@ -1,40 +1,68 @@
 // "Satış Siparişi Dağıtım Operasyonu"
-const sip_04_002 =
+const sip_04_002 = 
 {
-    cmbCustomer :"Client",
-    btnGet :"Rechercher",
-    dtFirst : "Date Début",
-    dtLast : "Date Fin",
-    cmbDepot : "Depot",
-    menu:"Liste de vente  ",
-    pg_txtCustomerCode : 
+    cmbCustomer: "Client",
+    btnGet: "Rechercher",
+    dtFirst: "Première Date",
+    dtLast: "Dernière Date",
+    cmbDepot: "Dépôt",
+    menu: "Commande de Vente",
+    itemTotalQyt: "Quantité pouvant être expédiée",
+    popOrderDetail: 
     {
-        title : "Choix Client",
-        clmCode :  "Code Client",
-        clmTitle : "Nom Client",
-        clmTypeName : "Type",
-        clmGenusName : "Genre"
+        title: "Détail de la Commande"
+    },
+    pg_txtCustomerCode: 
+    {
+        title: "Sélection du Client",
+        clmCode: "CODE CLIENT",
+        clmTitle: "NOM DU CLIENT",
+        clmTypeName: "TYPE",
+        clmGenusName: "GENRE"
     },
     grdSlsOrdList: 
     {
-        clmRef: "Référence",
-        clmRefNo: "Ligne",
-        clmPrice: "Prix ",
-        clmInputCode : "Sélection Document",
-        clmInputName : "Nom Client",
-        clmDate: "Date",
-        clmVat : "TVA",
-        clmAmount : "Total" ,
-        clmTotal : "Total",
-        clmOutputName :"Réserve",
+        clmItemCode: "Code Produit",
+        clmItemName: "Nom du Produit",
+        clmDepotQuantity: "Quantité en Stock",
+        clmComingQuantity: "Quantité à Venir",
+        clmTotalQuantity: "Total pouvant être Envoyé",
+        clmQuantity: "Quantité Commandée",
+        clmApprovedQuantity: "Quantité à Approuver",
+        clmTotalHt: "Total HT",
+        clmTotal: "Total TTC",
     },
-    popDesign : 
+    btnSave: "Approuver les Lignes Sélectionnées",
+    msgApprovedBig: 
     {
-        title: "Choix du Design",
-        design : "Design" ,
-        lang : "Langue Document" 
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "La quantité approuvée ne peut pas être supérieure à la quantité commandée!",
     },
-    btnView : "Aperçu", 
-    btnMailsend : "Envoyer E-Mail", 
+    grdOrderDetail: 
+    {
+        clmCode: "Code Produit",
+        clmName: "Nom du Produit",
+        clmDate: "Date de Commande",
+        clmCustomer: "Nom du Client",
+        clmQuantity: "Quantité Commandée",
+        clmApprovedQuantity: "Quantité à Approuver",
+    },
+    btnDetailCancel: "Annuler",
+    btnDetailApproved: "Approuver",
+    msgSave: 
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Approuvez-vous les lignes sélectionnées?",
+    },
+    msgSaveSuccess:
+    {
+        title: "Attention",
+        btn01: "Imprimer",
+        btn02: "Fermer",
+        msg: "Les lignes sélectionnées ont été approuvées. Voulez-vous imprimer les commandes ?",
+    },
 }
 export default sip_04_002
