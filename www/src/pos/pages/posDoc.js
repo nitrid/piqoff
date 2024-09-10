@@ -593,15 +593,20 @@ export default class posDoc extends React.PureComponent
         //KULLANICI BAZLI GÜNLÜK TOPLAM FİŞ SAYISI GÖSTERİMİ. (12.07.2024 - ALI KEMAL KARACA)
         if(!this.state.isFormation)
         {
-            let tmpQueryTCount = 
+            let tmpTCountResult = undefined;
+
+            if(!this.core.offline)
             {
-                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
-                param : ['LUSER:string|50'],
-                value : [this.core.auth.data.CODE],
+                let tmpQueryTCount = 
+                {
+                    query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                    param : ['LUSER:string|50'],
+                    value : [this.core.auth.data.CODE],
+                }
+                tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
             }
-    
-            let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)
-            if(typeof tmpTCountResult != 'undefined' || tmpTCountResult.result?.recordset?.length > 0)
+
+            if(typeof tmpTCountResult != 'undefined' && tmpTCountResult.result?.recordset?.length > 0)
             {
                 this.formation.value = this.lang.t("lblTicketCount") + " " + tmpTCountResult.result.recordset[0].TICKET_COUNT
             }
@@ -2415,7 +2420,7 @@ export default class posDoc extends React.PureComponent
                     {
                         //HER TURLU CEVAP DÖNDÜÜ 0Ç0N POPUP KAPANIYOR YEN0DEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
                         let tmpAcsVal = this.acsObj.filter({ID:'btnPCCancelAcs',USERS:this.user.CODE})
-                                        
+                                    
                         if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
                         {   
                             let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
