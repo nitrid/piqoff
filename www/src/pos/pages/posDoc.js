@@ -2406,7 +2406,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.txtPaymentPopTotal.value = pAmount
                 this.msgCardPayment.show().then(async (e) =>
-                {   
+                {    
                     if(e == 'btn01')
                     {
                         if(this.posDevice.payPort != null && this.posDevice.payPort.isOpen)
