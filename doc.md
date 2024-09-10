@@ -1,4 +1,4 @@
-DENEME
+DENE
 # SETUP
 piqoff/ npm i
 piqoff/www npm i
