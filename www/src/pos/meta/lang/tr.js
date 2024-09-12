@@ -73,6 +73,12 @@ export const langTr =
         msg : "Okuttuğunuz Barkod Sistemde Bulunamadı !",
         btn01 : "Tamam",
     },
+    msgBarcodeBalanceNotFound : 
+    {
+        title : "Uyarı",
+        msg : "Bu barkod daha önce okutulmuş !",
+        btn01 : "Tamam",
+    },
     msgSpecialTicketAlert : 
     {
         title : "Uyarı",
