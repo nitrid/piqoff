@@ -226,6 +226,22 @@ export const langTr =
             btn01: "Tamam",
             msg: "Tutardan Büyük İndirim Yapılamaz !"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder",
+            btnCancel : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     extract :
     {
