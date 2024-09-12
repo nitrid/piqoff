@@ -118,15 +118,22 @@ class fumaWebApi
     }
     async getVkn()
     {
-        let tmpQuery = 
+        try
         {
-            query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+            let tmpQuery = 
+            {
+                query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+            }
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+    
+            if(typeof tmpResult[0] != 'undefined')
+            {
+                this.sellerVkn = tmpResult[0].TAX_NO
+            }
         }
-        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-        if(typeof tmpResult[0] != 'undefined')
+        catch (error) 
         {
-            this.sellerVkn = tmpResult[0].TAX_NO
+            console.log("Fuma getVkn error" + error);
         }
     }
     async processEndDay()
