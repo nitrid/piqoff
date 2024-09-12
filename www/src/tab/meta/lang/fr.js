@@ -225,6 +225,21 @@ export const langFr =
             btn01: "OK",
             msg: "Vous ne Pouvez pas Appliquer de Remise Supérieure au Montant Total !"
         },
+        popMailSend : 
+        {
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail",   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
     },
     extract :
     {

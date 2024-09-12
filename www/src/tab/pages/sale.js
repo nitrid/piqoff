@@ -277,33 +277,48 @@ export default class Sale extends React.PureComponent
     async getPrice(pItem,pQty,pDate,pCustomer,pDepot,pListNo,pType,pAddVat)
     {
         let tmpPrice = 0
-        let tmpQuery = 
+        let tmpData
+        if(this.core.local.platform != '')
         {
-            query : `SELECT PRICE, ITEM_VAT, LIST_NO, LIST_VAT_TYPE, CONTRACT_VAT_TYPE 
-                    FROM ITEM_PRICE_VW_02 
-                    WHERE 
-                        ITEM_GUID = ? AND 
-                        TYPE = ? AND 
-                        QUANTITY BETWEEN 0 AND ? AND 
-                        (
-                            (datetime(START_DATE) <= strftime('%Y-%m-%d', ?) AND datetime(FINISH_DATE) >= strftime('%Y-%m-%d', ?)) OR 
-                            (START_DATE = '1970-01-01T00:00:00.000Z')
-                        ) AND
-                        (
-                            (DEPOT = ?) OR 
-                            (DEPOT = '00000000-0000-0000-0000-000000000000')
-                        ) AND 
-                        (LIST_NO = ? OR LIST_NO = 0) AND
-                        (
-                            (CUSTOMER_GUID = ?) OR 
-                            (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
-                        )
-                    ORDER BY DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
-                    LIMIT 1;`,
-            values : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
-        }
+            let tmpQuery = 
+            {
+                query : `SELECT PRICE, ITEM_VAT, LIST_NO, LIST_VAT_TYPE, CONTRACT_VAT_TYPE 
+                        FROM ITEM_PRICE_VW_02 
+                        WHERE 
+                            ITEM_GUID = ? AND 
+                            TYPE = ? AND 
+                            QUANTITY BETWEEN 0 AND ? AND 
+                            (
+                                (datetime(START_DATE) <= strftime('%Y-%m-%d', ?) AND datetime(FINISH_DATE) >= strftime('%Y-%m-%d', ?)) OR 
+                                (START_DATE = '1970-01-01T00:00:00.000Z')
+                            ) AND
+                            (
+                                (DEPOT = ?) OR 
+                                (DEPOT = '00000000-0000-0000-0000-000000000000')
+                            ) AND 
+                            (LIST_NO = ? OR LIST_NO = 0) AND
+                            (
+                                (CUSTOMER_GUID = ?) OR 
+                                (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
+                            )
+                        ORDER BY DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
+                        LIMIT 1;`,
+                values : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
+            }
         
-        let tmpData = await this.core.local.select(tmpQuery) 
+            tmpData = await this.core.local.select(tmpQuery) 
+
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : ``,
+                param : ['VAL:string|50','MAIN_GRP:string|50'],
+                value : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
+            }
+            tmpData = await this.core.sql.execute(tmpQuery) 
+        }
 
         if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
         {
@@ -2055,11 +2070,12 @@ export default class Sale extends React.PureComponent
                                         </div>
                                         <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.t("popDesign.btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
+                                                    await this.popMailSend.show()
                                                     let tmpQuery = 
                                                     {
                                                         query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
@@ -2069,12 +2085,8 @@ export default class Sale extends React.PureComponent
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
-                                                        await this.popMailSend.show()
+                                                        this.popDesign.hide();  
                                                         this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
-                                                    }
-                                                    else
-                                                    {
-                                                        this.popMailSend.show()
                                                     }
                                                 }
                                             }}/>
@@ -2086,16 +2098,13 @@ export default class Sale extends React.PureComponent
                         </div>
                         {/* Mail Send PopUp */}
                         <div>
-                            <NdPopUp parent={this} id={"popMailSend"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
+                            <NbPopUp parent={this} id={"popMailSend"} 
+                            centered={true}
                             title={this.t("popMailSend.title")}
                             container={"#root"} 
                             width={'600'}
                             height={'600'}
                             position={{of:'#root'}}
-                            deferRendering={false}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -2178,7 +2187,7 @@ export default class Sale extends React.PureComponent
                                                         //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                         {
-                                                            App.instance.setState({isExecute:true})
+                                                            this.setState({isExecute:true}) 
                                                             let tmpAttach = pResult.split('|')[1]
                                                             let tmpHtml = ''
                                                            
@@ -2188,7 +2197,7 @@ export default class Sale extends React.PureComponent
                                                             let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:" "+ this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                             {
-                                                                App.instance.setState({isExecute:false})
+                                                                this.setState({isExecute:false})      
                                                                 let tmpConfObj1 =
                                                                 {
                                                                     id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2199,7 +2208,6 @@ export default class Sale extends React.PureComponent
                                                                 {  
                                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
                                                                     await dialog(tmpConfObj1);
-                                                                    this.htmlEditor.value = '',
                                                                     this.txtMailSubject.value = '',
                                                                     this.txtSendMail.value = ''
                                                                     this.popMailSend.hide();  
@@ -2218,7 +2226,7 @@ export default class Sale extends React.PureComponent
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                <NdButton text={this.t("popMailSend.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                                 onClick={()=>
                                                 {
                                                     this.popMailSend.hide();  
@@ -2227,7 +2235,7 @@ export default class Sale extends React.PureComponent
                                         </div>
                                     </Item>
                                 </Form>
-                            </NdPopUp>
+                            </NbPopUp>
                         </div>
                         {/* PRINTVIEW POPUP */}
                         <div>
