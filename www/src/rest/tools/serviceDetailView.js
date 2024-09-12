@@ -3,6 +3,7 @@ import NbBase from "../../core/react/bootstrap/base.js";
 import NbButton from '../../core/react/bootstrap/button';
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import { datatable } from '../../core/core.js';
+import NbLabel from "../../core/react/bootstrap/label.js";
 
 export default class NbServiceDetailView extends NbBase
 {
@@ -21,6 +22,7 @@ export default class NbServiceDetailView extends NbBase
         this._onAddClick = this._onAddClick.bind(this)
         this._onPlusClick = this._onPlusClick.bind(this)
         this._onMinusClick = this._onMinusClick.bind(this)
+        this._onPersonClick = this._onPersonClick.bind(this)
         this._onWaitClick = this._onWaitClick.bind(this)
         this._onCloseClick = this._onCloseClick.bind(this)
 
@@ -73,6 +75,13 @@ export default class NbServiceDetailView extends NbBase
         if(typeof this.props.onMinusClick != 'undefined')
         {
             this.props.onMinusClick(e);
+        }
+    }
+    _onPersonClick(e)
+    {
+        if(typeof this.props.onPersonClick != 'undefined')
+        {
+            this.props.onPersonClick(e);
         }
     }
     _onWaitClick(e)
@@ -222,7 +231,7 @@ export default class NbServiceDetailView extends NbBase
                         }
                     })()}
                     
-                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
+                    {/* <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
                         <div>
                             <NbButton className="form-group btn btn-block btn-outline-dark" 
                             style={{height:"35px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',
@@ -280,7 +289,7 @@ export default class NbServiceDetailView extends NbBase
                                 <i className="fa-solid fa-minus fa-1x"></i>
                             </NbButton>
                         </div>
-                    </div>
+                    </div> */}
                     <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px',paddingLeft:'0px'}}>
                         <div>
                             <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}}
@@ -358,8 +367,45 @@ export default class NbServiceDetailView extends NbBase
                             </NbButton>
                         </div>
                     </div>
+                    <div className="row" style={{ display: 'flex' }}>
+                        <div style={{display:'flex'}}>
+                            <div style={{flex:0.3333}}>
+                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"white",color:"#079992",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'5px',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
+                                onClick={()=>
+                                {
+                                    this.lblPerson.value = (Number(this.lblPerson.value) + 1).toString()
+                                    this._onPersonClick(Number(this.lblPerson.value) + 1)
+                                }}>
+                                    <i className="fa-solid fa-plus fa-2x"></i>
+                                </NbButton>
+                            </div>
+                            <div style={{flex:0.3333,height:"46px",width:"100%",color:"#079992",borderBottom:"solid 2px",paddingTop:'5px',borderTop:"solid 2px"}}>
+                                <div className="row">
+                                    <div className="col-5 text-center">
+                                        <i className="fa-solid fa-users" style={{fontSize:'26px'}}></i>
+                                    </div>
+                                    <div className="col-7">
+                                        <h2 style={{color:"#FF6B6B"}}><NbLabel id="lblPerson" parent={this} value={"1"}/></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{flex:0.3333}}>
+                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"white",color:"#079992",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'5px',borderBottomLeftRadius:'0px'}}
+                                onClick={()=>
+                                {
+                                    if(Number(this.lblPerson.value) > 1)
+                                    {
+                                        this.lblPerson.value = (Number(this.lblPerson.value) - 1).toString()
+                                        this._onPersonClick(this.lblPerson.value)
+                                    }
+                                }}>
+                                    <i className="fa-solid fa-minus fa-2x"></i>
+                                </NbButton>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style={{position:'relative',top:'120px'}}>
+                <div style={{position:'relative',top:'180px'}}>
                     {this.buildItem()}
                 </div>
             </div>

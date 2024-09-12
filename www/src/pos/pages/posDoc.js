@@ -994,7 +994,7 @@ export default class posDoc extends React.PureComponent
         let tmpBarPattern = this.getBarPattern(pCode)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
-        pCode = tmpBarPattern.barcode     
+        pCode = tmpBarPattern.barcode
         //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         this.loading.current.instance.show()
         //ÜRÜN GETİRME    
@@ -1442,12 +1442,21 @@ export default class posDoc extends React.PureComponent
                 }
 
                 let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+                let tmpIsDiscount = false
 
+                if(tmpMoney == "***")
+                {
+                    tmpMoney = 0
+                    tmpCent = 0
+                    tmpIsDiscount = true
+                }
+                
                 return {
                     barcode : tmpBarkod,
                     code : tmpCode,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
-                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram)),
+                    isDiscount : tmpIsDiscount
                 }
             }
         }
@@ -1773,7 +1782,7 @@ export default class posDoc extends React.PureComponent
     }
     async saleRowAdd(pItemData)
     {                
-        let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,0,0,pItemData.VAT)
+        let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,typeof pItemData.DISCOUNT == 'undefined' ? 0 : pItemData.DISCOUNT,0,pItemData.VAT)
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()

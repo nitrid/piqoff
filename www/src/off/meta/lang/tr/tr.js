@@ -589,5 +589,7 @@ export const langTr =
         btnSave :"Tamam",
         txtSenderNote : "Gönderici Notu",
         txtRecieverNote : "Alıcı Notu",
+        txtSenderDate : "Gönderilen Tarih",
+        txtRecieverDate : "Teslim Tarihi"
     },
 }

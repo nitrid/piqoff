@@ -48,7 +48,7 @@ export default class NbTableView extends NbBase
             if(this.state.data[i].ORDER_COUNT > 0)
             {
                 tmpCardStyle = {height:'120px',width:'100%',borderRadius:'10px',backgroundColor:'#ff9f43',border:'solid 2px rgb(7, 153, 146)',borderRadius:'10px'}
-                tmpCountStyle = {marginBottom:'0px',height:'40px',color:'#079992',textShadow: '-1px -1px 0 #fff,1px -1px 0 #fff,-1px  1px 0 #fff,1px  1px 0 #fff'}
+                tmpCountStyle = {marginBottom:'0px',height:'40px',color:'#079992',textShadow: '-1px -1px 0 #fff,1px -1px 0 #fff,-1px  1px 0 #fff,1px  1px 0 #fff',alignContent:'center'}
             }
 
             tmpTable.push(
@@ -60,8 +60,36 @@ export default class NbTableView extends NbBase
                                 this._onClick(i)
                             }}>
                                 <div className="col-12">
-                                    <h5 className="card-title text-center m-0">{this.state.data[i].NAME}</h5>
-                                    <p className="fs-4 fw-bold text-center" style={tmpCountStyle}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                    <div className="row">
+                                        <div className="col-12">
+                                            <h5 className="card-title text-center m-0">{this.state.data[i].NAME}</h5>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-6 p-0">
+                                            <p className="fs-6 fw-bold text-center" style={tmpCountStyle}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                        </div>
+                                        <div className="col-6" style={{alignContent:'center'}}>
+                                            {(()=>
+                                            {
+                                                if(this.state.data[i].ORDER_COUNT != 0)
+                                                {
+                                                    return (
+                                                        <div className="row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color:'#0f6f6a' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center',justifyContent:'center' }}>
+                                                                <i className="fa-solid fa-users" style={{ fontSize: '16px', marginRight: '5px' }}></i>
+                                                                <h5 style={{ margin: 0, fontSize: '18px' }}><strong>{this.state.data[i].PERSON}</strong></h5>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                                else
+                                                {
+                                                    return null
+                                                }
+                                            })()}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {(()=>

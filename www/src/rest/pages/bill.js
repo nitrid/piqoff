@@ -55,7 +55,7 @@ export default class bill extends React.PureComponent
 
         this.grpItem.selectCmd = 
         {
-            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007') ORDER BY CODE ASC"
+            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018') ORDER BY CODE ASC"
         }
         await this.grpItem.refresh()
         
@@ -70,7 +70,8 @@ export default class bill extends React.PureComponent
                     ISNULL((SELECT TOP 1 VAT FROM ITEMS WHERE ITEMS.GUID = ITEM.ITEM_GUID),0) AS VAT,
                     ISNULL((SELECT TOP 1 WAITING FROM ITEMS_REST WHERE ITEMS_REST.ITEM = ITEM.ITEM_GUID),0) AS WAITING,
                     ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE_VW_01 AS IMG WHERE IMG.ITEM_GUID = ITEM.ITEM_GUID),'') AS IMAGE
-                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007')`
+                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007','008','009','010',
+                    '011','012','013','014','015','016','017','018')`
         }
         await this.productItem.refresh();
         
@@ -194,6 +195,8 @@ export default class bill extends React.PureComponent
         tmpEmpty.ZONE_CODE = this.tableSelected.CODE
         tmpEmpty.ZONE_NAME = this.tableSelected.NAME
         tmpEmpty.REF = tmpMaxRef
+        tmpEmpty.PERSON = 1
+
         this.restOrderObj.addEmpty(tmpEmpty)
 
         this.serviceView.items.push(
@@ -208,7 +211,7 @@ export default class bill extends React.PureComponent
             DELIVERED : 0
         })
     }
-    addItem(pData)
+    async addItem(pData)
     {
         let tmpEmpty = {...this.restOrderObj.restOrderDetail.empty}
         tmpEmpty.ZONE = this.serviceSelected.ZONE
@@ -231,9 +234,14 @@ export default class bill extends React.PureComponent
         tmpEmpty.TOTAL = tmpEmpty.AMOUNT
         tmpEmpty.STATUS = 0
         tmpEmpty.WAITING = pData.WAITING
-
+        tmpEmpty.PRINTED = 0
+        
         this.restOrderObj.restOrderDetail.addEmpty(tmpEmpty)
-
+        
+        if(this.restOrderObj.dt().length == 0)
+        {
+            await this.addOrder()
+        }
         this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
         this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
         this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
@@ -337,7 +345,7 @@ export default class bill extends React.PureComponent
             let tmpArrDt = []
             for (let i = 0; i < tmpPrintDt.groupBy('CODE').length; i++) 
             {
-                let tmpItems = []
+                let tmpItems = new datatable()
                 for (let x = 0; x < pData.length; x++) 
                 {
                     let tmpFilterPrinter = tmpPrintDt.where({CODE:tmpPrintDt.groupBy('CODE')[i].CODE}).where({ITEM_GUID:pData[x].ITEM})
@@ -360,10 +368,34 @@ export default class bill extends React.PureComponent
             
             for (let i = 0; i < tmpArrDt.length; i++) 
             {
-                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i]) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
                 {
-                    console.log(pResult)
-                })
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
             }
 
             resolve(true)
@@ -392,16 +424,30 @@ export default class bill extends React.PureComponent
                         }}
                         onSaveClick={async(e)=>
                         {
+                            let tmpPrintDt = []
                             let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                             for (let x = 0; x < tmpServices.length; x++) 
                             {
                                 await this.restOrderObj.load({ZONE:tmpServices[x].ZONE,REF:tmpServices[x].REF})
                                 
-                                let tmpPrintDt = []
                                 let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
-
+                                
                                 if (tmpFilter.length > 0)
                                 {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
+                                    
                                     for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(
@@ -409,6 +455,7 @@ export default class bill extends React.PureComponent
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
                                             REST : tmpFilter[i].REST,
+                                            PERSON : tmpFilter[i].PERSON,
                                             ZONE_NAME : tmpFilter[i].ZONE_NAME,
                                             REF : tmpFilter[i].REF,
                                             ITEM : tmpFilter[i].ITEM,
@@ -417,52 +464,20 @@ export default class bill extends React.PureComponent
                                             QUANTITY : tmpFilter[i].QUANTITY,
                                             PROPERTY : tmpFilter[i].PROPERTY,
                                             DESCRIPTION : tmpFilter[i].DESCRIPTION,
+                                            WAITING : tmpFilter[i].WAITING,
+                                            WAIT_STATUS : tmpFilter[i].WAIT_STATUS,
+                                            PRINTED : tmpFilter[i].PRINTED
                                         })
+                                        tmpFilter[i].PRINTED = tmpFilter[i].PRINTED == 0 ? 1 : tmpFilter[i].PRINTED
                                         tmpFilter[i].STATUS = 1
                                     }
-                                    await this.print(tmpPrintDt)
-                                    await this.restOrderObj.save()
                                     this.tableView.items[e].DELIVERED = 0
                                 }
-                                else
-                                {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'80%',height:'180px',
-                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRePrint.btn02"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
-                                    }
-    
-                                    let msgResult = await dialog(tmpConfObj);
-
-                                    if(msgResult == "btn01")
-                                    {
-                                        for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
-                                        {
-                                            tmpPrintDt.push(
-                                            {
-                                                LDATE : moment(new Date()).utcOffset(0, true),
-                                                LUSER : this.core.auth.data.CODE,
-                                                REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
-                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
-                                                REF : this.restOrderObj.restOrderDetail.dt()[i].REF,
-                                                ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
-                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
-                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
-                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
-                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
-                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
-                                            })
-                                            this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
-                                        }
-
-                                        await this.print(tmpPrintDt)
-                                        await this.restOrderObj.save()
-                                        this.tableView.items[e].DELIVERED = 0
-                                    }
-                                }
+                                await this.restOrderObj.save()
                             }
 
+                            await this.print(tmpPrintDt)
+                            
                             this.tableView.updateState()
                         }}
                         onChangeClick={async(e)=>
@@ -482,13 +497,42 @@ export default class bill extends React.PureComponent
                             let msgResult = await dialog(tmpConfObj);
                             if(msgResult == "btn01")
                             {
+                                let tmpPrintDt = []
                                 let tmpServices = await this.getServices(this.tableView.items[e].GUID)
                                 for (let i = 0; i < tmpServices.length; i++) 
                                 {
                                     await this.restOrderObj.load({ZONE:tmpServices[i].ZONE,REF:tmpServices[i].REF})
+
+                                    for (let x = 0; x < this.restOrderObj.restOrderDetail.dt().length; x++) 
+                                    {
+                                        if(this.restOrderObj.restOrderDetail.dt()[x].PRINTED == 1)
+                                        {
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[x].PERSON,
+                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
+                                                REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
+                                                ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
+                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[x].ITEM_CODE,
+                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[x].ITEM_NAME,
+                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[x].QUANTITY,
+                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
+                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
+                                                WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
+                                                WAIT_STATUS : 3,
+                                                PRINTED : 0
+                                            })
+                                        }
+                                    }
+
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
                                 }
+
+                                await this.print(tmpPrintDt)
                                 this.init()
                             }                            
                         }}
@@ -505,6 +549,12 @@ export default class bill extends React.PureComponent
                                 this.serviceSelected = this.serviceView.items[e]
                                 await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
                                 this.serviceDetailView.title = this.serviceView.items[e].ZONE_NAME + " / SERVICE - " + this.serviceView.items[e].REF
+                                
+                                try
+                                {
+                                    this.serviceDetailView.lblPerson.value = this.restOrderObj.dt()[0].PERSON
+                                }catch{}
+
                                 this.serviceDetailView.items = this.restOrderObj.restOrderDetail.dt()
                                 this.serviceDetailView.updateState()
                             }} 
@@ -538,6 +588,19 @@ export default class bill extends React.PureComponent
 
                                 if (tmpFilter.length > 0)
                                 {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
                                     for (let i = 0; i < tmpFilter.length; i++) 
                                     {
                                         tmpPrintDt.push(
@@ -545,6 +608,7 @@ export default class bill extends React.PureComponent
                                             LDATE : moment(new Date()).utcOffset(0, true),
                                             LUSER : this.core.auth.data.CODE,
                                             REST : tmpFilter[i].REST,
+                                            PERSON : tmpFilter[i].PERSON,
                                             ZONE_NAME : tmpFilter[i].ZONE_NAME,
                                             REF : tmpFilter[i].REF,
                                             ITEM : tmpFilter[i].ITEM,
@@ -555,8 +619,12 @@ export default class bill extends React.PureComponent
                                             DESCRIPTION : tmpFilter[i].DESCRIPTION,
                                             WAITING : tmpFilter[i].WAITING,
                                             WAIT_STATUS : tmpFilter[i].WAIT_STATUS,
+                                            PRINTED : tmpFilter[i].PRINTED
                                         })
+                                        tmpFilter[i].PRINTED = tmpFilter[i].PRINTED == 0 ? 1 : tmpFilter[i].PRINTED
                                         tmpFilter[i].STATUS = 1
+
+                                        console.log(tmpFilter[i].PRINTED)
                                     }
                                     await this.print(tmpPrintDt)
                                     await this.restOrderObj.save()
@@ -583,6 +651,7 @@ export default class bill extends React.PureComponent
                                                 LDATE : moment(new Date()).utcOffset(0, true),
                                                 LUSER : this.core.auth.data.CODE,
                                                 REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[i].PERSON,
                                                 ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
                                                 REF : this.restOrderObj.restOrderDetail.dt()[i].REF,
                                                 ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
@@ -593,8 +662,12 @@ export default class bill extends React.PureComponent
                                                 DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
                                                 WAITING : this.restOrderObj.restOrderDetail.dt()[i].WAITING,
                                                 WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[i].WAIT_STATUS,
+                                                PRINTED : this.restOrderObj.restOrderDetail.dt()[i].PRINTED
                                             })
+                                            this.restOrderObj.restOrderDetail.dt()[i].PRINTED = this.restOrderObj.restOrderDetail.dt()[i].PRINTED == 0 ? 1 : this.restOrderObj.restOrderDetail.dt()[i].PRINTED
                                             this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+
+                                            console.log(this.restOrderObj.restOrderDetail.dt()[i].PRINTED)
                                         }
                                         await this.print(tmpPrintDt)
                                         await this.restOrderObj.save()
@@ -616,6 +689,34 @@ export default class bill extends React.PureComponent
                                 if(msgResult == "btn01")
                                 {
                                     await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
+
+                                    let tmpPrintDt = []
+                                    for (let x = 0; x < this.restOrderObj.restOrderDetail.dt().length; x++) 
+                                    {
+                                        if(this.restOrderObj.restOrderDetail.dt()[x].PRINTED == 1)
+                                        {
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : this.restOrderObj.restOrderDetail.dt()[x].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[x].PERSON,
+                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[x].ZONE_NAME,
+                                                REF : this.restOrderObj.restOrderDetail.dt()[x].REF,
+                                                ITEM : this.restOrderObj.restOrderDetail.dt()[x].ITEM,
+                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[x].ITEM_CODE,
+                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[x].ITEM_NAME,
+                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[x].QUANTITY,
+                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[x].PROPERTY,
+                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[x].DESCRIPTION,
+                                                WAITING : this.restOrderObj.restOrderDetail.dt()[x].WAITING,
+                                                WAIT_STATUS : 3,
+                                                PRINTED : 0
+                                            })
+                                        }
+                                    }
+                                    await this.print(tmpPrintDt)
+                                    
                                     this.restOrderObj.dt().removeAt(0)
                                     await this.restOrderObj.save()
 
@@ -774,6 +875,11 @@ export default class bill extends React.PureComponent
                                 this.restOrderObj.save()
                                 this.serviceDetailView.updateState()
                             }}
+                            onPersonClick={async(e)=>
+                            {
+                                this.restOrderObj.dt()[0].PERSON = e
+                                this.restOrderObj.save()
+                            }}
                             onDeleteClick={async(e)=>
                             {
                                 let tmpConfObj =
@@ -785,9 +891,38 @@ export default class bill extends React.PureComponent
                                 let msgResult = await dialog(tmpConfObj);
                                 if(msgResult == "btn01")
                                 {
+                                    let tmpDelete = this.restOrderObj.restOrderDetail.dt().where({GUID:this.serviceDetailView.items[e].GUID})
+
+                                    if(tmpDelete.length > 0 && tmpDelete[0].PRINTED > 0)
+                                    {
+                                        let tmpPrintDt = []
+
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : tmpDelete[0].REST,
+                                            PERSON : tmpDelete[0].PERSON,
+                                            ZONE_NAME : tmpDelete[0].ZONE_NAME,
+                                            REF : tmpDelete[0].REF,
+                                            ITEM : tmpDelete[0].ITEM,
+                                            ITEM_CODE : tmpDelete[0].ITEM_CODE,
+                                            ITEM_NAME : tmpDelete[0].ITEM_NAME,
+                                            QUANTITY : tmpDelete[0].QUANTITY,
+                                            PROPERTY : tmpDelete[0].PROPERTY,
+                                            DESCRIPTION : tmpDelete[0].DESCRIPTION,
+                                            WAITING : tmpDelete[0].WAITING,
+                                            WAIT_STATUS : 3,
+                                            PRINTED : 0
+                                        })
+
+                                        await this.print(tmpPrintDt)
+                                    }
+                                    
+
                                     this.restOrderObj.restOrderDetail.dt().removeAt(this.serviceDetailView.items[e])
                                     if(this.restOrderObj.restOrderDetail.dt().length == 0)
-                                    {
+                                    {                                    
                                         this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
                                         this.restOrderObj.dt().removeAt(0)
                                         this.serviceView.updateState()
@@ -935,58 +1070,90 @@ export default class bill extends React.PureComponent
                             <NbProductDetailView parent={this} id="productDetailView" param={this.param.filter({ID:'SpecialNote',TYPE:0})}
                             onCloseClick={async()=>
                             {
-                                let tmpArrProp = []
-
-                                for (let i = 0; i < this.productDetailView.itemProp.length; i++) 
+                                try
                                 {
-                                    let tmpObjP = this.productDetailView["ChkGrp" + this.productDetailView.itemProp[i].CODE].state.items
-                                    for (let x = 0; x < tmpObjP.length; x++) 
+                                    let tmpArrProp = []
+
+                                    for (let i = 0; i < this.productDetailView.itemProp.length; i++) 
                                     {
-                                        if(tmpObjP[x].VALUE)
+                                        let tmpObjP = this.productDetailView["ChkGrp" + this.productDetailView.itemProp[i].CODE].state.items
+                                        for (let x = 0; x < tmpObjP.length; x++) 
                                         {
-                                            tmpArrProp.push(tmpObjP[x])
-                                            tmpArrProp[tmpArrProp.length - 1].CODE = this.productDetailView.itemProp[i].CODE
+                                            if(tmpObjP[x].VALUE)
+                                            {
+                                                tmpArrProp.push(tmpObjP[x])
+                                                tmpArrProp[tmpArrProp.length - 1].CODE = this.productDetailView.itemProp[i].CODE
+                                            }
                                         }
                                     }
-                                }
-                                
-                                this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
-                                this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
-                                this.productDetailView.items.PRICE = await this.getPrice(this.productDetailView.items.ITEM)
-                                this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
-                                this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
-                                this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
-                                this.productDetailView.items.TOTAL = this.productDetailView.items.AMOUNT
+                                    
+                                    let tmpItem = typeof this.productDetailView.items.ITEM_GUID == 'undefined' ? this.productDetailView.items.ITEM : this.productDetailView.items.ITEM_GUID
 
-                                this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
-                                this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
-                                this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
-                                this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
-
-                                if(this.productDetailView.items.QUANTITY == 0)
-                                {
-                                    let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
-                                    if(tmpRemoveItem.length > 0)
+                                    this.productDetailView.items.PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
+                                    this.productDetailView.items.DESCRIPTION = this.productDetailView.txtNote.value
+                                    this.productDetailView.items.PRICE = await this.getPrice(tmpItem)
+                                    this.productDetailView.items.AMOUNT = Number(Number(this.productDetailView.items.PRICE) * Number(this.productDetailView.items.QUANTITY)).round(2)
+                                    this.productDetailView.items.FAMOUNT = Number(this.productDetailView.items.AMOUNT).rateInNum(this.productDetailView.items.VATRATE)
+                                    this.productDetailView.items.VAT = Number(Number(this.productDetailView.items.AMOUNT) - Number(this.productDetailView.items.FAMOUNT))
+                                    this.productDetailView.items.TOTAL = this.productDetailView.items.AMOUNT
+    
+                                    this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
+                                    this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+    
+                                    if(this.productDetailView.items.QUANTITY == 0)
                                     {
-                                        this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
-                                    }
-                                    if(this.restOrderObj.restOrderDetail.dt().length == 0)
-                                    {
-                                        this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
-                                        this.restOrderObj.dt().removeAt(0)
-                                        this.serviceView.updateState()
-                                    }
-                                }
-                                
-                                await this.restOrderObj.save()
+                                        let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
+                                        if(tmpRemoveItem.length > 0 && tmpRemoveItem[0].PRINTED > 0)
+                                        {
+                                            let tmpPrintDt = []
 
-                                if(typeof this.serviceDetailView != 'undefined')
-                                {
-                                    this.serviceDetailView.updateState()
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : tmpRemoveItem[0].REST,
+                                                PERSON : tmpRemoveItem[0].PERSON,
+                                                ZONE_NAME : tmpRemoveItem[0].ZONE_NAME,
+                                                REF : tmpRemoveItem[0].REF,
+                                                ITEM : tmpRemoveItem[0].ITEM,
+                                                ITEM_CODE : tmpRemoveItem[0].ITEM_CODE,
+                                                ITEM_NAME : tmpRemoveItem[0].ITEM_NAME,
+                                                QUANTITY : tmpRemoveItem[0].QUANTITY,
+                                                PROPERTY : tmpRemoveItem[0].PROPERTY,
+                                                DESCRIPTION : tmpRemoveItem[0].DESCRIPTION,
+                                                WAITING : tmpRemoveItem[0].WAITING,
+                                                WAIT_STATUS : 3,
+                                                PRINTED : 0
+                                            })
+
+                                            await this.print(tmpPrintDt)
+
+                                            this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
+                                        }
+                                        if(this.restOrderObj.restOrderDetail.dt().length == 0)
+                                        {
+                                            this.serviceView.items.removeAt(this.serviceView.items.where({GUID:this.restOrderObj.dt()[0].GUID})[0])
+                                            this.restOrderObj.dt().removeAt(0)
+                                            this.serviceView.updateState()
+                                        }
+                                    }
+    
+                                    await this.restOrderObj.save()
+    
+                                    if(typeof this.serviceDetailView != 'undefined')
+                                    {
+                                        this.serviceDetailView.updateState()
+                                    }
+                                    if(typeof this.addProductView != 'undefined')
+                                    {
+                                        this.addProductView.updateState()
+                                    }
                                 }
-                                if(typeof this.addProductView != 'undefined')
+                                catch(e)
                                 {
-                                    this.addProductView.updateState()
+                                    console.log(e)
                                 }
 
                                 this.popProductDetail.hide()

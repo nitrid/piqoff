@@ -131,7 +131,7 @@ export default class salesOrdList extends React.PureComponent
                     query : "SELECT * FROM DOC_VW_01 " +
                             "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                            " AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -162,9 +162,9 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'sip_02_002',
+                                                id: 'tkf_02_002',
                                                 text: this.t('menu'),
-                                                path: 'orders/documents/salesOrder.js',
+                                                path: 'offers/documents/salesOffer.js',
                                             })
                                         }
                                     }    
@@ -335,9 +335,9 @@ export default class salesOrdList extends React.PureComponent
                             {
                                 App.instance.menuClick(
                                 {
-                                    id: 'sip_02_002',
+                                    id: 'tkf_02_002',
                                     text: this.t('menu'),
-                                    path: 'orders/documents/salesOrder.js',
+                                    path: 'offers/documents/salesOffer.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
