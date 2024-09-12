@@ -2179,7 +2179,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
-                                                <Column dataField="CDATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="LUSER" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>

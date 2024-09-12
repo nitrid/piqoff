@@ -9,6 +9,7 @@ import NdPopGrid from '../../core/react/devex/popgrid';
 import NdGrid,{Column,Pager,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from '../../core/react/devex/grid';
 import NdTextArea from '../../core/react/devex/textarea';
 import NdSelectBox from '../../core/react/devex/selectbox';
+import NdHtmlEditor from '../../core/react/devex/htmlEditor';
 
 function parseTry(pData)
 {
@@ -144,6 +145,16 @@ function comboBoxGet(pItem,pThis)
             return JSON.stringify({value : pThis[pItem.ID].value})
         }
     }
+}
+function htmlBoxBuild(pItem,pThis)
+{
+    return (
+        <Item key={pItem.ID} cssClass="form-label-bold">
+            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <NdHtmlEditor id={pItem.ID} key={pItem.ID} parent={pThis} height={300}>
+            </NdHtmlEditor>
+        </Item>
+    )
 }
 function popInputBuild(pItem,pThis)
 {
@@ -543,6 +554,34 @@ function popObjectListGet(pItem,pThis)
         return JSON.stringify(pThis[pItem.ID].obj)
     }
 }
+function htmlEditorSet(pItem,pThis)
+{
+    if(typeof pThis[pItem.ID] != 'undefined')
+    {
+        if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
+        {
+            pThis[pItem.ID].value = parseTry(pItem.VALUE)
+        }
+        else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
+        {
+            pThis[pItem.ID].value = parseTry(pItem.VALUE).value
+        }
+    }
+}
+function htmlEditorGet(pItem,pThis)
+{
+    if(typeof pThis[pItem.ID] != 'undefined')
+    {
+        if(typeof parseTry(pItem.VALUE) == 'string' || typeof parseTry(pItem.VALUE) == 'number')
+        {
+            return pThis[pItem.ID].value
+        }
+        else if(typeof parseTry(pItem.VALUE) == 'object' && (typeof parseTry(pItem.VALUE).value == 'string' || typeof parseTry(pItem.VALUE).value == 'number'))
+        {
+            return JSON.stringify({value : pThis[pItem.ID].value})
+        }
+    }
+}
 export function ItemBuild(pItem,pThis)
 {
     if(typeof pItem.VIEW == 'undefined' || typeof pItem.VIEW.TYPE == 'undefined')
@@ -576,6 +615,10 @@ export function ItemBuild(pItem,pThis)
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
         return popObjectListBuild(pItem,pThis)
+    }
+    else if(pItem.VIEW.TYPE == 'html')
+    {
+        return htmlBoxBuild(pItem,pThis)
     }
     // else
     // {
@@ -619,6 +662,10 @@ export async function ItemSet(pItem,pThis)
     {
         popObjectListSet(pItem,pThis)
     }
+    else if(pItem.VIEW.TYPE == 'html')
+    {
+        htmlEditorSet(pItem,pThis)
+    }
 }
 export async function ItemGet(pItem,pThis)
 {
@@ -656,5 +703,13 @@ export async function ItemGet(pItem,pThis)
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
         return popObjectListGet(pItem,pThis)
+    }
+    else if(pItem.VIEW.TYPE == 'popObjectList')
+    {
+        return popObjectListGet(pItem,pThis)
+    }
+    else if(pItem.VIEW.TYPE == 'html')
+    {
+        return htmlEditorGet(pItem,pThis)
     }
 }

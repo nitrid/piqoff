@@ -29,6 +29,20 @@ const irs_01_002 =
         clmTotal : "Toplam",
         clmOutputName :"Depo",
     },
+    msgConvertInvoices :
+    {  
+        title: "Dikkat",
+        btn01: "Tamam",
+        btn02: "Iptal",
+        msg: "Seçilen irsaliyeleri faturaya cevirmek istediğinizden eminmisiniz ? Fatura oluştukdan sonra değiştirilemez !!"         
+    },
+    msgConvertSucces :
+    {  
+        title: "Dikkat",
+        btn01: "Yazdır",
+        btn02: "Kapat",
+        msg: "Faturalar Oluşturuldu yazdırmak istermisiniz ?"         
+    },
 
 }
 

@@ -94,7 +94,7 @@ export default class App extends React.PureComponent
     }
     async init()
     {
-        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
+        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:1000,reconnection: true,reconnectionAttempts: Infinity,reconnectionDelay: 500,reconnectionDelayMax: 1000,transports : ['websocket']}));
         this.core.appInfo = appInfo
         
         if(!App.instance)
@@ -115,6 +115,10 @@ export default class App extends React.PureComponent
                 App.instance.setState({logined:false,connected:true});
             }
         })
+        this.core.socket.on('connect_error',async () => 
+        {
+            App.instance.setState({connected:false});
+        }) 
         this.core.socket.on('general',async(e)=>
         {
             if(typeof e.id != 'undefined' && e.id == 'M004')

@@ -562,5 +562,7 @@ export const langDe =
         btnSave : "OK",
         txtSenderNote : "Absenders Beschreibung",
         txtRecieverNote : "Empfängers Beschreibung",
+        txtSenderDate : "Empfängers Datum",
+        txtRecieverDate : "Absenders Datum"
     }
 }
