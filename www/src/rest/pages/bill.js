@@ -339,7 +339,7 @@ export default class bill extends React.PureComponent
             let tmpPrintDt = new datatable()
             tmpPrintDt.selectCmd = 
             {
-                query : "SELECT * FROM REST_PRINT_ITEM_VW_01 WHERE ITEM_GUID IN (" + pData.map(obj => `'${obj.ITEM}'`).join(", ") + ")"
+                query : "SELECT * FROM REST_PRINT_ITEM_VW_01 WHERE ITEM_GUID IN (" + pData.map(obj => `'${obj.ITEM}'`).join(", ") + ") ORDER BY CODE ASC"
             }
             await tmpPrintDt.refresh()
             
@@ -350,18 +350,19 @@ export default class bill extends React.PureComponent
                 for (let x = 0; x < pData.length; x++) 
                 {
                     let tmpFilterPrinter = tmpPrintDt.where({CODE:tmpPrintDt.groupBy('CODE')[i].CODE}).where({ITEM_GUID:pData[x].ITEM})
-                    for (let m = 0; m < tmpFilterPrinter.length; m++) 
+                    if(tmpFilterPrinter.length > 0)
                     {
-                        tmpItems.push(pData[x])
-                        tmpItems[tmpItems.length-1].ITEM_NAME = replaceTurkishChars(tmpFilterPrinter[m].ITEM_NAME)
-                        tmpItems[tmpItems.length-1].PRINTER_PATH = tmpFilterPrinter[m].PRINTER_PATH
-                        tmpItems[tmpItems.length-1].DESIGN_PATH = tmpFilterPrinter[m].DESIGN_PATH
-                        if(this.isValidJSON(tmpItems[tmpItems.length-1].PROPERTY))
+                        pData[x].ITEM_NAME = replaceTurkishChars(pData[x].ITEM_NAME)
+                        pData[x].PRINTER_PATH = tmpFilterPrinter[0].PRINTER_PATH
+                        pData[x].DESIGN_PATH = tmpFilterPrinter[0].DESIGN_PATH
+                        if(this.isValidJSON(pData[x].PROPERTY))
                         {
-                            tmpItems[tmpItems.length-1].PROPERTY = JSON.parse(tmpItems[tmpItems.length-1].PROPERTY).map(item => item.TITLE).join('\n')
-                            tmpItems[tmpItems.length-1].PROPERTY = replaceTurkishChars(tmpItems[tmpItems.length-1].PROPERTY)
+                            pData[x].PROPERTY = JSON.parse(pData[x].PROPERTY).map(item => item.TITLE).join('\n')
+                            pData[x].PROPERTY = replaceTurkishChars(pData[x].PROPERTY)
                         }
-                        tmpItems[tmpItems.length-1].DESCRIPTION = replaceTurkishChars(tmpItems[tmpItems.length-1].DESCRIPTION)
+                        pData[x].DESCRIPTION = replaceTurkishChars(pData[x].DESCRIPTION)
+                        
+                        tmpItems.push({...pData[x]})
                     }
                 }
                 tmpArrDt.push(tmpItems)
@@ -369,30 +370,35 @@ export default class bill extends React.PureComponent
             
             for (let i = 0; i < tmpArrDt.length; i++) 
             {
-                if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
+                let tmpStatus0 = tmpArrDt[i].where({WAIT_STATUS:0})
+                let tmpStatus1 = tmpArrDt[i].where({WAIT_STATUS:1})
+                let tmpStatus2 = tmpArrDt[i].where({WAIT_STATUS:2})
+                let tmpStatus3 = tmpArrDt[i].where({WAIT_STATUS:3})
+
+                if(tmpStatus0.length > 0)
                 {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpStatus0[0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpStatus0.toArray()) + ',"PRINTER":"' + tmpStatus0[0].PRINTER_PATH + '"}',async(pResult) =>
                     {
                         console.log(pResult)
                     })
                 }
-                if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
+                if(tmpStatus1.length > 0)
                 {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpStatus1[0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpStatus1.toArray()) + ',"PRINTER":"' + tmpStatus1[0].PRINTER_PATH + '"}',async(pResult) =>
                     {
                         console.log(pResult)
                     })
                 }
-                if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
+                if(tmpStatus2.length > 0)
                 {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpStatus2[0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpStatus2.toArray()) + ',"PRINTER":"' + tmpStatus2[0].PRINTER_PATH + '"}',async(pResult) =>
                     {
                         console.log(pResult)
                     })
                 }
-                if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
+                if(tmpStatus3.length > 0)
                 {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpStatus3[0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpStatus3.toArray()) + ',"PRINTER":"' + tmpStatus3[0].PRINTER_PATH + '"}',async(pResult) =>
                     {
                         console.log(pResult)
                     })
