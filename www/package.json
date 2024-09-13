@@ -9,14 +9,6 @@
     "certificate": "LNE-39258",
     "sha": "9d627e4005d7537a6987b0bbbfbf63e5321b8987219d9d18498f916b6bc2a17b"
   },
-  "databases": [
-    {
-      "CODE": "NANCY"
-    },
-    {
-      "CODE": "ZEYNO"
-    }
-  ],
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"
