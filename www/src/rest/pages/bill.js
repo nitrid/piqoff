@@ -53,9 +53,11 @@ export default class bill extends React.PureComponent
         await this.tableView.items.refresh()
         this.tableView.updateState()
 
+        let tmpGrpPrm = this.param.filter({ID:'Groups',TYPE:0}).getValue().map(code => `'${code}'`).join(',')
+
         this.grpItem.selectCmd = 
         {
-            query : "SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN ('001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018') ORDER BY CODE ASC"
+            query : `SELECT CODE,NAME FROM ITEM_SUB_GROUP_VW_01 WHERE CODE IN (${tmpGrpPrm}) ORDER BY CODE ASC`
         }
         await this.grpItem.refresh()
         
@@ -70,8 +72,7 @@ export default class bill extends React.PureComponent
                     ISNULL((SELECT TOP 1 VAT FROM ITEMS WHERE ITEMS.GUID = ITEM.ITEM_GUID),0) AS VAT,
                     ISNULL((SELECT TOP 1 WAITING FROM ITEMS_REST WHERE ITEMS_REST.ITEM = ITEM.ITEM_GUID),0) AS WAITING,
                     ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE_VW_01 AS IMG WHERE IMG.ITEM_GUID = ITEM.ITEM_GUID),'') AS IMAGE
-                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN ('001','002','003','004','005','006','007','008','009','010',
-                    '011','012','013','014','015','016','017','018')`
+                    FROM ITEMS_SUB_GRP_VW_01 AS ITEM WHERE SUB_CODE IN (${tmpGrpPrm})`
         }
         await this.productItem.refresh();
         
@@ -368,38 +369,44 @@ export default class bill extends React.PureComponent
             
             for (let i = 0; i < tmpArrDt.length; i++) 
             {
-                if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
-                {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                    {
-                        console.log(pResult)
-                    })
-                }
-                if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
-                {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                    {
-                        console.log(pResult)
-                    })
-                }
-                if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
-                {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                    {
-                        console.log(pResult)
-                    })
-                }
-                if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
-                {
-                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                    {
-                        console.log(pResult)
-                    })
-                }
+                console.log(tmpArrDt[i])
+                // if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
+                // {
+                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                //     {
+                //         console.log(pResult)
+                //     })
+                // }
+                // if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
+                // {
+                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                //     {
+                //         console.log(pResult)
+                //     })
+                // }
+                // if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
+                // {
+                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                //     {
+                //         console.log(pResult)
+                //     })
+                // }
+                // if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
+                // {
+                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                //     {
+                //         console.log(pResult)
+                //     })
+                // }
             }
 
             resolve(true)
         })
+    }
+    isMultiQtyGrp(pGrp)
+    {
+        let tmpMGrp = this.param.filter({ID:'MultiQtyGrp',TYPE:0}).getValue()
+        return tmpMGrp.some(item => item === pGrp);
     }
     render()
     {    
@@ -1020,31 +1027,39 @@ export default class bill extends React.PureComponent
                                             }
                                             this.addProductView.fullItems[i].PROPERTY = tmpArrProp.length > 0 ? JSON.stringify(tmpArrProp) : ''
                                         }
-
+                                        
                                         if(typeof this.restItemSelected == 'undefined')
                                         {
-                                            this.addProductView.fullItems[i].PRICE = await this.getPrice(this.addProductView.fullItems[i].ITEM_GUID)
-                                            this.addItem(this.addProductView.fullItems[i])
-                                            this.restItemSelected = undefined
+                                            let tmpQty = this.addProductView.fullItems[i].QUANTITY
+                                            for (let x = 0; x < tmpQty; x++) 
+                                            {
+                                                this.addProductView.fullItems[i].QUANTITY = 1
+                                                this.addProductView.fullItems[i].PRICE = await this.getPrice(this.addProductView.fullItems[i].ITEM_GUID)
+                                                this.addItem(this.addProductView.fullItems[i])
+                                                this.restItemSelected = undefined
+                                            }
                                         }
                                         else
                                         {
-                                            this.restItemSelected.QUANTITY = this.addProductView.fullItems[i].QUANTITY
-                                            this.restItemSelected.PRICE = await this.getPrice(this.addProductView.fullItems[i].ITEM_GUID)
-                                            this.restItemSelected.AMOUNT = Number(Number(this.restItemSelected.PRICE) * Number(this.restItemSelected.QUANTITY)).round(2)
-                                            this.restItemSelected.FAMOUNT = Number(this.restItemSelected.AMOUNT).rateInNum(this.addProductView.fullItems[i].VAT)
-                                            this.restItemSelected.VAT = Number(Number(this.restItemSelected.AMOUNT) - Number(this.restItemSelected.FAMOUNT))
-                                            this.restItemSelected.TOTAL = this.restItemSelected.AMOUNT
-                                            this.restItemSelected.ITEM = this.addProductView.fullItems[i].ITEM_GUID
-                                            this.restItemSelected.ITEM_NAME = this.addProductView.fullItems[i].ITEM_NAME
-                                            this.restItemSelected.PROPERTY = this.addProductView.fullItems[i].PROPERTY
-                                            this.restItemSelected.DESCRIPTION = this.addProductView.fullItems[i].DESCRIPTION
-                                            this.restItemSelected.STATUS = 0
-
-                                            this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
-                                            this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
-                                            this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
-                                            this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+                                            for (let x = 0; x < this.addProductView.fullItems[i].QUANTITY; x++) 
+                                            {
+                                                this.restItemSelected.QUANTITY = 1
+                                                this.restItemSelected.PRICE = await this.getPrice(this.addProductView.fullItems[i].ITEM_GUID)
+                                                this.restItemSelected.AMOUNT = Number(Number(this.restItemSelected.PRICE) * 1).round(2)
+                                                this.restItemSelected.FAMOUNT = Number(this.restItemSelected.AMOUNT).rateInNum(this.addProductView.fullItems[i].VAT)
+                                                this.restItemSelected.VAT = Number(Number(this.restItemSelected.AMOUNT) - Number(this.restItemSelected.FAMOUNT))
+                                                this.restItemSelected.TOTAL = this.restItemSelected.AMOUNT
+                                                this.restItemSelected.ITEM = this.addProductView.fullItems[i].ITEM_GUID
+                                                this.restItemSelected.ITEM_NAME = this.addProductView.fullItems[i].ITEM_NAME
+                                                this.restItemSelected.PROPERTY = this.addProductView.fullItems[i].PROPERTY
+                                                this.restItemSelected.DESCRIPTION = this.addProductView.fullItems[i].DESCRIPTION
+                                                this.restItemSelected.STATUS = 0
+    
+                                                this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
+                                                this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
+                                                this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
+                                                this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+                                            }
                                         }
                                         
                                         tmpSave = true
@@ -1105,31 +1120,34 @@ export default class bill extends React.PureComponent
                                     if(this.productDetailView.items.QUANTITY == 0)
                                     {
                                         let tmpRemoveItem = this.restOrderObj.restOrderDetail.dt().where({ITEM:this.productDetailView.items.ITEM})
-                                        if(tmpRemoveItem.length > 0 && tmpRemoveItem[0].PRINTED > 0)
+                                        if(tmpRemoveItem.length > 0)
                                         {
-                                            let tmpPrintDt = []
-
-                                            tmpPrintDt.push(
+                                            if(tmpRemoveItem[0].PRINTED > 0)
                                             {
-                                                LDATE : moment(new Date()).utcOffset(0, true),
-                                                LUSER : this.core.auth.data.CODE,
-                                                REST : tmpRemoveItem[0].REST,
-                                                PERSON : tmpRemoveItem[0].PERSON,
-                                                ZONE_NAME : tmpRemoveItem[0].ZONE_NAME,
-                                                REF : tmpRemoveItem[0].REF,
-                                                ITEM : tmpRemoveItem[0].ITEM,
-                                                ITEM_CODE : tmpRemoveItem[0].ITEM_CODE,
-                                                ITEM_NAME : tmpRemoveItem[0].ITEM_NAME,
-                                                QUANTITY : tmpRemoveItem[0].QUANTITY,
-                                                PROPERTY : tmpRemoveItem[0].PROPERTY,
-                                                DESCRIPTION : tmpRemoveItem[0].DESCRIPTION,
-                                                WAITING : tmpRemoveItem[0].WAITING,
-                                                WAIT_STATUS : 3,
-                                                PRINTED : 0
-                                            })
+                                                let tmpPrintDt = []
 
-                                            await this.print(tmpPrintDt)
-
+                                                tmpPrintDt.push(
+                                                {
+                                                    LDATE : moment(new Date()).utcOffset(0, true),
+                                                    LUSER : this.core.auth.data.CODE,
+                                                    REST : tmpRemoveItem[0].REST,
+                                                    PERSON : tmpRemoveItem[0].PERSON,
+                                                    ZONE_NAME : tmpRemoveItem[0].ZONE_NAME,
+                                                    REF : tmpRemoveItem[0].REF,
+                                                    ITEM : tmpRemoveItem[0].ITEM,
+                                                    ITEM_CODE : tmpRemoveItem[0].ITEM_CODE,
+                                                    ITEM_NAME : tmpRemoveItem[0].ITEM_NAME,
+                                                    QUANTITY : tmpRemoveItem[0].QUANTITY,
+                                                    PROPERTY : tmpRemoveItem[0].PROPERTY,
+                                                    DESCRIPTION : tmpRemoveItem[0].DESCRIPTION,
+                                                    WAITING : tmpRemoveItem[0].WAITING,
+                                                    WAIT_STATUS : 3,
+                                                    PRINTED : 0
+                                                })
+    
+                                                await this.print(tmpPrintDt)
+                                            }
+                                            
                                             this.restOrderObj.restOrderDetail.dt().removeAt(tmpRemoveItem[0])
                                         }
                                         if(this.restOrderObj.restOrderDetail.dt().length == 0)

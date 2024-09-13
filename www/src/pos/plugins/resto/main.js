@@ -87,6 +87,7 @@ posDoc.prototype.render = function()
     let originalRenderOutput = orgRender.call(this);
     let modifiedChildren = addChildToElementWithId(originalRenderOutput.props.children,'frmBtnGrp',(renderTables.bind(this))());
     modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderDiscount.bind(this))());
+    modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderPaySplit.bind(this))());
     
     return React.cloneElement(originalRenderOutput, {}, ...modifiedChildren);
 }
@@ -130,6 +131,23 @@ async function getGrp()
     }
     await tmpTbl.refresh()
     this.setState({restTableGrp:tmpTbl.toArray()})
+}
+function renderPaySplit()
+{
+    return (
+        <NdLayoutItem key={"btnRestPaySplitLy"} id={"btnRestPaySplitLy"} parent={this} data-grid={{x:45,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:30}}
+        access={this.acsObj.filter({ELEMENT:'btnRestPaySplitLy',USERS:this.user.CODE})}>
+            <div>
+                <NbButton id={"btnRestPaySplit"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",border:"#ff9f43"}}
+                onClick={async()=>
+                {
+                    
+                }}>
+                    <i className="text-white fa-solid fa-comments-dollar" style={{fontSize: "24px"}} />
+                </NbButton>
+            </div>
+        </NdLayoutItem>
+    )
 }
 function renderDiscount()
 {
