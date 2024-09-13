@@ -369,35 +369,34 @@ export default class bill extends React.PureComponent
             
             for (let i = 0; i < tmpArrDt.length; i++) 
             {
-                console.log(tmpArrDt[i])
-                // if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
-                // {
-                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                //     {
-                //         console.log(pResult)
-                //     })
-                // }
-                // if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
-                // {
-                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                //     {
-                //         console.log(pResult)
-                //     })
-                // }
-                // if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
-                // {
-                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                //     {
-                //         console.log(pResult)
-                //     })
-                // }
-                // if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
-                // {
-                //     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
-                //     {
-                //         console.log(pResult)
-                //     })
-                // }
+                if(tmpArrDt[i].where({WAIT_STATUS:0}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:0}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:1}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:1}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:2}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:2}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
+                if(tmpArrDt[i].where({WAIT_STATUS:3}).length > 0)
+                {
+                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpArrDt[i][0].DESIGN_PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpArrDt[i].where({WAIT_STATUS:3}).toArray()) + ',"PRINTER":"' + tmpArrDt[i][0].PRINTER_PATH + '"}',async(pResult) =>
+                    {
+                        console.log(pResult)
+                    })
+                }
             }
 
             resolve(true)
