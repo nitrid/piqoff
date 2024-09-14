@@ -73,6 +73,12 @@ export const langEn =
         msg : "Barcode not recognized",
         btn01 : "OK",
     },
+    msgBarcodeBalanceNotFound : 
+    {
+        title : "Warning",
+        msg : "This barcode has already been scanned!",
+        btn01 : "OK",
+    },
     msgSpecialTicketAlert : 
     {
         title : "Attention",
