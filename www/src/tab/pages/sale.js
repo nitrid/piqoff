@@ -114,7 +114,6 @@ export default class Sale extends React.PureComponent
     }
     _columnListBox(e)
     {
-        console.log(e)
         var onOptionChanged = (e) =>
         {
             if (e.name == 'selectedItemKeys') 
@@ -189,7 +188,7 @@ export default class Sale extends React.PureComponent
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     let tmpItemObj = tmpBuf.result.recordset[i]
-                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,0,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                     this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
@@ -219,7 +218,9 @@ export default class Sale extends React.PureComponent
                 
                 for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
-                    this.itemView.items.push(tmpItems.result.recordset[i])
+                    let tmpItemObj = tmpItems.result.recordset[i]
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
                 this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
@@ -265,7 +266,9 @@ export default class Sale extends React.PureComponent
             let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
             for (let i = 0; i < tmpItems.result.recordset.length; i++) 
             {
-                this.itemView.items.push(tmpItems.result.recordset[i])
+                let tmpItemObj = tmpItems.result.recordset[i]
+                tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,0,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                this.itemView.items.push(tmpItemObj)
             }
             this.itemView.items = this.itemView.items
             this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
@@ -307,45 +310,49 @@ export default class Sale extends React.PureComponent
             }
         
             tmpData = await this.core.local.select(tmpQuery) 
+            if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
+            {
+                let tmpVatType = 0
+                tmpPrice = tmpData.result.recordset[0].PRICE
+                
+                if(pType == 0)
+                {
+                    if(tmpData.result.recordset[0].LIST_NO != 0)
+                    {
+                        tmpVatType = tmpData.result.recordset[0].LIST_VAT_TYPE
+                    }
+                    else
+                    {
+                        tmpVatType = tmpData.result.recordset[0].CONTRACT_VAT_TYPE
+                    }
+                    if(tmpVatType == 0)
+                    {
+                        tmpPrice = tmpPrice / ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
+                    }
+                }
+                if(pAddVat)
+                {
+                    tmpPrice = tmpPrice * ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
+                }
+            }
 
         }
         else
         {
             let tmpQuery = 
             {
-                query : ``,
-                param : ['VAL:string|50','MAIN_GRP:string|50'],
-                value : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
+                query : `SELECT (SELECT [dbo].[FN_PRICE](GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,@TYPE,0)) AS PRICE FROM ITEMS WHERE GUID = @GUID`,
+                param : ['GUID:string|50','TYPE:int','QUANTITY:float','DEPOT:string|50','LIST_NO:int','CUSTOMER:string|50'],
+                value : [pItem,pType,pQty,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
             }
             tmpData = await this.core.sql.execute(tmpQuery) 
-        }
-
-        if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
-        {
-            let tmpVatType = 0
-            tmpPrice = tmpData.result.recordset[0].PRICE
-            
-            if(pType == 0)
+            if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
-                if(tmpData.result.recordset[0].LIST_NO != 0)
-                {
-                    tmpVatType = tmpData.result.recordset[0].LIST_VAT_TYPE
-                }
-                else
-                {
-                    tmpVatType = tmpData.result.recordset[0].CONTRACT_VAT_TYPE
-                }
-                if(tmpVatType == 0)
-                {
-                    tmpPrice = tmpPrice / ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
-                }
-            }
-            if(pAddVat)
-            {
-                tmpPrice = tmpPrice * ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
+                tmpPrice = tmpData.result.recordset[0].PRICE
             }
         }
         return Number(tmpPrice).round(2)
+       
     }
     async _customerSearch()
     {
@@ -2019,7 +2026,6 @@ export default class Sale extends React.PureComponent
                                                                 value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                             }
                                                         }
-                                                        
                                                         this.setState({isExecute:true})                                                        
                                                         let tmpData = await this.core.sql.execute(tmpQuery)                                                         
                                                         this.setState({isExecute:false})                                                        
