@@ -32,6 +32,27 @@ const lang =
         btn01 : "Evet",
         btn02 : "Hayır",
         msg : "Seçili ürünü bedava vermek istediğinize eminmisiniz ?",
-    }
+    },
+    popRestNP :
+    {
+        title : "Kişi sayısı",
+        msg : "Toplam Tutar : "
+    },
+    msgRestPaymentType :
+    {
+        title : "Ödeme Tipi Seçiniz",
+        msg : "Alınacak Ödeme Tutarı : "
+    },
+    popRestPayment :
+    {
+        title : "Ödeme Giriniz",
+        msg : "Ödenecek Tutar : "
+    },
+    msgRestMoneyChange : 
+    {
+        title : "Bilgi",
+        msg : "Para Üstü Veriniz.",
+        btn01 : "Tamam",
+    },
 }
 export default lang

@@ -11,6 +11,7 @@ import NbLabel from "../../../core/react/bootstrap/label.js";
 import posDoc from '../../pages/posDoc.js';
 import { datatable } from "../../../core/core.js";
 import NdDialog,{ dialog } from "../../../core/react/devex/dialog.js";
+import NbPopNumber from "../../tools/popnumber.js";
 
 import {prm} from './meta/prm.js'
 import {acs} from './meta/acs.js'
@@ -141,10 +142,104 @@ function renderPaySplit()
                 <NbButton id={"btnRestPaySplit"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",border:"#ff9f43"}}
                 onClick={async()=>
                 {
-                    
+                    if(this.payRest.value == 0)
+                    {
+                        return
+                    }
+
+                    let tmpResult = await this.popRestNP.show(this.lang.t("popRestNP.title"),1,undefined,this.lang.t("popRestNP.msg") + Number(this.payRest.value).round(2).toFixed(2) + Number.money.sign)
+                    if(typeof tmpResult != 'undefined' && tmpResult != '')
+                    {
+                        let tmpPay = Number(this.payRest.value / tmpResult).round(2)
+                        let tmpPayChange = 0
+                        let tmpPayType = 0
+
+                        this.lblMsgRestPaymentType.value = this.lang.t("msgRestPaymentType.msg") + Number(tmpPay).round(2).toFixed(2) + Number.money.sign
+                        let tmpResult2 = await this.msgRestPaymentType.show()
+                     
+                        if(tmpResult2 == "btn01")
+                        {
+                            tmpPayType = 0
+                            let tmpResult3 = await this.popRestPayment.show(this.lang.t("popRestPayment.title"),tmpPay,undefined,this.lang.t("popRestPayment.msg") + Number(tmpPay).round(2).toFixed(2) + Number.money.sign)
+                            if(typeof tmpResult3 != 'undefined' && tmpResult3 != '')
+                            {
+                                tmpPayChange = tmpResult3 - tmpPay
+                                if(tmpPayChange > 0)
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgRestMoneyChange',
+                                        showTitle:true,
+                                        title:this.lang.t("msgRestMoneyChange.title"),
+                                        showCloseButton:true,
+                                        width:'500px',
+                                        height:'250px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgRestMoneyChange.btn01"),location:'after'}],
+                                        content:(<div><h3 className="text-danger text-center">{Number(tmpPayChange).toFixed(2) + " " + Number.money.sign}</h3><h3 className="text-primary text-center">{this.lang.t("msgRestMoneyChange.msg")}</h3></div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                }
+                                
+                                this.payAdd(tmpPayType,tmpPay)
+                            }
+                        }
+                        else if(tmpResult2 == "btn02")
+                        {
+                            tmpPayType = 1
+                            this.payAdd(tmpPayType,tmpPay)
+                        }
+                    }
                 }}>
                     <i className="text-white fa-solid fa-comments-dollar" style={{fontSize: "24px"}} />
                 </NbButton>
+            </div>
+            {/* Rest NP Popup */}
+            <div>
+                <NbPopNumber id={"popRestNP"} parent={this}/>
+            </div>
+            {/* Rest Payment Type Popup */}
+            <div>
+                <NdDialog id={"msgRestPaymentType"} container={"#root"} parent={this}
+                position={{of:'#root'}} 
+                showTitle={true} 
+                title={this.lang.t("msgRestPaymentType.title")} 
+                showCloseButton={false}
+                width={"500px"}
+                height={"200px"}
+                deferRendering={false}
+                >
+                    <div className="row">
+                        <div className="col-12">
+                            <h4 className="text-center"><NbLabel id={"lblMsgRestPaymentType"} parent={this} value={""}/></h4>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-6 py-2">
+                            <NbButton id={"btnMsgRestPaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this.msgRestPaymentType._onClick("btn01")
+                            }}>
+                                <div className="row"><div className="col-12">{"ESC"}</div></div>
+                                <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-money-bill"} style={{fontSize: "24px"}}/></div></div>
+                            </NbButton>
+                        </div>
+                        <div className="col-6 py-2">
+                            <NbButton id={"btnMsgRestPaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this.msgRestPaymentType._onClick("btn02")
+                            }}>
+                                <div className="row"><div className="col-12">{"CB"}</div></div>
+                                <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-credit-card"} style={{fontSize: "24px"}}/></div></div>                                    
+                            </NbButton>
+                        </div>
+                    </div>
+                </NdDialog>
+            </div>
+            {/* Rest Payment Popup */}
+            <div>
+                <NbPopNumber id={"popRestPayment"} parent={this}/>
             </div>
         </NdLayoutItem>
     )
