@@ -17,6 +17,7 @@ export class restOrderCls
             ZONE_NAME : '',
             REF : 0,
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            PERSON : 1,
             FAMOUNT : 0,
             AMOUNT : 0,
             DISCOUNT : 0,
@@ -49,14 +50,15 @@ export class restOrderCls
                     "@ZONE = @PZONE, " +
                     "@REF = @PREF, " +
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@PERSON = @PPERSON, " + 
                     "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL ",
-            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PFAMOUNT:float','PAMOUNT:float',
+            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
                      'PDISCOUNT:float','PVAT:float','PTOTAL:float'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL']
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -66,15 +68,16 @@ export class restOrderCls
                     "@ZONE = @PZONE, " +
                     "@REF = @PREF, " +
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@PERSON = @PPERSON, " + 
                     "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " +
                     "@DELETED = @PDELETED ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PFAMOUNT:float','PAMOUNT:float',
-                        'PDISCOUNT:float','PVAT:float','PTOTAL:float','PDELETED:bit'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
+                     'PDISCOUNT:float','PVAT:float','PTOTAL:float','PDELETED:bit'],
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','DELETED']
         } 
         tmpDt.deleteCmd = 
         {
@@ -184,7 +187,12 @@ export class restOrderDetailCls
             TOTAL : 0,
             PROPERTY : '',
             DESCRIPTION : '',
-            STATUS : 0
+            STATUS : 0,
+            WAIT_STATUS : 0,
+            WAITING : false,
+            POS : '00000000-0000-0000-0000-000000000000',
+            POS_SALE : '00000000-0000-0000-0000-000000000000',
+            PRINTED : 0
         }
         this._initDs();
     }
@@ -216,11 +224,16 @@ export class restOrderDetailCls
                     "@TOTAL = @PTOTAL, " + 
                     "@PROPERTY = @PPROPERTY, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@WAIT_STATUS = @PWAIT_STATUS, " +
+                    "@POS = @PPOS, " + 
+                    "@POS_SALE = @PPOS_SALE, " +
+                    "@PRINTED = @PPRINTED ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int'],
-            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION','STATUS']
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50','PPRINTED:int'],
+            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
+                       'STATUS','WAIT_STATUS','POS','POS_SALE','PRINTED']
         } 
         tmpDt.updateCmd = 
         {
@@ -240,11 +253,16 @@ export class restOrderDetailCls
                     "@TOTAL = @PTOTAL, " + 
                     "@PROPERTY = @PPROPERTY, " + 
                     "@DESCRIPTION = @PDESCRIPTION, " + 
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@WAIT_STATUS = @PWAIT_STATUS, " +
+                    "@POS = @PPOS, " + 
+                    "@POS_SALE = @PPOS_SALE, " + 
+                    "@PRINTED = @PPRINTED ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int'],
-            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION','STATUS']
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50','PPRINTED:int'],
+            dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
+                       'STATUS','WAIT_STATUS','POS','POS_SALE','PRINTED']
         } 
         tmpDt.deleteCmd = 
         {
@@ -336,6 +354,7 @@ export class restTableCls
             LDATE : moment(new Date()).utcOffset(0, true),
             CODE : '',
             NAME : '',
+            GRP : '',
             DELETED : 0
         }
         this._initDs();
@@ -356,9 +375,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.updateCmd = 
         {
@@ -366,9 +386,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.deleteCmd = 
         {
@@ -434,6 +455,342 @@ export class restTableCls
             await this.ds.get('REST_TABLE').refresh();
             
             resolve(this.ds.get('REST_TABLE'));
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update());
+        }); 
+    }
+}
+export class restPropertyCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {            
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).utcOffset(0, true),
+            CODE : '',
+            NAME : '',
+            SELECTION : 0,
+            PROPERTY : '',
+            DELETED : 0
+        }
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('REST_PROPERTY');
+        tmpDt.selectCmd = 
+        {
+            query : `SELECT * FROM [dbo].[REST_PROPERTY] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((CODE = @CODE) OR (@CODE = '')) AND DELETED = 0 ORDER BY LDATE DESC`,
+            param : ['GUID:string|50','CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PROPERTY_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@SELECTION = @PSELECTION, " +
+                    "@PROPERTY = @PPROPERTY ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PSELECTION:int','PPROPERTY:string|max'],
+            dataprm : ['GUID','CUSER','CODE','NAME','SELECTION','PROPERTY']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PROPERTY_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@SELECTION = @PSELECTION, " +
+                    "@PROPERTY = @PPROPERTY ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PSELECTION:int','PPROPERTY:string|max'],
+            dataprm : ['GUID','CUSER','CODE','NAME','SELECTION','PROPERTY']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PROPERTY_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+
+        let tmpItemProp = new datatable('REST_ITEM_PROPERTY');
+
+        tmpItemProp.selectCmd = 
+        {
+            query : `SELECT *, 
+                    ISNULL((SELECT TOP 1 NAME FROM ITEMS WHERE GUID = ITEM),'') AS ITEM_NAME
+                    FROM REST_ITEM_PROPERTY WHERE PROPERTY = @PROPERTY AND DELETED = 0`,
+            param : ['PROPERTY:string|50'],
+        }
+        tmpItemProp.insertCmd = 
+        {
+            query : `INSERT INTO [dbo].[REST_ITEM_PROPERTY] ([GUID],[CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[PROPERTY],[DELETED]
+                    ) VALUES (
+                    NEWID(),GETDATE(),@CUSER,GETDATE(),@LUSER,@ITEM,@PROPERTY,0)`,
+            param : ['CUSER:string|25','LUSER:string|25','ITEM:string|50','PROPERTY:string|50'],
+            dataprm : ['CUSER','LUSER','ITEM','PROPERTY']
+        }
+        tmpItemProp.updateCmd = 
+        {
+            query : `UPDATE [dbo].[REST_ITEM_PROPERTY] SET [LDATE] = GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PROPERTY] = @PROPERTY
+                    WHERE GUID = @GUID`,
+            param : ['LUSER:string|25','ITEM:string|50','PROPERTY:string|50','GUID:string|50'],
+            dataprm : ['LUSER','ITEM','PROPERTY','GUID']
+        }
+        tmpItemProp.deleteCmd = 
+        {
+            query : `UPDATE [dbo].[REST_ITEM_PROPERTY] SET DELETED = 1 WHERE GUID = @GUID`,
+            param : ['GUID:string|50'],
+            dataprm : ['GUID']
+        }
+
+        this.ds.add(tmpItemProp);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('REST_PROPERTY') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('REST_PROPERTY').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',REST_GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'',CODE:''}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CODE;
+            }
+
+            this.ds.get('REST_PROPERTY').selectCmd.value = Object.values(tmpPrm);
+            
+            await this.ds.get('REST_PROPERTY').refresh();
+            
+            if(this.ds.get('REST_PROPERTY').length > 0)
+            {
+                this.ds.get('REST_ITEM_PROPERTY').selectCmd.value = [this.ds.get('REST_PROPERTY')[0].GUID]
+                await this.ds.get('REST_ITEM_PROPERTY').refresh()
+            }
+
+            resolve(this.ds.get('REST_PROPERTY'));
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update());
+        }); 
+    }
+}
+export class restPrinterCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {            
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).utcOffset(0, true),
+            CODE : '',
+            NAME : '',
+            DESIGN_PATH : '',
+            PRINTER_PATH : '',
+            LANG : '',
+            DELETED : 0
+        }
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('REST_PRINTER');
+        tmpDt.selectCmd = 
+        {
+            query : `SELECT * FROM [dbo].[REST_PRINTER] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((CODE = @CODE) OR (@CODE = '')) AND DELETED = 0 ORDER BY LDATE DESC`,
+            param : ['GUID:string|50','CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PRINTER_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@DESIGN_PATH = @PDESIGN_PATH, " +
+                    "@PRINTER_PATH = @PPRINTER_PATH, " +
+                    "@LANG = @PLANG ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PDESIGN_PATH:string|max','PPRINTER_PATH:string|max','PLANG:string|10'],
+            dataprm : ['GUID','CUSER','CODE','NAME','DESIGN_PATH','PRINTER_PATH','LANG']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PRINTER_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@DESIGN_PATH = @PDESIGN_PATH, " +
+                    "@PRINTER_PATH = @PPRINTER_PATH, " +
+                    "@LANG = @PLANG ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PDESIGN_PATH:string|max','PPRINTER_PATH:string|max','PLANG:string|10'],
+            dataprm : ['GUID','CUSER','CODE','NAME','DESIGN_PATH','PRINTER_PATH','LANG']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_REST_PRINTER_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+
+        let tmpItemPrinter = new datatable('REST_PRINT_ITEM');
+
+        tmpItemPrinter.selectCmd = 
+        {
+            query : `SELECT *, 
+                    ISNULL((SELECT TOP 1 NAME FROM ITEMS WHERE GUID = ITEM),'') AS ITEM_NAME
+                    FROM REST_PRINT_ITEM WHERE PRINTER = @PRINTER`,
+            param : ['PRINTER:string|50'],
+        }
+        tmpItemPrinter.insertCmd = 
+        {
+            query : `INSERT INTO [dbo].[REST_PRINT_ITEM] ([GUID],[CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[PRINTER]
+                    ) VALUES (
+                    NEWID(),GETDATE(),@CUSER,GETDATE(),@LUSER,@ITEM,@PRINTER)`,
+            param : ['CUSER:string|25','LUSER:string|25','ITEM:string|50','PRINTER:string|50'],
+            dataprm : ['CUSER','LUSER','ITEM','PRINTER']
+        }
+        tmpItemPrinter.updateCmd = 
+        {
+            query : `UPDATE [dbo].[REST_PRINT_ITEM] SET [LDATE] = GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PRINTER] = @PRINTER
+                    WHERE GUID = @GUID`,
+            param : ['LUSER:string|25','ITEM:string|50','PRINTER:string|50','GUID:string|50'],
+            dataprm : ['LUSER','ITEM','PRINTER','GUID']
+        }
+        tmpItemPrinter.deleteCmd = 
+        {
+            query : `DELETE FROM [dbo].[REST_PRINT_ITEM] WHERE GUID = @GUID`,
+            param : ['GUID:string|50'],
+            dataprm : ['GUID']
+        }
+
+        this.ds.add(tmpItemPrinter);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('REST_PRINTER') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('REST_PRINTER').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',REST_GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'',CODE:''}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CODE;
+            }
+
+            this.ds.get('REST_PRINTER').selectCmd.value = Object.values(tmpPrm);
+            
+            await this.ds.get('REST_PRINTER').refresh();
+            
+            if(this.ds.get('REST_PRINTER').length > 0)
+            {
+                this.ds.get('REST_PRINT_ITEM').selectCmd.value = [this.ds.get('REST_PRINTER')[0].GUID]
+                await this.ds.get('REST_PRINT_ITEM').refresh()
+            }
+
+            resolve(this.ds.get('REST_PRINTER'));
         });
     }
     save()

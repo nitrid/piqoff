@@ -25,6 +25,7 @@ class piqXApi
             {
                 let tmpResult = await this.getInvoiceList(pParam)
                 
+                console.log(tmpResult)
                 if(typeof tmpResult.err != 'undefined' && (tmpResult.err == 403 || tmpResult.err == 404))
                 {
                     await this.login(this.username,this.password)

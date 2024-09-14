@@ -372,12 +372,16 @@ export const langFr =
         pos_02_014 : "Tickets de balance", 
         pos_02_015 : "Rapport vente client",
         pos_02_016 : "Rapport des Mouvements de Points",
+        pos_02_017 : "Rapport de ventes par intervalle horaire",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
         rest: "Restaurant",
         rest_01: "Définitions",
         rest_01_001: "Définitions des tables",
+        rest_01_002: "Définitions des caractéristiques",
+        rest_01_003: "Définitions de l'imprimante",
+        rest_01_004 : "Attributs Produits",
         rest_02 : "Les opérations",
         rest_02_001 : "Suivi des tables",
         promo: "Promotion",
@@ -386,6 +390,7 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_02_002: "Liste Detaillée promotion",
+        promo_02_003 : "Liste des promotions supprimées",
         promo_03: "Rapports",
         promo_04: "Les opérations",
         promo_04_001: "Mise à jour étiquette électronique", // BAK
@@ -582,5 +587,7 @@ export const langFr =
         btnSave :"OK",
         txtSenderNote : "Instruction Expéditeur",
         txtRecieverNote : "Instruction Destinataire",
+        txtSenderDate : "Chargement Date",
+        txtRecieverDate : "Livraison Date"
     }
 }

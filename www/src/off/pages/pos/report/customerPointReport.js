@@ -18,7 +18,6 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
 
 export default class customerPointReport extends React.PureComponent
 {
@@ -54,8 +53,8 @@ export default class customerPointReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS POINT,(dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) / 100) AS EURO,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
-                    " FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = CUSTOMER_VW_01.GUID ORDER BY LDATE DESC),'') AS LDATE_FORMAT FROM [dbo].[CUSTOMER_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) ",
+                    query : "SELECT GUID,CODE,TITLE,CUSTOMER_POINT AS POINT,(CUSTOMER_POINT / 100) AS EURO,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
+                    " FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = CUSTOMER_VW_02.GUID ORDER BY LDATE DESC),'') AS LDATE_FORMAT FROM [dbo].[CUSTOMER_VW_02] WHERE ((CODE = @CODE) OR (@CODE = '')) ",
                     param : ['CODE:string|50'],
                     value : [this.txtCustomerCode.value]
                 },
@@ -146,15 +145,14 @@ export default class customerPointReport extends React.PureComponent
                 let tmpQuery = 
                 {
                     query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
-                            "@GUID = @PGUID, " + 
                             "@CUSER = @PCUSER, " + 
                             "@TYPE = @PTYPE, " +     
                             "@CUSTOMER = @PCUSTOMER, " +                  
                             "@DOC = @PDOC, " + 
                             "@POINT = @PPOINT, " + 
                             "@DESCRIPTION = @PDESCRIPTION ", 
-                    param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                    value : [datatable.uuidv4(),this.core.auth.data.CODE,this.cmbPointType.value,this.grdCustomerPointReport.getSelectedData()[0].GUID,'00000000-0000-0000-0000-000000000000',this.txtPoint.value,this.txtDescription.value]
+                    param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                    value : [this.core.auth.data.CODE,this.cmbPointType.value,this.grdCustomerPointReport.getSelectedData()[0].GUID,'00000000-0000-0000-0000-000000000000',this.txtPoint.value,this.txtDescription.value]
                 }
                 await this.core.sql.execute(tmpQuery)
                 this.popPointEntry.hide()

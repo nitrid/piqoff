@@ -27,18 +27,18 @@ export default class NdDocAi extends Base
         this.customer = pCustomer
         this.popDocAi.show()
     }
-    getValue(pData)
+    getValue(pData,pType)
     {
         let tmpValue = undefined
         if(typeof pData != 'undefined')
         {
             if(typeof pData.content != 'undefined')
             {
-                tmpValue = this.parseNumber(pData.content)
+                tmpValue = pType == 'string' ? pData.content : this.parseNumber(pData.content)
             }
             else if(typeof pData.value != 'undefined')
             {
-                tmpValue = this.parseNumber(pData.value)
+                tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
             }
             if(typeof pData.value != 'undefined' && typeof pData.value.amount != 'undefined')
             {
@@ -118,8 +118,8 @@ export default class NdDocAi extends Base
             for (let i = 0; i < pData.Item.length; i++) 
             {
                 pData.Items.push({...pData.Item[i]})
-                pData.Item[i].ProductCode = this.getValue(pData.Item[i].ProductCode)
-                pData.Item[i].Description = this.getValue(pData.Item[i].Description)
+                pData.Item[i].ProductCode = this.getValue(pData.Item[i].ProductCode,'string')
+                pData.Item[i].Description = this.getValue(pData.Item[i].Description,'string')
 
                 if(typeof this.getValue(pData.Item[i].Quantity) == 'undefined' || this.getValue(pData.Item[i].Quantity) == 0)
                 {

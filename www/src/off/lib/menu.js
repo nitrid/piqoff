@@ -224,11 +224,6 @@ export const menu = (e) =>
                             path: 'items/operations/itemEntryOutDoc'
                         },
                         {
-                            id: 'stk_04_007',
-                            text: e.t('menuOff.stk_04_007'), //'Ceopos Ürün gönderimi',
-                            path: 'items/operations/ceoposWeightItemSend'
-                        },
-                        {
                             id: 'stk_04_008',
                             text: e.t('menuOff.stk_04_008'), //'Price Toplu Ürün gönderimi',
                             path: 'items/operations/pricerAllItemSend'
@@ -1401,6 +1396,12 @@ export const menu = (e) =>
                             id: 'pos_02_016',
                             text: e.t('menuOff.pos_02_016'),
                             path: 'pos/report/usingPointReport'
+                        },
+                         //Okunmamış Terazi Fişleri Raporu 
+                         {
+                            id: 'pos_02_017',
+                            text: e.t('menuOff.pos_02_017'),
+                            path: 'pos/report/posSaleTimeReport'
                         }
                     ]
                 },
@@ -1424,6 +1425,21 @@ export const menu = (e) =>
                             id: 'rest_01_001',
                             text: e.t('menuOff.rest_01_001'),//'Masa Tanımları',
                             path: 'rest/card/tableCard'
+                        },
+                        {
+                            id: 'rest_01_002',
+                            text: e.t('menuOff.rest_01_002'),//'Özellik Tanımları',
+                            path: 'rest/card/propertyCard'
+                        },
+                        {
+                            id: 'rest_01_003',
+                            text: e.t('menuOff.rest_01_003'),//'Yazıcı Tanımları',
+                            path: 'rest/card/printerCard'
+                        },
+                        {
+                            id: 'rest_01_004',
+                            text: e.t('menuOff.rest_01_004'),//'Ürün Ek Özellik Tanımları',
+                            path: 'rest/card/productExtraProperty'
                         }
                     ]
                 },
@@ -1483,6 +1499,11 @@ export const menu = (e) =>
                             id: 'promo_02_002',
                             text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
                             path: 'promotion/lists/promotionDetailList'
+                        },
+                        {
+                            id: 'promo_02_003',
+                            text: e.t('menuOff.promo_02_003'),//'Promosyon Silinen Listesi',
+                            path: 'promotion/lists/promotionDeleteList'
                         }
                     ]
                 },

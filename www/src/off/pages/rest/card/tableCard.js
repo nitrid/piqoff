@@ -233,7 +233,6 @@ export default class TableCard extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             this.tableObj.dt().removeAt(0)
-                                            console.log(this.tableObj.dt())
                                             await this.tableObj.dt().delete();
                                             this.init(); 
                                         }
@@ -341,6 +340,16 @@ export default class TableCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item>    
+                                {/* txtGrp */}
+                                <Item>
+                                    <Label text={"GRP"} alignment="right" />
+                                    <NdTextBox id="txtGrp" parent={this} simple={true} dt={{data:this.tableObj.dt(),field:"GRP"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
+                                    param={this.param.filter({ELEMENT:'txtGrp',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtGrp',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item>    

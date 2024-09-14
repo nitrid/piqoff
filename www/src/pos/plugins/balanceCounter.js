@@ -12,7 +12,7 @@ const orgGetBarPattern = posDoc.prototype.getBarPattern
 
 posDoc.prototype.rowDelete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active)
+    if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
     {
         if(this.posObj.posSale.dt().length > 1)
         {
@@ -53,7 +53,7 @@ posDoc.prototype.rowDelete = async function()
 }
 posDoc.prototype.delete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active)
+    if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
     {
         let tmpDt = new datatable(); 
         tmpDt.selectCmd = 
@@ -106,7 +106,7 @@ posDoc.prototype.getItem = async function(pCode)
             this.txtBarcode.value = "";
             this.loading.current.instance.show()
             let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,pCode)
-            
+
             if(tmpBalanceDt.length > 0)
             {
                 //TERAZİYE TOPLAM MİKTAR EŞLEŞMESİ
@@ -258,17 +258,44 @@ posDoc.prototype.getItem = async function(pCode)
                 for (let i = 0; i < tmpBalanceDt.length; i++) 
                 {
                     let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
-                    
                     if(tmpItemsDt.length > 0)
                     {
                         //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
                         tmpItemsDt[0].SCALE_MANUEL = false;
-                        
                         tmpItemsDt[0].QUANTITY = tmpBalanceDt[i].QUANTITY
                         tmpItemsDt[0].PRICE = tmpBalanceDt[i].PRICE
+                        tmpItemsDt[0].DISCOUNT = 0
+
+                        if(tmpBalanceDt[i].FREE)
+                        {
+                            //FIYAT GETİRME
+                            let tmpPriceDt = new datatable()
+                            tmpPriceDt.selectCmd = 
+                            {
+                                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE ",
+                                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
+                                local : 
+                                {
+                                    type : "select",
+                                    query : "SELECT * FROM ITEMS_POS_VW_01 AS ITEM " + 
+                                            "WHERE ITEM.GUID = ? LIMIT 1;",
+                                    values : [tmpItemsDt[0].GUID]
+                                }
+                            }
+                            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpItemsDt[0].QUANTITY * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].DEPOT_GUID,1]
+                            await tmpPriceDt.refresh();  
+                            
+                            if(tmpPriceDt.length > 0)
+                            {
+                                tmpItemsDt[0].PRICE = tmpPriceDt[0].PRICE
+                                tmpBalanceDt[i].PRICE = tmpPriceDt[0].PRICE
+                            }
+
+                            tmpItemsDt[0].DISCOUNT = Number(tmpItemsDt[0].QUANTITY * tmpItemsDt[0].PRICE).round(2)
+                        }
+
                         this.saleAdd(tmpItemsDt[0])
 
-                        
                         if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         {
                             if(typeof tmpBalanceDt[0].STATUS == 'undefined')
@@ -285,9 +312,10 @@ posDoc.prototype.getItem = async function(pCode)
                                             "@TICKET_NO = @PTICKET_NO, " +
                                             "@QUANTITY = @PQUANTITY, " +
                                             "@PRICE = @PPRICE, " +
-                                            "@STATUS = 1 ", 
-                                    param : ['PGUID:string|50','PITEM:string|50','PPOS:string|50','PTICKET_NO:int','PQUANTITY:float','PPRICE:float'],
-                                    value : [tmpBalanceDt[i].GUID,tmpItemsDt[0].GUID,this.posObj.dt()[0].GUID,tmpTicketNo,tmpBalanceDt[i].QUANTITY,tmpBalanceDt[i].PRICE]
+                                            "@STATUS = 1, " + 
+                                            "@FREE = @PFREE ",
+                                    param : ['PGUID:string|50','PITEM:string|50','PPOS:string|50','PTICKET_NO:int','PQUANTITY:float','PPRICE:float','PFREE:bit'],
+                                    value : [tmpBalanceDt[i].GUID,tmpItemsDt[0].GUID,this.posObj.dt()[0].GUID,tmpTicketNo,tmpBalanceDt[i].QUANTITY,tmpBalanceDt[i].PRICE,tmpBalanceDt[i].FREE]
                                 }
                                 await this.core.sql.execute(tmpInsertQuery)
                             }
@@ -301,9 +329,10 @@ posDoc.prototype.getItem = async function(pCode)
                                             "@LUSER = @PLUSER, " + 
                                             "@LDATE = @PLDATE, " +
                                             "@POS = @PPOS, " +
-                                            "@STATUS = 1 ", 
-                                    param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50'],
-                                    value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID]
+                                            "@STATUS = 1, " +
+                                            "@FREE = @PFREE ", 
+                                    param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50','PFREE:bit'],
+                                    value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID,tmpBalanceDt[i].FREE]
                                 }
                                 await this.core.sql.execute(tmpUpdateQuery)
                             }
@@ -315,14 +344,14 @@ posDoc.prototype.getItem = async function(pCode)
             {
                 let tmpConfObj =
                 {
-                    id:'msgBarcodeNotFound',
+                    id:'msgBarcodeBalanceNotFound',
                     showTitle:true,
-                    title:this.lang.t("msgBarcodeNotFound.title"),
+                    title:this.lang.t("msgBarcodeBalanceNotFound.title"),
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
+                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
             }
@@ -343,11 +372,10 @@ function getBarPattern(pBarcode)
     {            
         return
     }
-
+    
     for (let i = 0; i < tmpPrm.length; i++) 
     {
         let tmpFlag = tmpPrm[i].substring(0,2)
-        
         if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag && tmpPrm[i].indexOf('X') > -1)
         {
             return pBarcode.substring(tmpPrm[i].indexOf('X'),tmpPrm[i].lastIndexOf('X') + 1)
@@ -383,7 +411,8 @@ function getBalanceCounter(pTicketNo,pCode)
                         GUID : datatable.uuidv4(),
                         ITEM_CODE : "B" + tmpBar.code,
                         QUANTITY : tmpBar.quantity,
-                        PRICE : tmpBar.price
+                        PRICE : tmpBar.price,
+                        FREE : typeof tmpBar.isDiscount == 'undefined' ? false : tmpBar.isDiscount
                     }
                 )
 

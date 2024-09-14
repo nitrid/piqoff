@@ -76,14 +76,20 @@ export default class NbItemPopUp extends NbBase
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :  "SELECT TOP 5 DOC_DATE,REF + '-' + CONVERT(NVARCHAR,REF_NO) AS REF,PRICE,QUANTITY,TOTALHT FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND TYPE = 1 AND REBATE = 0 ORDER BY DOC_DATE DESC ",
-                    param : ['INPUT:string|50','ITEM:string|50'],
+                    query :  "SELECT *,((DEPOT_QUANTITY + INPUT_RESERVE) - OUTPUT_RESERVE) AS TOTAL_QUANTITY FROM   " +
+                            "( SELECT GUID, " +
+                            "    (SELECT [dbo].[FN_DEPOT_QUANTITY](GUID,'00000000-0000-0000-0000-000000000000',GETDATE())) AS DEPOT_QUANTITY,  " +
+                            "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,0,'00000000-0000-0000-0000-000000000000')) AS INPUT_RESERVE,  " +
+                            "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,1,'00000000-0000-0000-0000-000000000000')) AS OUTPUT_RESERVE  " +
+                            "    FROM ITEMS WHERE GUID = @ITEM  " +
+                            ") AS TMP  " ,
+                    param : ['ITEM:string|50'],
                     value : [this.data.GUID]
                 },
                 sql : this.core.sql
             }
         }
-        await this.grdLastSales.dataRefresh(tmpItemsSource)
+        await this.grdQuantity.dataRefresh(tmpItemsSource)
     }
     _onValueChange(e)
     {
@@ -381,7 +387,7 @@ export default class NbItemPopUp extends NbBase
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <NdGrid id="grdLastSales" parent={this} 
+                                <NdGrid id="grdQuantity" parent={this} 
                                     selection={{mode:"single"}} 
                                     showBorders={true}
                                     headerFilter={{visible:false}}
@@ -390,11 +396,10 @@ export default class NbItemPopUp extends NbBase
                                     allowColumnResizing={true}
                                     >                            
                                         <Paging defaultPageSize={5} />
-                                        <Column dataField="DOC_DATE" caption={this.t("grdLastSales.clmDocDate")} visible={true} width={150} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                        <Column dataField="REF" caption={this.t("grdLastSales.clmRef")} visible={true} width={250}/> 
-                                        <Column dataField="QUANTITY" caption={this.t("grdLastSales.clmQuantity")} visible={true} width={100}/> 
-                                        <Column dataField="PRICE" caption={this.t("grdLastSales.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                        <Column dataField="TOTALHT" caption={this.t("grdLastSales.clmTotal")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                        <Column dataField="DEPOT_QUANTITY" caption={this.t("grdQuantity.clmDepot")} visible={true} width={150}/> 
+                                        <Column dataField="INPUT_RESERVE" caption={this.t("grdQuantity.clmInput")} visible={true} width={250}/> 
+                                        <Column dataField="OUTPUT_RESERVE" caption={this.t("grdQuantity.clmOutput")} visible={true} width={100}/> 
+                                        <Column dataField="TOTAL_QUANTITY" caption={this.t("grdQuantity.clmTotal")} visible={true} width={150} /> 
                                 </NdGrid>
                             </div>                                            
                         </div>
