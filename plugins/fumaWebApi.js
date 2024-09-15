@@ -120,7 +120,7 @@ class fumaWebApi
     {
         let tmpQuery = 
         {
-            query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+            query : "SELECT TOP 1 * FROM COMPANY_VW_01",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 
