@@ -73,6 +73,12 @@ export const langIt =
         msg: "Il codice a barre letto non è presente nel sistema!",
         btn01: "Ok",
     },
+    msgBarcodeBalanceNotFound : 
+    {
+        title : "Avviso",
+        msg : "Questo codice a barre è già stato scansionato!",
+        btn01 : "OK",
+    },
     msgSpecialTicketAlert: 
     {
         title: "Avviso",

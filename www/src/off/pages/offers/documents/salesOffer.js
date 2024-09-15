@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -40,6 +41,7 @@ export default class salesOffer extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
+            console.log(this.pagePrm)
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
@@ -50,6 +52,7 @@ export default class salesOffer extends DocBase
         await super.init()
         this.grid = this["grdSlsOffer"+this.tabIndex]
         this.grid.devGrid.clearFilter("row")
+
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -813,7 +816,6 @@ export default class salesOffer extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                      onClick={async ()=>
                                     {       
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -874,8 +876,15 @@ export default class salesOffer extends DocBase
                                             {
                                                 this.docObj.transportInfermotion.addEmpty()
                                                 this.docObj.transportInfermotion.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.transportInfermotion.dt()[0].SENDER_DATE = moment(new Date()).format("YYYY-MM-DD")
+                                                this.docObj.transportInfermotion.dt()[0].RECIEVER_DATE = moment(new Date()).format("YYYY-MM-DD")
+                                                this.popTransport.show()
                                             }
-                                            this.popTransport.show()
+                                            else
+                                            {
+                                                await this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                                this.popTransport.show()
+                                            }
                                         }
                                     }    
                                 } />
@@ -1825,7 +1834,6 @@ export default class salesOffer extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
@@ -1902,8 +1910,6 @@ export default class salesOffer extends DocBase
                                                     {
                                                         await this.popMailSend.show()
                                                         let tmpAutoMail = this.sysParam.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue()
-                                                        console.log(tmpAutoMail)
-                                                        console.log(tmpData.result.recordset[0].EMAIL)
                                                         if(typeof tmpAutoMail != 'undefined' && tmpAutoMail != '')
                                                         {
                                                             this.txtSendMail.value = tmpAutoMail + ',' + tmpData.result.recordset[0].EMAIL
@@ -1917,6 +1923,7 @@ export default class salesOffer extends DocBase
                                                     {
                                                         this.popMailSend.show()
                                                     }
+                                                    this.htmlEditor.value = this.param.filter({ID:'mailText',USERS:this.user.CODE}).getValue().value
                                                 }
                                             }}/>
                                         </div>

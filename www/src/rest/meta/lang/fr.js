@@ -85,6 +85,13 @@ export const langFr =
         btn01: "Oui",
         btn02: "Non"
     },
+    msgSendKitchen:
+    {
+        title : "Attention",
+        msg : "Êtes-vous sûr de vouloir envoyer les produits à la cuisine ?",
+        btn01 : "Oui",
+        btn02 : "Non"
+    },
     msgWaitStatus:
     {
         title: "Avertissement",

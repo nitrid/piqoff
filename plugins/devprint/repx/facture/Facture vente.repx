@@ -21,11 +21,10 @@
           </ExpressionBindings>
           <StylePriority Ref="11" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="12" ControlType="XRLine" Name="line1" SizeF="789.2916,11" LocationFloat="0, 0" />
-        <Item4 Ref="13" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="1.58945713E-05, 0" />
-        <Item5 Ref="14" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 11" StyleName="PageInfo">
-          <StylePriority Ref="15" UseTextAlignment="false" />
-        </Item5>
+        <Item3 Ref="12" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="1.58945713E-05, 0" />
+        <Item4 Ref="13" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 11" StyleName="PageInfo">
+          <StylePriority Ref="14" UseTextAlignment="false" />
+        </Item4>
       </Controls>
     </Item2>
     <Item3 Ref="16" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="290.958221">

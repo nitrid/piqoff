@@ -77,6 +77,12 @@ export const langFr =
         msg : "Code barre non reconnu",
         btn01 : "OK",
     },
+    msgBarcodeBalanceNotFound : 
+    {
+        title : "Avertissement",
+        msg : "Ce code-barres a déjà été scanné !",
+        btn01 : "D'accord",
+    },
     msgSpecialTicketAlert : 
     {
         title : "Attention",
