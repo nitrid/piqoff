@@ -53,8 +53,8 @@ export default class customerPointReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS POINT,(dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) / 100) AS EURO,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
-                    " FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = CUSTOMER_VW_01.GUID ORDER BY LDATE DESC),'') AS LDATE_FORMAT FROM [dbo].[CUSTOMER_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) ",
+                    query : "SELECT GUID,CODE,TITLE,CUSTOMER_POINT AS POINT,(CUSTOMER_POINT / 100) AS EURO,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
+                    " FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = CUSTOMER_VW_02.GUID ORDER BY LDATE DESC),'') AS LDATE_FORMAT FROM [dbo].[CUSTOMER_VW_02] WHERE ((CODE = @CODE) OR (@CODE = '')) ",
                     param : ['CODE:string|50'],
                     value : [this.txtCustomerCode.value]
                 },

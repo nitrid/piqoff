@@ -169,7 +169,7 @@ export const prm =
     },
     //Otomatik Interfel
     {
-        TYPE : 1,
+        TYPE : 0,
         ID :"autoInterfel",
         VALUE : 
         {
@@ -483,6 +483,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Varsayılan Mail Adresi"
+        }
+    },
+    //Maliyet Fiyatı Elle Girişi Kilitle
+    {
+        TYPE : 0,
+        ID :"costPriceReadOnly",
+        VALUE :false,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
         }
     },
     //#endregion
@@ -1095,7 +1111,7 @@ export const prm =
         {
             TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ticket Rest.",
+            CAPTION : "Maliyet Fiyatı.",
             DISPLAY : "value",
             FORM: 
             {
@@ -3436,4 +3452,84 @@ export const prm =
         }
     },
     //#endregion    
+    //#region Satış Teklif
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "tkf_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Teklif",
+            CAPTION : "Depo"
+        }
+    },
+    // Mail İmza 
+    {
+        TYPE : 1,
+        ID :"mailText",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "tkf_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "html",
+            PAGE_NAME : "Satış Teklif",
+            CAPTION : "Mail Açıklaması"
+        }
+    },
+    //#endregion
+    //#region Satış Sipariş onaylama
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "sip_04_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş onaylama",
+            CAPTION : "Depo"
+        }
+    },
+     //cmbDepot
+     {
+        TYPE : 1,
+        ID :"printDesing",
+        VALUE : 
+        {
+            value : "55"
+        },
+        SPECIAL : "",
+        PAGE : "sip_04_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş onaylama",
+            CAPTION : "Yazdırma Dizaynı Tagı"
+        }
+    },
+    //#endregion
 ]

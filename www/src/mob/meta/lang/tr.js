@@ -13,6 +13,7 @@ export const langTr =
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     comingSoon : "Yakında Aktif Olacak... ",
     btnBarcodeEntry: "Barkod Giriş",
+    btnOrderSelect :" Sipariş Seçimi",
     btnProcessLines: "İşlem Satırları",
     btnNewDoc: "Yeni Evrak",
     btnDocDelete: "Evrak Sil",
@@ -926,5 +927,74 @@ export const langTr =
             clmInputName : "Cari Adı",
             clmInputCode : "Cari Kodu",
         },
+    },
+    kar_01 : // "Sipariş Eşleştirme"
+    {
+        lblRef : "Seri - Sıra :",
+        lblDepot : "Depo :",
+        lblCustomerCode : "Cari Kodu :",
+        lblCustomerName : "Cari Adı :",
+        lblDate : "Tarih :",
+        lblDepotQuantity : "Depo Miktar :",
+        lblUnit : "Birim :",
+        lblQuantity : "Miktar :",
+        lblPrice : "Fiyat :",
+        lblAmount : "Tutar :",
+        lblDiscount : "Satır İndirim :",
+        lblDocDiscount : "Evrak İndirim :",
+        lblTotalHt: "Ara Toplam :",
+        lblVat : "Kdv :",
+        lblSumAmount : "Toplam Tutar :",
+        lblGenAmount : "Genel Toplam :",
+        lblAdd: "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgDepot : "Lütfen depo seçiniz !",
+            msgCustomer : "Lütfen cari seçiniz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgLimitQuantityCheck : "Miktar 9 999 dan büyük olamaz!",
+            msgQuantityCheck : "Lütfen Miktarı Kontrol Edin !",
+            msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+            msgOrderSelected : "Yeni evraka geçmeden yeni sipariş seçilemez",
+            msgOrderNotFound : "Sipariş Bulunamadı."
+        },
+        grdList : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+            clmPrice : "Fiyat",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "Kdv",
+            clmTotal : "Tutar"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmInputName : "Cari Adı",
+            clmInputCode : "Cari Kodu",
+        },
+        grdOrderDetail : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Bekleyen Miktar",
+        },
+        lblPendQuantity : "Bekleyen Miktar",
+        lblTotalQuantity : "Toplam Miktar",
+        lblList : "Listele",
+        lblSelect : "Seç",
+        lblOrderRef : "Sipariş Barkodu",
+        lblOrderList : "Sipariş Listesi"
     },
 }

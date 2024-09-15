@@ -37,7 +37,8 @@ const stk_03_001 =
         clmMargin : "Brüt Marj",
         clmCustomerPrice : "T.Fiyatı",
         clmOrgin : "Menşei",
-        clmPriceSaleVatExt : "Vergisiz Fiyat"
+        clmPriceSaleVatExt : "Vergisiz Fiyat",
+        clmFMargin : "Marj %"
     },
 }
 

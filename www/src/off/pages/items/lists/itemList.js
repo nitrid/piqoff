@@ -46,6 +46,7 @@ export default class itemList extends React.PureComponent
             {CODE : "COST_PRICE",NAME :  this.t("grdListe.clmCostPrice")},
             {CODE : "MARGIN",NAME :  this.t("grdListe.clmMargin")},
             {CODE : "NETMARGIN",NAME :  this.t("grdListe.clmNetMargin")},
+            {CODE : "FMARGIN",NAME :  this.t("grdListe.clmFMargin")},
             {CODE : "VAT",NAME :  this.t("grdListe.clmVat")},  
             {CODE : "MIN_PRICE",NAME :  this.t("grdListe.clmMinPrice")},
             {CODE : "MAX_PRICE",NAME :  this.t("grdListe.clmMaxPrice")},
@@ -54,6 +55,16 @@ export default class itemList extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+    }
+    async grossMargin()
+    {
+        for (let i = 0; i < this.grdListe.data.datatable.length; i++) 
+        {
+            let tmpExVat = this.grdListe.data.datatable[i].PRICE_SALE / ((this.grdListe.data.datatable[i].VAT / 100) + 1)
+            let tmpMargin = tmpExVat - this.grdListe.data.datatable[i].CUSTOMER_PRICE;
+            this.grdListe.data.datatable[i].FMARGIN =  Number((tmpMargin / Number(this.grdListe.data.datatable[i].PRICE_SALE).rateInNum(this.grdListe.data.datatable[i].VAT,3)) * 100).round(2)
+        }
+        await this.grdListe.dataRefresh({source:this.grdListe.data.datatable});
     }
     componentDidMount()
     {
@@ -125,7 +136,6 @@ export default class itemList extends React.PureComponent
     }
     async _btnGetirClick()
     {
-        console.log(Number(9.075).round(2))
         let tmpStatus
         if(this.chkAktif.value == true)
         {
@@ -485,6 +495,7 @@ export default class itemList extends React.PureComponent
                 this.txtTotalPassive.value = this.grdListe.data.datatable.where({'STATUS':false}).length
             }
         }
+        this.grossMargin()
     }
     render()
     {
@@ -701,6 +712,7 @@ export default class itemList extends React.PureComponent
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
+                                <Column dataField="FMARGIN" caption={this.t("grdListe.clmFMargin")} visible={false}/> 
                                 <Column dataField="MIN_PRICE" caption={this.t("grdListe.clmMinPrice")} visible={false}/> 
                                 <Column dataField="MAX_PRICE" caption={this.t("grdListe.clmMaxPrice")} visible={false}/> 
                                 <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={false}/> 

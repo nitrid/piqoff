@@ -355,7 +355,7 @@ export default class Login extends React.Component
                                         {
                                             setTimeout(() => {
                                                 this.cardRead.value = ''
-                                            }, 500);
+                                            }, 1200);
                                         }
                                         else
                                         {

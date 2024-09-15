@@ -14,22 +14,6 @@ export class NdLayout extends Base
         this.style.position = 'relative'
 
         this.handleLayoutChange = this.handleLayoutChange.bind(this)
-
-        // this.onEditMode = async(pStatus)=>
-        // {
-        //     if(!pStatus)
-        //     {
-        //         console.log(this.props.parent)
-        //         React.Children.map(this.props.children,child => 
-        //         {
-        //             if(typeof this.props.parent[child.props.id] != 'undefined')
-        //             {
-        //                 this.props.parent[child.props.id].setState({visible:this.props.parent[child.props.id].state.accessValue.visible})
-        //             }
-        //             //console.log(this.props.parent[child.props.id].state.accessValue.visible + " - " + child.props.id)
-        //         })
-        //     }
-        // }
     }
     componentWillUnmount() 
     {

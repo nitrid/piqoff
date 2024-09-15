@@ -28,6 +28,7 @@ const sip_01_002 =
         clmAmount : "Total" ,
         clmTotal : "Total",
         clmOutputName :"Réserve",
+        clmMainGroup : "Client Groupe"
     },
     popDesign : 
     {
@@ -50,5 +51,6 @@ const sip_01_002 =
     },
     btnView : "Aperçu", 
     btnMailsend : "Envoyer E-Mail", 
+    cmbMainGrp : "Client Groupe"
 }
 export default sip_01_002

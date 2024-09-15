@@ -354,6 +354,7 @@ export const langDe =
         pos_02_014 : "Waagenbeleg", 
         pos_02_015 : "Kundenbasiertes Verkaufsbericht",
         pos_02_016 : "Bericht über Punktänderungen",  
+        pos_02_017 : "Verkaufsbericht nach Zeitintervallen",
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         pos_03_002: "Auslosung",
@@ -363,6 +364,7 @@ export const langDe =
         promo_02: "Listen",
         promo_02_001: "Angebotsliste",
         promo_02_002: "Angebotsdetailliste",
+        promo_02_003 : "Gelöschte Promotionen Liste",
         promo_03: "Berichte",
         promo_04: "Operationen",
         promo_04_001: "Elektronik Etiket Güncelleme", // BAK
@@ -560,5 +562,7 @@ export const langDe =
         btnSave : "OK",
         txtSenderNote : "Absenders Beschreibung",
         txtRecieverNote : "Empfängers Beschreibung",
+        txtSenderDate : "Empfängers Datum",
+        txtRecieverDate : "Absenders Datum"
     }
 }

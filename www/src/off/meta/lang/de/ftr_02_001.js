@@ -443,7 +443,8 @@ const ftr_02_001 =
         clmSalePrice :"Verkaufspreis", 
         clmMargin : "Bruttomarge",
         clmCostPrice : "Einkaufspreis",
-        clmNetMargin : "Nettomarge"
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
     },
     grdNewPriceDate: 
     {
@@ -454,7 +455,8 @@ const ftr_02_001 =
         clmSalePrice :"Verkaufspreis", 
         clmMargin : "Bruttomarge",
         clmCostPrice : "Einkaufspreis",
-        clmNetMargin : "Nettomarge"
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
     },
     msgPriceDateUpdate :
     {
