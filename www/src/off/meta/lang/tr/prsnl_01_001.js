@@ -17,7 +17,9 @@ const prsnl_01_001 =
     txtGender: "Cinsiyet",
     txtMarialStatus: "Medeni Durumu",
     tabTitleAdress : "Adres",
+    tabTitleAttendance : "İşteki Durumu",
     tabTitleLegal : "Yasal",
+    txtDays: "Personel Giriş Tarihleri",
     expDay : "(Gün)",
     chkActive: "Aktif",
     pg_txtCode : 
@@ -35,6 +37,14 @@ const prsnl_01_001 =
         clmZipcode : "Posta Kodu",
         clmCity :"Şehir",
         clmCountry : "Ülke",
+    },
+    grdAttendance : 
+    {
+        clmAttendance_Date : "İşe Giriş Tarihi",
+        clmCheck_In_Tıme : "Geliş Saati",
+        clmCheck_Out_Tıme :"Çıkış Saati",
+        clmIs_Absent : "İşe Geldi",
+        clmAbsence_Reason : "Nedeni",
     },
     grdLegal : 
     {
@@ -72,6 +82,15 @@ const prsnl_01_001 =
         cmbPopZipcode :"Posta Kodu",
         cmbPopCity :"Şehir",
         cmbPopCountry :"Ülke",
+    },
+    popAttendance : 
+    {
+        title : "Durumu",
+        txtPopAttendance_Date : "İşe Giriş Tarihi",
+        cmbPopCheck_In_Tıme : "Geliş Saati",
+        cmbPopCheck_Out_Tıme :"Çıkış Saati",
+        cmbPopIs_Absent : "İşe Geldi",
+        cmbPopAbsent_Reason : "Nedeni",
     },
     popBank : 
     {

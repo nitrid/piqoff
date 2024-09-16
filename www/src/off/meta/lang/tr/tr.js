@@ -343,6 +343,7 @@ export const langTr =
         prsnl_01 : "Tanımlar",
         prsnl_01_001 : "Personel Tanımları",
         prsnl_01_002 : "Adres Tanımları",
+        prsnl_01_003 : "Durum Çizelge Tanımları",
         prsnl_02 : "Listeler",
         prsnl_02_001 : "Personel Listeleri",
         prsnl_03 : "Operasyonlar",

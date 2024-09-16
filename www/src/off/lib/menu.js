@@ -1200,6 +1200,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
                             path: 'employee/cards/employeeAddressCards'
                         },
+                        {
+                            id: 'prsnl_01_003',
+                            text: e.t('menuOff.prsnl_01_003'), //'Durum Çizelge Tanımları',
+                            path: 'employee/cards/employeeAttendanceCards'
+                        },
                         
                     ]
                 },
