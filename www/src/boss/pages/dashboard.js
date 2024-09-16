@@ -832,7 +832,7 @@ export default class Dashboard extends React.PureComponent
                                 select : 
                                 {
                                     query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
-                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },
                                 sql : this.core.sql
@@ -846,7 +846,7 @@ export default class Dashboard extends React.PureComponent
                                 select : 
                                 {
                                     query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
-                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },
                                 sql : this.core.sql
@@ -868,7 +868,7 @@ export default class Dashboard extends React.PureComponent
                                 select : 
                                 {
                                     query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
-                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },
                                 sql : this.core.sql
@@ -882,7 +882,7 @@ export default class Dashboard extends React.PureComponent
                                 select : 
                                 {
                                     query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
-                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },
                                 sql : this.core.sql
