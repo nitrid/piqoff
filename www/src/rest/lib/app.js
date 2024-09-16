@@ -136,6 +136,14 @@ export default class App extends React.PureComponent
             }
         })
     }
+    componentDidMount()
+    {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('monitor') != null)
+        {
+            this.setState({page:'monitor.js'})
+        }
+    }
     async loadTab()
     {
         return new Promise(async (resolve) =>
