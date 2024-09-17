@@ -7,11 +7,9 @@ import NbPopUp from '../../core/react/bootstrap/popup';
 import NbButton from '../../core/react/bootstrap/button';
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdCheckBox from "../../core/react/devex/checkbox.js";
-import NbTableView from "../tools/tableView.js"
-import NbServiceView from "../tools/serviceView.js"
-import NbServiceDetailView from "../tools/serviceDetailView.js"
-import NbAddProductView from "../tools/addProductView.js"
-import NbProductDetailView from "../tools/productDetailView.js"
+import NbTableMView from "../tools/tableMView.js"
+import NbServiceMView from "../tools/serviceMView.js"
+import NbServiceMDetailView from "../tools/serviceMDetailView.js"
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 
 import { datatable } from '../../core/core.js';
@@ -198,7 +196,7 @@ export default class monitor extends React.PureComponent
                         </div>
                     </div>
                     <div className='row'>
-                        <NbTableView parent={this} id="tableView" 
+                        <NbTableMView parent={this} id="tableView" 
                         onClick={async(e)=>
                         {
                             await this.popTableDetail.show()
@@ -213,7 +211,7 @@ export default class monitor extends React.PureComponent
                     {/* TABLE DETAIL */}
                     <div>
                         <NbPopUp id={"popTableDetail"} parent={this} title={""} fullscreen={true}>
-                            <NbServiceView parent={this} id="serviceView" 
+                            <NbServiceMView parent={this} id="serviceView" 
                             onClick={async(e)=>
                             {
                                 this.restOrderObj.clearAll()
@@ -230,6 +228,99 @@ export default class monitor extends React.PureComponent
                                 this.serviceDetailView.items = this.restOrderObj.restOrderDetail.dt()
                                 this.serviceDetailView.updateState()
                             }}
+                            onSaveClick={async(e)=>
+                            {
+                                let tmpPrintDt = []
+                                await this.restOrderObj.load({ZONE:this.tableSelected.GUID,REF:this.serviceView.items[e].REF})
+
+                                let tmpFilter = this.restOrderObj.restOrderDetail.dt().where({STATUS:0})
+
+                                if (tmpFilter.length > 0)
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSendKitchen',showTitle:true,title:this.lang.t("msgSendKitchen.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgSendKitchen.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSendKitchen.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSendKitchen.msg")}</div>)
+                                    }
+
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn02")
+                                    {
+                                        return
+                                    }
+                                    for (let i = 0; i < tmpFilter.length; i++) 
+                                    {
+                                        tmpPrintDt.push(
+                                        {
+                                            LDATE : moment(new Date()).utcOffset(0, true),
+                                            LUSER : this.core.auth.data.CODE,
+                                            REST : tmpFilter[i].REST,
+                                            PERSON : tmpFilter[i].PERSON,
+                                            ZONE_NAME : tmpFilter[i].ZONE_NAME,
+                                            REF : tmpFilter[i].REF,
+                                            ITEM : tmpFilter[i].ITEM,
+                                            ITEM_CODE : tmpFilter[i].ITEM_CODE,
+                                            ITEM_NAME : tmpFilter[i].ITEM_NAME,
+                                            QUANTITY : tmpFilter[i].QUANTITY,
+                                            PROPERTY : tmpFilter[i].PROPERTY,
+                                            DESCRIPTION : tmpFilter[i].DESCRIPTION,
+                                            WAITING : tmpFilter[i].WAITING,
+                                            WAIT_STATUS : tmpFilter[i].WAIT_STATUS,
+                                            PRINTED : tmpFilter[i].PRINTED
+                                        })
+                                        tmpFilter[i].PRINTED = tmpFilter[i].PRINTED == 0 ? 1 : tmpFilter[i].PRINTED
+                                        tmpFilter[i].STATUS = 1
+                                    }
+                                    await this.print(tmpPrintDt)
+                                    await this.restOrderObj.save()
+                                    this.serviceView.items[e].DELIVERED = 0
+                                    this.serviceView.updateState()
+                                }
+                                else
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRePrint.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+                                    }
+    
+                                    let msgResult = await dialog(tmpConfObj);
+
+                                    if(msgResult == "btn01")
+                                    {
+                                        for (let i = 0; i < this.restOrderObj.restOrderDetail.dt().length; i++) 
+                                        {
+                                            tmpPrintDt.push(
+                                            {
+                                                LDATE : moment(new Date()).utcOffset(0, true),
+                                                LUSER : this.core.auth.data.CODE,
+                                                REST : this.restOrderObj.restOrderDetail.dt()[i].REST,
+                                                PERSON : this.restOrderObj.restOrderDetail.dt()[i].PERSON,
+                                                ZONE_NAME : this.restOrderObj.restOrderDetail.dt()[i].ZONE_NAME,
+                                                REF : this.restOrderObj.restOrderDetail.dt()[i].REF,
+                                                ITEM : this.restOrderObj.restOrderDetail.dt()[i].ITEM,
+                                                ITEM_CODE : this.restOrderObj.restOrderDetail.dt()[i].ITEM_CODE,
+                                                ITEM_NAME : this.restOrderObj.restOrderDetail.dt()[i].ITEM_NAME,
+                                                QUANTITY : this.restOrderObj.restOrderDetail.dt()[i].QUANTITY,
+                                                PROPERTY : this.restOrderObj.restOrderDetail.dt()[i].PROPERTY,
+                                                DESCRIPTION : this.restOrderObj.restOrderDetail.dt()[i].DESCRIPTION,
+                                                WAITING : this.restOrderObj.restOrderDetail.dt()[i].WAITING,
+                                                WAIT_STATUS : this.restOrderObj.restOrderDetail.dt()[i].WAIT_STATUS,
+                                                PRINTED : this.restOrderObj.restOrderDetail.dt()[i].PRINTED
+                                            })
+                                            this.restOrderObj.restOrderDetail.dt()[i].PRINTED = this.restOrderObj.restOrderDetail.dt()[i].PRINTED == 0 ? 1 : this.restOrderObj.restOrderDetail.dt()[i].PRINTED
+                                            this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
+                                        }
+                                        await this.print(tmpPrintDt)
+                                        await this.restOrderObj.save()
+                                        this.serviceView.items[e].DELIVERED = 0
+                                        this.serviceView.updateState()
+                                    }
+                                }
+                            }}
                             onCloseClick={(e)=>
                             {
                                 this.popTableDetail.hide();
@@ -241,7 +332,7 @@ export default class monitor extends React.PureComponent
                     {/* SERVICE DETAIL */}
                     <div>
                         <NbPopUp id={"popServiceDetail"} parent={this} title={""} fullscreen={true} style={{paddingLeft:'5px'}}>
-                            <NbServiceDetailView parent={this} id="serviceDetailView" 
+                            <NbServiceMDetailView parent={this} id="serviceDetailView" 
                             onDoubleClick={async(e)=>
                             {
                                 if(this.serviceDetailView.items[e].STATUS == 1)
@@ -272,41 +363,6 @@ export default class monitor extends React.PureComponent
                                     if(msgResult == "btn01")
                                     {
                                         this.serviceDetailView.items[e].STATUS = 1
-                                        await this.restOrderObj.save()
-                                        this.serviceDetailView.updateState()
-                                    }
-                                }
-                            }}
-                            onWaitClick={async(e)=>
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgWaitStatus',showTitle:true,title:this.lang.t("msgWaitStatus.title"),showCloseButton:true,width:'90%',height:'200px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgWaitStatus.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWaitStatus.btn02"),location:'after'}],
-                                }
-
-                                if(this.serviceDetailView.items[e].WAIT_STATUS == 0)
-                                {
-                                    tmpConfObj.content = <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgWaitStatus.msg1")}</div>
-
-                                    let tmpResult = await dialog(tmpConfObj);
-                                    if(tmpResult == "btn01")
-                                    {
-                                        this.serviceDetailView.items[e].STATUS = 0
-                                        this.serviceDetailView.items[e].WAIT_STATUS = 1
-                                        await this.restOrderObj.save()
-                                        this.serviceDetailView.updateState()
-                                    }
-                                }
-                                else if(this.serviceDetailView.items[e].WAIT_STATUS == 1)
-                                {
-                                    tmpConfObj.content = <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgWaitStatus.msg2")}</div>
-
-                                    let tmpResult = await dialog(tmpConfObj);
-                                    if(tmpResult == "btn01")
-                                    {
-                                        this.serviceDetailView.items[e].STATUS = 0
-                                        this.serviceDetailView.items[e].WAIT_STATUS = 2
                                         await this.restOrderObj.save()
                                         this.serviceDetailView.updateState()
                                     }

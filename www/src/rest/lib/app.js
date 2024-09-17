@@ -213,7 +213,13 @@ export default class App extends React.PureComponent
                         <img src="./css/img/logo.png" width="45px" height="45px"/>
                     </div>
                     <div className="col-4" style={{paddingTop:"10px"}} align="center">
-                        
+                        <NbButton id="btnRefresh" parent={this} className="form-group btn btn-primary btn-block" style={{height:"45px"}}
+                        onClick={()=>
+                        {
+                            window.location.reload()
+                        }}>
+                            <i className="fa-solid fa-arrows-rotate fa-2x"></i>
+                        </NbButton>
                     </div>
                     <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
                         <NbButton id="btnLogout" parent={this} className="form-group btn btn-primary btn-block" style={{height:"45px"}}

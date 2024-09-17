@@ -53,6 +53,13 @@ const lang =
         title: "Information",
         msg: "Rendez la monnaie.",
         btn01: "D'accord"
+    },
+    msgRestPosSaleAdd: 
+    {
+        title: "Avertissement",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Il y a des lignes déjà ajoutées dans l'écran de vente. Êtes-vous sûr de vouloir continuer ?"
     }
 }
 export default lang

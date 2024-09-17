@@ -358,7 +358,6 @@ function renderTables()
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                     <div className="row pt-2" style={{visibility:(this.state.showPage == 'table' ? "visible" : "hidden"),display:(this.state.showPage == 'table' ? "flex" : "none")}}>
                         <NbTableView parent={this} id="restTableView" 
@@ -387,7 +386,6 @@ function renderTables()
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTableEmptyAlert.msg")}</div>)
                                 }
                                 await dialog(tmpConfObj);
-
                             }
                         }}
                         onPrintClick={async(e)=>
@@ -541,11 +539,28 @@ function renderTables()
                                         let tmpConfObj =
                                         {
                                             id:'msgConvertPosAddition',showTitle:true,title:this.lang.t("msgConvertPosAddition.title"),showCloseButton:true,width:'500px',height:'240px',
-                                            button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],                                            
+                                            button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],
                                         }
 
                                         let tmpCount = this.grdRestTableItem.data.datatable.length - this.grdRestTableItem.getSelectedData().length
                                         
+                                        if(this.posObj.posSale.dt().length > 0)
+                                        {
+                                            let tmpConfObj1 =
+                                            {
+                                                id:'msgRestPosSaleAdd',showTitle:true,title:this.lang.t("msgRestPosSaleAdd.title"),showCloseButton:true,width:'500px',height:'240px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgRestPosSaleAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestPosSaleAdd.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestPosSaleAdd.msg")}</div>)
+                                            }
+
+                                            let tmpMsgResult1 = await dialog(tmpConfObj1);
+
+                                            if(tmpMsgResult1 == "btn02")
+                                            {
+                                                return
+                                            }
+                                        }
+
                                         if(tmpCount > 0)
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConvertPosAddition.msg",{ count: tmpCount })}</div>)
