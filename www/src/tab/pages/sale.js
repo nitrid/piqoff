@@ -772,6 +772,30 @@ export default class Sale extends React.PureComponent
             cordova.plugins.printer.print(tmpFilePath);
         })
     }
+    async priceListChange()
+    {
+        let tmpConfObj1 =
+        {
+            id:'msgPriceListChange',showTitle:true,title:this.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgPriceListChange.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPriceListChange.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgPriceListChange.msg")}</div>)
+        }
+
+        let pResult = await dialog(tmpConfObj1);
+        
+        if(pResult == 'btn01')
+        {
+            for (let i = 0; i < this.docLines.length; i++) 
+            {
+                this.docLines[i].PRICE = await this.getPrice(this.docLines[i].ITEM,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false)
+                this.docLines[i].VAT = parseFloat(((((this.docLines[i].PRICE * this.docLines[i].QUANTITY) - (parseFloat(this.docLines[i].DISCOUNT) + parseFloat(this.docLines[i].DOC_DISCOUNT))) * (this.docLines[i].VAT_RATE) / 100))).round(4);
+                this.docLines[i].AMOUNT = parseFloat((this.docLines[i].PRICE * this.docLines[i].QUANTITY).toFixed(3)).round(2)
+                this.docLines[i].TOTALHT = Number((parseFloat((this.docLines[i].PRICE * this.docLines[i].QUANTITY).toFixed(3)) - (parseFloat(this.docLines[i].DISCOUNT)))).round(2)
+                this.docLines[i].TOTAL = Number(((this.docLines[i].TOTALHT - this.docLines[i].DOC_DISCOUNT) + this.docLines[i].VAT)).round(2)
+            }
+            this._calculateTotal()
+        }
+    }
     render()
     {
         return(
@@ -1079,6 +1103,10 @@ export default class Sale extends React.PureComponent
                                                     value=""
                                                     dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
                                                     data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                                    onValueChanged={(async()=>
+                                                    {
+                                                        this.priceListChange()
+                                                    }).bind(this)}
                                                     >
                                                     </NdSelectBox>
                                                 </Item>

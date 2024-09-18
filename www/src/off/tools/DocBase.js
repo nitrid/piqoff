@@ -2935,22 +2935,22 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
-                                <NdTextBox id="txtPalletQuntity" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
+                                <NdTextBox id="txtPalletQuntity" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtColis")} alignment="right" />
-                                <NdTextBox id="txtColis" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
+                                <NdTextBox id="txtColis" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
-                                <NdTextBox id="txtMetter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
+                                <NdTextBox id="txtMetter" mode={'number'} parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
-                                <NdTextBox id="txtHeight" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
+                                <NdTextBox id="txtHeight" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
                                 </NdTextBox>
                             </Item>
                             <EmptyItem/>
