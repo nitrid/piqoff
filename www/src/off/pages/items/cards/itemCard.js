@@ -2617,7 +2617,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriPrice.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriHT.value = this.txtPopPriPrice.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
@@ -2643,7 +2643,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceGrossMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
@@ -2668,7 +2668,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
@@ -2693,7 +2693,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                         }}>
                                         
@@ -3106,7 +3106,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2,3) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
