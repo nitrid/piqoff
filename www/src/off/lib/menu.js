@@ -654,7 +654,7 @@ export const menu = (e) =>
                                 {
                                     id: 'ftr_01_004',
                                     text: e.t('menuOff.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                                    path: 'invoices/lists/priceDiffInvList'
+                                    path: 'invoices/lists/PriceDiffInvList'
                                 },
                             ]
                         },
