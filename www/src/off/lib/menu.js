@@ -724,6 +724,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_02_006'),//'Açik Alis Fatura Raporu',
                             path: 'report/purchase/openInvoicePurchaseReport'
                         },
+                        {
+                            id: 'slsRpt_02_007',
+                            text: e.t('menuOff.slsRpt_02_007'),//'Alış Faturası Yaşlandırma Raporu',
+                            path: 'report/purchase/purchaseInvoiceAgingReport'
+                        },
                     ]
                 }
             ]
@@ -1031,6 +1036,11 @@ export const menu = (e) =>
                             id: 'slsRpt_01_009',
                             text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
                             path: 'report/sales/openInvoiceSalesReport'
+                        },
+                        {
+                            id: 'slsRpt_01_010',
+                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            path: 'customers/report/saleInvoiceAgingReport'
                         },
                     ]
                 }
