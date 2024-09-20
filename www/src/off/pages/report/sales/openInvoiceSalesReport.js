@@ -142,22 +142,27 @@ export default class openInvoiceSalesReport extends React.PureComponent
             source : 
             {
                 groupBy : this.groupList,
-                select : 
+                select: 
                 {
-                    query : "SELECT " +
-                                "TYPE," +
-                                "DOC_DATE," +
-                                "DOC_TYPE," +
-                                "INPUT_CODE," +
-                                "INPUT_NAME," +
-                                "DOC_REF," +
-                                "DOC_REF_NO," +
-                                "DOC_TOTAL," +
-                                "PAYING_AMOUNT, " +
-                                "ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER " +
-                            "FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                            "WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
-                            "GROUP BY DOC_TYPE,TYPE,DOC_DATE,INPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,INPUT_CODE,DOC_TOTAL",
+                    query: "SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER " + 
+                           "FROM ( " +
+                           "    SELECT " +
+                           "        TYPE, " +
+                           "        DOC_DATE, " +
+                           "        DOC_TYPE, " +
+                           "        INPUT_CODE, " +
+                           "        INPUT_NAME, " +
+                           "        DOC_REF, " +
+                           "        DOC_REF_NO, " +
+                           "        MAX(DOC_TOTAL) AS DOC_TOTAL, " +  // Faturanın toplamı
+                           "        SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + // Ödeme ve iadelerin toplamı
+                           "    FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                           "    WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
+                           "    AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                           "    GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE " +
+                           ") AS TMP " +
+                           "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
+                    param: ['INPUT_CODE:string|50', 'FIRST_DATE:date', 'LAST_DATE:date'],
                     param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
                 },
