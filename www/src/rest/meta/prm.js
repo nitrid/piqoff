@@ -151,4 +151,52 @@ export const prm =
             }
         }
     },
+    //MultiService
+    {
+        TYPE : 0,
+        ID :"MultiService",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Rest",
+            CAPTION : "Çoklu Servis",
+        }
+    },
+    //SelectionGroup
+    {
+        TYPE : 0,
+        ID :"SelectionGroup",
+        VALUE : '001',
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Rest",
+            CAPTION : "Seçili Ürün Grubu",
+        }
+    },
+    //OpenedGroup
+    {
+        TYPE : 0,
+        ID :"OpenedGroup",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Rest",
+            CAPTION : "Ürün Grubu Açık",
+        }
+    },
 ]

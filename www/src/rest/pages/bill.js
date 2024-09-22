@@ -168,48 +168,52 @@ export default class bill extends React.PureComponent
     }
     async addOrder()
     {
-        let tmpMaxRef = 0
-        if(this.serviceView.items.length > 0)
+        return new Promise(async resolve => 
         {
-            tmpMaxRef = this.serviceView.items.max('REF') + 1
-        }
-        else
-        {
-            let tmpQuery = 
+            let tmpMaxRef = 0
+            if(this.serviceView.items.length > 0)
             {
-                query : "SELECT ISNULL(MAX(REF),0) + 1 AS MAX_REF FROM REST_ORDER_VW_01 WHERE ZONE = @ZONE",
-                param : ['ZONE:string|50'],
-                value : [this.tableSelected.GUID]
+                tmpMaxRef = this.serviceView.items.max('REF') + 1
             }
+            else
+            {
+                let tmpQuery = 
+                {
+                    query : "SELECT ISNULL(MAX(REF),0) + 1 AS MAX_REF FROM REST_ORDER_VW_01 WHERE ZONE = @ZONE",
+                    param : ['ZONE:string|50'],
+                    value : [this.tableSelected.GUID]
+                }
 
-            let tmpResult = await this.core.sql.execute(tmpQuery)
+                let tmpResult = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    tmpMaxRef = tmpResult.result.recordset[0].MAX_REF
+                }
+            }
             
-            if(tmpResult.result.recordset.length > 0)
+            let tmpEmpty = {...this.restOrderObj.empty}
+
+            tmpEmpty.ZONE = this.tableSelected.GUID
+            tmpEmpty.ZONE_CODE = this.tableSelected.CODE
+            tmpEmpty.ZONE_NAME = this.tableSelected.NAME
+            tmpEmpty.REF = tmpMaxRef
+            tmpEmpty.PERSON = 1
+
+            this.restOrderObj.addEmpty(tmpEmpty)
+            
+            this.serviceView.items.push(
             {
-                tmpMaxRef = tmpResult.result.recordset[0].MAX_REF
-            }
-        }
-        
-        let tmpEmpty = {...this.restOrderObj.empty}
-
-        tmpEmpty.ZONE = this.tableSelected.GUID
-        tmpEmpty.ZONE_CODE = this.tableSelected.CODE
-        tmpEmpty.ZONE_NAME = this.tableSelected.NAME
-        tmpEmpty.REF = tmpMaxRef
-        tmpEmpty.PERSON = 1
-
-        this.restOrderObj.addEmpty(tmpEmpty)
-
-        this.serviceView.items.push(
-        {
-            GUID : this.restOrderObj.dt()[0].GUID,
-            ZONE : this.restOrderObj.dt()[0].ZONE,
-            ZONE_CODE : this.restOrderObj.dt()[0].ZONE_CODE,
-            ZONE_NAME : this.restOrderObj.dt()[0].ZONE_NAME,
-            REF : this.restOrderObj.dt()[0].REF,
-            ORDER_COMPLATE_COUNT : 0,
-            ORDER_COUNT : 0,
-            DELIVERED : 0
+                GUID : this.restOrderObj.dt()[0].GUID,
+                ZONE : this.restOrderObj.dt()[0].ZONE,
+                ZONE_CODE : this.restOrderObj.dt()[0].ZONE_CODE,
+                ZONE_NAME : this.restOrderObj.dt()[0].ZONE_NAME,
+                REF : this.restOrderObj.dt()[0].REF,
+                ORDER_COMPLATE_COUNT : 0,
+                ORDER_COUNT : 0,
+                DELIVERED : 0
+            })
+            resolve()
         })
     }
     async addItem(pData)
@@ -433,6 +437,29 @@ export default class bill extends React.PureComponent
                             this.serviceView.updateState()
                             this.tableSelected = this.tableView.items[e]
                             App.instance.btnLogout.setLock({display:"none"})
+
+                            if(!this.param.filter({ID:'MultiService',TYPE:0}).getValue())
+                            {
+                                if(this.serviceView.items.length == 0)
+                                {
+                                    this.restOrderObj.clearAll()                                
+
+                                    await this.addOrder()
+
+                                    this.serviceSelected = this.serviceView.items[this.serviceView.items.length-1]
+                                    this.serviceView.updateState()
+
+                                    await this.popServiceDetail.show()
+
+                                    this.serviceDetailView.items = this.restOrderObj.restOrderDetail.dt()
+                                    this.serviceDetailView.title =  this.restOrderObj.dt()[0].ZONE_NAME + " / SERVICE - " + this.restOrderObj.dt()[0].REF
+                                    this.serviceDetailView.updateState()
+                                }
+                                else
+                                {
+                                    this.serviceView._onClick(0)
+                                }
+                            }
                         }}
                         onSaveClick={async(e)=>
                         {
@@ -635,8 +662,6 @@ export default class bill extends React.PureComponent
                                         })
                                         tmpFilter[i].PRINTED = tmpFilter[i].PRINTED == 0 ? 1 : tmpFilter[i].PRINTED
                                         tmpFilter[i].STATUS = 1
-
-                                        console.log(tmpFilter[i].PRINTED)
                                     }
                                     await this.print(tmpPrintDt)
                                     await this.restOrderObj.save()
@@ -678,8 +703,6 @@ export default class bill extends React.PureComponent
                                             })
                                             this.restOrderObj.restOrderDetail.dt()[i].PRINTED = this.restOrderObj.restOrderDetail.dt()[i].PRINTED == 0 ? 1 : this.restOrderObj.restOrderDetail.dt()[i].PRINTED
                                             this.restOrderObj.restOrderDetail.dt()[i].STATUS = 1
-
-                                            console.log(this.restOrderObj.restOrderDetail.dt()[i].PRINTED)
                                         }
                                         await this.print(tmpPrintDt)
                                         await this.restOrderObj.save()
@@ -827,8 +850,27 @@ export default class bill extends React.PureComponent
 
                                 this.addProductView.grpItem = this.grpItem
                                 this.addProductView.fullItems = this.productItem
-                                this.addProductView.items = this.productItem
+
+                                if(this.param.filter({ID:'SelectionGroup',TYPE:0}).getValue() == '')
+                                {
+                                    this.addProductView.items = new datatable()
+                                    this.addProductView.lblGroup.value = ""
+                                }
+                                else
+                                {
+                                    this.addProductView.items = this.addProductView.fullItems.where({SUB_CODE:this.param.filter({ID:'SelectionGroup',TYPE:0}).getValue()})
+                                    if(this.addProductView.items.length > 0)
+                                    {
+                                        this.addProductView.lblGroup.value = this.addProductView.items[0].SUB_NAME
+                                    }
+                                }
+
                                 this.addProductView.updateState()
+
+                                if(this.param.filter({ID:'OpenedGroup',TYPE:0}).getValue())
+                                {
+                                    this.addProductView.setState({page:'group'})
+                                }
                             }}
                             onChangeClick={async(e)=>
                             {
@@ -889,6 +931,7 @@ export default class bill extends React.PureComponent
                             }}
                             onPersonClick={async(e)=>
                             {
+                                console.log(this.restOrderObj.dt())
                                 this.restOrderObj.dt()[0].PERSON = e
                                 this.restOrderObj.save()
                             }}
@@ -980,15 +1023,15 @@ export default class bill extends React.PureComponent
                             }}
                             onCloseClick={async()=>
                             {
-                                if(this.serviceDetailView.items.length > 0)
-                                {
-
-                                }
-                                
                                 this.popServiceDetail.hide()
 
                                 this.serviceView.items = await this.getServices(this.tableSelected.GUID)
                                 this.serviceView.updateState()
+
+                                if(!this.param.filter({ID:'MultiService',TYPE:0}).getValue())
+                                {
+                                    this.serviceView._onCloseClick()
+                                }
                             }}/>
                         </NbPopUp>
                     </div>

@@ -54,5 +54,12 @@ const lang =
         msg : "Para Üstü Veriniz.",
         btn01 : "Tamam",
     },
+    msgRestPosSaleAdd : 
+    {
+        title : "Uyarı",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        msg : "Satış ekranında önceden eklenmiş satırlar var. Devam etmek istediğinize eminmisiniz ?"
+    },
 }
 export default lang
