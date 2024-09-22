@@ -501,14 +501,14 @@ export default class salesOrdList extends React.PureComponent
                                     <Item>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                            this.popOrderDetail.hide()
                                         }}/>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                             for (let i = 0; i < this.orderDetail.length; i++) 
