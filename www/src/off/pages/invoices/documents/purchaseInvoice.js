@@ -61,7 +61,11 @@ export default class purchaseInvoice extends DocBase
             }
             else if(typeof this.pagePrm.piqx != 'undefined')
             {
-                this.initPiqX()
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+                
             }
         }
     }
