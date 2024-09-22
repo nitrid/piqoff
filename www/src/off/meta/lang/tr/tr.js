@@ -482,6 +482,7 @@ export const langTr =
         slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
         slsRpt_02_005 : "DEB Detay Raporu",
         slsRpt_02_006 : "Açık Alış Fatura Raporu",
+        slsRpt_02_007 : "Alış Faturası Yaşlandırma Raporu",
     },
     login:
     {
