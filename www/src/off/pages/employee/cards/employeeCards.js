@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { employeesCls,employeeAdressCls, } from '../../../../core/cls/employees.js';
+import { employeesCls,employeeAdressCls,employeeAttendanceCls, } from '../../../../core/cls/employees.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -21,6 +21,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 
 export default class EmployeeCard extends React.PureComponent
 {
@@ -208,6 +209,11 @@ export default class EmployeeCard extends React.PureComponent
         {        
             await this.grdAdress.dataRefresh({source:this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')});
         }
+        await this.core.util.waitUntil(10)
+        if(e.itemData.title == this.t("tabTitleAttendance"))
+            {        
+                await this.grdAttendance.dataRefresh({source:this.employeeObj.employeeAttendance.dt('EMPLOYEE_ATTENDANCE')});
+            }
        
     }
 
@@ -240,7 +246,7 @@ export default class EmployeeCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployees"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        
+                                        console.log(this.employeeObj.employeeAttendance.dt())
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -648,6 +654,51 @@ export default class EmployeeCard extends React.PureComponent
                                 </TabPanel>
                             </div>
                         </div> 
+                         {/* PERSONEL BİLGİ POPUP */}
+                        <div className='row px-2 pt-2'>
+                            <div className='col-12'>
+                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
+                                    <Item title={this.t("tabTitleAttendance")}>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <Toolbar>
+                                                    <Item location="after">
+                                                        <Button icon="add"
+                                                        onClick={async ()=>
+                                                        {
+                                                           
+                                                            this.popAttendance.show();
+                                                        }}/>
+                                                    </Item>
+                                                </Toolbar>
+                                            </div>
+                                        </div>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <NdGrid parent={this} id={"grdAttendance"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                height={'100%'} 
+                                                width={'100%'}
+                                                dbApply={false}
+                                                >
+                                                    <Paging defaultPageSize={5} />
+                                                    <Editing mode="popup" allowUpdating={true} allowDeleting={true} />
+                                                    <Column dataField="ATTENDANCE_DATE" caption={this.t("grdAttendance.clmAttendance_Date")} />
+                                                    <Column dataField="CHECK_IN_TIME" caption={this.t("grdAttendance.clmCheck_In_Tıme")} />
+                                                    <Column dataField="CHECK_OUT_TIME" caption={this.t("grdAttendance.clmCheck_Out_Tıme")}/>
+                                                    <Column dataField="IS_ABSENT" caption={this.t("grdAttendance.clmIs_Absent")} />
+                                                    <Column dataField="ABSENCE_REASON" caption={this.t("grdAttendance.clmAbsence_Reason")}/>
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                    </Item>   
+                                           
+                                </TabPanel>
+                            </div>
+                        </div> 
                     </div>
                     {/* Adres POPUP */}
                     <div>
@@ -815,6 +866,87 @@ export default class EmployeeCard extends React.PureComponent
                                             onClick={()=>
                                             {
                                                 this.popAdress.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                     {/* PERSONEL BİLGİ POPUP */}
+                     <div>
+                        <NdPopUp parent={this} id={"popAttendance"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popAttendance.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'350'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popAttendance.txtPopAttendance_Date")} alignment="right" />
+                                    <NdDatePicker id={"txtPopAttendance_Date"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popAttendance.cmbPopCheck_In_Tıme")} alignment="right" />
+                                    <NdDatePicker id={"cmbPopCheck_In_Tıme"} parent={this} simple={true}  type={'datetime'}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popAttendance.cmbPopCheck_Out_Tıme")} alignment="right" />
+                                    <NdDatePicker id={"cmbPopCheck_Out_Tıme"} parent={this} simple={true}  type={'datetime'}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popAttendance.cmbPopIs_Absent")} alignment="right" />
+                                <NdSelectBox 
+                                    id={"cmbPopIs_Absent"} 
+                                    parent={this} 
+                                    simple={true} 
+                                    dataSource={[
+                                        { id: 0, text: 'GELMEDİ' },
+                                        { id: 1, text: 'GELDİ' }
+                                    ]}
+                                    displayExpr="text"  
+                                    valueExpr="id"      
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popAttendance.cmbPopAbsent_Reason")} alignment="right" />
+                                    <NdTextBox id={"cmbPopAbsent_Reason"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.employeeObj.employeeAttendance.empty};
+                                               
+                                                
+                                                tmpEmpty.ATTENDANCE_DATE = this.txtPopAttendance_Date.value
+                                                tmpEmpty.CHECK_IN_TIME = this.cmbPopCheck_In_Tıme.value
+                                                tmpEmpty.CHECK_OUT_TIME = this.cmbPopCheck_Out_Tıme.value
+                                                tmpEmpty.IS_ABSENT = this.cmbPopIs_Absent.value
+                                                tmpEmpty.ABSENCE_REASON = this.cmbPopAbsent_Reason.value
+                                                tmpEmpty.EMPLOYEE_GUID = this.employeeObj.dt()[0].GUID 
+
+                                                this.employeeObj.employeeAttendance.addEmpty(tmpEmpty);    
+                                                this.popAttendance.hide(); 
+                                                
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popAttendance.hide();  
                                             }}/>
                                         </div>
                                     </div>

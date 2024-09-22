@@ -242,6 +242,13 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgPriceListChange:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Fiyatları Güncellemek istermisiniz ?"
+        },
     },
     extract :
     {

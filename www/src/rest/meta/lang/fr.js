@@ -15,6 +15,7 @@ export const langFr =
     serverConnection : "Etablissement de la connexion avec le serveur",
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
+    btnMenu : "MENU",
     msgAnotherUserAlert: 
     {
         title : "Attention",

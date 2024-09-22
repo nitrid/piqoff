@@ -61,7 +61,11 @@ export default class purchaseInvoice extends DocBase
             }
             else if(typeof this.pagePrm.piqx != 'undefined')
             {
-                this.initPiqX()
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+                
             }
         }
     }
@@ -1143,18 +1147,6 @@ export default class purchaseInvoice extends DocBase
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
-                // let tmpTaxSucre = 0
-                // let tmpQuery = 
-                // {
-                //     query : "SELECT TAX_SUCRE FROM CUSTOMER_VW_01 WHERE GUID = @CUSTOMER",
-                //     param : ['CUSTOMER:string|50'],
-                //     value : [this.docObj.dt()[0].OUTPUT]
-                // }
-                // let tmpData = await this.core.sql.execute(tmpQuery)
-                // if(tmpData.result.recordset.length > 0)
-                // {
-                //     tmpTaxSucre = tmpData.result.recordset[0].TAX_SUCRE
-                // }
                 App.instance.setState({isExecute:true})
                 this.newPrice.clear()
                 this.newVat.clear()
@@ -1302,7 +1294,6 @@ export default class purchaseInvoice extends DocBase
                     this.newPriceDate.clear()
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
-                        console.log(this.docObj.docItems.dt()[i])
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                         {
                             if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )

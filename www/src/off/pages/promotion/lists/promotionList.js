@@ -305,6 +305,7 @@ export default class promotionList extends React.PureComponent
                                 <GroupPanel visible={true} allowColumnDragging={false}/>
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                <Export fileName={"promo"} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ACTIVE" caption={this.t("grdListe.clmCode")} visible={false} defaultSortOrder="desc"/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 

@@ -240,6 +240,13 @@ export const langFr =
             msgSuccess: "L'envoi du courrier a réussi !",
             msgFailed: "L'envoi du courrier a échoué !"
         },
+        msgPriceListChange:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous mettre à jour les prix ?"
+        },
     },
     extract :
     {
