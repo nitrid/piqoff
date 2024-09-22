@@ -1350,7 +1350,7 @@ export const prm =
         VALUE : 
         {
             active : false,
-            dbControl:false,
+            dbControl:true,
             tolerans : 0.030
         },
         SPECIAL : "",

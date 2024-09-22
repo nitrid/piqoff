@@ -11,6 +11,9 @@ const pos_02_014 =
         clmStatus : "Durum",
         clmCDate : "Tarih",
         clmTicketNo : "Fiş No",
+        clmDescriptions : "Açıklama",
+        clmUser : "Kullanıcı",
+        clmAmount : "Tutar",
     },
 }
 
