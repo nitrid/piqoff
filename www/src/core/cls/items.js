@@ -1290,10 +1290,11 @@ export class itemSubGrpCls
         {
             query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_DELETE] " + 
                     "@CUSER = @PCUSER, " +
-                    "@UPDATE = 1, " +  
+                    "@UPDATE = 1, " +
+                    "@ITEM = @PITEM, " +  
                     "@SUB = @PSUB ", 
-            param : ['PCUSER:string|25','PSUB:string|50'],
-            dataprm : ['CUSER','SUB_GUID']
+            param : ['PCUSER:string|25','PITEM:string|50','PSUB:string|50'],
+            dataprm : ['CUSER','ITEM_GUID','SUB_GUID']
         }
         this.ds.add(tmpDt);
     }
