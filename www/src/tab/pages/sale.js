@@ -898,11 +898,11 @@ export default class Sale extends React.PureComponent
                                                             this.popCart.hide();
                                                         }
                                                     }}>
-                                                        <i className="fa-solid fa-file fa-1x"></i>
+                                                        <i className="fa-solid fa-plus fa-1x"></i>
                                                     </NbButton>
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
-                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",background:"#69F0AE"}}
                                                     onClick={async()=>
                                                     {
                                                         if(this.docLines.length == 0)
