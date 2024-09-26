@@ -209,6 +209,7 @@ export default class salesOrdList extends React.PureComponent
         {
             query : `SELECT *,CASE WHEN APPROVED_QUANTITY = 0 THEN QUANTITY ELSE APPROVED_QUANTITY END AS APPROVED_QYT FROM (SELECT 
                     ORDERS.DOC_DATE,
+                    ORDERS.DOC_GUID,
                     ORDERS.GUID,
                     ORDERS.ITEM,
                     ORDERS.ITEM_CODE,
@@ -466,6 +467,17 @@ export default class salesOrdList extends React.PureComponent
                                                 e.key.APPROVED_QYT = e.key.QUANTITY
                                            }
                                         }}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            App.instance.menuClick(
+                                                {
+                                                    id: 'sip_02_002',
+                                                    text: this.t('menu'),
+                                                    path: 'orders/documents/salesOrder.js',
+                                                    pagePrm:{GUID:e.data.DOC_GUID}
+                                                })
+                                            this.popOrderDetail.hide()
+                                        }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
@@ -489,14 +501,14 @@ export default class salesOrdList extends React.PureComponent
                                     <Item>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                            this.popOrderDetail.hide()
                                         }}/>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                             for (let i = 0; i < this.orderDetail.length; i++) 
