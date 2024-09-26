@@ -232,7 +232,7 @@ export const langTr =
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
             btnSend : "Gönder",
-            btnCancel : "Gönder",
+            btnCancel : "İptal",
             cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
@@ -320,11 +320,12 @@ export const langTr =
         yearSales : "Bu Yılki Sipariş Toplamı",
         sale : "Satış Tutarı",        
     },
+    //Tahsilat
     collection:
     {
         txtCustomer: "Müşteri",
         dtDocDate : "Tarih",
-        btnCash: "Tahilat Girişi",
+        btnCash: "Tahsilat Girişi",
         txtTotal : "Toplam Tutar",
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -382,6 +383,39 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili",            
+            btnPrint :"Yazdır",
+            btnCancel: "İptal",
+            btnView : "Görüntüle",
+            btnMailsend : "Mail Gönder",
+        },
+        msgCollection:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Faturanıza tahsilat girmek istermisiniz ?"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder",
+            btnCancel : "İptal",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
         pg_invoices : 
         {
