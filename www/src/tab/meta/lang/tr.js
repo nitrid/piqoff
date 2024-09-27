@@ -15,6 +15,7 @@ export const langTr =
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
+    btnCancel : "Vazgeç",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -52,6 +53,7 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
+            dtDShıpmentDate : "Şipariş Tarihi",
             txtDescription : "Açıklama",
             cmbPricingList : "Fiyat Liste No"
         },
@@ -327,6 +329,7 @@ export const langTr =
         dtDocDate : "Tarih",
         btnCash: "Tahsilat Girişi",
         txtTotal : "Toplam Tutar",
+        checkReference : "Referan Numrası",
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -354,6 +357,11 @@ export const langTr =
             btnCancel : "Vazgeç",
             cmbCashSafe: "Kasa/Banka",
             invoiceSelect : "Fatura Seçimi",
+        },
+        popCheck : 
+        {
+            title: "Referans Girişi",
+            btnApprove : "Ekle",
         },
         ValidCash : "0'dan büyük bir tutar giriniz",
         msgNew:

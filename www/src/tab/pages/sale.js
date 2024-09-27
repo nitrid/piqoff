@@ -1083,10 +1083,23 @@ export default class Sale extends React.PureComponent
                                                         </Validator> 
                                                     </NdSelectBox>
                                                 </Item>
+                                                {/* Tarih */}
                                                 <Item>
                                                     <Label text={this.t("popCart.dtDocDate")} alignment="right" />
                                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                                    onValueChanged={(async()=>
+                                                    {
+                                                        this.checkRow()
+                                                    }).bind(this)}
+                                                    >
+                                                    </NdDatePicker>
+                                                </Item>
+                                                 {/* Şipariş Tarihi */}
+                                                <Item>
+                                                    <Label text={this.t("popCart.dtDShıpmentDate")} alignment="right" />
+                                                    <NdDatePicker simple={true}  parent={this} id={"dtDShıpmentDate"}
+                                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                                     onValueChanged={(async()=>
                                                     {
                                                         this.checkRow()
