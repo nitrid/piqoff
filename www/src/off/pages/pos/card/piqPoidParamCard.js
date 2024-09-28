@@ -7,6 +7,7 @@ import Form, { Label,Item } from 'devextreme-react/form';
 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdSelectBox from '../../../../core/react/devex/selectbox';
 import {ItemBuild,ItemSet,ItemGet} from '../../../../admin/tools/itemOp';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable,param } from '../../../../core/core.js';
@@ -243,47 +244,71 @@ export default class piqPoidDeviceCard extends React.PureComponent
             <div>
                 <ScrollView>
                     <div className="row px-2 pt-2">
-                        <div className="col-1 offset-11">
-                        <NdButton text={this.t("btnSave")} type="default" width="100%"
-                        onClick={async()=>
-                        {
-                            let tmpConfObj =
-                            {
-                                id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn02",caption:this.t("msgSaveResult.btn01"),location:'after'}],
-                            }
-
-                            App.instance.setState({isExecute:true})
-                            for (let x = 0; x < this.state.metaPrm.length; x++) 
-                            {
-                                this.prmData.add
-                                (
+                        <div className="col-12">
+                            <Form colCount={2} id={"frmFilter" + this.tabIndex}>
+                                <Item>
+                                    <Label text={this.t("lblDevice")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDevice" tabIndex={this.tabIndex}
+                                    displayExpr="CODE"                       
+                                    valueExpr="CODE"
+                                    value={""}
+                                    showClearButton={true}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    onValueChanged={async(e)=>
                                     {
-                                        TYPE:this.state.metaPrm[x].TYPE,
-                                        ID:this.state.metaPrm[x].ID,
-                                        VALUE:await this.ItemGet(this.state.metaPrm[x],this),
-                                        SPECIAL:this.state.metaPrm[x].SPECIAL,
-                                        USERS:"",
-                                        PAGE:this.state.metaPrm[x].PAGE,
-                                        ELEMENT:this.state.metaPrm[x].ELEMENT,
-                                        APP:this.state.metaPrm[x].APP,
-                                    }
-                                )
-                            }
-                            let tmpResult = await this.prmData.save()                                            
-                            await this.prmData.load({APP:'POID'})
-                            App.instance.setState({isExecute:false})
+                                        await this.prmData.load({APP:'POID'})
+                                        this.prmData.filter({TYPE:0}).meta.map((pItem) => 
+                                        {
+                                            let tmpData = {...pItem}
+                                            tmpData.VALUE = this.prmData.filter({TYPE:0,USERS:e.value,ID:pItem.ID}).getValue()
+                                            this.ItemSet(tmpData,this)
+                                        })
+                                    }}
+                                    />
+                                </Item>
+                                <Item>
+                                    <NdButton text={this.t("btnSave")} type="default" width="100%"
+                                    onClick={async()=>
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn02",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                                        }
 
-                            if(tmpResult == 0)
-                            {
-                                tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                            }
-                            else
-                            {
-                                tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                            }
-                            await dialog(tmpConfObj);
-                        }}></NdButton>
+                                        App.instance.setState({isExecute:true})
+                                        for (let x = 0; x < this.state.metaPrm.length; x++) 
+                                        {
+                                            this.prmData.add
+                                            (
+                                                {
+                                                    TYPE:this.state.metaPrm[x].TYPE,
+                                                    ID:this.state.metaPrm[x].ID,
+                                                    VALUE:await this.ItemGet(this.state.metaPrm[x],this),
+                                                    SPECIAL:this.state.metaPrm[x].SPECIAL,
+                                                    USERS:this.cmbDevice.value,
+                                                    PAGE:this.state.metaPrm[x].PAGE,
+                                                    ELEMENT:this.state.metaPrm[x].ELEMENT,
+                                                    APP:this.state.metaPrm[x].APP,
+                                                }
+                                            )
+                                        }
+                                        let tmpResult = await this.prmData.save()                                            
+                                        await this.prmData.load({APP:'POID'})
+                                        App.instance.setState({isExecute:false})
+
+                                        if(tmpResult == 0)
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }}></NdButton>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -2,6 +2,7 @@
 const pos_01_008 =
 {
     btnSave: "Enregistrer",
+    lblDevice: "Device",
     msgSaveResult:
     {
         title: "Attention",

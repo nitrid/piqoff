@@ -2,6 +2,7 @@
 const pos_01_008 =
 {
     btnSave: "Kaydet",
+    lblDevice: "Device",
     msgSaveResult:
     {
         title: "Dikkat",
