@@ -15,6 +15,7 @@ export const langTr =
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
+    btnMenu : "MENÜ",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -82,6 +83,13 @@ export const langTr =
     {
         title : "Dikkat",
         msg : "Tüm ürünleri yeniden yazıdırmak istediğinize eminmisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
+    msgSendKitchen:
+    {
+        title : "Dikkat",
+        msg : "Ürünleri mutfaga göndermek istediğinize eminmisiniz ?",
         btn01 : "Evet",
         btn02 : "Hayır"
     },

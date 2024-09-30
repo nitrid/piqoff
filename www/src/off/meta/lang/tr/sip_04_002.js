@@ -7,6 +7,11 @@ const sip_04_002 =
     dtLast : "Son Tarih",
     cmbDepot : "Depo",
     menu:"Satış Sipariş",
+    itemTotalQyt : "Sevk edilebilecek Miktar",
+    popOrderDetail : 
+    {
+        title : "Sipariş Detayı"
+    },
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -17,25 +22,48 @@ const sip_04_002 =
     },
     grdSlsOrdList: 
     {
-        clmRef: "Seri",
-        clmRefNo: "Sıra",
-        clmPrice: "Fiyat",
-        clmInputCode : "Müşteri Kodu",
-        clmInputName : "Müşteri Adı",
-        clmDate: "Tarih",
-        clmVat : "KDV",
-        clmAmount : "Tutar",
+        clmItemCode: "Ürün Kodu",
+        clmItemName: "Ürün Adı",
+        clmDepotQuantity: "Depodaki Miktar",
+        clmComingQuantity : "Gelecek Miktar",
+        clmTotalQuantity : "Toplam Gönderilebilecek",
+        clmQuantity: "Sipariş Miktarı",
+        clmApprovedQuantity : "Onaylanacak Miktar",
+        clmTotalHt : "Vergisiz Tutar",
         clmTotal : "Toplam",
-        clmOutputName :"Depo",
     },
-    popDesign : 
+    btnSave: "Seçilen Satırları Onayla",
+    msgApprovedBig:
     {
-        title: "Dizayn seçimi",
-        design : "Dizayn",
-        lang : "Evrak Dili"
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Onaylanan miktar sipariş miktarından fazla olamaz !",
     },
-    btnView : "Görüntüle",
-    btnMailsend : "Mail Gönder",
+    grdOrderDetail: 
+    {
+        clmCode: "Ürün Kodu",
+        clmName: "Ürün Adı",
+        clmDate: "Sipariş Tarihi",
+        clmCustomer : "Müşteri Adı",
+        clmQuantity: "Sipariş Miktarı",
+        clmApprovedQuantity : "Onaylanacak Miktar",
+    },
+    btnDetailCancel : "Vazgeç",
+    btnDetailApproved : "Onayla",
+    msgSave:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msg: "Seçilen Satırları Onaylıyor musunuz?",
+    },
+    msgSaveSuccess:
+    {
+        title: "Dikkat",
+        btn01: "Yazdır",
+        btn02: "Kapat",
+        msg: "Seçilen Satırları Onaylandı. Siparişleri yazdırmak istermisiniz? ",
+    },
 }
 
 export default sip_04_002

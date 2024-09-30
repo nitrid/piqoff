@@ -15,6 +15,7 @@ export const langFr =
     serverConnection : "Etablissement de la connexion avec le serveur",
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
+    btnMenu : "MENU",
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -84,6 +85,13 @@ export const langFr =
         msg: "Êtes-vous sûr de vouloir réimprimer tous les articles ?",
         btn01: "Oui",
         btn02: "Non"
+    },
+    msgSendKitchen:
+    {
+        title : "Attention",
+        msg : "Êtes-vous sûr de vouloir envoyer les produits à la cuisine ?",
+        btn01 : "Oui",
+        btn02 : "Non"
     },
     msgWaitStatus:
     {

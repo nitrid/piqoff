@@ -107,7 +107,7 @@ class fumaWebApi
                 });
                 pSocket.on('customerUpdate',async (pParam,pCallback) =>
                 {    
-                    //this.processCustomerSend(pParam)
+                    //this.customerProcess();
                 });
             }
         } 
@@ -118,15 +118,22 @@ class fumaWebApi
     }
     async getVkn()
     {
-        let tmpQuery = 
+        try
         {
-            query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+            let tmpQuery = 
+            {
+                query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+            }
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+    
+            if(typeof tmpResult[0] != 'undefined')
+            {
+                this.sellerVkn = tmpResult[0].TAX_NO
+            }
         }
-        let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-
-        if(typeof tmpResult[0] != 'undefined')
+        catch (error) 
         {
-            this.sellerVkn = tmpResult[0].TAX_NO
+            console.log("Fuma getVkn error" + error);
         }
     }
     async processEndDay()
@@ -136,8 +143,8 @@ class fumaWebApi
             try 
             {
                 await this.orderProcess();
-                await this.pointProcess();
                 await this.customerProcess();
+                await this.pointProcess();
             } 
             catch (error) 
             {
@@ -193,33 +200,42 @@ class fumaWebApi
         let posQuery = 
         {
             query : `SELECT
-                    ROUND(POS.VAT,4) AS vat,
-                    ROUND(POS.DISCOUNT,4) AS discount,
-                    ROUND(POS.FAMOUNT,4) AS famount,
-                    ROUND(POS.AMOUNT,4) AS amount,
-                    ROUND(POS.TOTAL,4) AS total,
-                    ROUND(POS.LOYALTY,4) AS loyalty,
-                    POS.GUID AS orderTransferId,
-                    POS.LDATE AS documentDate,
-                    POS.CUSTOMER_GUID AS userTransferId,
-                    lower(POS.CUSTOMER_MAIL) AS email,
-                    POS.CUSTOMER_PHONE AS mobilePhone,
-                    POS.CUSTOMER_FIRST_NAME AS name,
-                    POS.CUSTOMER_LAST_NAME AS surname,
-                    POS.CUSTOMER_CODE AS cardId,
-                    POS.CUSTOMER_GUID AS cardTransferId,
-                    CAST(ISNULL((SELECT POINT FROM CUSTOMERS WHERE CUSTOMERS.GUID = POS.CUSTOMER_GUID),0) AS INT) AS point,
-                    CAST(ISNULL((SELECT TOP 1 POINT FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = POS.CUSTOMER_GUID AND TYPE = 0 AND CUSTOMER_POINT.DOC = POS.GUID), 0) AS INT) AS winPoint,
-                    CAST(ISNULL((SELECT TOP 1 POINT FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = POS.CUSTOMER_GUID AND TYPE = 1 AND CUSTOMER_POINT.DOC = POS.GUID), 0) AS INT) AS lostPoint,
-                    ISNULL(AUDIT_LOG.STATUS,0) AS STATUS
-                    FROM FUMA_VW_01 AS POS 
-                    LEFT OUTER JOIN AUDIT_LOG ON
-                    POS.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POS'
-                    WHERE 
-                    ISNULL(AUDIT_LOG.STATUS,0) = 0 AND 
-                    POS.STATUS = 1
-                    AND POS.CUSTOMER_CODE <> ''
-                    ORDER BY documentDate ASC `
+                        ROUND(POS.VAT, 4) AS vat,
+                        ROUND(POS.DISCOUNT, 4) AS discount,
+                        ROUND(POS.FAMOUNT, 4) AS famount,
+                        ROUND(POS.AMOUNT, 4) AS amount,
+                        ROUND(POS.TOTAL, 4) AS total,
+                        ROUND(POS.LOYALTY, 4) AS loyalty,
+                        POS.GUID AS orderTransferId,
+                        POS.LDATE AS documentDate,
+                        POS.CUSTOMER_GUID AS userTransferId,
+                        LOWER(POS.CUSTOMER_MAIL) AS email,
+                        POS.CUSTOMER_PHONE AS mobilePhone,
+                        POS.CUSTOMER_FIRST_NAME AS name,
+                        POS.CUSTOMER_LAST_NAME AS surname,
+                        POS.CUSTOMER_CODE AS cardId,
+                        POS.CUSTOMER_GUID AS cardTransferId,
+                        CAST(ISNULL(CUST.POINT, 0) AS INT) AS point,
+                        CAST(ISNULL(WIN_POINT.POINT, 0) AS INT) AS winPoint,
+                        CAST(ISNULL(LOST_POINT.POINT, 0) AS INT) AS lostPoint,
+                        ISNULL(AUDIT_LOG.STATUS, 0) AS STATUS
+                    FROM
+                        FUMA_VW_01 AS POS
+                    LEFT JOIN
+                        CUSTOMERS AS CUST ON POS.CUSTOMER_GUID = CUST.GUID
+                    LEFT JOIN
+                        (SELECT CUSTOMER, DOC, POINT FROM CUSTOMER_POINT WHERE TYPE = 0) AS WIN_POINT 
+                        ON POS.CUSTOMER_GUID = WIN_POINT.CUSTOMER AND POS.GUID = WIN_POINT.DOC
+                    LEFT JOIN
+                        (SELECT CUSTOMER, DOC, POINT FROM CUSTOMER_POINT WHERE TYPE = 1) AS LOST_POINT 
+                        ON POS.CUSTOMER_GUID = LOST_POINT.CUSTOMER AND POS.GUID = LOST_POINT.DOC
+                    LEFT JOIN
+                        AUDIT_LOG ON POS.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POS'
+                    WHERE
+                        ISNULL(AUDIT_LOG.STATUS, 0) = 0
+                        AND POS.STATUS = 1
+                        AND POS.CUSTOMER_CODE <> ''
+                        AND AUDIT_LOG.DOC IS NULL `
         }
         
         let posData = (await core.instance.sql.execute(posQuery)).result.recordset;
@@ -288,24 +304,34 @@ class fumaWebApi
         let sendData = [];
         let customerQuery = 
         {
-            query : `SELECT * FROM (SELECT
-                    MAX(NAME) AS name,
-                    MAX(LAST_NAME) AS surname,
-                    LOWER(MAX(EMAIL)) AS email,
-                    MAX(PHONE1) AS mobilePhone,
-                    MAX(GUID) AS userTransferId,
-                    MAX(CODE) AS cardId,
-                    MAX(GUID) AS cardTransferId,
-                    MAX(CUSTOMER_POINT) AS point
-                    FROM FUMA_VW_03
-                    WHERE 
-                    CODE <> ''
-                    GROUP BY CODE) AS tbl
-                    LEFT OUTER JOIN AUDIT_LOG ON
-                    tbl.userTransferId = AUDIT_LOG.DOC AND
-                    AUDIT_LOG.TYPE = 'USER'
+            query : `WITH FumaGrouped AS (
+                        SELECT
+                            MAX(FUMA.NAME) AS name,
+                            MAX(FUMA.LAST_NAME) AS surname,
+                            LOWER(MAX(FUMA.EMAIL)) AS email,
+                            MAX(FUMA.PHONE1) AS mobilePhone,
+                            MAX(FUMA.GUID) AS userTransferId,
+                            MAX(FUMA.CODE) AS cardId,
+                            MAX(FUMA.GUID) AS cardTransferId,
+                            MAX(FUMA.CUSTOMER_POINT) AS point
+                        FROM
+                            FUMA_VW_03 AS FUMA
+                        WHERE
+                            FUMA.CODE <> ''
+                        GROUP BY
+                            FUMA.CODE
+                    )
+                    SELECT
+                        FumaGrouped.*,
+                        ISNULL(AUDIT_LOG.STATUS, 0) AS STATUS
+                    FROM
+                        FumaGrouped
+                    LEFT JOIN
+                        AUDIT_LOG ON FumaGrouped.userTransferId = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'USER'
                     WHERE
-                    ISNULL(AUDIT_LOG.STATUS,0) = 0 `,
+                        ISNULL(AUDIT_LOG.STATUS, 0) = 0
+                        AND AUDIT_LOG.DOC IS NULL
+                    `,
         }
         
         let customerData = (await core.instance.sql.execute(customerQuery)).result.recordset;
@@ -340,22 +366,26 @@ class fumaWebApi
         let pointQuery = 
         {
             query : `SELECT
-                    POINT.DOC AS orderId,
-                    POINT.DESCRIPTION AS description,
-                    POINT.LDATE AS documentDate,
-                    POINT.TYPE AS type,
-                    POINT.POINT AS point,
-                    POINT.GUID AS transferId,
-                    (SELECT TOP 1 GUID FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER) AS cardTransferId,
-                    ISNULL((SELECT TOP 1 CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER),'') AS cardId,
-                    ISNULL(AUDIT_LOG.STATUS,0) AS STATUS 
-                    FROM CUSTOMER_POINT AS POINT 
-                    LEFT OUTER JOIN AUDIT_LOG ON
-                    POINT.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POINT'
+                        POINT.DOC AS orderId,
+                        POINT.DESCRIPTION AS description,
+                        POINT.LDATE AS documentDate,
+                        POINT.TYPE AS type,
+                        POINT.POINT AS point,
+                        POINT.GUID AS transferId,
+                        CUST.GUID AS cardTransferId,
+                        ISNULL(CUST.CODE, '') AS cardId,
+                        ISNULL(AUDIT_LOG.STATUS, 0) AS STATUS
+                    FROM
+                        CUSTOMER_POINT AS POINT
+                    LEFT JOIN
+                        CUSTOMER_VW_01 AS CUST ON POINT.CUSTOMER = CUST.GUID
+                    LEFT JOIN
+                        AUDIT_LOG ON POINT.GUID = AUDIT_LOG.DOC AND AUDIT_LOG.TYPE = 'POINT'
                     WHERE
-                    (SELECT TOP 1 CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = POINT.CUSTOMER) != '' AND 
-                    ISNULL(AUDIT_LOG.STATUS,0) = 0 AND 
-                    POINT.DELETED = 0 `,
+                        CUST.CODE IS NOT NULL AND
+                        ISNULL(AUDIT_LOG.STATUS, 0) = 0 AND
+                        POINT.DELETED = 0 AND
+                        AUDIT_LOG.DOC IS NULL;`,
         };
         
         let pointData = (await core.instance.sql.execute(pointQuery)).result.recordset;

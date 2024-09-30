@@ -496,6 +496,71 @@ const ftr_02_008 =
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
     },
+    msgNewPrice : 
+    {
+        title: "Dikkat",
+        btn01: "Hiç Birini Güncelleme",
+        btn02: "Seçilen Fiyatları Güncelle",
+        msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
+    },
+    msgNewPriceDate : 
+    {
+        title: "Dikkat",
+        btn01: "Hiç Birini Güncelleme",
+        btn02: "Seçilen Fiyatları Güncelle",
+        msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+    },
+    grdNewPrice: 
+    {
+        clmCode: "Kodu",
+        clmName: "Adı",
+        clmPrice: "Eski T. Fiyat",
+        clmPrice2: "Yeni Fiyat",
+        clmSalePrice :"Satış Fiyatı", 
+        clmMargin : "Brüt Marj",
+        clmCostPrice : "Maliyet Fiyatı",
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
+    },
+    grdNewPriceDate: 
+    {
+        clmCode: "Kodu",
+        clmName: "Adı",
+        clmPrice: "Eski T. Fiyat",
+        clmPrice2: "Yeni Fiyat",
+        clmSalePrice :"Satış Fiyatı", 
+        clmMargin : "Brüt Marj",
+        clmCostPrice : "Maliyet Fiyatı",
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
+    },
+    msgCompulsoryCustomer:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Seçilen Ürün Müşteriye Tanımlı Değil !"
+    },
+    msgNewVat : 
+    {
+        title: "Dikkat",
+        btn01: "Hiç Birini Güncelleme",
+        btn02: "Seçilen Oranları Güncelle",
+        msg: "Fatura ile Sistemde Farklı KDV oranları mevcut.. "
+    },
+    grdNewVat: 
+    {
+        clmCode: "Kodu",
+        clmName: "Adı",
+        clmVat: "Sistemdeki KDV",
+        clmVat2: "Yeni KDV",
+    },
+    msgPriceDateUpdate :
+    {
+        msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        title : "Dikkat"
+    },
 }
 
 export default ftr_02_008

@@ -11,6 +11,7 @@ import NbLabel from "../../../core/react/bootstrap/label.js";
 import posDoc from '../../pages/posDoc.js';
 import { datatable } from "../../../core/core.js";
 import NdDialog,{ dialog } from "../../../core/react/devex/dialog.js";
+import NbPopNumber from "../../tools/popnumber.js";
 
 import {prm} from './meta/prm.js'
 import {acs} from './meta/acs.js'
@@ -34,6 +35,7 @@ App.prototype.loadPos = async function()
     
     this.acsObj.meta = this.acsObj.meta.concat(acs)
     this.prmObj.meta = this.prmObj.meta.concat(prm)
+
     return orgLoadPos.call(this)
 }
 posDoc.prototype.init = function() 
@@ -43,7 +45,8 @@ posDoc.prototype.init = function()
 posDoc.prototype.componentWillMount = function() 
 {
     this.state.showPage = 'table'
-
+    this.state.restTableGrp = []
+    
     if(typeof orgComponentWillMount != 'undefined')
     {
         orgComponentWillMount.call(this)
@@ -85,6 +88,7 @@ posDoc.prototype.render = function()
     let originalRenderOutput = orgRender.call(this);
     let modifiedChildren = addChildToElementWithId(originalRenderOutput.props.children,'frmBtnGrp',(renderTables.bind(this))());
     modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderDiscount.bind(this))());
+    modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderPaySplit.bind(this))());
     
     return React.cloneElement(originalRenderOutput, {}, ...modifiedChildren);
 }
@@ -109,14 +113,136 @@ function addChildToElementWithId(children, id, newChild)
         return child;
     });
 }
-async function getTables()
+async function getTables(pGrp)
 {
     this.restTableView.items.selectCmd = 
     {
-        query : "SELECT *,ISNULL((SELECT SUM(TOTAL) FROM REST_ORDER_VW_01 WHERE ORDER_COUNT > 0 AND ZONE = REST_TABLE_VW_01.GUID),0) AS TOTAL FROM REST_TABLE_VW_01 ORDER BY CODE ASC"
+        query : `SELECT *,ISNULL((SELECT SUM(TOTAL) FROM REST_ORDER_VW_01 WHERE ORDER_COUNT > 0 AND ZONE = REST_TABLE_VW_01.GUID),0) AS TOTAL 
+                 FROM REST_TABLE_VW_01 WHERE GRP = '${typeof pGrp == 'undefined' ? '' : pGrp}' OR '${typeof pGrp == 'undefined' ? '' : pGrp}' = '' ORDER BY CODE ASC`
     }
     await this.restTableView.items.refresh()
     this.restTableView.updateState()
+}
+async function getGrp() 
+{
+    let tmpTbl = new datatable()
+    tmpTbl.selectCmd = 
+    {
+        query : "SELECT GRP FROM REST_TABLE_VW_01 GROUP BY GRP"
+    }
+    await tmpTbl.refresh()
+    this.setState({restTableGrp:tmpTbl.toArray()})
+}
+function renderPaySplit()
+{
+    return (
+        <NdLayoutItem key={"btnRestPaySplitLy"} id={"btnRestPaySplitLy"} parent={this} data-grid={{x:45,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:30}}
+        access={this.acsObj.filter({ELEMENT:'btnRestPaySplitLy',USERS:this.user.CODE})}>
+            <div>
+                <NbButton id={"btnRestPaySplit"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",border:"#ff9f43"}}
+                onClick={async()=>
+                {
+                    if(this.payRest.value == 0)
+                    {
+                        return
+                    }
+
+                    let tmpResult = await this.popRestNP.show(this.lang.t("popRestNP.title"),1,undefined,this.lang.t("popRestNP.msg") + Number(this.payRest.value).round(2).toFixed(2) + Number.money.sign)
+                    if(typeof tmpResult != 'undefined' && tmpResult != '')
+                    {
+                        let tmpPay = Number(this.payRest.value / tmpResult).round(2)
+                        let tmpPayChange = 0
+                        let tmpPayType = 0
+
+                        this.lblMsgRestPaymentType.value = this.lang.t("msgRestPaymentType.msg") + Number(tmpPay).round(2).toFixed(2) + Number.money.sign
+                        let tmpResult2 = await this.msgRestPaymentType.show()
+                     
+                        if(tmpResult2 == "btn01")
+                        {
+                            tmpPayType = 0
+                            let tmpResult3 = await this.popRestPayment.show(this.lang.t("popRestPayment.title"),tmpPay,undefined,this.lang.t("popRestPayment.msg") + Number(tmpPay).round(2).toFixed(2) + Number.money.sign)
+                            if(typeof tmpResult3 != 'undefined' && tmpResult3 != '')
+                            {
+                                tmpPayChange = tmpResult3 - tmpPay
+                                if(tmpPayChange > 0)
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgRestMoneyChange',
+                                        showTitle:true,
+                                        title:this.lang.t("msgRestMoneyChange.title"),
+                                        showCloseButton:true,
+                                        width:'500px',
+                                        height:'250px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgRestMoneyChange.btn01"),location:'after'}],
+                                        content:(<div><h3 className="text-danger text-center">{Number(tmpPayChange).toFixed(2) + " " + Number.money.sign}</h3><h3 className="text-primary text-center">{this.lang.t("msgRestMoneyChange.msg")}</h3></div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                }
+                                
+                                this.payAdd(tmpPayType,tmpPay)
+                            }
+                        }
+                        else if(tmpResult2 == "btn02")
+                        {
+                            tmpPayType = 1
+                            this.payAdd(tmpPayType,tmpPay)
+                        }
+                    }
+                }}>
+                    <i className="text-white fa-solid fa-comments-dollar" style={{fontSize: "24px"}} />
+                </NbButton>
+            </div>
+            {/* Rest NP Popup */}
+            <div>
+                <NbPopNumber id={"popRestNP"} parent={this}/>
+            </div>
+            {/* Rest Payment Type Popup */}
+            <div>
+                <NdDialog id={"msgRestPaymentType"} container={"#root"} parent={this}
+                position={{of:'#root'}} 
+                showTitle={true} 
+                title={this.lang.t("msgRestPaymentType.title")} 
+                showCloseButton={false}
+                width={"500px"}
+                height={"200px"}
+                deferRendering={false}
+                >
+                    <div className="row">
+                        <div className="col-12">
+                            <h4 className="text-center"><NbLabel id={"lblMsgRestPaymentType"} parent={this} value={""}/></h4>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-6 py-2">
+                            <NbButton id={"btnMsgRestPaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this.msgRestPaymentType._onClick("btn01")
+                            }}>
+                                <div className="row"><div className="col-12">{"ESC"}</div></div>
+                                <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-money-bill"} style={{fontSize: "24px"}}/></div></div>
+                            </NbButton>
+                        </div>
+                        <div className="col-6 py-2">
+                            <NbButton id={"btnMsgRestPaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this.msgRestPaymentType._onClick("btn02")
+                            }}>
+                                <div className="row"><div className="col-12">{"CB"}</div></div>
+                                <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-credit-card"} style={{fontSize: "24px"}}/></div></div>                                    
+                            </NbButton>
+                        </div>
+                    </div>
+                </NdDialog>
+            </div>
+            {/* Rest Payment Popup */}
+            <div>
+                <NbPopNumber id={"popRestPayment"} parent={this}/>
+            </div>
+        </NdLayoutItem>
+    )
 }
 function renderDiscount()
 {
@@ -165,6 +291,8 @@ function renderDiscount()
 function renderTables()
 {
     getTables = getTables.bind(this)
+    getGrp = getGrp.bind(this)
+
     return (
         <NdLayoutItem key={"btnRestTablesLy"} id={"btnRestTablesLy"} parent={this} data-grid={{x:40,y:90,h:32,w:30,minH:16,maxH:32,minW:3,maxW:30}}
         access={this.acsObj.filter({ELEMENT:'btnRestTablesLy',USERS:this.user.CODE})}>
@@ -175,6 +303,7 @@ function renderTables()
                     await this.popRestTable.show()
                     this.setState({showPage:"table"})
                     getTables()
+                    getGrp()
                 }}>
                     <i className="text-white fa-solid fa-utensils" style={{fontSize: "24px"}} />
                 </NbButton>
@@ -182,23 +311,52 @@ function renderTables()
             <div>
                 <NbPopUp id={"popRestTable"} parent={this} title={""} fullscreen={true} header={false}>
                     <div className="row" style={{visibility:(this.state.showPage == 'table' ? "visible" : "hidden"),display:(this.state.showPage == 'table' ? "flex" : "none")}}>
-                        <div className="col-1 px-1 pt-1 pb-1 offset-10">
-                            <NbButton id={"btnRefreshRestTable"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
-                            onClick={()=>
-                            {
-                                getTables()
-                            }}>
-                                <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "24px"}} />
-                            </NbButton>
+                        <div className="col-10 pt-1 pb-1 px-1">
+                            <div className="row">
+                                {(()=>
+                                {
+                                    console.log(this.state.restTableGrp)
+                                    let tmpGrpArr = []
+                                    for (let i = 0; i < this.state.restTableGrp.length; i++) 
+                                    {
+                                        tmpGrpArr.push(
+                                        <div key={"btnRestGrp" + i} className="col">
+                                            <NbButton id={"btnRestGrp" + i} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                            onClick={()=>
+                                            {
+                                                getTables(this.state.restTableGrp[i].GRP)
+                                            }}>
+                                                <div style={{fontSize:'16px',fontWeight:'bold'}}>{this.state.restTableGrp[i].GRP}</div>
+                                            </NbButton>
+                                        </div>
+                                        )
+                                    }
+                                    return tmpGrpArr
+                                })()}
+                                
+                            </div>
                         </div>
-                        <div className="col-1 px-1 pt-1 pb-1">
-                            <NbButton id={"btnCloseRestTable"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
-                            onClick={()=>
-                            {
-                                this.popRestTable.hide()
-                            }}>
-                                <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
-                            </NbButton>
+                        <div className="col-2 pt-1 pb-1">
+                            <div className="row">
+                                <div className="col-6">
+                                    <NbButton id={"btnRefreshRestTable"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                    onClick={()=>
+                                    {
+                                        getTables()
+                                    }}>
+                                        <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                                <div className="col-6">
+                                    <NbButton id={"btnCloseRestTable"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",padding:"5px"}}
+                                    onClick={()=>
+                                    {
+                                        this.popRestTable.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="row pt-2" style={{visibility:(this.state.showPage == 'table' ? "visible" : "hidden"),display:(this.state.showPage == 'table' ? "flex" : "none")}}>
@@ -228,7 +386,6 @@ function renderTables()
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTableEmptyAlert.msg")}</div>)
                                 }
                                 await dialog(tmpConfObj);
-
                             }
                         }}
                         onPrintClick={async(e)=>
@@ -382,11 +539,28 @@ function renderTables()
                                         let tmpConfObj =
                                         {
                                             id:'msgConvertPosAddition',showTitle:true,title:this.lang.t("msgConvertPosAddition.title"),showCloseButton:true,width:'500px',height:'240px',
-                                            button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],                                            
+                                            button:[{id:"btn01",caption:this.lang.t("msgConvertPosAddition.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgConvertPosAddition.btn02"),location:'after'}],
                                         }
 
                                         let tmpCount = this.grdRestTableItem.data.datatable.length - this.grdRestTableItem.getSelectedData().length
                                         
+                                        if(this.posObj.posSale.dt().length > 0)
+                                        {
+                                            let tmpConfObj1 =
+                                            {
+                                                id:'msgRestPosSaleAdd',showTitle:true,title:this.lang.t("msgRestPosSaleAdd.title"),showCloseButton:true,width:'500px',height:'240px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgRestPosSaleAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestPosSaleAdd.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestPosSaleAdd.msg")}</div>)
+                                            }
+
+                                            let tmpMsgResult1 = await dialog(tmpConfObj1);
+
+                                            if(tmpMsgResult1 == "btn02")
+                                            {
+                                                return
+                                            }
+                                        }
+
                                         if(tmpCount > 0)
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConvertPosAddition.msg",{ count: tmpCount })}</div>)

@@ -12,8 +12,9 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
-    btnBarcodeEntry: "Entrée du code-barres",   
+    btnBarcodeEntry: "Entrée Produit",   
     btnProcessLines: "Traiter les lignes",   
+    btnOrderSelect : "Sélection",
     btnNewDoc: "Nouveau document",   
     btnDocDelete: "Supprimer le document",   
     btnLineDisc: "Remise de ligne",       
@@ -57,15 +58,15 @@ export const langFr =
     popCustomer : 
     {
         title : "Choix du client", 
-        clmCode :  "Mot de passe",
-        clmTitle : "Catégorie",
+        clmCode : "Code",
+        clmTitle : "Nom",
         clmTypeName : "Type",
         clmGenusName : "Genre"
     },
     popItem : 
     {
         title : "Choix du stock",
-        clmCode : "Mot de passe",
+        clmCode : "Code",
         clmName : "Nom",
     },
     popDiscount:
@@ -925,5 +926,74 @@ export const langFr =
             clmInputName : "Nom actuel",
             clmInputCode : "Code actuel",
         },
+    },
+    kar_01: // "Appariement de Commande"
+    {
+        lblRef: "Série - Numéro :",
+        lblDepot: "Dépôt :",
+        lblCustomerCode: "Code Client :",
+        lblCustomerName: "Nom du Client :",
+        lblDate: "Date :",
+        lblDepotQuantity: "Quantité en Dépôt :",
+        lblUnit: "Unité :",
+        lblQuantity: "Quantité :",
+        lblPrice: "Prix :",
+        lblAmount: "Montant :",
+        lblDiscount: "Remise de Ligne :",
+        lblDocDiscount: "Remise de Document :",
+        lblTotalHt: "Sous-total :",
+        lblVat: "TVA :",
+        lblSumAmount: "Montant Total :",
+        lblGenAmount: "Total Général :",
+        lblAdd: "Ajouter",
+        msgAlert: 
+        {
+            btn01: "D'accord",
+            title: "Attention",
+            msgDepot: "Veuillez sélectionner un dépôt !",
+            msgCustomer: "Veuillez sélectionner un client !",
+            msgProcess: "Aucun produit n'a encore été saisi !",
+            msgBarcodeNotFound: "Code-barres introuvable !",
+            msgBarcodeCheck: "Veuillez scanner le code-barres !",
+            msgLimitQuantityCheck: "La quantité ne peut pas dépasser 9 999 !",
+            msgQuantityCheck: "Veuillez vérifier la quantité !",
+            msgRowNotDelete: "Cette ligne a été facturée et ne peut être supprimée !",
+            msgRowNotUpdate: "Cette ligne a été facturée et la quantité ne peut être modifiée !",
+            msgDiscount: "La remise ne peut pas être supérieure au montant !",
+            msgNotSave: "L'enregistrement a échoué",
+            msgOrderSelected: "Aucune nouvelle commande ne peut être sélectionnée avant de passer au nouveau document",
+            msgOrderNotFound: "Commande non trouvée."
+        },
+        grdList: 
+        {
+            clmItemName: "Nom",
+            clmQuantity: "Quantité",
+            clmPrice: "Prix",
+            clmAmount: "Montant",
+            clmDiscount: "Remise",
+            clmDiscountRate: "Remise %",
+            clmVat: "TVA",
+            clmTotal: "Montant"
+        },
+        popDoc: 
+        {
+            title: "Sélection de Document",
+            clmRef: "Réf",
+            clmRefNo: "Numéro de Réf",
+            clmDate: "Date",
+            clmInputName: "Nom du Client",
+            clmInputCode: "Code Client",
+        },
+        grdOrderDetail: 
+        {
+            clmItemName: "Nom",
+            clmQuantity: "Quantité en Attente",
+        },
+        lblPendQuantity: "Quantité en Attente",
+        lblTotalQuantity: "Quantité Totale",
+        lblList: "Lister",
+        lblSelect: "Sélectionner",
+        lblOrderRef: "Code-Barres de Commande",
+        lblOrderList: "Liste des Commandes"
     },
 }

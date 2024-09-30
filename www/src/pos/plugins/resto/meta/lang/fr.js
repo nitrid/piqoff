@@ -32,6 +32,34 @@ const lang =
         btn01: "Oui",
         btn02: "Non",
         msg: "Êtes-vous sûr de vouloir offrir cet article gratuitement?",
+    },
+    popRestNP:
+    {
+        title: "Nombre de personnes",
+        msg: "Montant total : "
+    },
+    msgRestPaymentType:
+    {
+        title: "Choisissez le type de paiement",
+        msg: "Montant à recevoir : "
+    },
+    popRestPayment:
+    {
+        title: "Entrez le paiement",
+        msg: "Montant à payer : "
+    },
+    msgRestMoneyChange:
+    {
+        title: "Information",
+        msg: "Rendez la monnaie.",
+        btn01: "D'accord"
+    },
+    msgRestPosSaleAdd: 
+    {
+        title: "Avertissement",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Il y a des lignes déjà ajoutées dans l'écran de vente. Êtes-vous sûr de vouloir continuer ?"
     }
 }
 export default lang

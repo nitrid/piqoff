@@ -17,6 +17,7 @@ export class restOrderCls
             ZONE_NAME : '',
             REF : 0,
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            PERSON : 1,
             FAMOUNT : 0,
             AMOUNT : 0,
             DISCOUNT : 0,
@@ -49,14 +50,15 @@ export class restOrderCls
                     "@ZONE = @PZONE, " +
                     "@REF = @PREF, " +
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@PERSON = @PPERSON, " + 
                     "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL ",
-            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PFAMOUNT:float','PAMOUNT:float',
+            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
                      'PDISCOUNT:float','PVAT:float','PTOTAL:float'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL']
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -66,15 +68,16 @@ export class restOrderCls
                     "@ZONE = @PZONE, " +
                     "@REF = @PREF, " +
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@PERSON = @PPERSON, " + 
                     "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " +
                     "@DELETED = @PDELETED ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PFAMOUNT:float','PAMOUNT:float',
-                        'PDISCOUNT:float','PVAT:float','PTOTAL:float','PDELETED:bit'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
+                     'PDISCOUNT:float','PVAT:float','PTOTAL:float','PDELETED:bit'],
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','DELETED']
         } 
         tmpDt.deleteCmd = 
         {
@@ -188,7 +191,8 @@ export class restOrderDetailCls
             WAIT_STATUS : 0,
             WAITING : false,
             POS : '00000000-0000-0000-0000-000000000000',
-            POS_SALE : '00000000-0000-0000-0000-000000000000'
+            POS_SALE : '00000000-0000-0000-0000-000000000000',
+            PRINTED : 0
         }
         this._initDs();
     }
@@ -223,12 +227,13 @@ export class restOrderDetailCls
                     "@STATUS = @PSTATUS, " +
                     "@WAIT_STATUS = @PWAIT_STATUS, " +
                     "@POS = @PPOS, " + 
-                    "@POS_SALE = @PPOS_SALE ",
+                    "@POS_SALE = @PPOS_SALE, " +
+                    "@PRINTED = @PPRINTED ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50'],
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50','PPRINTED:int'],
             dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
-                       'STATUS','WAIT_STATUS','POS','POS_SALE']
+                       'STATUS','WAIT_STATUS','POS','POS_SALE','PRINTED']
         } 
         tmpDt.updateCmd = 
         {
@@ -251,12 +256,13 @@ export class restOrderDetailCls
                     "@STATUS = @PSTATUS, " +
                     "@WAIT_STATUS = @PWAIT_STATUS, " +
                     "@POS = @PPOS, " + 
-                    "@POS_SALE = @PPOS_SALE ",
+                    "@POS_SALE = @PPOS_SALE, " + 
+                    "@PRINTED = @PPRINTED ",
             param : ['PGUID:string|50','PCUSER:string|25','PREST:string|50','PLINE_NO:int','PITEM:string|50','PITEM_NAME:string|250','PQUANTITY:float',
                      'PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PPROPERTY:string|max','PDESCRIPTION:string|max',
-                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50'],
+                     'PSTATUS:int','PWAIT_STATUS:int','PPOS:string|50','PPOS_SALE:string|50','PPRINTED:int'],
             dataprm : ['GUID','CUSER','REST_GUID','LINE_NO','ITEM','ITEM_NAME','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','PROPERTY','DESCRIPTION',
-                       'STATUS','WAIT_STATUS','POS','POS_SALE']
+                       'STATUS','WAIT_STATUS','POS','POS_SALE','PRINTED']
         } 
         tmpDt.deleteCmd = 
         {
@@ -348,6 +354,7 @@ export class restTableCls
             LDATE : moment(new Date()).utcOffset(0, true),
             CODE : '',
             NAME : '',
+            GRP : '',
             DELETED : 0
         }
         this._initDs();
@@ -368,9 +375,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.updateCmd = 
         {
@@ -378,9 +386,10 @@ export class restTableCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@CODE = @PCODE, " +
-                    "@NAME = @PNAME ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME']
+                    "@NAME = @PNAME, " +
+                    "@GRP = @PGRP ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|50','PGRP:string|25'],
+            dataprm : ['GUID','CUSER','CODE','NAME','GRP']
         } 
         tmpDt.deleteCmd = 
         {

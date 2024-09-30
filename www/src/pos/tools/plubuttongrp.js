@@ -542,7 +542,7 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                            query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
                             param : ['VAL:string|50']
                         },
                         sql:this.props.parent.core.sql

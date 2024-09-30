@@ -28,6 +28,7 @@ const sip_01_002 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
         clmOutputName :"Depo",
+        clmMainGroup : "Müşteri Grubu"
     },
     popDesign : 
     {
@@ -50,6 +51,8 @@ const sip_01_002 =
     },
     btnView : "Görüntüle",
     btnMailsend : "Mail Gönder",
+    cmbMainGrp : "Müşteri Grubu"
+    
 }
 
 export default sip_01_002

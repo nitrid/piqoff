@@ -73,6 +73,12 @@ export const langEs =
         msg: "¡El código de barras escaneado no se encuentra en el sistema!",
         btn01: "Aceptar",
     },
+    msgBarcodeBalanceNotFound : 
+    {
+        title : "Advertencia",
+        msg : "¡Este código de barras ya ha sido escaneado!",
+        btn01 : "Aceptar",
+    },
     msgSpecialTicketAlert:
     {
         title: "Advertencia",

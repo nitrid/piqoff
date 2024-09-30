@@ -6,14 +6,13 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Editing,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -27,10 +26,13 @@ export default class salesOrdList extends React.PureComponent
         super(props)
 
         this.printGuid = ''
-        this.state = {columns:[],summary:[]}
+        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.state = {columns:[],summary:[],selecedItem:'',textColor:'green'}
         this.core = App.instance.core;
         this.orderList = new datatable()
+        this.orderDetail = new datatable()
         this._btnGetClick = this._btnGetClick.bind(this)
+        this._btnApprove = this._btnApprove.bind(this)
     }
     componentDidMount()
     {
@@ -41,146 +43,218 @@ export default class salesOrdList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value = moment(new Date(0)).format("YYYY-MM-DD");
-        this.dtLast.value = moment(new Date(0)).format("YYYY-MM-DD");
+        
     }
     async _btnGetClick()
     {
         this.orderList = new datatable()
-        let tmpXDt = new datatable()
         this.orderList.selectCmd = 
         {
-            query : `SELECT 
-                    ORDERS.GUID,
-                    ORDERS.DOC_GUID,
+            query : `SELECT *,DEPOT_QUANTITY + COMING_QUANTITY AS TOTAL_QUANTITY,CASE WHEN APPROVED_QUANTITY = 0 THEN QUANTITY ELSE APPROVED_QUANTITY END AS APPROVED_QYT FROM (SELECT 
                     ORDERS.DOC_DATE,
-                    ORDERS.REF + '-' + CONVERT(NVARCHAR(20),ORDERS.REF_NO) AS REF,
-                    ORDERS.INPUT,
-                    ORDERS.INPUT_CODE,
-                    ORDERS.INPUT_NAME,
-                    ORDERS.OUTPUT,
-                    ORDERS.OUTPUT_NAME,
                     ORDERS.ITEM,
                     ORDERS.ITEM_CODE,
                     ORDERS.ITEM_NAME,
-                    CASE WHEN UNIT.GUID IS NULL THEN ORDERS.UNIT ELSE UNIT.GUID END AS UNIT,
-                    CASE WHEN UNIT.NAME IS NULL THEN ORDERS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, 
-                    CASE WHEN UNIT.SYMBOL IS NULL THEN ORDERS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
-                    CASE WHEN UNIT.FACTOR IS NULL THEN ORDERS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
-                    CASE WHEN UNIT.FACTOR IS NULL THEN ORDERS.PEND_QUANTITY ELSE ORDERS.PEND_QUANTITY / UNIT.FACTOR END AS PEND_QUANTITY 
+                    ORDERS.OUTPUT,
+                    ORDERS.OUTPUT_NAME,
+                    SUM(ORDERS.TOTALHT) AS TOTALHT,
+                    SUM(ORDERS.TOTAL) AS TOTAL,
+                    CASE WHEN UNIT.GUID IS NULL THEN MAIN_UNIT.GUID ELSE UNIT.GUID END AS UNIT,
+                    CASE WHEN UNIT.NAME IS NULL THEN MAIN_UNIT.NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                    CASE WHEN UNIT.SYMBOL IS NULL THEN MAIN_UNIT.SYMBOL ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                    CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                    CASE WHEN UNIT.FACTOR IS NULL THEN SUM(ORDERS.QUANTITY) ELSE SUM(ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
+                    CASE WHEN UNIT.FACTOR IS NULL THEN SUM(ORDERS.APPROVED_QUANTITY) ELSE SUM(ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
+                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                    (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
                     FROM DOC_ORDERS_VW_01 AS ORDERS
                     LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
                     ORDERS.ITEM = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '` + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + `'
-                    WHERE ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE AND ORDERS.TYPE = 1 AND ORDERS.OUTPUT = @DEPOT AND ORDERS.PEND_QUANTITY > 0
-                    ORDER BY ORDERS.DOC_DATE ASC`,
+                    LEFT OUTER JOIN ITEM_UNIT_VW_01 AS MAIN_UNIT ON
+                    ORDERS.ITEM = MAIN_UNIT.ITEM_GUID AND MAIN_UNIT.TYPE = 0 
+                    WHERE ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE AND ORDERS.TYPE =  1 AND  ORDERS.PEND_QUANTITY > 0 AND OUTPUT = @DEPOT
+                    GROUP BY ORDERS.DOC_DATE,ORDERS.ITEM,ORDERS.ITEM_CODE,ORDERS.ITEM_NAME,ORDERS.UNIT_NAME,UNIT.GUID,UNIT.NAME, UNIT.SYMBOL,UNIT.FACTOR,
+                    MAIN_UNIT.GUID,MAIN_UNIT.NAME, MAIN_UNIT.FACTOR, MAIN_UNIT.SYMBOL,ORDERS.OUTPUT,ORDERS.OUTPUT_NAME) AS TMP`,
             param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50'],
-            value : [this.dtFirst.value,this.dtLast.value,this.cmbDepot.value]
+            value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value]
+        }
+        App.instance.setState({isExecute:true})
+        await this.orderList.refresh()
+        await this.grdSlsOrdList.dataRefresh({source:this.orderList})
+        App.instance.setState({isExecute:false})
+
+        
+    }
+    async _btnApprove()
+    {
+        let tmpConfOb1 =
+        {
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
         }
         
-        await this.orderList.refresh()
-
-        let tmpEmpty = {GUID:'',DOC_GUID:'',DOC_DATE:'',REF:'',INPUT:'',INPUT_NAME:''}
-
-        for (let i = 0; i < this.orderList.length; i++) 
+        let pResult = await dialog(tmpConfOb1);
+        if(pResult == 'btn02')
         {
-            if (!tmpEmpty.hasOwnProperty(this.orderList[i].ITEM)) 
-            {
-                tmpEmpty[this.orderList[i].ITEM] = 0
-            }
+            return
         }
-        for (let i = 0; i < this.orderList.length; i++) 
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
-            if(tmpXDt.where({INPUT:this.orderList[i].INPUT}).length == 0)
+            let tmpQuery = 
             {
-                let tmpDataRow = {...tmpEmpty}
-                tmpDataRow.GUID = this.orderList[i].GUID,
-                tmpDataRow.DOC_GUID = this.orderList[i].DOC_GUID,
-                tmpDataRow.DOC_DATE = this.orderList[i].DOC_DATE,
-                tmpDataRow.REF = this.orderList[i].REF,
-                tmpDataRow.INPUT = this.orderList[i].INPUT,
-                tmpDataRow.INPUT_NAME = this.orderList[i].INPUT_NAME,
-                tmpDataRow[this.orderList[i].ITEM] = this.orderList[i].PEND_QUANTITY
-
-                tmpXDt.push(tmpDataRow)
+                query : `SELECT *,CASE WHEN APPROVED_QUANTITY = 0 THEN QUANTITY ELSE APPROVED_QUANTITY END AS APPROVED_QYT FROM (SELECT 
+                ORDERS.DOC_DATE,
+                ORDERS.GUID,
+                ORDERS.ITEM,
+                ORDERS.ITEM_CODE,
+                ORDERS.ITEM_NAME,
+                ORDERS.OUTPUT,
+                ORDERS.OUTPUT_NAME,
+                ORDERS.INPUT,
+                ORDERS.INPUT_CODE,
+                ORDERS.INPUT_NAME,
+                (ORDERS.TOTALHT) AS TOTALHT,
+                (ORDERS.TOTAL) AS TOTAL,
+                CASE WHEN UNIT.GUID IS NULL THEN MAIN_UNIT.GUID ELSE UNIT.GUID END AS UNIT,
+                CASE WHEN UNIT.NAME IS NULL THEN MAIN_UNIT.NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                CASE WHEN UNIT.SYMBOL IS NULL THEN MAIN_UNIT.SYMBOL ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.QUANTITY) ELSE (ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
+                CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.APPROVED_QUANTITY) ELSE (ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
+                (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
+                FROM DOC_ORDERS_VW_01 AS ORDERS
+                LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
+                ORDERS.ITEM = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '` + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + `'
+                LEFT OUTER JOIN ITEM_UNIT_VW_01 AS MAIN_UNIT ON
+                ORDERS.ITEM = MAIN_UNIT.ITEM_GUID AND MAIN_UNIT.TYPE = 0 
+                WHERE ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE AND ORDERS.TYPE =  1 AND  ORDERS.PEND_QUANTITY > 0 AND OUTPUT = @DEPOT AND ITEM = @ITEM
+                ) AS TMP`,
+                param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50','ITEM:string|50'],
+                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value,this.grdSlsOrdList.getSelectedData()[i].ITEM]
             }
-            else
+
+            let tmpOrderLines =  await this.core.sql.execute(tmpQuery) 
+
+            for (let x = 0; x < tmpOrderLines.result.recordset.length; x++) 
             {
-                let tmpMDt = tmpXDt.where({INPUT:this.orderList[i].INPUT})
-                tmpMDt[0][this.orderList[i].ITEM] = tmpMDt[0][this.orderList[i].ITEM] + this.orderList[i].PEND_QUANTITY
-            }
-        }
-
-        await this.grdSlsOrdList.dataRefresh({source:tmpXDt})
-
-        let tmpColumn = []
-        let tmpSummary = []
-
-        for (let i = 0; i < Object.keys(tmpEmpty).length; i++) 
-        {
-            if(Object.keys(tmpEmpty)[i].length >= 36)
-            {
-                let tmpCaption = this.orderList.where({ITEM:Object.keys(tmpEmpty)[i]}).length > 0 ? this.orderList.where({ITEM:Object.keys(tmpEmpty)[i]})[0].ITEM_NAME : Object.keys(tmpEmpty)[i]
-                tmpColumn.push(<Column key={Object.keys(tmpEmpty)[i]} dataField={Object.keys(tmpEmpty)[i]} caption={tmpCaption} visible={true} width={100} allowEditing={true}
-                headerCellRender={(e)=>
+                let tmpQuery = 
                 {
-                    return <div style={{whiteSpace:'normal',textAlign: 'center'}}>{tmpCaption}</div>
-                }}
-                cellRender={(e)=>
-                {
-                    return e.value + " / " + (this.orderList.where({ITEM:e.column.dataField}).length > 0 ? this.orderList.where({ITEM:e.column.dataField})[0].UNIT_SHORT : '')
-                }}
-                />)
-                tmpSummary.push(<TotalItem key={Object.keys(tmpEmpty)[i]} column={Object.keys(tmpEmpty)[i]} summaryType="sum" 
-                customizeText={(e) => 
-                {
-                    return e.value + '/' + (this.orderList.where({ITEM:Object.keys(tmpEmpty)[i]}).length > 0 ? this.orderList.where({ITEM:Object.keys(tmpEmpty)[i]})[0].UNIT_SHORT : '')
+                    query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@APPROVED_QUANTITY = @PAPPROVED_QUANTITY, " + 
+                            "@GUID = @PGUID ", 
+                    param : ['PCUSER:string|50','PAPPROVED_QUANTITY:float','PGUID:string|50'],
+                    value : [this.user.CODE,tmpOrderLines.result.recordset[x].APPROVED_QYT * tmpOrderLines.result.recordset[x].UNIT_FACTOR,tmpOrderLines.result.recordset[x].GUID]
                 }
-                }/>)
-
-            }
-            else if(Object.keys(tmpEmpty)[i] == 'INPUT_NAME')
-            {
-                tmpColumn.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} allowEditing={false} visible={true} width={300}/>)
+                await this.core.sql.execute(tmpQuery) 
             }
         }
-        this.setState({columns:tmpColumn,summary:tmpSummary})
+        App.instance.setState({isExecute:false})
+
+        let tmpConfObj =
+        {
+            id:'msgSaveSuccess',showTitle:true,title:this.t("msgSaveSuccess.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSaveSuccess.btn01"),location:'before'},{id:"btn01",caption:this.t("msgSaveSuccess.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveSuccess.msg")}</div>)
+        }
+        
+        let tmpdialog = await dialog(tmpConfObj);  
+        if(tmpdialog == 'btn01')
+        {
+            let tmpOrderQuery = 
+            {
+                query: "SELECT DOC_GUID FROM DOC_ORDERS_VW_01 WHERE ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND OUTPUT = @DEPOT GROUP BY DOC_GUID HAVING SUM(APPROVED_QUANTITY) > 0 " ,
+                param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50'],
+                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value]
+            }
+            let tmpOrderData = await this.core.sql.execute(tmpOrderQuery) 
+            
+            if(tmpOrderData.result.recordset.length > 0)
+            {
+                for (let r = 0; r < tmpOrderData.result.recordset.length; r++) 
+                {
+                    let tmpPrintQuery = 
+                {
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value:  [tmpOrderData.result.recordset[r].DOC_GUID,this.prmObj.filter({ID:'printDesing',USERS:this.user.CODE}).getValue().value,'']
+                }
+                let tmpData = await this.core.sql.execute(tmpPrintQuery) 
+                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+                {
+                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+    
+                    mywindow.onload = function() 
+                    {
+                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                    } 
+                    // if(pResult.split('|')[0] != 'ERR')
+                    // {
+                    //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                    //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                    // }
+                });
+                }
+               
+            }
+        }
     }
-    async orderUpdate(pData,pQty)
+    async getOrderDetail(pData)
     {
-        return new Promise(async resolve =>
+        this.orderDetail = new datatable()
+        this.orderDetail.selectCmd = 
         {
-            let tmpDoc = new docCls()
-            await tmpDoc.load({GUID:pData.DOC_GUID});
-            let tmpItemOrder = tmpDoc.docOrders.dt().where({ITEM:pData.ITEM})
-    
-            if(tmpDoc.dt().length > 0 && tmpItemOrder.length > 0)
-            {
-                tmpItemOrder[0].QUANTITY = pQty * pData.UNIT_FACTOR
-                tmpItemOrder[0].TOTALHT = Number((parseFloat((tmpItemOrder[0].PRICE * tmpItemOrder[0].QUANTITY).toFixed(3)) - (parseFloat(tmpItemOrder[0].DISCOUNT)))).round(2)
-                tmpItemOrder[0].VAT = parseFloat(((((tmpItemOrder[0].TOTALHT) - (parseFloat(tmpItemOrder[0].DOC_DISCOUNT))) * (tmpItemOrder[0].VAT_RATE) / 100))).round(6);
-                tmpItemOrder[0].AMOUNT = parseFloat((tmpItemOrder[0].PRICE * tmpItemOrder[0].QUANTITY).toFixed(3)).round(2)
-                tmpItemOrder[0].TOTAL = Number(((tmpItemOrder[0].TOTALHT - tmpItemOrder[0].DOC_DISCOUNT) + tmpItemOrder[0].VAT)).round(2)
-    
-                let tmpVat = 0
-                for (let i = 0; i < tmpDoc.docOrders.dt().groupBy('VAT_RATE').length; i++) 
-                {
-                    tmpVat = tmpVat + parseFloat(tmpDoc.docOrders.dt().where({'VAT_RATE':tmpDoc.docOrders.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
-                }
-                tmpDoc.dt()[0].AMOUNT = tmpDoc.docOrders.dt().sum("AMOUNT",2)
-                tmpDoc.dt()[0].DISCOUNT = Number(parseFloat(tmpDoc.docOrders.dt().sum("AMOUNT",2)) - parseFloat(tmpDoc.docOrders.dt().sum("TOTALHT",2))).round(2)
-                tmpDoc.dt()[0].DOC_DISCOUNT_1 = tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_1",4)
-                tmpDoc.dt()[0].DOC_DISCOUNT_2 = tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_2",4)
-                tmpDoc.dt()[0].DOC_DISCOUNT_3 = tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_3",4)
-                tmpDoc.dt()[0].DOC_DISCOUNT = Number((parseFloat(tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(tmpDoc.docOrders.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
-                tmpDoc.dt()[0].VAT = Number(tmpVat).round(2)
-                tmpDoc.dt()[0].SUBTOTAL = parseFloat(tmpDoc.docOrders.dt().sum("TOTALHT",2))
-                tmpDoc.dt()[0].TOTALHT = parseFloat(parseFloat(tmpDoc.docOrders.dt().sum("TOTALHT",2)) - parseFloat(tmpDoc.docOrders.dt().sum("DOC_DISCOUNT",2))).round(2)
-                tmpDoc.dt()[0].TOTAL = Number((parseFloat(tmpDoc.dt()[0].TOTALHT)) + parseFloat(tmpDoc.dt()[0].VAT)).round(2)
-                
-                await tmpDoc.save()
-            }
-            resolve()
-        });
+            query : `SELECT *,CASE WHEN APPROVED_QUANTITY = 0 THEN QUANTITY ELSE APPROVED_QUANTITY END AS APPROVED_QYT FROM (SELECT 
+                    ORDERS.DOC_DATE,
+                    ORDERS.DOC_GUID,
+                    ORDERS.GUID,
+                    ORDERS.ITEM,
+                    ORDERS.ITEM_CODE,
+                    ORDERS.ITEM_NAME,
+                    ORDERS.OUTPUT,
+                    ORDERS.OUTPUT_NAME,
+                    ORDERS.INPUT,
+                    ORDERS.INPUT_CODE,
+                    ORDERS.INPUT_NAME,
+                    (ORDERS.TOTALHT) AS TOTALHT,
+                    (ORDERS.TOTAL) AS TOTAL,
+                    CASE WHEN UNIT.GUID IS NULL THEN MAIN_UNIT.GUID ELSE UNIT.GUID END AS UNIT,
+                    CASE WHEN UNIT.NAME IS NULL THEN MAIN_UNIT.NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                    CASE WHEN UNIT.SYMBOL IS NULL THEN MAIN_UNIT.SYMBOL ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                    CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                    CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.QUANTITY) ELSE (ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
+                    CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.APPROVED_QUANTITY) ELSE (ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
+                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                    (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
+                    FROM DOC_ORDERS_VW_01 AS ORDERS
+                    LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
+                    ORDERS.ITEM = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '` + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + `'
+                    LEFT OUTER JOIN ITEM_UNIT_VW_01 AS MAIN_UNIT ON
+                    ORDERS.ITEM = MAIN_UNIT.ITEM_GUID AND MAIN_UNIT.TYPE = 0 
+                    WHERE ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE AND ORDERS.TYPE =  1 AND  ORDERS.PEND_QUANTITY > 0 AND OUTPUT = @DEPOT AND ITEM = @ITEM
+                    ) AS TMP`,
+            param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50','ITEM:string|50'],
+            value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value,pData.ITEM]
+        }
+
+        App.instance.setState({isExecute:true})
+        await this.orderDetail.refresh()
+        await this.grdOrderDetail.dataRefresh({source:this.orderDetail})
+        App.instance.setState({isExecute:false})
+        this.itemTotalQyt = pData.TOTAL_QUANTITY
+        if(pData.TOTAL_QUANTITY <  pData.APPROVED_QYT)
+        {
+            this.setState({textColor:'red'})
+        }
+        else
+        if(pData.TOTAL_QUANTITY <  pData.APPROVED_QYT)
+        {
+            this.setState({textColor:'green'})
+        }
+        this.popOrderDetail.show()
     }
     render()
     {
@@ -242,22 +316,20 @@ export default class salesOrdList extends React.PureComponent
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
                                 <Item>
-                                    <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}/>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}onApply={(async()=>{this._btnGetClick()}).bind(this)}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}/>
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value = ""
                                     data = {{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
@@ -275,7 +347,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="Default" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -290,160 +362,179 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnResizing={true}
                             width={'100%'}
                             dbApply={false}
-                            onRowUpdating={(e)=>
+                            onCellPrepared={(e) =>
                             {
-                                Object.keys(e.newData).forEach(async itemKey => 
+                                if(e.rowType === "data" && e.column.dataField === "APPROVED_QYT")
                                 {
-                                    let tmpODt = {...this.orderList.where({ITEM:itemKey}).where({INPUT:e.key.INPUT})}
-                                    let tmpOld = e.oldData[itemKey]
-                                    let tmpNew = e.newData[itemKey]
-
-                                    for (let i = 0; i < tmpODt.length; i++) 
-                                    {
-                                        let tmpReminder = tmpNew - tmpOld    
-                                        let tmpWeight = tmpODt[i].PEND_QUANTITY / tmpOld
-                                        let tmpAvgQty = tmpODt[i].PEND_QUANTITY + Math.round(tmpReminder * tmpWeight)
-                                        console.log(tmpNew + " - " + tmpOld + " - " + tmpAvgQty)
-                                        await this.orderUpdate(tmpODt[i],tmpAvgQty)
-                                    }
-                                })
+                                    e.cellElement.style.color = e.data.DEPOT_QUANTITY + e.data.COMING_QUANTITY < e.data.APPROVED_QYT ? "red" : "green";
+                                }
                             }}
-                            >                            
+                            onRowDblClick={async(e)=>
+                            {
+                                this.setState({selecedItem:e.data.ITEM_CODE + ' - ' + e.data.ITEM_NAME})
+                                this.getOrderDetail(e.data)
+                            }}>                     
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Editing mode="batch" allowUpdating={true} allowDeleting={false} allowAdding={false} confirmDelete={false}/>
-                                {this.state.columns}
+                                <Editing mode="batch" allowUpdating={false} allowDeleting={false} allowAdding={false} confirmDelete={false}/>
+                                <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrdList.clmItemCode")} width={100}/>
+                                <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrdList.clmItemName")} width={300} />
+                                <Column dataField="DEPOT_QUANTITY" caption={this.t("grdSlsOrdList.clmDepotQuantity")} width={120} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                <Column dataField="COMING_QUANTITY" caption={this.t("grdSlsOrdList.clmComingQuantity")} width={120} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                <Column dataField="TOTAL_QUANTITY" caption={this.t("grdSlsOrdList.clmTotalQuantity")} width={120} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrdList.clmQuantity")} width={120} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                <Column dataField="APPROVED_QYT" caption={this.t("grdSlsOrdList.clmApprovedQuantity")} width={120} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                <Column dataField="TOTALHT" caption={this.t("grdSlsOrdList.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={120} allowHeaderFiltering={false}/>
+                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                 <Summary>
-                                    {this.state.summary}
+                                    <TotalItem
+                                    column="QUANTITY"
+                                    summaryType="sum"/>
+                                     <TotalItem
+                                    column="APPROVED_QYT"
+                                    summaryType="sum"/>
+                                     <TotalItem
+                                    column="DEPOT_QUANTITY"
+                                    summaryType="sum"/>
+                                     <TotalItem
+                                    column="COMING_QUANTITY"
+                                    summaryType="sum"/>
+                                    <TotalItem
+                                    column="TOTALHT"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    <TotalItem
+                                    column="TOTAL"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary>
                             </NdGrid>
                         </div>
                     </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this._btnApprove}></NdButton>
+                        </div>
+                    </div>
                 </ScrollView>
-                    {/* Dizayn Seçim PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popDesign"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDesign.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'280'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                    displayExpr="DESIGN_NAME"                       
-                                    valueExpr="TAG"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmSlsOrderMail" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDesign.lang")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value={localStorage.getItem('lang').toUpperCase()}
-                                    searchEnabled={true}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
+                <div>
+                    <NdPopUp id={"popOrderDetail"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("popOrderDetail.title")} 
+                    showCloseButton={true}
+                    width={"1000px"}
+                    height={"800PX"}
+                    deferRendering={false}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.state.selecedItem}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    {/* grdOrderDetail */}
+                                    <Item>
+                                        <NdGrid parent={this} id={"grdOrderDetail"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter={{visible:true}}
+                                        filterRow = {{visible:true}}
+                                        height={600} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        selection={{mode:"multiple"}}
+                                        onRowUpdated={async(e)=>
+                                        {
+                                           if(e.key.APPROVED_QYT > e.key.QUANTITY)
+                                           {
+                                                let tmpConfObj =
                                                 {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                        value:  [this.printGuid,this.cmbDesignList.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-                                                    {
-                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
-                                                        mywindow.onload = function() 
-                                                        {
-                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                        } 
-                                                    });
-                                                    this.popDesign.hide();  
+                                                    id:'msgApprovedBig',showTitle:true,title:this.t("msgApprovedBig.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgApprovedBig.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgApprovedBig.msg")}</div>)
                                                 }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
+                                                
+                                                await dialog(tmpConfObj);  
+                                                e.key.APPROVED_QYT = e.key.QUANTITY
+                                           }
+                                        }}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            App.instance.menuClick(
+                                                {
+                                                    id: 'sip_02_002',
+                                                    text: this.t('menu'),
+                                                    path: 'orders/documents/salesOrder.js',
+                                                    pagePrm:{GUID:e.data.DOC_GUID}
+                                                })
+                                            this.popOrderDetail.hide()
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
+                                            <Column dataField="DOC_DATE" caption={this.t("grdOrderDetail.clmDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
+                                            <Column dataField="INPUT_NAME" caption={this.t("grdOrderDetail.clmCustomer")} width={230} allowEditing={false}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdOrderDetail.clmCode")} width={90} allowEditing={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdOrderDetail.clmName")} width={180} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdOrderDetail.clmQuantity")} width={90} allowEditing={false} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="APPROVED_QYT" caption={this.t("grdOrderDetail.clmApprovedQuantity")} width={90} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Summary>
+                                                <TotalItem
+                                                column="QUANTITY"
+                                                summaryType="sum"/>
+                                                <TotalItem
+                                                column="APPROVED_QYT"
+                                                summaryType="sum"/>
+                                            </Summary>
+                                        </NdGrid>
+                                    </Item>
+                                    <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                           this.popOrderDetail.hide()
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            for (let i = 0; i < this.orderDetail.length; i++) 
                                             {
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                    <div className='row py-2'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOrderMail" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
+                                                let tmpQuery = 
                                                 {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                        value:  [this.printGuid,this.cmbDesignList.value]
-                                                    }
-                                                    App.instance.setState({isExecute:true})
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-                                                    {
-                                                        if(pResult.split('|')[0] != 'ERR')
-                                                        {
-                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            mywindow.onload = function() 
-                                                            { 
-                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                            } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                        }
-                                                    });
+                                                    query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " + 
+                                                            "@CUSER = @PCUSER, " + 
+                                                            "@APPROVED_QUANTITY = @PAPPROVED_QUANTITY, " + 
+                                                            "@GUID = @PGUID ", 
+                                                    param : ['PCUSER:string|50','PAPPROVED_QUANTITY:float','PGUID:string|50'],
+                                                    value : [this.user.CODE,this.orderDetail[i].APPROVED_QYT * this.orderDetail[i].UNIT_FACTOR,this.orderDetail[i].GUID]
                                                 }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOrderMail" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {    
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    this.popMailSend.show()
-                                                }
-                                            }}/>
-                                        </div>
+                                                await this.core.sql.execute(tmpQuery) 
+                                            }
+                                            this.popOrderDetail.hide()
+                                            this._btnGetClick()
+                                        }}/>
                                     </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
+                                </div>
+                            </Item>
+                                </Form>
+                            </div>
+                        </div>
+                    </NdPopUp>  
+                </div>
             </div>
         )
     }

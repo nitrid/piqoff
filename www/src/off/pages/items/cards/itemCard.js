@@ -560,7 +560,7 @@ export default class itemCard extends React.PureComponent
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
-            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
+            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
             let tmpMargin = tmpExVat - this.txtCostPrice.value;
             let tmpMarginRate = ((tmpMargin / this.txtCostPrice.value)) * 100
             
@@ -575,7 +575,7 @@ export default class itemCard extends React.PureComponent
 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
-            this.itemsObj.itemPrice.dt()[i].MARGIN =  Number((tmpMargin / this.itemsObj.itemPrice.dt()[i].PRICE_HT) * 100).round(2)
+            this.itemsObj.itemPrice.dt()[i].MARGIN =  tmpMarginRate.toFixed(2); 
 
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -584,7 +584,7 @@ export default class itemCard extends React.PureComponent
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
-            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
+            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
             let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
@@ -1888,19 +1888,20 @@ export default class itemCard extends React.PureComponent
                                                         e.key.PRICE_HT = e.data.PRICE
                                                         e.key.PRICE_TTC =  Number(e.data.PRICE).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                     }
-                                                    e.key.MARGIN =  Number(((e.key.PRICE_HT  - this.txtCostPrice.value) / e.key.PRICE_HT) * 100).round(2)
+                                                    e.key.MARGIN =  Number(((e.key.PRICE_HT  / this.txtCostPrice.value)) * 100).round(2)
                                                 }
                                                 if(typeof e.data.MARGIN != 'undefined')
                                                 {
+                                                   
                                                     if(e.key.LIST_VAT_TYPE == 0)
                                                     {
-                                                        e.key.PRICE_HT =  Number(this.txtCostPrice.value / (1 - e.data.MARGIN / 100)).round(3);
+                                                        e.key.PRICE_HT =   Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100) )).round(3);
                                                         e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
                                                         e.key.PRICE =  e.key.PRICE_TTC
                                                     }
                                                     else
                                                     {
-                                                        e.key.PRICE_HT =  Number(this.txtCostPrice.value / (1 - e.data.MARGIN / 100)).round(3);
+                                                        e.key.PRICE_HT =  Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100))).round(3);
                                                         e.key.PRICE_TTC = Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                         e.key.PRICE =  e.key.PRICE_HT
                                                     }
@@ -2616,7 +2617,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriPrice.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriHT.value = this.txtPopPriPrice.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
@@ -2632,13 +2633,13 @@ export default class itemCard extends React.PureComponent
                                             let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
                                             if(tmpDt[0].VAT_TYPE == 0)
                                             {
-                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value / (1 - this.txtPopPriceMargin.value / 100)).round(3);
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceMargin.value / 100))).round(3);
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
                                                 this.txtPopPriPrice.value = this.txtPopPriTTC.value
                                             }
                                             else
                                             {
-                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value / (1 - this.txtPopPriceMargin.value / 100)).round(3);
+                                                this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceMargin.value / 100))).round(3);
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
@@ -2667,7 +2668,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
@@ -2692,7 +2693,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                         }}>
                                         
@@ -3105,7 +3106,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2,3) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql

@@ -654,7 +654,7 @@ export const menu = (e) =>
                                 {
                                     id: 'ftr_01_004',
                                     text: e.t('menuOff.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                                    path: 'invoices/lists/priceDiffInvList'
+                                    path: 'invoices/lists/PriceDiffInvList'
                                 },
                             ]
                         },
@@ -723,6 +723,11 @@ export const menu = (e) =>
                             id: 'slsRpt_02_006',
                             text: e.t('menuOff.slsRpt_02_006'),//'Açik Alis Fatura Raporu',
                             path: 'report/purchase/openInvoicePurchaseReport'
+                        },
+                        {
+                            id: 'slsRpt_02_007',
+                            text: e.t('menuOff.slsRpt_02_007'),//'Alış Faturası Yaşlandırma Raporu',
+                            path: 'report/purchase/purchaseInvoiceAgingReport'
                         },
                     ]
                 }
@@ -1032,6 +1037,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
                             path: 'report/sales/openInvoiceSalesReport'
                         },
+                        {
+                            id: 'slsRpt_01_010',
+                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            path: 'customers/report/saleInvoiceAgingReport'
+                        },
                     ]
                 }
             ]
@@ -1199,6 +1209,11 @@ export const menu = (e) =>
                             id: 'prsnl_01_002',
                             text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
                             path: 'employee/cards/employeeAddressCards'
+                        },
+                        {
+                            id: 'prsnl_01_003',
+                            text: e.t('menuOff.prsnl_01_003'), //'Durum Çizelge Tanımları',
+                            path: 'employee/cards/employeeAttendanceCards'
                         },
                         
                     ]

@@ -343,6 +343,7 @@ export const langTr =
         prsnl_01 : "Tanımlar",
         prsnl_01_001 : "Personel Tanımları",
         prsnl_01_002 : "Adres Tanımları",
+        prsnl_01_003 : "Durum Çizelge Tanımları",
         prsnl_02 : "Listeler",
         prsnl_02_001 : "Personel Listeleri",
         prsnl_03 : "Operasyonlar",
@@ -481,6 +482,7 @@ export const langTr =
         slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
         slsRpt_02_005 : "DEB Detay Raporu",
         slsRpt_02_006 : "Açık Alış Fatura Raporu",
+        slsRpt_02_007 : "Alış Faturası Yaşlandırma Raporu",
     },
     login:
     {

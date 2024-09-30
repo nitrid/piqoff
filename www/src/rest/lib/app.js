@@ -94,7 +94,7 @@ export default class App extends React.PureComponent
     }
     async init()
     {
-        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
+        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:1000,reconnection: true,reconnectionAttempts: Infinity,reconnectionDelay: 500,reconnectionDelayMax: 1000,transports : ['websocket']}));
         this.core.appInfo = appInfo
         
         if(!App.instance)
@@ -115,6 +115,10 @@ export default class App extends React.PureComponent
                 App.instance.setState({logined:false,connected:true});
             }
         })
+        this.core.socket.on('connect_error',async () => 
+        {
+            App.instance.setState({connected:false});
+        }) 
         this.core.socket.on('general',async(e)=>
         {
             if(typeof e.id != 'undefined' && e.id == 'M004')
@@ -131,6 +135,14 @@ export default class App extends React.PureComponent
                 window.location.reload()
             }
         })
+    }
+    componentDidMount()
+    {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('monitor') != null)
+        {
+            this.setState({page:'monitor.js'})
+        }
     }
     async loadTab()
     {
@@ -201,7 +213,13 @@ export default class App extends React.PureComponent
                         <img src="./css/img/logo.png" width="45px" height="45px"/>
                     </div>
                     <div className="col-4" style={{paddingTop:"10px"}} align="center">
-                        
+                        <NbButton id="btnRefresh" parent={this} className="form-group btn btn-primary btn-block" style={{height:"45px"}}
+                        onClick={()=>
+                        {
+                            window.location.reload()
+                        }}>
+                            <i className="fa-solid fa-arrows-rotate fa-2x"></i>
+                        </NbButton>
                     </div>
                     <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
                         <NbButton id="btnLogout" parent={this} className="form-group btn btn-primary btn-block" style={{height:"45px"}}

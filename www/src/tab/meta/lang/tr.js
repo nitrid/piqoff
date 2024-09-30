@@ -207,13 +207,12 @@ export const langTr =
             btn02: "Hayır",
             msg: "Faturanıza tahsilat girmek istermisiniz ?"
         },
-        grdLastSales : 
+        grdQuantity : 
         {
-            clmDocDate: "Tarih",
-            clmRef : "Evrak No",
-            clmQuantity : "Miktar",
-            clmPrice : "Fiyat",
-            clmTotal : "Tutar",
+            clmDepot: "Depo Miktarı",
+            clmInput : "Gelecek Miktar",
+            clmOutput : "Sİpariş Alınan",
+            clmTotal : "Toplam",
         },
         msgDiscountPercent:
         {
@@ -226,6 +225,29 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder",
+            btnCancel : "Gönder",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        msgPriceListChange:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Fiyatları Güncellemek istermisiniz ?"
         },
     },
     extract :

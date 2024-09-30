@@ -2571,6 +2571,24 @@ export const prm =
             CAPTION : "Belge no kontrolu"
         }
     },
+    {
+        TYPE : 1,
+        ID :"compulsoryCustomer",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_008",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Alis Faturası",
+            CAPTION : "Tedarikçişi olmayan ürünü kaydetme"
+        }
+    },
     //#endregion
     //#region Promosyon
     //txtRef
@@ -3491,4 +3509,45 @@ export const prm =
             CAPTION : "Mail Açıklaması"
         }
     },
+    //#endregion
+    //#region Satış Sipariş onaylama
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "sip_04_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş onaylama",
+            CAPTION : "Depo"
+        }
+    },
+     //cmbDepot
+     {
+        TYPE : 1,
+        ID :"printDesing",
+        VALUE : 
+        {
+            value : "55"
+        },
+        SPECIAL : "",
+        PAGE : "sip_04_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş onaylama",
+            CAPTION : "Yazdırma Dizaynı Tagı"
+        }
+    },
+    //#endregion
 ]

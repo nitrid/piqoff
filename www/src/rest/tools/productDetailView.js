@@ -166,8 +166,11 @@ export default class NbProductDetailView extends NbBase
                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"white",color:"#079992",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomRightRadius:'0px',borderTop:'none'}}
                                     onClick={()=>
                                     {
-                                        this.items.QUANTITY = this.items.QUANTITY + 1
-                                        this.updateState()
+                                        if(this.items.QUANTITY < 1)
+                                        {
+                                            this.items.QUANTITY = this.items.QUANTITY + 1
+                                            this.updateState()
+                                        }
                                     }}>
                                         <i className="fa-solid fa-plus fa-2x"></i>
                                     </NbButton>

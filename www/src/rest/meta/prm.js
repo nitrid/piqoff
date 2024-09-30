@@ -107,4 +107,96 @@ export const prm =
             }
         }
     },
+    //Groups
+    {
+        TYPE : 0,
+        ID :"Groups",
+        VALUE : ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018'],
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "popTextList",
+            PAGE_NAME : "Rest",
+            CAPTION : "Ürün Grupları",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
+    //MultiQtyGrp
+    {
+        TYPE : 0,
+        ID :"MultiQtyGrp",
+        VALUE : ['013','014','015'],
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "popTextList",
+            PAGE_NAME : "Rest",
+            CAPTION : "Çoklu Ürün Eklenecek Gruplar",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
+    //MultiService
+    {
+        TYPE : 0,
+        ID :"MultiService",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Rest",
+            CAPTION : "Çoklu Servis",
+        }
+    },
+    //SelectionGroup
+    {
+        TYPE : 0,
+        ID :"SelectionGroup",
+        VALUE : '001',
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Rest",
+            CAPTION : "Seçili Ürün Grubu",
+        }
+    },
+    //OpenedGroup
+    {
+        TYPE : 0,
+        ID :"OpenedGroup",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Rest",
+            CAPTION : "Ürün Grubu Açık",
+        }
+    },
 ]

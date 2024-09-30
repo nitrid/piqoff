@@ -206,13 +206,12 @@ export const langFr =
             btn02: "Non",
             msg: "Souhaitez-vous saisir un paiement pour votre facture ?"
         },
-        grdLastSales : 
+        grdQuantity: 
         {
-            clmDocDate: "date",
-            clmRef : "N° Document",
-            clmQuantity : "Quantité",
-            clmPrice : "Prix",
-            clmTotal : "Total",
+            clmDepot: "Quantité en Dépôt",
+            clmInput: "Quantité à Venir",
+            clmOutput: "Commandé",
+            clmTotal: "Total",
         },
         msgDiscountPrice:
         {
@@ -225,6 +224,28 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Vous ne Pouvez pas Appliquer de Remise Supérieure au Montant Total !"
+        },
+        popMailSend : 
+        {
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail",   
+            btnSend : "Envoyer",
+            cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        msgPriceListChange:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous mettre à jour les prix ?"
         },
     },
     extract :

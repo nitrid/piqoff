@@ -495,5 +495,70 @@ const ftr_02_008 =
         btn01: "OK", 
         msg: "Nach Hinzufügen von Artikel kann Kunde nicht geändert werden" 
     },
+    msgNewPrice : 
+    {
+        title: "Achtung",
+        btn01: "Keine Aktualisierung",
+        btn02: "Ausgewählte Preise aktualisieren",
+        msg: "Bitte wählen Sie die Artikel aus, deren Lieferantenpreis aktualisiert werden soll. "
+    },
+    msgNewPriceDate : 
+    {
+        title: "Achtung",
+        btn01: "Keine Aktualisierung",
+        btn02: "Ausgewählte Preise aktualisieren",
+        msg: "Bitte wählen Sie die Artikel aus, deren Datum aktualisiert werden soll. "
+    },
+    grdNewPrice: 
+    {
+        clmCode: "Kennung",
+        clmName: "Name",
+        clmPrice: "Alter Preis",
+        clmPrice2: "Neuer Preis",
+        clmSalePrice :"Verkaufspreis", 
+        clmMargin : "Bruttomarge",
+        clmCostPrice : "Einkaufspreis",
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
+    },
+    grdNewPriceDate: 
+    {
+        clmCode: "Kennung",
+        clmName: "Name",
+        clmPrice: "Alter Preis",
+        clmPrice2: "Neuer Preis",
+        clmSalePrice :"Verkaufspreis", 
+        clmMargin : "Bruttomarge",
+        clmCostPrice : "Einkaufspreis",
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
+    },
+    msgPriceDateUpdate :
+    {
+        msg : "Möchten Sie die Daten der unveränderten Preise aktualisieren?",
+        btn01 : "Ja",
+        btn02 : "Nein",
+        title : "Achtung"
+    },
+    msgNewVat : 
+    {
+        title: "Achtung",
+        btn01: "Keine Aktualisierung",
+        btn02: "Ausgewählte Sätze aktualisieren",
+        msg: "Die Rechnung weist unterschiedliche Mehrwertsteuersätze auf als das System. "
+    },
+    grdNewVat: 
+    {
+        clmCode: "Kennung",
+        clmName: "Name",
+        clmVat: "System ..",
+        clmVat2: "Neue ..",
+    },
+    msgCompulsoryCustomer:
+    {
+        title: "Achtung",
+        btn01: "Ok",
+        msg: "Der ausgewälte Artikel ist dem Kunden nicht zugeordnet!"
+    },
 }
 export default ftr_02_008
