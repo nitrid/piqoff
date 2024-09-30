@@ -1287,6 +1287,21 @@ export const menu = (e) =>
                             id: 'pos_01_005',
                             text: e.t('menuOff.pos_01_005'),//'Pos ödeme tipi tanımlama',
                             path: 'pos/card/posPayType'
+                        },
+                        {
+                            id: 'pos_01_006',
+                            text: e.t('menuOff.pos_01_006'),//'Piqpoid kullanıcı tanımlama',
+                            path: 'pos/card/piqPoidUserCard'
+                        },
+                        {
+                            id: 'pos_01_007',
+                            text: e.t('menuOff.pos_01_007'),//'Piqpoid cihaz tanımlama',
+                            path: 'pos/card/piqPoidDeviceCard'
+                        },
+                        {
+                            id: 'pos_01_008',
+                            text: e.t('menuOff.pos_01_008'),//'Piqpoid parametre tanımlama',
+                            path: 'pos/card/piqPoidParamCard'
                         }
                     ]
                 },

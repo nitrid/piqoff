@@ -21,11 +21,18 @@ function parseTry(pData)
         return pData
     }
 }
-function checkBoxBuild(pItem,pThis)
+function checkBoxBuild(pItem,pThis,pLang)
 {
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+    
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdCheckBox id={pItem.ID} key={pItem.ID} parent={pThis}/>
         </Item>
     )
@@ -58,11 +65,18 @@ function checkBoxGet(pItem,pThis)
         }
     }
 }
-function textBoxBuild(pItem,pThis)
+function textBoxBuild(pItem,pThis,pLang)
 {
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true}/>
         </Item>
     )
@@ -95,7 +109,7 @@ function textBoxGet(pItem,pThis)
         }
     }
 }
-function comboBoxBuild(pItem,pThis)
+function comboBoxBuild(pItem,pThis,pLang)
 {
     let tmpSource = {}
     if(Array.isArray(pItem.VIEW.DATA))
@@ -107,9 +121,17 @@ function comboBoxBuild(pItem,pThis)
         tmpSource = pItem.VIEW.DATA
         tmpSource.sql = pThis.core.sql
     }
+
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdSelectBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true}
             displayExpr={pItem.VIEW.DISPLAY}                      
             valueExpr={pItem.VIEW.FIELD}
@@ -146,17 +168,24 @@ function comboBoxGet(pItem,pThis)
         }
     }
 }
-function htmlBoxBuild(pItem,pThis)
+function htmlBoxBuild(pItem,pThis,pLang)
 {
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdHtmlEditor id={pItem.ID} key={pItem.ID} parent={pThis} height={300}>
             </NdHtmlEditor>
         </Item>
     )
 }
-function popInputBuild(pItem,pThis)
+function popInputBuild(pItem,pThis,pLang)
 {
     let tmpBuild = ()=>
     {
@@ -193,9 +222,16 @@ function popInputBuild(pItem,pThis)
         return tmpItems
     }
 
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
@@ -239,7 +275,7 @@ function popInputBuild(pItem,pThis)
                 position={{of:'#root'}}
                 showCloseButton={true}
                 showTitle={true}
-                title={pItem.VIEW.CAPTION}
+                title={tmpCaption}
                 width={typeof pItem.VIEW.FORM.width == 'undefined' ? '600' : pItem.VIEW.FORM.width}
                 height={typeof pItem.VIEW.FORM.height == 'undefined' ? '260' : pItem.VIEW.FORM.height}
                 >
@@ -293,7 +329,7 @@ function popInputBoxSet(pItem,pThis)
         if(typeof parseTry(pItem.VALUE) == 'object')
         {            
             pThis[pItem.ID].obj = parseTry(Object.assign({},pItem).VALUE)
-            console.log(pThis[pItem.ID].obj)
+            
             if(typeof pItem.VIEW.DISPLAY != 'undefined')
             {
                 pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
@@ -311,7 +347,7 @@ function popInputBoxGet(pItem,pThis)
         }
     }
 }
-function popSelectBuild(pItem,pThis)
+function popSelectBuild(pItem,pThis,pLang)
 {
     let tmpSource = {}
     if(Array.isArray(pItem.VIEW.FORM.data))
@@ -324,9 +360,16 @@ function popSelectBuild(pItem,pThis)
         tmpSource.sql = pThis.core.sql
     }
 
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
@@ -415,11 +458,18 @@ function popSelectBoxGet(pItem,pThis)
         }        
     }
 }
-function popTextListBuild(pItem,pThis)
+function popTextListBuild(pItem,pThis,pLang)
 {
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdTextBox id={pItem.ID} key={pItem.ID} parent={pThis} simple={true} readOnly={true}
             button={
             [
@@ -484,11 +534,18 @@ function popTextListGet(pItem,pThis)
         return JSON.stringify(pThis[pItem.ID].obj)
     }
 }
-function popObjectListBuild(pItem,pThis)
+function popObjectListBuild(pItem,pThis,pLang)
 {
+    let tmpCaption = pItem.VIEW.CAPTION
+
+    if(typeof pLang != 'undefined' && typeof pItem.VIEW.CAPTION == 'object')
+    {
+        tmpCaption = pItem.VIEW.CAPTION[pLang]
+    }
+
     return (
         <Item key={pItem.ID} cssClass="form-label-bold">
-            <Label text={pItem.VIEW.CAPTION} alignment="right" />
+            <Label text={tmpCaption} alignment="right" />
             <NdButton id={pItem.ID} key={pItem.ID} parent={pThis} text={"Giriş"} width={'100%'} type="default"
             onClick={async()=>
             {
@@ -582,7 +639,7 @@ function htmlEditorGet(pItem,pThis)
         }
     }
 }
-export function ItemBuild(pItem,pThis)
+export function ItemBuild(pItem,pThis,pLang)
 {
     if(typeof pItem.VIEW == 'undefined' || typeof pItem.VIEW.TYPE == 'undefined')
     {
@@ -590,19 +647,19 @@ export function ItemBuild(pItem,pThis)
     }
     if(pItem.VIEW.TYPE == 'checkbox')
     {
-        return checkBoxBuild(pItem,pThis)
+        return checkBoxBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'text')
     {
-        return textBoxBuild(pItem,pThis)
+        return textBoxBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'combobox')
     {
-        return comboBoxBuild(pItem,pThis)
+        return comboBoxBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'popInput')
     {
-        return popInputBuild(pItem,pThis)
+        return popInputBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'popSelect')
     {
@@ -610,15 +667,15 @@ export function ItemBuild(pItem,pThis)
     }
     else if(pItem.VIEW.TYPE == 'popTextList')
     {
-        return popTextListBuild(pItem,pThis)
+        return popTextListBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'popObjectList')
     {
-        return popObjectListBuild(pItem,pThis)
+        return popObjectListBuild(pItem,pThis,pLang)
     }
     else if(pItem.VIEW.TYPE == 'html')
     {
-        return htmlBoxBuild(pItem,pThis)
+        return htmlBoxBuild(pItem,pThis,pLang)
     }
     // else
     // {

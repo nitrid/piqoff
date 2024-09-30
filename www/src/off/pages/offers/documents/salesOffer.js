@@ -882,7 +882,7 @@ export default class salesOffer extends DocBase
                                             }
                                             else
                                             {
-                                                await this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                              
                                                 this.popTransport.show()
                                             }
                                         }
@@ -1081,7 +1081,7 @@ export default class salesOffer extends DocBase
                                                     this.txtRef.props.onChange()
                                                     this.checkRow()
                                                 }
-                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                if(this.docObj.dt()[0].INPUT_CODE != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }

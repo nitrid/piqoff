@@ -652,11 +652,11 @@ export default class extract extends React.PureComponent
                                                 this.init()
                                             }
                                         }}>
-                                            <i className="fa-solid fa-file fa-1x"></i>
+                                            <i className="fa-solid fa-plus fa-1x"></i>
                                         </NbButton>
                                     </Item>
                                     <Item location="after" locateInMenu="auto">
-                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",background:"#69F0AE"}}
                                         onClick={async()=>
                                         {
                                             console.log(this.docObj.dt())
@@ -695,13 +695,25 @@ export default class extract extends React.PureComponent
                                         <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
                                         onClick={async()=>
                                         {
-                                            if(this.docObj.dt()[0].DOC_TYPE == 20)
-                                            {
-                                                this.popDesign.show()
+                                            let tmpQuery = 
+                                            {   
+                                                query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '19'"
                                             }
+
+                                            if(this.docObj.dt()[0].DOC_TYPE != 20)
+                                            {
+                                                tmpQuery = 
+                                                {   
+                                                    query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '19'"
+                                                }
+                                            }
+                                            
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
+                                            this.popDesign.show()
                                         }}>
                                             <i className="fa-solid fa-print fa-1x"></i>
-                                        </NbButton>                                                    
+                                        </NbButton>                                                     
                                     </Item>
                                     <Item location="after" locateInMenu="auto">
                                         <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
@@ -931,161 +943,481 @@ export default class extract extends React.PureComponent
                                 </div>
                             </div>
                         </NbPopUp>
-                    </div>    
-                     {/* Cash PopUp */}
-                     <div>
-                        <NdPopUp parent={this} id={"popCash"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popCash.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'400'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                {/* cmbPayType */}
-                                <Item>
-                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPayType"
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value=""
-                                    searchEnabled={true}
-                                    notRefresh={true}
-                                    onValueChanged={(async(e)=>
+                    </div>  
+                    {/* DIZAYN SECIM POPUP */}
+                        <div>
+                            <NdPopUp parent={this} id={"popDesign"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popDesign.title")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'280'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("popDesign.design")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                        displayExpr="DESIGN_NAME"                       
+                                        valueExpr="TAG"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
                                         {
-                                            this.cmbCashSafe.value = ''
-                                            let tmpQuery
-                                            if(e.value == 0)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 1)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
-                                            }
-                                            else if(e.value == 2)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 3)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 4)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 5)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                    
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {   
-                                                this.cmbCashSafe.setData(tmpData.result.recordset)
-                                            }
-                                            else
-                                            {
-                                                this.cmbCashSafe.setData([])
-                                            }
                                         }).bind(this)}
-                                    data={{source:[{ID:0,VALUE:this.t("cmbPayType.cash")},{ID:1,VALUE:this.t("cmbPayType.check")},{ID:2,VALUE:this.t("cmbPayType.bankTransfer")},{ID:3,VALUE:this.t("cmbPayType.otoTransfer")},{ID:4,VALUE:this.t("cmbPayType.foodTicket")},{ID:5,VALUE:this.t("cmbPayType.bill")}]}}
-                                    >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("popCash.cmbCashSafe")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    notRefresh={true}
-                                    onValueChanged={(async()=>
+                                        // data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        >
+                                            <Validator validationGroup={"frmCollectionInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popDesign.lang")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value={localStorage.getItem('lang').toUpperCase()}
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
                                         {
+                                        }).bind(this)}
+                                        data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                        >
+                                            <Validator validationGroup={"frmCollectionInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmCollectionInvPrint" + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpQuery = {}
+                                                       
+                                                        
+                                                        tmpQuery = 
+                                                        {
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG =  @DESIGN),'') AS PATH FROM DOC_CUSTOMER_VW_01 WHERE DOC_GUID = @DOC_GUID ORDER BY CDATE DESC" ,
+                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                        }
+                                                        this.setState({isExecute:true})                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                        this.setState({isExecute:false})                                                        
+                                                        console.log(tmpData) // BAK
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {     
+                                                                let base64ToUint8Array = (base64)=>
+                                                                {
+                                                                    let raw = atob(base64);
+                                                                    let uint8Array = new Uint8Array(raw.length);
+                                                                    for (let i = 0; i < raw.length; i++) 
+                                                                    {
+                                                                        uint8Array[i] = raw.charCodeAt(i);
+                                                                    }
+                                                                    return uint8Array;
+                                                                }
 
-                                        }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popCash.cash")} alignment="right" />
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="numCash" parent={this} simple={true}
-                                        maxLength={32}                                        
-                                        >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RangeRule min={0.1} message={this.t("ValidCash")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popCash.description")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}                                        
-                                        >
-                                        </NdTextBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-12'>
-                                            <NdButton text={this.t("popCash.invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async (e)=>
-                                            {       
-                                                this.getInvoices()
-                                            }}/>
+                                                                this.popPrintView.show()
+
+                                                                document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                                let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                                let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                                pdfViewerFrame.onload = (async function() 
+                                                                {
+                                                                    await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                    if(App.instance.core.local.platform == 'cordova')
+                                                                    {
+                                                                        this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                    }
+                                                                }).bind(this)
+                                                                pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                            }
+                                                        });
+                                                        this.popDesign.hide();  
+                                                    }
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popDesign.hide();  
+                                                }}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
+                                        <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup={"frmPayCash"  + this.tabIndex}
+                                            <NdButton text={this.t("popDesign.btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmCollectionInvPrint" + this.tabIndex}
                                             onClick={async (e)=>
-                                            {       
+                                            {    
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    if(this.cmbPayType.value == 1)
+                                                    await this.popMailSend.show()
+                                                    this.popDesign.hide();
+                                                    let tmpQuery = 
                                                     {
-                                                        this.popCheck.show()
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
                                                     }
-                                                    else
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
                                                     {
-                                                        this._addPayment(this.cmbPayType.value,this.numCash.value)
-                                                        this.popCash.hide();  
+                                                        this.popDesign.hide();  
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
                                                     }
                                                 }
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popCash.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCash.hide();  
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>  
+                        {/* Mail Send PopUp */}
+                        <div>
+                            <NbPopUp parent={this} id={"popMailSend"} 
+                            centered={true}
+                            title={this.t("popMailSend.title")}
+                            container={"#root"} 
+                            width={'600'}
+                            height={'600'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
+                                        displayExpr="MAIL_ADDRESS"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                        <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                    <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                        <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                                validationGroup={"frmMailsend"  + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpQuery = {}
+
+                                                        
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG =  @DESIGN),'') AS PATH FROM DOC_CUSTOMER_VW_01 WHERE DOC_GUID = @DOC_GUID ORDER BY CDATE DESC" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        
+                                                        
+                                                        this.setState({isExecute:true})                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                        this.setState({isExecute:false})                                                        
+                                                        //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        {
+                                                            this.setState({isExecute:true}) 
+                                                            let tmpAttach = pResult.split('|')[1]
+                                                            let tmpHtml = ''
+                                                           
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {
+                                                            }
+                                                            let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:" "+ this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+                                                            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                            {
+                                                                this.setState({isExecute:false})      
+                                                                let tmpConfObj1 =
+                                                                {
+                                                                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                                }
+                                                                
+                                                                if((pResult1) == 0)
+                                                                {  
+                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                    await dialog(tmpConfObj1);
+                                                                    this.txtMailSubject.value = '',
+                                                                    this.txtSendMail.value = ''
+                                                                    this.popMailSend.hide();  
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                    await dialog(tmpConfObj1);
+                                                                    this.popMailSend.hide(); 
+                                                                }
+                                                            });
+                                                        });
+                                                    }
+                                                        
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popMailSend.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popMailSend.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NbPopUp>
+                        </div>
+                        {/* Cash PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popCash"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popCash.title")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'400'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    {/* cmbPayType */}
+                                    <Item>
+                                        <Label text={this.t("cmbPayType.title")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbPayType"
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value=""
+                                        searchEnabled={true}
+                                        notRefresh={true}
+                                        onValueChanged={(async(e)=>
+                                            {
+                                                this.cmbCashSafe.value = ''
+                                                let tmpQuery
+                                                if(e.value == 0)
+                                                {
+                                                    tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                                }
+                                                else if(e.value == 1)
+                                                {
+                                                    tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                                }
+                                        
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    this.cmbCashSafe.setData(tmpData.result.recordset)
+                                                }
+                                                else
+                                                {
+                                                    this.cmbCashSafe.setData([])
+                                                }
+                                            }).bind(this)}
+                                        data={{source:[{ID:0,VALUE:this.t("cmbPayType.cash")},{ID:1,VALUE:this.t("cmbPayType.check")}]}}
+                                        >
+                                            <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidCash")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    {/* cmbCashSafe */}
+                                    <Item>
+                                        <Label text={this.t("popCash.cmbCashSafe")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        notRefresh={true}
+                                        onValueChanged={(async()=>
+                                            {
+
+                                            }).bind(this)}
+                                        >
+                                            <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidCash")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popCash.cash")} alignment="right" />
+                                        <div className="col-4 pe-0">
+                                            <NdNumberBox id="numCash" parent={this} simple={true}
+                                            maxLength={32}                                        
+                                            >
+                                            <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
+                                                <RangeRule min={0.1} message={this.t("ValidCash")} />
+                                            </Validator>  
+                                            </NdNumberBox>
+                                        </div>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popCash.description")} alignment="right" />
+                                        <div className="col-12 pe-0">
+                                            <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            maxLength={32}                                        
+                                            >
+                                            </NdTextBox>
+                                        </div>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <NdButton text={this.t("popCash.invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
+                                                onClick={async (e)=>
+                                                {       
+                                                    this.getInvoices()
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                                validationGroup={"frmPayCash"  + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        if(this.cmbPayType.value == 1)
+                                                        {
+                                                            this.popCheck.show()
+                                                        }
+                                                        else
+                                                        {
+                                                            this._addPayment(this.cmbPayType.value,this.numCash.value)
+                                                            this.popCash.hide();  
+                                                        }
+                                                    }
+                                                    
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popCash.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popCash.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>  
+                        {/* Check PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popCheck"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popCheck.title")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'180'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("checkReference")} alignment="right" />
+                                        <div className="col-12 pe-0">
+                                            <NdTextBox id="checkReference" parent={this} simple={true} width={500}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            maxLength={32}                                        
+                                            param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
+                                            >
+                                            </NdTextBox>
+                                        </div>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                                validationGroup={"frmCollCheck" + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    this._addPayment(1,this.numCash.value)
+                                                    this.popCheck.hide(); 
+                                                    this.popCash.hide();  
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popCheck.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div> 
+                        {/* PRINTVIEW POPUP */}
+                        <div>
+                            <NbPopUp id={"popPrintView"} parent={this} title={""} fullscreen={true}>
+                                <div className='row' style={{paddingTop:"10px",paddingBottom:"10px"}}>
+                                    <div className='col-12' align={"right"}>
+                                        <Toolbar>
+                                            <Item location="after" locateInMenu="auto">
+                                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                onClick={()=>
+                                                {
+                                                    this.popPrintView.hide();
+                                                }}>
+                                                    <i className="fa-solid fa-xmark fa-1x"></i>
+                                                </NbButton>
+                                            </Item>
+                                        </Toolbar>
+                                    </div>
+                                </div>
+                                <div id={"printView"}></div>
+                            </NbPopUp>
+                        </div>
                     {/* Fatura Grid */}
                     <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
                     visible={false}

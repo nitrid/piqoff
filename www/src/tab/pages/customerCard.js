@@ -297,7 +297,7 @@ export default class CustomerCard extends React.PureComponent
                                         }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
+                                    <NdButton id="btnNew" parent={this} icon="add" type="default"
                                     onClick={()=>
                                     {
                                         this.init(); 
