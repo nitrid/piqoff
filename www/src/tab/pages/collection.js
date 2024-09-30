@@ -168,7 +168,7 @@ export default class extract extends React.PureComponent
     }
     async _addPayment(pType,pAmount)
     {
-        if(this.invoices.length > 0)
+        if(this.invoices != null && this.invoices.length > 0)
         {
             let tmpAmount  = pAmount
             for (let i = 0; i < this.invoices.length; i++) 
@@ -392,7 +392,7 @@ export default class extract extends React.PureComponent
     }
     async _addPayment(pType,pAmount)
     {
-        if(this.invoices.length > 0)
+        if(this.invoices != null && this.invoices.length > 0)
         {
             let tmpAmount  = pAmount
             for (let i = 0; i < this.invoices.length; i++) 
@@ -1307,6 +1307,7 @@ export default class extract extends React.PureComponent
                                         <div className='row'>
                                             <div className='col-12'>
                                                 <NdButton text={this.t("popCash.invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
+                                                disabled={!this.sysParam.filter({ID:'invoicesForFacture',USERS:this.user.CODE}).getValue().value}
                                                 onClick={async (e)=>
                                                 {       
                                                     this.getInvoices()
