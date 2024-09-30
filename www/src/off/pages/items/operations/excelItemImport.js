@@ -113,7 +113,7 @@ export default class excelItemImport extends React.PureComponent
             "@BARCODE  = @PBARCODE,   " +
             "@MULTICODE = @PMULTICODE,  " +
             "@FACTOR_2   = @PFACTOR_2   " ,
-            param : ['PCUSER:string|50','PTYPE:int','PCODE:string|50','PNAME:string|50','PSNAME:string|32','PVAT:float','PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:int',
+            param : ['PCUSER:string|50','PTYPE:int','PCODE:string|50','PNAME:string|150','PSNAME:string|32','PVAT:float','PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:int',
             'PMAIN_CODE:string|50','PORGINS:string|50','PSALE_JOIN_LINE:int','PTICKET_REST:int','PSUGAR_RATE:float','PDESCRIPTION:string|max','PCUSTOMER:string|50','PSALE_PRICE:float','PUNIT_CODE:string|50',
             'PUNIT_CODE_2:string|50','PBARCODE:string|50','PMULTICODE:string|50','PFACTOR_2:float'],
             dataprm : ['CUSER','TYPE','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_CODE','ORGINS','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','DESCRIPTION'
