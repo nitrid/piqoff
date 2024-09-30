@@ -251,6 +251,11 @@ export const langTr =
             btn02: "Hayır",
             msg: "Fiyatları Güncellemek istermisiniz ?"
         },
+        orderGroup:
+        {
+            Name: "ÜRÜN İSMİ",
+            Code: "ÜRÜN KODU",
+        },
     },
     extract :
     {
@@ -302,7 +307,7 @@ export const langTr =
         },
         popItem:
         {
-            title : "Müşteri Seçimi",
+            title : "Ürün Seçimi",
             btn01 : "Ara",
             btn02 : "Seç",
             clmCode : "KODU",
@@ -408,6 +413,12 @@ export const langTr =
             btn01: "Evet",
             btn02: "Hayır",
             msg: "Faturanıza tahsilat girmek istermisiniz ?"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz.."
         },
         popMailSend : 
         {
