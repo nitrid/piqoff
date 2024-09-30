@@ -15,6 +15,7 @@ export const langFr =
     btnBarcodeEntry: "Entrée Produit",   
     btnProcessLines: "Traiter les lignes",   
     btnOrderSelect : "Sélection",
+    btnOrderComplated : "Terminer",
     btnNewDoc: "Nouveau document",   
     btnDocDelete: "Supprimer le document",   
     btnLineDisc: "Remise de ligne",       
@@ -86,6 +87,13 @@ export const langFr =
         Percent3: "3. Yüzde",
         Price3: "3. montant ",
         btnSave: "Enregister"
+    },
+    msgOrderComplated:
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Annuler",
+        msg: "Êtes-vous sûr de vouloir terminer la commande ?"
     },
     menu:
     {
