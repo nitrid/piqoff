@@ -898,11 +898,11 @@ export default class Sale extends React.PureComponent
                                                             this.popCart.hide();
                                                         }
                                                     }}>
-                                                        <i className="fa-solid fa-file fa-1x"></i>
+                                                        <i className="fa-solid fa-plus fa-1x"></i>
                                                     </NbButton>
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
-                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",background:"#69F0AE"}}
                                                     onClick={async()=>
                                                     {
                                                         if(this.docLines.length == 0)
@@ -1083,10 +1083,23 @@ export default class Sale extends React.PureComponent
                                                         </Validator> 
                                                     </NdSelectBox>
                                                 </Item>
+                                                {/* Tarih */}
                                                 <Item>
                                                     <Label text={this.t("popCart.dtDocDate")} alignment="right" />
                                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                                    onValueChanged={(async()=>
+                                                    {
+                                                        this.checkRow()
+                                                    }).bind(this)}
+                                                    >
+                                                    </NdDatePicker>
+                                                </Item>
+                                                 {/* Şipariş Tarihi */}
+                                                <Item>
+                                                    <Label text={this.t("popCart.dtDShıpmentDate")} alignment="right" />
+                                                    <NdDatePicker simple={true}  parent={this} id={"dtDShıpmentDate"}
+                                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                                     onValueChanged={(async()=>
                                                     {
                                                         this.checkRow()
