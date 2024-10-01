@@ -3,9 +3,7 @@ import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
 import fetch from 'node-fetch';
-import moment from 'moment';
-
-
+import config from '../config.js';
 class pricerApi
 {
     constructor()
@@ -15,14 +13,21 @@ class pricerApi
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.active = false
+        this.host = 'localhost:3333'
 
+        if(config?.plugins?.pricerApi?.active)
+        {
+            this.active = config?.plugins?.pricerApi?.active
+            this.host = typeof config.plugins.pricerApi.host == 'undefined' ? this.host : config?.plugins?.pricerApi?.host
+        }
+        
         this.processRun()
     }
     async connEvt(pSocket)
     {
-        pSocket.on('sql',async (pParam,pCallback) =>
+        if(this.active == true)
         {
-            if(this.active == true)
+            pSocket.on('sql',async (pParam,pCallback) =>
             {
                 if(typeof pParam.length != 'undefined')
                 {
@@ -203,21 +208,20 @@ class pricerApi
                         }
                     }
                 }
-            }
-           
-        })
-        pSocket.on('allPromoSend',async (pParam,pCallback) =>
-        {
-            this.processPromoSend()
-        })
-        pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
-        {
-            this.allItemSend()
-        })
-        pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
-        {
-            this.dateItemSend(arguments[0],arguments[1])
-        })
+            })
+            pSocket.on('allPromoSend',async (pParam,pCallback) =>
+            {
+                this.processPromoSend()
+            })
+            pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
+            {
+                this.allItemSend()
+            })
+            pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
+            {
+                this.dateItemSend(arguments[0],arguments[1])
+            })
+        }
     }
     async itemUpdate(pGuid)
     {
@@ -257,7 +261,7 @@ class pricerApi
                 }
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -342,7 +346,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -439,7 +443,6 @@ class pricerApi
     {
         if(this.active == true)
         {
-
             cron.schedule('0 3 * * *', async () => 
             {
                 await this.processPromoSend()
@@ -506,7 +509,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
