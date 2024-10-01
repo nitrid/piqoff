@@ -1959,7 +1959,7 @@ export class posDeviceCls
            " \n"+
            " \n"+
            " \n"+
-           "Cordialment \n"+
+           "Cordialement \n"+
            "P&P Supermarche & Boucherie \n" + 
            " \n"+
            " \n"+ 
