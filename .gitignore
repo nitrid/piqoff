@@ -11,6 +11,6 @@ log/
 www/public--
 archiveFiscal/
 plugins/mailer.js
-www/src/pos/resources
+www/src/pos/resources/logop.png
 plugins/devprint
-www/src/off/resources
+www/src/off/resources/logop.png
