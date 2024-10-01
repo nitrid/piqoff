@@ -1,5 +1,4 @@
 /config.js
-plugins/lic
 tmp/
 node_modules/
 package-lock.json
@@ -14,3 +13,4 @@ plugins/mailer.js
 www/src/pos/resources/
 www/src/off/resources/
 plugins/devprint
+plugins/private
