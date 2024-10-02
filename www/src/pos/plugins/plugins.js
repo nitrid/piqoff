@@ -5,12 +5,27 @@ const orgInit = App.prototype.init
 App.prototype.init = async function()
 {
   orgInit.call(this);
-  const plugins = [];
+  
+  let plugins = [];
+  let pluginsConf;
 
+  try 
+  {
+    pluginsConf = (await import('../../config.js')).default;
+  } 
+  catch (error) 
+  {
+    pluginsConf = { plugins: [] };
+  }
+  console.log(pluginsConf.plugins)
   const pluginsContext = require.context('./', false, /\.js$/);
   pluginsContext.keys().forEach((key) => 
   {
-    plugins.push(() => pluginsContext(key));
+    const fileName = key.replace('./', '').replace('.js', '');
+    if(fileName != 'plugins' && pluginsConf.plugins.includes(fileName))
+    {
+      plugins.push(() => pluginsContext(key));
+    }
   });
 
   try 
