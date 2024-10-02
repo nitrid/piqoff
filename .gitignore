@@ -1,4 +1,5 @@
 /config.js
+plugins/lic
 tmp/
 node_modules/
 package-lock.json
@@ -9,7 +10,6 @@ www/log
 log/
 www/public--
 archiveFiscal/
-www/src/pos/resources/
-www/src/off/resources/
+plugins/mailer.js
+www/src/pos/resources
 plugins/devprint
-plugins/private
