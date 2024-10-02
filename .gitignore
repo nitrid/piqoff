@@ -14,6 +14,5 @@ www/src/off/resources
 www/src/pos/resources
 www/src/off/plugins/private
 www/src/pos/plugins/private
-www/src/off/plugins/config.js
-www/src/pos/plugins/config.js
 plugins/devprint
+www/src/config.js
