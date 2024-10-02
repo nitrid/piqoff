@@ -119,7 +119,15 @@ module.exports =
                 target: 'http://localhost',
                 ws: true
             }
-        }
+        },
+        client: 
+        {
+            overlay: 
+            {
+                warnings: false,  // Uyarıların overlay üzerinde çıkmasını engelle
+                errors: true,     // Hatalar gösterilmeye devam etsin
+            },
+        },
     },
     plugins: 
     [

@@ -11,18 +11,19 @@ App.prototype.init = async function()
 
   try 
   {
-    pluginsConf = (await import('../../config.js')).default;
+    pluginsConf = require('../../config.js').default;
   } 
   catch (error) 
   {
-    pluginsConf = { plugins: [] };
+    pluginsConf = { plugins: {} };
   }
-  console.log(pluginsConf.plugins)
+
   const pluginsContext = require.context('./', false, /\.js$/);
   pluginsContext.keys().forEach((key) => 
   {
     const fileName = key.replace('./', '').replace('.js', '');
-    if(fileName != 'plugins' && pluginsConf.plugins.includes(fileName))
+    
+    if(fileName != 'plugins' && typeof pluginsConf?.plugins?.pos != 'undefined' && pluginsConf?.plugins?.pos[fileName])
     {
       plugins.push(() => pluginsContext(key));
     }
@@ -38,9 +39,8 @@ App.prototype.init = async function()
   } 
   catch (e) 
   {
-    console.log('private klasörü bulunamadı veya boş.');
+    
   }
 
   const loadedPlugins = await Promise.all(plugins.map(plugin => plugin()));
-  console.log('Yüklenen pluginler:', loadedPlugins);
 }
