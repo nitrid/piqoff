@@ -1042,6 +1042,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
                             path: 'customers/report/saleInvoiceAgingReport'
                         },
+                        {
+                            id: 'slsRpt_01_011',
+                            text: e.t('menuOff.slsRpt_01_011'),//'Eksik Gönderilen Siparişler Raporu',
+                            path: 'report/sales/ıncompleteShippedOrdersReport'
+                        },
                     ]
                 }
             ]
