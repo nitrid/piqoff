@@ -29,11 +29,3 @@ App.prototype.init = async function()
   const loadedPlugins = await Promise.all(plugins.map(plugin => plugin()));
   console.log('Yüklenen pluginler:', loadedPlugins);
 }
-// const plugins = 
-// {
-//   balanceCounter : () => import('./balanceCounter.js'),
-//   cordovaDevice : () => import('./cordovaDevice.js'),
-//   //resto : () => import('./resto/main.js')
-// };
-  
-// export default plugins;
