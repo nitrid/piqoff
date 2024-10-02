@@ -3732,9 +3732,12 @@ export default class posDoc extends React.PureComponent
     }
     isUnitDecimal(pUnit)
     {
-        if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+        if(typeof pUnit != 'undefined' && pUnit != null)
         {
-            return true
+            if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+            {
+                return true
+            }
         }
         return false
     }
