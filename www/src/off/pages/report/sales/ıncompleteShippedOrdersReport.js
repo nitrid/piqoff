@@ -39,7 +39,7 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
             {CODE : "REF_NO",NAME : this.t("grdSlsOrdList.clmRefNo")},
             {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOrdList.clmOutputName")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdSlsOrdList.clmItemName")},
             {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
             {CODE : "QUANTITY",NAME : this.t("grdSlsOrdList.clmQuantıty")},
             {CODE : "COMP_QUANTITY",NAME : this.t("grdSlsOrdList.clmCompQuantıty")},
@@ -127,57 +127,30 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
     }
     async _btnGetClick()
     {
-        if(this.chkInvOrDisp.value == false)
+       
+        let tmpSource =
         {
-            console.log(this.chkInvOrDisp.value)
-            let tmpSource =
+            source : 
             {
-                source : 
+                groupBy : this.groupList,
+                select : 
                 {
-                    groupBy : this.groupList,
-                    select : 
-                    {
-                        query : "SELECT * " +
-                                "FROM DOC_ORDERS_VW_01    " +
-                                "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
-                                "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 1   " +
-                                "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
-                                param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
-                    },
-                    sql : this.core.sql
-                }
+                    query : "SELECT MAX(GUID) AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY " +
+                            "FROM DOC_ORDERS_VW_01    " +
+                            "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
+                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
+                            "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0   " +
+                            "GROUP BY REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY   ",
+                            param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                            value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                },
+                sql : this.core.sql
             }
-            App.instance.setState({isExecute:true})
-            await this.grdSlsOrdList.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
         }
-        else
-        {
-            let tmpSource2 =
-            {
-                source : 
-                {
-                    groupBy : this.groupList,
-                    select : 
-                    {
-                        query : "SELECT * " +
-                                "FROM DOC_ORDERS_VW_01    " +
-                                "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
-                                "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0    " +
-                                "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
-                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
-                    },
-                    sql : this.core.sql
-                }
-            }
-            App.instance.setState({isExecute:true})
-            await this.grdSlsOrdList.dataRefresh(tmpSource2)
-            App.instance.setState({isExecute:false})
-        }
+        App.instance.setState({isExecute:true})
+        await this.grdSlsOrdList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+    
     }
     async _btnGrdPrint(e)
     {
@@ -500,14 +473,6 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>       
                                 </NdPopGrid>
                                 </Item> 
-                                <Item>
-                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbMainGrp" showClearButton={true} notRefresh={true}  searchEnabled={true}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    data={{source: {select : {query:"SELECT CODE,NAME FROM CUSTOMER_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                    />
-                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -523,14 +488,6 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
                         </div>
                         <div className="col-3">
                             
-                        </div>
-                        <div className="col-3">
-                            <Form>
-                                <Item>
-                                    <Label text={this.t("chkInvOrDisp")} alignment="left" />
-                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={false} />
-                                </Item>
-                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
@@ -561,15 +518,14 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={false} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsOrdList.clmInputCode")} visible={false}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/>
-                                <Column dataField="MAIN_GROUP_NAME" caption={this.t("grdSlsOrdList.clmMainGroup")} width={100} visible={true}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsOrdList.clmOutputName")} visible={false}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/>                                
+                                <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrdList.clmItemName")} visible={true}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/>
-                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrdList.clmQuantıty")} visible={true} /> 
-                                <Column dataField="COMP_QUANTITY" caption={this.t("grdSlsOrdList.clmCompQuantıty")} visible={false} /> 
-                                <Column dataField="PEND_QUANTITY" caption={this.t("grdSlsOrdList.clmPendQuantıty")} visible={true} />              
+                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrdList.clmQuantıty")} visible={true} width={100} /> 
+                                <Column dataField="COMP_QUANTITY" caption={this.t("grdSlsOrdList.clmCompQuantıty")} visible={true} width={100} /> 
+                                <Column dataField="PEND_QUANTITY" caption={this.t("grdSlsOrdList.clmPendQuantıty")} visible={true} width={125} />              
                                 <Column type="buttons" width={70}>
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>
