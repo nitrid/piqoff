@@ -139,7 +139,7 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
                             "FROM DOC_ORDERS_VW_01    " +
                             "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
-                            "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0   " +
+                            "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0  AND PEND_QUANTITY > 0 " +
                             "GROUP BY REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY   ",
                             param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                             value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
@@ -533,15 +533,15 @@ export default class ıncompleteShippedOrdersReport extends React.PureComponent
                                     <TotalItem
                                     column="QUANTITY"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                      <TotalItem
+                                    valueFormat={{ style: "decimal"}} />
+                                    <TotalItem
                                     column="COMP_QUANTITY"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    valueFormat={{ style: "decimal"}} />
                                     <TotalItem
                                     column="PEND_QUANTITY"
                                     summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    valueFormat={{ style: "decimal"}} />
                                 </Summary>
                             </NdGrid>
                         </div>
