@@ -28,7 +28,6 @@ const slsRpt_01_011 =
         clmCompQuantıty : "Teslim Edilen",
         clmPendQuantıty :"Teslim Edilecek",
         clmItemName :"Ürün İsmi",
-        clmItemName :"Ürün İsmi",
     },
 }
 

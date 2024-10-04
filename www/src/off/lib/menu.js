@@ -1045,7 +1045,7 @@ export const menu = (e) =>
                         {
                             id: 'slsRpt_01_011',
                             text: e.t('menuOff.slsRpt_01_011'),//'Eksik Gönderilen Siparişler Raporu',
-                            path: 'report/sales/ıncompleteShippedOrdersReport'
+                            path: 'report/sales/incompleteShippedOrdersReport'
                         },
                     ]
                 }
