@@ -20,7 +20,7 @@ export default class customerInfoScreen extends React.PureComponent
         this.state = {digit : false}
 
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
-        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0,USERS:this.core.auth.data.CODE}).getValue()
 
         setInterval(()=>
         {

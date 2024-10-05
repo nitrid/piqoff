@@ -34,7 +34,7 @@ export default class docParamMob extends React.PureComponent
         await this.core.util.waitUntil(0)
 
         this.prmData = new param(mobPrm)
-        await this.prmData.load({APP:'MOB'})        
+        await this.prmData.load({APP:'MOB',USERS:''})        
 
         let tmpDt = new datatable()
         tmpDt.import(this.prmData.filter({TYPE:1}).meta)
@@ -63,7 +63,7 @@ export default class docParamMob extends React.PureComponent
                 <ScrollView>
                     <div className='row px-2 pt-2'>
                         <div className='col-12'>
-                            <Form colCount={3} id={"frmFilter" + this.tabIndex}>
+                            <Form colCount={4} id={"frmFilter" + this.tabIndex}>
                                 <Item>
                                     <Label text={this.t("lblUser")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbUser"
@@ -74,12 +74,19 @@ export default class docParamMob extends React.PureComponent
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
-                                        await this.prmData.load({APP:'MOB'})                                    
+                                        if(e.value == null)
+                                        {
+                                            await this.prmData.load({APP:'MOB',USERS:''})
+                                        }
+                                        else
+                                        {
+                                            await this.prmData.load({APP:'MOB'}) 
+                                        }
 
                                         this.state.metaPrm.map((pItem) => 
                                         {
                                             let tmpData = {...pItem} 
-                                            tmpData.VALUE = this.prmData.filter({TYPE:1,USERS:e.value,ID:pItem.ID}).getValue()                                        
+                                            tmpData.VALUE = this.prmData.filter({TYPE:1,USERS:e.value == null ? '' : e.value,ID:pItem.ID}).getValue()                                        
                                             this.ItemSet(tmpData,this)
                                         })
                                     }}
@@ -91,20 +98,73 @@ export default class docParamMob extends React.PureComponent
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     showClearButton={true}
-                                    // data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
-                                        await this.prmData.load({APP:'MOB'})
+                                        if(this.cmbUser.value == null)
+                                        {
+                                            await this.prmData.load({APP:'MOB',USERS:''})
+                                        }
+                                        else
+                                        {
+                                            await this.prmData.load({APP:'MOB'}) 
+                                        }
+
                                         this.setState({metaPrm:this.prmData.filter({TYPE:1,PAGE:this.cmbDoc.value}).meta})
                                         
                                         this.state.metaPrm.map((pItem) => 
                                         {
                                             let tmpData = {...pItem} 
-                                            tmpData.VALUE = this.prmData.filter({TYPE:1,USERS:this.cmbUser.value,ID:pItem.ID}).getValue()                                        
+                                            tmpData.VALUE = this.prmData.filter({TYPE:1,USERS:this.cmbUser.value == null ? '' : this.cmbUser.value,ID:pItem.ID}).getValue()                                        
                                             this.ItemSet(tmpData,this)
                                         })
                                     }}
                                     />
+                                </Item>
+                                <Item>
+                                    <NdButton text={this.t("btnMetaSave")} type="default" width="100%"
+                                    onClick={async()=>
+                                    {
+                                        await this.prmData.load({APP:'MOB',USERS:''})
+
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
+                                        }
+
+                                        App.instance.setState({isExecute:true})
+
+                                        for (let x = 0; x < this.state.metaPrm.length; x++) 
+                                        {
+                                            this.prmData.add
+                                            (
+                                                {
+                                                    TYPE:this.state.metaPrm[x].TYPE,
+                                                    ID:this.state.metaPrm[x].ID,
+                                                    VALUE:await this.ItemGet(this.state.metaPrm[x],this),
+                                                    SPECIAL:this.state.metaPrm[x].SPECIAL,
+                                                    USERS:"",
+                                                    PAGE:this.state.metaPrm[x].PAGE,
+                                                    ELEMENT:this.state.metaPrm[x].ELEMENT,
+                                                    APP:this.state.metaPrm[x].APP,
+                                                }
+                                            )
+                                        }
+
+                                        let tmpResult = await this.prmData.save()
+                                        await this.prmData.load({APP:'MOB'})
+                                        App.instance.setState({isExecute:false})
+
+                                        if(tmpResult == 0)
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{App.instance.lang.t("msgSaveResult.msgSuccess")}</div>)
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }}></NdButton>
                                 </Item>
                                 <Item>
                                     <NdButton text={this.t("btnSave")} type="default" width="100%"

@@ -407,6 +407,7 @@ export const langTr =
     {
         lblUser : "Kullanıcı",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -418,6 +419,7 @@ export const langTr =
     {
         lblUser : "Kullanıcı",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -429,6 +431,7 @@ export const langTr =
     {
         lblUser : "Kullanıcı",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -441,6 +444,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -453,6 +457,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -465,6 +470,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -477,6 +483,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -489,6 +496,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -501,6 +509,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -513,6 +522,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",
@@ -525,6 +535,7 @@ export const langTr =
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
         btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
         pg_UserList :
         {
             title : "Kullanıcı Seçimi",

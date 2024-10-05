@@ -405,6 +405,7 @@ export const langFr =
     prm_01_001 :
     {
         lblUser : "Utilisateur",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -416,6 +417,7 @@ export const langFr =
     prm_01_002 :
     {
         lblUser : "Utilisateur",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -427,6 +429,7 @@ export const langFr =
     prm_01_003 :
     {
         lblUser : "Utilisateur",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -439,6 +442,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -451,6 +455,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -463,6 +468,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -475,6 +481,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -487,6 +494,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -499,6 +507,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -511,6 +520,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
@@ -523,6 +533,7 @@ export const langFr =
     {
         lblUser : "Utilisateur",
         lblDoc : "Document",
+        btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :
         {
