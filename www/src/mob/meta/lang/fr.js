@@ -21,9 +21,16 @@ export const langFr =
     btnLineDisc: "Remise de ligne",       
     chkRememberMe : "Souviens-toi de moi", 
     btnMailsend : "Mail Gönder", // BAK
+    msgPassiveItem:
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Produit pasif souhaitez-vous l'activer ?"
+    },
     msgMailsend:
     {
-        title: "Dikkat",  // BAK
+        title: "Attention",  // BAK
         btn01: "Evet",  // BAK
         btn02: "Iptal",  // BAK
         msg: "Mail göndermek istediğinize emin misiniz ?"  // BAK

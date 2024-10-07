@@ -195,7 +195,7 @@ class NdLayoutItemBase extends Base
         else
         {
             
-            if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
+            if(typeof this.props.access != 'undefined' && typeof this.props?.access?.getValue()?.visible != 'undefined')
             {
                 if(this.state.accessValue.visible)
                 {

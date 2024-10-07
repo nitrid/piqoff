@@ -21,6 +21,13 @@ export const langTr =
     btnLineDisc: "Satır İndirim",
     chkRememberMe : "Beni Hatırla", // BAK
     btnMailsend : "Mail Gönder",
+    msgPassiveItem:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Okuttugunu urun pasif aktif yapmak istermisiniz ?"
+    },
     msgMailsend:
     {
         title: "Dikkat",
