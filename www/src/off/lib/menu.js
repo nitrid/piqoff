@@ -1437,7 +1437,13 @@ export const menu = (e) =>
                             id: 'pos_02_017',
                             text: e.t('menuOff.pos_02_017'),
                             path: 'pos/report/posSaleTimeReport'
-                        }
+                        },
+                        //Serbest Yapılan İndirimler İçin Rapor.
+                        {
+                           id: 'pos_02_018',
+                           text: e.t('menuOff.pos_02_018'),
+                           path: 'pos/report/freeDiscountsReport'
+                       }
                     ]
                 },
             ]
