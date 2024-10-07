@@ -10,6 +10,7 @@ import NdButton from '../../../core/react/devex/button';
 import {ItemBuild,ItemSet,ItemGet} from '../../tools/itemOp';
 import NdPopGrid from '../../../core/react/devex/popgrid';
 import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from '../../../core/react/devex/grid';
+import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
 
 export default class accessPos extends React.PureComponent
 {
@@ -32,16 +33,19 @@ export default class accessPos extends React.PureComponent
         await this.core.util.waitUntil(0)
 
         this.acsData = new access(acs)
-        await this.acsData.load({APP:'POS'})        
+        await this.acsData.load({APP:'POS',USERS:''})        
 
         let tmpDt = new datatable()
-        tmpDt.import(this.acsData.filter({TYPE:2}).meta)
+        tmpDt.import(this.acsData.meta)
         tmpDt = tmpDt.groupBy('PAGE')
-        console.log(tmpDt)
+
         let tmpMenu = []
         for (let i = 0; i < tmpDt.length; i++) 
         {
-            tmpMenu.push({CODE:tmpDt[i].PAGE,NAME:tmpDt[i].VIEW.PAGE_NAME})            
+            if(typeof tmpDt[i].VIEW != 'undefined')
+            {
+                tmpMenu.push({CODE:tmpDt[i].PAGE,NAME:tmpDt[i].VIEW.PAGE_NAME})  
+            }
         }
         await this.cmbDoc.dataRefresh({source:tmpMenu});
     }
@@ -60,7 +64,7 @@ export default class accessPos extends React.PureComponent
             <div>
                 <div className='row px-2 pt-2'>
                     <div className='col-12'>
-                        <Form colCount={3} id={"frmFilter" + this.tabIndex}>
+                        <Form colCount={4} id={"frmFilter" + this.tabIndex}>
                             <Item>
                                 <Label text={this.t("lblUser")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbUser"
@@ -71,12 +75,19 @@ export default class accessPos extends React.PureComponent
                                 data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
-                                    await this.acsData.load({APP:'POS'})                                    
+                                    if(e.value == null)
+                                    {
+                                        await this.acsData.load({APP:'POS',USERS:''})
+                                    }
+                                    else
+                                    {
+                                        await this.acsData.load({APP:'POS'})
+                                    }
 
                                     this.state.metaAcs.map((pItem) => 
                                     {
                                         let tmpData = {...pItem} 
-                                        tmpData.VALUE = this.acsData.filter({TYPE:2,USERS:e.value,ID:pItem.ID}).getValue()                                        
+                                        tmpData.VALUE = this.acsData.filter({USERS:e.value == null ? '' : e.value,ID:pItem.ID}).getValue()                                        
                                         this.ItemSet(tmpData,this)
                                     })
                                 }}
@@ -88,21 +99,75 @@ export default class accessPos extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="CODE"
                                 showClearButton={true}
-                                // data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
-                                    await this.acsData.load({APP:'POS'})
+                                    if(e.value == null)
+                                    {
+                                        await this.acsData.load({APP:'POS',USERS:''})
+                                    }
+                                    else
+                                    {
+                                        await this.acsData.load({APP:'POS'})
+                                    }  
                                     
-                                    this.setState({metaAcs:this.acsData.filter({TYPE:2,PAGE:this.cmbDoc.value}).meta})
+                                    this.setState({metaAcs:this.acsData.filter({PAGE:this.cmbDoc.value}).meta})
                                     
                                     this.state.metaAcs.map((pItem) => 
                                     {
                                         let tmpData = {...pItem} 
-                                        tmpData.VALUE = this.acsData.filter({TYPE:2,USERS:e.value,ID:pItem.ID}).getValue()                                        
+                                        tmpData.VALUE = this.acsData.filter({USERS:this.cmbUser.value == null ? '' : this.cmbUser.value,ID:pItem.ID}).getValue()                                        
                                         this.ItemSet(tmpData,this)
                                     })
                                 }}
                                 />
+                            </Item>
+                            <Item>
+                                <NdButton text={this.t("btnMetaSave")} type="default" width="100%"
+                                onClick={async()=>
+                                {
+                                    await this.acsData.load({APP:'POS',USERS:''})
+
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
+                                    }
+
+                                    App.instance.setState({isExecute:true})
+                                    
+                                    for (let x = 0; x < this.state.metaAcs.length; x++) 
+                                    {
+                                        if(typeof this.state.metaAcs[x].VIEW != 'undefined')
+                                        {
+                                            this.acsData.add
+                                            (
+                                                {
+                                                    TYPE:this.state.metaAcs[x].TYPE,
+                                                    ID:this.state.metaAcs[x].ID,
+                                                    VALUE:await this.ItemGet(this.state.metaAcs[x],this),
+                                                    SPECIAL:this.state.metaAcs[x].SPECIAL,
+                                                    USERS:"",
+                                                    PAGE:this.state.metaAcs[x].PAGE,
+                                                    ELEMENT:this.state.metaAcs[x].ELEMENT,
+                                                    APP:this.state.metaAcs[x].APP,
+                                                }
+                                            )
+                                        }
+                                    }
+                                    let tmpResult = await this.acsData.save()
+                                    await this.acsData.load({APP:'POS'})
+                                    App.instance.setState({isExecute:false})
+                                    
+                                    if(tmpResult == 0)
+                                    {
+                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{App.instance.lang.t("msgSaveResult.msgSuccess")}</div>)
+                                    }
+                                    else
+                                    {
+                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                }}></NdButton>
                             </Item>
                             <Item>
                                 <NdButton text={this.t("btnSave")} type="default" width="100%"
@@ -111,27 +176,49 @@ export default class accessPos extends React.PureComponent
                                     this.pg_UserList.show();
                                     this.pg_UserList.onClick = async(data) =>
                                     {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
+                                        }
+
+                                        App.instance.setState({isExecute:true})
+
                                         for (let i = 0; i < data.length; i++) 
                                         {
                                             for (let x = 0; x < this.state.metaAcs.length; x++) 
                                             {
-                                                this.acsData.add
-                                                (
-                                                    {
-                                                        TYPE:this.state.metaAcs[x].TYPE,
-                                                        ID:this.state.metaAcs[x].ID,
-                                                        VALUE:await this.ItemGet(this.state.metaAcs[x],this),
-                                                        SPECIAL:this.state.metaAcs[x].SPECIAL,
-                                                        USERS:data[i].CODE,
-                                                        PAGE:this.state.metaAcs[x].PAGE,
-                                                        ELEMENT:this.state.metaAcs[x].ELEMENT,
-                                                        APP:this.state.metaAcs[x].APP,
-                                                    }
-                                                )
+                                                if(typeof this.state.metaAcs[x].VIEW != 'undefined')
+                                                {
+                                                    this.acsData.add
+                                                    (
+                                                        {
+                                                            TYPE:this.state.metaAcs[x].TYPE,
+                                                            ID:this.state.metaAcs[x].ID,
+                                                            VALUE:await this.ItemGet(this.state.metaAcs[x],this),
+                                                            SPECIAL:this.state.metaAcs[x].SPECIAL,
+                                                            USERS:data[i].CODE,
+                                                            PAGE:this.state.metaAcs[x].PAGE,
+                                                            ELEMENT:this.state.metaAcs[x].ELEMENT,
+                                                            APP:this.state.metaAcs[x].APP,
+                                                        }
+                                                    )
+                                                }
                                             }
                                         }
-                                        await this.acsData.save()
+                                        let tmpResult = await this.acsData.save()
                                         await this.acsData.load({APP:'POS'})
+                                        App.instance.setState({isExecute:false})
+
+                                        if(tmpResult == 0)
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{App.instance.lang.t("msgSaveResult.msgSuccess")}</div>)
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
                                     }
                                 }}></NdButton>
                             </Item>

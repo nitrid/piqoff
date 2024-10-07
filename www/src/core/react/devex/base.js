@@ -18,7 +18,7 @@ export default class NdBase extends React.PureComponent
         }
         this.isUnmounted = false;
         // GÖRÜNÜR DURUMU. YETKİLENDİRME.
-        if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
+        if(typeof this.props.access != 'undefined' && typeof this.props.access?.getValue()?.visible != 'undefined')
         {   
             this.state.visible = this.props.access.getValue().visible
         }
@@ -27,7 +27,7 @@ export default class NdBase extends React.PureComponent
             this.state.visible = true;
         }
         // EDİT EDİLEBİLİRLİK DURUMU. YETKİLENDİRME.
-        if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().editable != 'undefined')
+        if(typeof this.props.access != 'undefined' && typeof this.props.access?.getValue()?.editable != 'undefined')
         {           
             this.state.editable = this.props.access.getValue().editable ? false : true
         }

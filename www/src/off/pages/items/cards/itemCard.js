@@ -1667,7 +1667,7 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-1 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
                                             param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
+                                            />
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1744,8 +1744,7 @@ export default class itemCard extends React.PureComponent
                                                         dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                                         format={"#,##0.000"} step={0.1}
                                                         editable={this.state.isItemGrpForMinMaxAccess}
-                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
-                                                        access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
+                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
                                                         </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>

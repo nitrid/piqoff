@@ -83,6 +83,8 @@ export default class Sale extends React.PureComponent
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
+        this.orderGroup.value = this.sysParam.filter({ID:'salesİtemsType',USERS:this.user.CODE}).getValue().value
+      
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
         this.docObj.dt()[0].PRICE_LIST_NO = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
@@ -173,11 +175,12 @@ export default class Sale extends React.PureComponent
         //CORDOVA YADA ELECTRON İSE SQLLİTE LOCALDB KULLANILIYOR.
         if(this.core.local.platform != '')
         {
+            
             let tmpQuery = 
             {
                 query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
             
@@ -203,7 +206,7 @@ export default class Sale extends React.PureComponent
             {
                 query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
+                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY " + this.orderGroup.value,
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
                 value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
                 buffer : true
@@ -819,8 +822,17 @@ export default class Sale extends React.PureComponent
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </NbButton>
                         </div>
+                        
                         <div className="col-2" align="left" style={{paddingTop:'5px'}}>
-                          
+                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'150px'}} 
+                            displayExpr="VALUE"                       
+                            valueExpr="ID"
+                            onValueChanged={(async(e)=>
+                            {
+                                this.getItems()
+                            }).bind(this)}
+                            data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")}]}}
+                            />
                         </div>
                         <div className="col-4" align="center" style={{paddingTop:'5px'}}>
                             <NdTextBox id={"txtSearch"} parent={this} simple={true} placeholder={"Search"}  onChange={this.getItems}
@@ -839,7 +851,7 @@ export default class Sale extends React.PureComponent
                             />
                         </div>
                         <div className="col-4" align="right" style={{paddingRight:'25px',paddingTop:'5px'}}>
-                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' style={{width:'250px'}}
+                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' style={{width:'250px'}} 
                             displayExpr="NAME"                       
                             valueExpr="CODE"
                             value= ""
@@ -898,11 +910,11 @@ export default class Sale extends React.PureComponent
                                                             this.popCart.hide();
                                                         }
                                                     }}>
-                                                        <i className="fa-solid fa-file fa-1x"></i>
+                                                        <i className="fa-solid fa-plus fa-1x"></i>
                                                     </NbButton>
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
-                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",background:"#69F0AE"}}
                                                     onClick={async()=>
                                                     {
                                                         if(this.docLines.length == 0)
@@ -949,22 +961,41 @@ export default class Sale extends React.PureComponent
                                                             return;
                                                         }
 
-                                                        let tmpConfObj =
+                                                        if(this.sysParam.filter({ID:'salesİnvoicesForFacture',USERS:this.user.CODE}).getValue().value == true)
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'before'},{id:"btn03",caption:this.t("msgSave.btn03"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                                        }
-                                                        
-                                                        let pResult = await dialog(tmpConfObj);
-                                                        if(pResult == 'btn01')
-                                                        {
-                                                            this.orderSave()
-                                                        }
-                                                        else if(pResult == 'btn02')
-                                                        {
-                                                            this.factureSave()
-                                                        }
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'before'},{id:"btn03",caption:this.t("msgSave.btn03"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                                            }
+                                                            
+                                                            let pResult = await dialog(tmpConfObj);
+                                                            if(pResult == 'btn01')
+                                                            {
+                                                                this.orderSave()
+                                                            }
+                                                            else if(pResult == 'btn02')
+                                                            {
+                                                                this.factureSave()
+                                                            }
+
+                                                        } else {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn03",caption:this.t("msgSave.btn03"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                                            }
+                                                            
+                                                            let pResult = await dialog(tmpConfObj);
+                                                            if(pResult == 'btn01')
+                                                            {
+                                                                this.orderSave()
+                                                            }
+                                                        }    
+
+
                                                     }}>
                                                         <i className="fa-solid fa-floppy-disk fa-1x"></i>
                                                     </NbButton>                                                    
@@ -1083,10 +1114,23 @@ export default class Sale extends React.PureComponent
                                                         </Validator> 
                                                     </NdSelectBox>
                                                 </Item>
+                                                {/* dtDocDate */}
                                                 <Item>
                                                     <Label text={this.t("popCart.dtDocDate")} alignment="right" />
                                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                                    onValueChanged={(async()=>
+                                                    {
+                                                        this.checkRow()
+                                                    }).bind(this)}
+                                                    >
+                                                    </NdDatePicker>
+                                                </Item>
+                                                 {/* dtDShıpmentDate */}
+                                                <Item>
+                                                    <Label text={this.t("popCart.dtDShıpmentDate")} alignment="right" />
+                                                    <NdDatePicker simple={true}  parent={this} id={"dtDShıpmentDate"}
+                                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                                     onValueChanged={(async()=>
                                                     {
                                                         this.checkRow()

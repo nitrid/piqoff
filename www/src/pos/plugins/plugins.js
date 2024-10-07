@@ -1,8 +1,46 @@
-const plugins = 
+import App from '../lib/app.js';
+
+const orgInit = App.prototype.init
+
+App.prototype.init = async function()
 {
-  balanceCounter : () => import('./balanceCounter.js'),
-  cordovaDevice : () => import('./cordovaDevice.js'),
-  //resto : () => import('./resto/main.js')
-};
+  orgInit.call(this);
   
-  export default plugins;
+  let plugins = [];
+  let pluginsConf;
+
+  try 
+  {
+    pluginsConf = require('../../config.js').default;
+  } 
+  catch (error) 
+  {
+    pluginsConf = { plugins: {} };
+  }
+
+  const pluginsContext = require.context('./', false, /\.js$/);
+  pluginsContext.keys().forEach((key) => 
+  {
+    const fileName = key.replace('./', '').replace('.js', '');
+    
+    if(fileName != 'plugins' && typeof pluginsConf?.plugins?.pos != 'undefined' && pluginsConf?.plugins?.pos[fileName])
+    {
+      plugins.push(() => pluginsContext(key));
+    }
+  });
+
+  try 
+  {
+    const privatePluginsContext = require.context('./private', false, /\.js$/);
+    privatePluginsContext.keys().forEach((key) => 
+    {
+      plugins.push(() => privatePluginsContext(key));
+    });
+  } 
+  catch (e) 
+  {
+    
+  }
+
+  const loadedPlugins = await Promise.all(plugins.map(plugin => plugin()));
+}

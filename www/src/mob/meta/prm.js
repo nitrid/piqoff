@@ -67,12 +67,32 @@ export const prm =
             CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },
+    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE
     {
         TYPE : 0,
         ID :"deafultPage",
         VALUE : 
         {
-            value : ""
+            value : "pairing/salesPairing.js"
+        },
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Otomatik Açılacak Sayfa"
+        }
+    },
+    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE İD Sİ
+    {
+        TYPE : 0,
+        ID :"deafultPageId",
+        VALUE : 
+        {
+            value : "kar_01"
         },
         SPECIAL : "",
         PAGE : "",

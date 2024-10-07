@@ -123,7 +123,22 @@ export default class NdAccessEdit extends Base
                     {
                         if(typeof item.state.accessValue != 'undefined' && typeof item.props.access != 'undefined')
                         {
-                            item.props.access.setValue(item.state.accessValue)
+                            for (let x = 0; x < item.props.access.meta.length; x++) 
+                            {
+                                item.props.access.add
+                                (
+                                    {
+                                        TYPE:item.props.access.meta[x].TYPE,
+                                        ID:item.props.access.meta[x].ID,
+                                        VALUE:item.state.accessValue,
+                                        SPECIAL:item.props.access.meta[x].SPECIAL,
+                                        USERS:this.core.auth.data.CODE,
+                                        PAGE:item.props.access.meta[x].PAGE,
+                                        ELEMENT:item.props.access.meta[x].ELEMENT,
+                                        APP:item.props.access.meta[x].APP,
+                                    }
+                                )
+                            }
                             await item.props.access.save()
                         }
                     })

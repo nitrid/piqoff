@@ -1042,6 +1042,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
                             path: 'customers/report/saleInvoiceAgingReport'
                         },
+                        {
+                            id: 'slsRpt_01_011',
+                            text: e.t('menuOff.slsRpt_01_011'),//'Eksik Gönderilen Siparişler Raporu',
+                            path: 'report/sales/incompleteShippedOrdersReport'
+                        },
                     ]
                 }
             ]
@@ -1287,6 +1292,21 @@ export const menu = (e) =>
                             id: 'pos_01_005',
                             text: e.t('menuOff.pos_01_005'),//'Pos ödeme tipi tanımlama',
                             path: 'pos/card/posPayType'
+                        },
+                        {
+                            id: 'pos_01_006',
+                            text: e.t('menuOff.pos_01_006'),//'Piqpoid kullanıcı tanımlama',
+                            path: 'pos/card/piqPoidUserCard'
+                        },
+                        {
+                            id: 'pos_01_007',
+                            text: e.t('menuOff.pos_01_007'),//'Piqpoid cihaz tanımlama',
+                            path: 'pos/card/piqPoidDeviceCard'
+                        },
+                        {
+                            id: 'pos_01_008',
+                            text: e.t('menuOff.pos_01_008'),//'Piqpoid parametre tanımlama',
+                            path: 'pos/card/piqPoidParamCard'
                         }
                     ]
                 },

@@ -1,5 +1,6 @@
 import {core} from 'gensrv'
 import fetch from 'node-fetch';
+import config from '../config.js';
 
 class piqXApi
 {
@@ -14,6 +15,14 @@ class piqXApi
         this.password = '1'
         this.token = ''
         this.endpoint = 'http://piqx.azurewebsites.net/'
+
+        if(config?.plugins?.piqXApi?.active)
+        {
+            this.active = config?.plugins?.piqXApi?.active
+            this.endpoint = typeof config.plugins.piqXApi.endpoint == 'undefined' ? this.endpoint : config?.plugins?.piqXApi?.endpoint
+            this.username = typeof config.plugins.piqXApi.username == 'undefined' ? this.username : config?.plugins?.piqXApi?.username
+            this.password = typeof config.plugins.piqXApi.password == 'undefined' ? this.password : config?.plugins?.piqXApi?.password
+        }
     }
     async connEvt(pSocket)
     {
