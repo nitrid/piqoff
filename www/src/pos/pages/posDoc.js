@@ -59,7 +59,7 @@ export default class posDoc extends React.PureComponent
         this.isFirstOpen = false
         this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
-        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0,USERS:this.user.CODE}).getValue()
 
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -471,9 +471,9 @@ export default class posDoc extends React.PureComponent
             //******************************************************** */
            
 
-            this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
+            this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0,USERS:this.user.CODE}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
-            if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
+            if(this.prmObj.filter({ID:'TSEUsb',TYPE:0,USERS:this.user.CODE}).getValue() == true)
             {
                 this.posUsbTSE = new posUsbTSECls();
                 this.posUsbTSE.deviceId = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
@@ -880,7 +880,7 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_TAX_NO = tmpCustomerDt[0].TAX_NO
                 this.posObj.dt()[0].CUSTOMER_SIRET = tmpCustomerDt[0].SIRET_ID
 
-                if(this.prmObj.filter({ID:'mailControl',TYPE:0}).getValue() == true)
+                if(this.prmObj.filter({ID:'mailControl',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                 {
                     if(this.posObj.dt()[0].CUSTOMER_MAIL == '')
                     {
@@ -1012,7 +1012,7 @@ export default class posDoc extends React.PureComponent
             }
             //*********************************************************/
             //BİRDEN FAZLA FİYAT LİSTESİ VARSA LİSTE SEÇİMİ SORULUYOR
-            if(this.prmObj.filter({ID:'PricingListNoChoice',TYPE:0}).getValue())
+            if(this.prmObj.filter({ID:'PricingListNoChoice',TYPE:0,USERS:this.user.CODE}).getValue())
             {
                 let tmpPriceChoice = await this.priceListChoice(tmpItemsDt[0].GUID)
                 if(tmpPriceChoice == -1)
@@ -1256,7 +1256,7 @@ export default class posDoc extends React.PureComponent
                 this.loading.current.instance.hide()
 
                 let tmpMsgResult = "btn01"
-                if(this.prmObj.filter({ID:'PriceNotFoundAlert',TYPE:0}).getValue())
+                if(this.prmObj.filter({ID:'PriceNotFoundAlert',TYPE:0,USERS:this.user.CODE}).getValue())
                 {
                     let tmpConfObj =
                     {
@@ -1400,7 +1400,7 @@ export default class posDoc extends React.PureComponent
     getBarPattern(pBarcode)
     {
         pBarcode = pBarcode.toString().trim()
-        let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
+        let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0,USERS:this.user.CODE}).getValue();
         
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
         {               
@@ -1438,7 +1438,7 @@ export default class posDoc extends React.PureComponent
                 let tmpFactory = 1
                 if(tmpSumFlag == 'F')
                 {
-                    tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
+                    tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                 }
 
                 let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
@@ -1467,7 +1467,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            let tmpPrm = this.prmObj.filter({ID:'ItemsWarning',TYPE:0}).getValue();
+            let tmpPrm = this.prmObj.filter({ID:'ItemsWarning',TYPE:0,USERS:this.user.CODE}).getValue();
             if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
             {            
                 resolve()
@@ -1931,7 +1931,7 @@ export default class posDoc extends React.PureComponent
                 //************************* */
                                 
                 //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
-                if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
+                if(this.prmObj.filter({ID:'TSEUsb',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                 {
                     await this.posUsbTSE.transaction(tmpSignedData.SIGNATURE_SUM)
                     if(typeof this.posUsbTSE.lastTransaction != 'undefined' && this.posUsbTSE.lastTransaction.status)
@@ -1996,9 +1996,9 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
+                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                 {       
-                    if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
+                    if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                     {
                         let tmpType = 'Fis'  
                         let tmpFactCert = ''                  
@@ -2067,11 +2067,11 @@ export default class posDoc extends React.PureComponent
                                 customerUsePoint:this.popCustomerUsePoint.value,
                                 customerPoint:this.customerPoint.value,
                                 customerGrowPoint:this.popCustomerGrowPoint.value,
-                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                             }
                         }
                         //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
-                        if(this.prmObj.filter({ID:'PrintAlert',TYPE:0}).getValue() == true)
+                        if(this.prmObj.filter({ID:'PrintAlert',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                         {
                             let tmpConfObj =
                             {
@@ -2174,7 +2174,7 @@ export default class posDoc extends React.PureComponent
                                 customerUsePoint:this.popCustomerUsePoint.value,
                                 customerPoint:this.customerPoint.value,
                                 customerGrowPoint:this.popCustomerGrowPoint.value,
-                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                             }
                         }
 
@@ -2210,7 +2210,7 @@ export default class posDoc extends React.PureComponent
         //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
         if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
         {
-            let tmpCustFact = (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)
+            let tmpCustFact = (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()) / 100)
             if(this.posObj.dt()[0].TYPE == 0)
             {
                 if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
@@ -2991,7 +2991,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            if(this.prmObj.filter({ID:'PriceCheckZero',TYPE:0}).getValue() == true && pPrice == 0)
+            if(this.prmObj.filter({ID:'PriceCheckZero',TYPE:0,USERS:this.user.CODE}).getValue() == true && pPrice == 0)
             {
                 let tmpConfObj =
                 {
@@ -3003,7 +3003,7 @@ export default class posDoc extends React.PureComponent
                 resolve(false)
                 return
             }
-            if(this.prmObj.filter({ID:'MinPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.MIN_PRICE).round(2)))
+            if(this.prmObj.filter({ID:'MinPriceCheck',TYPE:0,USERS:this.user.CODE}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.MIN_PRICE).round(2)))
             {
                 let tmpConfObj =
                 {
@@ -3015,7 +3015,7 @@ export default class posDoc extends React.PureComponent
                 resolve(false)
                 return
             }
-            if(this.prmObj.filter({ID:'CostPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.COST_PRICE).round(2)))
+            if(this.prmObj.filter({ID:'CostPriceCheck',TYPE:0,USERS:this.user.CODE}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.COST_PRICE).round(2)))
             {
                 let tmpConfObj =
                 {
@@ -3546,7 +3546,7 @@ export default class posDoc extends React.PureComponent
                         customerUsePoint : Math.floor(pPosDt[0].LOYALTY * 100),
                         customerPoint : (pPosDt[0].CUSTOMER_POINT + Math.floor(pPosDt[0].LOYALTY * 100)) - Math.floor(pPosDt[0].TOTAL),
                         customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL),
-                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                     }
                 }
                 
@@ -3606,7 +3606,7 @@ export default class posDoc extends React.PureComponent
     }
     async ZReport()
     {
-        import("../meta/print/" + this.prmObj.filter({ID:'ZReportPrintDesign',TYPE:0}).getValue()).then(async(e)=>
+        import("../meta/print/" + this.prmObj.filter({ID:'ZReportPrintDesign',TYPE:0,USERS:this.user.CODE}).getValue()).then(async(e)=>
         {
             let tmpSaleDt = new datatable()
             tmpSaleDt.selectCmd = 
@@ -3732,9 +3732,12 @@ export default class posDoc extends React.PureComponent
     }
     isUnitDecimal(pUnit)
     {
-        if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+        if(typeof pUnit != 'undefined' && pUnit != null)
         {
-            return true
+            if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+            {
+                return true
+            }
         }
         return false
     }
@@ -3787,7 +3790,7 @@ export default class posDoc extends React.PureComponent
         return(
             <div style={{overflowX:'hidden'}}>
                 {/* Ekranda belirli bir süre boş beklediğinde logout olması için yapıldı */}
-                <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
+                <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0,USERS:this.user.CODE}).getValue()}
                 onIdle={()=>
                 {
                     this.posLcd.print
@@ -4151,12 +4154,12 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(e.column.dataField == "QUANTITY")
                                         {
-                                            if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
+                                            if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                             {                                
                                                 let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.data.UNIT_FACTOR),undefined,e.data.ITEM_NAME)
                                                 if(typeof tmpResult != 'undefined' && tmpResult != '')
                                                 {
-                                                    if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                    if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0,USERS:this.user.CODE}).getValue() == true && tmpResult == 0)
                                                     {
                                                         let tmpConfObj =
                                                         {
@@ -4191,7 +4194,7 @@ export default class posDoc extends React.PureComponent
                                         }
                                         if(e.column.dataField == "PRICE")
                                         {
-                                            if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
+                                            if(this.prmObj.filter({ID:'PriceEdit',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                             {
                                                 this.popPriceDesc.show()
                                             }
@@ -4578,7 +4581,7 @@ export default class posDoc extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
-                                        if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == 0)
+                                        if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 0)
                                         {
                                             if(this.customerName.value != '')
                                             {
@@ -4966,7 +4969,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"pluBtnGrpLy"} id={"pluBtnGrpLy"} parent={this} data-grid={{x:40,y:10,h:80,w:30,minH:80,maxH:80,minW:30,maxW:30}} style={{margin:'-4px'}}
                             access={this.acsObj.filter({ELEMENT:'pluBtnGrpLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                                    <NbPluButtonGrp id="pluBtnGrp" parent={this} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                                     onSelection={(pItem,pQuantity)=>
                                     {
                                         if(this.txtBarcode.value != '')
@@ -5274,7 +5277,7 @@ export default class posDoc extends React.PureComponent
                                             if(this.posObj.dt()[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
                                             {
                                                 //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
-                                                if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == 0)
+                                                if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 0)
                                                 {
                                                     if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
                                                     {
@@ -5984,7 +5987,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerList.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -6061,7 +6064,7 @@ export default class posDoc extends React.PureComponent
                 {/* Item List Popup */}
                 <div>
                     <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}  selectAll={true}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -6861,7 +6864,7 @@ export default class posDoc extends React.PureComponent
                                         this.popCustomerPointToEuro.value = 0 
                                         return
                                     }
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()).round(2)).toString()
+                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()).round(2)).toString()
                                 }}>     
                                 </NdTextBox> 
                             </div>
@@ -7003,7 +7006,7 @@ export default class posDoc extends React.PureComponent
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
-                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                                                     }
                                                 }
 
@@ -7095,7 +7098,7 @@ export default class posDoc extends React.PureComponent
                                                                     customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                     customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                                     customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
-                                                                    customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                                                                    customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                                                                 }
                                                             }
                                                             await this.print(tmpData,0)
@@ -7213,7 +7216,7 @@ export default class posDoc extends React.PureComponent
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
-                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
                                                     }
                                                 }
                                                 //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
@@ -7394,7 +7397,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                             {this.state.keyboardVisibility && 
                             (
-                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             )}
                         </div>
                         {/* grdLastPos */}
@@ -7903,7 +7906,7 @@ export default class posDoc extends React.PureComponent
                 {/* Price Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popPriceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popPriceDesc.head")} title={this.lang.t("popPriceDesc.title")}                    
-                    param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'PriceDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {
                         if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
@@ -7935,7 +7938,7 @@ export default class posDoc extends React.PureComponent
                 {/* Park Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popParkDesc.head")} title={this.lang.t("popParkDesc.title")}                    
-                    param={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {
                         if(typeof e != 'undefined')
@@ -7948,7 +7951,7 @@ export default class posDoc extends React.PureComponent
                 {/* Delete Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
-                    param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {
                         this.sendJet({CODE:"320",NAME:"Ticket en attente annulé et supprimé.",DESCRIPTION:e}) //// Beklemedeki fiş silindi.
@@ -7964,7 +7967,7 @@ export default class posDoc extends React.PureComponent
                 {/* Row Delete Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popRowDeleteDesc.head")} title={this.lang.t("popRowDeleteDesc.title")}         
-                    param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {
                         this.sendJet({CODE:"323",NAME:"Ligne de article supprimé.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
@@ -7980,7 +7983,7 @@ export default class posDoc extends React.PureComponent
                 {/* Item Return Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popItemReturnDesc.head")} title={this.lang.t("popItemReturnDesc.title")}     
-                    param={this.prmObj.filter({ID:'RebateDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'RebateDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {        
                         if(typeof e != 'undefined')
@@ -8063,7 +8066,7 @@ export default class posDoc extends React.PureComponent
                 {/* Discount Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popDiscountDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popDiscountDesc.head")} title={this.lang.t("popDiscountDesc.title")}     
-                    param={this.prmObj.filter({ID:'DiscountDescription',TYPE:0})}></NbPopDescboard>
+                    param={this.prmObj.filter({ID:'DiscountDescription',TYPE:0,USERS:this.user.CODE})}></NbPopDescboard>
                 </div>
                 {/* Item Return Ticket Dialog  */}
                 <div>
@@ -8395,7 +8398,7 @@ export default class posDoc extends React.PureComponent
                 {/* Advance Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popAdvanceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popAdvanceDesc.head")} title={this.lang.t("popAdvanceDesc.title")}                    
-                    param={this.prmObj.filter({ID:'AdvanceDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'AdvanceDescription',TYPE:0,USERS:this.user.CODE})}
                     onClick={async (e)=>
                     {
                         if(typeof e != 'undefined')
@@ -8407,11 +8410,11 @@ export default class posDoc extends React.PureComponent
                                 if(this.rbtnAdvanceType.value == 0)
                                 {
                                     tmpInput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
-                                    tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()                                    
+                                    tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0,USERS:this.user.CODE}).getValue()                                    
                                 }
                                 else
                                 {
-                                    tmpInput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                    tmpInput = this.prmObj.filter({ID:'SafeCenter',TYPE:0,USERS:this.user.CODE}).getValue()
                                     tmpOutput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
                                 }
 
@@ -8626,7 +8629,7 @@ export default class posDoc extends React.PureComponent
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             </div>
                         </div>
                         <div className="row py-1">
@@ -8733,13 +8736,13 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(e.column.dataField == "QUANTITY")
                                     {
-                                        if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
+                                        if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                         {                                            
                                             let tmpResult = await this.popNumber.show(this.lang.t("quantity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
                                                                                         
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
-                                                if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0,USERS:this.user.CODE}).getValue() == true && tmpResult == 0)
                                                 {
                                                     let tmpConfObj =
                                                     {
@@ -8775,7 +8778,7 @@ export default class posDoc extends React.PureComponent
                                     }
                                     if(e.column.dataField == "PRICE")
                                     {
-                                        if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
+                                        if(this.prmObj.filter({ID:'PriceEdit',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                         {
                                             this.popPriceDesc.show()
                                         }
@@ -8869,7 +8872,7 @@ export default class posDoc extends React.PureComponent
                 {/* RePrint Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popRePrintDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popRePrintDesc.head")} title={this.lang.t("popRePrintDesc.title")}                    
-                    param={this.prmObj.filter({ID:'RePrintDescription',TYPE:0})}
+                    param={this.prmObj.filter({ID:'RePrintDescription',TYPE:0,USERS:this.user.CODE})}
                     ></NbPopDescboard>
                 </div>
                 {/* Customer Add Popup */}
@@ -9178,7 +9181,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             </div>
                         </div>                        
                     </NdPopUp>
@@ -9186,7 +9189,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9216,7 +9219,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Country Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCountry"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCountry.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9240,7 +9243,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add City Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddCity"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCity.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9264,7 +9267,7 @@ export default class posDoc extends React.PureComponent
                 {/* Customer Add Zipcode Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerAddZipCode"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddZipCode.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9288,7 +9291,7 @@ export default class posDoc extends React.PureComponent
                 {/* Print Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popPrintCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
-                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}
+                    keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}
                     data={{source:
                     {
                         select:
@@ -9470,7 +9473,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9529,7 +9532,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             </div>
                         </div>     
                         <div className="row py-1">
@@ -9562,7 +9565,7 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NbPopDescboard id={"popBalanceCounterDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popBalanceCounterDesc.head")} title={this.lang.t("popBalanceCounterDesc.title")}         
                     button={[{id:"btn02",caption:this.lang.t("popBalanceCounterDesc.btn02"),location:'after'}]}
-                    param={this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0})}
+                    param={this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0,USERS:this.user.CODE})}
                     >
                     </NbPopDescboard>
                 </div>
@@ -9604,7 +9607,7 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <div className="row py-1">
                                     <div className="col-12">
-                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0}).getValue()}/>
+                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                                     </div>
                                 </div>
                             </Item>

@@ -32,8 +32,8 @@ export default class itemInfoScreen extends React.PureComponent
         this.barcode = "";
         this.timeout = 30
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
-        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
-        this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
+        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0,USERS:this.core.auth.data.CODE}).getValue()
+        this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0,USERS:this.core.auth.data.CODE}).getValue()
 
         document.addEventListener("keydown", (function(event) 
         {

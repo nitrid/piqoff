@@ -475,6 +475,7 @@ export const langFr =
         slsRpt_01_007 : "Rapport factures retours",   
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
+        slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 

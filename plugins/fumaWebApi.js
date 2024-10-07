@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { core } from 'gensrv'
 import cron from 'node-cron';
 import axios from 'axios';
+import config from '../config.js';
 class fumaWebApi
 {
     constructor()
@@ -11,8 +12,13 @@ class fumaWebApi
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this);
         this.core.socket.on('connection',this.connEvt);
-        this.active = true;
+        this.active = false;
         this.sellerVkn = '';
+
+        if(config?.plugins?.fumaWebApi?.active)
+        {
+            this.active = config?.plugins?.fumaWebApi?.active
+        }
 
         this.getVkn();
         this.processEndDay();
