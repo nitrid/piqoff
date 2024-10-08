@@ -178,7 +178,7 @@ export default class App extends React.PureComponent
         {
             App.instance = this;
         }
-
+        this.init()
         this.core.socket.on('connect',async () => 
         {
             if((await this.core.sql.try()).status == 1)
@@ -268,6 +268,10 @@ export default class App extends React.PureComponent
                 window.location.reload()
             }
         })     
+    }
+    init()
+    {
+
     }
     menuClick(data)
     {
