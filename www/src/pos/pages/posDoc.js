@@ -3036,7 +3036,15 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.subTotalBuild(pData.possale)
         return new Promise(async resolve => 
         {
-            let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
+            let prmPrint
+            if(pType == 0)
+            {
+                prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
+            }
+            else
+            {
+                prmPrint = "print.js"
+            }
 
             import("../meta/print/" + prmPrint).then(async(e)=>
             {

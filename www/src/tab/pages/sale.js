@@ -191,7 +191,7 @@ export default class Sale extends React.PureComponent
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     let tmpItemObj = tmpBuf.result.recordset[i]
-                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,0,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                     this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
