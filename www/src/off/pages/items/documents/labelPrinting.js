@@ -1030,16 +1030,16 @@ export default class labelPrinting extends React.PureComponent
                                     pageSize={50}
                                     notRefresh={true}
                                     onValueChanged={(async(e)=>
+                                    {
+                                        for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
                                         {
-                                           for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
-                                           {
-                                               if(this.cmbDesignList.data.datatable[i].TAG == e.value)
-                                               {
-                                                   this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
-                                               }
-                                           }
-                                           this.calculateCount()
-                                        }).bind(this)}
+                                            if(this.cmbDesignList.data.datatable[i].TAG == e.value)
+                                            {
+                                                this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
+                                            }
+                                        }
+                                        this.calculateCount()
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME,PAGE_COUNT FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '01'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
