@@ -494,6 +494,16 @@ export default class Sale extends React.PureComponent
 
         localStorage.setItem("data",JSON.stringify(this.docLines.toArray()))
     }
+    async updateLine()
+    {
+        for (let i = 0; i < this.docLines.length; i++) 
+        {
+            let tmpDocOrders = this.docLines[i]; 
+            tmpDocOrders.LINE_NO = i + 1    
+            
+            this.docLines[i] = tmpDocOrders
+        }
+    }  
     async checkRow()
     {
         for (let i = 0; i < this.docLines.length; i++) 
@@ -1229,6 +1239,7 @@ export default class Sale extends React.PureComponent
                                                     onRowRemoved={async (e)=>
                                                     {
                                                         this._calculateTotal()
+                                                        this.updateLine()
                                                     }}
                                                     onReady={async()=>
                                                     {
