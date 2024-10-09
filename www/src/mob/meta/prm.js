@@ -67,45 +67,39 @@ export const prm =
             CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },
-    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE
+  //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE
+  {
+    TYPE : 0,
+    ID :"deafultPage",
+    VALUE : 
     {
-        TYPE : 0,
-        ID :"deafultPage",
-        VALUE : 
-        {
-            value : "pairing/salesPairing.js"
-        },
-        SPECIAL : "",
-        PAGE : "",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Otomatik Açılacak Sayfa"
-        }
+        value : "",
+        pageId: ""
     },
-    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE İD Sİ
+    SPECIAL : "",
+    PAGE : "",
+    ELEMENT : "",
+    APP : "MOB",
+    VIEW : 
     {
-        TYPE : 0,
-        ID :"deafultPageId",
-        VALUE : 
+        TYPE : "popInput",
+        PAGE_NAME : "Sistem",
+        CAPTION : "Girişte açılacak sayfa",
+        DISPLAY : "active",
+        FORM: 
         {
-            value : "kar_01"
-        },
-        SPECIAL : "",
-        PAGE : "",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Otomatik Açılacak Sayfa"
+            width:"400",
+            height:"220",
+            colCount:1,
+            item:
+            [
+                {type:"text",caption:"Girişte açılacak sayfa yolu",field:"value",id:"txtPopDeafultPage"},
+                {type:"text",caption:"Girişte açılacak sayfa ID",field:"pageId",id:"txtPopDeafultPageId"},
+            ]
         }
-    },
-    //#endregion
+    }
+},
+//#endregion
     //#region Alış Sipariş
     //txtRef
     {
