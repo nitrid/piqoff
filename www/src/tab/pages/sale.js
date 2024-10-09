@@ -841,7 +841,7 @@ export default class Sale extends React.PureComponent
                             {
                                 this.getItems()
                             }).bind(this)}
-                            data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")}]}}
+                            data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")}]}}
                             />
                         </div>
                         <div className="col-4" align="center" style={{paddingTop:'5px'}}>
