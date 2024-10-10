@@ -1620,7 +1620,7 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={6}>
+                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={7}>
                                 {/* chkActive */}
                                 <NdLayoutItem key={"chkActiveLy"} id={"chkActiveLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkActiveLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1692,6 +1692,18 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-2 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkPiqPoid" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"PIQPOID"}}
                                             param={this.param.filter({ELEMENT:'chkPiqPoid',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkFavori */}
+                                <NdLayoutItem key={"chkFavoriLy"} id={"chkFavoriLy"} parent={this} data-grid={{x:6,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkFavoriLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{"Favori" + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkFavori" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"FAVORI"}}
+                                            param={this.param.filter({ELEMENT:'chkFavori',USERS:this.user.CODE})}/>
                                         </div>
                                     </div>
                                 </NdLayoutItem>

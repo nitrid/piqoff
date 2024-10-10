@@ -255,6 +255,7 @@ export const langTr =
         {
             Name: "ÜRÜN İSMİ",
             Code: "ÜRÜN KODU",
+            Favori: "FAVORİLER",
         },
     },
     extract :

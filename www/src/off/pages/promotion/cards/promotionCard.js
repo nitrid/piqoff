@@ -1352,12 +1352,13 @@ export default class promotionCard extends React.PureComponent
                                             }).bind(this)} 
                                             >     
                                             </NdTextBox>      
-                                            <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
-                                            position={{of:'#page'}} 
+                                            <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
+                                            container={"root"} 
+                                            position={{of:'#root'}} 
                                             showTitle={true} 
                                             showBorders={true}
-                                            width={'90%'}
-                                            height={'90%'}
+                                            width={'75%'}
+                                            height={'75%'}
                                             title={this.t("pg_Grid.title")} 
                                             columnAutoWidth={true}
                                             allowColumnResizing={true}

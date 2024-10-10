@@ -73,7 +73,8 @@ export const prm =
         ID :"deafultPage",
         VALUE : 
         {
-            value : "pairing/salesPairing.js"
+            value : "",
+            pageId: ""
         },
         SPECIAL : "",
         PAGE : "",
@@ -81,28 +82,21 @@ export const prm =
         APP : "MOB",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Sistem",
-            CAPTION : "Otomatik Açılacak Sayfa"
-        }
-    },
-    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE İD Sİ
-    {
-        TYPE : 0,
-        ID :"deafultPageId",
-        VALUE : 
-        {
-            value : "kar_01"
-        },
-        SPECIAL : "",
-        PAGE : "",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Otomatik Açılacak Sayfa"
+            CAPTION : "Girişte açılacak sayfa",
+            DISPLAY : "active",
+            FORM: 
+            {
+                width:"400",
+                height:"220",
+                colCount:1,
+                item:
+                [
+                    {type:"text",caption:"Girişte açılacak sayfa yolu",field:"value",id:"txtPopDeafultPage"},
+                    {type:"text",caption:"Girişte açılacak sayfa ID",field:"pageId",id:"txtPopDeafultPageId"},
+                ]
+            }
         }
     },
     //#endregion

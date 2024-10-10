@@ -77,7 +77,7 @@ export const prm =
         ID :"salesİtemsType",
         VALUE : 
         {
-            value : "CODE"
+            value : "NAME"
         },
         SPECIAL : "",
         ELEMENT : "",
