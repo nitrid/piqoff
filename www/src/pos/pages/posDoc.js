@@ -33,6 +33,7 @@ import NdButton from "../../core/react/devex/button.js";
 import NdAccessEdit from '../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
+import { restOrderCls,restOrderDetailCls} from "../../core/cls/rest.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
@@ -76,6 +77,7 @@ export default class posDoc extends React.PureComponent
         this.rebatePosSaleDt = new datatable()
         this.rebatePosPayDt = new datatable()
         this.rebatePosDt = new datatable()
+        this.restOrderObj = new restOrderCls()
         
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();

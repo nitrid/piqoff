@@ -315,7 +315,6 @@ function renderTables()
                             <div className="row">
                                 {(()=>
                                 {
-                                    console.log(this.state.restTableGrp)
                                     let tmpGrpArr = []
                                     for (let i = 0; i < this.state.restTableGrp.length; i++) 
                                     {
@@ -365,6 +364,18 @@ function renderTables()
                         {
                             if(this.restTableView.items[e].ORDER_COUNT > 0)
                             {
+                                if(this.posObj.posSale.dt().length > 0)
+                                {
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgAllreadySale',showTitle:true,title:this.lang.t("msgAllreadySale.title"),showCloseButton:true,width:'500px',height:'240px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgAllreadySale.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAllreadySale.msg")}</div>)
+                                    }
+    
+                                    await dialog(tmpConfObj1);
+                                    return
+                                }
                                 this.setState({showPage:"detail"})
                                 let tmpData = new datatable()
                                 tmpData.selectCmd = 
@@ -375,17 +386,147 @@ function renderTables()
                                 }
                                 await tmpData.refresh()
 
+                                if(tmpData[0].POS != '00000000-0000-0000-0000-000000000000')
+                                {
+                                    let tmpUpdate = 
+                                    {
+                                        query : "UPDATE REST_ORDER_DETAIL SET STATUS = 4 WHERE POS = @POS " +
+                                                "UPDATE POS SET STATUS = 0 WHERE GUID = @POS ",
+                                        param : ['POS:string|50','POS_SALE:string|50'],
+                                        value : [tmpData[0].POS]
+                                    }
+                                    await this.core.sql.execute(tmpUpdate)
+                                    this.getDoc(tmpData[0].POS)
+                                    this.popRestTable.hide()
+                                    return
+                                }
                                 await this.grdRestTableItem.dataRefresh({source:tmpData});
                             }
                             else
                             {
-                                let tmpConfObj =
+                                let tmpConfObj1 =
                                 {
-                                    id:'msgTableEmptyAlert',showTitle:true,title:this.lang.t("msgTableEmptyAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgTableEmptyAlert.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTableEmptyAlert.msg")}</div>)
+                                    id:'msgRestPosSaleAdd',showTitle:true,title:this.lang.t("msgRestPosSaleAdd.title"),showCloseButton:true,width:'500px',height:'240px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgRestPosSaleAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestPosSaleAdd.btn02"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestPosSaleAdd.msg")}</div>)
                                 }
-                                await dialog(tmpConfObj);
+
+                                let tmpMsgResult1 = await dialog(tmpConfObj1);
+
+                                this.restOrderObj.clearAll()
+                                
+                                let tmpMaxRef = 0
+                                let tmpQuery = 
+                                {
+                                    query : "SELECT ISNULL(MAX(REF),0) + 1 AS MAX_REF FROM REST_ORDER_VW_01 WHERE ZONE = @ZONE",
+                                    param : ['ZONE:string|50'],
+                                    value : [this.restTableView.items[e].GUID]
+                                }
+                
+                                let tmpResult = await this.core.sql.execute(tmpQuery)
+                                
+                                if(tmpResult.result.recordset.length > 0)
+                                {
+                                    tmpMaxRef = tmpResult.result.recordset[0].MAX_REF
+                                }
+                                if(tmpMsgResult1 == "btn01")
+                                {
+                                
+                                    let tmpRestQuery = 
+                                    {
+                                        query : "SELECT * FROM REST_ORDER_DETAIL WHERE POS = @POS ",
+                                        param : ['POS:string|50'],
+                                        value : [this.posObj.dt()[0].GUID]
+                                    }
+                    
+                                    let tmpRestResult = await this.core.sql.execute(tmpRestQuery)
+                                    
+                                    if(tmpRestResult.result.recordset.length > 0)
+                                    {
+                                        console.log(tmpRestResult)
+                                        await this.restOrderObj.load({ZONE:tmpRestResult.result.recordset[0].ZONE,REF:tmpRestResult.result.recordset[0].REF})
+                                        this.restOrderObj.dt()[0].ZONE = this.restTableView.items[e].GUID
+                                        if(tmpRestResult.result.recordset[0].ZONE != this.restTableView.items[e].GUID)
+                                        {
+                                            this.restOrderObj.dt()[0].REF = tmpMaxRef
+                                        }
+                                    }
+                                    else
+                                    {
+                                        let tmpEmpty = {...this.restOrderObj.empty}
+
+                                        tmpEmpty.ZONE = this.restTableView.items[e].GUID
+                                        tmpEmpty.ZONE_CODE = this.restTableView.items[e].CODE
+                                        tmpEmpty.ZONE_NAME = this.restTableView.items[e].NAME
+                                        tmpEmpty.REF = tmpMaxRef
+                                        tmpEmpty.PERSON = 1
+                                        this.restOrderObj.addEmpty(tmpEmpty)
+                                    }
+                                    console.log(this.restOrderObj.restOrderDetail.dt())
+                                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                    {
+                                        let tmpEmpty = this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})
+                                        if(tmpEmpty.length > 0)
+                                        {
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT =  Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT = Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].DISCOUNT = 0
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].TOTAL = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].STATUS = 0
+                                            this.posObj.posSale.dt()[i].AMOUNT = this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT
+                                            this.posObj.posSale.dt()[i].FAMOUNT = Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT).rateInNum(10)
+                                            this.posObj.posSale.dt()[i].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).FAMOUNT))
+                                            this.posObj.posSale.dt()[i].VAT_RATE = 10
+                                        }
+                                        else
+                                        {
+                                            let tmpEmpty = {...this.restOrderObj.restOrderDetail.empty}
+                                            tmpEmpty.REST_GUID = this.restOrderObj.dt()[0].GUID
+                                            tmpEmpty.LINE_NO = this.restOrderObj.restOrderDetail.dt().max('LINE_NO') + 1
+                                            tmpEmpty.ITEM = this.posObj.posSale.dt()[i].ITEM_GUID
+                                            tmpEmpty.ITEM_CODE = this.posObj.posSale.dt()[i].ITEM_CODE
+                                            tmpEmpty.ITEM_NAME = this.posObj.posSale.dt()[i].ITEM_NAME
+                                            tmpEmpty.QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
+                                            tmpEmpty.PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
+                                            tmpEmpty.AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            tmpEmpty.FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
+                                            tmpEmpty.DISCOUNT = 0
+                                            tmpEmpty.VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
+                                            tmpEmpty.PROPERTY = '' 
+                                            tmpEmpty.DESCRIPTION = ''
+                                            tmpEmpty.TOTAL = tmpEmpty.AMOUNT
+                                            tmpEmpty.STATUS = 0
+                                            tmpEmpty.WAITING = 0
+                                            tmpEmpty.PRINTED = 0
+                                            tmpEmpty.POS = this.posObj.dt()[0].GUID
+                                            tmpEmpty.POS_SALE = this.posObj.posSale.dt()[i].GUID
+                                            this.posObj.posSale.dt()[i].AMOUNT = tmpEmpty.AMOUNT
+                                            this.posObj.posSale.dt()[i].FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
+                                            this.posObj.posSale.dt()[i].VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
+                                            this.posObj.posSale.dt()[i].VAT_RATE = 10
+
+                                            await this.restOrderObj.restOrderDetail.addEmpty(tmpEmpty)
+                                        }
+                                    }
+                                    console.log(this.restOrderObj.restOrderDetail.dt())
+                                    this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
+                                    this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+                                    await this.calcGrandTotal()
+                                    this.posObj.dt()[0].STATUS = -1
+                                    await this.posObj.save()
+                                    await this.restOrderObj.save()
+                                    await this.popRestTable.hide()
+                                    this.init()
+                                }
+                                else
+                                {
+                                    return
+                                }
                             }
                         }}
                         onPrintClick={async(e)=>
