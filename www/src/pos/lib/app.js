@@ -152,7 +152,8 @@ export default class App extends React.PureComponent
             }
         }
         
-        this.core = new core(io(tmpHost,{timeout:1000,reconnection: true,reconnectionAttempts: Infinity,reconnectionDelay: 500,reconnectionDelayMax: 1000,transports : ['websocket']}));        
+        //this.core = new core(io(tmpHost,{timeout:1000,reconnection: true,reconnectionAttempts: Infinity,reconnectionDelay: 500,reconnectionDelayMax: 1000,transports : ['websocket']}));        
+        this.core = new core(io(tmpHost,{transports : ['websocket']}));        
         this.core.appInfo = {...appInfo}
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);

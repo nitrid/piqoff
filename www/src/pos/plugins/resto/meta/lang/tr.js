@@ -61,5 +61,11 @@ const lang =
         btn02 : "Hayır",
         msg : "Satış ekranında önceden eklenmiş satırlar var. Devam etmek istediğinize eminmisiniz ?"
     },
+    msgAllreadySale : 
+    {
+        title : "Uyarı",
+        btn01 : "Tamam",
+        msg : "Satış ekranında önceden eklenmiş satırlar var işlem masa çağırılamaz !"
+    }
 }
 export default lang

@@ -60,6 +60,12 @@ const lang =
         btn01: "Oui",
         btn02: "Non",
         msg: "Il y a des lignes déjà ajoutées dans l'écran de vente. Êtes-vous sûr de vouloir continuer ?"
+    },
+    msgAllreadySale : 
+    {
+        title : "Avertissement",
+        btn01 : "D'accord",
+        msg : "Il y a déjà des lignes ajoutées à l'écran de vente, l'opération de rappel de table ne peut pas être effectuée !"
     }
 }
 export default lang

@@ -33,6 +33,7 @@ import NdButton from "../../core/react/devex/button.js";
 import NdAccessEdit from '../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
+import { restOrderCls,restOrderDetailCls} from "../../core/cls/rest.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
@@ -76,6 +77,7 @@ export default class posDoc extends React.PureComponent
         this.rebatePosSaleDt = new datatable()
         this.rebatePosPayDt = new datatable()
         this.rebatePosDt = new datatable()
+        this.restOrderObj = new restOrderCls()
         
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -598,6 +600,12 @@ export default class posDoc extends React.PureComponent
                 query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
                 param : ['LUSER:string|50'],
                 value : [this.core.auth.data.CODE],
+                local : 
+                {
+                    type : "select",
+                    query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = strftime('%Y%m%d', 'now');",
+                    values : [this.core.auth.data.CODE]
+                }
             }
     
             let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)

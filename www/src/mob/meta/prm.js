@@ -67,39 +67,39 @@ export const prm =
             CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },
-    //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE
+  //SAYFA YÜKLENMEDEN ÖNCE HANGİ SAYFANIN ACILACAGI PARAMETRE
+  {
+    TYPE : 0,
+    ID :"deafultPage",
+    VALUE : 
     {
-        TYPE : 0,
-        ID :"deafultPage",
-        VALUE : 
-        {
-            value : "",
-            pageId: ""
-        },
-        SPECIAL : "",
-        PAGE : "",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "popInput",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Girişte açılacak sayfa",
-            DISPLAY : "active",
-            FORM: 
-            {
-                width:"400",
-                height:"220",
-                colCount:1,
-                item:
-                [
-                    {type:"text",caption:"Girişte açılacak sayfa yolu",field:"value",id:"txtPopDeafultPage"},
-                    {type:"text",caption:"Girişte açılacak sayfa ID",field:"pageId",id:"txtPopDeafultPageId"},
-                ]
-            }
-        }
+        value : "",
+        pageId: ""
     },
-    //#endregion
+    SPECIAL : "",
+    PAGE : "",
+    ELEMENT : "",
+    APP : "MOB",
+    VIEW : 
+    {
+        TYPE : "popInput",
+        PAGE_NAME : "Sistem",
+        CAPTION : "Girişte açılacak sayfa",
+        DISPLAY : "active",
+        FORM: 
+        {
+            width:"400",
+            height:"220",
+            colCount:1,
+            item:
+            [
+                {type:"text",caption:"Girişte açılacak sayfa yolu",field:"value",id:"txtPopDeafultPage"},
+                {type:"text",caption:"Girişte açılacak sayfa ID",field:"pageId",id:"txtPopDeafultPageId"},
+            ]
+        }
+    }
+},
+//#endregion
     //#region Alış Sipariş
     //txtRef
     {
