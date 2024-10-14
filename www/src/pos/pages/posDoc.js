@@ -600,6 +600,12 @@ export default class posDoc extends React.PureComponent
                 query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
                 param : ['LUSER:string|50'],
                 value : [this.core.auth.data.CODE],
+                local : 
+                {
+                    type : "select",
+                    query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = strftime('%Y%m%d', 'now');",
+                    values : [this.core.auth.data.CODE]
+                }
             }
     
             let tmpTCountResult = await this.core.sql.execute(tmpQueryTCount)

@@ -944,7 +944,7 @@ export default class transferCls
                 {
                     name : "POS_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_VW_01"
+                    query : "SELECT * FROM POS_VW_01 ORDER BY REF ASC"
                 },
                 to : 
                 {
