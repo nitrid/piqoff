@@ -5369,7 +5369,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             query:  "SELECT TOP 1 *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
-                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 ORDER BY LDATE DESC",
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 AND DOC_DATE = CONVERT(nvarchar,GETDATE(),112) ORDER BY LDATE DESC",
                                             param:  ["LUSER:string|25"],
                                             value:  [this.user.CODE],
                                             local : 

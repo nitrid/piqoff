@@ -1768,36 +1768,26 @@ export class posDeviceCls
             return
         }
         
-        let tmpSerialCount = 0;
         let tmpBarcode = "";
 
         this.scannerPort.on('data',(data) =>
         {
-            if(data.toString("utf8").substring(0,1) == 'F' || data.toString("utf8").substring(0,1) == 'A')
+            tmpBarcode += data.toString("utf8");
+            if (tmpBarcode.endsWith("\n") || tmpBarcode.endsWith("\r"))
             {
-                tmpSerialCount = 0
-            }
-            tmpSerialCount++;
-
-            tmpBarcode = tmpBarcode + data.toString("utf8")
-
-            if(tmpSerialCount == 2)
-            {
-                if(tmpBarcode.length == 11)
+                tmpBarcode = tmpBarcode.trim();
+                if(tmpBarcode.length === 11)
                 {
-                    tmpBarcode = tmpBarcode.substring(2,10)
+                    tmpBarcode = tmpBarcode.substring(2,10);
                 }
                 else
                 {
-                    tmpBarcode = tmpBarcode.substring(1,14)
+                    tmpBarcode = tmpBarcode.substring(1,tmpBarcode.length);
                 }
-                
-                this.emit('scanner',tmpBarcode);
-                
-                tmpSerialCount = 0;
-                tmpBarcode = "";            
+                this.emit('scanner', tmpBarcode);
+                tmpBarcode = "";
             }
-        })
+        });
     }
     pdf(pData)
     {
