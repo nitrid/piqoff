@@ -476,9 +476,9 @@ function renderTables()
                                             this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
                                             this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].TOTAL = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
                                             this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].STATUS = 0
-                                            this.posObj.posSale.dt()[i].AMOUNT = this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT
-                                            this.posObj.posSale.dt()[i].FAMOUNT = Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT).rateInNum(10)
-                                            this.posObj.posSale.dt()[i].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID}).FAMOUNT))
+                                            this.posObj.posSale.dt()[i].AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.posObj.posSale.dt()[i].FAMOUNT =Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
+                                            this.posObj.posSale.dt()[i].VAT =  Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
                                             this.posObj.posSale.dt()[i].VAT_RATE = 10
                                         }
                                         else
