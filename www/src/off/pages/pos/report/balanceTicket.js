@@ -129,8 +129,7 @@ export default class itemSalesReport extends React.PureComponent
                 {
                     query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,AMOUNT,TICKET_DATE,STATUS,WEIGHER_NAME, " +
                     "ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'PRICE'),'') + ' ' + ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'QUANTITY'),'') + ''+ ISNULL((SELECT CASE WHEN COUNT(TAG) = 0 THEN '' ELSE CONVERT(NVARCHAR,COUNT(TAG)) + ' Réimprimé' END FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'REPRINT'),'')  AS DESCRIPTIONS ," +
-                    "CONVERT(NVARCHAR, CDATE , 108) AS TIME ," +
-                    "CONVERT(NVARCHAR, TICKET_DATE, 103) AS DATE" +
+                    "CONVERT(NVARCHAR, CDATE , 108) AS TIME " +
                     "FROM BALANCE_COUNTER_VW_01 AS BC WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) AND TICKET_DATE <> '19700101' ORDER BY TICKET_NO ASC" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
@@ -236,8 +235,8 @@ export default class itemSalesReport extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_014")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={'dd/MM/yyyy - HH:mm:ss'}  width={150}/> 
-                                <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
+                                <Column dataField="TICKET_DATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={'dd/MM/yyyy'}  width={150}/> 
+                                <Column dataField="TIME" caption={this.t("grdListe.clmTime")} visible={true} width={100}/> 
                                 <Column dataField="WEIGHER_NAME" caption={this.t("grdListe.clmUser")} visible={true}  dataType="number"  width={120}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}  dataType="number"  width={150}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} width={200}/> 

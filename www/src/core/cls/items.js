@@ -1844,7 +1844,7 @@ export class itemLogPriceCls
         let tmpDt = new datatable('PRICE_HISTORY');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC",
+            query : "SELECT *,CONVERT(NVARCHAR, CDATE ,103) AS DATE,CONVERT(NVARCHAR, CDATE ,108) AS DATE  FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 
