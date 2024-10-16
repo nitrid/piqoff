@@ -1402,6 +1402,7 @@ export default class posDoc extends React.PureComponent
         pBarcode = pBarcode.toString().trim()
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
         
+        console.log(tmpPrm)
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
         {               
             return {barcode:pBarcode}
@@ -1412,6 +1413,7 @@ export default class posDoc extends React.PureComponent
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
+                console.log(tmpFlag)
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
                 let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
                 let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
@@ -1441,7 +1443,9 @@ export default class posDoc extends React.PureComponent
                     tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
                 }
 
+                console.log(tmpSumFlag)
                 let tmpBarkod = pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag
+                console.log(tmpBarkod)
                 let tmpIsDiscount = false
 
                 if(tmpMoney == "***")
@@ -3732,9 +3736,12 @@ export default class posDoc extends React.PureComponent
     }
     isUnitDecimal(pUnit)
     {
-        if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+        if(typeof pUnit != 'undefined' && pUnit != null)
         {
-            return true
+            if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+            {
+                return true
+            }
         }
         return false
     }

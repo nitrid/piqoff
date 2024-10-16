@@ -60,7 +60,7 @@ export function print()
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:("Caissier: " + data.pos[0].CUSER).space(29,'e') + ("Caisse: " + data.pos[0].DEVICE).space(26,'s')}},
         //FIS NO BARKODU
-        ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
+        ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 0.8,height:40,position:'OFF'}}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** " + data.pos[0].REF + " ******"}},
         ()=>{return {font:"b",align:"lt",data:" ".space(44)}},
@@ -132,7 +132,7 @@ export function print()
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",
                 pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
-                data:"T " +"Libelle".space(30) + " " + "Qte".space(4) + " " + "U ou EUR/kg".space(12) + " " + "T.EUR".space(6)}
+                data:"T " +"Libelle".space(29) + " " + "Qte".space(4) + " " + "U ou EUR/kg".space(12) + " " + "T.EUR".space(5)}
             }
             else if(data.special.type == 'Fatura')
             {

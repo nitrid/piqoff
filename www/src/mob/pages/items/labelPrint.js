@@ -139,6 +139,28 @@ export default class labelPrint extends React.PureComponent
                 this.lblItemName.value = this.itemDt[0].NAME
                 this.txtPrice.value = this.itemDt[0].PRICE
                 this.txtBarcode.value = ""
+                if(this.itemDt[0].STATUS == false)
+                {
+                    document.getElementById("Sound2").play(); 
+                    let tmpConfObj = 
+                    {
+                        id:'msgPassiveItem',showTitle:true,title:this.lang.t("msgPassiveItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPassiveItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPassiveItem.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassiveItem.msg")}</div>)
+                    }
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {  
+                        let tmpQuery = 
+                        {
+                            query :"UPDATE ITEMS SET STATUS = 1 WHERE GUID = @GUID ",
+                            param : ['GUID:string|50'],
+                            value : [this.itemDt[0].GUID]
+                        }
+
+                        await this.core.sql.execute(tmpQuery) 
+                    }
+                }
                 if(this.txtPrice.value == 0)
                 {
                     document.getElementById("Sound").play(); 
