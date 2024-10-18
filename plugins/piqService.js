@@ -106,28 +106,17 @@ class mailer
                 console.log(err);
             }
         });
-        // // Depo miktarlarının Güncellenmesi
-        // cron.schedule('0 3 * * *', async () => 
-        // {
-        //     tmpQuery = 
-        //     {
-        //         query : "SELECT * FROM ITEM_QUANTITY ",
-        //     }
+        // Depo miktarlarının Güncellenmesi
+        cron.schedule('0 3 * * *', async () => 
+        {
+            let tmpUpdateQuery = 
+            {
+                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.GETDATE())) ",
+            }
        
-        //     let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-        //     for (let i = 0; i < tmpResult.length; i++) 
-        //     {
-                
-        //         let tmpUpdateQuery = 
-        //         {
-        //             query : "EXEC CUSTOMERS SET POINT = (SELECT dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE())) WHERE GUID = @CUSTOMER", 
-        //             param : ['CUSTOMER:string|50'],
-        //             value : [tmpResultCustomer.result.recordset[i].GUID],
-        //         }
-        //         await core.instance.sql.execute(tmpUpdateQuery)
-        //     }
+            await core.instance.sql.execute(tmpUpdateQuery)
         
-        // });
+        });
     }
 
     async mailSend(pData)
