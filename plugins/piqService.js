@@ -6,7 +6,7 @@ import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import cron from 'node-cron';
 import nodemailer from  'nodemailer'
-class mailer
+class piqService
 {
     constructor()
     {
@@ -106,17 +106,26 @@ class mailer
                 console.log(err);
             }
         });
-        // Depo miktarlarının Güncellenmesi
+        // Pos Satışlarının günlük aktarımı - Depo Miktar güncellenmesi - Cari Bakiye güncellemesi
         cron.schedule('0 3 * * *', async () => 
         {
-            let tmpUpdateQuery = 
+
+            let tmpQuantityUpdateQuery = 
             {
                 query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.GETDATE())) ",
             }
-       
-            await core.instance.sql.execute(tmpUpdateQuery)
+
+            await core.instance.sql.execute(tmpQuantityUpdateQuery)
+            
+            let tmpBalanceUpdateQuery = 
+            {
+                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.GETDATE())) ",
+            }
+        
+            await core.instance.sql.execute(tmpBalanceUpdateQuery)
         
         });
+       
     }
 
     async mailSend(pData)
@@ -206,4 +215,4 @@ class mailer
     }
 }
 
-export const _mailer = new mailer()
+export const _piqService = new piqService()

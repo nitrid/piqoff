@@ -1612,7 +1612,7 @@ class nf525
                     subject : "NF525 Anomali Control - " + tmpCompanyDt.result.recordset[0].NAME,
                     text : tmpMailText,
                 }
-                let tmpcontrol = await this.core.plugins._mailer.mailSend(tmpMailData)
+                let tmpcontrol = await this.core.plugins._piqService.mailSend(tmpMailData)
                 if(tmpcontrol != 0)
                 {
                     let tmpControlData =
@@ -1622,7 +1622,7 @@ class nf525
                         text : "Mail sistemi çalışmıyor",
                         mailGuid:"A7386C3E-4973-4D94-BEFE-D6CA932AAF5D"
                     }
-                   await this.core.plugins._mailer.mailSend(tmpControlData)
+                   await this.core.plugins._piqService.mailSend(tmpControlData)
                 }
             }
             

@@ -39,7 +39,7 @@ export const prm =
         ID :"refForCustomerCode",
         VALUE : 
         {
-            value : false
+            value : true
         },
         SPECIAL : "",
         ELEMENT : "",
