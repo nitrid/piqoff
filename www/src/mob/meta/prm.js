@@ -341,7 +341,7 @@ export const prm =
      //rowMerge
      {
         TYPE : 1,
-        ID :"rowMerge",
+        ID :"customer",
         VALUE : 
         {
             value : "1697898160"
