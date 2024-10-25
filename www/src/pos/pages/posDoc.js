@@ -2590,7 +2590,10 @@ export default class posDoc extends React.PureComponent
             let tmpSaveResult = await this.posObj.save()
             if(tmpSaveResult == 0)
             {
-                this.init()
+                setTimeout(() => 
+                {
+                    this.init()
+                }, 1000);
                 resolve(true)
             }
             else

@@ -44,7 +44,7 @@ export default class itemInfoScreen extends React.PureComponent
             }
             else
             {
-                if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.key !== "Backspace" && event.key !== "Delete") 
+                if (!event.ctrlKey && !event.altKey && event.key !== "Backspace" && event.key !== "Delete" && event.key !== "Shift" ) 
                 {
                     this.barcode += event.key;
                 }

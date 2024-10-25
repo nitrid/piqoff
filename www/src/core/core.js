@@ -950,10 +950,15 @@ export class dataset
     }
     async delete()
     {
-        for (let i = 0; i < this.length; i++) 
+        return new Promise(resolve => 
         {
-            await this.get(i).delete()
-        }
+            for (let i = 0; i < this.length; i++) 
+            {
+                this.get(i).delete()
+            }
+
+            resolve()
+        });
     }
     remove(pName)
     {
