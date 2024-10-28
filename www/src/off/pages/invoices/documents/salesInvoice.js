@@ -2233,22 +2233,23 @@ export default class salesInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    // let tmpQuery2 = 
-                                                    // { 
-                                                    //     query:  "SELECT TOP 5 " +
-                                                    //             "DOC_DATE AS DOC_DATE, " +
-                                                    //             "DOC_REF AS REF, " +
-                                                    //             "DOC_REF_NO AS REF_NO, " +
-                                                    //             "BALANCE AS BALANCE " +
-                                                    //             "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                                                    //             "AND BALANCE <> 0 " +
-                                                    //             "ORDER BY DOC_DATE DESC" ,
-                                                    //     param:  ['INPUT:string|50'],
-                                                    //     value:  [this.docObj.dt()[0].INPUT]
-                                                    // }
-                                                    // let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                                                    // let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
+                                                    let tmpQuery2 = 
+                                                    { 
+                                                        query:  "SELECT TOP 5 " +
+                                                                "DOC_DATE AS DOC_DATE, " +
+                                                                "DOC_REF AS REF, " +
+                                                                "DOC_REF_NO AS REF_NO, " +
+                                                                "BALANCE AS BALANCE " +
+                                                                "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                                                                "AND BALANCE <> 0 " +
+                                                                "ORDER BY DOC_DATE DESC" ,
+                                                        param:  ['INPUT:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData2 = await this.core.sql.execute(tmpQuery2) 
+                                                    let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                                                    console.log(JSON.stringify(tmpObj))
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2296,15 +2297,29 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO  " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                   
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+                                                    let tmpQuery2 = 
+                                                    { 
+                                                        query:  "SELECT TOP 5 " +
+                                                                "DOC_DATE AS DOC_DATE, " +
+                                                                "DOC_REF AS REF, " +
+                                                                "DOC_REF_NO AS REF_NO, " +
+                                                                "BALANCE AS BALANCE " +
+                                                                "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                                                                "AND BALANCE <> 0 " +
+                                                                "ORDER BY DOC_DATE DESC" ,
+                                                        param:  ['INPUT:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData2 = await this.core.sql.execute(tmpQuery2) 
+                                                    let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2481,14 +2496,29 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+                                                    let tmpQuery2 = 
+                                                    { 
+                                                        query:  "SELECT TOP 5 " +
+                                                                "DOC_DATE AS DOC_DATE, " +
+                                                                "DOC_REF AS REF, " +
+                                                                "DOC_REF_NO AS REF_NO, " +
+                                                                "BALANCE AS BALANCE " +
+                                                                "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                                                                "AND BALANCE <> 0 " +
+                                                                "ORDER BY DOC_DATE DESC" ,
+                                                        param:  ['INPUT:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData2 = await this.core.sql.execute(tmpQuery2) 
+                                                    let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
