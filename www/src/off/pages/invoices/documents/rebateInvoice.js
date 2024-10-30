@@ -1440,7 +1440,7 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     this.msgQuantity.tmpData = data[0]
                                                     await this.msgQuantity.show();
-                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                 }
                                                 else
                                                 {
