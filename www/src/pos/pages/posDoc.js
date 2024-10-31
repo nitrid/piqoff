@@ -8952,8 +8952,18 @@ export default class posDoc extends React.PureComponent
                                         }}
                                         onChange={async(e)=>
                                         {                         
-                                            this.customerObj.clearAll()
-                                            await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT CODE FROM CUSTOMERS WHERE CODE = @CODE",
+                                                param:  ['CODE:string|50'],
+                                                value:  [this.txtPopCustomerCode.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.customerObj.clearAll()
+                                                await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
+                                            }
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
@@ -9029,8 +9039,8 @@ export default class posDoc extends React.PureComponent
                                         ]}
                                         onFocusIn={()=>
                                         {                                    
-                                            this.keyPopCustomerAdd.inputName = "txtPopSettingsLcd"
-                                            this.keyPopCustomerAdd.setInput(this.txtPopSettingsLcd.value)
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerCountry"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerCountry.value)
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
