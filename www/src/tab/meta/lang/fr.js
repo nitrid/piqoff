@@ -51,6 +51,7 @@ export const langFr =
             txtTotal : "Total",
             cmbDepot : "Dépôt",
             dtDocDate : "Date",
+            dtDShipmentDate : "Date de Livraison",
             txtDescription : "Information",
             cmbPricingList : "Numéro de tarif"
         },
@@ -247,6 +248,12 @@ export const langFr =
             btn02: "Non",
             msg: "Voulez-vous mettre à jour les prix ?"
         },
+        orderGroup:
+        {
+            Name: "NOM DU PRODUIT",
+            Code: "CODE PRODUIT",
+            Favori: "FAVORIS",
+        }
     },
     extract :
     {
