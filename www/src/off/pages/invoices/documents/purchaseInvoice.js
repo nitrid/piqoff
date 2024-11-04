@@ -633,7 +633,7 @@ export default class purchaseInvoice extends DocBase
                     e.data.ORIGIN = r.component._changedValue
                     let tmpQuery = 
                     {
-                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
                         param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                         value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
                     }
@@ -656,7 +656,7 @@ export default class purchaseInvoice extends DocBase
                                   e.data.ORIGIN = this.cmbOrigin.value 
                                   let tmpQuery = 
                                   {
-                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                      query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
                                       param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                                       value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
                                   }
@@ -849,7 +849,7 @@ export default class purchaseInvoice extends DocBase
 
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
@@ -2436,7 +2436,7 @@ export default class purchaseInvoice extends DocBase
                                                     e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
                                                         param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                         value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
                                                     }

@@ -352,7 +352,7 @@ export default class privatePrinting extends React.PureComponent
                                         let tmpBarData = new datatable()
                                         tmpBarData.selectCmd = 
                                         {
-                                            query :"SELECT ITEM_GUID AS GUID,ITEM_CODE AS CODE,ITEM_NAME AS NAME,[dbo].[FN_PRICE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM [ITEM_BARCODE_VW_01] WHERE BARCODE = @BARCODE ",
+                                            query :"SELECT ITEM_GUID AS GUID,ITEM_CODE AS CODE,ITEM_NAME AS NAME,[dbo].[FN_PRICE](ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM [ITEM_BARCODE_VW_01] WHERE BARCODE = @BARCODE ",
                                             param : ['BARCODE:string|50'],
                                             value : [this.txtBarkod.value]
                                         }
@@ -427,7 +427,7 @@ export default class privatePrinting extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME,[dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
+                                                query : "SELECT GUID,CODE,NAME,[dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql

@@ -363,7 +363,7 @@ export default class rebateInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+            query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
             param : ['GUID:string|50','CUSTOMER:string|50','QUANTITY:float'],
             value : [pData.GUID,this.docObj.dt()[0].INPUT,pQuantity]
         }
@@ -1176,7 +1176,7 @@ export default class rebateInvoice extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
                                                     param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                     value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
                                                 }

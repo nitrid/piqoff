@@ -78,7 +78,7 @@ export default class NbItemPopUp extends NbBase
                 {
                     query :  "SELECT *,((DEPOT_QUANTITY + INPUT_RESERVE) - OUTPUT_RESERVE) AS TOTAL_QUANTITY FROM   " +
                             "( SELECT GUID, " +
-                            "    (SELECT [dbo].[FN_DEPOT_QUANTITY](GUID,'00000000-0000-0000-0000-000000000000',GETDATE())) AS DEPOT_QUANTITY,  " +
+                            "    (SELECT [dbo].[FN_DEPOT_QUANTITY](GUID,'00000000-0000-0000-0000-000000000000',dbo.GETDATE())) AS DEPOT_QUANTITY,  " +
                             "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,0,'00000000-0000-0000-0000-000000000000')) AS INPUT_RESERVE,  " +
                             "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,1,'00000000-0000-0000-0000-000000000000')) AS OUTPUT_RESERVE  " +
                             "    FROM ITEMS WHERE GUID = @ITEM  " +

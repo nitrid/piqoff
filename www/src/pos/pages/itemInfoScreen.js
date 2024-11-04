@@ -90,7 +90,7 @@ export default class itemInfoScreen extends React.PureComponent
                 query : "SELECT TOP 1 " +  
                         "NAME, " +  
                         "UNIT_NAME, " +  
-                        "ROUND((SELECT dbo.FN_PRICE(ITEM.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',@LIST_NO,0,1)),2) AS PRICE, " +  
+                        "ROUND((SELECT dbo.FN_PRICE(ITEM.GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',@LIST_NO,0,1)),2) AS PRICE, " +  
                         "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = ITEM.GUID AND TYPE = 1),'') AS UNDER_UNIT_SYMBOL, " +  
                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = ITEM.GUID AND TYPE = 1),'') AS UNDER_UNIT_FACTOR, " +  
                         "ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM.GUID),'') AS IMAGE " +  

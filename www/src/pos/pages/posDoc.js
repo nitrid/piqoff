@@ -597,7 +597,7 @@ export default class posDoc extends React.PureComponent
         {
             let tmpQueryTCount = 
             {
-                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112)", 
+                query : "SELECT COUNT(REF) AS TICKET_COUNT FROM POS_VW_01 WHERE LUSER = @LUSER AND DOC_DATE = CONVERT(NVARCHAR(10),dbo.GETDATE(),112)", 
                 param : ['LUSER:string|50'],
                 value : [this.core.auth.data.CODE],
                 local : 
@@ -836,7 +836,7 @@ export default class posDoc extends React.PureComponent
             tmpCustomerDt.selectCmd = 
             {
                 query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1,TAX_NO,SIRET_ID, " +
-                        "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
+                        "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,dbo.GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
                 local : 
@@ -1037,7 +1037,7 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
                         "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
                         "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
                         "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
@@ -1858,7 +1858,7 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE, " + 
                         "ISNULL((SELECT TOP 1 NO FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),0) AS LIST_NO, " + 
                         "ISNULL((SELECT TOP 1 NAME FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_NAME, " +
                         "ISNULL((SELECT TOP 1 TAG FROM ITEM_PRICE_LIST WHERE NO = @LIST_NO),'') AS LIST_TAG",
@@ -2664,7 +2664,7 @@ export default class posDoc extends React.PureComponent
 
             tmpDt.selectCmd = 
             {
-                query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE CODE = @CODE AND TYPE = 1",
+                query : "SELECT *,DATEDIFF(DAY,CDATE,dbo.GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE CODE = @CODE AND TYPE = 1",
                 param : ['CODE:string|50'],
                 value : [pCode],
                 local : 
@@ -5413,7 +5413,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             query:  "SELECT TOP 1 *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
-                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 AND DOC_DATE = CONVERT(nvarchar,GETDATE(),112) ORDER BY LDATE DESC",
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 AND DOC_DATE = CONVERT(nvarchar,dbo.GETDATE(),112) ORDER BY LDATE DESC",
                                             param:  ["LUSER:string|25"],
                                             value:  [this.user.CODE],
                                             local : 
@@ -6012,7 +6012,7 @@ export default class posDoc extends React.PureComponent
                         select:
                         {
                             query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL,TAX_NO,SIRET_ID, " +
-                                    "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
+                                    "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,dbo.GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
                             local : 
@@ -6088,7 +6088,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT CODE,NAME,dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.pricingListNo + ",0,1) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
+                            query : "SELECT CODE,NAME,dbo.FN_PRICE(GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.pricingListNo + ",0,1) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
                             param : ['VAL:string|50','CUSTOMER:string|50'],
                             local : 
                             {
@@ -9513,7 +9513,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query: "UPDATE CUSTOMER_OFFICAL SET LDATE = GETDATE(),LUSER = @LUSER,EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            query: "UPDATE CUSTOMER_OFFICAL SET LDATE = dbo.GETDATE(),LUSER = @LUSER,EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
                                             param: ['LUSER:string|100','EMAIL:string|100','NAME:string|50','LAST_NAME:string|50','PHONE1:string|50','CUSTOMER:string|50'],
                                             value: [this.core.auth.data.CODE,this.txtNewMail.value,this.txtNewCustomerName.value,this.txtNewCustomerLastName.value,this.txtNewPhone.value,this.posObj.dt()[0].CUSTOMER_GUID]
                                         };

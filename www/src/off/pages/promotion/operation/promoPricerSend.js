@@ -39,13 +39,13 @@ export default class promoPricerSend extends React.PureComponent
                 select : 
                 {
                     query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-                            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE," +
+                            " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE," +
                             "COND_ITEM_GUID AS ITEM, " +
                             "COND_ITEM_NAME AS ITEM_NAME, " +
                             "COND_ITEM_CODE AS ITEM_CODE, " +
                             "CODE AS CODE, " +
                             "NAME AS NAME " +
-                            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112)  ",
+                            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,dbo.GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,dbo.GETDATE(),112)  ",
                 },
                 sql : this.core.sql
             }

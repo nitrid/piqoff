@@ -125,7 +125,7 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
                                 "WHERE  " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
@@ -148,8 +148,8 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
-                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND " +
+                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) <> 0 AND " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
                         value : [this.txtUrunAdi.value,this.cmbDepot.value]

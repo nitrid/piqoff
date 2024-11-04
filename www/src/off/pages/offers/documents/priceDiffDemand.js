@@ -166,7 +166,7 @@ export default class priceDiffDemand extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE] " +
-                                "(GUID,1,GETDATE(),'" + this.docObj.dt()[0].OUTPUT +"','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " +
+                                "(GUID,1,dbo.GETDATE(),'" + this.docObj.dt()[0].OUTPUT +"','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " +
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))" ,
                         param : ['VAL:string|50']
                     },
@@ -512,7 +512,7 @@ export default class priceDiffDemand extends DocBase
                                     e.data.ORIGIN = this.cmbOrigin.value 
                                     let tmpQuery = 
                                     {
-                                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                        query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
                                         param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                                         value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
                                     }
@@ -626,7 +626,7 @@ export default class priceDiffDemand extends DocBase
                 {
                     let tmpCheckQuery = 
                     {
-                        query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                        query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
                         param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                         value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
                     }
@@ -672,7 +672,7 @@ export default class priceDiffDemand extends DocBase
 
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
             }

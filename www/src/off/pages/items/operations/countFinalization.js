@@ -194,7 +194,7 @@ export default class countFinalization extends React.PureComponent
                     select : 
                     {
                         query :"SELECT ITEM,ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,DEPOT, "+ 
-                        " [dbo].[FN_DEPOT_QUANTITY](ITEM,DEPOT,GETDATE()) AS DEPOT_QUANTITY FROM ITEM_COUNT_VW_01 "+
+                        " [dbo].[FN_DEPOT_QUANTITY](ITEM,DEPOT,dbo.GETDATE()) AS DEPOT_QUANTITY FROM ITEM_COUNT_VW_01 "+
                         " WHERE (REF+CONVERT(NVARCHAR,REF_NO)) IN("+tmpRefRefNo+")  GROUP BY ITEM,ITEM_CODE,ITEM_NAME,DEPOT",
                     },
                     sql : this.core.sql
@@ -214,7 +214,7 @@ export default class countFinalization extends React.PureComponent
                     {
                         query :"SELECT " +
                         "GUID AS ITEM, " +
-                        "[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS DEPOT_QUANTITY, " +
+                        "[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS DEPOT_QUANTITY, " +
                         "NAME AS ITEM_NAME, " +
                         "CODE AS ITEM_CODE, " +
                         "ISNULL((SELECT SUM(QUANTITY) FROM ITEM_COUNT WHERE ITEM_COUNT.ITEM = ITEMS.GUID AND (REF+CONVERT(NVARCHAR,REF_NO)) IN("+tmpRefRefNo+")),0) AS QUANTITY, " +

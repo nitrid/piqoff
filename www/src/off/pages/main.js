@@ -42,7 +42,7 @@ export default class mainPage extends React.PureComponent
         //             "(SELECT *, " +
         //             "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
         //             "FROM [ITEM_EXPDATE_VW_01] WHERE  " +
-        //             " (GETDATE()+15 >  EXP_DATE) AND (EXP_DATE >= GETDATE())) AS TMP WHERE QUANTITY - DIFF > 0",
+        //             " (dbo.GETDATE()+15 >  EXP_DATE) AND (EXP_DATE >= dbo.GETDATE())) AS TMP WHERE QUANTITY - DIFF > 0",
         // }
         // let tmpData = await this.core.sql.execute(tmpQuery) 
         // if(tmpData.result.recordset.length > 0)

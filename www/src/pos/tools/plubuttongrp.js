@@ -55,8 +55,8 @@ export default class NbPluButtonGrp extends NbBase
         
         this.pluImageDt.selectCmd = 
         {
-            query : `SELECT *,ISNULL((SELECT TOP 1 1 FROM PROMO_COND_APP_VW_01 WHERE COND_ITEM_GUID = ITEM_GUID AND START_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND 
-                    FINISH_DATE >= CONVERT(NVARCHAR(10),GETDATE(),112)),0) AS PROMO FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT CASE WHEN value = '' THEN '00000000-0000-0000-0000-000000000000' ELSE value END 
+            query : `SELECT *,ISNULL((SELECT TOP 1 1 FROM PROMO_COND_APP_VW_01 WHERE COND_ITEM_GUID = ITEM_GUID AND START_DATE <= CONVERT(NVARCHAR(10),dbo.GETDATE(),112) AND 
+                    FINISH_DATE >= CONVERT(NVARCHAR(10),dbo.GETDATE(),112)),0) AS PROMO FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT CASE WHEN value = '' THEN '00000000-0000-0000-0000-000000000000' ELSE value END 
                     FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC`,
             param : ['MAIN_GUID:string|max'],
             value : [tmpArr.toString()],
@@ -490,7 +490,7 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,NAME,ROUND((SELECT dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)), 2) AS PRICE FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1 ",
+                            query : "SELECT GUID,CODE,NAME,ROUND((SELECT dbo.FN_PRICE(GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)), 2) AS PRICE FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1 ",
                             param : ['VAL:string|50']
                         },
                         sql:this.props.parent.core.sql
