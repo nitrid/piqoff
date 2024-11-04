@@ -53,7 +53,7 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
-            dtDShıpmentDate : "Şipariş Tarihi",
+            dtDShıpmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
             cmbPricingList : "Fiyat Liste No"
         },
