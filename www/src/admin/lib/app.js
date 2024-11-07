@@ -246,6 +246,35 @@ export default class App extends React.Component
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
         }
     }
+    getLicence(pApp,pField)
+    {
+        return new Promise((resolve) =>
+        {
+            try
+            {
+                this.core.socket.emit('get-licence',{type:pApp,field:pField},(tmpLicData) =>
+                {
+                    if(tmpLicData == null)
+                    {
+                        resolve(null);
+                        return;
+                    }
+    
+                    let tmpLic = JSON.parse(tmpLicData[pField]);
+                    if(tmpLic[pField] == null || typeof tmpLic[pField] == 'undefined')
+                    {
+                        resolve(null);
+                        return;
+                    }
+                    resolve(tmpLic[pField]);
+                });
+            }
+            catch(e)
+            {
+                resolve(null);
+            }
+        });
+    }
     render() 
     {
         const { opened,logined,connected,splash } = this.state;

@@ -74,7 +74,9 @@ export default class App extends React.PureComponent
             itemInfo : false,
             transferPanel : false,
             transProgress : "",
-            msgTransfer : ""
+            msgTransfer : "",
+            licenced : false,
+            licenceMsg : ''
         }
         this.toolbarItems = 
         [
@@ -213,6 +215,13 @@ export default class App extends React.PureComponent
                 this.core.auth.logout()
                 window.location.reload()
             }
+            //LİSANS KONTROLÜ YAPILDIKTAN SONRA KULLANICI DISCONNECT EDİLİYOR.
+            else if(typeof e.id != 'undefined' && e.id == 'M001')
+            {
+                this.core.auth.logout()
+                this.core.socket.disconnect();
+                this.setState({licenced:true,logined:false,licenceMsg:e.data});                
+            }
         })
 
         this.transfer = new transferCls()
@@ -336,6 +345,26 @@ export default class App extends React.PureComponent
     render() 
     {
         const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer } = this.state;
+
+        if(this.state.licenced)
+        {
+            //LİSANS KONTROLÜ YAPILDIKTAN SONRA BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
+            return(
+                <div style={this.style.splash_body}>
+                    <div className="card" style={this.style.splash_box}>
+                        <div className="card-header">{"Licence"}</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h5 className="text-center">{this.state.licenceMsg}</h5>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            )                
+        }
+        
         if(lcd)
         {
             return <CustomerInfoScreen/>
