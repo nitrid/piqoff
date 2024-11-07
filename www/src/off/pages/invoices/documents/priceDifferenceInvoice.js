@@ -48,11 +48,137 @@ export default class priceDifferenceInvoice extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
-        if(typeof this.pagePrm != 'undefined')
+        if(typeof this.pagePrm.GUID != 'undefined')
         {
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
+        }
+        else if(typeof this.pagePrm.piqx != 'undefined')
+        {
+            setTimeout(() => 
+                {
+                    this.initPiqX()
+                }, 1000);
+            
+        }
+    }
+    async initPiqX()
+    {
+        this.piqX = this.pagePrm.piqx
+        let jData = JSON.parse(this.piqX[0].JSON)
+
+        if(jData.length > 0)
+        {
+            let tmpCustQuery = 
+            {
+                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                param : ['TAX_NO:string|25'],
+                value : [this.piqX[0].DOC_FROM_NO]
+            }
+
+            let tmpCustData = await this.core.sql.execute(tmpCustQuery) 
+
+            if(tmpCustData?.result?.recordset?.length > 0)
+            {
+                this.txtCustomerCode.value = tmpCustData.result.recordset[0].CODE
+                this.txtCustomerName.value = tmpCustData.result.recordset[0].TITLE
+
+                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                {
+                    this.frmDocItems.option('disabled',false)
+                }
+                this.docObj.dt()[0].INPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.docCustomer.dt()[0].INPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.dt()[0].INPUT_CODE = tmpCustData.result.recordset[0].CODE
+                this.docObj.dt()[0].INPUT_NAME = tmpCustData.result.recordset[0].TITLE
+                this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                {
+                    this.txtRef.value = tmpCustData.result.recordset[0].CODE
+                }
+
+                let tmpAdrQuery = 
+                {
+                    query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                    param : ['CUSTOMER:string|50'],
+                    value : [tmpCustData.result.recordset[0].GUID]
+                }
+                let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                if(tmpAdressData.result.recordset.length > 1)
+                {
+                    this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
+                }
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+
+            this.dtDocDate.value = jData[0].DOC_DATE
+            this.txtRefno.value = jData[0].REF_NO
+            let tmpMissCodes = []
+
+            for (let i = 0; i < jData.length; i++) 
+            {
+                let tmpData = {}
+
+                let tmpItemQuery = 
+                {
+                    query : "SELECT " + 
+                            "I.GUID AS ITEM, " + 
+                            "I.CODE AS ITEM_CODE, " + 
+                            "I.NAME AS ITEM_NAME, " + 
+                            "I.UNIT AS UNIT, " + 
+                            "I.COST_PRICE AS COST_PRICE, " +
+                            "I.VAT AS VAT " +
+                            "FROM ITEM_MULTICODE AS M " + 
+                            "INNER JOIN ITEMS_VW_01 AS I ON " + 
+                            "M.ITEM = I.GUID " + 
+                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    param : ['CODE:string|50','CUSTOMER:string|50'],
+                    value : [jData[i].ITEM_CODE,this.docObj.dt()[0].INPUT]
+                }
+
+                let tmpItemData = await this.core.sql.execute(tmpItemQuery) 
+                
+                if(tmpItemData?.result?.recordset?.length > 0)
+                {
+                    tmpData.GUID = tmpItemData.result.recordset[0].ITEM
+                    tmpData.ITEM_TYPE = tmpItemData.result.recordset[0].ITEM_TYPE
+                    tmpData.CODE = tmpItemData.result.recordset[0].ITEM_CODE
+                    tmpData.NAME = tmpItemData.result.recordset[0].ITEM_NAME
+                    tmpData.UNIT = tmpItemData.result.recordset[0].UNIT
+                    tmpData.COST_PRICE = tmpItemData.result.recordset[0].COST_PRICE
+                    tmpData.VAT = tmpItemData.result.recordset[0].VAT
+                    await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
+                }
+                else
+                {
+                    tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
+                }
+            }
+
+            if(tmpMissCodes.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                }
+            
+                await dialog(tmpConfObj);
+            }
+            this.btnSave.setState({disabled:false});
         }
     }
     loadState() 

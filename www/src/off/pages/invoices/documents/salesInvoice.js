@@ -2261,6 +2261,8 @@ export default class salesInvoice extends DocBase
                                                                 docDate : tmpData.result.recordset[0].DOC_DATE,
                                                                 fromTax : tmpData.result.recordset[0].TAX_NO,
                                                                 toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                                                                fromRebate: tmpData.result.recordset[0].DOC_REBATE,
                                                                 json : JSON.stringify(tmpData.result.recordset),
                                                                 pdf : "data:application/pdf;base64," + pResult.split('|')[1]
                                                             },

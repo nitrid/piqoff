@@ -104,10 +104,7 @@ export default class purchaseInvoice extends DocBase
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
                 }
-                if(this.cmbDepot.value != '' && this.docLocked == false)
-                {
-                    this.frmDocItems.option('disabled',false)
-                }
+
                 let tmpAdrQuery = 
                 {
                     query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
@@ -134,6 +131,7 @@ export default class purchaseInvoice extends DocBase
 
             this.dtDocDate.value = jData[0].DOC_DATE
             this.dtShipDate.value = jData[0].SHIPMENT_DATE
+            this.txtRefno.value = jData[0].REF_NO
             let tmpMissCodes = []
 
             for (let i = 0; i < jData.length; i++) 
@@ -168,13 +166,12 @@ export default class purchaseInvoice extends DocBase
                     tmpData.UNIT = tmpItemData.result.recordset[0].UNIT
                     tmpData.COST_PRICE = tmpItemData.result.recordset[0].COST_PRICE
                     tmpData.VAT = tmpItemData.result.recordset[0].VAT
+                    await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
                 }
                 else
                 {
                     tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
                 }
-
-                await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
             }
 
             if(tmpMissCodes.length > 0)

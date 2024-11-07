@@ -1066,8 +1066,23 @@ export const menu = (e) =>
                     [
                         {
                             id: 'piqx_01_001',
-                            text: e.t('menuOff.piqx_01_001'), //'Gelen Fatura Listesi',
-                            path: 'piqx/lists/piqXIncomingList'
+                            text: e.t('menuOff.piqx_01_001'), //'Gelen Alış Fatura Listesi',
+                            path: 'piqx/lists/piqXPurcFactList'
+                        },
+                        {
+                            id: 'piqx_01_002',
+                            text: e.t('menuOff.piqx_01_002'), //'Gelen Şube Alış Faturası',
+                            path: 'piqx/lists/piqXBranchPurcFactList'
+                        },
+                        {
+                            id: 'piqx_01_003',
+                            text: e.t('menuOff.piqx_01_003'), //'Gelen Fiyat Farkı Faturası',
+                            path: 'piqx/lists/piqXPriceDiffFactList'
+                        },
+                        {
+                            id: 'piqx_01_004',
+                            text: e.t('menuOff.piqx_01_004'), //'Gelen İade Faturası',
+                            path: 'piqx/lists/piqXRebateFactList'
                         }
                     ]
                 }
