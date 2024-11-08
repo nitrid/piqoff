@@ -47,20 +47,22 @@ export default class branchSaleInvoice extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
-        if(typeof this.pagePrm.GUID != 'undefined')
+        if(typeof this.pagePrm != 'undefined')
         {
-            setTimeout(() => 
+            if(typeof this.pagePrm.GUID != 'undefined')
             {
-                this.getDoc(this.pagePrm.GUID,'',0)
-            }, 1000);
-        }
-        else if(typeof this.pagePrm.piqx != 'undefined')
-        {
-            setTimeout(() => 
+                setTimeout(() => 
                 {
-                    this.initPiqX()
+                    this.getDoc(this.pagePrm.GUID,'',0)
                 }, 1000);
-            
+            }
+            else if(typeof this.pagePrm.piqx != 'undefined')
+            {
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+            }
         }
     }
     async initPiqX()

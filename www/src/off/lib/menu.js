@@ -1060,29 +1060,52 @@ export const menu = (e) =>
             [
                 {
                     id:'piqx_01',
-                    text:e.t('menuOff.piqx_01'),//'Listeler',
+                    text:e.t('menuOff.piqx_01'),//'Faturalar',
                     expanded:false,
                     items:
                     [
                         {
                             id: 'piqx_01_001',
                             text: e.t('menuOff.piqx_01_001'), //'Gelen Alış Fatura Listesi',
-                            path: 'piqx/lists/piqXPurcFactList'
+                            path: 'piqx/invoices/piqXPurcFactList'
                         },
                         {
                             id: 'piqx_01_002',
                             text: e.t('menuOff.piqx_01_002'), //'Gelen Şube Alış Faturası',
-                            path: 'piqx/lists/piqXBranchPurcFactList'
+                            path: 'piqx/invoices/piqXBranchPurcFactList'
                         },
                         {
                             id: 'piqx_01_003',
                             text: e.t('menuOff.piqx_01_003'), //'Gelen Fiyat Farkı Faturası',
-                            path: 'piqx/lists/piqXPriceDiffFactList'
+                            path: 'piqx/invoices/piqXPriceDiffFactList'
                         },
                         {
                             id: 'piqx_01_004',
                             text: e.t('menuOff.piqx_01_004'), //'Gelen İade Faturası',
-                            path: 'piqx/lists/piqXRebateFactList'
+                            path: 'piqx/invoices/piqXRebateFactList'
+                        }
+                    ]
+                },
+                {
+                    id:'piqx_02',
+                    text:e.t('menuOff.piqx_02'),//'İrsaliyeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'piqx_02_001',
+                            text: e.t('menuOff.piqx_02_001'), //'Gelen Alış Fatura Listesi',
+                            path: 'piqx/dispatch/piqXPurcDispatchList'
+                        },
+                        {
+                            id: 'piqx_02_002',
+                            text: e.t('menuOff.piqx_02_002'), //'Gelen Şube Alış Faturası',
+                            path: 'piqx/dispatch/piqXBranchPurcDispatchList'
+                        },
+                        {
+                            id: 'piqx_02_003',
+                            text: e.t('menuOff.piqx_02_003'), //'Gelen Fiyat Farkı Faturası',
+                            path: 'piqx/dispatch/piqXRebateDispatchList'
                         }
                     ]
                 }
