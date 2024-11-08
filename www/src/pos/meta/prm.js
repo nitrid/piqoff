@@ -1509,7 +1509,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"PosAddition",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
