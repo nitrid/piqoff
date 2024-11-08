@@ -199,4 +199,26 @@ export const prm =
             CAPTION : "Ürün Grubu Açık",
         }
     },
+     //MultiQtyGrp
+     {
+        TYPE : 0,
+        ID :"MultiPrintDevice",
+        VALUE : "TP808",
+        SPECIAL : "",
+        PAGE : "bill.js",
+        ELEMENT : "",
+        APP : "REST",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Rest",
+            CAPTION : "Ürünlerin birleştirecek yacızı adı",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
 ]

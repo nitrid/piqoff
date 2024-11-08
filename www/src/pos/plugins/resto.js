@@ -218,6 +218,11 @@ function renderPaySplit()
                             tmpPayType = 1
                             this.payAdd(tmpPayType,tmpPay)
                         }
+                        else if(tmpResult2 == "btn03")
+                        {
+                            tmpPayType = 3
+                            this.payAdd(tmpPayType,tmpPay)
+                        }
                     }
                 }}>
                     <i className="text-white fa-solid fa-comments-dollar" style={{fontSize: "24px"}} />
@@ -244,7 +249,7 @@ function renderPaySplit()
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-6 py-2">
+                        <div className="col-4 py-2">
                             <NbButton id={"btnMsgRestPaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                             onClick={()=>
                             {
@@ -254,7 +259,7 @@ function renderPaySplit()
                                 <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-money-bill"} style={{fontSize: "24px"}}/></div></div>
                             </NbButton>
                         </div>
-                        <div className="col-6 py-2">
+                        <div className="col-4 py-2">
                             <NbButton id={"btnMsgRestPaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                             onClick={()=>
                             {
@@ -262,6 +267,16 @@ function renderPaySplit()
                             }}>
                                 <div className="row"><div className="col-12">{"CB"}</div></div>
                                 <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-credit-card"} style={{fontSize: "24px"}}/></div></div>                                    
+                            </NbButton>
+                        </div>
+                        <div className="col-4 py-2">
+                            <NbButton id={"btnMsgRestPaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this.msgRestPaymentType._onClick("btn03")
+                            }}>
+                                <div className="row"><div className="col-12">{"T.R"}</div></div>
+                                <div className="row"><div className="col-12"><i className={"text-white fa-solid fa-cutlery"} style={{fontSize: "24px"}}/></div></div>                                    
                             </NbButton>
                         </div>
                     </div>
