@@ -48,19 +48,22 @@ export default class priceDifferenceInvoice extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
-        if(typeof this.pagePrm.GUID != 'undefined')
+        if(typeof this.pagePrm != 'undefined')
         {
-            setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',0)
-            }, 1000);
-        }
-        else if(typeof this.pagePrm.piqx != 'undefined')
-        {
-            setTimeout(() => 
-                {
-                    this.initPiqX()
+            if(typeof this.pagePrm.GUID != 'undefined')
+            {
+                setTimeout(() => {
+                    this.getDoc(this.pagePrm.GUID,'',0)
                 }, 1000);
-            
+            }
+            else if(typeof this.pagePrm.piqx != 'undefined')
+            {
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+                
+            }
         }
     }
     async initPiqX()
@@ -942,6 +945,11 @@ export default class priceDifferenceInvoice extends DocBase
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {
+                                                    if(typeof this.piqX != 'undefined')
+                                                        {
+                                                            this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
+                                                        }
+                                                        
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});

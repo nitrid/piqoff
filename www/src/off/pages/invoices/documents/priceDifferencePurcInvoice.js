@@ -1826,7 +1826,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                                 fromTax : tmpData.result.recordset[0].TAX_NO,
                                                                 toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
                                                                 fromType: tmpData.result.recordset[0].DOC_TYPE,
-                                                                fromRebate: tmpData.result.recordset[0].DOC_REBATE,
+                                                                fromRebate: tmpData.result.recordset[0].REBATE,
                                                                 json : JSON.stringify(tmpData.result.recordset),
                                                                 pdf : "data:application/pdf;base64," + pResult.split('|')[1]
                                                             },
