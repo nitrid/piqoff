@@ -58,7 +58,7 @@ class piqService
                             query : "SELECT ISNULL(SUM(CASE WHEN TYPE = 0 THEN POINT ELSE POINT * -1 END),0) AS POINT FROM CUSTOMER_POINT WHERE CUSTOMER = '" + tmpResultCustomer.result.recordset[i].GUID + "' AND DELETED = 0 " +
                                     "UNION ALL " +
                                     "SELECT ISNULL(SUM(CASE WHEN TYPE = 0 THEN POINT ELSE POINT * -1 END),0) AS POINT FROM CUSTOMER_POINT WHERE CUSTOMER = '" + tmpResultCustomer.result.recordset[i].GUID + "' AND TYPE = 0 AND " +
-                                    "CDATE >= CONVERT(NVARCHAR(4),YEAR(GETDATE())) + '0101' AND CDATE <= CONVERT(NVARCHAR(4),YEAR(GETDATE())) + '0131' AND DELETED = 0",
+                                    "CDATE >= CONVERT(NVARCHAR(4),YEAR(dbo.GETDATE())) + '0101' AND CDATE <= CONVERT(NVARCHAR(4),YEAR(dbo.GETDATE())) + '0131' AND DELETED = 0",
                         }
         
                         let tmpResult = await core.instance.sql.execute(tmpQuery)
@@ -91,7 +91,7 @@ class piqService
 
                                 let tmpUpdateQuery = 
                                 {
-                                    query : "UPDATE CUSTOMERS SET POINT = (SELECT dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE())) WHERE GUID = @CUSTOMER", 
+                                    query : "UPDATE CUSTOMERS SET POINT = (SELECT dbo.FN_CUSTOMER_TOTAL_POINT(GUID,dbo.GETDATE())) WHERE GUID = @CUSTOMER", 
                                     param : ['CUSTOMER:string|50'],
                                     value : [tmpResultCustomer.result.recordset[i].GUID],
                                 }
@@ -112,14 +112,14 @@ class piqService
 
             let tmpQuantityUpdateQuery = 
             {
-                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.GETDATE())) ",
+                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.dbo.GETDATE())) ",
             }
 
             await core.instance.sql.execute(tmpQuantityUpdateQuery)
             
             let tmpBalanceUpdateQuery = 
             {
-                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.GETDATE())) ",
+                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.dbo.GETDATE())) ",
             }
         
             await core.instance.sql.execute(tmpBalanceUpdateQuery)

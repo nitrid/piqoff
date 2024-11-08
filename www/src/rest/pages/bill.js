@@ -150,7 +150,7 @@ export default class bill extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50']
             }
             tmpPriceDt.selectCmd.value = [pItem]

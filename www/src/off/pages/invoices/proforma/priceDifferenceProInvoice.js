@@ -322,7 +322,7 @@ export default class priceDifferenceInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+            query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
@@ -379,7 +379,7 @@ export default class priceDifferenceInvoice extends DocBase
                 {
                     let tmpQuery = 
                     {
-                        query :"SELECT dbo.FN_PRICE(@ITEM,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                        query :"SELECT dbo.FN_PRICE(@ITEM,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
                         param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
                         value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }

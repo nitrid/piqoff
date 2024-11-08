@@ -317,7 +317,10 @@ export const langFr =
         cnt_04_001 : "Contrat de vente multiple",
         piqx : "PiqX",
         piqx_01 : "Listes", //BAK
-        piqx_01_001 : "Factures reçues", //BAK
+        piqx_01_001 : "Factures d'achat reçues", //BAK
+        piqx_01_002 : "Facture d'achat de interne reçue",
+        piqx_01_003 : "Factures de différence de prix reçues",
+        piqx_01_004 : "Factures de retour reçues",
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",

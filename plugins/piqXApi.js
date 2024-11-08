@@ -34,7 +34,6 @@ class piqXApi
             {
                 let tmpResult = await this.getInvoiceList(pParam)
                 
-                console.log(tmpResult)
                 if(typeof tmpResult.err != 'undefined' && (tmpResult.err == 403 || tmpResult.err == 404))
                 {
                     await this.login(this.username,this.password)
@@ -123,7 +122,7 @@ class piqXApi
     {
         try 
         {
-            let url = this.endpoint + `/api/invoiceList?taxId=${encodeURIComponent(pData.taxId)}`;
+            let url = this.endpoint + `/api/invoiceList?taxId=${encodeURIComponent(pData.taxId)}&type=${encodeURIComponent(pData.docType)}&rebate=${encodeURIComponent(pData.rebate)}`;
 
             if (pData.first && pData.last) 
             {
@@ -200,6 +199,8 @@ class piqXApi
                     docdate: pData.docDate || '',
                     fromtax: pData.fromTax || '',
                     totax: pData.toTax || '',
+                    fromtype: pData.fromType || '',
+                    fromrebate: pData.fromRebate || '',
                     json: pData.json || '',
                     pdf: pData.pdf || ''
                 })

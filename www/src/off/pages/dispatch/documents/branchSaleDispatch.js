@@ -523,7 +523,7 @@ export default class branchSaleDispatch extends DocBase
             {
                 let tmpCheckQuery = 
                 {
-                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY ",
                     param : ['GUID:string|50','DEPOT:string|50'],
                     value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
                 }

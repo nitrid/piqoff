@@ -28,13 +28,13 @@ export default class piqPoidUserCard extends React.PureComponent
         }
         this.userDt.insertCmd = 
         {
-            query : "INSERT INTO BALANCE_USERS (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,DELETED) VALUES (@GUID,GETDATE(),@CUSER,GETDATE(),@LUSER,@CODE,@NAME,0)",
+            query : "INSERT INTO BALANCE_USERS (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,0)",
             param : ['GUID:string|50','CUSER:string|25','LUSER:string|25','CODE:string|25','NAME:string|50'],
             dataprm : ['GUID','CUSER','LUSER','CODE','NAME']
         }
         this.userDt.updateCmd = 
         {
-            query : "UPDATE BALANCE_USERS SET LDATE = GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME WHERE GUID = @GUID",
+            query : "UPDATE BALANCE_USERS SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME WHERE GUID = @GUID",
             param : ['LUSER:string|25','CODE:string|25','NAME:string|50','GUID:string|50'],
             dataprm : ['LUSER','CODE','NAME','GUID']
         }

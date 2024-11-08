@@ -72,10 +72,10 @@ export default class rebateOperation extends React.PureComponent
                     "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_NAME,'')  AS CUSTOMER_NAME, " +
                     "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_CODE ,'')AS CUSTOMER_CODE, " +
                     "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_GUID ,'00000000-0000-0000-0000-000000000000')AS CUSTOMER_GUID, " +
-                    "[dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                    "[dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
                     "LEFT OUTER JOIN  " +
                     "ITEM_MULTICODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_MULTICODE_VW_01.ITEM_GUID " +
-                    "WHERE [dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,GETDATE()) > 0  " +
+                    "WHERE [dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,dbo.GETDATE()) > 0  " +
                     " AND      ((ITEM_MULTICODE_VW_01.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ",
                     param : ['DEPOT:string|50','CUSTOMER_CODE:string|50'],
                     value : [this.cmbDepot.value,this.txtCustomerCode.CODE]

@@ -28,13 +28,13 @@ export default class piqPoidDeviceCard extends React.PureComponent
         }
         this.deviceDt.insertCmd = 
         {
-            query : "INSERT INTO BALANCE_DEVICES (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,MACID,LANG,USER_CODE,USER_PWD,DELETED) VALUES (@GUID,GETDATE(),@CUSER,GETDATE(),@LUSER,@CODE,@NAME,@MACID,@LANG,@USER_CODE,@USER_PWD,0)",
+            query : "INSERT INTO BALANCE_DEVICES (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,MACID,LANG,USER_CODE,USER_PWD,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,@MACID,@LANG,@USER_CODE,@USER_PWD,0)",
             param : ['GUID:string|50','CUSER:string|25','LUSER:string|25','CODE:string|10','NAME:string|50','MACID:string|50','LANG:string|5','USER_CODE:string|25','USER_PWD:string|50'],
             dataprm : ['GUID','CUSER','LUSER','CODE','NAME','MACID','LANG','USER_CODE','USER_PWD']
         }
         this.deviceDt.updateCmd = 
         {
-            query : "UPDATE BALANCE_DEVICES SET LDATE = GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME, MACID = @MACID, LANG = @LANG, USER_CODE = @USER_CODE, USER_PWD = @USER_PWD WHERE GUID = @GUID",
+            query : "UPDATE BALANCE_DEVICES SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME, MACID = @MACID, LANG = @LANG, USER_CODE = @USER_CODE, USER_PWD = @USER_PWD WHERE GUID = @GUID",
             param : ['LUSER:string|25','CODE:string|10','NAME:string|50','MACID:string|50','LANG:string|5','USER_CODE:string|25','USER_PWD:string|50','GUID:string|50'],
             dataprm : ['LUSER','CODE','NAME','MACID','LANG','USER_CODE','USER_PWD','GUID']
         }

@@ -272,7 +272,7 @@ posDoc.prototype.getItem = async function(pCode)
                             let tmpPriceDt = new datatable()
                             tmpPriceDt.selectCmd = 
                             {
-                                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE ",
+                                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,0,1) AS PRICE ",
                                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','LIST_NO:int'],
                                 local : 
                                 {
