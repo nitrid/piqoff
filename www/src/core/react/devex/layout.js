@@ -66,8 +66,11 @@ export class NdLayout extends Base
                             tmpObj.position.w = itemL.w
                         }
                         
-                        child.props.access.setValue(tmpObj)
-    
+                        let tmpMeta = {...child.props.access[0]}
+                        tmpMeta.VALUE = tmpObj
+
+                        child.props.access.add(tmpMeta)
+                        
                         if(typeof this.props.parent != 'undefined' && typeof this.props.parent[child.props.id] != 'undefined')
                         {
                             this.props.parent[child.props.id].setState({accessValue:child.props.access.getValue()})
@@ -192,7 +195,7 @@ class NdLayoutItemBase extends Base
         else
         {
             
-            if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
+            if(typeof this.props.access != 'undefined' && typeof this.props?.access?.getValue()?.visible != 'undefined')
             {
                 if(this.state.accessValue.visible)
                 {

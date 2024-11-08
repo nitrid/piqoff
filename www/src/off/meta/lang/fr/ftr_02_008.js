@@ -492,5 +492,70 @@ const ftr_02_008 =
         btn01: "OK", //BAK
         msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
     },
+    msgCompulsoryCustomer:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
+    },
+    msgNewPrice :      
+    {     
+        title: "Attention",     
+        btn01: "Ne pas mettre à jour",     
+        btn02: "Mettre prix sélectionné à jour ",     
+        msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
+    },     
+    msgNewPriceDate : 
+    {
+        title: "Attention", 
+        btn01: "Ne pas mettre a jour", 
+        btn02: "Mettre à jour les produits sélectionnés", 
+        msg: "Veuillez choisir les produits où vous souhaitez mettre à jour la date. " 
+    },
+    grdNewPrice:      
+    {     
+        clmCode: "Code",     
+        clmName: "Nom",     
+        clmPrice: "Ancien Prix",     
+        clmPrice2: "Nouveau Prix",   
+        clmSalePrice :"Prix de Vente",  
+        clmMargin : "Marge Brute",
+        clmCostPrice : "Coût", 
+        clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
+    },
+    grdNewPriceDate:      
+    {     
+        clmCode: "Code",     
+        clmName: "Nom",     
+        clmPrice: "Ancien Prix",     
+        clmPrice2: "Nouveau Prix",   
+        clmSalePrice :"Prix de Vente",  
+        clmMargin : "Marge Brute",
+        clmCostPrice : "Coût", 
+        clmNetMargin : "Marge Nette",
+        clmMarge : "Marge"
+    },
+    msgNewVat : 
+    {
+        title: "Attention",  
+        btn01: "Ne faire aucune MAJ",  
+        btn02: "Mettre à jour les lignes sélectionnées",  
+        msg: "Différence du taux de TVA entre la facture et celui enregistré."  
+    },  
+    grdNewVat: 
+    {
+        clmCode: "Code",    
+        clmName: "Nom",    
+        clmVat: "TVA Saisie",    
+        clmVat2: "Nouveau TVA",    
+    },
+    msgPriceDateUpdate :
+    {
+        msg : "Souhaitez-vous mettre à jour la date des produits où le prix d’achat reste inchangé ? ", 
+        btn01 : "Oui", 
+        btn02 : "Non", 
+        title : "Attention" 
+    },
 }
 export default ftr_02_008

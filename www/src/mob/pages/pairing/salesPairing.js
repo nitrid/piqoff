@@ -73,12 +73,12 @@ export default class salesPairing extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
         this.orderDetailDt.selectCmd = 
         {
-            query : "SELECT ITEM_NAME,ITEM_CODE,CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID",
+            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0",
             param : ['DOC_GUID:string|50'],
         }
 
@@ -164,7 +164,7 @@ export default class salesPairing extends React.PureComponent
                     query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
                             "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
                             "FROM DOC_ORDERS_VW_01 " + 
-                            "WHERE CLOSED = 0 AND QUANTITY > COMP_QUANTITY AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = ''))" + 
+                            "WHERE CLOSED = 0 AND CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (DOC_ORDERS_VW_01.APPROVED_QUANTITY - DOC_ORDERS_VW_01.COMP_QUANTITY) ELSE DOC_ORDERS_VW_01.COMP_QUANTITY END > 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = ''))" + 
                             "GROUP BY REF,REF_NO,DOC_GUID,DOC_DATE,INPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,OUTPUT",
                     param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
                     value : [this.dtFirstDate.value,this.dtLastDate.value,this.docObj.dt()[0].INPUT_CODE]
@@ -329,8 +329,12 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.ORDER_LINE_GUID = this.itemDt[0].ORDER_LINE_GUID
         tmpDocItems.ORDER_DOC_GUID = this.itemDt[0].ORDER_DOC_GUID
 
-        console.log(tmpDocItems)
         this.docObj.docItems.addEmpty(tmpDocItems)
+
+        this.orderDetailDt.clear();
+        this.orderDetailDt.selectCmd.value = [this.orderGuid]
+        await this.orderDetailDt.refresh();  
+        await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
         this.clearEntry()
 
         await this.save()
@@ -414,10 +418,15 @@ export default class salesPairing extends React.PureComponent
     }
     async onClickOrdersShortcut()
     {
+        this.txtOrderRef = ''
         this.pageView.activePage('Orders')
     }
     async ordersSelect(pGuid)
     {
+        if(typeof pGuid == 'undefined')
+        {
+            pGuid = this.grdOrderList.getSelectedData()[0].DOC_GUID
+        }
         if(this.docObj.docItems.dt().length > 0)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgOrderSelected")}</div>)
@@ -478,6 +487,39 @@ export default class salesPairing extends React.PureComponent
         await this.orderDetailDt.refresh();  
         await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
         this.pageView.activePage('OrderDetail')
+    }
+    async orderComplated()
+    {
+        let tmpConfObj = 
+        {
+            id:'msgOrderComplated',showTitle:true,title:this.lang.t("msgOrderComplated.title"),showCloseButton:true,width:'350px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgOrderComplated.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgOrderComplated.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOrderComplated.msg")}</div>)
+        }
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn01')
+        {              
+            for (let i = 0; i < this.orderDetailDt.length; i++) 
+            {
+                console.log(this.orderDetailDt)
+                if(this.orderDetailDt[i].PEND_QUANTITY > 0)
+                {
+                    let tmpQuery = 
+                    {
+                        query :"UPDATE DOC_ORDERS SET CLOSED = 1 WHERE GUID = @GUID ",
+                        param : ['GUID:string|50'],
+                        value : [this.orderDetailDt[i].GUID]
+                    }
+
+                    await this.core.sql.execute(tmpQuery) 
+                }
+            }
+            this.init()
+        }
+        else
+        {
+           
+        }
     }
     render()
     {
@@ -760,7 +802,19 @@ export default class salesPairing extends React.PureComponent
                                             </NbButton>
                                         </div>
                                         <div className='col-6'>
-                                           
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.onClickProcessShortcut.bind(this)}>
+                                                <div className='row py-2'>
+                                                    <div className='col-12'>
+                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                    </div>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col-12'>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
+                                                    </div>
+                                                </div>
+                                            </NbButton>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -780,16 +834,16 @@ export default class salesPairing extends React.PureComponent
                                             </NbButton>
                                         </div>
                                         <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.onClickProcessShortcut.bind(this)}>
+                                            <NbButton className="form-group btn btn-success btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.orderComplated.bind(this)}>
                                                 <div className='row py-2'>
                                                     <div className='col-12'>
-                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                        <i className={"fa-solid fa-check"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
                                                     </div>
                                                 </div>
                                                 <div className='row'>
                                                     <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnOrderComplated")}</h6>
                                                     </div>
                                                 </div>
                                             </NbButton>
@@ -1424,6 +1478,13 @@ export default class salesPairing extends React.PureComponent
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.ordersSelect.bind(this)}>{this.t("lblSelect")}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-12'>
                                             <NdGrid parent={this} id={"grdOrderList"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
@@ -1476,6 +1537,13 @@ export default class salesPairing extends React.PureComponent
                                             height={'350'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onRowPrepared={(e) =>
+                                            {
+                                                if(e.rowType == 'data' && e.data.PEND_QUANTITY == '0')
+                                                {
+                                                    e.rowElement.style.backgroundColor ="green"
+                                                }
+                                            }}
                                             >
                                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                                 <Scrolling mode="standart" />

@@ -680,8 +680,8 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM ITEMS_VW_01 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 10`
+                    query : `SELECT *,dbo.FN_PRICE(GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE FROM ITEMS_VW_01 {0}`,
+                    where : `WHERE LDATE >= dbo.GETDATE() - 10`
                 },
                 to : 
                 {
@@ -703,9 +703,9 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE 
+                    query : `SELECT *,dbo.FN_PRICE(GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE 
                             FROM ITEMS_POS_VW_01 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 10`
+                    where : `WHERE LDATE >= dbo.GETDATE() - 10`
                 },
                 to : 
                 {
@@ -726,7 +726,7 @@ export default class transferCls
                 {
                     type : "select",
                     query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 10`
+                    where : `WHERE LDATE >= dbo.GETDATE() - 10`
                 },
                 to : 
                 {
@@ -751,8 +751,8 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2 {0}`,
-                    where : "AND LDATE >= GETDATE() - 10"
+                    query : `SELECT *,DATEDIFF(DAY,CDATE,dbo.GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2 {0}`,
+                    where : "AND LDATE >= dbo.GETDATE() - 10"
                 },
                 to : 
                 {
@@ -809,7 +809,7 @@ export default class transferCls
                 {
                     type : "select",
                     query : `SELECT * FROM PLU_IMAGE_VW_01 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 10`
+                    where : `WHERE LDATE >= dbo.GETDATE() - 10`
                 },
                 to : 
                 {
@@ -899,7 +899,7 @@ export default class transferCls
                 {
                     type : "select",
                     query : `SELECT * FROM CUSTOMER_VW_02 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 10`
+                    where : `WHERE LDATE >= dbo.GETDATE() - 10`
                 },
                 to : 
                 {
@@ -944,7 +944,7 @@ export default class transferCls
                 {
                     name : "POS_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_VW_01"
+                    query : "SELECT * FROM POS_VW_01 ORDER BY REF ASC"
                 },
                 to : 
                 {

@@ -1,5 +1,6 @@
 import {core} from 'gensrv'
 import fetch from 'node-fetch';
+import config from '../config.js';
 
 class piqXApi
 {
@@ -14,6 +15,14 @@ class piqXApi
         this.password = '1'
         this.token = ''
         this.endpoint = 'http://piqx.azurewebsites.net/'
+
+        if(config?.plugins?.piqXApi?.active)
+        {
+            this.active = config?.plugins?.piqXApi?.active
+            this.endpoint = typeof config.plugins.piqXApi.endpoint == 'undefined' ? this.endpoint : config?.plugins?.piqXApi?.endpoint
+            this.username = typeof config.plugins.piqXApi.username == 'undefined' ? this.username : config?.plugins?.piqXApi?.username
+            this.password = typeof config.plugins.piqXApi.password == 'undefined' ? this.password : config?.plugins?.piqXApi?.password
+        }
     }
     async connEvt(pSocket)
     {
@@ -25,7 +34,6 @@ class piqXApi
             {
                 let tmpResult = await this.getInvoiceList(pParam)
                 
-                console.log(tmpResult)
                 if(typeof tmpResult.err != 'undefined' && (tmpResult.err == 403 || tmpResult.err == 404))
                 {
                     await this.login(this.username,this.password)
@@ -114,7 +122,7 @@ class piqXApi
     {
         try 
         {
-            let url = this.endpoint + `/api/invoiceList?taxId=${encodeURIComponent(pData.taxId)}`;
+            let url = this.endpoint + `/api/invoiceList?taxId=${encodeURIComponent(pData.taxId)}&type=${encodeURIComponent(pData.docType)}&rebate=${encodeURIComponent(pData.rebate)}`;
 
             if (pData.first && pData.last) 
             {
@@ -191,6 +199,8 @@ class piqXApi
                     docdate: pData.docDate || '',
                     fromtax: pData.fromTax || '',
                     totax: pData.toTax || '',
+                    fromtype: pData.fromType || '',
+                    fromrebate: pData.fromRebate || '',
                     json: pData.json || '',
                     pdf: pData.pdf || ''
                 })

@@ -157,7 +157,7 @@ export default class safeList extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,GETDATE()) AS TOTAL",
+            query :"SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,dbo.GETDATE()) AS TOTAL",
             param : ['SAFE:string|50'],
             value : [this.cmbSafe.value]
         }

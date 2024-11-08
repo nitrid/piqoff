@@ -61,7 +61,11 @@ export default class purchaseInvoice extends DocBase
             }
             else if(typeof this.pagePrm.piqx != 'undefined')
             {
-                this.initPiqX()
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+                
             }
         }
     }
@@ -100,10 +104,7 @@ export default class purchaseInvoice extends DocBase
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
                 }
-                if(this.cmbDepot.value != '' && this.docLocked == false)
-                {
-                    this.frmDocItems.option('disabled',false)
-                }
+
                 let tmpAdrQuery = 
                 {
                     query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
@@ -130,6 +131,7 @@ export default class purchaseInvoice extends DocBase
 
             this.dtDocDate.value = jData[0].DOC_DATE
             this.dtShipDate.value = jData[0].SHIPMENT_DATE
+            this.txtRefno.value = jData[0].REF_NO
             let tmpMissCodes = []
 
             for (let i = 0; i < jData.length; i++) 
@@ -164,13 +166,12 @@ export default class purchaseInvoice extends DocBase
                     tmpData.UNIT = tmpItemData.result.recordset[0].UNIT
                     tmpData.COST_PRICE = tmpItemData.result.recordset[0].COST_PRICE
                     tmpData.VAT = tmpItemData.result.recordset[0].VAT
+                    await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
                 }
                 else
                 {
                     tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
                 }
-
-                await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
             }
 
             if(tmpMissCodes.length > 0)
@@ -629,7 +630,7 @@ export default class purchaseInvoice extends DocBase
                     e.data.ORIGIN = r.component._changedValue
                     let tmpQuery = 
                     {
-                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
                         param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                         value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
                     }
@@ -652,7 +653,7 @@ export default class purchaseInvoice extends DocBase
                                   e.data.ORIGIN = this.cmbOrigin.value 
                                   let tmpQuery = 
                                   {
-                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                      query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
                                       param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                                       value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
                                   }
@@ -845,7 +846,7 @@ export default class purchaseInvoice extends DocBase
 
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
@@ -1143,18 +1144,6 @@ export default class purchaseInvoice extends DocBase
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
-                // let tmpTaxSucre = 0
-                // let tmpQuery = 
-                // {
-                //     query : "SELECT TAX_SUCRE FROM CUSTOMER_VW_01 WHERE GUID = @CUSTOMER",
-                //     param : ['CUSTOMER:string|50'],
-                //     value : [this.docObj.dt()[0].OUTPUT]
-                // }
-                // let tmpData = await this.core.sql.execute(tmpQuery)
-                // if(tmpData.result.recordset.length > 0)
-                // {
-                //     tmpTaxSucre = tmpData.result.recordset[0].TAX_SUCRE
-                // }
                 App.instance.setState({isExecute:true})
                 this.newPrice.clear()
                 this.newVat.clear()
@@ -1302,7 +1291,6 @@ export default class purchaseInvoice extends DocBase
                     this.newPriceDate.clear()
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
-                        console.log(this.docObj.docItems.dt()[i])
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                         {
                             if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )
@@ -2445,7 +2433,7 @@ export default class purchaseInvoice extends DocBase
                                                     e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
                                                         param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                         value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
                                                     }

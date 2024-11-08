@@ -103,7 +103,7 @@ export default class priceDifferenceInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " + 
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " + 
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                         param : ['VAL:string|50']
                     },
@@ -497,7 +497,7 @@ export default class priceDifferenceInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
                     param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
                     value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
                 }
@@ -1791,20 +1791,8 @@ export default class priceDifferenceInvoice extends DocBase
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {  
-                                                if(this.docLocked == false)
-                                                { 
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
-                                                    }                
-                                                    await dialog(tmpConfObj);
-                                                    return
-                                                }
-                                                else
-                                                {                                               
-                                                    if(e.validationGroup.validate().status == "valid")
+                                                                               
+                                                if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     App.instance.setState({isExecute:true})
                                                     let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
@@ -1825,11 +1813,28 @@ export default class priceDifferenceInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
                                                     App.instance.setState({isExecute:false})
-                                                    let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
+                                                             this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                                                                fromRebate: tmpData.result.recordset[0].REBATE,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+                                                            
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
     
                                                             mywindow.onload = function() 
@@ -1841,9 +1846,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         }
                                                     });
                                                     this.popDesign.hide();  
-                                                    }
                                                 }
-                                                   
                                             }}/>
                                         </div>
                                         <div className='col-6'>

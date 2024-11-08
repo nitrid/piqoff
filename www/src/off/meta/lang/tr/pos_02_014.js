@@ -5,12 +5,16 @@ const pos_02_014 =
     grdListe : 
     {
         clmCode: "Kodu",
-        clmName : "Adı",           
+        clmName : "Adı",  
+        clmTime : "Saat",              
         clmQuantity : "Miktar",
         clmPrice : "Fiyat",
         clmStatus : "Durum",
         clmCDate : "Tarih",
         clmTicketNo : "Fiş No",
+        clmDescriptions : "Açıklama",
+        clmUser : "Kullanıcı",
+        clmAmount : "Tutar",
     },
 }
 

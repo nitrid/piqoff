@@ -49,11 +49,11 @@ export default class ProductExtraProperty extends React.PureComponent
                     SET @ISCHECK = ISNULL((SELECT TOP 1 1 FROM ITEMS_REST WHERE ITEMS_REST.ITEM = @ITEM),0)
                     IF @ISCHECK = 0
                     BEGIN 
-                    INSERT INTO [dbo].[ITEMS_REST] ([CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[WAITING]) VALUES (GETDATE(),@CUSER,GETDATE(),@LUSER,@ITEM,@WAITING)
+                    INSERT INTO [dbo].[ITEMS_REST] ([CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[WAITING]) VALUES (dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@ITEM,@WAITING)
                     END
                     ELSE
                     BEGIN
-                    UPDATE [dbo].[ITEMS_REST] SET [LDATE] = GETDATE(),[LUSER] = @LUSER,[WAITING] = @WAITING WHERE ITEM = @ITEM
+                    UPDATE [dbo].[ITEMS_REST] SET [LDATE] = dbo.GETDATE(),[LUSER] = @LUSER,[WAITING] = @WAITING WHERE ITEM = @ITEM
                     END`,
             param : ['CUSER:string|25','LUSER:string|25','ITEM:string|50','WAITING:bit'],
             dataprm : ['CUSER','LUSER','GUID','WAITING']

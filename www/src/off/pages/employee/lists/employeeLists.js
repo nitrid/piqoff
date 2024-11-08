@@ -31,11 +31,7 @@ export default class employeeList extends React.PureComponent
         [
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},           
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},  
-            {CODE : "LAST_NAME",NAME : this.t("grdListe.clmLastName")},             
-            {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
-            {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
-            {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
-            {CODE : "CITY",NAME : this.t("grdListe.clmCity")},       
+            {CODE : "LAST_NAME",NAME : this.t("grdListe.clmLastName")},                  
             {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
             {CODE : "GSM_PHONE",NAME : this.t("grdListe.clmGsm")},       
             {CODE : "EMAIL",NAME : this.t("grdListe.clmEmail")}, 
@@ -268,10 +264,7 @@ export default class employeeList extends React.PureComponent
                                 <Column dataField="GENDER" caption={this.t("grdListe.clmGender")} visible={true}/>
                                 <Column dataField="MARIAL_STATUS" caption={this.t("grdListe.clmMarıalStatus")} visible={true}/>
                                 <Column dataField="WAGE" caption={this.t("grdListe.clmWage")} visible={true} dataType={'number'} allowEditing={true} format={{ style: "currency", currency:Number.money.code,precision: 2}}/>
-                                <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
-                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
-                                <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
-                                <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
+ 
                             </NdGrid>
                         </div>
                     </div>

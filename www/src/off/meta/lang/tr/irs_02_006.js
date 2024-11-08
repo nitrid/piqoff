@@ -384,6 +384,51 @@ const irs_02_006 =
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
     },
+    msgNewPrice : 
+    {
+        title: "Dikkat",
+        btn01: "Hiç Birini Güncelleme",
+        btn02: "Seçilen Fiyatları Güncelle",
+        msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
+    },
+    msgNewPriceDate : 
+    {
+        title: "Dikkat",
+        btn01: "Hiç Birini Güncelleme",
+        btn02: "Seçilen Fiyatları Güncelle",
+        msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+    },
+    grdNewPrice: 
+    {
+        clmCode: "Kodu",
+        clmName: "Adı",
+        clmPrice: "Eski T. Fiyat",
+        clmPrice2: "Yeni Fiyat",
+        clmSalePrice :"Satış Fiyatı", 
+        clmMargin : "Brüt Marj",
+        clmCostPrice : "Maliyet Fiyatı",
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
+    },
+    grdNewPriceDate: 
+    {
+        clmCode: "Kodu",
+        clmName: "Adı",
+        clmPrice: "Eski T. Fiyat",
+        clmPrice2: "Yeni Fiyat",
+        clmSalePrice :"Satış Fiyatı", 
+        clmMargin : "Brüt Marj",
+        clmCostPrice : "Maliyet Fiyatı",
+        clmNetMargin : "Net Marj",
+        clmMarge : "Marj"
+    },
+    msgPriceDateUpdate :
+    {
+        msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        title : "Dikkat"
+    },
 }
 
 export default irs_02_006

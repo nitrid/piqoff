@@ -382,5 +382,50 @@ const irs_02_006 =
         btn01: "OK", 
         msg: "Nach Hinzufügen von Artikel kann Kunde nicht geändert werden" 
     },
+    msgNewPrice : 
+    {
+        title: "Achtung!",
+        btn01: "Keine Aktualisierung",
+        btn02: "Ausgewählte Preise aktualisieren.",
+        msg: "Bitte wählen Sie die Produkte aus, für die Sie den Lieferantenpreis aktualisieren möchten."
+    },
+    msgNewPriceDate : 
+    {
+        title: "Achtung!",
+        btn01: "Keine Aktualisierung",
+        btn02: "Ausgewählte Preise aktualisieren.",
+        msg: "Bitte wählen Sie die Produkte aus, für die Sie das Datum aktualisieren möchten. "
+    },
+    grdNewPrice: 
+    {
+        clmCode: "Code",
+        clmName: "Name",
+        clmPrice: "Alter Preis",
+        clmPrice2: "Neuer Preis",
+        clmSalePrice :"Verkaufspreis", 
+        clmMargin : "Bruttomarge",
+        clmCostPrice : "Kostenpreis",
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
+    },
+    grdNewPriceDate: 
+    {
+        clmCode: "Code",
+        clmName: "Name",
+        clmPrice: "Alter Preis",
+        clmPrice2: "Neuer Preis",
+        clmSalePrice :"Verkaufspreis", 
+        clmMargin : "Bruttomarge",
+        clmCostPrice : "Kostenpreis",
+        clmNetMargin : "Nettomarge",
+        clmMarge : "Marge"
+    },
+    msgPriceDateUpdate :
+    {
+        msg : "Möchten Sie die Daten der unveränderten Preise aktualisieren?",
+        btn01 : "JA",
+        btn02 : "NEIN",
+        title : "Achtung!"
+    },
 }
 export default irs_02_006

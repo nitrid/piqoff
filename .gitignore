@@ -10,6 +10,10 @@ www/log
 log/
 www/public--
 archiveFiscal/
-plugins/mailer.js
+www/src/off/resources
 www/src/pos/resources
+www/src/off/plugins/private
+www/src/pos/plugins/private
 plugins/devprint
+www/src/config.js
+plugins/private

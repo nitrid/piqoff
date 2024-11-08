@@ -23,7 +23,7 @@ export const prm =
         ID :"invoicesForPayment",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         ELEMENT : "",
@@ -35,7 +35,61 @@ export const prm =
             CAPTION : "Ödeme İşlemleri İçin Fatura Seçme Zorunluluğu"
         }
     },
-    //#endregion
+        // Ödeme ve tahsilat için Fatura secme durumu
+    {
+        TYPE : 0,
+        ID :"invoicesForFacture",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Ödeme İşlemleri İçin Fatura Seçme durumu"
+        }
+    },
+    // Şipariş kayıt ederken fatura ozellıgı olması veya olmaması
+    {
+        TYPE : 0,
+        ID :"salesİnvoicesForFacture",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Şipariş kayıt ederken fatura ozellıgı olması"
+        }
+    },
+    // Şipariş Sayfası Ürünler Listelenirken "Name" mi Gore "Code" mı gore Listelensin
+    {
+        TYPE : 0,
+        ID :"salesİtemsType",
+        VALUE : 
+        {
+            value : "NAME"
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin"
+        }
+    },
+//#endregion
     //#region Sale
     //defaultUnit
     {

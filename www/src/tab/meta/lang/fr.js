@@ -51,6 +51,7 @@ export const langFr =
             txtTotal : "Total",
             cmbDepot : "Dépôt",
             dtDocDate : "Date",
+            dtDShipmentDate : "Date de Livraison",
             txtDescription : "Information",
             cmbPricingList : "Numéro de tarif"
         },
@@ -240,6 +241,19 @@ export const langFr =
             msgSuccess: "L'envoi du courrier a réussi !",
             msgFailed: "L'envoi du courrier a échoué !"
         },
+        msgPriceListChange:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous mettre à jour les prix ?"
+        },
+        orderGroup:
+        {
+            Name: "NOM DU PRODUIT",
+            Code: "CODE PRODUIT",
+            Favori: "FAVORIS",
+        }
     },
     extract :
     {
@@ -346,6 +360,16 @@ export const langFr =
             cmbCashSafe: "Caisse/Banque",
             invoiceSelect : "Sélection de facture",
         },
+        popDesign: 
+        {
+            title: "Choix de Design",
+            design: "Design",
+            lang: "Langue du Document",            
+            btnPrint: "Imprimer",
+            btnCancel: "Annuler",
+            btnView: "Afficher",
+            btnMailsend: "Envoyer par Mail",
+        },        
         ValidCash : "Veuillez saisir un montant supérieur à 0",
         msgNew:
         {
@@ -374,6 +398,12 @@ export const langFr =
             btn01: "OK",
             btn02: "Annuler",
             msg: "Êtes-vous sûr de vouloir supprimer l'enregistrement ? "
+        },
+        msgCustomerSelect:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner un client, s'il vous plaît..."
         },
         pg_invoices : 
         {

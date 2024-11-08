@@ -38,7 +38,8 @@ export class itemsCls
             DESCRIPTION : '',
             CUSTOMS_CODE: '',
             GENRE : '',
-            PIQPOID : false
+            PIQPOID : false,
+            FAVORI : false
         }
 
         this.itemLang = new itemLangCls()
@@ -86,7 +87,7 @@ export class itemsCls
                     "@ORGINS = @PORGINS, " + 
                     "@SECTOR = @PSECTOR, " + 
                     "@RAYON = @PRAYON, " + 
-                    "@SHELF = @PSHELF, " + 
+                    "@SHELF = @PSHELF, " +                    
                     "@WEIGHING = @PWEIGHING, " +
                     "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
                     "@TICKET_REST = @PTICKET_REST, " +
@@ -95,13 +96,14 @@ export class itemsCls
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
                     "@GENRE = @PGENRE, " +
-                    "@PIQPOID = @PPIQPOID " ,
+                    "@PIQPOID = @PPIQPOID, "  +
+                    "@FAVORI = @PFAVORI " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
-                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit'],
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI'],
             local : 
             {
                 type : "insert",
@@ -137,7 +139,7 @@ export class itemsCls
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_ITEMS_UPDATE] " + 
-                    "@GUID = @PGUID, " + 
+                    "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@TYPE = @PTYPE, " + 
                     "@SPECIAL = @PSPECIAL, " + 
@@ -154,7 +156,7 @@ export class itemsCls
                     "@ORGINS = @PORGINS, " + 
                     "@SECTOR = @PSECTOR, " + 
                     "@RAYON = @PRAYON, " + 
-                    "@SHELF = @PSHELF, " + 
+                    "@SHELF = @PSHELF, " +                    
                     "@WEIGHING = @PWEIGHING, " +
                     "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
                     "@TICKET_REST = @PTICKET_REST, " +
@@ -163,13 +165,14 @@ export class itemsCls
                     "@DESCRIPTION = @PDESCRIPTION, " + 
                     "@CUSTOMS_CODE = @PCUSTOMS_CODE, " +
                     "@GENRE = @PGENRE, " +
-                    "@PIQPOID = @PPIQPOID " ,
+                    "@PIQPOID = @PPIQPOID, "  +
+                    "@FAVORI = @PFAVORI " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
-                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit'],
-            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS',
-                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID'],
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit'],
+            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI'],
             local : 
             {
                 type : "update",
@@ -500,7 +503,7 @@ export class itemPriceCls
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
                     "((DEPOT = @DEPOT) OR (@DEPOT = '00000000-0000-0000-0000-000000000000')) AND " +
                     "((START_DATE >= @START_DATE) OR (CONVERT(NVARCHAR(10),@START_DATE,112) = '19700101')) AND " +
-                    "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND (FINISH_DATE > GETDATE()-2 OR FINISH_DATE = '19700101') AND" + 
+                    "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND (FINISH_DATE > dbo.GETDATE()-2 OR FINISH_DATE = '19700101') AND" + 
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND " +
@@ -1290,10 +1293,11 @@ export class itemSubGrpCls
         {
             query : "EXEC [dbo].[PRD_ITEMS_SUB_GRP_DELETE] " + 
                     "@CUSER = @PCUSER, " +
-                    "@UPDATE = 1, " +  
+                    "@UPDATE = 1, " +
+                    "@ITEM = @PITEM, " +  
                     "@SUB = @PSUB ", 
-            param : ['PCUSER:string|25','PSUB:string|50'],
-            dataprm : ['CUSER','SUB_GUID']
+            param : ['PCUSER:string|25','PITEM:string|50','PSUB:string|50'],
+            dataprm : ['CUSER','ITEM_GUID','SUB_GUID']
         }
         this.ds.add(tmpDt);
     }
@@ -1840,7 +1844,7 @@ export class itemLogPriceCls
         let tmpDt = new datatable('PRICE_HISTORY');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC",
+            query : "SELECT *,CONVERT(NVARCHAR, CDATE ,104) +'-'+CONVERT(NVARCHAR, CDATE ,108) AS DATE  FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 

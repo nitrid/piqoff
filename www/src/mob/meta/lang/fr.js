@@ -15,14 +15,22 @@ export const langFr =
     btnBarcodeEntry: "Entrée Produit",   
     btnProcessLines: "Traiter les lignes",   
     btnOrderSelect : "Sélection",
+    btnOrderComplated : "Terminer",
     btnNewDoc: "Nouveau document",   
     btnDocDelete: "Supprimer le document",   
     btnLineDisc: "Remise de ligne",       
     chkRememberMe : "Souviens-toi de moi", 
     btnMailsend : "Mail Gönder", // BAK
+    msgPassiveItem:
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Produit pasif souhaitez-vous l'activer ?"
+    },
     msgMailsend:
     {
-        title: "Dikkat",  // BAK
+        title: "Attention",  // BAK
         btn01: "Evet",  // BAK
         btn02: "Iptal",  // BAK
         msg: "Mail göndermek istediğinize emin misiniz ?"  // BAK
@@ -86,6 +94,13 @@ export const langFr =
         Percent3: "3. Yüzde",
         Price3: "3. montant ",
         btnSave: "Enregister"
+    },
+    msgOrderComplated:
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Annuler",
+        msg: "Êtes-vous sûr de vouloir terminer la commande ?"
     },
     menu:
     {

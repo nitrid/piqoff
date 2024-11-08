@@ -51,13 +51,13 @@ export default class itemCard extends React.PureComponent
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
         {
-            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC ",
+            query : "SELECT *,CONVERT(NVARCHAR, CDATE ,104) +'-'+CONVERT(NVARCHAR, CDATE ,108) AS DATE FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.salesContractObj = new datatable()
         this.salesContractObj.selectCmd =
         {
-            query :"SELECT * FROM [CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE()   ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= dbo.GETDATE() AND FINISH_DATE >= dbo.GETDATE()   ORDER BY LDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.otherShopObj = new datatable()
@@ -281,7 +281,7 @@ export default class itemCard extends React.PureComponent
         //ÜRÜN PROMOSYON DURUMU GETİRME İŞLEMİ
         let tmpPromoQuery = 
         {
-            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
+            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= dbo.GETDATE() AND FINISH_DATE >= dbo.GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
             param : ['COND_ITEM_GUID:string|50'],
             value : [this.itemsObj.dt()[0].GUID]
         }
@@ -301,7 +301,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -514,7 +514,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -584,7 +584,7 @@ export default class itemCard extends React.PureComponent
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
-            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
+            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
             let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
@@ -799,7 +799,7 @@ export default class itemCard extends React.PureComponent
                                 this.txtCostPrice.value = e.data.CUSTOMER_PRICE
                                 let tmpQuery = 
                                 {
-                                    query : "UPDATE ITEM_PRICE SET CHANGE_DATE = GETDATE() WHERE GUID =@PRICE_GUID ",
+                                    query : "UPDATE ITEM_PRICE SET CHANGE_DATE = dbo.GETDATE() WHERE GUID =@PRICE_GUID ",
                                     param : ['PRICE_GUID:string|50'],
                                     value : [e.data.CUSTOMER_PRICE_GUID]
                                 }
@@ -1620,7 +1620,7 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={6}>
+                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={7}>
                                 {/* chkActive */}
                                 <NdLayoutItem key={"chkActiveLy"} id={"chkActiveLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkActiveLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1667,7 +1667,7 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-1 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
                                             param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
+                                            />
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1692,6 +1692,18 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-2 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkPiqPoid" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"PIQPOID"}}
                                             param={this.param.filter({ELEMENT:'chkPiqPoid',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkFavori */}
+                                <NdLayoutItem key={"chkFavoriLy"} id={"chkFavoriLy"} parent={this} data-grid={{x:6,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkFavoriLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{"Favori" + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkFavori" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"FAVORI"}}
+                                            param={this.param.filter({ELEMENT:'chkFavori',USERS:this.user.CODE})}/>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1744,8 +1756,7 @@ export default class itemCard extends React.PureComponent
                                                         dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                                         format={"#,##0.000"} step={0.1}
                                                         editable={this.state.isItemGrpForMinMaxAccess}
-                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
-                                                        access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
+                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
                                                         </NdNumberBox>
                                                     </div>
                                                 </NdLayoutItem>
@@ -2180,7 +2191,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
-                                                <Column dataField="LUSER" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="DATE" caption={this.t("grdCustomerPrice.clmDate")}allowEditing={false} />
                                                 <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
@@ -2201,7 +2212,7 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
-                                                <Column dataField="CDATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="DATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false}/>
                                                 <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                             </NdGrid>
                                         </div>
@@ -2617,7 +2628,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriPrice.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriHT.value = this.txtPopPriPrice.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
@@ -2643,7 +2654,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceGrossMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
@@ -2668,7 +2679,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceNetMargin.value = Number((((((this.txtPopPriHT.value - this.txtCostPrice.value) / 1.15) / this.txtCostPrice.value) )) * 100).round(2)
                                         }}>
                                         
@@ -2693,7 +2704,7 @@ export default class itemCard extends React.PureComponent
                                                 this.txtPopPriTTC.value = Number(this.txtPopPriHT.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                 this.txtPopPriPrice.value = this.txtPopPriHT.value
                                             }
-                                            this.txtPopPriceMargin.value = Number(((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtPopPriHT.value) * 100).round(2)
+                                            this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                             this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                         }}>
                                         
@@ -3106,7 +3117,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2,3) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql

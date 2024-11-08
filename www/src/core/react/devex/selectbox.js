@@ -49,6 +49,7 @@ export default class NdSelectBox extends Base
             onChange={this._onChange}
             onCustomItemCreating = {this._onCustomItemCreating}
             onInitialized={this._onInitialized}
+            itemRender={this.props.itemRender}
             height={this.props.height}
             style={this.props.style}
             value={this.state.value}

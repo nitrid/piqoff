@@ -161,7 +161,7 @@ export default class promotionCard extends React.PureComponent
             
             let tmpQuery = 
             {
-                query : "SELECT (SELECT dbo.FN_PRICE(GUID,1,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE FROM ITEMS WHERE GUID = @GUID",
+                query : "SELECT (SELECT dbo.FN_PRICE(GUID,1,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE FROM ITEMS WHERE GUID = @GUID",
                 param : ['GUID:string|50','CUSTOMER:string|50'],
                 value : [pGuid,this.promo.dt()[0].CUSTOMER_GUID]           
             }
@@ -220,7 +220,7 @@ export default class promotionCard extends React.PureComponent
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 WHERE CDATE > GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 WHERE CDATE > dbo.GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
             }
         }
         else
@@ -325,7 +325,7 @@ export default class promotionCard extends React.PureComponent
                                                 select:
                                                 {
                                                     query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,(SELECT TOP 1 COST_PRICE FROM ITEMS WHERE ITEMS.GUID = MAX(ITEM_GUID)) AS COST_PRICE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
-                                                            "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
+                                                            "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
                                                             "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
                                                             "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
                                                     param : ['VAL:string|50']
@@ -1352,12 +1352,13 @@ export default class promotionCard extends React.PureComponent
                                             }).bind(this)} 
                                             >     
                                             </NdTextBox>      
-                                            <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
-                                            position={{of:'#page'}} 
+                                            <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
+                                            container={"root"} 
+                                            position={{of:'#root'}} 
                                             showTitle={true} 
                                             showBorders={true}
-                                            width={'90%'}
-                                            height={'90%'}
+                                            width={'75%'}
+                                            height={'75%'}
                                             title={this.t("pg_Grid.title")} 
                                             columnAutoWidth={true}
                                             allowColumnResizing={true}

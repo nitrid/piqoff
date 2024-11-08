@@ -15,11 +15,19 @@ export const langTr =
     btnBarcodeEntry: "Barkod Giriş",
     btnOrderSelect :" Sipariş Seçimi",
     btnProcessLines: "İşlem Satırları",
+    btnOrderComplated : "Tamamla",
     btnNewDoc: "Yeni Evrak",
     btnDocDelete: "Evrak Sil",
     btnLineDisc: "Satır İndirim",
     chkRememberMe : "Beni Hatırla", // BAK
     btnMailsend : "Mail Gönder",
+    msgPassiveItem:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Okuttugunu urun pasif aktif yapmak istermisiniz ?"
+    },
     msgMailsend:
     {
         title: "Dikkat",
@@ -86,6 +94,13 @@ export const langTr =
         Percent3: "3. Yüzde",
         Price3: "3. Tutar",
         btnSave: "Kaydet"
+    },
+    msgOrderComplated:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Siparişi Tamamladıgınıza eminmisiniz ?"
     },
     menu:
     {

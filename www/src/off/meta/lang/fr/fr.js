@@ -316,8 +316,15 @@ export const langFr =
         cnt_04 : "Opérations",
         cnt_04_001 : "Contrat de vente multiple",
         piqx : "PiqX",
-        piqx_01 : "Listes", //BAK
-        piqx_01_001 : "Factures reçues", //BAK
+        piqx_01 : "Factures", //BAK
+        piqx_01_001 : "Factures d'achat reçues", //BAK
+        piqx_01_002 : "Facture d'achat de interne reçue",
+        piqx_01_003 : "Factures de différence de prix reçues",
+        piqx_01_004 : "Factures de retour reçues",
+        piqx_02 : "Bons de livraison", //BAK
+        piqx_02_001 : "Bons de livraison d'achat reçus",
+        piqx_02_002 : "Bons de livraison interne reçus",
+        piqx_02_003 : "Bons de retour",
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",
@@ -355,6 +362,9 @@ export const langFr =
         pos_01_003 : "Descriptions des tickets",
         pos_01_004 : "Message POS",
         pos_01_005 : "Type de paiement POS",
+        pos_01_006 : "Utilisateur Piqpoid",
+        pos_01_007 : "Appareil PiqPoid",
+        pos_01_008 : "Paramètres PiqPoid",
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -472,6 +482,7 @@ export const langFr =
         slsRpt_01_007 : "Rapport factures retours",   
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
+        slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 

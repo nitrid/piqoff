@@ -263,7 +263,7 @@ export class posCls
     {
         return new Promise(async resolve => 
         {
-            this.ds.delete()
+            await this.ds.delete()
             //DEPO MIKTARLARININ GÜNCELLENMESİ İÇİN YAPILDI.
             this.depotQtyUpdate()
             resolve(await this.ds.update()); 
@@ -1959,8 +1959,7 @@ export class posDeviceCls
            " \n"+
            " \n"+
            " \n"+
-           "Cordialment \n"+
-           "P&P Supermarche & Boucherie \n" + 
+           "Cordialement \n"+
            " \n"+
            " \n"+ 
            "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +

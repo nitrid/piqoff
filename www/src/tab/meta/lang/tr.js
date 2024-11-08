@@ -15,6 +15,7 @@ export const langTr =
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
+    btnCancel : "Vazgeç",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -52,6 +53,7 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
+            dtDShıpmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
             cmbPricingList : "Fiyat Liste No"
         },
@@ -232,7 +234,7 @@ export const langTr =
             txtMailSubject : "E-Mail Başlığı",
             txtSendMail : "E-Mail Adresi",
             btnSend : "Gönder",
-            btnCancel : "Gönder",
+            btnCancel : "İptal",
             cmbMailAddress : "Gönderilecek E-Mail Adresi"
         },
         msgMailSendResult:
@@ -241,6 +243,19 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
+        },
+        msgPriceListChange:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Fiyatları Güncellemek istermisiniz ?"
+        },
+        orderGroup:
+        {
+            Name: "ÜRÜN İSMİ",
+            Code: "ÜRÜN KODU",
+            Favori: "FAVORİLER",
         },
     },
     extract :
@@ -293,7 +308,7 @@ export const langTr =
         },
         popItem:
         {
-            title : "Müşteri Seçimi",
+            title : "Ürün Seçimi",
             btn01 : "Ara",
             btn02 : "Seç",
             clmCode : "KODU",
@@ -313,12 +328,14 @@ export const langTr =
         yearSales : "Bu Yılki Sipariş Toplamı",
         sale : "Satış Tutarı",        
     },
+    //Tahsilat
     collection:
     {
         txtCustomer: "Müşteri",
         dtDocDate : "Tarih",
-        btnCash: "Tahilat Girişi",
+        btnCash: "Tahsilat Girişi",
         txtTotal : "Toplam Tutar",
+        checkReference : "Referan Numrası",
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -346,6 +363,11 @@ export const langTr =
             btnCancel : "Vazgeç",
             cmbCashSafe: "Kasa/Banka",
             invoiceSelect : "Fatura Seçimi",
+        },
+        popCheck : 
+        {
+            title: "Referans Girişi",
+            btnApprove : "Ekle",
         },
         ValidCash : "0'dan büyük bir tutar giriniz",
         msgNew:
@@ -375,6 +397,45 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili",            
+            btnPrint :"Yazdır",
+            btnCancel: "İptal",
+            btnView : "Görüntüle",
+            btnMailsend : "Mail Gönder",
+        },
+        msgCollection:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Faturanıza tahsilat girmek istermisiniz ?"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz.."
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder",
+            btnCancel : "İptal",
+            cmbMailAddress : "Gönderilecek E-Mail Adresi"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
         pg_invoices : 
         {

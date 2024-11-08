@@ -332,14 +332,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -384,7 +384,7 @@ export default class DocBase extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,@TYPE,@ADD_VAT) AS PRICE",
+                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,@TYPE,@ADD_VAT) AS PRICE",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int','TYPE:int','ADD_VAT:bit'],
                 value : [pItem,pQty,pCustomer,pDepot,pListNo,pType,pAddVat]
             }
@@ -406,7 +406,7 @@ export default class DocBase extends React.PureComponent
             let tmpQuery = 
             {
                 query : "SELECT " +
-                        "dbo.FN_DEPOT_QUANTITY(@ITEM,@DEPOT,GETDATE()) AS DEPOT_QTY, " +
+                        "dbo.FN_DEPOT_QUANTITY(@ITEM,@DEPOT,dbo.GETDATE()) AS DEPOT_QTY, " +
                         "dbo.FN_ORDER_PEND_QTY(@ITEM,1,@DEPOT) AS RESERV_OUTPUT_QTY, " +
                         "dbo.FN_ORDER_PEND_QTY(@ITEM,0,@DEPOT) AS RESERV_INPUT_QTY",
                 param : ['ITEM:string|50','DEPOT:string|50'],
@@ -2935,22 +2935,22 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
-                                <NdTextBox id="txtPalletQuntity" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
+                                <NdTextBox id="txtPalletQuntity" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtColis")} alignment="right" />
-                                <NdTextBox id="txtColis" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
+                                <NdTextBox id="txtColis" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
-                                <NdTextBox id="txtMetter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
+                                <NdTextBox id="txtMetter" mode={'number'} parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
-                                <NdTextBox id="txtHeight" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
+                                <NdTextBox id="txtHeight" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
                                 </NdTextBox>
                             </Item>
                             <EmptyItem/>

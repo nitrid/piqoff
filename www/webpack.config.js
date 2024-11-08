@@ -33,6 +33,15 @@ module.exports =
         rest: './src/rest/index.js'
     },    
     mode: "development",
+    stats: 
+    {
+        all: false,            // Tüm çıktıların devre dışı bırakılması
+        errors: true,          // Sadece hatalar gösterilsin
+        warnings: false,       // Uyarılar devre dışı bırakıldı
+        modules: false,        // Modüller gösterilmesin
+        moduleTrace: false,    // Modül izleme gösterilmesin
+        errorDetails: true     // Hatalarla ilgili ayrıntılar gösterilsin
+    },
     module: 
     {
         rules: 
@@ -52,8 +61,7 @@ module.exports =
                 use: ["style-loader", "css-loader"]
             },
         ]
-    },
-    
+    },    
     resolve: 
     { 
         alias: 
@@ -111,7 +119,15 @@ module.exports =
                 target: 'http://localhost',
                 ws: true
             }
-        }
+        },
+        client: 
+        {
+            overlay: 
+            {
+                warnings: false,  // Uyarıların overlay üzerinde çıkmasını engelle
+                errors: true,     // Hatalar gösterilmeye devam etsin
+            },
+        },
     },
     plugins: 
     [

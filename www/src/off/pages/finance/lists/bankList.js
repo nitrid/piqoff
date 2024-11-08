@@ -157,7 +157,7 @@ export default class virement extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT [dbo].[FN_BANK_AMOUNT](@BANK,GETDATE()) AS TOTAL",
+            query :"SELECT [dbo].[FN_BANK_AMOUNT](@BANK,dbo.GETDATE()) AS TOTAL",
             param : ['BANK:string|50'],
             value : [this.cmbBank.value]
         }

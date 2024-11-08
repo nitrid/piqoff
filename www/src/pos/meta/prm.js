@@ -1505,5 +1505,21 @@ export const prm =
             CAPTION : "Klavye Deseni"
         }
     },
+    //Adisyon kullanım 
+    {
+        TYPE : 0,
+        ID :"PosAddition",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Adisyon kullanımı"
+        }
+    },
     //#endregion
 ]

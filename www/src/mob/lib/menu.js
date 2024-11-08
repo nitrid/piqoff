@@ -156,7 +156,7 @@ export const menu = (e) =>
                 },
                 {
                     id: 'sip_04',
-                    text : e.t('menu.sip_04'), //'Toplu Sipariş Toplama'
+                    text : e.t('menu.sip_04'), //'Pos Sipariş Toplama'
                     icon : "fa-solid fa-bag-shopping",
                     path: "order/posOrder.js"
                 }

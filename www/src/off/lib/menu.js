@@ -654,7 +654,7 @@ export const menu = (e) =>
                                 {
                                     id: 'ftr_01_004',
                                     text: e.t('menuOff.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                                    path: 'invoices/lists/priceDiffInvList'
+                                    path: 'invoices/lists/PriceDiffInvList'
                                 },
                             ]
                         },
@@ -723,6 +723,11 @@ export const menu = (e) =>
                             id: 'slsRpt_02_006',
                             text: e.t('menuOff.slsRpt_02_006'),//'Açik Alis Fatura Raporu',
                             path: 'report/purchase/openInvoicePurchaseReport'
+                        },
+                        {
+                            id: 'slsRpt_02_007',
+                            text: e.t('menuOff.slsRpt_02_007'),//'Alış Faturası Yaşlandırma Raporu',
+                            path: 'report/purchase/purchaseInvoiceAgingReport'
                         },
                     ]
                 }
@@ -1032,6 +1037,16 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_009'),//'Açik Fatura raporu',
                             path: 'report/sales/openInvoiceSalesReport'
                         },
+                        {
+                            id: 'slsRpt_01_010',
+                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            path: 'customers/report/saleInvoiceAgingReport'
+                        },
+                        {
+                            id: 'slsRpt_01_011',
+                            text: e.t('menuOff.slsRpt_01_011'),//'Eksik Gönderilen Siparişler Raporu',
+                            path: 'report/sales/incompleteShippedOrdersReport'
+                        },
                     ]
                 }
             ]
@@ -1045,14 +1060,52 @@ export const menu = (e) =>
             [
                 {
                     id:'piqx_01',
-                    text:e.t('menuOff.piqx_01'),//'Listeler',
+                    text:e.t('menuOff.piqx_01'),//'Faturalar',
                     expanded:false,
                     items:
                     [
                         {
                             id: 'piqx_01_001',
-                            text: e.t('menuOff.piqx_01_001'), //'Gelen Fatura Listesi',
-                            path: 'piqx/lists/piqXIncomingList'
+                            text: e.t('menuOff.piqx_01_001'), //'Gelen Alış Fatura Listesi',
+                            path: 'piqx/invoices/piqXPurcFactList'
+                        },
+                        {
+                            id: 'piqx_01_002',
+                            text: e.t('menuOff.piqx_01_002'), //'Gelen Şube Alış Faturası',
+                            path: 'piqx/invoices/piqXBranchPurcFactList'
+                        },
+                        {
+                            id: 'piqx_01_003',
+                            text: e.t('menuOff.piqx_01_003'), //'Gelen Fiyat Farkı Faturası',
+                            path: 'piqx/invoices/piqXPriceDiffFactList'
+                        },
+                        {
+                            id: 'piqx_01_004',
+                            text: e.t('menuOff.piqx_01_004'), //'Gelen İade Faturası',
+                            path: 'piqx/invoices/piqXRebateFactList'
+                        }
+                    ]
+                },
+                {
+                    id:'piqx_02',
+                    text:e.t('menuOff.piqx_02'),//'İrsaliyeler',
+                    expanded:false,
+                    items:
+                    [
+                        {
+                            id: 'piqx_02_001',
+                            text: e.t('menuOff.piqx_02_001'), //'Gelen Alış Fatura Listesi',
+                            path: 'piqx/dispatch/piqXPurcDispatchList'
+                        },
+                        {
+                            id: 'piqx_02_002',
+                            text: e.t('menuOff.piqx_02_002'), //'Gelen Şube Alış Faturası',
+                            path: 'piqx/dispatch/piqXBranchPurcDispatchList'
+                        },
+                        {
+                            id: 'piqx_02_003',
+                            text: e.t('menuOff.piqx_02_003'), //'Gelen Fiyat Farkı Faturası',
+                            path: 'piqx/dispatch/piqXRebateDispatchList'
                         }
                     ]
                 }
@@ -1200,6 +1253,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.prsnl_01_002'), //'Adres Tanımları',
                             path: 'employee/cards/employeeAddressCards'
                         },
+                        {
+                            id: 'prsnl_01_003',
+                            text: e.t('menuOff.prsnl_01_003'), //'Durum Çizelge Tanımları',
+                            path: 'employee/cards/employeeAttendanceCards'
+                        },
                         
                     ]
                 },
@@ -1272,6 +1330,21 @@ export const menu = (e) =>
                             id: 'pos_01_005',
                             text: e.t('menuOff.pos_01_005'),//'Pos ödeme tipi tanımlama',
                             path: 'pos/card/posPayType'
+                        },
+                        {
+                            id: 'pos_01_006',
+                            text: e.t('menuOff.pos_01_006'),//'Piqpoid kullanıcı tanımlama',
+                            path: 'pos/card/piqPoidUserCard'
+                        },
+                        {
+                            id: 'pos_01_007',
+                            text: e.t('menuOff.pos_01_007'),//'Piqpoid cihaz tanımlama',
+                            path: 'pos/card/piqPoidDeviceCard'
+                        },
+                        {
+                            id: 'pos_01_008',
+                            text: e.t('menuOff.pos_01_008'),//'Piqpoid parametre tanımlama',
+                            path: 'pos/card/piqPoidParamCard'
                         }
                     ]
                 },
@@ -1402,7 +1475,13 @@ export const menu = (e) =>
                             id: 'pos_02_017',
                             text: e.t('menuOff.pos_02_017'),
                             path: 'pos/report/posSaleTimeReport'
-                        }
+                        },
+                        //Serbest Yapılan İndirimler İçin Rapor.
+                        {
+                           id: 'pos_02_018',
+                           text: e.t('menuOff.pos_02_018'),
+                           path: 'pos/report/freeDiscountsReport'
+                       }
                     ]
                 },
             ]

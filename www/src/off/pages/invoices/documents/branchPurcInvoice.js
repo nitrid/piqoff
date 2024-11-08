@@ -49,9 +49,138 @@ export default class branchSaleInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',0)
-            }, 1000);
+            if(typeof this.pagePrm.GUID != 'undefined')
+            {
+                setTimeout(() => 
+                {
+                    this.getDoc(this.pagePrm.GUID,'',0)
+                }, 1000);
+            }
+            else if(typeof this.pagePrm.piqx != 'undefined')
+            {
+                setTimeout(() => 
+                    {
+                        this.initPiqX()
+                    }, 1000);
+            }
+        }
+    }
+    async initPiqX()
+    {
+        this.piqX = this.pagePrm.piqx
+        let jData = JSON.parse(this.piqX[0].JSON)
+
+        if(jData.length > 0)
+        {
+            let tmpCustQuery = 
+            {
+                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                param : ['TAX_NO:string|25'],
+                value : [this.piqX[0].DOC_FROM_NO]
+            }
+
+            let tmpCustData = await this.core.sql.execute(tmpCustQuery) 
+
+            if(tmpCustData?.result?.recordset?.length > 0)
+            {
+                this.txtCustomerCode.value = tmpCustData.result.recordset[0].CODE
+                this.txtCustomerName.value = tmpCustData.result.recordset[0].TITLE
+
+                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                {
+                    this.frmDocItems.option('disabled',false)
+                }
+                this.docObj.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.docCustomer.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
+                this.docObj.dt()[0].OUTPUT_CODE = tmpCustData.result.recordset[0].CODE
+                this.docObj.dt()[0].OUTPUT_NAME = tmpCustData.result.recordset[0].TITLE
+                this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                {
+                    this.txtRef.value = tmpCustData.result.recordset[0].CODE
+                }
+
+                let tmpAdrQuery = 
+                {
+                    query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                    param : ['CUSTOMER:string|50'],
+                    value : [tmpCustData.result.recordset[0].GUID]
+                }
+                let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                if(tmpAdressData.result.recordset.length > 1)
+                {
+                    this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
+                }
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+
+            this.dtDocDate.value = jData[0].DOC_DATE
+            this.dtShipDate.value = jData[0].SHIPMENT_DATE
+            this.txtRefno.value = jData[0].REF_NO
+            let tmpMissCodes = []
+
+            for (let i = 0; i < jData.length; i++) 
+            {
+                let tmpData = {}
+
+                let tmpItemQuery = 
+                {
+                    query : "SELECT " + 
+                            "I.GUID AS ITEM, " + 
+                            "I.CODE AS ITEM_CODE, " + 
+                            "I.NAME AS ITEM_NAME, " + 
+                            "I.UNIT AS UNIT, " + 
+                            "I.COST_PRICE AS COST_PRICE, " +
+                            "I.VAT AS VAT " +
+                            "FROM ITEM_MULTICODE AS M " + 
+                            "INNER JOIN ITEMS_VW_01 AS I ON " + 
+                            "M.ITEM = I.GUID " + 
+                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    param : ['CODE:string|50','CUSTOMER:string|50'],
+                    value : [jData[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT]
+                }
+
+                let tmpItemData = await this.core.sql.execute(tmpItemQuery) 
+                
+                if(tmpItemData?.result?.recordset?.length > 0)
+                {
+                    tmpData.GUID = tmpItemData.result.recordset[0].ITEM
+                    tmpData.ITEM_TYPE = tmpItemData.result.recordset[0].ITEM_TYPE
+                    tmpData.CODE = tmpItemData.result.recordset[0].ITEM_CODE
+                    tmpData.NAME = tmpItemData.result.recordset[0].ITEM_NAME
+                    tmpData.UNIT = tmpItemData.result.recordset[0].UNIT
+                    tmpData.COST_PRICE = tmpItemData.result.recordset[0].COST_PRICE
+                    tmpData.VAT = tmpItemData.result.recordset[0].VAT
+                    await this.addItem(tmpData,null,jData[i].QUANTITY,jData[i].PRICE,jData[i].DISCOUNT,jData[i].DISCOUNT_RATE)
+                }
+                else
+                {
+                    tmpMissCodes.push("'" +jData[i].ITEM_CODE + "'")
+                }
+            }
+
+            if(tmpMissCodes.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                }
+            
+                await dialog(tmpConfObj);
+            }
         }
     }
     loadState() 
@@ -409,6 +538,64 @@ export default class branchSaleInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            if(this.customerControl == true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                    param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+                }
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                console.log(tmpCheckData)
+                if(tmpCheckData.result.recordset.length == 0)
+                {   
+                    let tmpCustomerBtn = ''
+                    if(this.customerClear == true)
+                    {
+                        resolve()
+                        return 
+                    }
+                    
+                    if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        resolve()
+                        App.instance.setState({isExecute:false})
+                        return
+                    }
+                    await this.msgCustomerNotFound.show().then(async (e) =>
+                    {
+                        if(e == 'btn01' && this.checkCustomer.value == true)
+                        {
+                            this.customerControl = false
+                            resolve()
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            tmpCustomerBtn = e
+                            if(this.checkCustomer.value == true)
+                            {
+                                this.customerClear = true
+                            }
+                            resolve()
+                            return 
+                        }
+                    })
+                    if(tmpCustomerBtn == 'btn02')
+                    {
+                        resolve()
+                        return
+                    }
+                }
+            }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
@@ -661,6 +848,265 @@ export default class branchSaleInvoice extends DocBase
             this.popMultiItem.hide()
         }
     }
+    async saveDoc()
+    {
+        let tmpConfObj =
+        {
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn01')
+        {
+            let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+            {
+                App.instance.setState({isExecute:true})
+                this.newPrice.clear()
+                this.newVat.clear()
+                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                {
+                    if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+                    {
+                        if((this.docObj.docItems.dt()[i].COST_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0) ||(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0))
+                        {
+                            let tmpQuery = 
+                            {
+                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                param : ['ITEM:string|50','CUSTOMER:string|50'],
+                                value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery)
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                // if(tmpTaxSucre == 1)
+                                // {
+                                //     let tmpQuery2 = 
+                                //     {
+                                //         query : "SELECT MAIN_GUID FROM ITEMS_VW_01 WHERE GUID = @ITEM",
+                                //         param : ['ITEM:string|50'],
+                                //         value : [this.docObj.docItems.dt()[i].ITEM]
+                                //     }
+                                //     let tmpData2 = await this.core.sql.execute(tmpQuery2)
+                                //     if(tmpData2.result.recordset.length > 0)
+                                //     {
+                                //         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
+                                //         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == tmpData2.result.recordset[0].MAIN_GUID) != 'undefined'))
+                                //         {
+                                            
+                                //         }
+                                //     }
+                                // }
+                                tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
+                                tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
+                                tmpItemData[0].CUSER = this.user.CODE
+                                let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
+                                let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
+                                let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+                                tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
+                                let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
+                                let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+                                tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
+                                tmpItemData[0].MARGIN = ((tmpMargin / tmpExVat) * 100); 
+                                tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
+                                this.newPrice.push(tmpItemData[0])
+                            } 
+                        }
+                    }
+                }
+                if(this.newPrice.length > 0)
+                {
+                    await this.msgNewPrice.show().then(async (e) =>
+                    {
+                        if(e == 'btn02')
+                        {
+                            this.updatePriceData.insertCmd = 
+                            {
+                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
+                                "@PRICE_GUID = @PPRICE_GUID, " +
+                                "@NEW_CUSER = @PNEW_CUSER, " + 
+                                "@NEW_PRICE = @PNEW_PRICE, " +
+                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
+                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
+                                "@COST_PRICE = @PCOST_PRICE ", 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
+                            } 
+                            this.updatePriceData.updateCmd = 
+                            {
+                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
+                                "@PRICE_GUID = @PPRICE_GUID, " +
+                                "@NEW_CUSER = @PNEW_CUSER, " + 
+                                "@NEW_PRICE = @PNEW_PRICE, " +
+                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
+                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
+                                "@COST_PRICE = @PCOST_PRICE ", 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
+                            } 
+                            App.instance.setState({isExecute:true})
+                            for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
+                            {
+                                this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
+                            }
+                            await this.updatePriceData.update()
+                            App.instance.setState({isExecute:false})
+                            this.updatePriceData.clear()
+                        }
+                    })
+                }    
+                if(this.newVat.length > 0)
+                {
+                    await this.msgNewVat.show().then(async (e) =>
+                    {
+            
+                        if(e == 'btn01')
+                        {
+                            
+                        }
+                        if(e == 'btn02')
+                        {
+                            App.instance.setState({isExecute:true})
+                            for (let i = 0; i < this.grdNewVat.getSelectedData().length; i++) 
+                            {
+                                let tmpQuery = 
+                                {
+                                    query :"UPDATE ITEMS SET VAT = @VAT WHERE GUID = @GUID",
+                                    param : ['GUID:string|50','VAT:float'],
+                                    value : [this.grdNewVat.getSelectedData()[i].ITEM,this.grdNewVat.getSelectedData()[i].VAT_RATE]
+                                }
+                                await this.core.sql.execute(tmpQuery) 
+                            }
+                            App.instance.setState({isExecute:false})
+                        }
+                    })
+                }    
+                App.instance.setState({isExecute:false})
+            }
+            
+            let tmpConfObj =
+            {
+                id:'msgPriceDateUpdate',showTitle:true,title:this.t("msgPriceDateUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgPriceDateUpdate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPriceDateUpdate.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceDateUpdate.msg")}</div>)
+            }
+            
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                {
+                    App.instance.setState({isExecute:true})
+                    this.newPriceDate.clear()
+                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                    {
+                        if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+                        {
+                            if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )
+                            {
+                                let tmpQuery = 
+                                {
+                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    param : ['ITEM:string|50','CUSTOMER:string|50'],
+                                    value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery)
+                                if(tmpData.result.recordset.length > 0)
+                                {
+                                    let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                    tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
+                                    tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                    tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
+                                    tmpItemData[0].CUSER = this.user.CODE
+                                    let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
+                                    let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
+                                    let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+                                    tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                    let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
+                                    let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
+                                    let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+                                    tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
+                                    tmpItemData[0].MARGIN = ((tmpMargin / tmpExVat) * 100); 
+                                    tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
+                                    console.log(tmpItemData[0])
+                                    this.newPriceDate.push(tmpItemData[0])
+                                } 
+                            }
+                        }
+                    }
+                    if(this.newPriceDate.length > 0)
+                    {
+                        await this.msgNewPriceDate.show().then(async (e) =>
+                        {
+                
+                            if(e == 'btn01')
+                            {
+                                
+                            }
+                            if(e == 'btn02')
+                            {
+                                this.updatePriceData.insertCmd = 
+                                {
+                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
+                                    "@CUSER = @PNEW_CUSER ", 
+                                    param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
+                                    dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
+                                } 
+                                this.updatePriceData.updateCmd = 
+                                {
+                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
+                                    "@CUSER = @PNEW_CUSER ", 
+                                    param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
+                                    dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
+                                } 
+                                App.instance.setState({isExecute:true})
+                                for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
+                                {
+                                    this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
+                                }
+                                await this.updatePriceData.update()
+                                App.instance.setState({isExecute:false})
+                                this.updatePriceData.clear()
+                            }
+                        })
+                    }    
+                    App.instance.setState({isExecute:false})
+                }
+            }
+            let tmpConfObj1 =
+            {
+                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            }
+            
+            if((await this.docObj.save()) == 0)
+            {                                                    
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                await dialog(tmpConfObj1);
+
+                if(typeof this.piqX != 'undefined')
+                {
+                    this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
+                }
+                
+                this.btnSave.setState({disabled:true});
+                this.btnNew.setState({disabled:false});
+            }
+            else
+            {
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                await dialog(tmpConfObj1);
+            }
+        }
+    }
     render()
     {
         return(
@@ -719,35 +1165,7 @@ export default class branchSaleInvoice extends DocBase
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if((await this.docObj.save()) == 0)
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                    this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                            }
+                                            this.saveDoc()
                                         }                              
                                         else
                                         {

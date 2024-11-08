@@ -545,13 +545,13 @@ export class restPropertyCls
         {
             query : `INSERT INTO [dbo].[REST_ITEM_PROPERTY] ([GUID],[CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[PROPERTY],[DELETED]
                     ) VALUES (
-                    NEWID(),GETDATE(),@CUSER,GETDATE(),@LUSER,@ITEM,@PROPERTY,0)`,
+                    NEWID(),dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@ITEM,@PROPERTY,0)`,
             param : ['CUSER:string|25','LUSER:string|25','ITEM:string|50','PROPERTY:string|50'],
             dataprm : ['CUSER','LUSER','ITEM','PROPERTY']
         }
         tmpItemProp.updateCmd = 
         {
-            query : `UPDATE [dbo].[REST_ITEM_PROPERTY] SET [LDATE] = GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PROPERTY] = @PROPERTY
+            query : `UPDATE [dbo].[REST_ITEM_PROPERTY] SET [LDATE] = dbo.GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PROPERTY] = @PROPERTY
                     WHERE GUID = @GUID`,
             param : ['LUSER:string|25','ITEM:string|50','PROPERTY:string|50','GUID:string|50'],
             dataprm : ['LUSER','ITEM','PROPERTY','GUID']
@@ -713,13 +713,13 @@ export class restPrinterCls
         {
             query : `INSERT INTO [dbo].[REST_PRINT_ITEM] ([GUID],[CDATE],[CUSER],[LDATE],[LUSER],[ITEM],[PRINTER]
                     ) VALUES (
-                    NEWID(),GETDATE(),@CUSER,GETDATE(),@LUSER,@ITEM,@PRINTER)`,
+                    NEWID(),dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@ITEM,@PRINTER)`,
             param : ['CUSER:string|25','LUSER:string|25','ITEM:string|50','PRINTER:string|50'],
             dataprm : ['CUSER','LUSER','ITEM','PRINTER']
         }
         tmpItemPrinter.updateCmd = 
         {
-            query : `UPDATE [dbo].[REST_PRINT_ITEM] SET [LDATE] = GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PRINTER] = @PRINTER
+            query : `UPDATE [dbo].[REST_PRINT_ITEM] SET [LDATE] = dbo.GETDATE(),[LUSER] = @LUSER,[ITEM] = @ITEM,[PRINTER] = @PRINTER
                     WHERE GUID = @GUID`,
             param : ['LUSER:string|25','ITEM:string|50','PRINTER:string|50','GUID:string|50'],
             dataprm : ['LUSER','ITEM','PRINTER','GUID']

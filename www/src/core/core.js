@@ -950,10 +950,15 @@ export class dataset
     }
     async delete()
     {
-        for (let i = 0; i < this.length; i++) 
+        return new Promise(resolve => 
         {
-            await this.get(i).delete()
-        }
+            for (let i = 0; i < this.length; i++) 
+            {
+                this.get(i).delete()
+            }
+
+            resolve()
+        });
     }
     remove(pName)
     {
@@ -1689,7 +1694,7 @@ export class param extends datatable
     {
         if(arguments.length == 1 && typeof arguments[0] == 'object')
         {
-            if(this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).length > 0)
+            if(this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).length > 0 && this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS})[0].USERS == arguments[0].USERS)
             {
                 this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).setValue(arguments[0].VALUE)
             }
@@ -1718,23 +1723,23 @@ export class param extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM PARAM WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '')) AND ((ID = @ID) OR (@ID = '')) " ,
+                    query : "SELECT * FROM PARAM WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '-1') OR (USERS = '')) AND ((ID = @ID) OR (@ID = '')) " ,
                     param : ['APP:string|50','USERS:string|50','ID:string|50'],
                     value : [
                                 typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                                typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                                typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
                                 typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
                             ],
                     local : 
                     {
                         type : "select",
-                        query : "SELECT * FROM PARAM WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '')) AND ((ID = ?) OR (? = ''));",
+                        query : "SELECT * FROM PARAM WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '-1') OR (USERS = '')) AND ((ID = ?) OR (? = ''));",
                         values : 
                         [
                             typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
                             typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                            typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
-                            typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                            typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
+                            typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
                             typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
                             typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
                         ],        
@@ -1811,9 +1816,22 @@ export class param extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
-                }                
+                }
+                                
+                if(tmpData.length == 0)
+                {
+                    tmpData = this.where({USERS:''}).toArray()
+                    for (let i = 0; i < Object.keys(arguments[0]).length; i++) 
+                    {
+                        let tmpKey = Object.keys(arguments[0])[i]
+                        let tmpValue = Object.values(arguments[0])[i]
+                        if(tmpKey != "USERS")
+                        {
+                            tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+                        }
+                    }
+                }
             }
-
             let tmpPrm = new param(tmpMeta)
             tmpPrm.import(tmpData)
             return tmpPrm;
@@ -1903,17 +1921,24 @@ export class access extends datatable
     {
         if(arguments.length == 1 && typeof arguments[0] == 'object')
         {
-            let tmpItem =
-            {   
-                ID:typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,             
-                VALUE:typeof arguments[0].VALUE == 'undefined' ? '' : JSON.stringify(arguments[0].VALUE),
-                SPECIAL:typeof arguments[0].SPECIAL == 'undefined' ? '' : arguments[0].SPECIAL,
-                USERS:typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
-                PAGE:typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE,
-                ELEMENT:typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT,
-                APP:typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+            if(this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).length > 0 && this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS})[0].USERS == arguments[0].USERS)
+            {
+                this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).setValue(arguments[0].VALUE)
             }
-            this.push(tmpItem)
+            else
+            {
+                let tmpItem =
+                {   
+                    ID:typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,             
+                    VALUE:typeof arguments[0].VALUE == 'undefined' ? '' : typeof arguments[0].VALUE == 'object' ? JSON.stringify(arguments[0].VALUE) : arguments[0].VALUE,
+                    SPECIAL:typeof arguments[0].SPECIAL == 'undefined' ? '' : arguments[0].SPECIAL,
+                    USERS:typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                    PAGE:typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE,
+                    ELEMENT:typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT,
+                    APP:typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                }
+                this.push(tmpItem)
+            }
         }
     }
     load()
@@ -1924,18 +1949,26 @@ export class access extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = ''))" ,
-                    param : ['APP:string|50'],
-                    value : [typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP],
+                    query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '-1') OR (USERS = '')) AND ((ID = @ID) OR (@ID = ''))" ,
+                    param : ['APP:string|50','USERS:string|50','ID:string|50'],
+                    value : [
+                        typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                        typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
+                        typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                    ],
                     local : 
                     {
                         type : "select",
-                        query : "SELECT * FROM ACCESS WHERE ((APP = ?) OR (? = ''));",
+                        query : "SELECT * FROM ACCESS WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '-1') OR (USERS = '')) AND ((ID = ?) OR (? = ''));",
                         values : 
                         [
                             typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
                             typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                        ],        
+                            typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
+                            typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
+                            typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                            typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                        ],             
                     } 
                 } 
                 await this.refresh();
@@ -1974,8 +2007,7 @@ export class access extends datatable
                 param : ['PGUID:string|50','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
                 dataprm : ['GUID','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
             } 
-            await this.update(); 
-            resolve();
+            resolve(await this.update());
         });
     }
     filter()
@@ -2007,8 +2039,21 @@ export class access extends datatable
                     let tmpKey = Object.keys(arguments[0])[i]
                     let tmpValue = Object.values(arguments[0])[i]
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+                }
 
-                }                
+                if(tmpData.length == 0)
+                {
+                    tmpData = this.where({USERS:''}).toArray()
+                    for (let i = 0; i < Object.keys(arguments[0]).length; i++) 
+                    {
+                        let tmpKey = Object.keys(arguments[0])[i]
+                        let tmpValue = Object.values(arguments[0])[i]
+                        if(tmpKey != "USERS")
+                        {
+                            tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+                        }
+                    }
+                }
             }
             //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
             if(typeof Object.keys(arguments[0]).filter(key => key.includes('USERS')) != 'undefined')
@@ -2032,14 +2077,24 @@ export class access extends datatable
             // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRI.
             if(arguments.length == 0)
             {
-                return JSON.parse(JSON.parse(JSON.stringify(this[0].VALUE)))
+                // return JSON.parse(JSON.stringify(this[0].VALUE))
+                try
+                {
+                    return JSON.parse(this[0].VALUE)
+                }
+                catch(ex)
+                {
+                    return this[0].VALUE
+                }
             }
             // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 1 && typeof arguments[0] == 'number')
             {
                 try 
                 {
-                    return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
+                    //  return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
+                    return JSON.parse(this[arguments[0]].VALUE)
+
                 } catch (error) 
                 {
                     console.log('error param.toValue() : ' + error)
@@ -2047,43 +2102,32 @@ export class access extends datatable
             }                    
         }
         // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
-        else if(this.length == 0 && this.meta != null && this.meta.length > 0)
-        {
+        else if(this.length == 0 && this.meta != null && this.meta.length > 0 && typeof this.meta[0].VALUE != 'undefined')
+        {               
             return JSON.parse(JSON.stringify(this.meta[0].VALUE))
         }
-        return '';
+        return undefined;
     }
     setValue()
     {
-
         // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
         if(this.length > 0)
         {
             // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRA SET EDİLİYOR
             if(arguments.length == 1)
             {
-                this[0].VALUE = JSON.stringify(arguments[0]);
+                this[0].VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
             }
             // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 2 && typeof arguments[0] == 'number')
             {
                 try 
                 {
-                    this[arguments[0]].VALUE = JSON.stringify(arguments[0])
+                    this[arguments[0]].VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
                 } catch (error) 
                 {
                     console.log('error param.toValue() : ' + error)
                 }
-            }
-        }
-        else
-        {
-            if(this.meta.length == 1)
-            {
-                let tmpData = {...this.meta[0]}
-                tmpData.VALUE = JSON.stringify(arguments[0])
-                
-                this.push(tmpData)
             }
         }
     }

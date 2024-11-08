@@ -286,7 +286,7 @@ export default class Dashboard extends React.PureComponent
                             groupBy : this.groupList,
                             select : 
                             {
-                                query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 GROUP BY VAT_RATE",
                                 param : ['FISRT_DATE:date','LAST_DATE:date'],
                                 value : [this.dtDate.startDate,this.dtDate.endDate]
                             },
@@ -845,7 +845,7 @@ export default class Dashboard extends React.PureComponent
                                 groupBy : this.groupList,
                                 select : 
                                 {
-                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 GROUP BY VAT_RATE",
                                     param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },
@@ -881,7 +881,7 @@ export default class Dashboard extends React.PureComponent
                                 groupBy : this.groupList,
                                 select : 
                                 {
-                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                    query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 GROUP BY VAT_RATE",
                                     param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtTimeFirst.value,this.dtTimeLast.value]
                                 },

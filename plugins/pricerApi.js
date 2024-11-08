@@ -3,9 +3,7 @@ import { fileURLToPath } from 'url';
 import {core} from 'gensrv'
 import cron from 'node-cron';
 import fetch from 'node-fetch';
-import moment from 'moment';
-
-
+import config from '../config.js';
 class pricerApi
 {
     constructor()
@@ -15,14 +13,21 @@ class pricerApi
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.active = false
+        this.host = 'localhost:3333'
 
+        if(config?.plugins?.pricerApi?.active)
+        {
+            this.active = config?.plugins?.pricerApi?.active
+            this.host = typeof config.plugins.pricerApi.host == 'undefined' ? this.host : config?.plugins?.pricerApi?.host
+        }
+        
         this.processRun()
     }
     async connEvt(pSocket)
     {
-        pSocket.on('sql',async (pParam,pCallback) =>
+        if(this.active == true)
         {
-            if(this.active == true)
+            pSocket.on('sql',async (pParam,pCallback) =>
             {
                 if(typeof pParam.length != 'undefined')
                 {
@@ -203,21 +208,20 @@ class pricerApi
                         }
                     }
                 }
-            }
-           
-        })
-        pSocket.on('allPromoSend',async (pParam,pCallback) =>
-        {
-            this.processPromoSend()
-        })
-        pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
-        {
-            this.allItemSend()
-        })
-        pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
-        {
-            this.dateItemSend(arguments[0],arguments[1])
-        })
+            })
+            pSocket.on('allPromoSend',async (pParam,pCallback) =>
+            {
+                this.processPromoSend()
+            })
+            pSocket.on('priceAllItemSend',async (pParam,pCallback) =>
+            {
+                this.allItemSend()
+            })
+            pSocket.on('priceDateItemSend',async (pParam,pCallback) =>
+            {
+                this.dateItemSend(arguments[0],arguments[1])
+            })
+        }
     }
     async itemUpdate(pGuid)
     {
@@ -257,7 +261,7 @@ class pricerApi
                 }
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -342,7 +346,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -439,7 +443,6 @@ class pricerApi
     {
         if(this.active == true)
         {
-
             cron.schedule('0 3 * * *', async () => 
             {
                 await this.processPromoSend()
@@ -454,9 +457,9 @@ class pricerApi
             let tmpQuery = 
             {
                 query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
+                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
                 " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
-                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112) AND COND_QUANTITY <= 1 AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
+                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND START_DATE <= CONVERT(nvarchar,dbo.GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,dbo.GETDATE(),112) AND COND_QUANTITY <= 1 AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
             }
             
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -472,9 +475,9 @@ class pricerApi
             let tmpQuery = 
             {
                 query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
-                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
+                " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
                 " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
-                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND GUID = @GUID AND COND_QUANTITY <= 1 AND START_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE(),112) AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
+                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND GUID = @GUID AND COND_QUANTITY <= 1 AND START_DATE <= CONVERT(nvarchar,dbo.GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,dbo.GETDATE(),112) AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }
@@ -506,7 +509,7 @@ class pricerApi
                 tmpBarcodes.push(tmpResult[i].BARCODE)
             }
             
-            fetch('http://localhost:3333/api/public/core/v1/items', 
+            fetch('http://' + this.host + '/api/public/core/v1/items', 
             {
                 method: 'PATCH',
                 headers:  
@@ -574,7 +577,7 @@ class pricerApi
         console.log(111)
         let tmpCleanQuery = 
         {
-            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,GETDATE(),112) AND DELETED = 1 ",
+            query : " SELECT *,(SELECT START_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO),(SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) FROM PROMO_CONDITION WHERE  (SELECT FINISH_DATE FROM PROMO WHERE PROMO.GUID = PROMO_CONDITION.PROMO) >= CONVERT(nvarchar,dbo.GETDATE(),112) AND DELETED = 1 ",
         }
         let tmpCleanResult = (await core.instance.sql.execute(tmpCleanQuery)).result.recordset
         for (let i = 0; i < tmpCleanResult.length; i++) 
@@ -587,7 +590,7 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT COND_ITEM_GUID AS ITEM " +
-            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,GETDATE()-3,112)  ",
+            " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND  FINISH_DATE <= CONVERT(nvarchar,dbo.GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,dbo.GETDATE()-3,112)  ",
         }
         let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
 

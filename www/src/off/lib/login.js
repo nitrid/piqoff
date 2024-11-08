@@ -55,14 +55,22 @@ export default class Login extends React.PureComponent
         this.textValueChanged = this.textValueChanged.bind(this)
         this.setUser = this.setUser.bind(this)
 
+        try 
+        {
+            this.dbConfig = require('../../config.js').default.databases;
+        } 
+        catch (error) 
+        {
+            this.dbConfig = [];
+        }
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.Kullanici.focus()
-        if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+        if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
         {
-            this.txtDbSelect.value = this.core.appInfo.databases[0].CODE
+            this.txtDbSelect.value = this.dbConfig[0].CODE
             this.core.sql.selectedDb = this.txtDbSelect.value
         }
     }
@@ -97,7 +105,7 @@ export default class Login extends React.PureComponent
             else
             {
                 //ÇOKLU DATABASE SEÇİMİ İÇİN YAPILDI
-                if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+                if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
                 {
                     window.sessionStorage.setItem('selectedDb',this.txtDbSelect.value)
                 }
@@ -261,7 +269,7 @@ export default class Login extends React.PureComponent
     }
     dbSelectedView()
     {
-        if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+        if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
         {
             return(
                 <div className="dx-field">
@@ -276,7 +284,7 @@ export default class Login extends React.PureComponent
                                     icon:'more',
                                     onClick:async()=>
                                     {
-                                        await this.popDbList.setData(this.core.appInfo.databases)
+                                        await this.popDbList.setData(this.dbConfig)
                                         this.popDbList.show()
                                         this.popDbList.onClick = (data) =>
                                         {
@@ -424,12 +432,7 @@ export default class Login extends React.PureComponent
                                     />
                                 </div>
                             </div>                            
-                        </div>    
-                        {/* <div className="row">
-                            <div className="col-12">
-                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
-                            </div>
-                        </div>         */}
+                        </div>
                         <div className="row">
                             <div className="col-3">
                                 

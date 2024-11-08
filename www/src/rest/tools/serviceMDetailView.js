@@ -147,9 +147,9 @@ export default class NbServiceMDetailView extends NbBase
             }
 
             tmpTable.push(
-                <div key={i} className='row' style={{ display: 'flex' }}>
+                <div key={i} className='row' style={{ display: 'flex',height:'65px'}}>
                     <div style={{flex:1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px'}}>
-                        <div className="card" style={{height:'100px',width:'100%',border:'solid 2px #079992',borderRight:'none',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
+                        <div className="card" style={{height:'65px',width:'100%',border:'solid 2px #079992',borderRight:'none',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                         onClick={()=>
                         {
                             if (this.clickTimeout) 
@@ -184,7 +184,7 @@ export default class NbServiceMDetailView extends NbBase
                             {
                                 if(this.state.data[i].STATUS == 2 || this.state.data[i].STATUS == 3)
                                 {
-                                    return <i className="fa-solid fa-check fa-6x" style={{position:'absolute',left:'35%',color:'rgb(5 128 121 / 65%)'}}></i>
+                                    return <i className="fa-solid fa-check fa-6x" style={{height:'30px',position:'absolute',left:'35%',color:'rgb(5 128 121 / 65%)'}}></i>
                                 }
                                 else
                                 {
@@ -243,7 +243,7 @@ export default class NbServiceMDetailView extends NbBase
                             return (
                                 <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px',}}>
                                     <div>
-                                        <div style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',
+                                        <div style={{height:"65px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',
                                         borderBottomLeftRadius:'0px',borderBottomRightRadius:'5px',borderTopRightRadius:'5px',alignContent:'center',textAlign:'center'}}>
                                             <i className="fa-solid fa-clock-rotate-left fa-2x" 
                                             style={
@@ -260,7 +260,7 @@ export default class NbServiceMDetailView extends NbBase
                             return(
                                 <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px',}}>
                                     <div>
-                                        <div style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',borderLeft:'none',
+                                        <div style={{height:"65px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',borderLeft:'none',
                                         borderBottomLeftRadius:'0px',borderBottomRightRadius:'5px',borderTopRightRadius:'5px',alignContent:'center',textAlign:'center'}}>
                                         </div>
                                     </div>

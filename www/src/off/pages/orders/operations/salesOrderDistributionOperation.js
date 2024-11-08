@@ -65,7 +65,7 @@ export default class salesOrdList extends React.PureComponent
                     CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
                     CASE WHEN UNIT.FACTOR IS NULL THEN SUM(ORDERS.QUANTITY) ELSE SUM(ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
                     CASE WHEN UNIT.FACTOR IS NULL THEN SUM(ORDERS.APPROVED_QUANTITY) ELSE SUM(ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
-                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,dbo.GETDATE())) AS DEPOT_QUANTITY,
                     (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
                     FROM DOC_ORDERS_VW_01 AS ORDERS
                     LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
@@ -123,7 +123,7 @@ export default class salesOrdList extends React.PureComponent
                 CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
                 CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.QUANTITY) ELSE (ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
                 CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.APPROVED_QUANTITY) ELSE (ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
-                (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,dbo.GETDATE())) AS DEPOT_QUANTITY,
                 (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
                 FROM DOC_ORDERS_VW_01 AS ORDERS
                 LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
@@ -209,6 +209,7 @@ export default class salesOrdList extends React.PureComponent
         {
             query : `SELECT *,CASE WHEN APPROVED_QUANTITY = 0 THEN QUANTITY ELSE APPROVED_QUANTITY END AS APPROVED_QYT FROM (SELECT 
                     ORDERS.DOC_DATE,
+                    ORDERS.DOC_GUID,
                     ORDERS.GUID,
                     ORDERS.ITEM,
                     ORDERS.ITEM_CODE,
@@ -226,7 +227,7 @@ export default class salesOrdList extends React.PureComponent
                     CASE WHEN UNIT.FACTOR IS NULL THEN MAIN_UNIT.FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
                     CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.QUANTITY) ELSE (ORDERS.QUANTITY) / UNIT.FACTOR END AS QUANTITY,
                     CASE WHEN UNIT.FACTOR IS NULL THEN (ORDERS.APPROVED_QUANTITY) ELSE (ORDERS.APPROVED_QUANTITY) / UNIT.FACTOR END AS APPROVED_QUANTITY,
-                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,GETDATE())) AS DEPOT_QUANTITY,
+                    (SELECT [dbo].[FN_DEPOT_QUANTITY](ORDERS.ITEM,ORDERS.OUTPUT,dbo.GETDATE())) AS DEPOT_QUANTITY,
                     (SELECT dbo.FN_ORDER_PEND_QTY(ORDERS.ITEM,0,ORDERS.OUTPUT)) AS COMING_QUANTITY
                     FROM DOC_ORDERS_VW_01 AS ORDERS
                     LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON
@@ -466,6 +467,17 @@ export default class salesOrdList extends React.PureComponent
                                                 e.key.APPROVED_QYT = e.key.QUANTITY
                                            }
                                         }}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            App.instance.menuClick(
+                                                {
+                                                    id: 'sip_02_002',
+                                                    text: this.t('menu'),
+                                                    path: 'orders/documents/salesOrder.js',
+                                                    pagePrm:{GUID:e.data.DOC_GUID}
+                                                })
+                                            this.popOrderDetail.hide()
+                                        }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
@@ -489,14 +501,14 @@ export default class salesOrdList extends React.PureComponent
                                     <Item>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailCancel")} type="danger" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                            this.popOrderDetail.hide()
                                         }}/>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("btnDetailApproved")} type="success" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                             for (let i = 0; i < this.orderDetail.length; i++) 

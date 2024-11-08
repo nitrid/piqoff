@@ -2571,6 +2571,24 @@ export const prm =
             CAPTION : "Belge no kontrolu"
         }
     },
+    {
+        TYPE : 1,
+        ID :"compulsoryCustomer",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_008",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Alis Faturası",
+            CAPTION : "Tedarikçişi olmayan ürünü kaydetme"
+        }
+    },
     //#endregion
     //#region Promosyon
     //txtRef
