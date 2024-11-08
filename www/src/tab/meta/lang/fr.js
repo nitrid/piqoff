@@ -360,6 +360,16 @@ export const langFr =
             cmbCashSafe: "Caisse/Banque",
             invoiceSelect : "Sélection de facture",
         },
+        popDesign: 
+        {
+            title: "Choix de Design",
+            design: "Design",
+            lang: "Langue du Document",            
+            btnPrint: "Imprimer",
+            btnCancel: "Annuler",
+            btnView: "Afficher",
+            btnMailsend: "Envoyer par Mail",
+        },        
         ValidCash : "Veuillez saisir un montant supérieur à 0",
         msgNew:
         {
@@ -388,6 +398,12 @@ export const langFr =
             btn01: "OK",
             btn02: "Annuler",
             msg: "Êtes-vous sûr de vouloir supprimer l'enregistrement ? "
+        },
+        msgCustomerSelect:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner un client, s'il vous plaît..."
         },
         pg_invoices : 
         {
