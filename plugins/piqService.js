@@ -107,7 +107,7 @@ class piqService
             }
         });
         // Pos Satışlarının günlük aktarımı 
-        cron.schedule('0 3 * * *', async () => 
+        cron.schedule('0 23 * * *', async () => 
         {
 
             let tmpPosDataQuerty = 
