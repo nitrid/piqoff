@@ -270,6 +270,13 @@ const ftr_02_003 =
         btn01: "OK",
         msg: "Produit Introuvable !!"
     },
+    msgCustomerNotFound:
+    {
+        title: "Attention",
+        btn01: "Continuer",
+        btn02: "Annuler",
+        msg: "Le Produit Sélectionné n'est pas Associé au Client ! Voulez-vous Continuer ?"
+    },
     msgNotCustomer:
     {
         title: "Attention",

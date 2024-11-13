@@ -271,6 +271,13 @@ const ftr_02_003 =
         btn01: "Tamam",
         msg: "Ürün Bulunmadı !!"
     },
+    msgCustomerNotFound:
+    {
+        title: "Dikkat",
+        btn01: "Devam Et",
+        btn02: "Vazgeç",
+        msg: "Seçilen Ürün Müşteriye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+    },
     msgNotCustomer:
     {
         title: "Dikkat",
