@@ -45,8 +45,9 @@ export default class NdDocAi extends Base
                 tmpValue = this.parseNumber(pData.value.amount)
             }
 
-            if(typeof pData.kind != 'undefined' && pData.kind == 'number')
+            if(typeof pData.kind != 'undefined' && pData.kind == 'number' && (typeof pType != 'undefined' && pType != 'string'))
             {
+                console.log(pData)
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
         }
@@ -140,7 +141,12 @@ export default class NdDocAi extends Base
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
                 pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice)).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
-
+                pData.Item[i].DiscountRate = typeof this.getValue(pData.Item[i].DiscountRate,'string') == 'undefined' ? 0 : this.getValue(pData.Item[i].DiscountRate,'string')
+                if(typeof pData.Item[i].DiscountRate == 'string')
+                {
+                    pData.Item[i].DiscountRate = parseFloat(pData.Item[i].DiscountRate.replace("%", "").trim());
+                }
+                
                 let tmpItem = await this.getItem(pData.Item[i].ProductCode,pData.CustomerGuid)
                 if(typeof tmpItem != 'undefined')
                 {
@@ -152,6 +158,7 @@ export default class NdDocAi extends Base
                     pData.Item[i].ItemUnit = tmpItem.UNIT
                     pData.Item[i].ItemCost = tmpItem.COST_PRICE
                     pData.Item[i].ItemVat = tmpItem.VAT
+               
                 }
                 else
                 {
@@ -166,6 +173,8 @@ export default class NdDocAi extends Base
                 }
             }
 
+
+            pData.Item = pData.Item.filter(item => typeof item.ProductCode === "string" && item.ProductCode.trim() !== "");
             await this.grdList.dataRefresh({source:pData.Item});
             this.importData = pData    
         }
@@ -419,7 +428,7 @@ export default class NdDocAi extends Base
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
                                     <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.Unit}}/>
                                     <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                    <Column dataField="Discount" caption={this.lang.t("popDocAi.clmDiscount")} dataType={'number'}  format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
+                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                     <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                 </NdGrid>
                             </div>

@@ -1468,7 +1468,7 @@ export default class purchaseInvoice extends DocBase
                                                             COST_PRICE : e.Item[i].ItemCost,
                                                             VAT : e.Item[i].ItemVat
                                                         }
-                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice)
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice,e.Item[i].Discount,e.Item[i].DiscountRate)
                                                     }
                                                     else
                                                     {
