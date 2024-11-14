@@ -150,7 +150,7 @@ export default class bill extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query : "SELECT dbo.FN_PRICE(@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50']
             }
             tmpPriceDt.selectCmd.value = [pItem]
@@ -348,6 +348,9 @@ export default class bill extends React.PureComponent
             await tmpPrintDt.refresh()
             
             let tmpArrDt = []
+            let tmpPathGroup =  Array.from(new Set(tmpPrintDt.map(item => item.PRINTER_PATH)));
+            let tmpAllPrinterPath = tmpPathGroup.join(' - ');
+            console.log(tmpPrintDt)
             for (let i = 0; i < tmpPrintDt.groupBy('CODE').length; i++) 
             {
                 let tmpItems = new datatable()
@@ -359,6 +362,7 @@ export default class bill extends React.PureComponent
                         pData[x].ITEM_NAME = replaceTurkishChars(pData[x].ITEM_NAME)
                         pData[x].PRINTER_PATH = tmpFilterPrinter[0].PRINTER_PATH
                         pData[x].DESIGN_PATH = tmpFilterPrinter[0].DESIGN_PATH
+                        pData[x].ALL_PRINTER_PATH = tmpAllPrinterPath
                         if(this.isValidJSON(pData[x].PROPERTY))
                         {
                             pData[x].PROPERTY = JSON.parse(pData[x].PROPERTY).map(item => item.TITLE).join('\n')
@@ -368,6 +372,28 @@ export default class bill extends React.PureComponent
                         
                         tmpItems.push({...pData[x]})
                     }
+                }
+        
+                let tmpGroupItems = tmpItems.reduce((acc, item) => {
+                    // Aynı ITEM_NAME ve PROPERTY değerine sahip bir öğe olup olmadığını kontrol et
+                    const existingItem = acc.find(
+                        i => i.ITEM_NAME === item.ITEM_NAME && i.PROPERTY === item.PROPERTY && i.PRINTER_PATH === this.param.filter({ID:'MultiPrintDevice',TYPE:0}).getValue()
+                    );
+                
+                    if (existingItem) {
+                        // Varsa, QUANTITY değerini artır
+                        existingItem.QUANTITY += item.QUANTITY;
+                    } else {
+                        // Yoksa, yeni bir öğe olarak ekle
+                        acc.push({ ...item });
+                    }
+                
+                    return acc;
+                }, []);
+                tmpItems.clear()
+                for (let i = 0; i < tmpGroupItems.length; i++) 
+                {
+                    tmpItems.push({...tmpGroupItems[i]})
                 }
                 tmpArrDt.push(tmpItems)
             }

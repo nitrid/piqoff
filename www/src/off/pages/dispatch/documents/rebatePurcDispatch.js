@@ -90,7 +90,7 @@ export default class rebateDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -487,7 +487,7 @@ export default class rebateDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
                     param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
                     value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
                 }
@@ -528,7 +528,7 @@ export default class rebateDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
+            query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
             param : ['DEPOT:string|50','CUSTOMER:string|50'],
             value : [this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT]
         }
@@ -1715,7 +1715,7 @@ export default class rebateDispatch extends DocBase
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
-                                            onClick={async ()=>
+                                            onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
@@ -1730,6 +1730,24 @@ export default class rebateDispatch extends DocBase
                                                     console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
+                                                        this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                                                                fromRebate: tmpData.result.recordset[0].REBATE,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+                                                            
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                         mywindow.onload = function() 
                                                         {

@@ -101,7 +101,7 @@ export default class rebateInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " + 
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE " + 
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                         param : ['VAL:string|50']
                     },
@@ -513,7 +513,7 @@ export default class rebateInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
                     param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
                     value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
                 }
@@ -1911,6 +1911,24 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
+                                                         this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                                                                fromRebate: tmpData.result.recordset[0].REBATE,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
                                                         mywindow.onload = function() 

@@ -435,7 +435,7 @@ export default class posDeviceCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE TYPE = 2 AND STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE  STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 {/* txtPrinterPort */}

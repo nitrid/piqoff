@@ -269,7 +269,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM POS WHERE LDATE >= GETDATE() - 2 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+                query : "SELECT * FROM POS WHERE LDATE >= dbo.GETDATE() - 2 AND LDATE <= dbo.GETDATE() - 1 ORDER BY LDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -304,7 +304,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM DOC WHERE LDATE >= GETDATE() - 2 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+                query : "SELECT * FROM DOC WHERE LDATE >= dbo.GETDATE() - 2 AND LDATE <= dbo.GETDATE() - 1 ORDER BY LDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -339,7 +339,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM DOC_EXTRA WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() - 1 AND TAG = 'PRINT' ORDER BY CDATE DESC"
+                query : "SELECT * FROM DOC_EXTRA WHERE CDATE >= dbo.GETDATE() - 2 AND CDATE <= dbo.GETDATE() - 1 AND TAG = 'PRINT' ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -374,7 +374,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM POS_EXTRA WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() - 1 AND TAG IN ('REPRINT','REPRINTFACT') ORDER BY CDATE DESC"
+                query : "SELECT * FROM POS_EXTRA WHERE CDATE >= dbo.GETDATE() - 2 AND CDATE <= dbo.GETDATE() - 1 AND TAG IN ('REPRINT','REPRINTFACT') ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -409,7 +409,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_JET WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() + 2 ORDER BY CDATE DESC"
+                query : "SELECT * FROM NF525_JET WHERE CDATE >= dbo.GETDATE() - 2 AND CDATE <= dbo.GETDATE() + 2 ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -922,7 +922,7 @@ class nf525
                             "CASE WHEN TYPE = 1 THEN AMOUNT ELSE AMOUNT * -1 END AS FAMOUNT, " +
                             "CASE WHEN TYPE = 1 THEN TOTAL ELSE TOTAL * -1 END AS TOTAL " +
                             "FROM DOC_VAT_VW_01 AS DOC_VAT " +
-                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND TYPE = 1 AND DOC_TYPE IN (20,21) " +
+                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),dbo.GETDATE()-1,112) AND TYPE = 1 AND DOC_TYPE IN (20,21) " +
                             ") AS TMP " +
                             "GROUP BY DOC_DATE ORDER BY DOC_DATE"
                 }
@@ -933,7 +933,7 @@ class nf525
                 }
                 else
                 {
-                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),GETDATE() - 120,112)")
+                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),dbo.GETDATE() - 120,112)")
                 }
     
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -963,7 +963,7 @@ class nf525
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
                             "FROM NF203_GRAND_TOTAL WHERE TYPE = 0 " +
                             "GROUP BY MONTH(CONVERT(NVARCHAR(10),PERIOD,112)),[YEAR] " +
-                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),GETDATE(),112)) " +
+                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),dbo.GETDATE(),112)) " +
                             "ORDER BY [YEAR],MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) ASC"
                 }
     
@@ -992,7 +992,7 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF203_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(GETDATE()) " +
+                            "FROM NF203_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(dbo.GETDATE()) " +
                             "GROUP BY [YEAR] ORDER BY [YEAR] ASC"
                 }
     
@@ -1115,7 +1115,7 @@ class nf525
                             ",[SIGNATURE] " + 
                             ",[SIGNATURE_SUM] " + 
                             ") VALUES ( " + 
-                            " GETDATE() " + 
+                            " dbo.GETDATE() " + 
                             ",@TYPE " + 
                             ",@YEAR " + 
                             ",@PERIOD " + 
@@ -1194,7 +1194,7 @@ class nf525
                             "CASE WHEN TYPE = 0 THEN FAMOUNT ELSE FAMOUNT * -1 END AS FAMOUNT, " +
                             "CASE WHEN TYPE = 0 THEN TOTAL ELSE TOTAL * -1 END AS TOTAL " +
                             "FROM POS_VAT_VW_01 AS NF525 " +
-                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND DOC_TYPE = 0 " +
+                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),dbo.GETDATE()-1,112) AND DOC_TYPE = 0 " +
                             ") AS TMP " +
                             "GROUP BY DOC_DATE ORDER BY DOC_DATE ASC"
                 }
@@ -1205,7 +1205,7 @@ class nf525
                 }
                 else
                 {
-                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),GETDATE() - 120,112)")
+                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),dbo.GETDATE() - 120,112)")
                 }
                 
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -1235,7 +1235,7 @@ class nf525
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
                             "FROM NF525_GRAND_TOTAL WHERE TYPE = 0 " +
                             "GROUP BY MONTH(CONVERT(NVARCHAR(10),PERIOD,112)),[YEAR] " +
-                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),GETDATE(),112)) " +
+                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),dbo.GETDATE(),112)) " +
                             "ORDER BY [YEAR],MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) ASC"
                 }
 
@@ -1264,7 +1264,7 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF525_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(GETDATE()) " +
+                            "FROM NF525_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(dbo.GETDATE()) " +
                             "GROUP BY [YEAR] ORDER BY [YEAR] ASC"
                 }
     
@@ -1387,7 +1387,7 @@ class nf525
                             ",[SIGNATURE] " +
                             ",[SIGNATURE_SUM] " + 
                             ") VALUES ( " + 
-                            " GETDATE() " + 
+                            " dbo.GETDATE() " + 
                             ",@TYPE " + 
                             ",@YEAR " + 
                             ",@PERIOD " + 
@@ -1502,19 +1502,19 @@ class nf525
                     let tmpPosQuery = 
                     {
                         query : "SELECT GUID,DEVICE,TYPE_NAME,DOC_TYPE,DOC_DATE,REF,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT,TOTAL,CERTIFICATE,SIGNATURE,SIGNATURE_SUM " + 
-                                "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 ORDER BY REF ASC",
+                                "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),dbo.GETDATE() - 1,112) AND STATUS = 1 ORDER BY REF ASC",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }    
                     let tmpPosSaleQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),dbo.GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }
                     let tmpPosPayQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),dbo.GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }

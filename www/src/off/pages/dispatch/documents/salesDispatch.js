@@ -92,7 +92,7 @@ export default class salesDispatch extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE, " + 
-                                "(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE " + 
+                                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE " + 
                                 "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                         param : ['VAL:string|50']
                     },
@@ -555,7 +555,7 @@ export default class salesDispatch extends DocBase
             {
                 let tmpCheckQuery = 
                 {
-                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY ",
                     param : ['GUID:string|50','DEPOT:string|50'],
                     value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
                 }
@@ -674,7 +674,7 @@ export default class salesDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
                     param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int'],
                     value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbDepot.value,this.cmbPricingList.value]
                 }
@@ -1807,7 +1807,7 @@ export default class salesDispatch extends DocBase
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','DEPOT:string|50','PRICE_LIST_NO:int'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbDepot.value,this.cmbPricingList.value]
                                             }
@@ -2157,7 +2157,7 @@ export default class salesDispatch extends DocBase
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     let tmpQuery2 = 
                                                     {
-                                                        query: "SELECT ISNULL(SUM(TOTAL),0) AS DISPATCH, (SELECT [dbo].[FN_CUSTOMER_BALANCE](@INPUT,GETDATE())) AS BALANCE FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND INPUT = @INPUT" ,
+                                                        query: "SELECT ISNULL(SUM(TOTAL),0) AS DISPATCH, (SELECT [dbo].[FN_CUSTOMER_BALANCE](@INPUT,dbo.GETDATE())) AS BALANCE FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND INPUT = @INPUT" ,
                                                         param:  ['INPUT:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -2167,6 +2167,24 @@ export default class salesDispatch extends DocBase
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
+                                                        this.core.socket.emit('piqXInvoiceInsert',
+                                                            {
+                                                                fromUser : tmpData.result.recordset[0].LUSER,
+                                                                toUser : '',
+                                                                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                                                                docDate : tmpData.result.recordset[0].DOC_DATE,
+                                                                fromTax : tmpData.result.recordset[0].TAX_NO,
+                                                                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                                                                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                                                                fromRebate: tmpData.result.recordset[0].REBATE,
+                                                                json : JSON.stringify(tmpData.result.recordset),
+                                                                pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                                                            },
+                                                            (pData) =>
+                                                            {
+                                                                console.log(pData)
+                                                            })
+                                                            
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
                                                         mywindow.onload = function() 

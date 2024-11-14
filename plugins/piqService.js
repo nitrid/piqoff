@@ -58,7 +58,7 @@ class piqService
                             query : "SELECT ISNULL(SUM(CASE WHEN TYPE = 0 THEN POINT ELSE POINT * -1 END),0) AS POINT FROM CUSTOMER_POINT WHERE CUSTOMER = '" + tmpResultCustomer.result.recordset[i].GUID + "' AND DELETED = 0 " +
                                     "UNION ALL " +
                                     "SELECT ISNULL(SUM(CASE WHEN TYPE = 0 THEN POINT ELSE POINT * -1 END),0) AS POINT FROM CUSTOMER_POINT WHERE CUSTOMER = '" + tmpResultCustomer.result.recordset[i].GUID + "' AND TYPE = 0 AND " +
-                                    "CDATE >= CONVERT(NVARCHAR(4),YEAR(GETDATE())) + '0101' AND CDATE <= CONVERT(NVARCHAR(4),YEAR(GETDATE())) + '0131' AND DELETED = 0",
+                                    "CDATE >= CONVERT(NVARCHAR(4),YEAR(dbo.GETDATE())) + '0101' AND CDATE <= CONVERT(NVARCHAR(4),YEAR(dbo.GETDATE())) + '0131' AND DELETED = 0",
                         }
         
                         let tmpResult = await core.instance.sql.execute(tmpQuery)
@@ -91,7 +91,7 @@ class piqService
 
                                 let tmpUpdateQuery = 
                                 {
-                                    query : "UPDATE CUSTOMERS SET POINT = (SELECT dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE())) WHERE GUID = @CUSTOMER", 
+                                    query : "UPDATE CUSTOMERS SET POINT = (SELECT dbo.FN_CUSTOMER_TOTAL_POINT(GUID,dbo.GETDATE())) WHERE GUID = @CUSTOMER", 
                                     param : ['CUSTOMER:string|50'],
                                     value : [tmpResultCustomer.result.recordset[i].GUID],
                                 }
@@ -106,20 +106,52 @@ class piqService
                 console.log(err);
             }
         });
-        // Pos Satışlarının günlük aktarımı - Depo Miktar güncellenmesi - Cari Bakiye güncellemesi
-        cron.schedule('0 3 * * *', async () => 
+        // Pos Satışlarının günlük aktarımı 
+        cron.schedule('0 23 * * *', async () => 
+        {
+
+            let tmpPosDataQuerty = 
+            {  
+                query : " SELECT     " +
+                        "ITEM_GUID,    " +
+                        "DEPOT_GUID,    " +
+                        "SUM(QUANTITY)  AS QUANTITY    " +
+                        "FROM (SELECT ITEM_CODE,ITEM_GUID,CASE WHEN TYPE = 0 THEN QUANTITY WHEN TYPE = 1 THEN (QUANTITY * -1) END AS QUANTITY,DEPOT_GUID from POS_SALE_VW_01 WHERE STATUS = 1 AND DOC_DATE = CONVERT(nvarchar,GETDATE(),110)) " +
+                        "AS TMP GROUP BY ITEM_GUID,DEPOT_GUID  ",
+            }
+
+            let tmpPosData = (await core.instance.sql.execute(tmpPosDataQuerty)).result.recordset
+            
+            for (let i = 0; i < tmpPosData.length; i++) 
+            {
+                let tmpQuantityUpdateQuery = 
+                {
+                    query : "EXEC  [dbo].[PRD_POS_ITEM_QUANTITY_UPDATE] " + 
+                            "@ITEM = @PITEM, "  + 
+                            "@DEPOT = @PDEPOT, " + 
+                            "@QUANTITY = @PQUANTITY ",
+                    param : ['PITEM:string|50','PDEPOT:string|50','PQUANTITY:float'],
+                    value : [tmpPosData[i].ITEM_GUID,tmpPosData[i].DEPOT_GUID,tmpPosData[i].QUANTITY],
+                }
+                await core.instance.sql.execute(tmpQuantityUpdateQuery)
+            }
+        
+        });
+
+        // Depo Miktar güncellenmesi - Cari Bakiye güncellemesi
+        cron.schedule('0 4 * * *', async () => 
         {
 
             let tmpQuantityUpdateQuery = 
             {
-                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.GETDATE())) ",
+                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.dbo.GETDATE())) ",
             }
 
             await core.instance.sql.execute(tmpQuantityUpdateQuery)
             
             let tmpBalanceUpdateQuery = 
             {
-                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.GETDATE())) ",
+                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.dbo.GETDATE())) ",
             }
         
             await core.instance.sql.execute(tmpBalanceUpdateQuery)

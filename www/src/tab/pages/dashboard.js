@@ -21,7 +21,7 @@ export default class Dashboard extends React.PureComponent
     {
         let tmpQuery1 = 
         {
-            query : "SELECT ISNULL(SUM(TOTAL),0) AS TOTAL FROM DOC_VW_01 WHERE DOC_DATE >  DATEADD(MM, DATEDIFF(MM, 0, GETDATE()), 0) AND TYPE = 1 AND DOC_TYPE = 60 AND CUSER = @CUSER ",
+            query : "SELECT ISNULL(SUM(TOTAL),0) AS TOTAL FROM DOC_VW_01 WHERE DOC_DATE >  DATEADD(MM, DATEDIFF(MM, 0, dbo.GETDATE()), 0) AND TYPE = 1 AND DOC_TYPE = 60 AND CUSER = @CUSER ",
             param : ['CUSER:string|50'],
             value : [this.core.auth.data.CODE]
         }
@@ -46,7 +46,7 @@ export default class Dashboard extends React.PureComponent
         let tmpQuery = 
         {
             query : "SELECT FORMAT(DOC_DATE, 'MMMM', @LANG) AS MOUNT,SUM(TOTAL) AS TOTAL FROM DOC_VW_01 " +
-                "WHERE DOC_DATE >  DATEADD(YY, DATEDIFF(YY, 0, GETDATE()), 0) AND TYPE = 1 AND DOC_TYPE = 60 AND CUSER = @CUSER " +
+                "WHERE DOC_DATE >  DATEADD(YY, DATEDIFF(YY, 0, dbo.GETDATE()), 0) AND TYPE = 1 AND DOC_TYPE = 60 AND CUSER = @CUSER " +
                 "GROUP BY FORMAT(DOC_DATE, 'MMMM', @LANG),MONTH(DOC_DATE) ORDER BY MONTH(DOC_DATE) ",
             param : ['CUSER:string|50','LANG:string|10'],
             value : [this.core.auth.data.CODE,this.lang.language]

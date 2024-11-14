@@ -18,7 +18,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { docCls,docItemsCls,docCustomerCls } from '../../../../core/cls/doc.js';
 
-export default class piqXIncomingList extends React.PureComponent
+export default class piqXPurcFactList extends React.PureComponent
 {
     constructor(props)
     {
@@ -61,7 +61,7 @@ export default class piqXIncomingList extends React.PureComponent
     {
         if(this.taxId != "")
         {
-            this.core.socket.emit('piqXInvoiceList',{taxId:this.taxId,first:moment(this.dtFirst.value).utcOffset(0, true),last:moment(this.dtLast.value).utcOffset(0, true)},async(pData)=>
+            this.core.socket.emit('piqXInvoiceList',{taxId:this.taxId,first:moment(this.dtFirst.value).utcOffset(0, true),last:moment(this.dtLast.value).utcOffset(0, true),docType:20,rebate:0},async(pData)=>
             {
                 await this.grdList.dataRefresh({source:[]})
                 let tmpSource =

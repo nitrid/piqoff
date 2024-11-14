@@ -57,7 +57,7 @@ export default class itemCard extends React.PureComponent
         this.salesContractObj = new datatable()
         this.salesContractObj.selectCmd =
         {
-            query :"SELECT * FROM [CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE()   ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= dbo.GETDATE() AND FINISH_DATE >= dbo.GETDATE()   ORDER BY LDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.otherShopObj = new datatable()
@@ -281,7 +281,7 @@ export default class itemCard extends React.PureComponent
         //ÜRÜN PROMOSYON DURUMU GETİRME İŞLEMİ
         let tmpPromoQuery = 
         {
-            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
+            query : "SELECT TOP 1 GUID FROM PROMO_COND_APP_VW_01 WHERE START_DATE <= dbo.GETDATE() AND FINISH_DATE >= dbo.GETDATE() AND COND_TYPE = 0 AND COND_ITEM_GUID = @COND_ITEM_GUID",
             param : ['COND_ITEM_GUID:string|50'],
             value : [this.itemsObj.dt()[0].GUID]
         }
@@ -301,7 +301,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -514,7 +514,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -799,7 +799,7 @@ export default class itemCard extends React.PureComponent
                                 this.txtCostPrice.value = e.data.CUSTOMER_PRICE
                                 let tmpQuery = 
                                 {
-                                    query : "UPDATE ITEM_PRICE SET CHANGE_DATE = GETDATE() WHERE GUID =@PRICE_GUID ",
+                                    query : "UPDATE ITEM_PRICE SET CHANGE_DATE = dbo.GETDATE() WHERE GUID =@PRICE_GUID ",
                                     param : ['PRICE_GUID:string|50'],
                                     value : [e.data.CUSTOMER_PRICE_GUID]
                                 }
