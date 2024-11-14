@@ -9,12 +9,10 @@ class piqhubApi
     constructor()
     {
         this.core = core.instance;
-        const fullMacId = macid.machineIdSync();
-        this.macid = crypto.createHash('md5').update(fullMacId).digest('hex').substring(0, 16).toUpperCase();
-
+        this.macid = this.getStableMacId();
         this.checkLicenseExpiry();
 
-        this.socketHub = client('http://localhost:81',
+        this.socketHub = client('http://piqhub.piqsoft.com',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
@@ -30,6 +28,11 @@ class piqhubApi
         
         // Her 6 saatte bir lisans kontrolü yap
         this.startLicenseUpdateInterval();
+    }
+    getStableMacId() 
+    {
+        const fullMacId = macid.machineIdSync({ original: true });
+        return crypto.createHash('md5').update(fullMacId).digest('hex').substring(0, 16).toUpperCase();
     }
     startLicenseUpdateInterval()
     {
@@ -112,6 +115,10 @@ class piqhubApi
                 console.log(error)
                 pCallback(null);
             }
+        });
+        pSocket.on('get-macid',async (pParam,pCallback) =>
+        {
+            pCallback(this.macid);
         });
     }
     ioEvents()

@@ -183,6 +183,11 @@ export default class App extends React.PureComponent
         this.init()
         this.core.socket.on('connect',async () => 
         {
+            this.core.socket.emit('get-macid',{},(tmpMacId) =>
+            {
+                this.macid = tmpMacId;
+            })
+
             if((await this.core.sql.try()).status == 1)
             {
                 let tmpSplash = 
