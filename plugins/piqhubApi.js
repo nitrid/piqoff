@@ -31,8 +31,8 @@ class piqhubApi
     }
     getStableMacId() 
     {
-        const fullMacId = macid.machineIdSync({ original: true });
-        return crypto.createHash('md5').update(fullMacId).digest('hex').substring(0, 16).toUpperCase();
+        const baseId = process.env.WEBSITE_INSTANCE_ID || macid.machineIdSync({ original: true });
+        return crypto.createHash('md5').update(baseId).digest('hex').substring(0, 16).toUpperCase();
     }
     startLicenseUpdateInterval()
     {
