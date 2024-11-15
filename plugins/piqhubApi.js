@@ -31,8 +31,69 @@ class piqhubApi
     }
     getStableMacId() 
     {
-        const baseId = process.env.WEBSITE_INSTANCE_ID || macid.machineIdSync({ original: true });
-        return crypto.createHash('md5').update(baseId).digest('hex').substring(0, 16).toUpperCase();
+        try 
+        {
+            // Config dosyasının varlığını kontrol et
+            if (!fs.existsSync('./config.js')) 
+            {
+                this.core.log.msg('Config file not found. License system disabled.', 'Licence');
+                return null;
+            }
+
+            // Benzersiz bir ID oluştur (16 karakter, büyük harf ve rakamlar)
+            const generateUniqueId = () => 
+            {
+                return crypto.randomBytes(8).toString('hex').toUpperCase();
+            };
+
+            // Config dosyasını oku
+            let configContent = fs.readFileSync('./config.js', 'utf8');
+            
+            // Config içeriğini parse et
+            let configMatch = configContent.match(/export\s+default\s+({[\s\S]*})/);
+            if (!configMatch) 
+            {
+                this.core.log.msg('Invalid config file format', 'Licence');
+                return null;
+            }
+
+            let config;
+            try 
+            {
+                // Var olan config yapısını koru
+                config = eval('(' + configMatch[1] + ')');
+            } 
+            catch (error) 
+            {
+                this.core.log.msg('Error parsing config file', 'Licence');
+                return null;
+            }
+
+            // Eğer config içinde deviceId varsa onu kullan
+            if (config.macId) 
+            {
+                return config.macId;
+            }
+
+            // Yoksa yeni bir macId oluştur
+            const macId = generateUniqueId();
+
+            // Config yapısını koru ve macId ekle
+            const updatedContent = configContent.replace(
+                /export\s+default\s+{/,
+                `export default {\n  macId: "${macId}",`
+            );
+
+            fs.writeFileSync('./config.js', updatedContent);
+            
+            return macId;
+        } 
+        catch (error) 
+        {
+            console.error('Error in getStableMacId:', error);
+            this.core.log.msg('Error getting device ID. License system disabled.', 'Licence');
+            return null;
+        }
     }
     startLicenseUpdateInterval()
     {
