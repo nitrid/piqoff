@@ -1,5 +1,5 @@
 /config.js
-plugins/lic
+lic
 tmp/
 node_modules/
 package-lock.json

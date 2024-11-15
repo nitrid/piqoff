@@ -57,14 +57,14 @@ class piqhubApi
                     ...pData,
                     lastUpdate: new Date().toISOString()
                 };
-                fs.writeFileSync('./plugins/lic', JSON.stringify(licenseData));
+                fs.writeFileSync('./lic', JSON.stringify(licenseData));
                 this.core.log.msg('License updated successfully', 'Licence');
             }
             else
             {
-                if (fs.existsSync('./plugins/lic')) 
+                if (fs.existsSync('./lic')) 
                 {
-                    fs.unlinkSync('./plugins/lic');
+                    fs.unlinkSync('./lic');
                     return;
                 }
             }
@@ -74,19 +74,19 @@ class piqhubApi
     {
         try 
         {
-            if (!fs.existsSync('./plugins/lic')) 
+            if (!fs.existsSync('./lic')) 
             {
                 return;
             }
 
-            const licData = JSON.parse(fs.readFileSync('./plugins/lic', 'utf8'));
+            const licData = JSON.parse(fs.readFileSync('./lic', 'utf8'));
             const lastUpdate = new Date(licData.lastUpdate || 0);
             const now = new Date();
             const diffDays = Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
 
             if (diffDays > 15) 
             {
-                fs.unlinkSync('./plugins/lic');
+                fs.unlinkSync('./lic');
                 this.core.log.msg('License expired due to no internet connection for 15 days', 'Licence');
             }
         } 
@@ -170,12 +170,12 @@ class piqhubApi
     {
         try
         {
-            if(!fs.existsSync('./plugins/lic'))
+            if(!fs.existsSync('./lic'))
             {
                 return null;
             }
 
-            let tmpLicData = fs.readFileSync('./plugins/lic','utf8');
+            let tmpLicData = fs.readFileSync('./lic','utf8');
             let tmpLicObj = JSON.parse(tmpLicData);
             
             const lastUpdate = new Date(tmpLicObj.lastUpdate || 0);
@@ -184,7 +184,7 @@ class piqhubApi
 
             if (diffDays > 15) 
             {
-                fs.unlinkSync('./plugins/lic');
+                fs.unlinkSync('./lic');
                 return null;
             }
 
