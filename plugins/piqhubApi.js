@@ -11,8 +11,8 @@ class piqhubApi
         this.core = core.instance;
         this.macid = this.getStableMacId();
         this.checkLicenseExpiry();
-
         this.socketHub = client('http://piqhub.piqsoft.com',
+        //this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
@@ -120,13 +120,16 @@ class piqhubApi
                 };
                 fs.writeFileSync('./lic', JSON.stringify(licenseData));
                 this.core.log.msg('License updated successfully', 'Licence');
+                
+                // package.json'ı doğrudan oku
+                const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+                this.socketHub.emit('piqhub-set-info', {macid: this.macid,version: packageJson.version});
             }
             else
             {
                 if (fs.existsSync('./lic')) 
                 {
                     fs.unlinkSync('./lic');
-                    return;
                 }
             }
         });
