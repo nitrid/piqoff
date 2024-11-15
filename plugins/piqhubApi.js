@@ -9,7 +9,7 @@ class piqhubApi
     constructor()
     {
         this.core = core.instance;
-        this.macid = this.getStableMacId().then(macid => this.macid = macid);
+        this.macid = this.getStableMacId();
         this.checkLicenseExpiry();
 
         this.socketHub = client('http://piqhub.piqsoft.com',
@@ -31,42 +31,8 @@ class piqhubApi
     }
     getStableMacId() 
     {
-        try 
-        {
-            // Config dosyasının varlığını kontrol et
-            if (!fs.existsSync('./config.js')) 
-            {
-                this.core.log.msg('Config file not found. License system disabled.', 'Licence');
-                return null;
-            }
-
-            // Config dosyasını dinamik olarak import et
-            return import('../config.js').then(config => 
-            {
-                // Eğer config içinde macid varsa onu kullan
-                if (config.default.macid) 
-                {
-                    return config.default.macid;
-                }
-
-                // Yoksa yeni bir macid oluştur
-                const baseId = macid.machineIdSync({ original: true });
-                const stableId = crypto.createHash('md5').update(baseId).digest('hex').substring(0, 16).toUpperCase();
-                
-                // Config dosyasını güncelle
-                config.default.macid = stableId;
-                const configContent = `export default ${JSON.stringify(config.default, null, 2)}`;
-                fs.writeFileSync('./config.js', configContent);
-                
-                return stableId;
-            });
-        } 
-        catch (error) 
-        {
-            console.error('Error in getStableMacId:', error);
-            this.core.log.msg('Error getting machine ID. License system disabled.', 'Licence');
-            return null;
-        }
+        const baseId = process.env.WEBSITE_INSTANCE_ID || macid.machineIdSync({ original: true });
+        return crypto.createHash('md5').update(baseId).digest('hex').substring(0, 16).toUpperCase();
     }
     startLicenseUpdateInterval()
     {
@@ -82,7 +48,6 @@ class piqhubApi
     }
     updateLicense()
     {
-        console.log('updateLicense',this.macid)
         this.socketHub.emit('piqhub-get-licence', {macid: this.macid}, (pData) => 
         {
             if(pData != null)
