@@ -2201,5 +2201,21 @@ export const prm =
             DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
         }
     },
+    //
+    {
+        TYPE : 1,
+        ID :"GetOldDispatch",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "kar_01",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şipariş eşleştirme",
+            CAPTION : "Daha önce irsaliye oluşmuşsa getir",
+        }
+    },
     //#endregion
 ]
