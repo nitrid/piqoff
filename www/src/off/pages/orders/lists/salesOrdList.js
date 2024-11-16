@@ -543,7 +543,7 @@ export default class salesOrdList extends React.PureComponent
                             <Form>
                                 <Item>
                                     <Label text={this.t("chkInvOrDisp")} alignment="left" />
-                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={false} />
+                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={true} />
                                 </Item>
                             </Form>
                         </div>
