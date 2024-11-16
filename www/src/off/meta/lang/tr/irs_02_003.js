@@ -123,6 +123,12 @@ const irs_02_003 =
         Password : "Şifre",
         btnApprove : "Onayla"
     },
+    msgMissItemCode:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Bulunamayan Kodlar :"
+    },
     msgDocValid:
     {
         title: "Dikkat",
