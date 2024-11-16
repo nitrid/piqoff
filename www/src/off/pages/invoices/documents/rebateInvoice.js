@@ -19,6 +19,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import NdDocAi from '../../../tools/NdDocAi';
 
 export default class rebateInvoice extends DocBase
 {
@@ -551,7 +552,7 @@ export default class rebateInvoice extends DocBase
             )
         }
     }    
-    addItem(pData,pIndex,pQuantity,pPrice)
+    addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer)
     {
         return new Promise(async resolve =>
         {
@@ -723,6 +724,19 @@ export default class rebateInvoice extends DocBase
             }else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                if(typeof pDiscountPer != 'undefined')
+                {
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : ((this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity).toFixed(4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscountPer == 'undefined' ? 0 : pDiscountPer
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = this.docObj.docItems.dt()[pIndex].DISCOUNT
+                }
+                else
+                {
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscount == 'undefined' ? 0 : pDiscount
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscount == 'undefined' ? 0 : (pDiscount / this.docObj.docItems.dt()[pIndex].AMOUNT)  * 100
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = this.docObj.docItems.dt()[pIndex].DISCOUNT
+                }
+
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -892,6 +906,97 @@ export default class rebateInvoice extends DocBase
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnImport" parent={this} icon="fa-solid fa-cloud-arrow-up" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.popDocAi.show(this.docObj.dt()[0].INPUT)
+                                        this.popDocAi.onImport = async(e) =>
+                                        {
+                                            if(typeof e != 'undefined')
+                                            {
+                                                if(e.CustomerCode != '')
+                                                {
+                                                    this.docObj.dt()[0].INPUT = e.CustomerGuid
+                                                    this.docObj.docCustomer.dt()[0].INPUT = e.CustomerGuid
+                                                    this.docObj.dt()[0].INPUT_CODE = e.CustomerCode
+                                                    this.docObj.dt()[0].INPUT_NAME = e.CustomerName
+                                                    this.docObj.dt()[0].VAT_ZERO = e.CustomerVatZero
+
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.value = e.CustomerCode
+                                                    }
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [e.CustomerGuid]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            }
+                                                        }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                    }
+                                                }
+                                                this.dtDocDate.value = moment(e.InvoiceDate)
+                                                this.dtShipDate.value = moment(e.DueDate)
+
+                                                this.grid.devGrid.beginUpdate()
+                                                let tmpMissCodes = []
+                                                for (let i = 0; i < e.Item.length; i++) 
+                                                {
+                                                    if(e.Item[i].ItemCode != '')
+                                                    {
+                                                        let tmpItem =
+                                                        {
+                                                            GUID : e.Item[i].ItemGuid,
+                                                            CODE : e.Item[i].ItemCode,
+                                                            NAME : e.Item[i].ItemName,
+                                                            ITEM_TYPE : e.Item[i].ItemType,
+                                                            UNIT : e.Item[i].ItemUnit,
+                                                            COST_PRICE : e.Item[i].ItemCost,
+                                                            VAT : e.Item[i].ItemVat
+                                                        }
+                                                        await this.addItem(tmpItem,null,e.Item[i].Quantity,e.Item[i].UnitPrice,e.Item[i].Discount,e.Item[i].DiscountRate)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpMissCodes.push("'" +e.Item[i].ProductCode + "'")
+                                                    }
+                                                }
+                                                this.grid.devGrid.endUpdate()
+                                                if(tmpMissCodes.length > 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+                                                    }
+                                                
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                            console.log(e)
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                         onClick={()=>
@@ -2417,6 +2522,10 @@ export default class rebateInvoice extends DocBase
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Document AI PopUp */}
+                    <div>
+                        <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>
