@@ -92,7 +92,8 @@ export default class NdDocAi extends Base
                                         e.key.ItemType = data[0].ITEM_TYPE  
                                         e.key.ItemUnit = data[0].UNIT
                                         e.key.ItemVat = data[0].VAT
-                                                                          
+                                                                   
+                                        this.grdList.devGrid.refresh
                                     }
                             }
                         },

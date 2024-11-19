@@ -1521,5 +1521,21 @@ export const prm =
             CAPTION : "Pos Adisyon kullanımı"
         }
     },
-    //#endregion
+    //#Lcd kucuk ekrana giriş yazısı eklemek
+    {
+        TYPE : 0,
+        ID :"LcdEcranText",
+        VALUE : "Bonjour",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos lcd Ekran Çıkacak yazısı"
+        }
+    },
+   
 ]
