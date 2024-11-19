@@ -21,6 +21,7 @@ export default class Dashboard extends React.PureComponent
     this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0};
     this.t = App.instance.lang.getFixedT(null ,null ,"dashboard")
     this.date = moment(new Date()).format("YYYY-MM-DD")
+    this.companyName = ''
     this.query = 
     {
       dailySalesTotal : { query : "SELECT SUM(TOTAL) AS DAILY_SALES_TOTAL FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
@@ -57,6 +58,16 @@ export default class Dashboard extends React.PureComponent
     this.getSalesCount();
     this.getBestItemGroup();
     this.getExtra()
+    let tmpQuery = 
+    {
+        query : " SELECT TOP 1 * FROM COMPANY_VW_01",
+    }
+    let tmpResult = (await this.core.sql.execute(tmpQuery)).result.recordset
+
+    if(typeof tmpResult[0] != 'undefined')
+    {
+        this.companyName = tmpResult[0].NAME
+    }
   }
   async getBestItemGroup()
   {
@@ -221,6 +232,11 @@ export default class Dashboard extends React.PureComponent
     return(
       <ScrollView>
         <div className="row py-1 px-3">
+        <div className="col-sm-12 col-md-6 p-1">
+          <div className="text-center">
+                  <h5 className="card-title">{this.companyName}</h5>
+                </div>
+          </div>
           <div className="col-sm-12 col-md-6 p-1">
             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
             onApply={(async()=>
