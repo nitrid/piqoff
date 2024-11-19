@@ -1907,7 +1907,7 @@ export default class itemCard extends React.PureComponent
                                                     if(e.key.LIST_VAT_TYPE == 0)
                                                     {
                                                         e.key.PRICE_HT =   Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100) )).round(3);
-                                                        e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,2)
+                                                        e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                         e.key.PRICE =  e.key.PRICE_TTC
                                                     }
                                                     else
@@ -1947,7 +1947,7 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 4}}/>
                                                 <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                                 <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
