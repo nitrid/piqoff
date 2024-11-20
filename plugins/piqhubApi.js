@@ -10,8 +10,8 @@ class piqhubApi
         this.core = core.instance;
         this.macid = this.getStableMacId();
         this.checkLicenseExpiry();
-        //this.socketHub = client('http://piqhub.piqsoft.com',
-        this.socketHub = client('http://localhost:81',
+        this.socketHub = client('http://piqhub.piqsoft.com',
+        //this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
