@@ -1,6 +1,5 @@
 import {core} from 'gensrv';
 import client from 'socket.io-client';
-import macid from 'node-machine-id';
 import crypto from 'crypto';
 import * as fs from 'fs';
 
@@ -11,8 +10,8 @@ class piqhubApi
         this.core = core.instance;
         this.macid = this.getStableMacId();
         this.checkLicenseExpiry();
-        this.socketHub = client('http://piqhub.piqsoft.com',
-        //this.socketHub = client('http://localhost:81',
+        //this.socketHub = client('http://piqhub.piqsoft.com',
+        this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
@@ -184,6 +183,17 @@ class piqhubApi
         {
             pCallback(this.macid);
         });
+        pSocket.on('disconnect', () =>
+        {
+            let tmpClients = this.core.socket.clients().filter(client => 
+                client.username !== undefined && 
+                client.sha !== undefined && 
+                client.role !== undefined && 
+                client.app !== undefined
+            ).map(({id, username, sha, role, app}) => ({id, username, sha, role, app}));
+
+            this.socketHub.emit('piqhub-set-info', {macid: this.macid, userList: tmpClients});
+        });
     }
     ioEvents()
     {
@@ -228,6 +238,15 @@ class piqhubApi
                 }
             }
             //***************************************************************************/
+            //SOCKET HUB'A KULLANICI LİSTESİ GÖNDERİLİYOR.
+            let tmpClients = this.core.socket.clients().filter(client => 
+                client.username !== undefined && 
+                client.sha !== undefined && 
+                client.role !== undefined && 
+                client.app !== undefined
+            ).map(({id, username, sha, role, app}) => ({id, username, sha, role, app}));
+            
+            this.socketHub.emit('piqhub-set-info', {macid: this.macid, userList: tmpClients});
         })
     }
     getLicence(pType,pField)
