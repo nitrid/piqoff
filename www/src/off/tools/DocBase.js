@@ -734,6 +734,7 @@ export default class DocBase extends React.PureComponent
 
         this.pg_ordersGrid.onClick = async(data) =>
         {
+            console.log(data)
             App.instance.setState({isExecute:true})
             for (let i = 0; i < data.length; i++) 
             {
@@ -780,7 +781,12 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
                 tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
                 tmpDocItems.COST_PRICE = data[i].COST_PRICE
-            
+                tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
             }
@@ -847,6 +853,11 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
                     await this.docObj.docOrders.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
                 }
@@ -890,11 +901,14 @@ export default class DocBase extends React.PureComponent
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
                 }
-
-                
             }
             this.calculateTotal()
             App.instance.setState({isExecute:false})

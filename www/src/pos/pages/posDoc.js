@@ -4907,16 +4907,23 @@ export default class posDoc extends React.PureComponent
                                                 return
                                             }
 
-                                            let tmpConfObj =
+                                            if(this.posObj.posSale.dt().length > 1)
                                             {
+                                                let tmpConfObj =
+                                                {
                                                 id:'msgLineDeleteConfirm',showTitle:true,title:this.lang.t("msgLineDeleteConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.lang.t("msgLineDeleteConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineDeleteConfirm.msg")}</div>)
+                                                }
+                                                let tmpResult = await dialog(tmpConfObj);
+                                                if(tmpResult == "btn01")
+                                                {
+                                                    this.popRowDeleteDesc.show()
+                                                }
                                             }
-                                            let tmpResult = await dialog(tmpConfObj);
-                                            if(tmpResult == "btn01")
+                                            else
                                             {
-                                                this.popRowDeleteDesc.show()
+                                                this.btnDelete.props.onClick()
                                             }
                                         }
                                         else
