@@ -354,7 +354,7 @@ export default class Sale extends React.PureComponent
                 tmpPrice = tmpData.result.recordset[0].PRICE
             }
         }
-        return Number(tmpPrice).round(2)
+        return Number(tmpPrice).round(3)
        
     }
     async _customerSearch()

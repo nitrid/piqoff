@@ -29,7 +29,7 @@ const sip_01_001 =
         clmOutputName : "Nom fournisseur",
         clmDate: "Date",
         clmVat : "TVA",
-        clmAmount : "Total" ,
+        clmAmount : "Total HT" ,
         clmTotal : "Total",
         clmInputName : "Réserve",
     },

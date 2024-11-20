@@ -192,6 +192,8 @@ export default class salesPairing extends React.PureComponent
                 await this.unitDt.refresh()
                 this.cmbUnit.setData(this.unitDt)
 
+                console.log(this.unitDt)
+                console.log(this.itemDt[0].UNIT_GUID)
                 if(this.unitDt.length > 0)
                 {
                     if(this.itemDt[0].UNIT_GUID != '00000000-0000-0000-0000-000000000000')
@@ -418,7 +420,7 @@ export default class salesPairing extends React.PureComponent
     }
     async onClickOrdersShortcut()
     {
-        this.txtOrderRef = ''
+        this.txtOrderRef.value = ''
         this.pageView.activePage('Orders')
     }
     async ordersSelect(pGuid)
@@ -435,6 +437,27 @@ export default class salesPairing extends React.PureComponent
         }
         if(typeof pGuid != 'undefined')
         {
+            console.log(pGuid)
+            if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'GetOldDispatch'}).getValue())
+            {
+                console.log(111)
+                let tmpQuery = 
+                {
+                    query :"SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [pGuid]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                console.log(tmpData)
+                if(tmpData.result.recordset.length > 0)
+                {
+                    await this.getDoc(tmpData.result.recordset[0].DOC_TO,'',0)
+                    this.orderGuid = pGuid
+                    this.onClickBarcodeShortcut()
+                    return
+                }
+                console.log(2222)
+            }
             let tmpQuery = 
             {
                 query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40 AND DOC.REF = DOC_VW_01.REF) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
@@ -443,7 +466,6 @@ export default class salesPairing extends React.PureComponent
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT,
@@ -1442,7 +1464,7 @@ export default class salesPairing extends React.PureComponent
                                     <div className='row pb-2'>
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblOrderRef")}</div>
                                         <div className='col-9'>
-                                            <NdTextBox simple={true}  parent={this} id={"txtOrderRef"}  
+                                            <NdTextBox simple={true}  parent={this} id="txtOrderRef"
                                             onKeyUp={(async(e)=>
                                             {
                                                 if(e.event.key == 'Enter')
@@ -1455,6 +1477,7 @@ export default class salesPairing extends React.PureComponent
                                                     }
                                         
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         this.ordersSelect(tmpData.result.recordset[0].GUID)

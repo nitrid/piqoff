@@ -25,7 +25,7 @@ const sip_01_002 =
         clmInputName : "Nom Client",
         clmDate: "Date",
         clmVat : "TVA",
-        clmAmount : "Total" ,
+        clmAmount : "Total HT" ,
         clmTotal : "Total",
         clmOutputName :"Réserve",
         clmMainGroup : "Client Groupe"
@@ -47,7 +47,7 @@ const sip_01_002 =
     {  
         title: "Dikkat",  // BAK
         btn01: "Tamam",  // BAK
-        msg: "Seçilen Evrakları İrsaliyeye çevrildi.."           // BAK
+        msg: "Seçilen Evraklar İrsaliyeye çevrildi.."           // BAK
     },
     btnView : "Aperçu", 
     btnMailsend : "Envoyer E-Mail", 

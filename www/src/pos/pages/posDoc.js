@@ -637,11 +637,11 @@ export default class posDoc extends React.PureComponent
         this.parkCount.value = this.parkDt.length
         
         setTimeout(() => 
-        {
+        {           
             this.posLcd.print
             ({
                 blink : 0,
-                text :  "Bonjour".space(20) + (moment(new Date()).format("DD.MM.YYYY") + '-' + 'PIQSOFT').space(20)
+                text : this.prmObj.filter({ID:'LcdEcranText',TYPE:0,USERS:this.user.CODE}).getValue().space(20)  + (moment(new Date()).format("DD.MM.YYYY") + '-' + 'PIQSOFT').space(20)                
             })    
         }, 1000);
         this.core.util.writeLog("calcGrandTotal : 01")

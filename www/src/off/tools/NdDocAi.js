@@ -11,6 +11,8 @@ import NdGrid,{Column,Editing,Paging,Pager,KeyboardNavigation,Scrolling} from '.
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
+
 
 export default class NdDocAi extends Base
 {
@@ -21,6 +23,7 @@ export default class NdDocAi extends Base
         this.files = []
         this.importData = undefined
         this.customer = '00000000-0000-0000-0000-000000000000'
+        this._cellRoleRender = this._cellRoleRender.bind(this)
     }
     async show(pCustomer)
     {
@@ -45,13 +48,62 @@ export default class NdDocAi extends Base
                 tmpValue = this.parseNumber(pData.value.amount)
             }
 
-            if(typeof pData.kind != 'undefined' && pData.kind == 'number')
+            if(typeof pData.kind != 'undefined' && pData.kind == 'number' && (typeof pType != 'undefined' && pType != 'string'))
             {
+                console.log(pData)
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
         }
         return tmpValue
     }
+    _cellRoleRender(e)
+    {
+        console.log(this)
+        if(e.column.dataField == "ItemCode")
+        {
+            return (
+                <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
+                upper={true}
+                value={e.value}
+
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
+
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async()  =>
+                            {
+                                this.pg_txtItemsCode.show()
+                                this.pg_txtItemsCode.onClick = (data) =>
+                                    {
+                                        console.log(e)
+                                        console.log(this.grdList.devGrid.refresh())
+                                        console.log(e.rowIndex)        
+                                        e.key.ItemCode = data[0].CODE  
+                                        e.key.ItemCost = data[0].COST_PRICE  
+                                        e.key.ItemGuid = data[0].GUID  
+                                        e.key.ItemName = data[0].NAME  
+                                        e.key.ItemType = data[0].ITEM_TYPE  
+                                        e.key.ItemUnit = data[0].UNIT
+                                        e.key.ItemVat = data[0].VAT
+                                                                   
+                                        this.grdList.devGrid.refresh
+                                    }
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+    }    
     parseNumber(value) 
     {
         if(typeof value == 'undefined')
@@ -140,7 +192,12 @@ export default class NdDocAi extends Base
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
                 pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice)).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
-
+                pData.Item[i].DiscountRate = typeof this.getValue(pData.Item[i].DiscountRate,'string') == 'undefined' ? 0 : this.getValue(pData.Item[i].DiscountRate,'string')
+                if(typeof pData.Item[i].DiscountRate == 'string')
+                {
+                    pData.Item[i].DiscountRate = parseFloat(pData.Item[i].DiscountRate.replace("%", "").trim());
+                }
+                
                 let tmpItem = await this.getItem(pData.Item[i].ProductCode,pData.CustomerGuid)
                 if(typeof tmpItem != 'undefined')
                 {
@@ -152,6 +209,7 @@ export default class NdDocAi extends Base
                     pData.Item[i].ItemUnit = tmpItem.UNIT
                     pData.Item[i].ItemCost = tmpItem.COST_PRICE
                     pData.Item[i].ItemVat = tmpItem.VAT
+               
                 }
                 else
                 {
@@ -166,6 +224,8 @@ export default class NdDocAi extends Base
                 }
             }
 
+
+            pData.Item = pData.Item.filter(item => typeof item.ProductCode === "string" && item.ProductCode.trim() !== "");
             await this.grdList.dataRefresh({source:pData.Item});
             this.importData = pData    
         }
@@ -277,6 +337,7 @@ export default class NdDocAi extends Base
     render()
     {
         return(
+            <div>
             <NdPopUp parent={this} id={"popDocAi"} 
             visible={false}
             showCloseButton={true}
@@ -391,6 +452,7 @@ export default class NdDocAi extends Base
                                     {
                                         e.cellElement.style.backgroundColor = "red"
                                     }
+                                   
                                     if(e.rowType === "data" && e.column.dataField === "ItemName" && e.data.ItemCode == '')
                                     {
                                         e.cellElement.style.backgroundColor = "red"
@@ -414,12 +476,12 @@ export default class NdDocAi extends Base
                                     <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Scrolling mode="standart" />
                                     <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
-                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={false} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={true} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                     <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} allowEditing={false} width={120} allowHeaderFiltering={false}/>
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
                                     <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.Unit}}/>
                                     <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                    <Column dataField="Discount" caption={this.lang.t("popDocAi.clmDiscount")} dataType={'number'}  format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
+                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                     <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                 </NdGrid>
                             </div>
@@ -455,6 +517,47 @@ export default class NdDocAi extends Base
                     </Item>
                 </Form>
             </NdPopUp>
+            <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"} 
+            visible={false}
+            position={{of:'#root'}} 
+            showTitle={true} 
+            showBorders={true}
+            width={'90%'}
+            height={'90%'}
+            title={this.t("pg_txtItemsCode.title")} 
+            search={true}
+            data = 
+            {{
+                source:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,NAME,STATUS,0 AS ITEM_TYPE,UNIT,COST_PRICE,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        param : ['VAL:string|50']
+                    },
+                    sql:this.core.sql
+                }
+            }}
+            button=
+            {
+                [
+                    {
+                        id:'tst',
+                        icon:'more',
+                        onClick:()=>
+                        {
+                            console.log(1111)
+                        }
+                    }
+                ]
+            }
+            deferRendering={true}
+            >
+                <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={'20%'} />
+                <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
+                <Column dataField="STATUS" caption={this.t("pg_txtItemsCode.clmStatus")} width={'10%'} />
+            </NdPopGrid>
+        </div>
         )
     }
 }
