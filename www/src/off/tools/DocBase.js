@@ -2866,12 +2866,78 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtSenderName")} alignment="right" />
-                                <NdTextBox id="txtSenderName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtSenderName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:async()=>
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT SENDER_NAME AS NAME,  SENDER_ADRESS AS ADRESS , SENDER_CITY AS CITY,  SENDER_ZIPCODE AS ZIPCODE, SENDER_COUNTRY AS COUNTRY FROM TRANSPORT_INFORMATION WHERE SENDER_NAME IS NOT NULL AND SENDER_NAME <> '' GROUP BY SENDER_NAME, SENDER_ADRESS, SENDER_CITY, SENDER_ZIPCODE, SENDER_COUNTRY ORDER BY SENDER_NAME ASC",
+                                                }
+                                                
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    this.pg_transportSelect.setData(tmpData.result.recordset)
+                                                }
+                                            
+                                                this.pg_transportSelect.show()
+                                                this.pg_transportSelect.onClick = async(data) =>
+                                                {
+                                                    console.log(data[0].NAME)
+                                                    this.txtSenderName.value = data[0].NAME
+                                                    this.txtSenderAdress.value = data[0].ADRESS
+                                                    this.txtSenderCity.value = data[0].CITY
+                                                    this.txtSenderZipCode.value = data[0].ZIPCODE
+                                                    this.cmbSenderCountry.value = data[0].COUNTRY
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtRecieverName")} alignment="right" />
-                                <NdTextBox id="txtRecieverName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtRecieverName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:async()=>
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT RECIEVER_NAME AS NAME, RECIEVER_ADRESS AS ADRESS, RECIEVER_CITY AS CITY, RECIEVER_ZIPCODE AS ZIPCODE, RECIEVER_COUNTRY AS COUNTRY FROM TRANSPORT_INFORMATION WHERE RECIEVER_NAME IS NOT NULL AND RECIEVER_NAME <> '' GROUP BY RECIEVER_NAME, RECIEVER_ADRESS, RECIEVER_CITY, RECIEVER_ZIPCODE, RECIEVER_COUNTRY ORDER BY RECIEVER_NAME ASC"
+                                                }
+                                                
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    this.pg_transportSelect.setData(tmpData.result.recordset)
+                                                }
+                                            
+                                                this.pg_transportSelect.show()
+                                                this.pg_transportSelect.onClick = async(data) =>
+                                                {
+                                                    console.log(data[0].NAME)
+                                                    this.txtRecieverName.value = data[0].NAME
+                                                    this.txtRecieverAdress.value = data[0].ADRESS
+                                                    this.txtRecieverCity.value = data[0].CITY
+                                                    this.txtRecieverZipCode.value = data[0].ZIPCODE
+                                                    this.cmbRecieverCountry.value = data[0].COUNTRY
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }>
                                 </NdTextBox>
                             </Item>
                             <Item>
@@ -2896,17 +2962,17 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtSenderZipCode")} alignment="right" />
-                                <NdTextBox id="txtRecieverCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtSenderZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtRecieverZipCode")} alignment="right" />
-                                <NdTextBox id="txtSenderZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtRecieverZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.cmbSenderCountry")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                <NdSelectBox simple={true} parent={this} id="cmbSenderCountry"
                                 displayExpr="NAME"                       
                                 valueExpr="NAME"
                                 value="FRANCE"
@@ -2919,7 +2985,7 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.cmbRecieverCountry")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                <NdSelectBox simple={true} parent={this} id="cmbRecieverCountry"
                                 displayExpr="NAME"                       
                                 valueExpr="NAME"
                                 value="FRANCE"
@@ -2984,7 +3050,27 @@ export default class DocBase extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
-                </div>               
+                </div>   
+                 {/* Cari Seçim PopUp */}
+                 <div>
+                    <NdPopGrid id={"pg_transportSelect"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"single"}}
+                    title={this.t("pg_transportSelect.title")} //
+                    deferRendering={false}
+                    >
+                        <Column dataField="NAME" caption={this.t("pg_transportSelect.clmName")} width={150} defaultSortOrder="asc"/>
+                        <Column dataField="ADRESS" caption={this.t("pg_transportSelect.clmAdress")} width={500}  />
+                        <Column dataField="CITY" caption={this.t("pg_transportSelect.clmCity")} width={150} />
+                        <Column dataField="ZIPCODE" caption={this.t("pg_transportSelect.clmZipCode")} width={150} />
+                        <Column dataField="COUNTRY" caption={this.t("pg_transportSelect.clmCountry")} width={150} />
+                    </NdPopGrid>
+                </div>            
             </div>
         )
     }
