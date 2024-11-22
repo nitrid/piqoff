@@ -27,7 +27,7 @@ export const prm =
         },
         SPECIAL : "",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "TAB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -45,7 +45,7 @@ export const prm =
         },
         SPECIAL : "",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "TAB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -63,7 +63,7 @@ export const prm =
         },
         SPECIAL : "",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "TAB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -81,7 +81,7 @@ export const prm =
         },
         SPECIAL : "",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "TAB",
         VIEW : 
         {
             TYPE : "checkbox",
