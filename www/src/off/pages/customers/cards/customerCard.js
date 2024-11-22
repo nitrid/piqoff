@@ -142,6 +142,11 @@ export default class CustomerCard extends React.PureComponent
             this.txtTitle.readOnly = false
             this.setState({officalVisible:true})
         }
+        else if(pType == 2)
+        {
+            this.txtTitle.readOnly = false
+            this.setState({officalVisible:true})
+        }
     }
     async checkCustomer(pCode)
     {

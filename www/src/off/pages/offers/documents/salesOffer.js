@@ -41,7 +41,6 @@ export default class salesOffer extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm)
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
@@ -631,7 +630,6 @@ export default class salesOffer extends DocBase
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj)
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -679,6 +677,8 @@ export default class salesOffer extends DocBase
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(await this.docObj.transportInfermotion.save())
+                                                console.log(this.docObj)
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -872,6 +872,8 @@ export default class salesOffer extends DocBase
                                         icon: 'columnproperties',
                                         onClick: async () => 
                                         {
+                                            console.log(this.docObj.transportInfermotion.dt())
+                                            console.log(this.docObj.dt()[0].GUID)
                                             if(this.docObj.transportInfermotion.dt().length == 0)
                                             {
                                                 this.docObj.transportInfermotion.addEmpty()
@@ -1460,7 +1462,6 @@ export default class salesOffer extends DocBase
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbDepot.value,this.cmbPricingList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            console.log(tmpData)
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))

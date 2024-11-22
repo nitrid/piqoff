@@ -73,6 +73,15 @@ const tkf_02_002 =
         clmName : "ÜRÜN ADI",
         clmPrice : "SATIŞ FİYATI"
     },
+    pg_transportSelect : 
+    {
+        title : "Taşıyıcı Seçimi",
+        clmName : "TAŞIYICI ADI",
+        clmAdress : "ADRES",
+        clmCity : "ŞEHİR",
+        clmZipCode : "POSTA KODU",
+        clmCountry : "ÜLKE",
+    },
     grdSlsOffer: 
     {
         clmItemCode: "Kodu",

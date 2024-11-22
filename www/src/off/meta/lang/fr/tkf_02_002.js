@@ -73,6 +73,15 @@ const tkf_02_002 =
         clmName : "Nom Produit",
         clmPrice : "Prix de Vente" 
     },
+    pg_transportSelect : 
+    {
+        title : "Choix Transporteur",
+        clmName : "TRANSPORTEUR",
+        clmAdress : "ADRESSE",
+        clmCity : "VILLE",
+        clmZipCode : "CODE POSTAL",
+        clmCountry : "PAYS",    
+    },  
     grdSlsOffer: 
     {
         clmItemCode: "Code",

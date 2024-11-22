@@ -604,6 +604,12 @@ export const langTr =
         txtSenderNote : "Gönderici Notu",
         txtRecieverNote : "Alıcı Notu",
         txtSenderDate : "Gönderilen Tarih",
-        txtRecieverDate : "Teslim Tarihi"
+        txtRecieverDate : "Teslim Tarihi",
+        selectSenderInfo : "Gönderici Seçimi",
+        selectSenderName : "Gönderici Adı", 
+        selectRecieverInfo : "Alıcı Seçimi",
+        selectRecieverName : "Alıcı Adı",
+        
+        
     },
 }
