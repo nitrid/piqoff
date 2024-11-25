@@ -2998,12 +2998,12 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
-                                <NdTextBox id="txtSenderNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtSenderNote" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtRecieverNote")} alignment="right" />
-                                <NdTextBox id="txtRecieverNote" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtRecieverNote" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <EmptyItem/>
@@ -3012,12 +3012,12 @@ export default class DocBase extends React.PureComponent
                             <EmptyItem/>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtTransporter")} alignment="right" />
-                                <NdTextBox id="txtTransporter" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtTransporter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtTransporterPlate")} alignment="right" />
-                                <NdTextBox id="txtTransporterPlate" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER_PLATE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
+                                <NdTextBox id="txtTransporterPlate" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER_PLATE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
                             </Item>
                             <Item>

@@ -677,8 +677,8 @@ export default class salesOffer extends DocBase
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                console.log(await this.docObj.transportInfermotion.save())
-                                                console.log(this.docObj)
+                                                console.log(this.docObj.transportInfermotion.dt())
+                                                console.log(this.docObj.transportInfermotion)
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -872,8 +872,6 @@ export default class salesOffer extends DocBase
                                         icon: 'columnproperties',
                                         onClick: async () => 
                                         {
-                                            console.log(this.docObj.transportInfermotion.dt())
-                                            console.log(this.docObj.dt()[0].GUID)
                                             if(this.docObj.transportInfermotion.dt().length == 0)
                                             {
                                                 this.docObj.transportInfermotion.addEmpty()
@@ -884,7 +882,6 @@ export default class salesOffer extends DocBase
                                             }
                                             else
                                             {
-                                              
                                                 this.popTransport.show()
                                             }
                                         }
