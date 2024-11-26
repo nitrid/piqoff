@@ -36,6 +36,7 @@ const pos_02_001 =
         clmTTC : "Toplam",
         clmTicketID :"Fiş I.D",
         clmFacRef : "Fact. No",
+        clmRef : "Ref No",
     },
     pg_txtItem:
     {
