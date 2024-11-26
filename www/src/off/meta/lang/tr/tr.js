@@ -343,6 +343,7 @@ export const langTr =
         fns_04_001 : "Banka Ekstre Raporu",
         fns_04_003 : "Kasa Ekstre Raporu",
         fns_04_002 : "Müşteri Bakiye Raporu",
+        fns_04_004 : "Cari Fatura ve ödeme raporu",
         fns_05 : "Operasyonlar",
         fns_05_001 : "Toplu Tahsilat Girişi",
         fns_05_002 : "Toplu Ödeme Girişi",
@@ -604,6 +605,12 @@ export const langTr =
         txtSenderNote : "Gönderici Notu",
         txtRecieverNote : "Alıcı Notu",
         txtSenderDate : "Gönderilen Tarih",
-        txtRecieverDate : "Teslim Tarihi"
+        txtRecieverDate : "Teslim Tarihi",
+        selectSenderInfo : "Gönderici Seçimi",
+        selectSenderName : "Gönderici Adı", 
+        selectRecieverInfo : "Alıcı Seçimi",
+        selectRecieverName : "Alıcı Adı",
+        
+        
     },
 }

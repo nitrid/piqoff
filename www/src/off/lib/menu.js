@@ -1225,8 +1225,13 @@ export const menu = (e) =>
                             id: 'fns_04_002',
                             text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
+                        },
+                        {
+                            id: 'fns_04_004',
+                            text: e.t('menuOff.fns_04_004'),//'Cari Fatura ve ödeme raporu',
+                            path: 'finance/report/InvoicesAndCollectionReport'
                         }
-                    ]
+                    ]   
                 }
             ]
         },

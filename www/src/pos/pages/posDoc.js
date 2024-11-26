@@ -4907,16 +4907,23 @@ export default class posDoc extends React.PureComponent
                                                 return
                                             }
 
-                                            let tmpConfObj =
+                                            if(this.posObj.posSale.dt().length > 1)
                                             {
+                                                let tmpConfObj =
+                                                {
                                                 id:'msgLineDeleteConfirm',showTitle:true,title:this.lang.t("msgLineDeleteConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.lang.t("msgLineDeleteConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineDeleteConfirm.msg")}</div>)
+                                                }
+                                                let tmpResult = await dialog(tmpConfObj);
+                                                if(tmpResult == "btn01")
+                                                {
+                                                    this.popRowDeleteDesc.show()
+                                                }
                                             }
-                                            let tmpResult = await dialog(tmpConfObj);
-                                            if(tmpResult == "btn01")
+                                            else
                                             {
-                                                this.popRowDeleteDesc.show()
+                                                this.btnDelete.props.onClick()
                                             }
                                         }
                                         else
@@ -7348,9 +7355,9 @@ export default class posDoc extends React.PureComponent
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
                                                     "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
-                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY LDATE DESC",
-                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25","CUSTOMER_CODE:string|50"],
-                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value,this.txtPopLastCustomer.value]
+                                                    "((LUSER = @USER) OR (@USER = '')) AND ((DEVICE = @DEVICE) OR (@DEVICE = '')) AND STATUS = 1 AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY LDATE DESC",
+                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25","CUSTOMER_CODE:string|50","DEVICE:string|50"],
+                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value,this.txtPopLastCustomer.value,this.cmbDeviceFilter.value]
                                         }
                                     }
                                     else
@@ -7418,6 +7425,20 @@ export default class posDoc extends React.PureComponent
                             (
                                 <NbKeyboard id={"keyboardRef"} parent={this} inputName={"txtPopLastRefNo"} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                             )}
+                             <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbDeviceFilter" 
+                                displayExpr={'NAME'} valueExpr={'CODE'} value={''}
+                                data={{source:{
+                                    select:{
+                                        query : "SELECT '' AS CODE,'ALL DEVICES' AS NAME UNION ALL SELECT CODE,NAME AS NAME FROM POS_DEVICE ",
+                                        local:{
+                                            type : "select",
+                                            query:"SELECT '' AS CODE,'ALL DEVICES' AS NAME UNION ALL SELECT CODE,NAME AS NAME FROM POS_DEVICE;"
+                                        }
+                                    },
+                                    sql:this.core.sql
+                                }}}/>
+                            </div>
                         </div>
                         {/* grdLastPos */}
                         <div className="row py-1">
