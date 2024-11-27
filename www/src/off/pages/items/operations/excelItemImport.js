@@ -55,13 +55,14 @@ export default class excelItemImport extends React.PureComponent
        this.txtPopSalePrice.value = "SALE_PRICE",
        this.txtPopUnitId.value = "UNIT_CODE",
        this.txtPopUnitId2.value = "UNIT_CODE_2",
-       this.txtPopFactor2.value = "CUSTOMS",
-       this.txtPopBarcode.value = "FACTOR_2",
+       this.txtPopFactor2.value = "FACTOR_2",
+       this.txtPopBarcode.value = "BARCODE",
        this.txtPopMulticode.value = "MULTICODE",
        this.customerGuid = ''
     }
     async excelAdd(pData)
     {
+        console.log(pData)
         let Empty = {
            CUSER  : this.user.CODE,
            TYPE   : 0,
@@ -148,6 +149,7 @@ export default class excelItemImport extends React.PureComponent
                 tmpEmpty.BARCODE = typeof pData[i].BARCODE == 'undefined' ? '' : pData[i].BARCODE;
                 tmpEmpty.MULTICODE = typeof pData[i].MULTICODE == 'undefined' ? '' : pData[i].MULTICODE;
                 tmpEmpty.FACTOR_2 = typeof pData[i].FACTOR_2 == 'undefined' ? 1 : pData[i].FACTOR_2;
+                tmpEmpty.CUSTOMS = typeof pData[i].CUSTOMS == 'undefined' ? '' : pData[i].CUSTOMS;
 
                 this.excelData.push(tmpEmpty)
             }
