@@ -109,7 +109,11 @@ const pos_02_001 =
     btnMailSend : "Envoyer E-mail",  
     mailPopup : 
     {
-        title : "Saisie d'adresse E-mail"  
+        title : "Saisie d'adresse E-mail",  
+        cmbMailAddress : "Adresse E-mail",
+        txtMailSubject : "Sujet",
+        txtSendMail : "Adresse E-mail",
+        txtMailHtmlEditor : "Contenu"
     },
     msgFacture:
     {

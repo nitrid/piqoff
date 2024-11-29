@@ -108,7 +108,11 @@ const pos_02_001 =
     btnMailSend : "Mail Gönder", 
     mailPopup : 
     {
-        title : "Mail Adresi Girişi"
+        title : "Mail Adresi Girişi",
+        cmbMailAddress : "Gönderici Mail Adresi",
+        txtMailSubject : "Mail Konusu",
+        txtSendMail : "Mail Gönderilecek Adres",
+        txtMailHtmlEditor : "Mail İçeriği"
     },
     msgFacture:
     {
