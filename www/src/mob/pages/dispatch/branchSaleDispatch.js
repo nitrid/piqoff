@@ -562,7 +562,7 @@ export default class salesDispatch extends React.PureComponent
                                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                                 
-                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()?.value ==  true)
+                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() ==  true)
                                                                     {
                                                                         this.txtRef.value = data[0].CODE;
                                                                         this.txtRef.props.onChange(data[0].CODE)

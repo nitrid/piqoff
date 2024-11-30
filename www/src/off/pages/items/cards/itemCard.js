@@ -709,8 +709,9 @@ export default class itemCard extends React.PureComponent
                 this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
             }
         }
-        if(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue().value)
+        if(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue())
         {
+            console.log(111)
             let tmpQuery = 
             {
                 query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND REBATE = 0 AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
@@ -719,6 +720,7 @@ export default class itemCard extends React.PureComponent
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             
+            console.log(tmpData)
             if(tmpData.result.recordset.length >0)
             {
                 let tmpItemQuery = 
@@ -739,7 +741,7 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
-
+                    console.log(tmpServices)
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
                         let tmpQuantity = 0
