@@ -77,7 +77,7 @@ export default class rebateDispatch extends DocBase
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue() == true)
         {
             this.txtRefno.value = Math.floor(Date.now() / 1000)
         }
@@ -849,7 +849,7 @@ export default class rebateDispatch extends DocBase
                                             maxLength={32}
                                             onChange={(async(e)=>
                                             {
-                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
+                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue() == false)
                                                 {
                                                     let tmpQuery = 
                                                     {
