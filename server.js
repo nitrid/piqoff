@@ -1,8 +1,22 @@
 import {core} from 'gensrv'
-import config from './config.js'
+import fs from 'fs';
+import piqhubApi from './piqhub.js';
 
-let gensrv = new core(config);
-gensrv.listen(config.port);
+let piqhub = new piqhubApi();
+
+if (fs.existsSync('./config.js')) 
+{
+    let config = (await import('./config.js')).default;
+    let gensrv = new core(config);    
+    gensrv.listen(config.port);
+    piqhub.coreInit();
+
+    await piqhub.getCustomerFiles(config.macId);
+}
+else
+{
+    console.error('Config file not found');
+}
 
 const originalLog = console.log;
 const originalError = console.error;

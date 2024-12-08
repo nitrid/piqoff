@@ -11,7 +11,9 @@ App.prototype.init = async function()
 
   try 
   {
-    pluginsConf = require('../../config.js').default;
+    const response = await fetch('/config.js');
+    const configText = await response.text();
+    pluginsConf = eval('(' + configText.replace('export default','').replace(/;$/, '') + ')');
   } 
   catch (error) 
   {
