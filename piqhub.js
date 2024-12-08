@@ -7,6 +7,7 @@ import axios from 'axios';
 import AdmZip from 'adm-zip';
 import { promisify } from 'util';
 import { fileURLToPath } from 'url';
+import { fork } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,14 +18,18 @@ export default class piqhubApi
     {
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
-        this.socketHub = client('http://piqhub.piqsoft.com',
-        //this.socketHub = client('http://localhost:81',
+        //this.socketHub = client('http://piqhub.piqsoft.com',
+        this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
             reconnectionDelayMax: 5000,
-            timeout: 20000,
+            timeout: 60000,
+            query: 
+            {
+                macId: this.macId
+            }
         });
 
         this.ioEvents()        
@@ -443,32 +448,103 @@ export default class piqhubApi
     {
         try 
         {
-            progressCallback({
-                status: 'downloading',
-                file: 'public.zip',
-                progress: 0
-            });
-
             const response = await axios({
                 method: 'get',
                 url: `https://piqhub.piqsoft.com/api/version/${versionId}/public.zip`,
-                responseType: 'arraybuffer'
-            });
-
-            progressCallback({
-                status: 'extracting',
-                file: 'public.zip',
-                progress: 50
+                responseType: 'arraybuffer',
+                onDownloadProgress: (progressEvent) => 
+                {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    progressCallback(
+                    {
+                        status: 'downloading',
+                        file: 'public.zip',
+                        progress: percentCompleted
+                    });
+                }
             });
 
             const tempZipPath = path.join(__dirname, 'temp.zip');
             await promisify(fs.writeFile)(tempZipPath, response.data);
 
-            const zip = new AdmZip(tempZipPath);
-            zip.extractAllTo(__dirname, true);
-            await promisify(fs.unlink)(tempZipPath);
-
             progressCallback({
+                status: 'extracting',
+                file: 'public.zip',
+                progress: 0
+            });
+
+            // Zip işlemini child process'te yap
+            await new Promise((resolve, reject) => 
+            {
+                const child = fork('-e', [`
+                    const AdmZip = require('adm-zip');
+                    const fs = require('fs');
+
+                    process.on('message', (data) => 
+                    {
+                        try 
+                        {
+                            const zip = new AdmZip(data.zipPath);
+                            const entries = zip.getEntries();
+                            const totalEntries = entries.length;
+                            let extractedEntries = 0;
+                            let lastProgressTime = Date.now();
+                            const progressInterval = 1000; // 1 saniye
+
+                            entries.forEach((entry) => 
+                            {
+                                zip.extractEntryTo(entry, data.targetPath, true, true);
+                                extractedEntries++;
+                                
+                                // Her 1 saniyede bir progress gönder
+                                const now = Date.now();
+                                if (now - lastProgressTime >= progressInterval || extractedEntries === totalEntries) 
+                                {
+                                    lastProgressTime = now;
+                                    process.send(
+                                    {
+                                        status: 'progress',
+                                        file: entry.entryName,
+                                        filesExtracted: extractedEntries,
+                                        totalFiles: totalEntries,
+                                        progress: Math.round((extractedEntries * 100) / totalEntries)
+                                    });
+                                }
+                            });
+
+                            fs.unlinkSync(data.zipPath);
+                            process.send({ status: 'completed' });
+                        }
+                        catch(error) 
+                        {
+                            process.send({ status: 'error', error: error.message });
+                        }
+                    });
+                `]);
+                
+                child.send({zipPath: tempZipPath,targetPath: __dirname});
+
+                child.on('message', (message) => 
+                {
+                    if (message.status === 'completed') 
+                    {
+                        resolve();
+                    }
+                    else if (message.status === 'error')
+                    {
+                        reject(new Error(message.error));
+                    }
+                    else if (message.status === 'progress') 
+                    {
+                        progressCallback(message);
+                    }
+                });
+
+                child.on('error', reject);
+            });
+
+            progressCallback(
+            {
                 status: 'completed',
                 file: 'public.zip',
                 progress: 100
@@ -479,7 +555,8 @@ export default class piqhubApi
         catch (error) 
         {
             console.error('App files update error');
-            progressCallback({
+            progressCallback(
+            {
                 status: 'error',
                 file: 'public.zip',
                 error: error.message,
