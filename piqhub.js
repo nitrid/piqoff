@@ -18,8 +18,8 @@ export default class piqhubApi
     {
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
-        //this.socketHub = client('http://piqhub.piqsoft.com',
-        this.socketHub = client('http://localhost:81',
+        this.socketHub = client('http://piqhub.piqsoft.com',
+        //this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
