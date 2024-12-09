@@ -19,7 +19,7 @@ export default class userPage extends React.Component
         this.core = App.instance.core;
         this.userObj = new userCls()
         this.RoleCmb = [{CODE:'Administrator',NAME:'Administrator'},{CODE:'User',NAME:'User'},{CODE:'Pos',NAME:'Pos'}]
-        this.AppCmb = [{CODE:'OFF',NAME:'OFF'},{CODE: 'POS',NAME:'POS'},{CODE:'MOB',NAME:'MOB'},{CODE:'TAB',NAME:'TAB'},{CODE:'ADMIN',NAME:'ADMIN'},{CODE:'BOSS',NAME:'BOSS'}]
+        this.AppCmb = [{CODE:'OFF',NAME:'OFF'},{CODE: 'POS',NAME:'POS'},{CODE:'MOB',NAME:'MOB'},{CODE:'TAB',NAME:'TAB'},{CODE:'ADMIN',NAME:'ADMIN'},{CODE:'BOSS',NAME:'BOSS'},{CODE:'POID',NAME:'POID'}]
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
     }

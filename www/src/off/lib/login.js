@@ -515,33 +515,35 @@ export default class Login extends React.PureComponent
                             showTitle={true}
                             container={"#root"} 
                             width={'300'}
-                            height={'250'}
+                            height={'270'}
                             title={this.lang.t("about")}
                             position={{my:'bottom',of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")}/>
-                                </Item>
-                                <Item>
-                                    <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
-                                </Item>
-                                <Item>
-                                    <NbLabel id="abtNrCertificate2" parent={this} value={this.lang.t("abtNrCertificate2")}/>
-                                </Item>
-                                <Item>
-                                    <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
-                                </Item>
-                                <Item>
-                                    <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
-                                </Item>
+                                    <Item>
+                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtNrCertificate2" parent={this} value={this.lang.t("abtNrCertificate2")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtMacId" parent={this} value={"MacId: " + App.instance.macid}/>
+                                    </Item>
                                 </Form>
                             </NdPopUp>
                         </div>  
                    </div>
                 </div>
-                <div className="p-2"></div>
-              
+                <div className="p-2"></div>              
             </div>
         )
     }

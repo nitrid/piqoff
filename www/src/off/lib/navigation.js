@@ -8,8 +8,6 @@ import LoadPanel from 'devextreme-react/load-panel';
 import TabPanel from 'devextreme-react/tab-panel';
 import ContextMenu from 'devextreme-react/context-menu';
 import { dialog } from '../../core/react/devex/dialog.js';
-
-
 // DOUBLE CLİCK ICIN YAPILDI
 let timeout = null;
 export default class Navigation extends React.PureComponent 
@@ -68,6 +66,9 @@ export default class Navigation extends React.PureComponent
         }
         let tmpMenu = await this.mergeMenu(tmpM,tmpMenuData)
 
+        let tmpLicMenu = await App.instance.getLicence('OFF','MENU');
+        tmpMenu = await this.mergeLicMenu(tmpMenu, tmpLicMenu);
+        
         for (let i = 0; i < tmpMenu.length; i++) 
         {
             for (let x = 0; x < tmpMenuData.length; x++) 
@@ -123,6 +124,39 @@ export default class Navigation extends React.PureComponent
                 }
             }.bind(this));
             
+            resolve(tmpMenu)
+        });
+    }
+    async mergeLicMenu(tmpMenu,tmpMenuData)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof tmpMenuData == 'undefined' || tmpMenuData.length == 0)
+            {
+                resolve(tmpMenu)
+                return
+            }
+
+            tmpMenu.forEach(async function (element,index,object)
+            {
+                let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
+
+                if(typeof tmpMerge != 'undefined')
+                {
+                    object[index].visible = true
+                }
+                else
+                {
+                    object[index].visible = false
+                }
+                
+                if(typeof element.items != 'undefined')
+                {
+                    this.mergeLicMenu(element.items,tmpMenuData)
+                    
+                }
+            }.bind(this));
+
             resolve(tmpMenu)
         });
     }
