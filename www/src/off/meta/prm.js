@@ -37,10 +37,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"refForCustomerCode",
-        VALUE : 
-        {
-            value : true
-        },
+        VALUE : true,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -55,10 +52,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"randomRefNo",
-        VALUE : 
-        {
-            value : false
-        },
+        VALUE : false,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -189,10 +183,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"costForInvoıces",
-        VALUE : 
-        {
-            value : false
-        },
+        VALUE : true,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -252,7 +243,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"maxItemPrice",
-        VALUE : 1000,
+        VALUE : 100000,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",

@@ -185,6 +185,7 @@ export default class posDoc extends React.PureComponent
             }
             for (let i = 0; i < this.posObj.dt("POS_SALE").length; i++) 
             {
+                console.log(this.posObj.dt("POS_SALE"))
                 if(this.posObj.dt("POS_SALE")[i].GUID != '00000000-0000-0000-0000-000000000000')
                 {
                     let tmpCtrl = await this.core.local.select({query:"SELECT * FROM POS_SALE_VW_01 WHERE GUID = ?;",values:[this.posObj.dt("POS_SALE")[i].GUID]})
