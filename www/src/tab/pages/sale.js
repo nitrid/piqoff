@@ -827,6 +827,10 @@ export default class Sale extends React.PureComponent
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%"}}
                             onClick={()=>
                             {
+                                for (let i = 0; i < this.docLines.length; i++) 
+                                {
+                                    this.docLines[i].DISCOUNT_RATE =  Number(this.docLines[i].QUANTITY * this.docLines[i].PRICE).rate2Num(this.docLines[i].DISCOUNT,3)
+                                }
                                 this.popCart.show()
                             }}>
                                 <i className="fa-solid fa-cart-shopping"></i>
@@ -1199,6 +1203,7 @@ export default class Sale extends React.PureComponent
                                                     }}
                                                     onRowUpdated={async(e)=>
                                                     {
+                                                        console.log(e.data)
                                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                                         {
                                                             e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -1233,7 +1238,7 @@ export default class Sale extends React.PureComponent
                                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(4);
                                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+                                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)                                                    
                                                         this._calculateTotal()
                                                     }}
                                                     onRowRemoved={async (e)=>
@@ -1255,6 +1260,9 @@ export default class Sale extends React.PureComponent
                                                         <Column dataField="ITEM_NAME" caption={this.t("grdSale.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                                         <Column dataField="QUANTITY" caption={this.t("grdSale.clmQuantity")} width={70} dataType={'number'} />
                                                         <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                                        <Column caption={this.t("grdSale.clmPriceAfterDiscount")} width={90} allowEditing={true} calculateCellValue={(rowData) => {
+                                                            return (rowData.PRICE - (rowData.DISCOUNT / rowData.QUANTITY)).toFixed(2);
+                                                        }} format={{ style: "currency", currency: "EUR", precision: 2 }} />
                                                         <Column dataField="AMOUNT" caption={this.t("grdSale.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                                         <Column dataField="DISCOUNT" caption={this.t("grdSale.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSale.clmDiscountRate")} dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>

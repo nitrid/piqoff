@@ -240,7 +240,7 @@ export default class NbItemPopUp extends NbBase
                                         <NdTextBox id={"txtDiscount"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.DISCOUNT}
                                         onChange={(async(e)=>
                                         {
-                                            console.log(1)
+                                            
                                             this.data.DISCOUNT = this.txtDiscount.value
                                             this._onValueChange(this.data)
                                         }).bind(this)}

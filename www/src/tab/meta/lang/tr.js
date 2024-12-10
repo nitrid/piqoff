@@ -79,11 +79,12 @@ export const langTr =
             clmPrice: "Fiyat",
             clmQuantity : "Adet",
             clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
+            clmDiscountRate : "% İndirim",
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
+            clmPriceAfterDiscount : "İnd. Fiyat",
         },
         msgSave:
         {

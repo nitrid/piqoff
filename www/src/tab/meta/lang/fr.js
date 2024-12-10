@@ -77,11 +77,12 @@ export const langFr =
             clmPrice: "Prix",
             clmQuantity : "Quantité",
             clmDiscount : "Remise",
-            clmDiscountRate : "Remise %",
+            clmDiscountRate : "% Remise",
             clmVat : "TVA",
             clmAmount : "Montant",
             clmTotal : "Montant total",
             clmTotalHt : "Montant Hors Taxe",
+            clmPriceAfterDiscount : "Remise Prix",
         },
         msgSave:
         {
