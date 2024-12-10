@@ -138,7 +138,9 @@ const stk_01_001 =
         clmPrice: "Prix",
         clmGrossMargin: "Marge Brute",
         clmNetMargin: "Marge Nette",
-        clmMargin : "Marge %"
+        clmMargin : "Marge %",
+        clmListName: "Nom de Liste"
+
     },
     grdUnit: 
     {
