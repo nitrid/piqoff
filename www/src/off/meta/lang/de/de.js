@@ -564,5 +564,7 @@ export const langDe =
         txtRecieverNote : "Empfängers Beschreibung",
         txtSenderDate : "Empfängers Datum",
         txtRecieverDate : "Absenders Datum"
-    }
+    },
+    smallImage : "Kleine Bild",
+    bigImage : "Großes Bild"
 }

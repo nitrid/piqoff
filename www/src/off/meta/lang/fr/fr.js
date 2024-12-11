@@ -491,6 +491,7 @@ export const langFr =
         slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
         slsRpt_02_005 : "Rapport détaillé DEB",
         slsRpt_02_006 : "Rapport de facturation des achats ouvertes",
+        slsRpt_02_007 : "Rapport de facturation des achats ouvertes",
     },
     login:
     {
@@ -601,5 +602,7 @@ export const langFr =
         txtRecieverNote : "Instruction Destinataire",
         txtSenderDate : "Chargement Date",
         txtRecieverDate : "Livraison Date"
-    }
+    },
+    smallImage : "Petite image",
+    bigImage : "Grande image"
 }

@@ -610,7 +610,7 @@ export const langTr =
         selectSenderName : "Gönderici Adı", 
         selectRecieverInfo : "Alıcı Seçimi",
         selectRecieverName : "Alıcı Adı",
-        
-        
     },
+    smallImage : "Küçük Resim",
+    bigImage : "Büyük Resim"
 }
