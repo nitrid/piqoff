@@ -16,6 +16,12 @@ export default class piqhubApi
 {
     constructor()
     {
+        this.root_path = '';
+        if(typeof process.env.APP_DIR_PATH != 'undefined')
+        {
+            this.root_path = process.env.APP_DIR_PATH
+        }
+        console.log(this.root_path)
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
         this.socketHub = client('http://piqhub.piqsoft.com',
@@ -109,16 +115,16 @@ export default class piqhubApi
 
                 const zip = new AdmZip(tempZipPath);
                 zip.extractAllTo(__dirname, true);
+
                 await promisify(fs.unlink)(tempZipPath);
             } 
             catch (error) 
             {
-                
+                console.error('Error updating public.zip:', error);
             }
-            // Her durumda local cloud klasörünü kontrol et
+
             if (fs.existsSync('cloud')) 
             {
-                // Cloud klasöründeki tüm dosya ve klasörleri root'a kopyala
                 const cloudFiles = await promisify(fs.readdir)('cloud');
                 for (const file of cloudFiles) 
                 {
@@ -128,17 +134,23 @@ export default class piqhubApi
                     const stats = await promisify(fs.stat)(sourcePath);
                     if (stats.isDirectory()) 
                     {
-                        // Klasör ise recursive kopyala
                         await promisify(fs.cp)(sourcePath, targetPath, { recursive: true });
                     } 
                     else 
                     {
-                        // Dosya ise direkt kopyala
                         await promisify(fs.copyFile)(sourcePath, targetPath);
                     }
                 }
             }
 
+            if (fs.existsSync(path.join(__dirname, 'www', 'public', 'config.js')) && fs.existsSync(path.join(__dirname, 'www', 'public', 'public.zip'))) 
+            {
+                const configContent = fs.readFileSync(path.join(__dirname, 'www', 'public', 'config.js'));
+                const publicZip = new AdmZip(path.join(__dirname, 'www', 'public', 'public.zip'));
+                publicZip.addFile('public/config.js', configContent);
+                publicZip.writeZip(path.join(__dirname, 'www', 'public', 'public.zip'));
+            }
+            
             return true;
         } 
         catch (error) 
@@ -151,7 +163,7 @@ export default class piqhubApi
     {
         try 
         {
-            if (!fs.existsSync('./config.js')) 
+            if (!fs.existsSync(this.root_path + './config.js')) 
             {
                 console.log('Config file not found. License system disabled.');
                 return null;
@@ -162,7 +174,7 @@ export default class piqhubApi
                 return crypto.randomBytes(8).toString('hex').toUpperCase();
             };
 
-            let configContent = fs.readFileSync('./config.js', 'utf8');
+            let configContent = fs.readFileSync(this.root_path + './config.js', 'utf8');
             
             let configMatch = configContent.match(/export\s+default\s+({[\s\S]*})/);
             if (!configMatch) 
@@ -194,7 +206,7 @@ export default class piqhubApi
                 `export default {\n  macId: "${macId}",`
             );
 
-            fs.writeFileSync('./config.js', updatedContent);
+            fs.writeFileSync(this.root_path + '/config.js', updatedContent);
             
             return macId;
         } 
@@ -228,7 +240,7 @@ export default class piqhubApi
                     ...pData,
                     lastUpdate: new Date().toISOString()
                 };
-                fs.writeFileSync('./lic', JSON.stringify(licenseData));
+                fs.writeFileSync(this.root_path + './lic', JSON.stringify(licenseData));
                 console.log('License updated successfully');
                 
                 // package.json'ı doğrudan oku
@@ -237,9 +249,9 @@ export default class piqhubApi
             }
             else
             {
-                if (fs.existsSync('./lic')) 
+                if (fs.existsSync(this.root_path + './lic')) 
                 {
-                    fs.unlinkSync('./lic');
+                    fs.unlinkSync(this.root_path + './lic');
                 }
             }
         });
@@ -248,19 +260,19 @@ export default class piqhubApi
     {
         try 
         {
-            if (!fs.existsSync('./lic')) 
+            if (!fs.existsSync(this.root_path + './lic')) 
             {
                 return;
             }
 
-            const licData = JSON.parse(fs.readFileSync('./lic', 'utf8'));
+            const licData = JSON.parse(fs.readFileSync(this.root_path + './lic', 'utf8'));
             const lastUpdate = new Date(licData.lastUpdate || 0);
             const now = new Date();
             const diffDays = Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
 
             if (diffDays > 15) 
             {
-                fs.unlinkSync('./lic');
+                fs.unlinkSync(this.root_path + './lic');
                 console.log('License expired due to no internet connection for 15 days');
             }
         } 
@@ -334,12 +346,12 @@ export default class piqhubApi
     {
         try
         {
-            if(!fs.existsSync('./lic'))
+            if(!fs.existsSync(this.root_path + './lic'))
             {
                 return null;
             }
-
-            let tmpLicData = fs.readFileSync('./lic','utf8');
+            
+            let tmpLicData = fs.readFileSync(this.root_path + './lic','utf8');
             let tmpLicObj = JSON.parse(tmpLicData);
             
             const lastUpdate = new Date(tmpLicObj.lastUpdate || 0);
@@ -348,7 +360,7 @@ export default class piqhubApi
 
             if (diffDays > 15) 
             {
-                fs.unlinkSync('./lic');
+                fs.unlinkSync(this.root_path + './lic');
                 return null;
             }
 

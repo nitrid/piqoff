@@ -109,6 +109,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/rest")
+            },
+            {
+                directory: path.join(__dirname, "public")
             }
         ],
         port: 3000,
