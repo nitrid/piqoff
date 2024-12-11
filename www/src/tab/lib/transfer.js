@@ -41,11 +41,11 @@ export default class transferCls
     {
         let tmpTbl =
         [
-            //ITEMS_VW_02
+            //ITEMS_TAB_VW_01
             {
-                name : "ITEMS_VW_02",
-                query : `CREATE TABLE IF NOT EXISTS ITEMS_VW_02 (
-                        GUID TEXT PRIMARY KEY,
+                name : "ITEMS_TAB_VW_01",
+                query : `CREATE TABLE IF NOT EXISTS ITEMS_TAB_VW_01 (
+                        GUID TEXT,
                         CODE TEXT,
                         NAME TEXT,
                         VAT REAL,
@@ -55,7 +55,9 @@ export default class transferCls
                         UNIT_NAME TEXT,
                         UNIT_FACTOR REAL,
                         MAIN_GRP TEXT,
-                        MAIN_GRP_NAME TEXT);`
+                        MAIN_GRP_NAME TEXT,
+                        BARCODE TEXT,
+                        FAVORI INTEGER);`
             },
             //ITEM_PRICE_VW_02
             {
@@ -89,22 +91,22 @@ export default class transferCls
     {
         let tmpSchema = 
         [
-            //ITEMS_VW_02
+            //ITEMS_TAB_VW_01
             {
-                name : "ITEMS_VW_02",
+                name : "ITEMS_TAB_VW_01",
                 from : 
                 {
                     type : "select",
-                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,MAIN_GRP,MAIN_GRP_NAME FROM ITEMS_VW_02 WHERE STATUS = 1`,
+                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,MAIN_GRP,MAIN_GRP_NAME,BARCODE,FAVORI FROM ITEMS_TAB_VW_01 WHERE STATUS = 1`,
                 },
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO ITEMS_VW_02 (GUID, CODE, NAME, VAT, PRICE, IMAGE, UNIT, UNIT_NAME, UNIT_FACTOR, MAIN_GRP, MAIN_GRP_NAME) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    query : `INSERT OR REPLACE INTO ITEMS_TAB_VW_01 (GUID, CODE, NAME, VAT, PRICE, IMAGE, UNIT, UNIT_NAME, UNIT_FACTOR, MAIN_GRP, MAIN_GRP_NAME,BARCODE,FAVORI) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values :[{GUID : {map:'GUID'},CODE : {map:'CODE'},NAME : {map:'NAME'},VAT : {map:'VAT'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'},
                             UNIT : {map:'UNIT'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MAIN_GRP : {map:'MAIN_GRP'},
-                            MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'}}]
+                            MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},BARCODE : {map:'BARCODE'},FAVORI : {map:'FAVORI'}},]
                 },
             },
             //ITEM_PRICE_VW_02

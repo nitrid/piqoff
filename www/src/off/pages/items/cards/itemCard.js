@@ -1923,7 +1923,8 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="LIST_NO" caption={this.t("grdPrice.clmListNo")} allowEditing={false}/>
+                                                <Column dataField="LIST_NO" caption={this.t("grdPrice.clmListNo")} width={60} allowEditing={false}/>
+                                                <Column dataField="LIST_NAME" caption={this.t("grdPrice.clmListName")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} visible={false} allowEditing={false}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
