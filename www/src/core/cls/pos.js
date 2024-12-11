@@ -1,7 +1,8 @@
-import { core,dataset,datatable } from "../core.js";
+import { core,dataset,datatable,param } from "../core.js";
 import moment from 'moment';
 import { jsPDF } from "jspdf";
 import "jspdf-barcode";
+import {prm} from '../../off/meta/prm.js'
 
 export class posCls
 {
@@ -1206,6 +1207,9 @@ export class posDeviceCls
         this.payPort = null;
         this.scannerPort = null;
         this.version = "v.1.0.1"
+       
+      
+      
 
         this._initDs();
     }
@@ -1943,32 +1947,27 @@ export class posDeviceCls
         }           
         return docPdf
     }
-    pdfPrint(pData,pMail)
+    pdfPrint(pData,pMail,pSubject,pText)
     {
         return new Promise(async resolve => 
         {
+            if(typeof pSubject == 'undefined')
+            {
+                pSubject = 'Ticket de vente'
+            }
+            if(typeof pText == 'undefined')
+            {
+                let Prm = new param(prm);
+                let sysParam = Prm.filter({TYPE:0})
+                pText =''
+                console.log(sysParam.filter({ID:'posMailExplanation'}).getValue())
+                pText = sysParam.filter({ID:'posMailExplanation'}).getValue()
+            }
             let docPdf = this.pdf(pData)
-
-            let tmpText = "Bonjour Cher Client, \n" + 
-            " \n "+
-           "Merci pour votre achat dans notre magasin. \n" +
-           "Ci-joint votre ticket de caisse. \n" +
-           "Ceci est un e-mail automatique,veuillez ne pas y répondre! \n"+
-           "Pour toute information, vous pouvez nous joindre sur les coordonnées indiquées sur votre ticket de caisse. \n"+
-           " \n"+
-           " \n"+
-           " \n"+
-           " \n"+
-           "Cordialement \n"+
-           " \n"+
-           " \n"+ 
-           "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +
-           " \n"+
-           " \n"+
-           "This message is confidential. Any unauthorised disclosure, use or dissemination, either whole or partial, is prohibited. If you are not the intended recipient of the message, please notify the sender immediatly and delete the message. Thank you. "
             let tmpHtml = ''
             let tmpAttach = btoa(docPdf.output())
-            let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
+            let tmpMailData = {html:tmpHtml,subject:pSubject,sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,html:pText}
+           
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
                 console.log(pResult1)
@@ -2015,6 +2014,7 @@ export class posPromoCls
             TOTAL : 0,
             PROMO_TYPE : 0
         }
+        
 
         this._initDs();
     }

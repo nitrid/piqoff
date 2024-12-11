@@ -492,6 +492,23 @@ export const prm =
             CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
         }
     },
+    //#mail acıklaması parametresi
+    {
+        TYPE : 0,
+        ID :"posMailExplanation",
+        VALUE : "",
+        SPECIAL : "",
+        PAGE : "off",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "html",
+            PAGE_NAME : "Off",
+            CAPTION : "Mail Açıklaması çıkacak yazısı"
+        }
+    },
+   
     //#endregion
     //#region Stok Tanıtım
     //txtRef

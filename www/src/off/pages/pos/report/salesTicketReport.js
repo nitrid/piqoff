@@ -24,6 +24,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
 import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
 import { nf525Cls } from "../../../../core/cls/nf525.js";
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
 
 export default class salesOrdList extends React.PureComponent
@@ -126,7 +127,8 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
                     " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
                     " MAX(FACT_REF) AS FACT_REF, "+
-                    " MAX(PAYMENT) AS PAYMENT  "  +
+                    " MAX(PAYMENT) AS PAYMENT,  "  +
+                    " MAX(REF) AS REF " +
                     " FROM (  "  +
                     " SELECT  "  +
                     "SALE.POS_GUID AS SALE_POS_GUID, "  +
@@ -149,6 +151,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
                     " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
                     " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF," +
+                    " ISNULL((SELECT TOP 1 REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS REF," +
                     " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
                     " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
                     " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
@@ -334,7 +337,7 @@ export default class salesOrdList extends React.PureComponent
             App.instance.setState({isExecute:false})
         }
      
-        this.mailPopup._onClick()
+        this.mailPopup.hide()
     }
     async _factureInsert()
     {
@@ -440,7 +443,7 @@ export default class salesOrdList extends React.PureComponent
                 // console.log(JSON.stringify(tmpArr))
 
                
-                await this.posDevice.pdfPrint(tmpPrint,this.txtMail.value)
+                await this.posDevice.pdfPrint(tmpPrint,this.txtSendMail.value,this.txtMailSubject.value,this.htmlEditor.value)
                 resolve()
             })
         });
@@ -464,7 +467,8 @@ export default class salesOrdList extends React.PureComponent
                                     <NdButton id="btnMailSend" parent={this} icon="message" type="default"
                                     onClick={async ()=>
                                     {
-                                        this.txtMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
+                                        this.txtSendMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
+                                        this.htmlEditor.value = this.sysParam.filter({ID:'posMailExplanation',USERS:this.user.CODE}).getValue()
                                         await this.mailPopup.show().then(async (e) =>
                                         {
                                         });
@@ -742,19 +746,7 @@ export default class salesOrdList extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'tst',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    console.log('click1')
-                                                }
-                                            }
-                                        ]
-                                    }
+                                  
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
@@ -806,8 +798,9 @@ export default class salesOrdList extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
-                                <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={300}/> 
+                                <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/>
+                                <Column dataField="REF" caption={this.t("grdSaleTicketReport.clmRef")} visible={true} />  
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={250}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdSaleTicketReport.clmCardId")} visible={true} width={150}/> 
                                 <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
@@ -815,7 +808,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="TVA" caption={this.t("grdSaleTicketReport.clmVTA")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
                                 <Column dataField="TTC" caption={this.t("grdSaleTicketReport.clmTTC")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>  
                                 <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
-                                <Column dataField="FACT_REF" caption={this.t("grdSaleTicketReport.clmFacRef")} visible={true} /> 
+                                <Column dataField="FACT_REF" caption={this.t("grdSaleTicketReport.clmFacRef")} visible={true} />                                 
                             </NdGrid>
                         </div>
                     </div>
@@ -1297,7 +1290,6 @@ export default class salesOrdList extends React.PureComponent
                                                         value:  [this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].POS_GUID,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset))
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:false})
@@ -1328,49 +1320,74 @@ export default class salesOrdList extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>
-                    {/* Mail PopUp */}
+                    {/* Mail Send PopUp */}
                     <div>
-                        <NdDialog parent={this} id={"mailPopup"} 
-                        visible={false}                        
+                        <NdPopUp parent={this} id={"mailPopup"} 
+                        visible={false}
+                        showCloseButton={true}
                         showTitle={true}
                         title={this.t("mailPopup.title")}
                         container={"#root"} 
-                        width={"600"}
-                        height={"300"}
-                        position={{of:"#root"}}
+                        width={'600'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        deferRendering={false}
+                       
                         >
-                            {/* txtMail */}
-                            <div className="row pt-1">
-                                <div className="col-12">
-                                    <NdTextBox id="txtMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
-                                    </NdTextBox> 
-                                </div>
-                            </div> 
-                            <div className="row py-1">
-                                <div className="col-6">
-                                    <div className="col-12 px-1">
-                                        <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={async()=>
-                                        {
-                                            this._sendMail()
-                                        }}>
-                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>   
-                                </div>
-                                <div className="col-6">
-                                    <div className="col-12 px-1">
-                                        <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={async()=>
-                                        {
-                                            this.mailPopup._onClick()
-                                        }}>
-                                            <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>   
-                                </div>
-                            </div>     
-                        </NdDialog>
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("mailPopup.cmbMailAddress")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                    >
+                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("mailPopup.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={128}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("mailPopup.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={128}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("mailPopup.txtMailHtmlEditor")}>
+                                    </NdHtmlEditor>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className="col-12 px-1">
+                                            <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                            onClick={async()=>
+                                            {
+                                                this._sendMail()
+                                            }}>
+                                                <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                            </NbButton>
+                                        </div> 
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
                     </div>
                 </ScrollView>
             </div>
