@@ -163,7 +163,7 @@ export default class piqhubApi
     {
         try 
         {
-            if (!fs.existsSync(this.root_path + 'config.js')) 
+            if (!fs.existsSync(this.root_path + './config.js')) 
             {
                 console.log('Config file not found. License system disabled.');
                 return null;
@@ -174,7 +174,7 @@ export default class piqhubApi
                 return crypto.randomBytes(8).toString('hex').toUpperCase();
             };
 
-            let configContent = fs.readFileSync(this.root_path + 'config.js', 'utf8');
+            let configContent = fs.readFileSync(this.root_path + './config.js', 'utf8');
             
             let configMatch = configContent.match(/export\s+default\s+({[\s\S]*})/);
             if (!configMatch) 
@@ -206,7 +206,7 @@ export default class piqhubApi
                 `export default {\n  macId: "${macId}",`
             );
 
-            fs.writeFileSync(this.root_path + 'config.js', updatedContent);
+            fs.writeFileSync(this.root_path + '/config.js', updatedContent);
             
             return macId;
         } 
