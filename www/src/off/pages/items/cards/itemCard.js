@@ -1949,9 +1949,9 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 4}}/>
-                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={Number.money.sign +"##0.000"}/>
+                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={Number.money.sign +"##0.000"} allowEditing={false}/>
+                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={Number.money.sign +"##0.000"} allowEditing={false}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
                                                 <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                                 <Column dataField="MARGIN" caption={this.t("grdPrice.clmMargin")} dataType="number" format={"##0.00"} allowEditing={true}/>
