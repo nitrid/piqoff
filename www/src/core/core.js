@@ -2130,6 +2130,16 @@ export class access extends datatable
                 }
             }
         }
+        else
+        {
+            if(this.meta.length == 1)
+            {
+                let tmpData = {...this.meta[0]}
+                tmpData.VALUE = JSON.stringify(arguments[0])
+                
+                this.push(tmpData)
+            }
+        }
     }
 }
 export class menu
