@@ -377,7 +377,7 @@ export default class NdDocAi extends Base
                                 const formData = new FormData();
                                 formData.append('file', this.files[0]);
                                 App.instance.setState({isExecute:true})
-                                fetch('http://docai-gqgud5cga6f2bzb8.francecentral-01.azurewebsites.net/docai', 
+                                fetch('https://docai-gqgud5cga6f2bzb8.francecentral-01.azurewebsites.net/docai', 
                                 {
                                     method: 'POST',
                                     body: formData
