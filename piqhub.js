@@ -21,7 +21,7 @@ export default class piqhubApi
         {
             this.root_path = process.env.APP_DIR_PATH
         }
-        console.log(this.root_path)
+
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
         this.socketHub = client('http://piqhub.piqsoft.com',
@@ -115,31 +115,46 @@ export default class piqhubApi
 
                 const zip = new AdmZip(tempZipPath);
                 zip.extractAllTo(__dirname, true);
-
                 await promisify(fs.unlink)(tempZipPath);
             } 
             catch (error) 
             {
-                console.error('Error updating public.zip:', error);
+                
             }
 
-            if (fs.existsSync('cloud')) 
+            if (fs.existsSync(path.join(this.root_path, 'cloud'))) 
             {
-                const cloudFiles = await promisify(fs.readdir)('cloud');
-                for (const file of cloudFiles) 
+                try 
                 {
-                    const sourcePath = path.join('cloud', file);
-                    const targetPath = path.join(__dirname, file);
+                    const files = fs.readdirSync(path.join(this.root_path, 'cloud'));
                     
-                    const stats = await promisify(fs.stat)(sourcePath);
-                    if (stats.isDirectory()) 
+                    for (const file of files) 
                     {
-                        await promisify(fs.cp)(sourcePath, targetPath, { recursive: true });
-                    } 
-                    else 
-                    {
-                        await promisify(fs.copyFile)(sourcePath, targetPath);
+                        const sourcePath = path.join(this.root_path, 'cloud', file);
+                        const targetPath = path.join(this.root_path, file);
+                        
+                        try 
+                        {
+                            const stats = await promisify(fs.stat)(sourcePath);
+
+                            if (stats.isDirectory()) 
+                            {
+                                await promisify(fs.cp)(sourcePath, targetPath, { recursive: true });
+                            } 
+                            else 
+                            {
+                                await promisify(fs.copyFile)(sourcePath, targetPath);
+                            }
+                        }
+                        catch (error) 
+                        {
+                            
+                        }
                     }
+                }
+                catch (error) 
+                {
+                    
                 }
             }
 
