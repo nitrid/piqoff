@@ -201,12 +201,13 @@ export default class piqhubApi
 
             const macId = generateUniqueId();
 
+            console.log(macId)
             const updatedContent = configContent.replace(
                 /export\s+default\s+{/,
                 `export default {\n  macId: "${macId}",`
             );
 
-            fs.writeFileSync(this.root_path + '/config.js', updatedContent);
+            fs.writeFileSync(this.root_path + 'config.js', updatedContent);
             
             return macId;
         } 
