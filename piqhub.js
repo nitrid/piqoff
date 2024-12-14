@@ -402,7 +402,19 @@ export default class piqhubApi
     {
         try 
         {
-            const sqlFiles = ['T.sql', 'VFP.sql', 'I.sql'];
+            const requiredFiles = ['T.sql', 'VFP.sql', 'I.sql'];
+            let sqlFiles = [...requiredFiles];
+
+            try 
+            {
+                await axios.head(`https://piqhub.piqsoft.com/api/version/${versionId}/db/C.sql`);
+                sqlFiles.push('C.sql');
+            } 
+            catch (error) 
+            {
+                
+            }
+
             const totalSteps = sqlFiles.length;
             let currentStep = 0;
 
