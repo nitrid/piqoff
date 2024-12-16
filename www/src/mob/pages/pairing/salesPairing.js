@@ -45,7 +45,7 @@ export default class salesPairing extends React.PureComponent
             "ITEMS.STATUS AS STATUS,   "  +
             "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
             "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
-            "ITEMS.UNIT_GUID AS UNIT_GUID, " +
+            "ORDERS.UNIT AS UNIT_GUID, " +
             "(BARCODE) AS BARCODE,   "  +
             "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
             "ORDERS.GUID AS ORDER_LINE_GUID,   "  +
@@ -62,7 +62,7 @@ export default class salesPairing extends React.PureComponent
             "ORDERS.VAT AS VAT,   "  +
             "ORDERS.VAT_RATE AS VAT_RATE   "  +
             "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
-            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM   "  +
+            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM AND ORDERS.CLOSED = 0  "  +
             "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
             param : ['DOC_GUID:string|50','CODE:string|50'],
         }
@@ -78,7 +78,14 @@ export default class salesPairing extends React.PureComponent
         }
         this.orderDetailDt.selectCmd = 
         {
-            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0",
+            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,PEND_QUANTITY/UNIT_FACTOR AS PEND_QUANTITY FROM  " +
+                    "(SELECT GUID,  " +
+                    "ITEM_NAME,  " +
+                    "ITEM_CODE,  " +
+                    "CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY ,  " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.GUID = DOC_ORDERS_VW_01.UNIT),1) AS UNIT_FACTOR , " +
+                    "ISNULL((SELECT SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.GUID = DOC_ORDERS_VW_01.UNIT),'U') AS UNIT_NAME " +
+                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP",
             param : ['DOC_GUID:string|50'],
         }
 
@@ -131,7 +138,7 @@ export default class salesPairing extends React.PureComponent
     {
         this.itemDt.clear();
         this.unitDt.clear();
-        this.priceDt.clear();
+        this.priceDt.clear();   
 
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
@@ -192,8 +199,6 @@ export default class salesPairing extends React.PureComponent
                 await this.unitDt.refresh()
                 this.cmbUnit.setData(this.unitDt)
 
-                console.log(this.unitDt)
-                console.log(this.itemDt[0].UNIT_GUID)
                 if(this.unitDt.length > 0)
                 {
                     if(this.itemDt[0].UNIT_GUID != '00000000-0000-0000-0000-000000000000')
@@ -1574,7 +1579,7 @@ export default class salesPairing extends React.PureComponent
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
                                                 <Column dataField="ITEM_NAME" caption={this.t("grdOrderDetail.clmItemName")} width={250} />
-                                                <Column dataField="PEND_QUANTITY" caption={this.t("grdOrderDetail.clmQuantity")} dataType={'number'} width={60}/>
+                                                <Column dataField="PEND_QUANTITY" caption={this.t("grdOrderDetail.clmQuantity")} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_NAME}} dataType={'number'} width={160}/>
                                             </NdGrid>
                                         </div>
                                     </div>
