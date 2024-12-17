@@ -982,8 +982,12 @@ export const langTr =
         },
         grdList : 
         {
-            clmItemName : "Adı",
-            clmQuantity :  "Miktar",
+            clmRef : "Sipariş",
+            clmRefNo : "Sıra",
+            clmDate : "Tarih",
+            clmCustomerName : "Müşteri",
+            clmPendQuantity : "Bekleyen Miktar",
+            clmTotalQuantity : "Toplam Miktar",
             clmPrice : "Fiyat",
             clmAmount : "Tutar",
             clmDiscount : "İndirim",

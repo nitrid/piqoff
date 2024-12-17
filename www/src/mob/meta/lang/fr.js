@@ -981,8 +981,12 @@ export const langFr =
         },
         grdList: 
         {
-            clmItemName: "Nom",
-            clmQuantity: "Quantité",
+            clmRef: "Série",
+            clmRefNo: "Numéro",
+            clmDate: "Date",
+            clmCustomerName: "Client",
+            clmPendQuantity: "Quantité en Attente",
+            clmTotalQuantity: "Quantité Totale",
             clmPrice: "Prix",
             clmAmount: "Montant",
             clmDiscount: "Remise",

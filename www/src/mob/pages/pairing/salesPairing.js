@@ -78,14 +78,15 @@ export default class salesPairing extends React.PureComponent
         }
         this.orderDetailDt.selectCmd = 
         {
-            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,PEND_QUANTITY/UNIT_FACTOR AS PEND_QUANTITY FROM  " +
+            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,PEND_QUANTITY/UNIT_FACTOR AS PEND_QUANTITY,LINE_NO FROM  " +
                     "(SELECT GUID,  " +
                     "ITEM_NAME,  " +
                     "ITEM_CODE,  " +
+                    "LINE_NO,  " +
                     "CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY ,  " +
                     "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.GUID = DOC_ORDERS_VW_01.UNIT),1) AS UNIT_FACTOR , " +
                     "ISNULL((SELECT SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.GUID = DOC_ORDERS_VW_01.UNIT),'U') AS UNIT_NAME " +
-                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP",
+                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP ORDER BY LINE_NO ASC",
             param : ['DOC_GUID:string|50'],
         }
 
@@ -1529,10 +1530,10 @@ export default class salesPairing extends React.PureComponent
                                                 <Paging defaultPageSize={10} />
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                                <Column dataField="REF" caption={this.t("grdList.clmItemName")} width={80} />
-                                                <Column dataField="REF_NO" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmAmount")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmPrice")} width={150}/>
+                                                <Column dataField="REF" caption={this.t("grdList.clmRef")} width={150} />
+                                                <Column dataField="REF_NO" caption={this.t("grdList.clmRefNo")} dataType={'number'} width={80}/>
+                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmDate")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmCustomerName")} width={150}/>
                                             </NdGrid>
                                         </div>
                                     </div>
