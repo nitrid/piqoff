@@ -1,4 +1,4 @@
-//  "indirim Tanımları"
+//  "İndirim Tanımları"
 const promo_01_002 =
 {
     txtCode: "Kodu",        
@@ -10,8 +10,8 @@ const promo_01_002 =
     txtCustomerCode: "Müşteri Kodu",
     txtCustomerName: "Müşteri Adı",
     cmbPrmType: "Müşteri Türü",
-    txtPrmItem: "Müşteri",
-    btnPrmItem: "Müşteri Seçimi / listesi", 
+    txtPrmCustomer: "Müşteri",
+    btnPrmCustomer: "Müşteri Seçimi / listesi", 
     cmbPrmType2: "Ürün Türü",
     txtPrmItem2: "Ürün",
     btnPrmItem2: "Ürün Seçimi / listesi", 
@@ -39,7 +39,8 @@ const promo_01_002 =
         clmFinishDate : "Bitiş",
         clmGrpName: "Grubu", 
         clmPrice : "Fiyat",
-        btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
+        btnItem: "Promosyon Uygulanacak Ürün yada Ürün Grubu Seç",
+        btnCustomer: "Promosyon Uygulanacak Müşteri yada Müşteri Grubu Seç",
     },
     msgRef:
     {
@@ -96,27 +97,13 @@ const promo_01_002 =
     },
     cmbType:
     {
-        item: "Müşteri Türü",
-        generalAmount: "Müşteri Grubu",
-        discountRate: "İskonto Oran",
-        moneyPoint: "Para Puan",
-        giftCheck: "Hediye Çeki",
-        generalDiscount: "Genel İskonto",
-        discountAmount: "İskonto Tutar",
-        promoType01: "Koşul",
-        promoType02: "Uygulama",
+        customer: "Müşteri",
+        customerGroup: "Müşteri Grubu"
     },
     cmbType2:
     {
         item: "Ürün",
-        generalAmount: "Ürün Grubu",
-        discountRate: "İskonto Oran",
-        moneyPoint: "Para Puan",
-        giftCheck: "Hediye Çeki",
-        generalDiscount: "Genel İskonto",
-        discountAmount: "İskonto Tutar",
-        promoType01: "Koşul",
-        promoType02: "Uygulama",
+        itemGroup: "Ürün Grubu"
     },
     msgHelp:
     {
