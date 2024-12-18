@@ -24,10 +24,9 @@ const promo_01_002 =
     cmbRstItemType: "Tip",
     txtRstItemQuantity: "Miktar",
     txtRstItemAmount: "Değer",
-    txtCodePlace: "Lütfen Tanimlamak istediginiz Promosyon Kodunu Giriniz",
-    txtNamePlace: "Lütfen Tanimlamak istediginiz Promosyon Adıni Giriniz",
-    txtCustomerCodePlace: "Promosyon Taninlamak istediginiz Müşteriyi Seçebilirsiniz",
-    txtRstItemPlace: "Lütfen Promosyon Uygulanacak ürünü Seçiniz",
+    txtCodePlace: "Lütfen Tanimlamak istediginiz İndirim Kodunu Giriniz",
+    txtNamePlace: "Lütfen Tanimlamak istediginiz İndirim Adıni Giriniz",
+    txtAmount: "Tutar",
     pg_Grid:
     {
         title: "Seçim",
@@ -39,15 +38,15 @@ const promo_01_002 =
         clmFinishDate : "Bitiş",
         clmGrpName: "Grubu", 
         clmPrice : "Fiyat",
-        btnItem: "Promosyon Uygulanacak Ürün yada Ürün Grubu Seç",
-        btnCustomer: "Promosyon Uygulanacak Müşteri yada Müşteri Grubu Seç",
+        btnItem: "İndirim Uygulanacak Ürün yada Ürün Grubu Seç",
+        btnCustomer: "İndirim Uygulanacak Müşteri yada Müşteri Grubu Seç",
     },
     msgRef:
     {
         title: "Dikkat",
-        btn01: "Promosyona Git",
+        btn01: "İndirime Git",
         btn02: "Tamam",
-        msg: "Girmiş olduğunuz promosyon sistem de kayıtlı !"
+        msg: "Girmiş olduğunuz indirim sistem de kayıtlı !"
     },
     msgSave:
     {
@@ -76,12 +75,6 @@ const promo_01_002 =
         btn02: "Vazgeç",
         msg: "Kaydı silmek istediğinize eminmisiniz ?"
     },
-    pop_PrmItemList:
-    {
-        title: "Seçilmiş Ürünlar",
-        clmCode: "Kodu",
-        clmName: "Adi", 
-    },
     popDiscount:
     {
         title: "İndirim",
@@ -103,22 +96,9 @@ const promo_01_002 =
     cmbType2:
     {
         item: "Ürün",
-        itemGroup: "Ürün Grubu"
-    },
-    msgHelp:
-    {
-        title: "Açıklama",
-        btn01: "Tamam",
-        condItemQuantity: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda promosyon 5. üründen sonra geçerli olacaktır.",
-        condItemAmount: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun hangi toplam tutardan itibaren geçerli olacağını belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda promosyon seçilen ürünlerin toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
-        condGeneralAmount: "Toplam ticket tutarına hangi tutardan sonra promosyon Uygulamak ıstediğinizi belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda ticket toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
-        appDiscRate: "Koşul oluştuğunda uygulayacağı iskonto oranını belirleyiniz. Örnğ: Koşul oluştuğunda %10 indirim uygulasın.",
-        appDiscAmount: "Koşul oluştuğunda tutarsal olarak yapmak istediğiniz indirim uygulanacak fiyatı belirleyiniz. Örnğ: Koşul oluştuğunda koşulda seçili ürünlere 0,99€ fiyat uygulasın.",
-        appPoint: "Koşul oluştuğunda müşteriye vermek istediğiniz puan tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşterinin kartına 100 puan eklesin.",
-        appGiftCheck: "Koşul oluştuğunda müşteriye vermek istediğiniz hediye çeki tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye 100€ luk hediye çeki uluştursun.",
-        appGeneralAmount: "Koşul oluştuğunda uygulanacak rakamsal toplam indirim tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye tike tutarına 10€ luk indirim yapsın.",
-        appItemQuantity: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda sectiğiniz ürün yada ürünleri 5 adete kadar belirlediğiniz % lik indirimi yada fiyatı uygulasın.",
-        appItemAmount: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı fiyatı belirleyiniz. Örnğ: Fiyatı 1€ yada %10 yaptığınızda sectiğiniz ürün yada ürünleri 1€ dan yada %10 luk indirim uygulasın.",
+        itemGroup: "Ürün Grubu",
+        discountRate: "İndirim Oranı",
+        discountAmount: "İndirim Tutarı"
     },
     validation:
     {
@@ -139,11 +119,17 @@ const promo_01_002 =
         btn01: "Tamam",
         msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
     },
-    msgQuantityOrAmount:
+    msgAmount:
     {
         title: "Dikkat",
         btn01: "Tamam",
-        msg: "Lütfen Adet veya Tutar Giriniz !",
+        msg: "Lütfen Tutar Giriniz !",
+    },
+    msgCondOrApp:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Lütfen Müşteri veya Ürün Giriniz !",
     },
 }
 

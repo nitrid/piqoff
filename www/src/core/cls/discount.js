@@ -72,7 +72,7 @@ export class discountCls
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_DELETE] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID, " + 
@@ -220,7 +220,7 @@ export class discCondCls
                     "@LINK = @PLINK, " + 
                     "@WITHAL = @PWITHAL " ,
             param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PLINK:string|50','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','DISCOUNT','TYPE','LINK_GUID','WITHAL']
+            dataprm : ['GUID','DISCOUNT','TYPE','LINK_GUID','WITHAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -231,7 +231,7 @@ export class discCondCls
                     "@LINK = @PLINK, " + 
                     "@WITHAL = @PWITHAL " ,
             param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PLINK:string|50','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','DISCOUNT','TYPE','LINK_GUID','WITHAL']
+            dataprm : ['GUID','DISCOUNT','TYPE','LINK_GUID','WITHAL']
         } 
         tmpDt.deleteCmd = 
         {
