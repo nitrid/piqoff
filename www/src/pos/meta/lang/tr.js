@@ -991,5 +991,11 @@ export const langTr =
         clmVendorId : "Vendor Id",
         clmSerialNo : "Seri No"
     },
-    lblTicketCount : "Müşteri :"
+    lblTicketCount : "Müşteri :",
+    msgPopDiffAlert : 
+    {
+        title : "Uyarı",
+        msg : "Miktar 0 (sıfır) olamaz.",
+        btn01 : "Tamam",
+    },
 }
