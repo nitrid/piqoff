@@ -76,6 +76,12 @@ export default class purchaseOrder extends DocBase
         this.txtRefno.readOnly = false
         this.docLocked = false
         this.frmDocItems.option('disabled',true)
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc(
+        {
+            START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+        })
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -511,6 +517,9 @@ export default class purchaseOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
     
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -524,7 +533,9 @@ export default class purchaseOrder extends DocBase
                 if(tmpData.result.recordset.length > 0)
                 {
                     this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
+                    this.docObj.docOrders.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
                     this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
                     this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
@@ -536,6 +547,8 @@ export default class purchaseOrder extends DocBase
             else
             {
                 this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docOrders.dt()[pIndex].DISCOUNT = Number(pPrice * pQuantity).rateInc(tmpDiscRate,4)
+                this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
                 this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docOrders.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
@@ -1497,194 +1510,219 @@ export default class purchaseOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdPurcOrders"+this.tabIndex} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'500'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    sorting={{mode:'none'}}
-                                    filterRow={{visible:true}}
-                                    onRowPrepared={(e) =>
-                                    {
-                                        if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdPurcOrders"+this.tabIndex} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'500'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        sorting={{mode:'none'}}
+                                        filterRow={{visible:true}}
+                                        onRowPrepared={(e) =>
                                         {
-                                            e.rowElement.style.color ="Silver"
-                                        }
-                                    }}
-                                    onRowUpdating={async (e)=>
-                                    {
-                                        if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                        {
-                                            e.cancel = true
-                                            let tmpConfObj =
+                                            if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                e.rowElement.style.color ="Silver"
                                             }
-                                        
-                                            dialog(tmpConfObj);
-                                            e.component.cancelEditData()
-                                        }
-                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        }}
+                                        onRowUpdating={async (e)=>
                                         {
-                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
-                                            //*****************************************/
-                                        }
-                                    }}
-                                    onRowRemoving={async (e)=>
-                                    {
-                                        if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                        {
-                                            e.cancel = true
-                                            let tmpConfObj =
+                                            if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
                                             }
-                                        
-                                            dialog(tmpConfObj);
-                                            e.component.cancelEditData()
-                                        }
-                                    }}
-                                    onRowUpdated={async(e)=>
-                                    {
-                                        if(typeof e.data.QUANTITY != 'undefined')
-                                        {
-                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                            let tmpQuery = 
+                                            if(typeof e.newData.QUANTITY != 'undefined')
                                             {
-                                                query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                                await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                                //*****************************************/
                                             }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
+                                        }}
+                                        onRowRemoving={async (e)=>
+                                        {
+                                            if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                                                
-                                                this.calculateTotal()
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
                                             }
-                                        }
-                                        if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                        }}
+                                        onRowUpdated={async(e)=>
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
-                                        }
-                                        if(typeof e.data.PRICE != 'undefined')
-                                        {
-                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
-                                        }
-                                        if(typeof e.data.SUB_PRICE != 'undefined')
-                                        {
-                                            e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
-                                        }
-                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                        {
-                                            e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
-                                            e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                        }
-                                        if(typeof e.data.DISCOUNT != 'undefined')
-                                        {
-                                            e.key.DISCOUNT_1 = e.data.DISCOUNT
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
-                                        }
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                        {
-                                            let tmpConfObj =
+                                            if(typeof e.data.QUANTITY != 'undefined')
                                             {
-                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                                                    
+                                                    this.calculateTotal()
+                                                }
                                             }
-                                        
-                                            dialog(tmpConfObj);
-                                            e.key.DISCOUNT = 0 
-                                            e.key.DISCOUNT_1 = 0
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                            e.key.DISCOUNT_RATE = 0
-                                            return
-                                        }
-                                        e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        if(this.docObj.dt()[0].VAT_ZERO != 1)
-                                        {
-                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
-                                        }
-                                        else
-                                        {
-                                            e.key.VAT = 0
-                                            e.key.VAT_RATE = 0
-                                        }
-                                        
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
-                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.PRICE != 'undefined')
+                                            {
+                                                e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.SUB_PRICE != 'undefined')
+                                            {
+                                                e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                            {
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            if(typeof e.data.DISCOUNT != 'undefined')
+                                            {
+                                                e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                            }
+                                            if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.key.DISCOUNT = 0 
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = 0
+                                                return
+                                            }
 
-                                        if(e.key.DISCOUNT > 0)
+                                            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,e.key.ITEM)
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+    
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                            {
+                                                if(tmpDiscRate != 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = tmpDiscRate
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                }
+                                                else
+                                                {
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                }
+                                            }
+
+                                            e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                            {
+                                                e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                            }
+                                            else
+                                            {
+                                                e.key.VAT = 0
+                                                e.key.VAT_RATE = 0
+                                            }
+                                            
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+
+                                            if(e.key.DISCOUNT > 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
+                                            }
+                                            this.calculateTotal()
+                                        }}
+                                        onRowRemoved={async (e)=>{
+                                            this.calculateTotal()
+                                        }}
+                                        onReady={async()=>
                                         {
-                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
-                                        }
-                                        this.calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this.calculateTotal()
-                                    }}
-                                    onReady={async()=>
-                                    {
-                                        await this["grdPurcOrders"+this.tabIndex].dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-                                    }}
-                                    >
-                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOrders"}/>
-                                        <ColumnChooser enabled={true} />
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menuOff.sip_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={80} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={90} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={110} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdPurcOrders.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                                        <Column dataField="VAT_RATE" caption={this.t("grdPurcOrders.clmVatRate")} width={50} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                                        <Column dataField="TOTALHT" caption={this.t("grdPurcOrders.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="OFFER_REF" caption={this.t("grdPurcOrders.clmOffer")} width={110}  headerFilter={{visible:true}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={100}  headerFilter={{visible:true}}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target={"#grdPurcOrders"+this.tabIndex} 
-                                    onItemClick={(async(e)=>
-                                    {
-                                        if(e.itemData.text == this.t("getOffers"))
+                                            await this["grdPurcOrders"+this.tabIndex].dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+                                        }}
+                                        >
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOrders"}/>
+                                            <ColumnChooser enabled={true} />
+                                            <Paging defaultPageSize={10} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                            <Export fileName={this.lang.t("menuOff.sip_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={80} allowEditing={false}/>
+                                            <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={90} allowEditing={false}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={100} allowEditing={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
+                                            <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={110} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdPurcOrders.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>
+                                            <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                                            <Column dataField="VAT_RATE" caption={this.t("grdPurcOrders.clmVatRate")} width={50} allowEditing={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdPurcOrders.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="OFFER_REF" caption={this.t("grdPurcOrders.clmOffer")} width={110}  headerFilter={{visible:true}} allowEditing={false}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={100}  headerFilter={{visible:true}}/>
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target={"#grdPurcOrders"+this.tabIndex} 
+                                        onItemClick={(async(e)=>
                                         {
-                                            this.getOffers()
-                                        }
-                                    }).bind(this)} />
-                                 </React.Fragment>
+                                            if(e.itemData.text == this.t("getOffers"))
+                                            {
+                                                this.getOffers()
+                                            }
+                                        }).bind(this)} />
+                                    </React.Fragment>
                                 </Item>
                             </Form>
                         </div>

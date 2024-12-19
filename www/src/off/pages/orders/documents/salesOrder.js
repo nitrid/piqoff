@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -73,6 +74,13 @@ export default class salesOrder extends DocBase
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
+
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc(
+        {
+            START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+        })
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -473,6 +481,9 @@ export default class salesOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].LINE_NO = this.docObj.docOrders.dt().max("LINE_NO") + 1
             this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
     
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -487,9 +498,12 @@ export default class salesOrder extends DocBase
                 {
                     let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE
                     let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
+
                     this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                     this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
+                    this.docObj.docOrders.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
                     this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
                     this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
@@ -510,7 +524,9 @@ export default class salesOrder extends DocBase
             else
             {
                 this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
-                this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100) ).toFixed(6))
+                this.docObj.docOrders.dt()[pIndex].DISCOUNT = Number(pPrice * pQuantity).rateInc(tmpDiscRate,4)
+                this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docOrders.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docOrders.dt()[pIndex].TOTAL = Number((this.docObj.docOrders.dt()[pIndex].TOTALHT + this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
@@ -1636,6 +1652,30 @@ export default class salesOrder extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = 0
                                                 return
+                                            }
+
+                                            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,e.key.ITEM)
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+    
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                            {
+                                                if(tmpDiscRate != 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = tmpDiscRate
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                }
+                                                else
+                                                {
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                }
                                             }
 
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)

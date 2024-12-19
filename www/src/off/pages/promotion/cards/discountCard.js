@@ -61,7 +61,7 @@ export default class discountCard extends React.PureComponent
         this.discount.app.addEmpty();
 
         this.cmbPrmType.value = 0;
-        this.cmbPrmType2.value = 0;        
+        this.cmbPrmType2.value = 10;        
         this.cmbRstType.value = 0;
         this.txtAmount.value = 0;
     }
@@ -78,7 +78,7 @@ export default class discountCard extends React.PureComponent
         this.itemCondDt = this.discount.cond.dt().where({TYPE:{'IN':[10,11]}})
         
         this.cmbPrmType.value = this.customerCondDt.length > 0 ? this.customerCondDt[0].TYPE : 0;
-        this.cmbPrmType2.value = this.itemCondDt.length > 0 ? this.itemCondDt[0].TYPE : 0;
+        this.cmbPrmType2.value = this.itemCondDt.length > 0 ? this.itemCondDt[0].TYPE : 10;
         
         this.cmbRstType.value = this.discount.app.dt().length > 0 ? this.discount.app.dt()[0].TYPE : 0;
         this.txtAmount.value = this.discount.app.dt().length > 0 ? this.discount.app.dt()[0].AMOUNT : 0;
@@ -712,7 +712,7 @@ export default class discountCard extends React.PureComponent
                                                     <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
                                                     onClick={()=>
                                                     {
-                                                        if(this.cmbPrmType2.value == 0)
+                                                        if(this.cmbPrmType2.value == 10)
                                                         {
                                                             this.popPrmItem.setSource(
                                                             {
@@ -766,7 +766,7 @@ export default class discountCard extends React.PureComponent
                                                                 let tmpData = {...this.discount.cond.empty}
 
                                                                 tmpData.GUID = datatable.uuidv4();
-                                                                tmpData.TYPE = this.cmbPrmType2.value + 10;
+                                                                tmpData.TYPE = this.cmbPrmType2.value;
                                                                 tmpData.LINK_GUID = data[i].GUID;
                                                                 tmpData.LINK_CODE = data[i].CODE;
                                                                 tmpData.LINK_NAME = data[i].NAME;

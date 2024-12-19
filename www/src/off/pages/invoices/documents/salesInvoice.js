@@ -59,10 +59,7 @@ export default class salesInvoice extends DocBase
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
-        } 
-        
-        
-        console.log(this.discObj.getDocDisc('86D606F3-8FFC-4067-8D74-0348BE4AFC15','DF85EDA0-EDF5-4499-B6EF-29D9FEAC5601'))
+        }
     }
     loadState() 
     {
@@ -104,7 +101,8 @@ export default class salesInvoice extends DocBase
             this.frmDocItems.option('disabled',true)
 
             // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
-            await this.discObj.loadDocDisc({
+            await this.discObj.loadDocDisc(
+            {
                 START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
                 FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
             })
@@ -121,7 +119,6 @@ export default class salesInvoice extends DocBase
                     this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
                 }
             }, 1000);
-        
 
             this.pg_txtItemsCode.on('showing',()=>
             {
@@ -589,7 +586,7 @@ export default class salesInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE))
                     this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
-                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -1915,7 +1912,31 @@ export default class salesInvoice extends DocBase
                                                 e.key.DISCOUNT_RATE = 0
                                                 return
                                             }
-
+                                            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                            let tmpDiscRate = this.discObj.getDocDisc(e.key.TYPE == 0 ? e.key.OUTPUT : e.key.INPUT,e.key.ITEM)
+                                                                                        
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                            {
+                                                if(tmpDiscRate != 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = tmpDiscRate
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                }
+                                                else
+                                                {
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                }
+                                            }
+                                            
                                             e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
@@ -1932,17 +1953,9 @@ export default class salesInvoice extends DocBase
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                             e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
-                                            if(e.key.DISCOUNT == 0)
-                                            {
-                                                e.key.DISCOUNT_RATE = 0
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                            }
-                                            if(typeof e.data.DISCOUNT_RATE == 'undefined')
-                                            {
-                                               e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
-                                            }
+
+                                           
+                                            console.log(e.key.DISCOUNT_RATE)
                                             this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>

@@ -84,6 +84,15 @@ export class discountCls
         this.ds.add(tmpDt);
         this.ds.add(this.cond.dt())
         this.ds.add(this.app.dt())
+
+        this.docDiscDt = new datatable()
+        this.docDiscDt.selectCmd =
+        {
+            query : `SELECT * FROM DISCOUNT_COND_APP_VW_01 WHERE ((DEPOT = @DEPOT) OR (DEPOT = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND 
+                    STATUS = 1 ORDER BY TYPE ASC`,
+            param : ['DEPOT:string|50','START_DATE:date','FINISH_DATE:date'],
+        }
     }
     //#endregion
     dt()
@@ -178,6 +187,43 @@ export class discountCls
             this.ds.delete()
             resolve(await this.ds.update()); 
         });
+    }
+    loadDocDisc()
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                DEPOT : '00000000-0000-0000-0000-000000000000',
+                START_DATE : '19700101',
+                FINISH_DATE : '19700101',
+            }
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.DEPOT = typeof arguments[0].DEPOT == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT;
+                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? '19700101' : arguments[0].START_DATE;
+                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? '19700101' : arguments[0].FINISH_DATE;
+            }
+
+            this.docDiscDt.selectCmd.value = Object.values(tmpPrm)
+            
+            await this.docDiscDt.refresh();
+            resolve()
+        })
+    }
+    getDocDisc(pCustomer,pItem)
+    {
+        let tmpCustDisc = this.docDiscDt.where({TYPE : {'IN' : [0,1]}}).where({DETAIL_GUID : pCustomer})
+        if(tmpCustDisc.length > 0)
+        {
+            let tmpItemDisc = this.docDiscDt.where({GUID : {'IN' : tmpCustDisc.map(disc => disc.GUID)}}).where({TYPE : {'IN' : [10,11]}}).where({DETAIL_GUID : pItem})
+            if(tmpItemDisc.length > 0)
+            {
+                return tmpItemDisc[0].AMOUNT
+            }
+        }
+        return 0
     }
 }
 export class discCondCls

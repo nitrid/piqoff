@@ -489,8 +489,9 @@ export default class DocBase extends React.PureComponent
             this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
         }
         // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
-        await this.discObj.loadDocDisc({
-            DEPOT:this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
+        await this.discObj.loadDocDisc(
+        {
+            DEPOT : this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
             START_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"), 
             FINISH_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"),
         })

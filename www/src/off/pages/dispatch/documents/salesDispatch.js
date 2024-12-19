@@ -79,6 +79,13 @@ export default class salesDispatch extends DocBase
         
         this.frmDocItems.option('disabled',true)
 
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc(
+        {
+            START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+        })
+
         if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue() == true)
         {
             this.txtRefno.value = Math.floor(Date.now() / 1000)
@@ -656,8 +663,7 @@ export default class salesDispatch extends DocBase
             {
                 pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
             }
-            
-            
+                        
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -670,6 +676,9 @@ export default class salesDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
     
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -682,7 +691,9 @@ export default class salesDispatch extends DocBase
                 if(tmpData.result.recordset.length > 0)
                 {
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -703,9 +714,11 @@ export default class salesDispatch extends DocBase
             else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(pPrice * pQuantity).rateInc(tmpDiscRate,4)
+                this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(6))
-                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice * pQuantity).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
@@ -1861,6 +1874,30 @@ export default class salesDispatch extends DocBase
                                             e.key.DISCOUNT_RATE = 0
                                             return
                                         }
+                                        //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                        let tmpDiscRate = this.discObj.getDocDisc(e.key.TYPE == 0 ? e.key.OUTPUT : e.key.INPUT,e.key.ITEM)
+                                                                                                                                
+                                        if(e.key.DISCOUNT == 0)
+                                        {
+                                            e.key.DISCOUNT_RATE = 0
+                                            e.key.DISCOUNT_1 = 0
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
+                                        }
+
+                                        if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                        {
+                                            if(tmpDiscRate != 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = tmpDiscRate
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                            }
+                                            else
+                                            {
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                            }
+                                        }
 
                                         e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
                                         if(this.docObj.dt()[0].VAT_ZERO != 1)
@@ -1879,17 +1916,6 @@ export default class salesDispatch extends DocBase
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                         e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                                       
-                                        if(e.key.DISCOUNT == 0)
-                                        {
-                                            e.key.DISCOUNT_RATE = 0
-                                            e.key.DISCOUNT_1 = 0
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                        }
-                                        if(typeof e.data.DISCOUNT_RATE == 'undefined')
-                                        {
-                                           e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
-                                        }
                                         this.calculateTotal()
                                     }}
                                     onRowRemoved={async (e)=>{
