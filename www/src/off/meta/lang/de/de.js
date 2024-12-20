@@ -291,6 +291,7 @@ export const langDe =
         sip_04: "Operationen",
         sip_01_001: "Einkaufsbestellungsliste",
         sip_01_002: "Verkaufsbestellungsliste",
+        sip_01_003: "Zu erstellende Bestellliste", // bak
         sip_02_001: "Einkaufsbestellung",
         sip_02_002: "Verkaufsbestellung",
         sip_02_003: "POS Verkaufsbestellung",

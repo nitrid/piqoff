@@ -300,6 +300,7 @@ export const langFr =
         sip_04 : "Opérations", 
         sip_01_001: "Liste de Commande Achat ",
         sip_01_002: "Liste de Commande Vente ",
+        sip_01_003 : "Liste de commande de preparation",
         sip_02_001: "Saisie Commande Achat",
         sip_02_002: "Saisie Commande Vente  ",
         sip_02_003: "Saisie Commande Vente Pos",

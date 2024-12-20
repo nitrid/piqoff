@@ -815,6 +815,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.sip_01_002'),//'Satış Sipariş Listesi',
                                     path: 'orders/lists/salesOrdList'
                                 },
+                                {
+                                    id: 'sip_01_003',
+                                    text: e.t('menuOff.sip_01_003'),//'H Sipariş Listesi',
+                                    path: 'orders/lists/preparationOrderList'
+                                },
                             ]
                         },
                         {

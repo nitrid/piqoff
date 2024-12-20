@@ -300,6 +300,7 @@ export const langTr =
         sip_04 : "Operasyonlar",
         sip_01_001: "Alış Sipariş Listesi",
         sip_01_002: "Satış Sipariş Listesi",
+        sip_01_003 : "Hazırlanacak Sipariş Listesi",
         sip_02_001: "Alış Sipariş",
         sip_02_002: "Satış Sipariş",
         sip_02_003 : "Pos Satış Sipariş",
