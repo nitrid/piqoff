@@ -232,6 +232,24 @@ export default class purchaseInvoice extends DocBase
             this.txtDiffrentNegative.value = 0
             this.txtDiffrentTotal.value = 0
             this.txtDiffrentInv.value = 0
+            this.frmDocItems.option('disabled',true)  
+
+            if(typeof this?.txtDiffrentPositive?.value != 'undefined')
+            {
+                this.txtDiffrentPositive.value = 0
+            }
+            if(typeof this?.txtDiffrentNegative?.value != 'undefined')
+            {
+                this.txtDiffrentNegative.value = 0
+            }
+            if(typeof this?.txtDiffrentTotal?.value != 'undefined')
+            {
+                this.txtDiffrentTotal.value = 0
+            }
+            if(typeof this?.txtDiffrentInv?.value != 'undefined')
+            {
+                this.txtDiffrentInv.value = 0
+            }
 
             this.pg_txtItemsCode.on('showing',()=>
             {

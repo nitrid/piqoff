@@ -996,5 +996,11 @@ export const langFr =
         clmVendorId: "ID du fournisseur",
         clmSerialNo: "Numéro de série"
     },
-    lblTicketCount : "Client :"
+    lblTicketCount : "Client :",
+    msgPopDiffAlert : 
+    {
+        title : "Attention",
+        msg : "La quantité ne peut être 0 (zéro).",
+        btn01 : "OK",
+    },
 }

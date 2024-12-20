@@ -1837,7 +1837,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_TYPE = pItemData.VAT_TYPE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpCalc.TOTAL
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PROMO_TYPE = (pItemData.INPUT == pItemData.UNIQ_CODE) ? 1 : 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PROMO_TYPE = (typeof pItemData.PROMO_TYPE != 'undefined' ? pItemData.PROMO_TYPE : (pItemData.INPUT == pItemData.UNIQ_CODE) ? 1 : 0)
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
@@ -8256,8 +8256,20 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopDiffPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {
+                                    if(this.txtPopDiffPriceQ.value == 0)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgPopDiffAlert',showTitle:true,title:this.lang.t("msgPopDiffAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgPopDiffAlert.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPopDiffAlert.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                    
                                     let tmpData = {QUANTITY:this.txtPopDiffPriceQ.value * -1,PRICE:this.txtPopDiffPriceP.value};
                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData);
                                     this.popDiffPrice.hide();
