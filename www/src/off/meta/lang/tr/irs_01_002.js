@@ -6,6 +6,7 @@ const irs_01_002 =
     dtFirst : "İlk Tarih",
     dtLast : "Son Tarih",
     txtCustomerCode : "Müşteri",
+    cmbMainGrp : "Müşteri Grubu",
     menu:"Satış İrsaliyesi",
     chkOpenDispatch : "Sadece Faturası Olmayanları Göster",
     pg_txtCustomerCode : 
@@ -27,6 +28,7 @@ const irs_01_002 =
         clmVat : "KDV",
         clmAmount : "Tutar",
         clmTotal : "Toplam",
+        clmMainGroup : "Müşteri Grubu",
         clmOutputName :"Depo",
     },
     msgConvertInvoices :

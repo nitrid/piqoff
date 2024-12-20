@@ -6,6 +6,7 @@ const irs_01_002 =
     dtFirst : "Date Début",
     dtLast : "Date Fin",
     txtCustomerCode : "Client",
+    cmbMainGrp : "Groupe Client",
     menu:"Bon de Livraison de Vente ",
     chkOpenDispatch : "Affichez uniquement ceux sans facture", 
     pg_txtCustomerCode : 
@@ -27,6 +28,7 @@ const irs_01_002 =
         clmVat : "TVA",
         clmAmount : "Total TH" ,
         clmTotal : "Total TTC",
+        clmMainGroup : "Groupe Client",
         clmOutputName :"Réserve",
     },
     msgConvertInvoices:

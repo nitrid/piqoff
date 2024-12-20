@@ -142,6 +142,7 @@ export default class salesPairing extends React.PureComponent
         this.priceDt.clear();   
 
         this.lblItemName.value = ""
+        this.lblOrderName.value = ""
         this.lblDepotQuantity.value = 0
         this.txtPendQuantity.value = 0
         this.txttotalQuantity.value = 0
@@ -193,8 +194,7 @@ export default class salesPairing extends React.PureComponent
             
             if(this.itemDt.length > 0)
             {
-                this.lblItemName.value = this.itemDt[0].NAME
-               
+                this.lblItemName.value = this.itemDt[0].NAME               
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
@@ -386,6 +386,7 @@ export default class salesPairing extends React.PureComponent
                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
                 await dialog(tmpConfObj1);
             }
+            this.getOrderName()
             resolve()
         })
     }
@@ -410,6 +411,7 @@ export default class salesPairing extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+        this.getOrderName()
 
         this.pageView.activePage('Entry')
     }
@@ -474,6 +476,7 @@ export default class salesPairing extends React.PureComponent
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {
+                console.log(tmpData.result.recordset[0])
                 this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT,
                 this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
@@ -506,6 +509,16 @@ export default class salesPairing extends React.PureComponent
                 this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
             }
             this.onClickBarcodeShortcut()
+        }
+    }
+    async getOrderName()
+    {
+        console.log(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue())
+        if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue() == true)
+        {
+            this.orderDetailDt.selectCmd.value = [this.orderGuid]
+            await this.orderDetailDt.refresh();  
+            this.lblOrderName.value = this.orderDetailDt.where({PEND_QUANTITY:{'>':'0'}}).orderBy('LINE_NO',"asc")[0].ITEM_NAME
         }
     }
     async getOrderList()
@@ -886,6 +899,13 @@ export default class salesPairing extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
+                                    <div className='row'>
+                                        <div className='col-12'>
+                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
+                                                <NbLabel id="lblOrderName" parent={this} value={""}/>
+                                            </h6>
+                                        </div>
+                                    </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
