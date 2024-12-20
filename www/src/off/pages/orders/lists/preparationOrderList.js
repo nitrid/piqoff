@@ -131,6 +131,14 @@ export default class salesOrdList extends React.PureComponent
         let tmpSource = {...this.grdSlsOrdList.data.datatable}
         for (let i = 0; i < tmpSource.length; i++)
         {
+            let tmpQuery = 
+            {
+                query : "SELECT FACTOR FROM UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [tmpSource[i].ITEM]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery)
+            console.log(tmpData)
             if(tmpSource[i].APPROVED_QUANTITY == tmpSource[i].PEND_QUANTITY)
             {
                 tmpSource[i].STATUS = this.t("statusType.grey")
