@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Form, { EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
@@ -17,6 +17,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 
 export default class salesDisList extends React.PureComponent
 {
@@ -24,30 +25,13 @@ export default class salesDisList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
-        }
-        
+     
         this.core = App.instance.core;
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
 
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsDisList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsDisList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsDisList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsDisList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsDisList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsDisList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsDisList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsDisList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsDisList.clmTotal")},
-        ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
     }
     componentDidMount()
     {
@@ -62,70 +46,11 @@ export default class salesDisList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsDisList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsDisList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsDisList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsDisList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
 
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
     async _btnGetClick()
     {
+        console.log(this.cmbMainGrp.value)
+        console.log(this.chkOpenDispatch.value)
         if(this.chkOpenDispatch.value == false)
         {
             let tmpSource =
@@ -135,12 +60,15 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT * FROM DOC_VW_01 " +
+                        query : "SELECT *, " +
+                                "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
+                                "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
+                                "FROM DOC_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
                                 " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
-                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -552,27 +480,30 @@ export default class salesDisList extends React.PureComponent
                                 </NdPopGrid>
                                 </Item> 
                                 <Item>
-                                    <Label text={this.t("chkOpenDispatch")} alignment="right" />
-                                        <NdCheckBox id="chkOpenDispatch" parent={this} value={false}></NdCheckBox>
+                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMainGrp" showClearButton={true} notRefresh={true}  searchEnabled={true}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    data={{source: {select : {query:"SELECT CODE,NAME FROM CUSTOMER_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
+                                    />
                                 </Item>
                             </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                          
                         </div>
                         <div className="col-3">
                             
                         </div>
                         <div className="col-3">
-                            
+                        <Form>
+                                <Item>
+                                    <Label text={this.t("chkOpenDispatch")} alignment="right" />
+                                    <NdCheckBox id="chkOpenDispatch" parent={this} value={false}></NdCheckBox>
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
@@ -606,8 +537,8 @@ export default class salesDisList extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsDisList.clmInputCode")} visible={false}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsDisList.clmInputName")} visible={true}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsDisList.clmOutputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                <Column dataField="MAIN_GROUP_NAME" caption={this.t("grdSlsDisList.clmMainGroup")} width={120} visible={true}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={180} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="TOTALHT" caption={this.t("grdSlsDisList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
