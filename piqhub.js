@@ -221,7 +221,7 @@ export default class piqhubApi
                 `export default {\n  macId: "${macId}",`
             );
 
-            fs.writeFileSync(this.root_path + '/config.js', updatedContent);
+            fs.writeFileSync(this.root_path + './config.js', updatedContent);
             
             return macId;
         } 
