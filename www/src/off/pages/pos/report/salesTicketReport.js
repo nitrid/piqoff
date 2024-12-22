@@ -1078,13 +1078,7 @@ export default class salesOrdList extends React.PureComponent
                                                             
                                                         if(tmpChange < 0)
                                                         {
-                                                            if(this.rbtnTotalPayType.value == 0)
-                                                            {
-                                                                tmpChange = tmpChange * -1
-                                                                tmpAmount = this.txtPopLastTotal.value  //- tmpChange
-                                                            }
-                                                            else
-                                                            {       
+                                                          
                                                                 let tmpConfObj =
                                                                 {
                                                                     id:'msgPayNotBigToPay',showTitle:true,title:this.lang.t("msgPayNotBigToPay.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1094,7 +1088,6 @@ export default class salesOrdList extends React.PureComponent
                                                                 await dialog(tmpConfObj);
                                                                 tmpAmount = (this.txtPopLastTotal.value  - tmpChange) * -1
                                                                 tmpChange = 0
-                                                            }
                                                         }
                                                         else
                                                         {

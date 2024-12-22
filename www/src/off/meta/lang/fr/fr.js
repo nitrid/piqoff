@@ -607,5 +607,11 @@ export const langFr =
         txtRecieverDate : "Livraison Date"
     },
     smallImage : "Petite image",
-    bigImage : "Grande image"
+    bigImage : "Grande image",
+    msgPayNotBigToPay: 
+    {
+        title : "Attention",
+        msg : "Le montant saisi ne peut être supérieur au montant total du ticket de caisse ! " ,
+        btn01 : "OK"
+    },
 }

@@ -613,5 +613,11 @@ export const langTr =
         selectRecieverName : "Alıcı Adı",
     },
     smallImage : "Küçük Resim",
-    bigImage : "Büyük Resim"
+    bigImage : "Büyük Resim",
+    msgPayNotBigToPay: 
+    {
+        title : "Dikkat",
+        msg : "Girdiğiniz miktar toplam fiş tutarından büyük olamaz !",
+        btn01 : "Tamam"
+    }
 }

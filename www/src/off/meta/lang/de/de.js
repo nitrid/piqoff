@@ -567,5 +567,11 @@ export const langDe =
         txtRecieverDate : "Absenders Datum"
     },
     smallImage : "Kleine Bild",
-    bigImage : "Großes Bild"
+    bigImage : "Großes Bild",
+    msgPayNotBigToPay: 
+    {
+        title : "Achtung",
+        msg : "Der eingegebene Betrag kann nicht größer sein als der Gesamtbetrag des Kassenbelegs!",
+        btn01 : "OK"
+    }
 }
