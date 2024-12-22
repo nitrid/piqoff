@@ -29,7 +29,10 @@ const sip_01_003 =
         clmTotal : "Total",
         clmOutputName :"Réserve",
         clmMainGroup : "Client Groupe",
-        clmStatus : "Stat"
+        clmStatus : "Stat",
+        clmColis : "Colis",
+        clmPalet : "Palet",
+        clmBox : "Boite"
     },
     popDesign : 
     {

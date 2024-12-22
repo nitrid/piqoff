@@ -7,7 +7,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -66,7 +66,9 @@ export default class salesOrdList extends React.PureComponent
                             "OUTPUT_CODE,    " +
                             "INPUT_CODE,    " +
                             "INPUT_NAME,    " +
-                            "'111' AS STATUS,    " +
+                            "'' AS STATUS,    " +
+                            " 1 AS PALET,   " +
+                            " 1 AS BOX,   " +
                             "SUM(TOTAL) as TOTAL,    " +
                             "SUM(VAT) as VAT,    " +
                             "SUM(TOTALHT) as TOTALHT,   " +
@@ -133,12 +135,20 @@ export default class salesOrdList extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT FACTOR FROM UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
-                param : ['ITEM_GUID:string|50'],
-                value : [tmpSource[i].ITEM]
+                query : "SELECT  SUM(DO.QUANTITY / ISNULL(IU.FACTOR, 1)) AS COLIS FROM   " +
+                        "DOC_ORDERS_VW_01 DO  " +
+                        "LEFT JOIN   " +
+                        "ITEM_UNIT_VW_01 IU  " +
+                        "ON   " +
+                        "IU.ITEM_GUID = DO.ITEM AND IU.ID = '003' WHERE DO.DOC_GUID = @DOC_GUID ",
+                param : ['DOC_GUID:string|50'],
+                value : [tmpSource[i].GUID]
             }
             let tmpData = await this.core.sql.execute(tmpQuery)
-            console.log(tmpData)
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpSource[i].COLIS = tmpData.result.recordset[0].COLIS
+            }
             if(tmpSource[i].APPROVED_QUANTITY == tmpSource[i].PEND_QUANTITY)
             {
                 tmpSource[i].STATUS = this.t("statusType.grey")
@@ -398,15 +408,19 @@ export default class salesOrdList extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={170}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true} />
-                                <Column dataField="MAIN_GROUP_NAME" caption={this.t("grdSlsOrdList.clmMainGroup")} width={200} visible={true}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/>
-                                <Column dataField="TOTALHT" caption={this.t("grdSlsOrdList.clmAmount")} visible={true} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
-                                <Column dataField="STATUS" caption={this.t("grdSlsOrdList.clmStatus")} visible={true} width={200}/>
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
+                                <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={170} allowEditing={false}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100} allowEditing={false}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true} allowEditing={false}/>
+                                <Column dataField="MAIN_GROUP_NAME" caption={this.t("grdSlsOrdList.clmMainGroup")} width={200} visible={true} allowEditing={false}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"} allowEditing={false}/>
+                                <Column dataField="TOTALHT" caption={this.t("grdSlsOrdList.clmAmount")} visible={true} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/> 
+                                <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>              
+                                <Column dataField="COLIS" caption={this.t("grdSlsOrdList.clmColis")} visible={true} width={80} allowEditing={false}/>
+                                <Column dataField="PALET" caption={this.t("grdSlsOrdList.clmPalet")} visible={true} width={80}/>
+                                <Column dataField="BOX" caption={this.t("grdSlsOrdList.clmBox")} visible={true} width={80}/>
+                                <Column dataField="STATUS" caption={this.t("grdSlsOrdList.clmStatus")} visible={true} width={180} allowEditing={false}/>
                                 <Column type="buttons" width={70}>
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>

@@ -28,7 +28,10 @@ const sip_01_003 =
         clmAmount : "Betrag",
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
-        clmStatus : "Status"
+        clmStatus : "Status",
+        clmColis : "Koli",
+        clmPalet : "Palet",
+        clmBox : "Kiste"
     },
     popDesign : 
     {

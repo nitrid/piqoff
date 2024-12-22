@@ -29,7 +29,10 @@ const sip_01_003 =
         clmTotal : "Toplam",
         clmOutputName :"Depo",
         clmMainGroup : "Müşteri Grubu",
-        clmStatus : "Durum"
+        clmStatus : "Durum",
+        clmColis : "Koli",
+        clmPalet : "Palet",
+        clmBox : "Kutu"
     },
     popDesign : 
     {
