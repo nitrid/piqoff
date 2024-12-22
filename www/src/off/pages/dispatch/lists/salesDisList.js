@@ -61,6 +61,7 @@ export default class salesDisList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT *, " +
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
                                 "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
                                 "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
                                 "FROM DOC_VW_01 " +
@@ -87,6 +88,7 @@ export default class salesDisList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT,OUTPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,"+ 
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_ITEMS_VW_01.DOC_GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
                                 "CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL,SUM(DOC_DISCOUNT) AS DOC_DISCOUNT,SUM(DOC_DISCOUNT_1) AS DOC_DISCOUNT_1, " + 
                                 "SUM(DOC_DISCOUNT_2) AS DOC_DISCOUNT_2,SUM(DOC_DISCOUNT_3) AS DOC_DISCOUNT_3 FROM DOC_ITEMS_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
@@ -118,6 +120,8 @@ export default class salesDisList extends React.PureComponent
             return
         }
         let tmpDocGuids = []
+        App.instance.setState({isExecute:true})
+
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
             let tmpDocCls =  new docCls
@@ -226,19 +230,25 @@ export default class salesDisList extends React.PureComponent
             }
             if(tmpDocCls.docItems.dt().length > 0)
             {
-                let tmptest = await tmpDocCls.save()
-                console.log(tmptest)
+               await tmpDocCls.save()
+                
+                if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
+                {
+                    await this.MailSend(tmpDocCls.dt()[0].GUID,tmpDocCls.dt()[0].INPUT,tmpDocCls.dt()[0].REF_NO)
+                }
                 tmpDocGuids.push(tmpDocCls.dt()[0])
             }
         }
+        App.instance.setState({isExecute:false})
         let tmpConfObj2 =
         {
             id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'before'},{id:"btn01",caption:this.t("msgConvertSucces.btn02"),location:'after'}],
+            button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertSucces.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
         }
 
         let tmpPrintDialog = await dialog(tmpConfObj2);
+        console.log(tmpPrintDialog)
         if(tmpPrintDialog == 'btn01')
         {
             App.instance.setState({isExecute:true})
@@ -309,6 +319,65 @@ export default class salesDisList extends React.PureComponent
             App.instance.setState({isExecute:false})
         }
     }
+    async MailSend(pGuid,pCustomer,pRefno)
+    {
+        let tmpMAilQuery = 
+        {
+            query :"SELECT EMAIL,TITLE FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+            param:  ['GUID:string|50'],
+            value:  [pCustomer]
+        }
+        let tmpMailAdress = await this.core.sql.execute(tmpMAilQuery) 
+        if(tmpMailAdress.result.recordset.length > 0 && tmpMailAdress.result.recordset[0].EMAIL != '')
+        {
+            let txtSendMail = tmpMailAdress.result.recordset[0].EMAIL
+            let tmpQuery = 
+            {
+            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+            value:  [pGuid,this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().design,this.lang.languages[0].toString().toUpperCase()]
+            }
+            App.instance.setState({isExecute:true})
+            let tmpData = await this.core.sql.execute(tmpQuery)
+            App.instance.setState({isExecute:false})
+            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+            {
+                App.instance.setState({isExecute:true})
+                let  tmpHtml = ''
+                if(pResult.split('|')[0] != 'ERR')
+                {
+                }
+                let tmpMailData = {html:tmpHtml,subject:"Facture-" + pRefno ,sendMail:txtSendMail,attachName:"Facture-" + pRefno + ".pdf",attachData:pResult.split('|')[1],text:""}
+                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                {
+                    if((pResult1) == 0)
+                    {  
+                        let tmpQuery = 
+                        {
+                            query :"EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  " +
+                            "@CUSER = @PCUSER, " +
+                            "@DOC_GUID = @PDOC_GUID, " + 
+                            "@SENDER_MAIL = @PSENDER_MAIL, " +
+                            "@RECIEVER_MAIL = @PRECIEVER_MAIL",
+                            param : ['PCUSER:string|25','PDOC_GUID:string|50','PSENDER_MAIL:string|50','PRECIEVER_MAIL:string|50'],
+                            value : [this.user.CODE,pGuid,'',txtSendMail]
+                        }
+                        await this.core.sql.execute(tmpQuery) 
+                    }
+                    App.instance.setState({isExecute:false})
+                });
+            }); 
+        } 
+        else
+        {
+            let tmpText = this.t("msgNoMailAddress") + tmpMailAdress.result.recordset[0].TITLE
+            let tmpMailData = {html:'',subject:"Facture-" + pRefno,sendMail:this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().mail,text:tmpText}
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            {
+                App.instance.setState({isExecute:false})
+            });
+        }    
+    }
     render()
     {
         return(
@@ -347,6 +416,7 @@ export default class salesDisList extends React.PureComponent
                                         onClick: async () => 
                                         {
                                             this.convertInvoice()
+                                            
                                         }
                                     }    
                                 } />
@@ -541,7 +611,8 @@ export default class salesDisList extends React.PureComponent
                                 <Column dataField="DOC_DATE" caption={this.t("grdSlsDisList.clmDate")} visible={true} width={180} dataType="datetime" format={"dd/MM/yyyy"}/> 
                                 <Column dataField="TOTALHT" caption={this.t("grdSlsDisList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
+                                <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
+                                <Column dataField="FACTURE" caption={this.t("grdSlsDisList.clmFacture")} visible={true} width={100}/>
                             </NdGrid>
                         </div>
                     </div>

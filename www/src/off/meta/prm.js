@@ -3153,6 +3153,27 @@ export const prm =
             }
         }
     },
+//autoMailSend
+{
+    TYPE : 0,
+    ID :"autoFactureMailSend",
+    VALUE : 
+    {
+        value : true,
+        design : "33",
+        mail : "control@piqsoft.com"
+    },
+    SPECIAL : "",
+    PAGE : "irs_01_002",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Satış İrsaliye Listesi",
+        CAPTION : "Otomatik mail gonderme"
+    }
+},    
     
 //autoMailSend
 {

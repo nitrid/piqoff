@@ -9,6 +9,7 @@ const irs_01_002 =
     cmbMainGrp : "Groupe Client",
     menu:"Bon de Livraison de Vente ",
     chkOpenDispatch : "Affichez uniquement ceux sans facture", 
+    msgNoMailAddress : "Le client n'a pas d'adresse e-mail. ",
     pg_txtCustomerCode : 
     {
         title : "Choix Client",
@@ -30,6 +31,7 @@ const irs_01_002 =
         clmTotal : "Total TTC",
         clmMainGroup : "Groupe Client",
         clmOutputName :"Réserve",
+        clmFacture : "Converti en Facture "
     },
     msgConvertInvoices:
 {  
