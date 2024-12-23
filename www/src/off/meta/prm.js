@@ -37,7 +37,10 @@ export const prm =
     {
         TYPE : 0,
         ID :"refForCustomerCode",
-        VALUE : true,
+        VALUE : 
+        {
+            value : true
+        },
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
