@@ -1927,9 +1927,11 @@ export default class purchaseInvoice extends DocBase
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                console.log(tmpData)
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
+                                                    console.log(this.txtRef.value)
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
