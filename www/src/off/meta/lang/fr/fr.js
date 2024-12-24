@@ -351,6 +351,7 @@ export const langFr =
         prsnl_01 : "Saisie",
         prsnl_01_001 : "Définitions du personnel",
         prsnl_01_002 : "Définitions d'adresse",
+        prsnl_01_003 : "Définitions du statut",
         prsnl_02 : "Listes",
         prsnl_02_001 : "Listes du personnel",
         prsnl_03 : "Lesopérations ",
