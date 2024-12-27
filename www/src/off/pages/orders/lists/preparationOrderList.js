@@ -50,87 +50,43 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-       
-        let tmpSource2 =
-        {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT * FROM (SELECT DOC_GUID AS GUID,    " +
-                            "REF,    " +
-                            "REF_NO,    " +
-                            "DOC_DATE,    " +
-                            "OUTPUT_NAME,    " +
-                            "OUTPUT_CODE,    " +
-                            "INPUT_CODE,    " +
-                            "INPUT_NAME,    " +
-                            "'' AS STATUS,    " +
-                            " 1 AS PALET,   " +
-                            " 1 AS BOX,   " +
-                            "SUM(TOTAL) as TOTAL,    " +
-                            "SUM(VAT) as VAT,    " +
-                            "SUM(TOTALHT) as TOTALHT,   " +
-                            "SUM(APPROVED_QUANTITY) as APPROVED_QUANTITY,   " +
-                            "MAX(CLOSED) as CLOSED,   " +
-                            "CASE WHEN SUM(APPROVED_QUANTITY) = 0 THEN SUM(PEND_QUANTITY) ELSE SUM(APPROVED_QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                            "FROM DOC_ORDERS_VW_01    " +
-                            "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
-                            "AND TYPE = 1 AND APPROVED_QUANTITY > 0     " +
-                            "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE,INPUT    " +
-                            ") AS TMP WHERE (( MAIN_GROUP_CODE = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = ''))" +
-                            "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
-                    param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
-                },
-                sql : this.core.sql
-            }
-        }
-        App.instance.setState({isExecute:true})
-        await this.grdSlsOrdList.dataRefresh(tmpSource2)
-        App.instance.setState({isExecute:false})
-        await this.statusCheck()
-    }
-    async _btnGrdPrint(e)
-    {
-        this.printGuid = e.row.data.GUID
-        this.popDesign.show() 
-    }
-    async printOrders()
-    {
-        for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
-        {
-            let tmpPrintQuery = 
-            {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
-                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
-            }
-            let tmpData = await this.core.sql.execute(tmpPrintQuery) 
-            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-            {
-                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
-                mywindow.onload = function() 
-                {
-                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                } 
-                // if(pResult.split('|')[0] != 'ERR')
-                // {
-                //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                // }
-            });
+        let tmpQuery = 
+        {
+            query : "SELECT * FROM (SELECT DOC_GUID AS GUID,    " +
+            "REF,    " +
+            "REF_NO,    " +
+            "REF + '-' + CONVERT(NVARCHAR,REF_NO) AS PRINT_REF,    " +
+            "DOC_DATE,    " +
+            "OUTPUT_NAME,    " +
+            "OUTPUT_CODE,    " +
+            "INPUT_CODE,    " +
+            "INPUT_NAME,    " +
+            "'' AS STATUS,    " +
+            " 1 AS PALET,   " +
+            " 1 AS BOX,   " +
+            "SUM(TOTAL) as TOTAL,    " +
+            "SUM(VAT) as VAT,    " +
+            "SUM(TOTALHT) as TOTALHT,   " +
+            "SUM(APPROVED_QUANTITY) as APPROVED_QUANTITY,   " +
+            "MAX(CLOSED) as CLOSED,   " +
+            "CASE WHEN SUM(APPROVED_QUANTITY) = 0 THEN SUM(PEND_QUANTITY) ELSE SUM(APPROVED_QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY,   " +
+            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
+            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_CODE,   " +
+            "(SELECT TOP 1 ZIPCODE + ' ' + CITY + ' ' + COUNTRY_NAME FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_ORDERS_VW_01.INPUT AND TYPE = 0) AS ADDRESS   " +
+            "FROM DOC_ORDERS_VW_01    " +
+            "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
+            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
+            "AND TYPE = 1 AND APPROVED_QUANTITY > 0     " +
+            "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE,INPUT    " +
+            ") AS TMP WHERE (( MAIN_GROUP_CODE = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = ''))" +
+            "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
+            param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
+            value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
         }
-           
-    }
-    async statusCheck()
-    {
-        let tmpSource = {...this.grdSlsOrdList.data.datatable}
+        
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        let tmpSource = tmpData.result.recordset    
         for (let i = 0; i < tmpSource.length; i++)
         {
             let tmpQuery = 
@@ -144,11 +100,13 @@ export default class salesOrdList extends React.PureComponent
                 param : ['DOC_GUID:string|50'],
                 value : [tmpSource[i].GUID]
             }
+            
             let tmpData = await this.core.sql.execute(tmpQuery)
             if(tmpData.result.recordset.length > 0)
             {
                 tmpSource[i].COLIS = tmpData.result.recordset[0].COLIS
             }
+            
             if(tmpSource[i].APPROVED_QUANTITY == tmpSource[i].PEND_QUANTITY)
             {
                 tmpSource[i].STATUS = this.t("statusType.grey")
@@ -166,8 +124,62 @@ export default class salesOrdList extends React.PureComponent
                 tmpSource[i].STATUS = this.t("statusType.blue")
             }   
         }
-        this.grdSlsOrdList.dataRefresh(tmpSource)    
+               
+        App.instance.setState({isExecute:true})
+        await this.grdSlsOrdList.dataRefresh({source:tmpSource})
+        App.instance.setState({isExecute:false})
+    }
+    async _btnGrdPrint(e)
+    {
+        this.printGuid = e.row.data.GUID
+        this.popDesign.show() 
+    }
+    async printOrders()
+    {
+        let tmpLines = []
+        for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
+        {
+            let tmpPrintQuery = 
+            {
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
+            }
+            let tmpData = await this.core.sql.execute(tmpPrintQuery) 
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
+        }
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',(pResult) => 
+        {
+            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
+            mywindow.onload = function() 
+            {
+                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+            } 
+            // if(pResult.split('|')[0] != 'ERR')
+            // {
+            //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+            //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            // }
+        });
+        let tmpDesign = 'pallet_etiket.repx'
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpDesign.replaceAll('\\','/') + '","DATA":' + JSON.stringify(this.grdSlsOrdList.getSelectedData()) + '}',(pResult) => 
+        {
+            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+            mywindow.onload = function() 
+            {
+                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+            } 
+            // if(pResult.split('|')[0] != 'ERR')
+            // {
+            //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+            //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            // }
+        });
     }
     render()
     {

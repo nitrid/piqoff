@@ -251,6 +251,7 @@ export default class salesDisList extends React.PureComponent
         console.log(tmpPrintDialog)
         if(tmpPrintDialog == 'btn01')
         {
+            let tmpLines = []
             App.instance.setState({isExecute:true})
             for (let i = 0; i < tmpDocGuids.length; i++) 
             {
@@ -268,46 +269,36 @@ export default class salesDisList extends React.PureComponent
                 {
                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                    value:  [tmpDocGuids[i].GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                    value:  [tmpDocGuids[i].GUID,'333',localStorage.getItem('lang').toUpperCase()]
                 }
                 App.instance.setState({isExecute:true})
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 App.instance.setState({isExecute:false})
-                // let tmpQuery2 = 
-                // { 
-                //     query:  "SELECT TOP 5 " +
-                //             "DOC_DATE AS DOC_DATE, " +
-                //             "DOC_REF AS REF, " +
-                //             "DOC_REF_NO AS REF_NO, " +
-                //             "BALANCE AS BALANCE " +
-                //             "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                //             "AND BALANCE <> 0 " +
-                //             "ORDER BY DOC_DATE DESC" ,
-                //     param:  ['INPUT:string|50'],
-                //     value:  [this.docObj.dt()[0].INPUT]
-                // }
-                // let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                // let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
+                for (let x = 0; x < tmpData.result.recordset.length; x++) 
+                {
+                    tmpLines.push(tmpData.result.recordset[x])
+                }
+                this.core.socket.emit('piqXInvoiceInsert',
+                {
+                    fromUser : tmpData.result.recordset[0].LUSER,
+                    toUser : '',
+                    docGuid : tmpData.result.recordset[0].DOC_GUID,
+                    docDate : tmpData.result.recordset[0].DOC_DATE,
+                    fromTax : tmpData.result.recordset[0].TAX_NO,
+                    toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                    json : JSON.stringify(tmpData.result.recordset),
+                    pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                },
+                (pData) =>
+                {
+                    console.log(pData)
+                })
+              
+            }
+            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
                 {
                     if(pResult.split('|')[0] != 'ERR')
                     {
-                        this.core.socket.emit('piqXInvoiceInsert',
-                        {
-                            fromUser : tmpData.result.recordset[0].LUSER,
-                            toUser : '',
-                            docGuid : tmpData.result.recordset[0].DOC_GUID,
-                            docDate : tmpData.result.recordset[0].DOC_DATE,
-                            fromTax : tmpData.result.recordset[0].TAX_NO,
-                            toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
-                            json : JSON.stringify(tmpData.result.recordset),
-                            pdf : "data:application/pdf;base64," + pResult.split('|')[1]
-                        },
-                        (pData) =>
-                        {
-                            console.log(pData)
-                        })
-
                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                         mywindow.onload = function() 
                         { 
@@ -315,7 +306,6 @@ export default class salesDisList extends React.PureComponent
                         } 
                     }
                 });
-            }
             App.instance.setState({isExecute:false})
         }
     }
