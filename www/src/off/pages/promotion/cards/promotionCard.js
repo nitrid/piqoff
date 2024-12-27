@@ -956,9 +956,22 @@ export default class promotionCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
+                                    onClick={async (e)=>
                                     {
-                                        this.init();
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNewPage',showTitle:true,title:this.t("msgNewPage.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNewPage.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPage.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPage.msg")}</div>)
+                                            }
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {    
+                                                this.init();
+                                            } 
+                                        }    
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
