@@ -52,10 +52,10 @@ export default class posPayTypeCard extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 py-2">
                         <div className="col-12">
                             <Toolbar>
-                            <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
@@ -132,7 +132,10 @@ export default class posPayTypeCard extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="alert alert-info m-0" role="alert">
+                        {this.t("alert1")}
+                    </div>
+                    <div className="row px-2 py-2">
                         <div className="col-12">
                             <Form colCount={2} id={"frmPayType"}>
                             <Item>

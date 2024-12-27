@@ -338,7 +338,7 @@ export default class posDoc extends React.PureComponent
         
         if(this.core.offline)
         {
-            this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
+            this.sendJet({CODE:"70",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
         }
     }
     async componentDidMount()
@@ -1877,7 +1877,13 @@ export default class posDoc extends React.PureComponent
             pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
             /************************************************************************************ */
         }
+        
+        if(pRowData.QUANTITY > pItemData.QUANTITY)
+        {
+            this.sendJet({CODE:"323",NAME:"La quantité a été réduite."})
+        }
 
+        
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
         
         if(pRowData.PROMO_TYPE == 1)
@@ -2084,7 +2090,7 @@ export default class posDoc extends React.PureComponent
                         {
                             let tmpConfObj =
                             {
-                                id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:false,width:'500px',height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgPrintAlert.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
                             }
@@ -2119,6 +2125,10 @@ export default class posDoc extends React.PureComponent
                                 {
                                     await this.print(tmpData,2)
                                 }
+                            }
+                            else if(pResult == 'btn02')
+                            {
+                                this.sendJet({CODE:"901",NAME:"Le client n'a pas demandé de reçu de vente."})
                             }
                             else if(pResult == 'btn03')
                             {
@@ -4779,7 +4789,6 @@ export default class posDoc extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         
-                                       console.log(this.grdList.devGrid.getSelectedRowsData()[0])
                                         if(this.grdList.devGrid.getSelectedRowsData().length > 0 && (this.grdList.devGrid.getSelectedRowsData()[0].WEIGHING==false) && (this.grdList.devGrid.getSelectedRowsData()[0].UNIT_SHORT != 'kg'))
                                         {
                                             let tmpData = 

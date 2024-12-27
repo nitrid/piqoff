@@ -1315,7 +1315,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"SaleClosePrint",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
