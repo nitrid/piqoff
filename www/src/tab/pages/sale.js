@@ -180,7 +180,7 @@ export default class Sale extends React.PureComponent
             {
                 query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%')) OR (BARCODE = ?)) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) AND STATUS = 1 GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                        "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
             
