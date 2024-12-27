@@ -6,6 +6,7 @@ const pos_01_005 =
     txtPayTypeIcon : "Icon",
     txtPayTypeRate : "Degeri",
     chkPayTypeVisible : "Pos ödeme panelinde gözüksün",
+    alert1 : "Lütfen dikkat ! NF (Norm France) sertifikası sebebiyle 'Diğer' adında ödeme tipi belirleyemezsiniz.",
     msgSave:
     {
         title: "Dikkat",

@@ -6,6 +6,7 @@ const pos_01_005 =
     txtPayTypeIcon: "Icône",
     txtPayTypeRate: "Valeur",
     chkPayTypeVisible: "Visible dans le panneau de paiement POS",
+    alert1: "Attention ! En raison de la certification NF (Norme France), vous ne pouvez pas définir un type de paiement nommé 'Autre'.",
     msgSave: {
         title: "Attention",
         btn01: "OK",
