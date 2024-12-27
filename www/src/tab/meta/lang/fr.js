@@ -15,6 +15,7 @@ export const langFr =
     serverConnection : "Etablissement de la connexion avec le serveur",
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
+    msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
     menu:
     {
         dashboard : "Tableau de bord",
@@ -35,6 +36,13 @@ export const langFr =
     {
         title : "Veuillez patienter !",
         msg : "Vos données sont en train de se mettre à jour..."
+    },
+    msgDataTransferOption :
+    {
+        title : "Attention",
+        msg : "Voulez-vous mettre à jour vos données ?",
+        btnYes : "Oui",
+        btnNo : "Non",
     },
     sale:  // "Vente"
     {
