@@ -330,7 +330,7 @@ export function print()
                                 font: "b",
                                 style: "b",
                                 align: "rt",
-                                data: "Remise ".space(46,"s") + (Number(tmpSaleItem.DISCOUNT).rate2In(tmpSaleItem.FAMOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(10,"s")
+                                data: "Remise ".space(40,"s") + (Number(tmpSaleItem.AMOUNT).rate2Num(tmpSaleItem.DISCOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(16,"s")
                             })
                         }
                     }
