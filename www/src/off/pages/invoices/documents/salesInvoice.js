@@ -1875,7 +1875,7 @@ export default class salesInvoice extends DocBase
                                             }
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
