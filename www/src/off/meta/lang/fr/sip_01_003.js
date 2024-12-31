@@ -42,16 +42,16 @@ const sip_01_003 =
     },
     msgConvertDispatch :
     {  
-        title: "Dikkat",   // BAK
-        btn01: "Tamam",   // BAK
-        btn01: "Vazgeç",   // BAK
-        msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"            // BAK
+        title: "Attention",   // BAK
+        btn01: "Continuer",   // BAK
+        btn02: "Annuler",   // BAK
+        msg: "Voulez-vous convertir les bons de commande sélectionnés en livraison ?"            // BAK
     },
     msgConvertSucces :
     {  
-        title: "Dikkat",  // BAK
-        btn01: "Tamam",  // BAK
-        msg: "Seçilen Evraklar İrsaliyeye çevrildi.."           // BAK
+        title: "Attention",  // BAK
+        btn01: "Imprimer",  // BAK
+        msg: "Les livraisons ont été créées."           // BAK
     },
     btnView : "Aperçu", 
     btnMailsend : "Envoyer E-Mail", 

@@ -1873,6 +1873,10 @@ export default class salesInvoice extends DocBase
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+                                            if(typeof e.data.SUB_FACTOR != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                            }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
@@ -1981,7 +1985,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>

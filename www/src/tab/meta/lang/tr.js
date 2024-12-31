@@ -79,7 +79,8 @@ export const langTr =
             btn01 : "Ara",
             btn02 : "Seç",
             clmCode : "KODU",
-            clmName : "ADI"
+            clmName : "ADI",
+            clmAdress : "ADRES"
         },
         grdSale: 
         {

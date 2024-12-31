@@ -168,8 +168,10 @@ export default class salesOrdList extends React.PureComponent
                                 "DOC_DATE,    " +
                                 "OUTPUT_NAME,    " +
                                 "OUTPUT_CODE,    " +
+                                "OUTPUT,    " + 
                                 "INPUT_CODE,    " +
                                 "INPUT_NAME,    " +
+                                "INPUT,    " +
                                 "SUM(TOTAL) as TOTAL,    " +
                                 "SUM(VAT) as VAT,    " +
                                 "SUM(TOTALHT) as TOTALHT,   " +
@@ -180,7 +182,7 @@ export default class salesOrdList extends React.PureComponent
                                 "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
                                 "AND TYPE = 1 AND PEND_QUANTITY > 0 AND CLOSED = 0    " +
-                                "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE,INPUT    " +
+                                "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE,INPUT,OUTPUT    " +
                                 ") AS TMP WHERE PEND_QUANTITY > 0 AND (( MAIN_GROUP_CODE = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = ''))" +
                                 "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
@@ -247,7 +249,7 @@ export default class salesOrdList extends React.PureComponent
             tmpDocCls.addEmpty(tmpDoc);     
             let tmpLineQuery = 
             {
-                query :"SELECT * FROM DOC_ORDERS WHERE DOC_GUID = @DOC_GUID ",
+                query :"SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
                 param : ['DOC_GUID:string|50'],
                 value : [this.grdSlsOrdList.getSelectedData()[i].GUID]
             }
@@ -294,6 +296,8 @@ export default class salesOrdList extends React.PureComponent
                     tmpDocCls.docItems.addEmpty(tmpdocItems)
                 }
             }
+            console.log(tmpDocCls.docItems.dt())
+            console.log(tmpDocCls.dt())
             if(tmpDocCls.docItems.dt().length > 0)
             {
                 let tmptest = await tmpDocCls.save()

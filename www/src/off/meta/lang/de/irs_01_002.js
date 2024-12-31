@@ -29,5 +29,12 @@ const irs_01_002 =
         clmTotal: "Summe",
         clmOutputName: "Lager",
     },
+    msgPrintDispatch :
+    {  
+        title: "Achtung",
+        btn01: "Drucken",
+        btn02: "Schließen", 
+        msg: "Die Lieferscheine werden gedruckt. Möchten Sie sie drucken?"
+    }
 }
 export default irs_01_002

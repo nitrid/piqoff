@@ -91,7 +91,7 @@ export default class salesOrdList extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT  SUM(DO.QUANTITY / ISNULL(IU.FACTOR, 1)) AS COLIS FROM   " +
+                query : "SELECT  SUM(DO.APPROVED_QUANTITY / ISNULL(IU.FACTOR, 1)) AS COLIS FROM   " +
                         "DOC_ORDERS_VW_01 DO  " +
                         "LEFT JOIN   " +
                         "ITEM_UNIT_VW_01 IU  " +
