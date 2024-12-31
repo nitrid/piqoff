@@ -32,7 +32,8 @@ const sip_01_003 =
         clmStatus : "Durum",
         clmColis : "Koli",
         clmPalet : "Palet",
-        clmBox : "Kutu"
+        clmBox : "Kutu",
+        clmLivre : "Gönderildi"
     },
     popDesign : 
     {

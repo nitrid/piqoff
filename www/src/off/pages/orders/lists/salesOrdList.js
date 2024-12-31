@@ -137,6 +137,7 @@ export default class salesOrdList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT *, " +
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS LIVRE, " +
                                 "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
                                 "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
                                 "FROM DOC_VW_01 " +
@@ -172,9 +173,11 @@ export default class salesOrdList extends React.PureComponent
                                 "INPUT_CODE,    " +
                                 "INPUT_NAME,    " +
                                 "INPUT,    " +
+                                "SUM(AMOUNT) as AMOUNT,    " +
                                 "SUM(TOTAL) as TOTAL,    " +
                                 "SUM(VAT) as VAT,    " +
                                 "SUM(TOTALHT) as TOTALHT,   " +
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_ORDERS_VW_01.DOC_GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS LIVRE, " +
                                 "CASE WHEN SUM(APPROVED_QUANTITY) = 0 THEN SUM(PEND_QUANTITY) ELSE SUM(APPROVED_QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY,   " +
                                 "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
                                 "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
@@ -218,100 +221,103 @@ export default class salesOrdList extends React.PureComponent
         }
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
-            let tmpDocCls =  new docCls
+            if(this.grdSlsOrdList.getSelectedData()[i].LIVRE == 'X')
+            {
+                let tmpDocCls =  new docCls
 
-            let tmpDoc = {...tmpDocCls.empty}
-            tmpDoc.TYPE = 1
-            tmpDoc.DOC_TYPE = 40
-            tmpDoc.REBATE = 0
-            tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
-            tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
-            tmpDoc.AMOUNT = this.grdSlsOrdList.getSelectedData()[i].AMOUNT
-            tmpDoc.VAT = this.grdSlsOrdList.getSelectedData()[i].VAT
-            tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
-            tmpDoc.TOTALHT = this.grdSlsOrdList.getSelectedData()[i].TOTALHT
-            tmpDoc.TOTAL = this.grdSlsOrdList.getSelectedData()[i].TOTAL
-            tmpDoc.DOC_DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT
-            tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
-            tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
-            tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
-            tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
-            tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF
-            let tmpQuery = 
-            {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
-            }
-            tmpDocCls.addEmpty(tmpDoc);     
-            let tmpLineQuery = 
-            {
-                query :"SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
-                param : ['DOC_GUID:string|50'],
-                value : [this.grdSlsOrdList.getSelectedData()[i].GUID]
-            }
-            let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
-            if(tmpLineData.result.recordset.length > 0)
-            {
-                for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
+                let tmpDoc = {...tmpDocCls.empty}
+                tmpDoc.TYPE = 1
+                tmpDoc.DOC_TYPE = 40
+                tmpDoc.REBATE = 0
+                tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
+                tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
+                tmpDoc.AMOUNT = this.grdSlsOrdList.getSelectedData()[i].AMOUNT
+                tmpDoc.VAT = this.grdSlsOrdList.getSelectedData()[i].VAT
+                tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
+                tmpDoc.TOTALHT = this.grdSlsOrdList.getSelectedData()[i].TOTALHT
+                tmpDoc.TOTAL = this.grdSlsOrdList.getSelectedData()[i].TOTAL
+                tmpDoc.DOC_DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT
+                tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
+                tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
+                tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
+                tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
+                tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF
+                let tmpQuery = 
                 {
-                    let tmpdocItems = {...tmpDocCls.docItems.empty}
-                    tmpdocItems.DOC_GUID = tmpDocCls.dt()[0].GUID
-                    tmpdocItems.TYPE = tmpDocCls.dt()[0].TYPE
-                    tmpdocItems.DOC_TYPE = tmpDocCls.dt()[0].DOC_TYPE
-                    tmpdocItems.LINE_NO = tmpDocCls.docItems.dt().length
-                    tmpdocItems.REF = tmpDocCls.dt()[0].REF
-                    tmpdocItems.REF_NO = tmpDocCls.dt()[0].REF_NO
-                    tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
-                    tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
-                    tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
-                    tmpdocItems.LINE_NO = tmpDocCls.docOrders.dt().length
-                    tmpdocItems.ITEM = tmpLineData.result.recordset[x].ITEM
-                    tmpdocItems.ITEM_NAME = tmpLineData.result.recordset[x].ITEM_NAME
-                    tmpdocItems.UNIT = tmpLineData.result.recordset[x].UNIT
-                    tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
-                    tmpdocItems.DISCOUNT = tmpLineData.result.recordset[x].DISCOUNT
-                    tmpdocItems.DISCOUNT_1 = tmpLineData.result.recordset[x].DISCOUNT_1
-                    tmpdocItems.DISCOUNT_2 = tmpLineData.result.recordset[x].DISCOUNT_2
-                    tmpdocItems.DISCOUNT_3 = tmpLineData.result.recordset[x].DISCOUNT_3
-                    tmpdocItems.DOC_DISCOUNT_1 = tmpLineData.result.recordset[x].DOC_DISCOUNT_1
-                    tmpdocItems.DOC_DISCOUNT_2 = tmpLineData.result.recordset[x].DOC_DISCOUNT_2
-                    tmpdocItems.DOC_DISCOUNT_3 = tmpLineData.result.recordset[x].DOC_DISCOUNT_3
-                    tmpdocItems.DISCOUNT_RATE = tmpLineData.result.recordset[x].DISCOUNT_RATE
-                    tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
-                    tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
-                    tmpdocItems.QUANTITY = tmpLineData.result.recordset[x].QUANTITY
-                    tmpdocItems.VAT_RATE = tmpLineData.result.recordset[x].VAT_RATE
-                    tmpdocItems.PRICE = tmpLineData.result.recordset[x].PRICE
-                    tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
-                    tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
-                    tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
-                    tmpdocItems.TOTAL = tmpLineData.result.recordset[x].SUM_AMOUNT
-                    tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
-                    tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
-
-                    tmpDocCls.docItems.addEmpty(tmpdocItems)
+                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
+                }
+                tmpDocCls.addEmpty(tmpDoc);     
+                let tmpLineQuery = 
+                {
+                    query :"SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
+                    param : ['DOC_GUID:string|50'],
+                    value : [this.grdSlsOrdList.getSelectedData()[i].GUID]
+                }
+                let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
+                if(tmpLineData.result.recordset.length > 0)
+                {
+                    for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
+                    {
+                        let tmpdocItems = {...tmpDocCls.docItems.empty}
+                        tmpdocItems.DOC_GUID = tmpDocCls.dt()[0].GUID
+                        tmpdocItems.TYPE = tmpDocCls.dt()[0].TYPE
+                        tmpdocItems.DOC_TYPE = tmpDocCls.dt()[0].DOC_TYPE
+                        tmpdocItems.LINE_NO = tmpDocCls.docItems.dt().length
+                        tmpdocItems.REF = tmpDocCls.dt()[0].REF
+                        tmpdocItems.REF_NO = tmpDocCls.dt()[0].REF_NO
+                        tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+                        tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
+                        tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+                        tmpdocItems.LINE_NO = tmpDocCls.docOrders.dt().length
+                        tmpdocItems.ITEM = tmpLineData.result.recordset[x].ITEM
+                        tmpdocItems.ITEM_NAME = tmpLineData.result.recordset[x].ITEM_NAME
+                        tmpdocItems.UNIT = tmpLineData.result.recordset[x].UNIT
+                        tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+                        tmpdocItems.DISCOUNT = tmpLineData.result.recordset[x].DISCOUNT
+                        tmpdocItems.DISCOUNT_1 = tmpLineData.result.recordset[x].DISCOUNT_1
+                        tmpdocItems.DISCOUNT_2 = tmpLineData.result.recordset[x].DISCOUNT_2
+                        tmpdocItems.DISCOUNT_3 = tmpLineData.result.recordset[x].DISCOUNT_3
+                        tmpdocItems.DOC_DISCOUNT_1 = tmpLineData.result.recordset[x].DOC_DISCOUNT_1
+                        tmpdocItems.DOC_DISCOUNT_2 = tmpLineData.result.recordset[x].DOC_DISCOUNT_2
+                        tmpdocItems.DOC_DISCOUNT_3 = tmpLineData.result.recordset[x].DOC_DISCOUNT_3
+                        tmpdocItems.DISCOUNT_RATE = tmpLineData.result.recordset[x].DISCOUNT_RATE
+                        tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
+                        tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+                        tmpdocItems.QUANTITY = tmpLineData.result.recordset[x].QUANTITY
+                        tmpdocItems.VAT_RATE = tmpLineData.result.recordset[x].VAT_RATE
+                        tmpdocItems.PRICE = tmpLineData.result.recordset[x].PRICE
+                        tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
+                        tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
+                        tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
+                        tmpdocItems.TOTAL = tmpLineData.result.recordset[x].SUM_AMOUNT
+                        tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
+                        tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
+    
+                        tmpDocCls.docItems.addEmpty(tmpdocItems)
+                    }
+                }
+                if(tmpDocCls.docItems.dt().length > 0)
+                {
+                    let tmptest = await tmpDocCls.save()
+                    console.log(tmptest)
                 }
             }
-            console.log(tmpDocCls.docItems.dt())
-            console.log(tmpDocCls.dt())
-            if(tmpDocCls.docItems.dt().length > 0)
-            {
-                let tmptest = await tmpDocCls.save()
-                console.log(tmptest)
-            }
-            let tmpConfObj =
-            {
-                id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
+           
         }
+        let tmpConfObj1 =
+        {
+            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
+        }
+
+        await dialog(tmpConfObj1);
+        this._btnGetClick()
     }
     async printOrders()
     {
@@ -589,6 +595,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="TOTALHT" caption={this.t("grdSlsOrdList.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
+                                <Column dataField="LIVRE" caption={this.t("grdSlsOrdList.clmLivre")} visible={true} width={100}/>
                                 <Column type="buttons" width={70}>
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>

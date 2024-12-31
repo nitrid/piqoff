@@ -2192,9 +2192,7 @@ export default class salesDispatch extends DocBase
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                                                    console.log(tmpData2)
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         this.core.socket.emit('piqXInvoiceInsert',

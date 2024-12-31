@@ -32,7 +32,8 @@ const sip_01_003 =
         clmStatus : "Stat",
         clmColis : "Colis",
         clmPalet : "Palet",
-        clmBox : "Boite"
+        clmBox : "Boite",
+        clmLivre : "Livré"
     },
     popDesign : 
     {

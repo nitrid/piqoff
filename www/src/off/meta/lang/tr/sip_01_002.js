@@ -28,7 +28,8 @@ const sip_01_002 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
         clmOutputName :"Depo",
-        clmMainGroup : "Müşteri Grubu"
+        clmMainGroup : "Müşteri Grubu",
+        clmLivre : "Gönderildi"
     },
     popDesign : 
     {

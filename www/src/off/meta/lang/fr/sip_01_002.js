@@ -28,7 +28,8 @@ const sip_01_002 =
         clmAmount : "Total HT" ,
         clmTotal : "Total",
         clmOutputName :"Réserve",
-        clmMainGroup : "Client Groupe"
+        clmMainGroup : "Client Groupe",
+        clmLivre : "Livré"
     },
     popDesign : 
     {
