@@ -186,7 +186,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"costForInvoıces",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
