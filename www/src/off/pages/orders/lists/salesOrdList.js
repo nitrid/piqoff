@@ -62,6 +62,7 @@ export default class salesOrdList extends React.PureComponent
         this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
+        this._btnGetClick()
     }
     _columnListBox(e)
     {
