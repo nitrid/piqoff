@@ -366,7 +366,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],(SELECT ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -384,7 +384,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-30 ORDER BY DOC_DATE,REF_NO DESC ",
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-3 AND CUSER = '" + this.user.CODE + "' ORDER BY DOC_DATE,REF_NO DESC ",
                 },
                 sql : this.core.sql
             }
@@ -573,6 +573,10 @@ export default class Sale extends React.PureComponent
             await dialog(tmpConfObj1);
 
             localStorage.removeItem("data")
+            if(this.sysParam.filter({ID:'autoNewOrder',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.init()
+            }
         }
         else
         {
@@ -1482,6 +1486,7 @@ export default class Sale extends React.PureComponent
                                                 <Scrolling mode="standart" />
                                                 <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={200}/>
                                                 <Column dataField="TITLE" caption={this.t("popCustomer.clmName")} width={400}/>
+                                                <Column dataField="ADRESS" caption={this.t("popCustomer.clmAdress")} width={400}/>
                                             </NdGrid>
                                         </div>
                                     </div>

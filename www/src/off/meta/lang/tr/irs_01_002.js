@@ -47,7 +47,13 @@ const irs_01_002 =
         btn02: "Kapat",
         msg: "Faturalar Oluşturuldu yazdırmak istermisiniz ?"         
     },
-
+    msgPrintDispatch :
+    {  
+        title: "Dikkat",
+        btn01: "Yazdır",
+        btn02: "Kapat",
+        msg: "İrsaliyeler yazdırılacak. Yazdırmak istermisiniz ?"         
+    },
 }
 
 export default irs_01_002

@@ -89,6 +89,21 @@ export const prm =
             CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin"
         }
     },
+     // Şipariş Sayfası kayır edince yeni evraka gecsin
+     {
+        TYPE : 0,
+        ID :"autoNewOrder",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Şipariş Sayfası kayır edince yeni evraka gecsin mi?"
+        }
+    },
 //#endregion
     //#region Sale
     //defaultUnit

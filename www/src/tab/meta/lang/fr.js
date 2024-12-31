@@ -77,7 +77,8 @@ export const langFr =
             btn01 : "Recherche",
             btn02 : "Choisir",
             clmCode : "Code",
-            clmName : "Nom"
+            clmName : "Nom",
+            clmAdress : "Adresse"
         },
         grdSale: 
         {
@@ -241,6 +242,7 @@ export const langFr =
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail",   
             btnSend : "Envoyer",
+            btnCancel : "Annuler",
             cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
         },
         msgMailSendResult:

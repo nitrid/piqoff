@@ -309,6 +309,51 @@ export default class salesDisList extends React.PureComponent
             App.instance.setState({isExecute:false})
         }
     }
+    async printDispatch()
+    {
+        let tmpConfObj =
+        {
+            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgPrintDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPrintDispatch.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintDispatch.msg")}</div>)
+        }
+        let tmpDialog = await dialog(tmpConfObj);
+        if(tmpDialog == 'btn02')
+        {
+            return
+        }
+        let tmpLines = []
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,'444',localStorage.getItem('lang').toUpperCase()]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
+        }
+       
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
+        {
+            console.log(pResult.split('|')[0])
+            console.log(pResult.split('|')[1])
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                { 
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+            }
+        });
+        App.instance.setState({isExecute:false})
+    }
     async MailSend(pGuid,pCustomer,pRefno)
     {
         let tmpMAilQuery = 
@@ -406,6 +451,21 @@ export default class salesDisList extends React.PureComponent
                                         onClick: async () => 
                                         {
                                             this.convertInvoice()
+                                            
+                                        }
+                                    }    
+                                } />
+                                  <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'print',
+                                        onClick: async () => 
+                                        {
+                                            this.printDispatch()
                                             
                                         }
                                     }    

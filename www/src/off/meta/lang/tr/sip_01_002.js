@@ -40,7 +40,7 @@ const sip_01_002 =
     {  
         title: "Dikkat",
         btn01: "Tamam",
-        btn01: "Vazgeç",
+        btn02: "Vazgeç",
         msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"         
     },
     msgConvertSucces :

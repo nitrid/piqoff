@@ -495,6 +495,38 @@ export const prm =
             CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
         }
     },
+    //autoMailSend
+    {
+        TYPE : 0,
+        ID :"autoFactureMailSend",
+        VALUE : 
+        {
+            value : true,
+            design : "33",
+            mail : "control@piqsoft.com"
+        },
+        SPECIAL : "",
+        PAGE : "irs_01_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Fatura otomatik mail gonderme",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"value",field:"value",id:"chkAutomail"},
+                    {type:"text",caption:"design",field:"design",id:"txtAutoMailDesing"},
+                    {type:"text",caption:"mail",field:"mail",id:"txtAutoMailAdres"}
+                ]
+            }
+        }
+    }, 
     //#mail acıklaması parametresi
     {
         TYPE : 0,
@@ -3155,28 +3187,7 @@ export const prm =
                 },
             }
         }
-    },
-//autoMailSend
-{
-    TYPE : 0,
-    ID :"autoFactureMailSend",
-    VALUE : 
-    {
-        value : true,
-        design : "33",
-        mail : "control@piqsoft.com"
-    },
-    SPECIAL : "",
-    PAGE : "irs_01_002",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Satış İrsaliye Listesi",
-        CAPTION : "Otomatik mail gonderme"
-    }
-},    
+    },   
     
 //autoMailSend
 {
