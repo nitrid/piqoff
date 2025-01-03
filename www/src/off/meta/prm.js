@@ -530,7 +530,7 @@ export const prm =
     //#mail acıklaması parametresi
     {
         TYPE : 0,
-        ID :"posMailExplanation",
+        ID :"MailExplanation",
         VALUE : "",
         SPECIAL : "",
         PAGE : "off",

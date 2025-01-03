@@ -156,7 +156,7 @@ export default class salesDisList extends React.PureComponent
             let tmpDocCustomer = {...tmpDocCls.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = tmpDocCls.dt()[0].GUID
             tmpDocCustomer.TYPE = 1
-            tmpDocCustomer.DOC_TYPE = 40    
+            tmpDocCustomer.DOC_TYPE = 20    
             tmpDocCustomer.REF = tmpDocCls.dt()[0].REF
             tmpDocCustomer.REF_NO = tmpDocCls.dt()[0].REF_NO
             tmpDocCustomer.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
@@ -406,7 +406,7 @@ export default class salesDisList extends React.PureComponent
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
                 App.instance.setState({isExecute:true})
-                let  tmpHtml = ''
+                let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
                 if(pResult.split('|')[0] != 'ERR')
                 {
                 }

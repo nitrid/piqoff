@@ -1960,8 +1960,8 @@ export class posDeviceCls
                 let Prm = new param(prm);
                 let sysParam = Prm.filter({TYPE:0})
                 pText =''
-                console.log(sysParam.filter({ID:'posMailExplanation'}).getValue())
-                pText = sysParam.filter({ID:'posMailExplanation'}).getValue()
+                console.log(sysParam.filter({ID:'MailExplanation'}).getValue())
+                pText = sysParam.filter({ID:'MailExplanation'}).getValue()
             }
             let docPdf = this.pdf(pData)
             let tmpHtml = ''

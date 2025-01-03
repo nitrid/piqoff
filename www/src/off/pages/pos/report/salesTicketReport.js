@@ -468,7 +468,7 @@ export default class salesOrdList extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         this.txtSendMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
-                                        this.htmlEditor.value = this.sysParam.filter({ID:'posMailExplanation',USERS:this.user.CODE}).getValue()
+                                        this.htmlEditor.value = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
                                         await this.mailPopup.show().then(async (e) =>
                                         {
                                         });
