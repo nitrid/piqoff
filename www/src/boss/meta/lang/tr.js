@@ -63,6 +63,7 @@ export const langTr =
         salesTotalDetail : "Satış Detayı",
         detail : "Detay",
         balanceTicketCreated: "Kasap etiketleri",
+        popAllItemGroups : "Tüm Ürün Grupları",
         balanceTicketChecked: "Kasadan geçen etiket",
         ticketCreatedAmount: "Toplam",
         ticketCheckedAmount: "Toplam",
@@ -74,6 +75,11 @@ export const langTr =
             vat : "KDV",
             total : "Vergili"
         },
+        grdAllItemGroups :
+        {
+            itemGroupName : "Ürün Grubu",
+            itemGroupAmount : "Tutar"
+        }
         
     },
 }
