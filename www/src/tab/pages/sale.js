@@ -515,6 +515,7 @@ export default class Sale extends React.PureComponent
     }    
     async orderSave()
     {
+        console.log(this.docLines)
         if(this.docObj.dt()[0].REF_NO == 0)
         {
             let tmpQuery = 
@@ -554,6 +555,14 @@ export default class Sale extends React.PureComponent
                 tmpDocOrders.TOTAL = this.docLines[i].TOTAL
                 tmpDocOrders.UNIT = this.docLines[i].UNIT
                 tmpDocOrders.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocOrders.DISCOUNT_1 = this.docLines[i].DISCOUNT_1   
+                tmpDocOrders.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocOrders.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocOrders.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocOrders.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT   
+                tmpDocOrders.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docOrders.addEmpty(tmpDocOrders)
             }
         }
@@ -649,6 +658,14 @@ export default class Sale extends React.PureComponent
                 tmpDocItems.TOTAL = this.docLines[i].TOTAL
                 tmpDocItems.UNIT = this.docLines[i].UNIT
                 tmpDocItems.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocItems.DISCOUNT_1 = this.docLines[i].DISCOUNT_1
+                tmpDocItems.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocItems.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocItems.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocItems.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT
+                tmpDocItems.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docItems.addEmpty(tmpDocItems)
             }
         }

@@ -87,15 +87,16 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT,OUTPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,"+ 
-                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_ITEMS_VW_01.DOC_GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                                "CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL,SUM(DOC_DISCOUNT) AS DOC_DISCOUNT,SUM(DOC_DISCOUNT_1) AS DOC_DISCOUNT_1, " + 
-                                "SUM(DOC_DISCOUNT_2) AS DOC_DISCOUNT_2,SUM(DOC_DISCOUNT_3) AS DOC_DISCOUNT_3 FROM DOC_ITEMS_VW_01 " +
+                        query : "SELECT *, " +
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
+                                "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
+                                "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
+                                "FROM DOC_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND ITEM_TYPE IN (0,2) GROUP BY REF,REF_NO,INPUT,OUTPUT,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE,INPUT_NAME ORDER BY DOC_DATE DESC,REF_NO DESC",
-                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
+                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value] 
                     },
                     sql : this.core.sql
                 }
@@ -132,17 +133,19 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REBATE = 0
             tmpDoc.INPUT = this.grdSlsDisList.getSelectedData()[i].INPUT
             tmpDoc.OUTPUT = this.grdSlsDisList.getSelectedData()[i].OUTPUT
-            tmpDoc.AMOUNT = this.grdSlsDisList.getSelectedData()[i].AMOUNT
-            tmpDoc.VAT = this.grdSlsDisList.getSelectedData()[i].VAT
+            tmpDoc.AMOUNT = Number(this.grdSlsDisList.getSelectedData()[i].AMOUNT).round(2)
+            tmpDoc.VAT = Number(this.grdSlsDisList.getSelectedData()[i].VAT).round(2)
             tmpDoc.VAT_ZERO = this.grdSlsDisList.getSelectedData()[i].VAT_ZERO
-            tmpDoc.TOTALHT = this.grdSlsDisList.getSelectedData()[i].TOTALHT
-            tmpDoc.TOTAL = this.grdSlsDisList.getSelectedData()[i].TOTAL
-            tmpDoc.DOC_DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT
+            tmpDoc.TOTALHT = Number(this.grdSlsDisList.getSelectedData()[i].TOTALHT).round(2)
+            tmpDoc.TOTAL = Number(this.grdSlsDisList.getSelectedData()[i].TOTAL).round(2)
+            tmpDoc.DOC_DISCOUNT = Number(this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT).round(2)
             tmpDoc.DOC_DISCOUNT_1 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_1
             tmpDoc.DOC_DISCOUNT_2 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_2
             tmpDoc.DOC_DISCOUNT_3 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_3
             tmpDoc.DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DISCOUNT
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
+            tmpDoc.LOCKED = 1
+            tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
             let tmpQuery = 
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
