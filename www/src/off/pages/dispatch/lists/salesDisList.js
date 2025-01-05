@@ -152,7 +152,30 @@ export default class salesDisList extends React.PureComponent
             {
                 tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
             }
-            tmpDocCls.addEmpty(tmpDoc);     
+            tmpDocCls.addEmpty(tmpDoc);   
+            let tmpDocCustomer = {...tmpDocCls.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = tmpDocCls.dt()[0].GUID
+            tmpDocCustomer.TYPE = 1
+            tmpDocCustomer.DOC_TYPE = 20    
+            tmpDocCustomer.REF = tmpDocCls.dt()[0].REF
+            tmpDocCustomer.REF_NO = tmpDocCls.dt()[0].REF_NO
+            tmpDocCustomer.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+            tmpDocCustomer.INPUT = tmpDocCls.dt()[0].INPUT
+            tmpDocCustomer.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+            tmpDocCustomer.DESCRIPTION = tmpDocCls.dt()[0].DESCRIPTION
+            tmpDocCustomer.AMOUNT = tmpDocCls.dt()[0].TOTAL
+            let tmpCusotmerQuery = 
+            {
+                query :"SELECT * FROM CUSTOMER_VW_02 WHERE GUID = @INPUT ",
+                param : ['INPUT:string|50'],
+                value : [ tmpDocCls.dt()[0].INPUT]
+            }
+            let tmpCustomerData = await this.core.sql.execute(tmpCusotmerQuery) 
+            if(tmpCustomerData.result.recordset.length > 0)
+            {
+                tmpDocCustomer.EXPIRY_DATE =  moment(new Date()).add(tmpCustomerData.result.recordset[0].EXPIRY_DAY, 'days')
+            }   
+            tmpDocCls.docCustomer.addEmpty(tmpDocCustomer);
             let tmpLineQuery = 
             {
                 query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
@@ -228,8 +251,13 @@ export default class salesDisList extends React.PureComponent
                     }
                 }
             }
+            console.log(tmpDocCls.dt()[0]) 
+            console.log(tmpDocCls.docItems.dt())
             if(tmpDocCls.docItems.dt().length > 0)
             {
+                let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())                
+                tmpDocCls.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                tmpDocCls.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                await tmpDocCls.save()
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
@@ -378,7 +406,7 @@ export default class salesDisList extends React.PureComponent
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
                 App.instance.setState({isExecute:true})
-                let  tmpHtml = ''
+                let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
                 if(pResult.split('|')[0] != 'ERR')
                 {
                 }

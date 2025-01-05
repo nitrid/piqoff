@@ -274,6 +274,7 @@ export default class salesOrdList extends React.PureComponent
                         tmpdocItems.OUTPUT = tmpDocCls.dt()[0].OUTPUT
                         tmpdocItems.INPUT = tmpDocCls.dt()[0].INPUT
                         tmpdocItems.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+                        tmpdocItems.SHIPMENT_DATE = tmpDocCls.dt()[0].SHIPMENT_DATE
                         tmpdocItems.LINE_NO = tmpDocCls.docOrders.dt().length
                         tmpdocItems.ITEM = tmpLineData.result.recordset[x].ITEM
                         tmpdocItems.ITEM_NAME = tmpLineData.result.recordset[x].ITEM_NAME
