@@ -543,7 +543,6 @@ export const prm =
             CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
-   
     //#endregion
     //#region Stok Tanıtım
     //txtRef
@@ -1665,8 +1664,8 @@ export const prm =
             CAPTION : "Ünvan"
         }
     },
-     //txtCustomerName
-     {
+    //txtCustomerName
+    {
         TYPE : 2,
         ID :"txtCustomerName",
         VALUE : 
@@ -2200,7 +2199,6 @@ export const prm =
     },
     //#endregion
     //#region Şubeler Arası Satış Faturası
-    
     //txtRef
     {
         TYPE : 2,
@@ -2333,7 +2331,6 @@ export const prm =
     },
     //#endregion
     //#region Fiyat Farki Alış Faturası
-
     // checkDocNo
     {
         TYPE : 1,
@@ -2352,7 +2349,6 @@ export const prm =
     },
     //#endregion
     //#region Gelen İade Alış Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2559,7 +2555,6 @@ export const prm =
     },
     //#endregion
     //#region Gönderilen İade Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2578,7 +2573,6 @@ export const prm =
     },
     //#endregion
     //#region Fiyat Farki Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2597,7 +2591,6 @@ export const prm =
     },
     //#endregion
     //#region Şubeler Arası Alis Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2794,22 +2787,22 @@ export const prm =
     },
     // negativeQuantity
     {
-    TYPE : 1,
-    ID :"negativeQuantity",
-    VALUE : 
-    {
-        value : false
-    },
-    SPECIAL : "",
-    PAGE : "ftr_04_002",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Proforma Satış Faturası",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
-    }
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_04_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Proforma Satış Faturası",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
     },
     //#endregion
     //#region Depo Miktar Listesi
@@ -2841,7 +2834,7 @@ export const prm =
             }
         }
     },
-        //#endregion
+    //#endregion
     //#region Depo Sevk
     // negativeQuantity
     {
@@ -2960,7 +2953,7 @@ export const prm =
             CAPTION : "Satır Açıklamalarını Zorunlu Kıl"
         }
     },
-     // negativeQuantity
+    // negativeQuantity
     {
         TYPE : 1,
         ID :"negativeQuantity",
@@ -3188,45 +3181,44 @@ export const prm =
             }
         }
     },   
-    
-//autoMailSend
-{
-    TYPE : 1,
-    ID :"autoMailSend",
-    VALUE : 
+    //autoMailSend
     {
-        value : true
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şube Satış İrsaliye",
+            CAPTION : "Otomatik mail gonderme"
+        }
     },
-    SPECIAL : "",
-    PAGE : "irs_02_004",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
+    //autoMailSend
     {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şube Satış İrsaliye",
-        CAPTION : "Otomatik mail gonderme"
-    }
-},
-//autoMailSend
-{
-    TYPE : 1,
-    ID :"autoMailSend",
-    VALUE : 
-    {
-        value : true
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Satış",
+            CAPTION : "Otomatik mail gonderme"
+        }
     },
-    SPECIAL : "",
-    PAGE : "ftr_02_005",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şubeler Arası Satış",
-        CAPTION : "Otomatik mail gonderme"
-    }
-},
     //#endregion
     //#region Satış Anlaşması
     //cmbDepot
@@ -3408,28 +3400,28 @@ export const prm =
     },
     //#endregion
     //#region Tax Sugar Report
-        //Tax Sugar
+    //Tax Sugar
+    {
+        TYPE : 1,
+        ID :"taxSugarGroupValidation",
+        VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60FE2360-029B-4284-B7FB-6D5DD842EA58'],
+        SPECIAL : "",
+        PAGE : "slsRpt_02_003",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
         {
-            TYPE : 1,
-            ID :"taxSugarGroupValidation",
-            VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60FE2360-029B-4284-B7FB-6D5DD842EA58'],
-            SPECIAL : "",
-            PAGE : "slsRpt_02_003",
-            ELEMENT : "",
-            APP : "OFF",
-            VIEW : 
+            TYPE : "popTextList",
+            PAGE_NAME : "Tax Sugar Report",
+            CAPTION : "Tax Sugar Uygulanacak Gruplar",
+            FORM: 
             {
-                TYPE : "popTextList",
-                PAGE_NAME : "Tax Sugar Report",
-                CAPTION : "Tax Sugar Uygulanacak Gruplar",
-                FORM: 
-                {
-                    width:"400",
-                    height:"400",
-                    textHeight:"260"
-                }
+                width:"400",
+                height:"400",
+                textHeight:"260"
             }
-        },
+        }
+    },
     //#endregion
     //#region Satış Sipariş
     //negativeQuantity
@@ -3573,8 +3565,8 @@ export const prm =
             CAPTION : "Depo"
         }
     },
-     //cmbDepot
-     {
+    //cmbDepot
+    {
         TYPE : 1,
         ID :"printDesing",
         VALUE : 
