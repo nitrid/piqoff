@@ -177,6 +177,14 @@ export default class salesOrdList extends React.PureComponent
                                 "SUM(AMOUNT) as AMOUNT,    " +
                                 "SUM(TOTAL) as TOTAL,    " +
                                 "SUM(VAT) as VAT,    " +
+                                "SUM(DISCOUNT) as DISCOUNT,    " +
+                                "MAX(SHIPMENT_DATE) as SHIPMENT_DATE,    " +
+                                "(SELECT TOP 1 VAT_ZERO FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as VAT_ZERO,    " +
+                                "SUM(DOC_DISCOUNT) as DOC_DISCOUNT,    " +  
+                                "SUM(DOC_DISCOUNT_1) as DOC_DISCOUNT_1,    " +
+                                "SUM(DOC_DISCOUNT_2) as DOC_DISCOUNT_2,    " +
+                                "SUM(DOC_DISCOUNT_3) as DOC_DISCOUNT_3,    " +
+                                "(SELECT TOP 1 PRICE_LIST_NO FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as PRICE_LIST_NO,    " +
                                 "SUM(TOTALHT) as TOTALHT,   " +
                                 "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_ORDERS_VW_01.DOC_GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS LIVRE, " +
                                 "CASE WHEN SUM(APPROVED_QUANTITY) = 0 THEN SUM(PEND_QUANTITY) ELSE SUM(APPROVED_QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY,   " +
@@ -224,6 +232,7 @@ export default class salesOrdList extends React.PureComponent
         {
             if(this.grdSlsOrdList.getSelectedData()[i].LIVRE == 'X')
             {
+                
                 let tmpDocCls =  new docCls
 
                 let tmpDoc = {...tmpDocCls.empty}
@@ -232,17 +241,18 @@ export default class salesOrdList extends React.PureComponent
                 tmpDoc.REBATE = 0
                 tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
                 tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
-                tmpDoc.AMOUNT = this.grdSlsOrdList.getSelectedData()[i].AMOUNT
-                tmpDoc.VAT = this.grdSlsOrdList.getSelectedData()[i].VAT
+                tmpDoc.AMOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].AMOUNT).round(2)
+                tmpDoc.VAT = Number(this.grdSlsOrdList.getSelectedData()[i].VAT).round(2)
                 tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
-                tmpDoc.TOTALHT = this.grdSlsOrdList.getSelectedData()[i].TOTALHT
-                tmpDoc.TOTAL = this.grdSlsOrdList.getSelectedData()[i].TOTAL
-                tmpDoc.DOC_DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT
+                tmpDoc.TOTALHT = Number(this.grdSlsOrdList.getSelectedData()[i].TOTALHT).round(2)   
+                tmpDoc.TOTAL = Number(this.grdSlsOrdList.getSelectedData()[i].TOTAL).round(2)
+                tmpDoc.DOC_DISCOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT).round(2)
                 tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
                 tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
                 tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
                 tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
-                tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF
+                tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF,
+                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
