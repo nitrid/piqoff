@@ -218,7 +218,7 @@ export default class salesOrdList extends React.PureComponent
     {
         let tmpConfObj =
         {
-            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:false,width:'500px',height:'200px',
             button:[{id:"btn01",caption:this.t("msgConvertDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertDispatch.msg")}</div>)
         }
