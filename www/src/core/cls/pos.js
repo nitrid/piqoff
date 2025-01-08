@@ -1175,6 +1175,7 @@ export class posDeviceCls
             this.escpos.Serial = global.require('escpos-serialport');
             this.escpos.Screen = global.require('escpos-screen');
             this.escpos.USB = global.require('escpos-usb');
+            this.escpos.Network = global.require('escpos-network');
             this.path = global.require('path')
             this.serialport = global.require('serialport');
             this.net = global.require('net')
@@ -1668,18 +1669,24 @@ export class posDeviceCls
             }
 
             let device = undefined;
-            if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+            if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT.startsWith('TCP:'))
             {
-                device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
+                const ip = this.dt()[0].PRINTER_PORT.split(':')[1];
+                const port = 9100;
+                device = new this.escpos.Network(ip, port);
             }
-            else if(this.dt()[0].PRINTER_PORT == 'USB')
+            else if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT == 'USB')
             {
                 device = new this.escpos.USB();
+            }
+            else if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT.startsWith('COM'))
+            {
+                device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
             }
 
             let options = { encoding: "GB18030" /* default */ }
             let printer = new this.escpos.Printer(device, options);
-    
+
             let imgLoad = (imgPath) => 
             {
                 return new Promise((mresolve) =>
@@ -1693,6 +1700,12 @@ export class posDeviceCls
             
             device.open(async function(error)
             {   
+                if (error) {
+                    console.error("Printer connection error:", error);
+                    resolve();
+                    return;
+                }
+
                 let tmpArr = [];
                 for (let i = 0; i < pData.length; i++) 
                 {

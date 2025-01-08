@@ -54,8 +54,11 @@ posDoc.prototype.componentWillMount = function()
 }
 posDoc.prototype.rowDelete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
     {
+        console.log(tmpPosAdditionPrm);
         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
         {
             let tmpUpdateQ = 
@@ -89,7 +92,9 @@ posDoc.prototype.rowDelete = async function()
 }
 posDoc.prototype.delete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
     {
         let tmpUpdateQ = 
         {
@@ -409,7 +414,9 @@ function renderTables()
                         {
                             if(this.restTableView.items[e].ORDER_COUNT > 0)
                             {
-                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
                                 {
                                     if(this.posObj.posSale.dt().length > 0)
                                     {
@@ -465,7 +472,9 @@ function renderTables()
                             }
                             else
                             {
-                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
                                 {
                                     let tmpConfObj1 =
                                     {
@@ -652,12 +661,19 @@ function renderTables()
                                 }
                                 
                             }
-
-                            this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"adisyon/AdisyonTicket.repx","DATA":' + JSON.stringify(tmpData.toArray()) + ',"PRINTER":"TP808"}',async(pResult) =>
+                            
+                            let tmpAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue()
+                            if(tmpAdditionPrm !== null && typeof tmpAdditionPrm !== 'undefined' && tmpAdditionPrm.active === true)
+                            {   
+                                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpAdditionPrm.printerDesign + '","DATA":' + JSON.stringify(tmpData.toArray()) + ',"PRINTER":"' + tmpAdditionPrm.printerName + '"}',async(pResult) =>
+                                {
+                                    console.log(pResult)
+                                })
+                            }
+                            else
                             {
-                                console.log(pResult)
-                            })
-                            console.log(JSON.stringify(tmpData.toArray()))
+                                console.log(JSON.stringify(tmpData.toArray()))
+                            }
                         }}>
                         </NbTableView>
                     </div>

@@ -245,14 +245,22 @@ function popInputBuild(pItem,pThis,pLang)
                             let tmpProp = 
                             {
                                 ID : pObj.id,
-                                VALUE : pThis[pItem.ID].obj[pObj.field]
+                                VALUE : pThis[pItem.ID]?.obj?.[pObj.field] ?? null
                             }
                             if(pObj.type == 'checkbox')
                             {
+                                if(tmpProp.VALUE === null)
+                                {
+                                    tmpProp.VALUE = false
+                                }
                                 checkBoxSet(tmpProp,pThis)
                             }
                             else if(pObj.type == 'text')
                             {
+                                if(tmpProp.VALUE === null)
+                                {
+                                    tmpProp.VALUE = ""
+                                }
                                 textBoxSet(tmpProp,pThis)
                             }
                             else if(pObj.type == 'popObjectList')
@@ -332,7 +340,14 @@ function popInputBoxSet(pItem,pThis)
             
             if(typeof pItem.VIEW.DISPLAY != 'undefined')
             {
-                pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
+                try
+                {
+                    pThis[pItem.ID].value = pThis[pItem.ID].obj[pItem.VIEW.DISPLAY]
+                }
+                catch(e)
+                {
+                    pThis[pItem.ID].value = ""
+                }
             }
         }
     }
