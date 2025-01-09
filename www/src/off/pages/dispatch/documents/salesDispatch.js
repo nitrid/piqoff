@@ -175,6 +175,8 @@ export default class salesDispatch extends DocBase
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+            console.log(this.docObj.docItems.dt()[i])
+            console.log(tmpMargin)
         }
     }
     async multiItemAdd()
