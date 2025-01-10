@@ -306,7 +306,7 @@ export default class salesOrdList extends React.PureComponent
                         tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
                         tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
                         tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
-                        tmpdocItems.TOTAL = tmpLineData.result.recordset[x].SUM_AMOUNT
+                        tmpdocItems.TOTAL = tmpLineData.result.recordset[x].TOTAL
                         tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
                         tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
     
