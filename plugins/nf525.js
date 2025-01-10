@@ -141,7 +141,9 @@ class nf525
                         await this.archiveDuplicatePos(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicatePosFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicateFact(tmpFirstDate,tmpLastDate)
+                        await this.archiveDuplicateNote(tmpFirstDate,tmpLastDate)
                         await this.archiveDayTicket(tmpFirstDate,tmpLastDate)
+                        await this.archiveDayNote(tmpFirstDate,tmpLastDate)
                         await this.archiveDayFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDayProfFact(tmpFirstDate,tmpLastDate)
                         
@@ -182,6 +184,8 @@ class nf525
                 await this.dupPosNf525SignatureVerify()
                 await this.jetSignatureVerify()
                 await this.archiveFileVerify()
+                await this.noteNf525SignatureVerify()
+                await this.dupNoteNf525SignatureVerify()
                 core.instance.log.msg("Signature verify completed","Nf525");
 
                 resolve()
@@ -298,6 +302,41 @@ class nf525
             resolve()
         })
     }
+    async noteNf525SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_NOTE_VW_01 WHERE TAG_TIK_HOR_GDH >= dbo.GETDATE() - 2 AND TAG_TIK_HOR_GDH <= dbo.GETDATE() - 1 ORDER BY TAG_TIK_HOR_GDH DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Note erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
     async factureNf203SignatureVerify()
     {
         return new Promise(async resolve =>
@@ -394,6 +433,41 @@ class nf525
                             CODE:'90',
                             NAME:"Erreur integrite.",
                             DESCRIPTION:'Pos duplicate erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async dupNoteNf525SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_NOTE_DUPLICATE_VW_01 WHERE TAG_DUP_HOR_GDH >= dbo.GETDATE() - 2 AND TAG_DUP_HOR_GDH <= dbo.GETDATE() - 1 ORDER BY TAG_DUP_HOR_GDH DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Note duplicate erreur verify',
                             APP_VERSION:this.appInfo.version
                         })
                     }
@@ -689,6 +763,28 @@ class nf525
             resolve()
         });
     }
+    async archiveDuplicateNote(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_NOTE_DUPLICATE_VW_01 " +
+                        "WHERE TAG_DUP_HOR_GDH >= @FIRST_DATE AND " +
+                        "TAG_DUP_HOR_GDH <= @LAST_DATE " +
+                        "ORDER BY TAG_DUP_HOR_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_NOTE_DUPLICATE","DUPLICATE",this.folder)
+            }
+            resolve()
+        });
+    }
     archiveDayTicket(pFirst,pLast)
     {
         return new Promise(async resolve =>
@@ -790,6 +886,27 @@ class nf525
                 let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
                 
                 this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult},tmpFileName,'',this.folder)
+            }
+            resolve()
+        })
+    }
+    archiveDayNote(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "NOTE_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF525_NOTE_VW_01 WHERE TAG_TIK_HOR_GDH >= @FIRST_DATE AND TAG_TIK_HOR_GDH <= @LAST_DATE ORDER BY TAG_TIK_HOR_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+            
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,"NOTE",this.folder)                
             }
             resolve()
         })

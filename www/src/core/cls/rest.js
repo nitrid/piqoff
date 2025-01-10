@@ -26,6 +26,7 @@ export class restOrderCls
             ORDER_COMPLATE_COUNT : 0,
             ORDER_COUNT : 0,
             DELIVERED : 0,
+            STATUS : 0,
             DELETED : 0
         }
 
@@ -55,10 +56,11 @@ export class restOrderCls
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
-                    "@TOTAL = @PTOTAL ",
+                    "@TOTAL = @PTOTAL, " + 
+                    "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
-                     'PDISCOUNT:float','PVAT:float','PTOTAL:float'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL']
+                     'PDISCOUNT:float','PVAT:float','PTOTAL:float','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -74,10 +76,11 @@ export class restOrderCls
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " +
+                    "@STATUS = @PSTATUS, " +
                     "@DELETED = @PDELETED ", 
             param : ['PGUID:string|50','PCUSER:string|25','PZONE:string|50','PREF:int','PDOC_DATE:date','PPERSON:int','PFAMOUNT:float','PAMOUNT:float',
-                     'PDISCOUNT:float','PVAT:float','PTOTAL:float','PDELETED:bit'],
-            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','DELETED']
+                     'PDISCOUNT:float','PVAT:float','PTOTAL:float','PSTATUS:bit','PDELETED:bit'],
+            dataprm : ['GUID','CUSER','ZONE','REF','DOC_DATE','PERSON','FAMOUNT','AMOUNT','DISCOUNT','VAT','TOTAL','STATUS','DELETED']
         } 
         tmpDt.deleteCmd = 
         {
