@@ -180,7 +180,7 @@ export default class Sale extends React.PureComponent
             {
                 query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%')) OR (BARCODE = ?)) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) AND STATUS = 1 GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                        "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
             
@@ -366,7 +366,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],(SELECT ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -384,7 +384,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-30 ORDER BY DOC_DATE,REF_NO DESC ",
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-3 AND CUSER = '" + this.user.CODE + "' ORDER BY DOC_DATE,REF_NO DESC ",
                 },
                 sql : this.core.sql
             }
@@ -515,6 +515,7 @@ export default class Sale extends React.PureComponent
     }    
     async orderSave()
     {
+        console.log(this.docLines)
         if(this.docObj.dt()[0].REF_NO == 0)
         {
             let tmpQuery = 
@@ -554,6 +555,14 @@ export default class Sale extends React.PureComponent
                 tmpDocOrders.TOTAL = this.docLines[i].TOTAL
                 tmpDocOrders.UNIT = this.docLines[i].UNIT
                 tmpDocOrders.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocOrders.DISCOUNT_1 = this.docLines[i].DISCOUNT_1   
+                tmpDocOrders.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocOrders.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocOrders.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocOrders.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT   
+                tmpDocOrders.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docOrders.addEmpty(tmpDocOrders)
             }
         }
@@ -573,6 +582,10 @@ export default class Sale extends React.PureComponent
             await dialog(tmpConfObj1);
 
             localStorage.removeItem("data")
+            if(this.sysParam.filter({ID:'autoNewOrder',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.init()
+            }
         }
         else
         {
@@ -645,6 +658,14 @@ export default class Sale extends React.PureComponent
                 tmpDocItems.TOTAL = this.docLines[i].TOTAL
                 tmpDocItems.UNIT = this.docLines[i].UNIT
                 tmpDocItems.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocItems.DISCOUNT_1 = this.docLines[i].DISCOUNT_1
+                tmpDocItems.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocItems.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocItems.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocItems.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT
+                tmpDocItems.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docItems.addEmpty(tmpDocItems)
             }
         }
@@ -1482,6 +1503,7 @@ export default class Sale extends React.PureComponent
                                                 <Scrolling mode="standart" />
                                                 <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={200}/>
                                                 <Column dataField="TITLE" caption={this.t("popCustomer.clmName")} width={400}/>
+                                                <Column dataField="ADRESS" caption={this.t("popCustomer.clmAdress")} width={400}/>
                                             </NdGrid>
                                         </div>
                                     </div>

@@ -1587,7 +1587,11 @@ export default class purchaseOrder extends DocBase
                                             }
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.SUB_FACTOR != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
@@ -1697,7 +1701,7 @@ export default class purchaseOrder extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={110} allowEditing={false}/>
                                             <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdPurcOrders.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>

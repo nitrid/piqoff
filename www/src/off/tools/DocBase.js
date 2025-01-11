@@ -205,6 +205,7 @@ export default class DocBase extends React.PureComponent
                     {
                         this.cmbPopQteUnit.value = tmpDefaultUnit[0].GUID
                         this.txtPopQteUnitFactor.value = tmpDefaultUnit[0].FACTOR
+                        this.txtPopQteUnitQuantity.value = this.txtPopQuantity.value * this.txtPopQteUnitFactor.value
                     }
                     else
                     {

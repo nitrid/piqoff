@@ -1315,7 +1315,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"SaleClosePrint",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1505,22 +1505,6 @@ export const prm =
             CAPTION : "Klavye Deseni"
         }
     },
-    //Adisyon kullanım 
-    {
-        TYPE : 0,
-        ID :"PosAddition",
-        VALUE : false,
-        SPECIAL : "",
-        PAGE : "pos",
-        ELEMENT : "",
-        APP : "POS",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "Pos Adisyon kullanımı"
-        }
-    },
     //#Lcd kucuk ekrana giriş yazısı eklemek
     {
         TYPE : 0,
@@ -1537,5 +1521,33 @@ export const prm =
             CAPTION : "Pos lcd Ekran Çıkacak yazısı"
         }
     },
-   
+    //Adisyon Yazıcı
+    {
+        TYPE : 0,
+        ID :"PosAddition",
+        VALUE : {active:false,printerName:"TP809",printerDesign:"adisyon/AdisyonTicket.repx"},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Adisyon Yazıcı",
+            DISPLAY : "printerName",
+            FORM : 
+            {
+                width:"400",
+                height:"220",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopPosAdditionPrinterActive"},
+                    {type:"text",caption:"Yazıcı Adı",field:"printerName",id:"txtPopPosAdditionPrinterName"},
+                    {type:"text",caption:"Yazıcı Dizaynı",field:"printerDesign",id:"txtPopPosAdditionPrinterDesign"},
+                ]
+            }
+        }
+    }
 ]

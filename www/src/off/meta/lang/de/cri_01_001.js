@@ -131,6 +131,19 @@ const cri_01_001 =
         btn01: "OK",
         msg: "Bitte geben Sie die Steuernummer ein!"
     },
+    msgSave :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveValid :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+    },
     msgAdressNotValid:
     {
         title: "Achtung",

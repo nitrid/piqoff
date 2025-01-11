@@ -28,6 +28,7 @@ const slsRpt_01_011 =
         clmCompQuantıty : "Livré",
         clmPendQuantıty :"Sera livré",
         clmItemName :"Nom du produit",
+        clmLivre : "Livré"
     },
 }
 export default slsRpt_01_011

@@ -63,6 +63,7 @@ export const langFr =
         detail : "Détail",
         balanceTicketCreated: "Créer à la boucherie",
         balanceTicketChecked: "Passées en caisse",
+        popAllItemGroups : "Tous les groupes produits",
         ticketCreatedAmount: "Total",
         ticketCheckedAmount: "Total",
         ticketDifferance : "Différence",
@@ -73,6 +74,11 @@ export const langFr =
             vat : "TVA",
             total : "TTC"
         },
+        grdAllItemGroups :
+        {
+            itemGroupName : "Groupe d'article",
+            itemGroupAmount : "Total TTC"
+        }
        
     },
 }

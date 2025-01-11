@@ -175,6 +175,8 @@ export default class salesDispatch extends DocBase
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+            console.log(this.docObj.docItems.dt()[i])
+            console.log(tmpMargin)
         }
     }
     async multiItemAdd()
@@ -738,9 +740,14 @@ export default class salesDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND COMP_QUANTITY < QUANTITY AND CLOSED = 0 AND TYPE = 1 AND DOC_TYPE IN(60)",
-            param : ['INPUT:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
+            query : "SELECT *," + 
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (60)",
+            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         super.getOrders(tmpQuery)
     }
@@ -1833,7 +1840,11 @@ export default class salesDispatch extends DocBase
                                         }
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_FACTOR != 'undefined')
+                                        {
+                                            e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                         }
                                         if(typeof e.data.PRICE != 'undefined')
                                         {
@@ -1942,7 +1953,7 @@ export default class salesDispatch extends DocBase
                                         <Column dataField="ORIGIN" caption={this.t("grdSlsDispatch.clmOrigin")} width={60} allowEditing={true} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={100} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
@@ -2188,9 +2199,7 @@ export default class salesDispatch extends DocBase
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                                                    console.log(tmpData2)
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         this.core.socket.emit('piqXInvoiceInsert',

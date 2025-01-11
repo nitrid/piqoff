@@ -28,7 +28,8 @@ const sip_01_002 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
         clmOutputName :"Depo",
-        clmMainGroup : "Müşteri Grubu"
+        clmMainGroup : "Müşteri Grubu",
+        clmLivre : "Gönderildi"
     },
     popDesign : 
     {
@@ -40,7 +41,7 @@ const sip_01_002 =
     {  
         title: "Dikkat",
         btn01: "Tamam",
-        btn01: "Vazgeç",
+        btn02: "Vazgeç",
         msg: "Seçilen Evrakları İrsaliyeye çevirmek istediğinize emin misiniz?"         
     },
     msgConvertSucces :

@@ -15,6 +15,7 @@ export const langFr =
     serverConnection : "Etablissement de la connexion avec le serveur",
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
+    msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
     menu:
     {
         dashboard : "Tableau de bord",
@@ -35,6 +36,13 @@ export const langFr =
     {
         title : "Veuillez patienter !",
         msg : "Vos données sont en train de se mettre à jour..."
+    },
+    msgDataTransferOption :
+    {
+        title : "Attention",
+        msg : "Voulez-vous mettre à jour vos données ?",
+        btnYes : "Oui",
+        btnNo : "Non",
     },
     sale:  // "Vente"
     {
@@ -69,7 +77,8 @@ export const langFr =
             btn01 : "Recherche",
             btn02 : "Choisir",
             clmCode : "Code",
-            clmName : "Nom"
+            clmName : "Nom",
+            clmAdress : "Adresse"
         },
         grdSale: 
         {
@@ -233,6 +242,7 @@ export const langFr =
             txtMailSubject : "Objet E-Mail",   
             txtSendMail : "Adresse E-Mail",   
             btnSend : "Envoyer",
+            btnCancel : "Annuler",
             cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
         },
         msgMailSendResult:

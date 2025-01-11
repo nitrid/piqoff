@@ -31,6 +31,7 @@ const sip_04_002 =
         clmApprovedQuantity : "Onaylanacak Miktar",
         clmTotalHt : "Vergisiz Tutar",
         clmTotal : "Toplam",
+        clmLivre : "Gönderildi"
     },
     btnSave: "Seçilen Satırları Onayla",
     msgApprovedBig:

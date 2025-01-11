@@ -47,6 +47,13 @@ msgConvertSucces:
     btn02: "Fermer",
     msg: "Les factures ont été créées. Voulez-vous les imprimer ?"         
 },
+msgPrintDispatch :
+{  
+    title: "Attention",
+    btn01: "Imprimer",
+    btn02: "Fermer",
+    msg: "Les bons de livraison seront imprimés. Voulez-vous les imprimer ?"         
+},
 
 }
 export default irs_01_002

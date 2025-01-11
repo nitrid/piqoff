@@ -54,7 +54,9 @@ posDoc.prototype.componentWillMount = function()
 }
 posDoc.prototype.rowDelete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
     {
         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
         {
@@ -65,6 +67,7 @@ posDoc.prototype.rowDelete = async function()
                 value : [this.grdList.devGrid.getSelectedRowKeys()[0].GUID]
             }
             await this.core.sql.execute(tmpUpdateQ)
+            this.sendJet({CODE:"325",NAME:"Ligne de note supprimée"})
         }
     }
     else
@@ -89,7 +92,9 @@ posDoc.prototype.rowDelete = async function()
 }
 posDoc.prototype.delete = async function()
 {
-    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
     {
         let tmpUpdateQ = 
         {
@@ -98,6 +103,7 @@ posDoc.prototype.delete = async function()
             value : [this.posObj.dt()[0].GUID]
         }
         await this.core.sql.execute(tmpUpdateQ)
+        this.sendJet({CODE:"324",NAME:"Note supprimée"})
     }
     else
     {
@@ -324,6 +330,7 @@ function renderDiscount()
                             this.grdList.getSelectedData()[0].TOTAL = tmpCalc.TOTAL
     
                             await this.calcGrandTotal();
+                            this.sendJet({CODE:"327",NAME:"100% de réduction sur le produit"})
                         }
                     }
                 }}>
@@ -407,9 +414,12 @@ function renderTables()
                         <NbTableView parent={this} id="restTableView" 
                         onClick={async(e)=>
                         {
+                            console.log(this.restTableView.items[e].ORDER_COUNT)
                             if(this.restTableView.items[e].ORDER_COUNT > 0)
                             {
-                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
                                 {
                                     if(this.posObj.posSale.dt().length > 0)
                                     {
@@ -465,17 +475,10 @@ function renderTables()
                             }
                             else
                             {
-                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
+
+                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
                                 {
-                                    let tmpConfObj1 =
-                                    {
-                                        id:'msgRestPosSaleAdd',showTitle:true,title:this.lang.t("msgRestPosSaleAdd.title"),showCloseButton:true,width:'500px',height:'240px',
-                                        button:[{id:"btn01",caption:this.lang.t("msgRestPosSaleAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestPosSaleAdd.btn02"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestPosSaleAdd.msg")}</div>)
-                                    }
-    
-                                    let tmpMsgResult1 = await dialog(tmpConfObj1);
-    
                                     this.restOrderObj.clearAll()
                                     
                                     let tmpMaxRef = 0
@@ -492,104 +495,96 @@ function renderTables()
                                     {
                                         tmpMaxRef = tmpResult.result.recordset[0].MAX_REF
                                     }
-                                    if(tmpMsgResult1 == "btn01")
-                                    {
                                     
-                                        let tmpRestQuery = 
+                                    let tmpRestQuery = 
+                                    {
+                                        query : "SELECT * FROM REST_ORDER_DETAIL WHERE POS = @POS ",
+                                        param : ['POS:string|50'],
+                                        value : [this.posObj.dt()[0].GUID]
+                                    }
+                    
+                                    let tmpRestResult = await this.core.sql.execute(tmpRestQuery)
+                                    
+                                    if(tmpRestResult.result.recordset.length > 0)
+                                    {
+                                        await this.restOrderObj.load({ZONE:tmpRestResult.result.recordset[0].ZONE,REF:tmpRestResult.result.recordset[0].REF})
+                                        this.restOrderObj.dt()[0].ZONE = this.restTableView.items[e].GUID
+                                        if(tmpRestResult.result.recordset[0].ZONE != this.restTableView.items[e].GUID)
                                         {
-                                            query : "SELECT * FROM REST_ORDER_DETAIL WHERE POS = @POS ",
-                                            param : ['POS:string|50'],
-                                            value : [this.posObj.dt()[0].GUID]
+                                            this.restOrderObj.dt()[0].REF = tmpMaxRef
                                         }
-                        
-                                        let tmpRestResult = await this.core.sql.execute(tmpRestQuery)
-                                        
-                                        if(tmpRestResult.result.recordset.length > 0)
-                                        {
-                                            console.log(tmpRestResult)
-                                            await this.restOrderObj.load({ZONE:tmpRestResult.result.recordset[0].ZONE,REF:tmpRestResult.result.recordset[0].REF})
-                                            this.restOrderObj.dt()[0].ZONE = this.restTableView.items[e].GUID
-                                            if(tmpRestResult.result.recordset[0].ZONE != this.restTableView.items[e].GUID)
-                                            {
-                                                this.restOrderObj.dt()[0].REF = tmpMaxRef
-                                            }
-                                        }
-                                        else
-                                        {
-                                            let tmpEmpty = {...this.restOrderObj.empty}
-    
-                                            tmpEmpty.ZONE = this.restTableView.items[e].GUID
-                                            tmpEmpty.ZONE_CODE = this.restTableView.items[e].CODE
-                                            tmpEmpty.ZONE_NAME = this.restTableView.items[e].NAME
-                                            tmpEmpty.REF = tmpMaxRef
-                                            tmpEmpty.PERSON = 1
-                                            this.restOrderObj.addEmpty(tmpEmpty)
-                                        }
-                                        console.log(this.restOrderObj.restOrderDetail.dt())
-                                        for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                                        {
-                                            let tmpEmpty = this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})
-                                            if(tmpEmpty.length > 0)
-                                            {
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT =  Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT = Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].DISCOUNT = 0
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].TOTAL = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
-                                                this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].STATUS = 0
-                                                this.posObj.posSale.dt()[i].AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
-                                                this.posObj.posSale.dt()[i].FAMOUNT =Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
-                                                this.posObj.posSale.dt()[i].VAT =  Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
-                                                this.posObj.posSale.dt()[i].VAT_RATE = 10
-                                            }
-                                            else
-                                            {
-                                                let tmpEmpty = {...this.restOrderObj.restOrderDetail.empty}
-                                                tmpEmpty.REST_GUID = this.restOrderObj.dt()[0].GUID
-                                                tmpEmpty.LINE_NO = this.restOrderObj.restOrderDetail.dt().max('LINE_NO') + 1
-                                                tmpEmpty.ITEM = this.posObj.posSale.dt()[i].ITEM_GUID
-                                                tmpEmpty.ITEM_CODE = this.posObj.posSale.dt()[i].ITEM_CODE
-                                                tmpEmpty.ITEM_NAME = this.posObj.posSale.dt()[i].ITEM_NAME
-                                                tmpEmpty.QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
-                                                tmpEmpty.PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
-                                                tmpEmpty.AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
-                                                tmpEmpty.FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
-                                                tmpEmpty.DISCOUNT = 0
-                                                tmpEmpty.VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
-                                                tmpEmpty.PROPERTY = '' 
-                                                tmpEmpty.DESCRIPTION = ''
-                                                tmpEmpty.TOTAL = tmpEmpty.AMOUNT
-                                                tmpEmpty.STATUS = 0
-                                                tmpEmpty.WAITING = 0
-                                                tmpEmpty.PRINTED = 0
-                                                tmpEmpty.POS = this.posObj.dt()[0].GUID
-                                                tmpEmpty.POS_SALE = this.posObj.posSale.dt()[i].GUID
-                                                this.posObj.posSale.dt()[i].AMOUNT = tmpEmpty.AMOUNT
-                                                this.posObj.posSale.dt()[i].FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
-                                                this.posObj.posSale.dt()[i].VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
-                                                this.posObj.posSale.dt()[i].VAT_RATE = 10
-    
-                                                await this.restOrderObj.restOrderDetail.addEmpty(tmpEmpty)
-                                            }
-                                        }
-                                        console.log(this.restOrderObj.restOrderDetail.dt())
-                                        this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
-                                        this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
-                                        this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
-                                        this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
-                                        await this.calcGrandTotal()
-                                        this.posObj.dt()[0].STATUS = -1
-                                        await this.posObj.save()
-                                        await this.restOrderObj.save()
-                                        await this.popRestTable.hide()
-                                        this.init()
                                     }
                                     else
                                     {
-                                        return
+                                        let tmpEmpty = {...this.restOrderObj.empty}
+
+                                        tmpEmpty.ZONE = this.restTableView.items[e].GUID
+                                        tmpEmpty.ZONE_CODE = this.restTableView.items[e].CODE
+                                        tmpEmpty.ZONE_NAME = this.restTableView.items[e].NAME
+                                        tmpEmpty.REF = tmpMaxRef
+                                        tmpEmpty.PERSON = 1
+                                        this.restOrderObj.addEmpty(tmpEmpty)
                                     }
+                                    
+                                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                    {
+                                        let tmpEmpty = this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})
+                                        if(tmpEmpty.length > 0)
+                                        {
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT =  Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT = Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].DISCOUNT = 0
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].VAT = Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].TOTAL = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].STATUS = 0
+                                            this.posObj.posSale.dt()[i].AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            this.posObj.posSale.dt()[i].FAMOUNT =Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT).rateInNum(10)
+                                            this.posObj.posSale.dt()[i].VAT =  Number(Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].AMOUNT) - Number(this.restOrderObj.restOrderDetail.dt().where({POS_SALE:this.posObj.posSale.dt()[i].GUID})[0].FAMOUNT))
+                                            this.posObj.posSale.dt()[i].VAT_RATE = 10
+                                        }
+                                        else
+                                        {
+                                            let tmpEmpty = {...this.restOrderObj.restOrderDetail.empty}
+                                            tmpEmpty.REST_GUID = this.restOrderObj.dt()[0].GUID
+                                            tmpEmpty.LINE_NO = this.restOrderObj.restOrderDetail.dt().max('LINE_NO') + 1
+                                            tmpEmpty.ITEM = this.posObj.posSale.dt()[i].ITEM_GUID
+                                            tmpEmpty.ITEM_CODE = this.posObj.posSale.dt()[i].ITEM_CODE
+                                            tmpEmpty.ITEM_NAME = this.posObj.posSale.dt()[i].ITEM_NAME
+                                            tmpEmpty.QUANTITY = this.posObj.posSale.dt()[i].QUANTITY
+                                            tmpEmpty.PRICE = Number(this.posObj.posSale.dt()[i].PRICE)        
+                                            tmpEmpty.AMOUNT = Number(Number(this.posObj.posSale.dt()[i].PRICE) * Number(this.posObj.posSale.dt()[i].QUANTITY)).round(2)
+                                            tmpEmpty.FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
+                                            tmpEmpty.DISCOUNT = 0
+                                            tmpEmpty.VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
+                                            tmpEmpty.PROPERTY = '' 
+                                            tmpEmpty.DESCRIPTION = ''
+                                            tmpEmpty.TOTAL = tmpEmpty.AMOUNT
+                                            tmpEmpty.STATUS = 0
+                                            tmpEmpty.WAITING = 0
+                                            tmpEmpty.PRINTED = 0
+                                            tmpEmpty.POS = this.posObj.dt()[0].GUID
+                                            tmpEmpty.POS_SALE = this.posObj.posSale.dt()[i].GUID
+                                            this.posObj.posSale.dt()[i].AMOUNT = tmpEmpty.AMOUNT
+                                            this.posObj.posSale.dt()[i].FAMOUNT = Number(tmpEmpty.AMOUNT).rateInNum(10)
+                                            this.posObj.posSale.dt()[i].VAT = Number(Number(tmpEmpty.AMOUNT) - Number(tmpEmpty.FAMOUNT))
+                                            this.posObj.posSale.dt()[i].VAT_RATE = 10
+
+                                            await this.restOrderObj.restOrderDetail.addEmpty(tmpEmpty)
+                                        }
+                                    }
+                                    
+                                    this.restOrderObj.dt()[0].FAMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('FAMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].AMOUNT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('AMOUNT',2)).round(2))
+                                    this.restOrderObj.dt()[0].VAT = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('VAT',2)).round(2))
+                                    this.restOrderObj.dt()[0].TOTAL = Number(parseFloat(this.restOrderObj.restOrderDetail.dt().sum('TOTAL',2)).round(2))
+                                    await this.calcGrandTotal()
+                                    this.posObj.dt()[0].STATUS = -1
+                                    await this.posObj.save()
+                                    await this.restOrderObj.save()
+                                    await this.popRestTable.hide()
+                                    this.init()
                                 }
                                 else
                                 {
@@ -653,11 +648,25 @@ function renderTables()
                                 
                             }
 
-                            this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"adisyon/AdisyonTicket.repx","DATA":' + JSON.stringify(tmpData.toArray()) + ',"PRINTER":"TP808"}',async(pResult) =>
+                            let tmpAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue()
+                            if(tmpAdditionPrm !== null && typeof tmpAdditionPrm !== 'undefined')
+                            {   
+                                console.log(tmpData)
+                                
+                                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpAdditionPrm.printerDesign + '","DATA":' + JSON.stringify(tmpData.toArray()) + ',"PRINTER":"' + tmpAdditionPrm.printerName + '"}',async(pResult) =>
+                                {
+                                    console.log(pResult)
+                                    await this.nf525.signatureNote({CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),REST:tmpData[0].REST_GUID,
+                                    TYPE:'Vente',TVA:tmpData.sum('VAT',2),TTC:tmpData.sum('TOTAL',2)})
+
+                                    await this.nf525.signatureNoteDuplicate({GUID:datatable.uuidv4(),CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),
+                                    REST:tmpData[0].REST_GUID,REF:tmpData[0].ZONE_CODE + "" + tmpData[0].REF.toString().padStart(8,'0'),TYPE:'Note'})
+                                })
+                            }
+                            else
                             {
-                                console.log(pResult)
-                            })
-                            console.log(JSON.stringify(tmpData.toArray()))
+                                console.log(JSON.stringify(tmpData.toArray()))
+                            }
                         }}>
                         </NbTableView>
                     </div>

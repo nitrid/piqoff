@@ -24,6 +24,8 @@ const irs_02_002 =
     txtUnitPrice: "Stückpreis",
     btnView: "Anzeigen",
     btnMailsend: "E-Mail senden",
+    btnSave: "Speichern",
+    btnCancel: "Abbrechen",
     placeMailen: "Text",
     validDesign: "Bitte wählen Sie ein Design aus.",
     validMail: "Bitte geben Sie eine E-Mail-Adresse ein.",
@@ -33,13 +35,38 @@ const irs_02_002 =
     cmbPricingList : "Preisliste",
     btnView : "Anzeigen",
     btnMailsend : "E-Mail senden",
+    btnSave : "Speichern",
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
     isMsgSave :
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!",
+        btn02: "Abbrechen",
+        btnCancel : "Abbrechen"
+    },
+    msgSave :
+    {
+        title: "Erfolgreich",
+        btn01: "OK",
+        msg: "Die Änderungen wurden erfolgreich gespeichert!",
+        btn02: "Abbrechen",
+    },
+    msgSaveResult :
+    {
+        title: "Erfolgreich",
+        btn01: "OK",
+        msg: "Die Änderungen wurden erfolgreich gespeichert!",
+        btn02: "Abbrechen",
+        msgSuccess: "Die Änderungen wurden erfolgreich gespeichert!",
+        msgFailed: "Das Speichern der Änderungen ist fehlgeschlagen!",
+    },
+    msgSaveFailed :
+    {
+        title: "Fehler",
+        btn01: "OK",
+        msg: "Das Speichern der Änderungen ist fehlgeschlagen!",
     },
     msgMailSendResult:
     {
@@ -270,7 +297,10 @@ const irs_02_002 =
     {
         title: "Designauswahl",
         design : "Design",
-        lang : "Dokumentsprache"
+        lang : "Dokumentsprache",
+        btnApprove : "Bestätigen",
+        btnCancel : "Abbrechen",
+        btnSave : "Speichern",
     },
     msgMissItemCode:
     {

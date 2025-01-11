@@ -69,7 +69,19 @@ const stk_01_001 =
         msg: "Falsches Datum",
         btn01: "Ok"
     },
-
+    msgSave :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveValid :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+    },
     pg_txtRef: 
     {
         title: "Auswahl der Artikel",
@@ -133,7 +145,10 @@ const stk_01_001 =
         clmPrice: "Preis",
         clmGrossMargin: "Bruttomarge",
         clmNetMargin: "Nettomarge",
-        clmMargin : "Marge %"
+        clmMargin : "Marge %",
+        clmPriceTTC : "Preis inkl. MwSt.",
+        clmPriceHT : "Preis ohne MwSt.",
+        clmListName : "Liste"
     },
     grdUnit: 
     {

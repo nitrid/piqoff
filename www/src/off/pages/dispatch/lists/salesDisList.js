@@ -87,15 +87,16 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT,OUTPUT,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,"+ 
-                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_ITEMS_VW_01.DOC_GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                                "CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL,SUM(DOC_DISCOUNT) AS DOC_DISCOUNT,SUM(DOC_DISCOUNT_1) AS DOC_DISCOUNT_1, " + 
-                                "SUM(DOC_DISCOUNT_2) AS DOC_DISCOUNT_2,SUM(DOC_DISCOUNT_3) AS DOC_DISCOUNT_3 FROM DOC_ITEMS_VW_01 " +
+                        query : "SELECT *, " +
+                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
+                                "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
+                                "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
+                                "FROM DOC_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND ITEM_TYPE IN (0,2) GROUP BY REF,REF_NO,INPUT,OUTPUT,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE,INPUT_NAME ORDER BY DOC_DATE DESC,REF_NO DESC",
-                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
+                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value] 
                     },
                     sql : this.core.sql
                 }
@@ -109,7 +110,7 @@ export default class salesDisList extends React.PureComponent
     {
         let tmpConfObj =
         {
-            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:false,width:'500px',height:'200px',
             button:[{id:"btn01",caption:this.t("msgConvertInvoices.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertInvoices.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertInvoices.msg")}</div>)
         }
@@ -132,17 +133,19 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REBATE = 0
             tmpDoc.INPUT = this.grdSlsDisList.getSelectedData()[i].INPUT
             tmpDoc.OUTPUT = this.grdSlsDisList.getSelectedData()[i].OUTPUT
-            tmpDoc.AMOUNT = this.grdSlsDisList.getSelectedData()[i].AMOUNT
-            tmpDoc.VAT = this.grdSlsDisList.getSelectedData()[i].VAT
+            tmpDoc.AMOUNT = Number(this.grdSlsDisList.getSelectedData()[i].AMOUNT).round(2)
+            tmpDoc.VAT = Number(this.grdSlsDisList.getSelectedData()[i].VAT).round(2)
             tmpDoc.VAT_ZERO = this.grdSlsDisList.getSelectedData()[i].VAT_ZERO
-            tmpDoc.TOTALHT = this.grdSlsDisList.getSelectedData()[i].TOTALHT
-            tmpDoc.TOTAL = this.grdSlsDisList.getSelectedData()[i].TOTAL
-            tmpDoc.DOC_DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT
+            tmpDoc.TOTALHT = Number(this.grdSlsDisList.getSelectedData()[i].TOTALHT).round(2)
+            tmpDoc.TOTAL = Number(this.grdSlsDisList.getSelectedData()[i].TOTAL).round(2)
+            tmpDoc.DOC_DISCOUNT = Number(this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT).round(2)
             tmpDoc.DOC_DISCOUNT_1 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_1
             tmpDoc.DOC_DISCOUNT_2 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_2
             tmpDoc.DOC_DISCOUNT_3 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_3
             tmpDoc.DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DISCOUNT
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
+            tmpDoc.LOCKED = 1
+            tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
             let tmpQuery = 
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
@@ -152,7 +155,30 @@ export default class salesDisList extends React.PureComponent
             {
                 tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
             }
-            tmpDocCls.addEmpty(tmpDoc);     
+            tmpDocCls.addEmpty(tmpDoc);   
+            let tmpDocCustomer = {...tmpDocCls.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = tmpDocCls.dt()[0].GUID
+            tmpDocCustomer.TYPE = 1
+            tmpDocCustomer.DOC_TYPE = 20    
+            tmpDocCustomer.REF = tmpDocCls.dt()[0].REF
+            tmpDocCustomer.REF_NO = tmpDocCls.dt()[0].REF_NO
+            tmpDocCustomer.DOC_DATE = tmpDocCls.dt()[0].DOC_DATE
+            tmpDocCustomer.INPUT = tmpDocCls.dt()[0].INPUT
+            tmpDocCustomer.OUTPUT = tmpDocCls.dt()[0].OUTPUT
+            tmpDocCustomer.DESCRIPTION = tmpDocCls.dt()[0].DESCRIPTION
+            tmpDocCustomer.AMOUNT = tmpDocCls.dt()[0].TOTAL
+            let tmpCusotmerQuery = 
+            {
+                query :"SELECT * FROM CUSTOMER_VW_02 WHERE GUID = @INPUT ",
+                param : ['INPUT:string|50'],
+                value : [ tmpDocCls.dt()[0].INPUT]
+            }
+            let tmpCustomerData = await this.core.sql.execute(tmpCusotmerQuery) 
+            if(tmpCustomerData.result.recordset.length > 0)
+            {
+                tmpDocCustomer.EXPIRY_DATE =  moment(new Date()).add(tmpCustomerData.result.recordset[0].EXPIRY_DAY, 'days')
+            }   
+            tmpDocCls.docCustomer.addEmpty(tmpDocCustomer);
             let tmpLineQuery = 
             {
                 query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
@@ -228,8 +254,13 @@ export default class salesDisList extends React.PureComponent
                     }
                 }
             }
+            console.log(tmpDocCls.dt()[0]) 
+            console.log(tmpDocCls.docItems.dt())
             if(tmpDocCls.docItems.dt().length > 0)
             {
+                let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())                
+                tmpDocCls.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                tmpDocCls.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                await tmpDocCls.save()
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
@@ -251,6 +282,7 @@ export default class salesDisList extends React.PureComponent
         console.log(tmpPrintDialog)
         if(tmpPrintDialog == 'btn01')
         {
+            let tmpLines = []
             App.instance.setState({isExecute:true})
             for (let i = 0; i < tmpDocGuids.length; i++) 
             {
@@ -268,46 +300,36 @@ export default class salesDisList extends React.PureComponent
                 {
                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                    value:  [tmpDocGuids[i].GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                    value:  [tmpDocGuids[i].GUID,'333',localStorage.getItem('lang').toUpperCase()]
                 }
                 App.instance.setState({isExecute:true})
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 App.instance.setState({isExecute:false})
-                // let tmpQuery2 = 
-                // { 
-                //     query:  "SELECT TOP 5 " +
-                //             "DOC_DATE AS DOC_DATE, " +
-                //             "DOC_REF AS REF, " +
-                //             "DOC_REF_NO AS REF_NO, " +
-                //             "BALANCE AS BALANCE " +
-                //             "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                //             "AND BALANCE <> 0 " +
-                //             "ORDER BY DOC_DATE DESC" ,
-                //     param:  ['INPUT:string|50'],
-                //     value:  [this.docObj.dt()[0].INPUT]
-                // }
-                // let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                // let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
+                for (let x = 0; x < tmpData.result.recordset.length; x++) 
+                {
+                    tmpLines.push(tmpData.result.recordset[x])
+                }
+                this.core.socket.emit('piqXInvoiceInsert',
+                {
+                    fromUser : tmpData.result.recordset[0].LUSER,
+                    toUser : '',
+                    docGuid : tmpData.result.recordset[0].DOC_GUID,
+                    docDate : tmpData.result.recordset[0].DOC_DATE,
+                    fromTax : tmpData.result.recordset[0].TAX_NO,
+                    toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                    json : JSON.stringify(tmpData.result.recordset),
+                    pdf : "data:application/pdf;base64," + pResult.split('|')[1]
+                },
+                (pData) =>
+                {
+                    console.log(pData)
+                })
+              
+            }
+            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
                 {
                     if(pResult.split('|')[0] != 'ERR')
                     {
-                        this.core.socket.emit('piqXInvoiceInsert',
-                        {
-                            fromUser : tmpData.result.recordset[0].LUSER,
-                            toUser : '',
-                            docGuid : tmpData.result.recordset[0].DOC_GUID,
-                            docDate : tmpData.result.recordset[0].DOC_DATE,
-                            fromTax : tmpData.result.recordset[0].TAX_NO,
-                            toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
-                            json : JSON.stringify(tmpData.result.recordset),
-                            pdf : "data:application/pdf;base64," + pResult.split('|')[1]
-                        },
-                        (pData) =>
-                        {
-                            console.log(pData)
-                        })
-
                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                         mywindow.onload = function() 
                         { 
@@ -315,9 +337,53 @@ export default class salesDisList extends React.PureComponent
                         } 
                     }
                 });
-            }
             App.instance.setState({isExecute:false})
         }
+    }
+    async printDispatch()
+    {
+        let tmpConfObj =
+        {
+            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgPrintDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPrintDispatch.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintDispatch.msg")}</div>)
+        }
+        let tmpDialog = await dialog(tmpConfObj);
+        if(tmpDialog == 'btn02')
+        {
+            return
+        }
+        let tmpLines = []
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,'444',localStorage.getItem('lang').toUpperCase()]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
+        }
+       
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
+        {
+            console.log(pResult.split('|')[0])
+            console.log(pResult.split('|')[1])
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                { 
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+            }
+        });
+        App.instance.setState({isExecute:false})
     }
     async MailSend(pGuid,pCustomer,pRefno)
     {
@@ -343,7 +409,7 @@ export default class salesDisList extends React.PureComponent
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
                 App.instance.setState({isExecute:true})
-                let  tmpHtml = ''
+                let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
                 if(pResult.split('|')[0] != 'ERR')
                 {
                 }
@@ -416,6 +482,21 @@ export default class salesDisList extends React.PureComponent
                                         onClick: async () => 
                                         {
                                             this.convertInvoice()
+                                            
+                                        }
+                                    }    
+                                } />
+                                  <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'print',
+                                        onClick: async () => 
+                                        {
+                                            this.printDispatch()
                                             
                                         }
                                     }    

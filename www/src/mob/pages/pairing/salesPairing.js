@@ -430,6 +430,7 @@ export default class salesPairing extends React.PureComponent
     {
         this.txtOrderRef.value = ''
         this.pageView.activePage('Orders')
+        this.txtOrderRef.focus()
     }
     async ordersSelect(pGuid)
     {

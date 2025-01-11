@@ -16,6 +16,7 @@ export const langTr =
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     btnCancel : "Vazgeç",
+    msgInvalidUser : "Kullanıcı adı veya şifre hatalı !",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -36,6 +37,13 @@ export const langTr =
     {
         title : "Lütfen Bekleyiniz !",
         msg : "Verileriniz güncelleniyor...",
+    },
+    msgDataTransferOption :
+    {
+        title : "Dikkat",
+        msg : "Verileri güncellemek ister misiniz?",
+        btnYes : "EVET",
+        btnNo : "HAYIR",
     },
     sale:  // "Satış"
     {
@@ -71,7 +79,8 @@ export const langTr =
             btn01 : "Ara",
             btn02 : "Seç",
             clmCode : "KODU",
-            clmName : "ADI"
+            clmName : "ADI",
+            clmAdress : "ADRES"
         },
         grdSale: 
         {

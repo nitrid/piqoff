@@ -2,7 +2,7 @@
 const stk_03_001 = 
 {
     txtItemName: "Artikelname",
-    txtBarcode: "Barcode",
+    txtBarkod: "Barcode",
     cmbCustomer: "Lieferant",
     cmbMainGrp: "Artikelgruppe",
     cmbSubGrp : "Produktuntergruppe",
