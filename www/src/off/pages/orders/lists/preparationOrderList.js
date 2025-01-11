@@ -50,7 +50,6 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-
         let tmpQuery = 
         {
             query : "SELECT * FROM (SELECT DOC_GUID AS GUID,    " +
@@ -71,6 +70,7 @@ export default class salesOrdList extends React.PureComponent
             "SUM(APPROVED_QUANTITY) as APPROVED_QUANTITY,   " +
             "MAX(CLOSED) as CLOSED,   " +
             "CASE WHEN SUM(APPROVED_QUANTITY) = 0 THEN SUM(PEND_QUANTITY) ELSE SUM(APPROVED_QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY,   " +
+            "CASE WHEN (SELECT TOP 1 TAG FROM DOC_EXTRA WHERE DOC_EXTRA.DOC = DOC_ORDERS_VW_01.DOC_GUID) IS NULL THEN 'X' ELSE 'OK' END as PRINTED, " +
             "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
             "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS_VW_01.INPUT) AS MAIN_GROUP_CODE,   " +
             "(SELECT TOP 1 ZIPCODE + ' ' + CITY + ' ' + COUNTRY_NAME FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_ORDERS_VW_01.INPUT AND TYPE = 0) AS ADDRESS   " +
@@ -129,6 +129,22 @@ export default class salesOrdList extends React.PureComponent
         await this.grdSlsOrdList.dataRefresh({source:tmpSource})
         App.instance.setState({isExecute:false})
     }
+    async _btnGrdPrintControl(e)
+    {
+        let docExtra = new docExtraCls();
+        docExtra.addEmpty({
+            GUID: e,
+            CUSER: this.user.CODE,
+            TAG: 'PRINT',
+            DOC: e,
+            DESCRIPTION: '',
+            SIGNATURE: '',
+            SIGNATURE_SUM: ''
+        });
+        docExtra.save();
+        this.grdSlsOrdList.dataRefresh()
+        this._btnGetClick()
+    }
     async _btnGrdPrint(e)
     {
         this.printGuid = e.row.data.GUID
@@ -150,6 +166,8 @@ export default class salesOrdList extends React.PureComponent
             {
                 tmpLines.push(tmpData.result.recordset[x])
             }
+            console.log(this.grdSlsOrdList.getSelectedData()[i].GUID)
+            this._btnGrdPrintControl(this.grdSlsOrdList.getSelectedData()[i].GUID)
         }
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',(pResult) => 
         {
@@ -432,7 +450,8 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="COLIS" caption={this.t("grdSlsOrdList.clmColis")} visible={true} width={80} allowEditing={false}/>
                                 <Column dataField="PALET" caption={this.t("grdSlsOrdList.clmPalet")} visible={true} width={80}/>
                                 <Column dataField="BOX" caption={this.t("grdSlsOrdList.clmBox")} visible={true} width={80}/>
-                                <Column dataField="STATUS" caption={this.t("grdSlsOrdList.clmStatus")} visible={true} width={180} allowEditing={false}/>
+                                <Column dataField="STATUS" caption={this.t("grdSlsOrdList.clmStatus")} visible={true} width={130} allowEditing={false}/>
+                                <Column dataField="PRINTED" caption={this.t("grdSlsOrdList.clmPrinted")} visible={true} width={80} allowEditing={false}/>
                                 <Column type="buttons" width={70}>
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>
@@ -523,8 +542,9 @@ export default class salesOrdList extends React.PureComponent
                                                         //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
                                                         //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         // }
+                                                        this._btnGrdPrintControl(this.printGuid)
                                                     });
-                                                    this.popDesign.hide();  
+                                                    this.popDesign.hide(); 
                                                 }
                                             }}/>
                                         </div>
@@ -563,6 +583,7 @@ export default class salesOrdList extends React.PureComponent
                                                             } 
                                                             // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
                                                             // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                            this._btnGrdPrintControl(this.printGuid)
                                                         }
                                                     });
                                                 }

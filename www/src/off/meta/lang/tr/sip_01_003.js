@@ -33,7 +33,8 @@ const sip_01_003 =
         clmColis : "Koli",
         clmPalet : "Palet",
         clmBox : "Kutu",
-        clmLivre : "Gönderildi"
+        clmLivre : "Gönderildi",
+        clmPrinted : "Yazdırıldı"
     },
     popDesign : 
     {
