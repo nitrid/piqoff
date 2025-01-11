@@ -103,6 +103,7 @@ export default class NbItemCard extends NbBase
                                 {
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value}).length > 0 ? this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR : 1
                                     this.props.data.UNIT = e.value
+                                    console.log(this.props.data.CODE)
                                     let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                                     if(tmpDt.length > 0)
                                     {

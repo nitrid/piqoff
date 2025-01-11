@@ -71,7 +71,8 @@ export const langTr =
             txtPrice  :"Fiyat",
             cmbUnit : "Birim",
             txtQuantity : "Miktar",
-            txtDiscount : "İndirim"
+            txtDiscount : "İndirim",
+            txtItemListName : "Liste Adı"
         },
         popCustomer:
         {
@@ -310,6 +311,7 @@ export const langTr =
     {
         txtItem : "Lütfen Ürün Seçiniz",
         txtItemGroup : "Ürün Grubu",
+        txtItemListName : "Fiyat Liste",
         txtItemPrice : "Fiyat",
         grdListe : 
         {

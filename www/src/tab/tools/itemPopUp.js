@@ -11,6 +11,7 @@ import NdSelectBox from '../../core/react/devex/selectbox'
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
 import NdButton from '../../core/react/devex/button.js';
 import NdNumberBox from '../../core/react/devex/numberbox.js'
+import NbLabel from "../../core/react/bootstrap/label.js";
 export default class NbItemPopUp extends NbBase
 {
     constructor(props)
@@ -205,6 +206,37 @@ export default class NbItemPopUp extends NbBase
                         <div className='row pt-2'>
                             <div className='col-12'>
                                 <Form colCount={2}>
+                                    <Item>
+                                        <Label text={this.t("itemPopup.txtItemListName")} alignment="right" />
+                                        <NdSelectBox simple={true} 
+                                            parent={this} 
+                                            id="txtItemListName" 
+                                            showClearButton={true} 
+                                            notRefresh={true}  
+                                            searchEnabled={true}
+                                            displayExpr="LIST_NAME"                       
+                                            valueExpr="LIST_NO"
+                                            data={{source: {select : {query:"SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC"},sql : this.core.sql}}}
+                                            onValueChanged={async (e)=>
+                                            {
+                                                if(e.value)
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : `SELECT (SELECT [dbo].[FN_PRICE](GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,@TYPE,0)) AS PRICE FROM ITEMS WHERE GUID = @GUID`,
+                                                        param : ['GUID:string|50','TYPE:int','QUANTITY:float','DEPOT:string|50','LIST_NO:int','CUSTOMER:string|50'],
+                                                        value : [this.data.GUID,0,this.data.QUANTITY,'00000000-0000-0000-0000-000000000000',e.value,'00000000-0000-0000-0000-000000000000'],
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(this)
+                                                    if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtPrice.value = tmpData.result.recordset[0].PRICE
+                                                    }
+                                                }
+                                            }}
+                                        />    
+                                    </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.txtPrice")} alignment="right" />
                                         <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>

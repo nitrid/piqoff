@@ -69,7 +69,8 @@ export const langFr =
             txtPrice: "Prix",
             cmbUnit: "Unité",
             txtQuantity: "Quantité",
-            txtDiscount: "Remise"
+            txtDiscount: "Remise",
+            txtItemListName : "Nom de la liste"
         },
         popCustomer:
         {
@@ -308,7 +309,8 @@ export const langFr =
     {
         txtItem : "Veuillez choisir un produit",
         txtItemGroup : "Groupe de produit",  
-        txtItemPrice : "Prix",  
+        txtItemPrice : "Prix", 
+        txtItemListName : "Liste de prix",
         grdListe : 
         {
            clmName : "Dépôt",  
