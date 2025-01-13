@@ -56,6 +56,7 @@ export default class salesInvoice extends DocBase
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
+            console.log(this.pagePrm)
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
@@ -115,8 +116,11 @@ export default class salesInvoice extends DocBase
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                    if(this.txtRefno.value == 0)
+                    {
+                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                    }
                 }
             }, 1000);
 

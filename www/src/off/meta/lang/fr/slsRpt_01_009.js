@@ -1,5 +1,6 @@
 const slsRpt_01_009 =
 {
+    menu : "Facture de vente",
     btnGet: "Rechercher",
     txtCustomerCode : "Client", 
     grdListe : 

@@ -221,7 +221,7 @@ const cri_01_001 =
     tabTitleNote : "Notlar",
     grdNote:
     {
-        clmNote : "NOT"
+        clmName : "NOT"
     },
     txtMainGroup : "Ana Grup",
     pg_MainGroup : 
