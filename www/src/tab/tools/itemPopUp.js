@@ -225,13 +225,15 @@ export default class NbItemPopUp extends NbBase
                                                     {
                                                         query : `SELECT (SELECT [dbo].[FN_PRICE](GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,@TYPE,0)) AS PRICE FROM ITEMS WHERE GUID = @GUID`,
                                                         param : ['GUID:string|50','TYPE:int','QUANTITY:float','DEPOT:string|50','LIST_NO:int','CUSTOMER:string|50'],
-                                                        value : [this.data.GUID,0,this.data.QUANTITY,'00000000-0000-0000-0000-000000000000',e.value,'00000000-0000-0000-0000-000000000000'],
+                                                        value : [this.data.GUID,0,this.data.QUANTITY == 0 ? 1 : this.data.QUANTITY,'00000000-0000-0000-0000-000000000000',e.value,'00000000-0000-0000-0000-000000000000'],
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(this)
                                                     if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtPrice.value = tmpData.result.recordset[0].PRICE
+                                                        this.data.PRICE = this.txtPrice.value
+                                                        this._onValueChange(this.data)
                                                     }
                                                 }
                                             }}
@@ -239,7 +241,12 @@ export default class NbItemPopUp extends NbBase
                                     </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.txtPrice")} alignment="right" />
-                                        <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
+                                        <NdNumberBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.data.PRICE = this.txtPrice.value
+                                            this._onValueChange(this.data)
+                                        }).bind(this)}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.cmbUnit")} alignment="right" />
@@ -310,12 +317,10 @@ export default class NbItemPopUp extends NbBase
                                                 location:'before',
                                                 onClick:async()=>
                                                 {
-                                                    if(this["txtQuantity" + this.props.id].value > 0)
-                                                    {
-                                                        this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                        this.data.QUANTITY = this.txtQuantity.value
-                                                        this._onValueChange(this.data)
-                                                    }
+                                                
+                                                    this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                    this.data.QUANTITY = this.txtQuantity.value
+                                                    this._onValueChange(this.data)
                                                     
                                                 }
                                             },

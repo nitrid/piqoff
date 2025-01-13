@@ -451,7 +451,9 @@ export default class Sale extends React.PureComponent
         {
             if(e.QUANTITY > 0)
             { 
+                console.log(e)
                 tmpLine[0].QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+                tmpLine[0].PRICE = e.PRICE
                 tmpLine[0].DISCOUNT = e.DISCOUNT
                 tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
                 tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR))) - tmpLine[0].DISCOUNT).round(2)
