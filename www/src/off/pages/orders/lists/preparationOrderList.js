@@ -7,7 +7,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Editing,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Button,Paging,Pager,Export,Summary,TotalItem,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -392,6 +392,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -435,8 +436,9 @@ export default class salesOrdList extends React.PureComponent
                                 }
                             }}
                             >
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={170} allowEditing={false}/> 

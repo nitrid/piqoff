@@ -334,6 +334,7 @@ export default class collectionList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdColList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -341,8 +342,9 @@ export default class collectionList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 

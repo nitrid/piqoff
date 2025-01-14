@@ -7,7 +7,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem,StateStoring,ColumnChooser,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -33,21 +33,8 @@ export default class salesOrdList extends React.PureComponent
         this.printGuid = ''
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsOrdList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsOrdList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOrdList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsOrdList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsOrdList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsOrdList.clmTotal")},
-        ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
         this._btnGrdPrint = this._btnGrdPrint.bind(this)
     }
     componentDidMount()
@@ -63,68 +50,6 @@ export default class salesOrdList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
         this._btnGetClick()
-    }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsOrdList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsOrdList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
     }
     async _btnGetClick()
     {
@@ -550,13 +475,6 @@ export default class salesOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             
@@ -577,6 +495,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -593,9 +512,12 @@ export default class salesOrdList extends React.PureComponent
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
-                            >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                            >   
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrdList"}/>                                
+                                <ColumnChooser enabled={true} />  
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
@@ -608,7 +530,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                                 <Column dataField="LIVRE" caption={this.t("grdSlsOrdList.clmLivre")} visible={true} width={100}/>
-                                <Column type="buttons" width={70}>
+                                <Column type="buttons" width={70} fixed={true} fixedPosition="right">
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>
                                 <Summary>

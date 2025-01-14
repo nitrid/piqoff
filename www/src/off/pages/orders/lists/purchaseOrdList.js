@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -369,6 +369,7 @@ export default class purchaseOrdList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdPurcOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -386,8 +387,9 @@ export default class purchaseOrdList extends React.PureComponent
                                 })
                             }}
                             >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menu")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPurcOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPurcOrdList.clmRefNo")} visible={true} width={100}/> 

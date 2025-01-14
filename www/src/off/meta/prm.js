@@ -66,6 +66,25 @@ export const prm =
             CAPTION : "Seri Numarası Rastgele Oluştursun"
         }
     },
+    //Sayfalama Grid Görünümünü Kontrol Etme
+    //pageListColumnControl 
+    {
+        TYPE : 0,
+        ID :"pageListControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sayfadaki Liste Görünümünü Kontrol Etme(1,2,3)"
+        }
+    },
     //Alış Faturasından Fiyat Güncelleme
     {
         TYPE : 0,
@@ -3421,7 +3440,7 @@ export const prm =
                 textHeight:"260"
             }
         }
-    },
+    },  
     //#endregion
     //#region Satış Sipariş
     //negativeQuantity
