@@ -54,9 +54,7 @@ posDoc.prototype.componentWillMount = function()
 }
 posDoc.prototype.rowDelete = async function()
 {
-    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
-
-    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
+    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
     {
         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
         {
@@ -92,9 +90,7 @@ posDoc.prototype.rowDelete = async function()
 }
 posDoc.prototype.delete = async function()
 {
-    let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
-
-    if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
+    if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
     {
         let tmpUpdateQ = 
         {
@@ -127,6 +123,40 @@ posDoc.prototype.render = function()
     modifiedChildren = addChildToElementWithId(modifiedChildren,'frmBtnGrp',(renderPaySplit.bind(this))());
     
     return React.cloneElement(originalRenderOutput, {}, ...modifiedChildren);
+}
+function printNote(pData,pType)
+{
+    return new Promise(async resolve => 
+    {
+        import("../plugins/resto/meta/print/print-note.js").then(async(e)=>
+        {
+            console.log(e)
+            let tmpPrint = e.print(pData)
+            console.log(this)
+            // let tmpArr = [];
+            // for (let i = 0; i < tmpPrint.length; i++) 
+            // {
+            //     let tmpObj = tmpPrint[i]
+            //     if(typeof tmpPrint[i] == 'function')
+            //     {
+            //         tmpObj = tmpPrint[i]()
+            //     }
+            //     if(Array.isArray(tmpObj))
+            //     {
+            //         tmpArr.push(...tmpObj)
+            //     }
+            //     else if(typeof tmpObj == 'object')
+            //     {
+            //         tmpArr.push(tmpObj)
+            //     }
+            // }
+            // console.log(JSON.stringify(tmpArr))
+            
+            await this.posDevice.escPrinter(tmpPrint)
+
+            resolve()
+        })
+    });
 }
 function addChildToElementWithId(children, id, newChild) 
 {
@@ -414,12 +444,9 @@ function renderTables()
                         <NbTableView parent={this} id="restTableView" 
                         onClick={async(e)=>
                         {
-                            console.log(this.restTableView.items[e].ORDER_COUNT)
                             if(this.restTableView.items[e].ORDER_COUNT > 0)
                             {
-                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
-
-                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
+                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                 {
                                     if(this.posObj.posSale.dt().length > 0)
                                     {
@@ -469,15 +496,12 @@ function renderTables()
                                         value: [this.restTableView.items[e].GUID]
                                     }
                                     await tmpData.refresh()
-    
                                     await this.grdRestTableItem.dataRefresh({source:tmpData});
                                 }
                             }
                             else
                             {
-                                let tmpPosAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue();
-
-                                if(tmpPosAdditionPrm !== null && typeof tmpPosAdditionPrm !== 'undefined' && tmpPosAdditionPrm.active === true)
+                                if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                                 {
                                     this.restOrderObj.clearAll()
                                     
@@ -648,20 +672,40 @@ function renderTables()
                                 
                             }
 
-                            let tmpAdditionPrm = this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue()
-                            if(tmpAdditionPrm !== null && typeof tmpAdditionPrm !== 'undefined')
+                            if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                             {   
-                                console.log(tmpData)
+                                let tmpResultNoteDup = await this.nf525.signatureNoteDuplicate({GUID:datatable.uuidv4(),CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),
+                                REST:tmpData[0].REST_GUID,REF:tmpData[0].ZONE_CODE + "" + tmpData[0].REF.toString().padStart(8,'0'),TYPE:'Note'})
                                 
-                                this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpAdditionPrm.printerDesign + '","DATA":' + JSON.stringify(tmpData.toArray()) + ',"PRINTER":"' + tmpAdditionPrm.printerName + '"}',async(pResult) =>
-                                {
-                                    console.log(pResult)
-                                    await this.nf525.signatureNote({CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),REST:tmpData[0].REST_GUID,
-                                    TYPE:'Vente',TVA:tmpData.sum('VAT',2),TTC:tmpData.sum('TOTAL',2)})
+                                let tmpResultNote = await this.nf525.signatureNote({CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),REST:tmpData[0].REST_GUID,
+                                TYPE:'Vente',TVA:tmpData.sum('VAT',2),TTC:tmpData.sum('TOTAL',2),APP_VERSION:this.core.appInfo.version})
 
-                                    await this.nf525.signatureNoteDuplicate({GUID:datatable.uuidv4(),CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),
-                                    REST:tmpData[0].REST_GUID,REF:tmpData[0].ZONE_CODE + "" + tmpData[0].REF.toString().padStart(8,'0'),TYPE:'Note'})
-                                })
+                                let tmpSignNote = '-'
+                                if(tmpResultNote.SIGNATURE != '')
+                                {
+                                    tmpSignNote = tmpResultNote.SIGNATURE.substring(2,3) + tmpResultNote.SIGNATURE.substring(6,7) + tmpResultNote.SIGNATURE.substring(12,13) + tmpResultNote.SIGNATURE.substring(18,19)
+                                }
+
+                                let tmpSignDup = '-'
+                                if(tmpResultNoteDup.SIGNATURE != '')
+                                {
+                                    tmpSignDup = tmpResultNoteDup.SIGNATURE.substring(2,3) + tmpResultNoteDup.SIGNATURE.substring(6,7) + tmpResultNoteDup.SIGNATURE.substring(12,13) + tmpResultNoteDup.SIGNATURE.substring(18,19)
+                                }
+                                console.log(tmpResultNoteDup)
+                                let tmpDt = 
+                                {
+                                    firm : this.firm,
+                                    rest : tmpData,
+                                    special : 
+                                    {
+                                        reprint:tmpResultNoteDup.COUNT,
+                                        certificate:this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSignNote,
+                                        dupCertificate:this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSignDup
+                                    }
+                                }
+
+                                printNote = printNote.bind(this)
+                                printNote(tmpDt)
                             }
                             else
                             {

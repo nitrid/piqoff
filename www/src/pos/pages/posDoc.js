@@ -8505,7 +8505,7 @@ export default class posDoc extends React.PureComponent
 
                                 await tmpDoc.save()
 
-                                this.sendJet({CODE:"170",NAME:"Avans giriş çıkış işlemi yapıldı"}) //BAK
+                                this.sendJet({CODE:"170",NAME:"Une opération d'entrée et de sortie d'avance a été effectuée"}) //BAK
                                 
                                 this.popAdvance.hide()
 
