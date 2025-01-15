@@ -569,5 +569,11 @@ const  ftr_02_002 =
         btn01: "OK", 
         msg: "Impossible de changer le client après avoir ajouter le produit !" 
     },
+    cmbExpiryType : "Option de TVA",
+    cmbTypeData : 
+    {
+        encaissement : "Encaissement",   
+        debit : "Débit",   
+    },
 }
 export default ftr_02_002

@@ -1417,8 +1417,19 @@ export default class salesInvoice extends DocBase
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                 {/* öEDEME TİPİ */}
+                                <Item>
+                                    <Label text={this.t("cmbExpiryType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbExpiryType" height='fit-content' dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_TYPE"}}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.encaissement")},{ID:1,VALUE:this.t("cmbTypeData.debit")}]}}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       
+                                    }).bind(this)}
+                                    />
+                                </Item>
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
