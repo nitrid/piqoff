@@ -503,6 +503,10 @@ export default class itemCount extends React.PureComponent
                 {
                     this.groupList.push('TOTAL_COST')
                 }
+                if(typeof e.value.find(x => x == 'CUSTOMER_NAME') != 'undefined')
+                {
+                    this.groupList.push('CUSTOMER_NAME')
+                }
 
                 for (let i = 0; i < this.grdItemCount.devGrid.columnCount(); i++) 
                 {

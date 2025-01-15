@@ -57,7 +57,7 @@ export const langIt =
     msgMaxQuantity: 
     {
         title: "Avviso",
-        msg: "Non puoi inserire una quantità maggiore di 999.999!",
+        msg: "Non puoi inserire una quantità maggiore di 999!",
         btn01: "Ok",
     },
     msgPriceNotFound: 
