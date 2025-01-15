@@ -268,6 +268,12 @@ export const langTr =
             Code: "ÜRÜN KODU",
             Favori: "FAVORİLER",
         },
+        msgWrongUnit:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Birim koli olmak zorundadır !"
+        },
     },
     extract :
     {

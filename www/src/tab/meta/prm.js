@@ -125,6 +125,22 @@ export const prm =
             CAPTION : "Sabit Birim"
         }
     },
+    // Birim kilitli mi
+    {
+        TYPE : 1,
+        ID :"unitLock",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "sale.js",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış",
+            CAPTION : "Sabit Birim"
+        }
+    },
     //cmbDepot
     {
         TYPE : 1,

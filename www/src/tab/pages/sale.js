@@ -451,7 +451,6 @@ export default class Sale extends React.PureComponent
         {
             if(e.QUANTITY > 0)
             { 
-                console.log(e)
                 tmpLine[0].QUANTITY = e.QUANTITY * e.UNIT_FACTOR
                 tmpLine[0].PRICE = e.PRICE
                 tmpLine[0].DISCOUNT = e.DISCOUNT
@@ -517,7 +516,6 @@ export default class Sale extends React.PureComponent
     }    
     async orderSave()
     {
-        console.log(this.docLines)
         if(this.docObj.dt()[0].REF_NO == 0)
         {
             let tmpQuery = 
@@ -906,7 +904,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
                             </div>
                         </div>
                         <div className='row'>                            
@@ -1226,7 +1224,6 @@ export default class Sale extends React.PureComponent
                                                     }}
                                                     onRowUpdated={async(e)=>
                                                     {
-                                                        console.log(e.data)
                                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                                         {
                                                             e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)

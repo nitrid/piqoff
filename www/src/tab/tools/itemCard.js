@@ -3,6 +3,7 @@ import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
+import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 
 export default class NbItemCard extends NbBase
 {
@@ -26,16 +27,12 @@ export default class NbItemCard extends NbBase
     {        
         this.cmbUnit.data.onLoaded = async(pData)=>
         {
-            console.log(pData)
             if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined' && typeof this.data.QUANTITY == 'undefined')
             {
                 this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
-                console.log(this.props.data.GUID)
                 let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                 if(tmpDt.length > 0)
                 {
-                    console.log(option.FACTOR)
-                    console.log(tmpDt[0].PRICE)
 
                     let tmpPrice = Number(tmpDt[0].PRICE * option.FACTOR).round(3)
                     this.setState({price:tmpPrice})
@@ -102,9 +99,9 @@ export default class NbItemCard extends NbBase
                                 await this.core.util.waitUntil(300)
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
+                                    
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value}).length > 0 ? this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR : 1
                                     this.props.data.UNIT = e.value
-                                    console.log(this.props.data.CODE)
                                     let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                                     if(tmpDt.length > 0)
                                     {
@@ -156,6 +153,20 @@ export default class NbItemCard extends NbBase
                                     location:'after',
                                     onClick:async()=>
                                     {
+                                        if(this.props.unitLock == true)
+                                        {
+                                            if(this.cmbUnit.displayValue != 'Colis' )
+                                            {
+                                                let confObj = 
+                                                {
+                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgWrongUnit.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgWrongUnit.msg")}</div>)
+                                                }
+                                                await dialog(confObj);  
+                                                return
+                                            }
+                                        }
                                         this["txtQuantity" + this.props.id].value = Number(this["txtQuantity" + this.props.id].value) + 1 
                                         this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
                                         this._onValueChange(this.props.data)

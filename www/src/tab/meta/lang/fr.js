@@ -265,7 +265,13 @@ export const langFr =
             Name: "NOM DU PRODUIT",
             Code: "CODE PRODUIT",
             Favori: "FAVORIS",
-        }
+        },
+        msgWrongUnit:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "La quantité doit être en Colis !"
+        },
     },
     extract :
     {
