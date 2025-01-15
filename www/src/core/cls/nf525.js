@@ -464,7 +464,7 @@ export class nf525Cls
             let tmpSignature = ''
             let tmpSignatureSum = ''
             let tmpPrintCount = 0
-
+            
             let tmpQuery = 
             {
                 query : `SELECT TOP 1 TTC FROM NF525_NOTE WHERE REST = @REST`,
@@ -530,7 +530,7 @@ export class nf525Cls
                 await this.core.sql.execute(tmpInsertQuery)
             }
 
-            resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
+            resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum,COUNT:tmpPrintCount})
         })
     }
     signatureNote(pData)
@@ -574,7 +574,7 @@ export class nf525Cls
             }
             
             tmpResult = await this.core.sql.execute(tmpQuery)
-
+            
             if((tmpResult.result.recordset.length == 0) || (tmpResult.result.recordset[0].TTC != pData.TTC))
             {
                 let tmpInsertQuery = 
@@ -587,10 +587,11 @@ export class nf525Cls
                             @TYPE = @PTYPE, 
                             @TVA = @PTVA, 
                             @TTC = @PTTC, 
+                            @APP_VERSION = @PAPP_VERSION,
                             @SIGNATURE = @PSIGNATURE, 
                             @SIGNATURE_SUM = @PSIGNATURE_SUM`,
-                    param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PREST:string|50','PTYPE:string|50','PTVA:float','PTTC:float','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-                    value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.REST,pData.TYPE,pData.TVA,pData.TTC,tmpSignature,tmpSignatureSum],
+                    param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PREST:string|50','PTYPE:string|50','PTVA:float','PTTC:float','PAPP_VERSION:string|25','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+                    value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.REST,pData.TYPE,pData.TVA,pData.TTC,pData.APP_VERSION,tmpSignature,tmpSignatureSum],
                 }
 
                 await this.core.sql.execute(tmpInsertQuery)   

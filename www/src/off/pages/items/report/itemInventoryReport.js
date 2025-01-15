@@ -23,7 +23,7 @@ export default class itemInventoryReport extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','QUANTITY','BARCODE','COST_PRICE','TOTAL_COST']
+            columnListValue : ['NAME','CODE','QUANTITY','UNIT_SYMBOL','BARCODE','COST_PRICE','TOTAL_COST']
         }
         
         this.core = App.instance.core;
@@ -32,6 +32,7 @@ export default class itemInventoryReport extends React.PureComponent
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},                                   
             {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
+            {CODE : "UNIT_SYMBOL",NAME : this.t("grdListe.clmUnitSymbol")},
             {CODE : "BARCODE",NAME : this.t("grdListe.clmBarcode")}, 
             {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},    
             {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},    
@@ -77,6 +78,10 @@ export default class itemInventoryReport extends React.PureComponent
                 if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
                 {
                     this.groupList.push('QUANTITY')
+                }
+                if(typeof e.value.find(x => x == 'UNIT_SYMBOL') != 'undefined')
+                {
+                    this.groupList.push('UNIT_SYMBOL')
                 }
                 if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
                 {
@@ -273,6 +278,7 @@ export default class itemInventoryReport extends React.PureComponent
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="UNIT_SYMBOL" caption={this.t("grdListe.clmUnitSymbol")} visible={true}/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={true}/> 
                                 <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true}/> 
