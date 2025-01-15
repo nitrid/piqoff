@@ -66,8 +66,8 @@ export const prm =
             CAPTION : "Seri Numarası Rastgele Oluştursun"
         }
     },
-    //Sayfalama Grid Görünümünü Kontrol Etme
-    //pageListColumnControl 
+    //Sayfalama Grid Liste Görünümünü Kontrol Etme
+    //pageListControl 
     {
         TYPE : 0,
         ID :"pageListControl",

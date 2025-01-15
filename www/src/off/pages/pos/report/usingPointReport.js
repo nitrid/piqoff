@@ -163,8 +163,9 @@ export default class useingPointReport extends React.PureComponent
                                     this.getDetail(e.data.ITEM_GRP_NAME)
                                 }}
                             >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE" caption={this.t("grdUseingPointReport.clmDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} visible={true} width={100}/> 
                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdUseingPointReport.clmCustomerCode")} visible={true} width={100}/> 
