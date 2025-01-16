@@ -158,12 +158,18 @@ export default class piqhubApi
                 }
             }
 
-            if (fs.existsSync(path.join(__dirname, 'www', 'public', 'config.js')) && fs.existsSync(path.join(__dirname, 'www', 'public', 'public.zip'))) 
+            if (fs.existsSync(path.join(__dirname, 'www', 'public'))) 
             {
-                const configContent = fs.readFileSync(path.join(__dirname, 'www', 'public', 'config.js'));
-                const publicZip = new AdmZip(path.join(__dirname, 'www', 'public', 'public.zip'));
-                publicZip.addFile('public/config.js', configContent);
-                publicZip.writeZip(path.join(__dirname, 'www', 'public', 'public.zip'));
+                const publicZipPath = path.join(__dirname, 'www', 'public', 'public.zip');
+                
+                if (fs.existsSync(publicZipPath)) 
+                {
+                    fs.unlinkSync(publicZipPath);
+                }
+
+                const publicZip = new AdmZip();
+                publicZip.addLocalFolder(path.join(__dirname, 'www', 'public'), 'public');
+                publicZip.writeZip(publicZipPath);
             }
             
             return true;
