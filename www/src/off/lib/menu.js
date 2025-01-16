@@ -1638,6 +1638,20 @@ export const menu = (e) =>
                 },
             ]
         },
+        //Müşteri Evrak İşlemler
+        {
+            id: 'saleList',
+            text: e.t('menuOff.saleList'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'saleList_01',
+                    text: e.t('menuOff.saleList_01'),//'Toplu Müşteri Evrak Listesi',
+                    path: 'saleList/lists/saleList'
+                }
+            ]
+        },
         //Ayarlar
         {
             id: 'setting',

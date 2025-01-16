@@ -317,6 +317,8 @@ export const langTr =
         cnt_03 : "Raporlar",
         cnt_04 : "Operasyonlar",
         cnt_04_001 : "Çoklu Satış Anlaşması",
+        saleList : "Evrak Liste İşlemleri",
+        saleList_01: "Toplu Evrak Listesi",
         piqx : "PiqX",
         piqx_01 : "Faturalar",
         piqx_01_001 : "Gelen Alış Faturaları",
