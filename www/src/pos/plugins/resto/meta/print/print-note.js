@@ -45,7 +45,7 @@ export function print()
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
         {
-            if(data.special.reprint > 1)
+            if(data.special.reprint > 0)
             {
                 return {font:"b",style:"b",align:"ct",data: "DUPLICATA"}
             }   
@@ -105,11 +105,11 @@ export function print()
         },
         ()=>
         {
-            if(data.special.reprint > 1)
+            if(data.special.reprint > 0)
             {
                 let tmpArr = []
 
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Réimpression " + (data.special.reprint - 1)})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Réimpression " + (data.special.reprint)})
                 tmpArr.push({font:"b",align:"ct",data:moment(new Date()).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')})
                 tmpArr.push({font:"b",style:"b",align:"ct",data:data.special.dupCertificate})
 
