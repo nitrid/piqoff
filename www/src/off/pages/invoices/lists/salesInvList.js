@@ -10,7 +10,7 @@ import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/reac
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -56,8 +56,6 @@ export default class salesInvList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = '';
         this._btnGetClick()
     }
@@ -141,7 +139,7 @@ export default class salesInvList extends React.PureComponent
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                             " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                    value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate]
                 },
                 sql : this.core.sql
             }
@@ -149,6 +147,115 @@ export default class salesInvList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdSlsIvcList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
+    }
+    async txtDownload()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT REPLACE(CONVERT(varchar,DOC_DATE,104),'.','') AS DOC_DATE, " +
+                    "TYPE_NAME + '-' + CONVERT(nvarchar,REF_NO) AS REF, " +
+                    "CASE WHEN TYPE_NAME = 'FAC' THEN 'Facture ' + INPUT_NAME ELSE 'Avoir ' + OUTPUT_NAME END AS CUSTOMER, " +
+                    "TOTAL, TOTALHT, VAT, " +
+                    "CASE WHEN REBATE = 0 THEN  INPUT_CODE ELSE OUTPUT_CODE END AS CUSTOMER_CODE, " +
+                    " CASE WHEN REBATE = 0 THEN (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.INPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) " +
+                    " ELSE (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.OUTPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) END AS COUNTRY, " +
+                    "(SELECT TOP 1 REPLACE(CONVERT(varchar,EXPIRY_DATE,104),'.','') FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.DOC_GUID = DOC_VW_01.GUID) AS EXP_DATE " +
+                    "FROM DOC_VW_01 WHERE DOC_TYPE = 20 AND ((TYPE = 1 AND REBATE = 0) OR (TYPE = 0 AND REBATE = 1)) " +
+                    "AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
+                    "AND ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) " + 
+                    "AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) " +
+                    "ORDER BY DOC_DATE,REF_NO",
+            param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+            value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate]
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        
+        let content = "Code journal;Date;N° Pièce;Désignation;Montant Net;Montant Brut;Compte;Compte;Taxe;Expiration\n";
+        
+        for(let i = 0; i < tmpData.result.recordset.length; i++)
+        {
+            let row = tmpData.result.recordset[i];
+            
+            if(row.TYPE == 0)
+            {   
+                if(row.COUNTRY == 'FR')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    // KDV'siz tutar satırı  
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\n`;
+                    
+                    // KDV satırı
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.VAT};;4457151;;${row.EXP_DATE}\n`;
+                }
+                else if(row.COUNTRY == 'DE')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    // KDV'siz tutar satırı  
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\n`;
+                }
+                else if(row.COUNTRY == 'CH')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    // KDV'siz tutar satırı  
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079200;;${row.EXP_DATE}\n`;
+                }
+              
+            }
+            else
+            {
+                if(row.COUNTRY == 'FR')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    if(row.VAT > 0)
+                    {
+                        // KDV'siz tutar satırı  
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7070000;;${row.EXP_DATE}\n`;
+                        
+                        // KDV satırı
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.VAT};0;4457151;;${row.EXP_DATE}\n`;
+                    }
+                    else
+                    {
+                        // KDV'siz tutar satırı  
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7087000;;${row.EXP_DATE}\n`;
+                    }
+                }
+                else if(row.COUNTRY == 'DE')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    // KDV'siz tutar satırı  
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\n`;
+                }
+                else if(row.COUNTRY == 'CH')
+                {
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+            
+                    // KDV'siz tutar satırı  
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\n`;
+                }
+
+            }
+            // Ana satır
+          
+        }
+
+        console.log(content)
+        // Dosyayı indir
+        let blob = new Blob([content], {type: 'text/plain'});
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'Journaux_VE_' + moment(this.dtFirst.startDate).format('DD/MM/YYYY') + ' - ' + moment(this.dtFirst.endDate).format('DD/MM/YYYY') + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
     }
     render()
     {
@@ -177,6 +284,13 @@ export default class salesInvList extends React.PureComponent
                                         }
                                     }    
                                 } />
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnTxtfile" parent={this} icon="txtfile" type="default"
+                                    onClick={async()=>
+                                    {
+                                      this.txtDownload()
+                                    }}/>
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
@@ -218,16 +332,11 @@ export default class salesInvList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NbDateRange id={"dtFirst"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                               
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -418,7 +527,7 @@ export default class salesInvList extends React.PureComponent
                                                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                                                                 " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                                                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
-                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
+                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
                                                     App.instance.setState({isExecute:true})
