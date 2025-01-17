@@ -7,7 +7,7 @@ import axios from 'axios';
 import AdmZip from 'adm-zip';
 import { promisify } from 'util';
 import { fileURLToPath } from 'url';
-import { fork } from 'child_process';
+import unzipper from 'unzipper';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -512,81 +512,52 @@ export default class piqhubApi
             const tempZipPath = path.join(__dirname, 'temp.zip');
             await promisify(fs.writeFile)(tempZipPath, response.data);
 
-            progressCallback({
+            progressCallback(
+            {
                 status: 'extracting',
                 file: 'public.zip',
                 progress: 0
             });
 
-            // Zip işlemini child process'te yap
+            const directory = await unzipper.Open.file(tempZipPath);
+            const totalEntries = directory.files.length;
+            let extractedEntries = 0;
+
             await new Promise((resolve, reject) => 
             {
-                const child = fork('-e', [`
-                    const AdmZip = require('adm-zip');
-                    const fs = require('fs');
-
-                    process.on('message', (data) => 
-                    {
-                        try 
-                        {
-                            const zip = new AdmZip(data.zipPath);
-                            const entries = zip.getEntries();
-                            const totalEntries = entries.length;
-                            let extractedEntries = 0;
-                            let lastProgressTime = Date.now();
-                            const progressInterval = 1000; // 1 saniye
-
-                            entries.forEach((entry) => 
-                            {
-                                zip.extractEntryTo(entry, data.targetPath, true, true);
-                                extractedEntries++;
-                                
-                                // Her 1 saniyede bir progress gönder
-                                const now = Date.now();
-                                if (now - lastProgressTime >= progressInterval || extractedEntries === totalEntries) 
-                                {
-                                    lastProgressTime = now;
-                                    process.send(
-                                    {
-                                        status: 'progress',
-                                        file: entry.entryName,
-                                        filesExtracted: extractedEntries,
-                                        totalFiles: totalEntries,
-                                        progress: Math.round((extractedEntries * 100) / totalEntries)
-                                    });
-                                }
-                            });
-
-                            fs.unlinkSync(data.zipPath);
-                            process.send({ status: 'completed' });
-                        }
-                        catch(error) 
-                        {
-                            process.send({ status: 'error', error: error.message });
-                        }
-                    });
-                `]);
-                
-                child.send({zipPath: tempZipPath,targetPath: __dirname});
-
-                child.on('message', (message) => 
+                fs.createReadStream(tempZipPath).pipe(unzipper.Parse()).on('entry', (entry) => 
                 {
-                    if (message.status === 'completed') 
-                    {
-                        resolve();
-                    }
-                    else if (message.status === 'error')
-                    {
-                        reject(new Error(message.error));
-                    }
-                    else if (message.status === 'progress') 
-                    {
-                        progressCallback(message);
-                    }
-                });
+                    const fileName = entry.path;
+                    const type = entry.type;
+                    const fullPath = path.join(__dirname, fileName);
 
-                child.on('error', reject);
+                    if (type === 'File') 
+                    {
+                        entry.pipe(fs.createWriteStream(fullPath)).on('finish', () => 
+                        {
+                            extractedEntries++;
+                            if (extractedEntries % 100 === 0 || extractedEntries === totalEntries)
+                            {
+                                const progress = Math.round((extractedEntries / totalEntries) * 100);
+                                try 
+                                {
+                                    progressCallback({ status: 'extracting', file: fileName, progress });
+                                } 
+                                catch (error) 
+                                {
+                                    console.error('Progress callback error:', error);
+                                }
+                            }
+                        });
+                    } 
+                    else 
+                    {
+                        entry.autodrain();
+                    }
+                }).on('close', resolve).on('error', reject);
             });
+
+            fs.unlinkSync(tempZipPath);
 
             progressCallback(
             {
