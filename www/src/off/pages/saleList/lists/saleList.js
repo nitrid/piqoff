@@ -8,7 +8,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,Summary,TotalItem,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
@@ -505,55 +505,6 @@ export default class saleList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'add',
-                                        onClick: async () => 
-                                        {
-                                            App.instance.menuClick(
-                                            {
-                                                id: 'irs_02_002',
-                                                text: this.t('menu'),
-                                                path: 'dispatch/documents/salesDispatch.js',
-                                            })
-                                        }
-                                    }    
-                                } />
-                                  <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'detailslayout',
-                                        onClick: async () => 
-                                        {
-                                            this.convertInvoice()
-                                            
-                                        }
-                                    }    
-                                } />
-                                  <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'print',
-                                        onClick: async () => 
-                                        {
-                                            this.printDispatch()
-                                            
-                                        }
-                                    }    
-                                } />
                                  <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -706,6 +657,10 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
+                                        onSelectionChanged={(e)=>
+                                        {
+                                            e.component.refresh(true);
+                                        }}
                                         onRowDblClick={async(e)=>
                                             {
                                                 App.instance.menuClick(
@@ -716,7 +671,9 @@ export default class saleList extends React.PureComponent
                                                         pagePrm:{GUID:e.data.GUID}
                                                     })                                                                                        
                                             }}
-                                        >                            
+                                        >    
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOfferList"}/>                                
+                                            <ColumnChooser enabled={true} />                                                                                       
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
@@ -731,6 +688,55 @@ export default class saleList extends React.PureComponent
                                             <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                             <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
                                             <Column dataField="FACTURE" caption={this.t("grdSlsDisList.clmFacture")} visible={true} width={100}/>
+                                            <Summary calculateCustomSummary={(options) =>
+                                            {
+                                                if (options.name === 'SelectedRowsSummary') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTAL).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalHT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTALHT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalVAT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.VAT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                            }}>
+                                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmTotal")+": {0}"} showInColumn="TOTAL" />
+                                                <TotalItem name="SelectedRowsTotalHT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmAmount")+": {0}"} showInColumn="TOTALHT" />
+                                                <TotalItem name="SelectedRowsTotalVAT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmVat")+": {0}"} showInColumn="VAT" />
+                                            </Summary>
                                         </NdGrid>
                                     </div>
                                 </Item>
@@ -753,6 +759,10 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
+                                        onSelectionChanged={(e)=>
+                                        {
+                                            e.component.refresh(true);
+                                        }}
                                         onRowDblClick={async(e)=>
                                             {                                            
                                                 App.instance.menuClick(
@@ -763,7 +773,9 @@ export default class saleList extends React.PureComponent
                                                         pagePrm:{GUID:e.data.GUID}
                                                     })                                           
                                             }}
-                                        >                            
+                                        >         
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrderList"}/>                                
+                                            <ColumnChooser enabled={true} />                                                                                  
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
@@ -778,6 +790,55 @@ export default class saleList extends React.PureComponent
                                             <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                             <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
                                             <Column dataField="FACTURE" caption={this.t("grdSlsDisList.clmFacture")} visible={true} width={100}/>
+                                            <Summary calculateCustomSummary={(options) =>
+                                            {
+                                                if (options.name === 'SelectedRowsSummary') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTAL).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalHT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTALHT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalVAT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.VAT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                            }}>
+                                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmTotal")+": {0}"} showInColumn="TOTAL" />
+                                                <TotalItem name="SelectedRowsTotalHT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmAmount")+": {0}"} showInColumn="TOTALHT" />
+                                                <TotalItem name="SelectedRowsTotalVAT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmVat")+": {0}"} showInColumn="VAT" />
+                                            </Summary>
                                         </NdGrid>
                                     </div>
                                 </Item>
@@ -800,6 +861,10 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
+                                        onSelectionChanged={(e)=>
+                                        {
+                                            e.component.refresh(true);
+                                        }}
                                         onRowDblClick={async(e)=>
                                             {                                            
                                                 App.instance.menuClick(
@@ -810,7 +875,9 @@ export default class saleList extends React.PureComponent
                                                         pagePrm:{GUID:e.data.GUID}
                                                     })                                         
                                             }}
-                                        >                            
+                                        >        
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatchList"}/>                                
+                                            <ColumnChooser enabled={true} />                                                                                   
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
@@ -825,6 +892,55 @@ export default class saleList extends React.PureComponent
                                             <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                             <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
                                             <Column dataField="FACTURE" caption={this.t("grdSlsDisList.clmFacture")} visible={true} width={100}/>
+                                            <Summary calculateCustomSummary={(options) =>
+                                            {
+                                                if (options.name === 'SelectedRowsSummary') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTAL).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalHT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTALHT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalVAT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.VAT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                            }}>
+                                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmTotal")+": {0}"} showInColumn="TOTAL" />
+                                                <TotalItem name="SelectedRowsTotalHT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmAmount")+": {0}"} showInColumn="TOTALHT" />
+                                                <TotalItem name="SelectedRowsTotalVAT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmVat")+": {0}"} showInColumn="VAT" />
+                                            </Summary>
                                         </NdGrid>
                                     </div>
                                 </Item>
@@ -847,6 +963,10 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
+                                        onSelectionChanged={(e)=>
+                                        {
+                                            e.component.refresh(true);
+                                        }}
                                         onRowDblClick={async(e)=>
                                             {                                            
                                                 App.instance.menuClick(
@@ -857,7 +977,9 @@ export default class saleList extends React.PureComponent
                                                         pagePrm:{GUID:e.data.GUID}
                                                     })                                         
                                             }}
-                                        >                            
+                                        >       
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInvoiceList"}/>                                
+                                            <ColumnChooser enabled={true} />                       
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
@@ -872,6 +994,55 @@ export default class saleList extends React.PureComponent
                                             <Column dataField="VAT" caption={this.t("grdSlsDisList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                             <Column dataField="TOTAL" caption={this.t("grdSlsDisList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>   
                                             <Column dataField="MAIL" caption={this.t("grdSlsDisList.clmMail")} visible={true} width={100}/>
+                                            <Summary calculateCustomSummary={(options) =>
+                                            {
+                                                if (options.name === 'SelectedRowsSummary') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTAL).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalHT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.TOTALHT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                                if (options.name === 'SelectedRowsTotalVAT') 
+                                                {
+                                                    if (options.summaryProcess === 'start') 
+                                                    {
+                                                        options.totalValue = 0;
+                                                    } 
+                                                    else if (options.summaryProcess === 'calculate') 
+                                                    {
+                                                        if (options.component.isRowSelected(options.value)) 
+                                                        {
+                                                            options.totalValue += Number(options.value.VAT).round(2);
+                                                        }
+                                                    }
+                                                }
+                                            }}>
+                                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmTotal")+": {0}"} showInColumn="TOTAL" />
+                                                <TotalItem name="SelectedRowsTotalHT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmAmount")+": {0}"} showInColumn="TOTALHT" />
+                                                <TotalItem name="SelectedRowsTotalVAT" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat={this.t("grdSlsDisList.clmVat")+": {0}"} showInColumn="VAT" />
+                                            </Summary>
                                         </NdGrid>
                                     </div>
                                 </Item>

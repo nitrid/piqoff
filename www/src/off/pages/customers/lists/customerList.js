@@ -34,7 +34,7 @@ export default class barcodeList extends React.PureComponent
             {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
             {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},       
             {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
-            {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
+            {CODE : "ZIPCODE",NAME : this.t("grdListe.clmZipcode")},       
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
             {CODE : "CITY",NAME : this.t("grdListe.clmCity")},       
             {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
@@ -280,7 +280,7 @@ export default class barcodeList extends React.PureComponent
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 
                                 <Column dataField="GENUS_NAME" caption={this.t("grdListe.clmGenus")} visible={true}/> 
                                 <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
-                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
+                                <Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
                                 <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
                                 <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
