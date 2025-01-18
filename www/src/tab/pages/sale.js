@@ -302,7 +302,7 @@ export default class Sale extends React.PureComponent
                                 (DEPOT = ?) OR 
                                 (DEPOT = '00000000-0000-0000-0000-000000000000')
                             ) AND 
-                            (LIST_NO = ? OR LIST_NO = 0) AND
+                            (LIST_NO = ? OR LIST_NO = 1) AND
                             (
                                 (CUSTOMER_GUID = ?) OR 
                                 (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
