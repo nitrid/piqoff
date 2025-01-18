@@ -520,7 +520,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 " + (this.sysParam.filter({ID:'docNoAuto',USERS:this.user.CODE}).getValue() == false ? " AND REF = @REF " : ""),
                 param : ['REF:string|25'],
                 value : [this.docObj.dt()[0].REF]
             }
