@@ -95,6 +95,38 @@ export default class itemEntryDoc extends React.PureComponent
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:true});
         })
+        this.msgQuantity.onShowed = async ()=>
+        {
+            this.txtPopQteUnitQuantity.value = 1
+            this.txtPopQuantity.value = 1
+            this.txtPopQuantity.focus()
+            
+            let tmpUnitDt = new datatable()
+            tmpUnitDt.selectCmd = 
+            {
+                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                param: ['ITEM:string|50'],
+                value: [this.msgQuantity.tmpData.GUID]
+            }
+            await tmpUnitDt.refresh()
+            
+            if(tmpUnitDt.length > 0)
+            {   
+                this.cmbPopQteUnit.setData(tmpUnitDt)
+                let tmpDefaultUnit = tmpUnitDt.where({TYPE:{'<>' : 0}}).where({NAME:this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value})
+                if(tmpDefaultUnit.length > 0)
+                {
+                    this.cmbPopQteUnit.value = tmpDefaultUnit[0].GUID
+                    this.txtPopQteUnitFactor.value = tmpDefaultUnit[0].FACTOR
+                    this.txtPopQteUnitQuantity.value = this.txtPopQuantity.value * this.txtPopQteUnitFactor.value
+                }
+                else
+                {
+                    this.cmbPopQteUnit.value = this.msgQuantity.tmpData.UNIT
+                    this.txtPopQteUnitFactor.value = 1
+                }
+            }
+        }
 
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
         this.txtRef.setState({value:this.user.CODE})
@@ -1008,32 +1040,34 @@ export default class itemEntryDoc extends React.PureComponent
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.combineControl = true
-                                            this.combineNew = false  
-                                            await this.msgQuantity.show().then(async (e) =>
+                                            this.combineNew = false 
+                                            this.msgQuantity.tmpData = tmpData.result.recordset[0]
+                                            let tmpResult = await this.msgQuantity.show()
+                                            console.log(tmpResult)
+                                            if(tmpResult == 'btn02')
                                             {
-                                                if(e == 'btn01')
-                                                {
-                                                    if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
-                                                    {
-                                                        let tmpDocItems = {...this.docObj.docItems.empty}
-                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                        tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
-                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                        this.txtRef.readOnly = true
-                                                        this.txtRefno.readOnly = true
-                                                        this.docObj.docItems.addEmpty(tmpDocItems)
-                                                    }
-                                                    await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1,this.txtQuantity.value)
-                                                }
-                                            });
+                                                return
+                                            }
+
+                                            if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
+                                            {
+                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                            }
+                                            await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1,this.txtPopQteUnitQuantity.value)  
                                         }
                                         else
                                         {
@@ -1629,41 +1663,76 @@ export default class itemEntryDoc extends React.PureComponent
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
+                    width={"400px"}
+                    height={"400px"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
-                    onShowed={()=>
-                    {
-                        this.txtQuantity.setState({value:1})
-                        setTimeout(() => {
-                            this.txtQuantity.focus()
-                        }, 500);
-                    }}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                            <Form>
-                                {/* txtQuantity */}
-                                <Item>
-                                    <Label text={this.t("txtQuantity")} alignment="right" />
-                                    <NdTextBox id="txtQuantity" parent={this} simple={true}  
-                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                    value ={1}
-                                    onFocusIn={(async(e)=>
-                                    {
-                                        
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                            </Form>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    <Item>
+                                        <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.txtPopQteUnitFactor.value = this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        >
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        />
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
+                                        <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
+                                        </NdNumberBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}>
+                                        </NdNumberBox>
+                                    </Item>
+                                   
+                                   
+                                </Form>
+                            </div>
                             </div>
                         </div>
-                </NdDialog>
+                    </NdDialog>
                 </ScrollView>                
             </div>
         )
