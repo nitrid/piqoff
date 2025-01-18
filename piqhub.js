@@ -8,6 +8,7 @@ import AdmZip from 'adm-zip';
 import { promisify } from 'util';
 import { fileURLToPath } from 'url';
 import unzipper from 'unzipper';
+import { exec, spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,8 @@ export default class piqhubApi
             reconnectionDelay: 1000,
             reconnectionDelayMax: 5000,
             timeout: 60000,
+            forceNew: true,
+            autoConnect: true,
             query: 
             {
                 macId: this.macId
@@ -345,9 +348,9 @@ export default class piqhubApi
             console.log('piqhub connected');
             this.updateLicense();
         });
-        this.socketHub.on('disconnect', () => 
+        this.socketHub.on('disconnect', (reason) => 
         {
-            console.log('piqhub disconnect');
+            console.log('piqhub disconnect, reason:', reason);
         });
         this.socketHub.on('updateDatabase', async (versionId) => 
         {
@@ -362,6 +365,10 @@ export default class piqhubApi
             {
                 this.socketHub.emit('updateAppProgress', progress);
             });
+        });
+        this.socketHub.on('restartService', async () => 
+        {
+            this.restartService();
         });
     }
     getLicence(pType,pField)
@@ -580,6 +587,23 @@ export default class piqhubApi
                 progress: 0
             });
             return false;
+        }
+    }
+    restartService()
+    {
+        try 
+        {
+            console.log('Servis yeniden başlatma isteği alındı');
+            spawn('cmd.exe', ['/c', 'start', '/b', path.join(__dirname, 'setup', 'restart.bat')], 
+            {
+                detached: true,
+                stdio: 'ignore',
+                windowsHide: true
+            }).unref();
+        }
+        catch (error)
+        {
+            console.error('Restart hatası:', error);
         }
     }
 }
