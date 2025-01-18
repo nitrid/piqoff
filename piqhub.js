@@ -24,7 +24,7 @@ export default class piqhubApi
 
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
-        this.socketHub = client('http://piqhub.piqsoft.com',
+        this.socketHub = client('https://piqhub.piqsoft.com',
         //this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
@@ -342,6 +342,7 @@ export default class piqhubApi
     {
         this.socketHub.on('connect', () => 
         {
+            console.log('piqhub connected');
             this.updateLicense();
         });
         this.socketHub.on('disconnect', () => 
