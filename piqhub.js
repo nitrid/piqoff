@@ -7,7 +7,8 @@ import axios from 'axios';
 import AdmZip from 'adm-zip';
 import { promisify } from 'util';
 import { fileURLToPath } from 'url';
-import { fork } from 'child_process';
+import unzipper from 'unzipper';
+import { exec, spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ export default class piqhubApi
 
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
-        this.socketHub = client('http://piqhub.piqsoft.com',
+        this.socketHub = client('https://piqhub.piqsoft.com',
         //this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
@@ -32,6 +33,8 @@ export default class piqhubApi
             reconnectionDelay: 1000,
             reconnectionDelayMax: 5000,
             timeout: 60000,
+            forceNew: true,
+            autoConnect: true,
             query: 
             {
                 macId: this.macId
@@ -158,12 +161,18 @@ export default class piqhubApi
                 }
             }
 
-            if (fs.existsSync(path.join(__dirname, 'www', 'public', 'config.js')) && fs.existsSync(path.join(__dirname, 'www', 'public', 'public.zip'))) 
+            if (fs.existsSync(path.join(__dirname, 'www', 'public'))) 
             {
-                const configContent = fs.readFileSync(path.join(__dirname, 'www', 'public', 'config.js'));
-                const publicZip = new AdmZip(path.join(__dirname, 'www', 'public', 'public.zip'));
-                publicZip.addFile('public/config.js', configContent);
-                publicZip.writeZip(path.join(__dirname, 'www', 'public', 'public.zip'));
+                const publicZipPath = path.join(__dirname, 'www', 'public', 'public.zip');
+                
+                if (fs.existsSync(publicZipPath)) 
+                {
+                    fs.unlinkSync(publicZipPath);
+                }
+
+                const publicZip = new AdmZip();
+                publicZip.addLocalFolder(path.join(__dirname, 'www', 'public'), 'public');
+                publicZip.writeZip(publicZipPath);
             }
             
             return true;
@@ -336,11 +345,12 @@ export default class piqhubApi
     {
         this.socketHub.on('connect', () => 
         {
+            console.log('piqhub connected');
             this.updateLicense();
         });
-        this.socketHub.on('disconnect', () => 
+        this.socketHub.on('disconnect', (reason) => 
         {
-            console.log('piqhub disconnect');
+            console.log('piqhub disconnect, reason:', reason);
         });
         this.socketHub.on('updateDatabase', async (versionId) => 
         {
@@ -355,6 +365,10 @@ export default class piqhubApi
             {
                 this.socketHub.emit('updateAppProgress', progress);
             });
+        });
+        this.socketHub.on('restartService', async () => 
+        {
+            this.restartService();
         });
     }
     getLicence(pType,pField)
@@ -506,81 +520,52 @@ export default class piqhubApi
             const tempZipPath = path.join(__dirname, 'temp.zip');
             await promisify(fs.writeFile)(tempZipPath, response.data);
 
-            progressCallback({
+            progressCallback(
+            {
                 status: 'extracting',
                 file: 'public.zip',
                 progress: 0
             });
 
-            // Zip işlemini child process'te yap
+            const directory = await unzipper.Open.file(tempZipPath);
+            const totalEntries = directory.files.length;
+            let extractedEntries = 0;
+
             await new Promise((resolve, reject) => 
             {
-                const child = fork('-e', [`
-                    const AdmZip = require('adm-zip');
-                    const fs = require('fs');
-
-                    process.on('message', (data) => 
-                    {
-                        try 
-                        {
-                            const zip = new AdmZip(data.zipPath);
-                            const entries = zip.getEntries();
-                            const totalEntries = entries.length;
-                            let extractedEntries = 0;
-                            let lastProgressTime = Date.now();
-                            const progressInterval = 1000; // 1 saniye
-
-                            entries.forEach((entry) => 
-                            {
-                                zip.extractEntryTo(entry, data.targetPath, true, true);
-                                extractedEntries++;
-                                
-                                // Her 1 saniyede bir progress gönder
-                                const now = Date.now();
-                                if (now - lastProgressTime >= progressInterval || extractedEntries === totalEntries) 
-                                {
-                                    lastProgressTime = now;
-                                    process.send(
-                                    {
-                                        status: 'progress',
-                                        file: entry.entryName,
-                                        filesExtracted: extractedEntries,
-                                        totalFiles: totalEntries,
-                                        progress: Math.round((extractedEntries * 100) / totalEntries)
-                                    });
-                                }
-                            });
-
-                            fs.unlinkSync(data.zipPath);
-                            process.send({ status: 'completed' });
-                        }
-                        catch(error) 
-                        {
-                            process.send({ status: 'error', error: error.message });
-                        }
-                    });
-                `]);
-                
-                child.send({zipPath: tempZipPath,targetPath: __dirname});
-
-                child.on('message', (message) => 
+                fs.createReadStream(tempZipPath).pipe(unzipper.Parse()).on('entry', (entry) => 
                 {
-                    if (message.status === 'completed') 
-                    {
-                        resolve();
-                    }
-                    else if (message.status === 'error')
-                    {
-                        reject(new Error(message.error));
-                    }
-                    else if (message.status === 'progress') 
-                    {
-                        progressCallback(message);
-                    }
-                });
+                    const fileName = entry.path;
+                    const type = entry.type;
+                    const fullPath = path.join(__dirname, fileName);
 
-                child.on('error', reject);
+                    if (type === 'File') 
+                    {
+                        entry.pipe(fs.createWriteStream(fullPath)).on('finish', () => 
+                        {
+                            extractedEntries++;
+                            if (extractedEntries % 100 === 0 || extractedEntries === totalEntries)
+                            {
+                                const progress = Math.round((extractedEntries / totalEntries) * 100);
+                                try 
+                                {
+                                    progressCallback({ status: 'extracting', file: fileName, progress });
+                                } 
+                                catch (error) 
+                                {
+                                    console.error('Progress callback error:', error);
+                                }
+                            }
+                        });
+                    } 
+                    else 
+                    {
+                        entry.autodrain();
+                    }
+                }).on('close', resolve).on('error', reject);
             });
+
+            fs.unlinkSync(tempZipPath);
 
             progressCallback(
             {
@@ -602,6 +587,23 @@ export default class piqhubApi
                 progress: 0
             });
             return false;
+        }
+    }
+    restartService()
+    {
+        try 
+        {
+            console.log('Servis yeniden başlatma isteği alındı');
+            spawn('cmd.exe', ['/c', 'start', '/b', path.join(__dirname, 'setup', 'restart.bat')], 
+            {
+                detached: true,
+                stdio: 'ignore',
+                windowsHide: true
+            }).unref();
+        }
+        catch (error)
+        {
+            console.error('Restart hatası:', error);
         }
     }
 }

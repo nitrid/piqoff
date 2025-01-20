@@ -7081,76 +7081,93 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
-                                            let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
-                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                                            let tmpLastPos = new datatable();
+                                            let tmpRepas = 0
+                                            let tmpPrintCount = 0
+                                            let tmpJustPayDup = {}
+                                            let tmpSignJust = ''
+                                            let tmpSignJustDup = ''
+
+                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+
+                                            if(tmpLastPos.length > 0)
                                             {
-                                                let tmpLastPos = new datatable();
-                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                if(tmpLastPos.length > 0)
+                                                let tmpQuery = 
                                                 {
-                                                    let tmpQuery = 
+                                                    query : `SELECT TOP 1 REPAS FROM NF525_JUSTPAY WHERE POS = @POS`,
+                                                    param : ['POS:string|50'],
+                                                    value : [tmpLastPos[0].GUID]
+                                                }
+                                                
+                                                let tmpResult = await this.core.sql.execute(tmpQuery)
+                                                
+                                                if(tmpResult.result.recordset.length == 0)
+                                                {
+                                                    let tmpResult = await this.popNumber.show(this.lang.t("quantity"),0)
+                                                    if(typeof tmpResult != 'undefined' && tmpResult != '')
                                                     {
-                                                        query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
-                                                        param : ['POS_GUID:string|50','TAG:string|25'],
-                                                        value : [tmpLastPos[0].GUID,"REPRINT"]
+                                                        tmpRepas = tmpResult
                                                     }
-    
-                                                    let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
-                                                    if(tmpPrintCount < 2)
+                                                }
+                                                else
+                                                {
+                                                    tmpRepas = tmpResult.result.recordset[0].REPAS
+                                                }
+                                                
+                                                let tmpJustPay = await this.nf525.signatureJustPay(
+                                                {
+                                                    POS : tmpLastPos[0].GUID,
+                                                    TTC : tmpLastPos[0].TOTAL,
+                                                    REPAS : tmpRepas,
+                                                    CDATE : tmpLastPos[0].CDATE,
+                                                    CUSER : tmpLastPos[0].CUSER,
+                                                    APP_VERSION : this.core.appInfo.version
+                                                })
+                                                
+                                                if(!tmpJustPay.STATE)
+                                                {
+                                                    tmpJustPayDup = await this.nf525.signatureJustPayDuplicate(
                                                     {
-                                                        let tmpRePrintResult = await this.popRePrintDesc.show()
-                                                        if(typeof tmpRePrintResult != 'undefined')
-                                                        {
-                                                            let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
-                                                            let tmpInsertQuery = 
-                                                            {
-                                                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                                                        "@CUSER = @PCUSER, " + 
-                                                                        "@TAG = @PTAG, " +
-                                                                        "@POS_GUID = @PPOS_GUID, " +
-                                                                        "@LINE_GUID = @PLINE_GUID, " +
-                                                                        "@DATA = @PDATA, " +
-                                                                        "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                                                        "@APP_VERSION = @PAPP_VERSION, " +
-                                                                        "@DESCRIPTION = @PDESCRIPTION ", 
-                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
-                                                            }
-    
-                                                            await this.core.sql.execute(tmpInsertQuery)
-                                                            let tmpData = 
-                                                            {
-                                                                pos : tmpLastPos,
-                                                                possale : this.lastPosSaleDt,
-                                                                pospay : this.lastPosPayDt,
-                                                                pospromo : this.lastPosPromoDt,
-                                                                firm : this.firm,
-                                                                special : 
-                                                                {
-                                                                    type : 'Repas',
-                                                                    ticketCount : 0,
-                                                                    reprint : tmpPrintCount + 1,
-                                                                    repas : tmpResult,
-                                                                    customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                                    customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
-                                                                    customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()
-                                                                }
-                                                            }
-                                                            await this.print(tmpData,0)
-                                                        }                                                        
+                                                        POS : tmpLastPos[0].GUID,
+                                                        TYPE : "Justificatif",
+                                                        CUSER : tmpLastPos[0].CUSER,
+                                                        CDATE : tmpLastPos[0].CDATE,
+                                                        APP_VERSION : this.core.appInfo.version
+                                                    })
+
+                                                    tmpPrintCount = tmpJustPayDup.COUNT
+                                                    tmpSignJustDup = tmpJustPayDup.SIGNATURE.substring(2,3) + tmpJustPayDup.SIGNATURE.substring(6,7) + tmpJustPayDup.SIGNATURE.substring(12,13) + tmpJustPayDup.SIGNATURE.substring(18,19)
+                                                }
+
+                                                if(tmpJustPay.SIGNATURE != '')
+                                                {
+                                                    tmpSignJust = tmpJustPay.SIGNATURE.substring(2,3) + tmpJustPay.SIGNATURE.substring(6,7) + tmpJustPay.SIGNATURE.substring(12,13) + tmpJustPay.SIGNATURE.substring(18,19)
+                                                }
+
+                                                tmpLastPos[0].REF = tmpJustPay.REF
+                                                tmpLastPos[0].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSignJust
+
+                                                let tmpData = 
+                                                {
+                                                    pos : tmpLastPos,
+                                                    possale : this.lastPosSaleDt,
+                                                    pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
+                                                    firm : this.firm,
+                                                    special : 
+                                                    {
+                                                        type : 'Repas',
+                                                        ticketCount : 0,
+                                                        reprint : tmpPrintCount + 1,
+                                                        repas : tmpRepas.toString(),
+                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue(),
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSignJustDup
                                                     }
-                                                    else
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
-                                                        }
-                                                        await dialog(tmpConfObj);
-                                                    } 
-                                                }                                                
+                                                }
+                                                await this.print(tmpData,0)
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
