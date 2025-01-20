@@ -170,7 +170,7 @@ export default class salesPairing extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
+                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,MAX(VAT_ZERO) AS VAT_ZERO,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
                             "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
                             "FROM DOC_ORDERS_VW_01 " + 
                             "WHERE CLOSED = 0 AND CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (DOC_ORDERS_VW_01.APPROVED_QUANTITY - DOC_ORDERS_VW_01.COMP_QUANTITY) ELSE DOC_ORDERS_VW_01.COMP_QUANTITY END > 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = ''))" + 
@@ -319,6 +319,7 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = this.txttotalQuantity.value
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT_RATE
         tmpDocItems.PRICE = this.itemDt[0].PRICE
@@ -483,6 +484,7 @@ export default class salesPairing extends React.PureComponent
                 this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
                 this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
                 this.docObj.dt()[0].REF = tmpData.result.recordset[0].REF
+                this.docObj.dt()[0].VAT_ZERO = tmpData.result.recordset[0].VAT_ZERO
                 this.orderGuid = tmpData.result.recordset[0].GUID
                 this.txtRefNo.value = tmpData.result.recordset[0].NEW_REF_NO
                 this.onClickBarcodeShortcut()
@@ -495,6 +497,7 @@ export default class salesPairing extends React.PureComponent
             this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
             this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
             this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            this.docObj.dt()[0].VAT_ZERO = this.grdOrderList.getSelectedData()[0].VAT_ZERO
             this.orderGuid = this.grdOrderList.getSelectedData()[0].DOC_GUID
             let tmpQuery = 
             {
