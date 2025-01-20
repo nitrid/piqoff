@@ -166,16 +166,7 @@ export default class salesOrdList extends React.PureComponent
                 tmpDoc.REBATE = 0
                 tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
                 tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
-                tmpDoc.AMOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].AMOUNT).round(2)
-                tmpDoc.VAT = Number(this.grdSlsOrdList.getSelectedData()[i].VAT).round(2)
                 tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
-                tmpDoc.TOTALHT = Number(this.grdSlsOrdList.getSelectedData()[i].TOTALHT).round(2)   
-                tmpDoc.TOTAL = Number(this.grdSlsOrdList.getSelectedData()[i].TOTAL).round(2)
-                tmpDoc.DOC_DISCOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT).round(2)
-                tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
-                tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
-                tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
-                tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
                 tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF,
                 tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO
                 let tmpQuery = 
@@ -240,6 +231,24 @@ export default class salesOrdList extends React.PureComponent
                 }
                 if(tmpDocCls.docItems.dt().length > 0)
                 {
+                    let tmpVat = 0
+                    for (let i = 0; i < tmpDocCls.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                    {
+                        if(tmpDocCls.dt()[0].VAT_ZERO != 1)
+                        {
+                            tmpVat = tmpVat + parseFloat(tmpDocCls.docItems.dt().where({'VAT_RATE':tmpDocCls.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                        }
+                    }
+                    tmpDocCls.dt()[0].AMOUNT = tmpDocCls.docItems.dt().sum("AMOUNT",2)
+                    tmpDocCls.dt()[0].DISCOUNT = Number(parseFloat(tmpDocCls.docItems.dt().sum("AMOUNT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))).round(2)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_1 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_2 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_3 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT = Number((parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
+                    tmpDocCls.dt()[0].VAT = Number(tmpVat).round(2)
+                    tmpDocCls.dt()[0].SUBTOTAL = parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))
+                    tmpDocCls.dt()[0].TOTALHT = parseFloat(parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
+                    tmpDocCls.dt()[0].TOTAL = Number((parseFloat(tmpDocCls.dt()[0].TOTALHT)) + parseFloat(tmpDocCls.dt()[0].VAT)).round(2)
                     let tmptest = await tmpDocCls.save()
                     console.log(tmptest)
                 }

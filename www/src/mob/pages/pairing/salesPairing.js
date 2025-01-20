@@ -319,6 +319,7 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = this.txttotalQuantity.value
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT_RATE
         tmpDocItems.PRICE = this.itemDt[0].PRICE

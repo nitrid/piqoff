@@ -1930,7 +1930,7 @@ export default class salesDispatch extends DocBase
                                         this.calculateTotal()
                                     }}
                                     onRowRemoved={async (e)=>{
-                                        //this.calculateTotal()
+                                        this.calculateTotal()
                                     }}
                                     onReady={async()=>
                                     {

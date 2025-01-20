@@ -133,16 +133,7 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REBATE = 0
             tmpDoc.INPUT = this.grdSlsDisList.getSelectedData()[i].INPUT
             tmpDoc.OUTPUT = this.grdSlsDisList.getSelectedData()[i].OUTPUT
-            tmpDoc.AMOUNT = Number(this.grdSlsDisList.getSelectedData()[i].AMOUNT).round(2)
-            tmpDoc.VAT = Number(this.grdSlsDisList.getSelectedData()[i].VAT).round(2)
             tmpDoc.VAT_ZERO = this.grdSlsDisList.getSelectedData()[i].VAT_ZERO
-            tmpDoc.TOTALHT = Number(this.grdSlsDisList.getSelectedData()[i].TOTALHT).round(2)
-            tmpDoc.TOTAL = Number(this.grdSlsDisList.getSelectedData()[i].TOTAL).round(2)
-            tmpDoc.DOC_DISCOUNT = Number(this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT).round(2)
-            tmpDoc.DOC_DISCOUNT_1 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_1
-            tmpDoc.DOC_DISCOUNT_2 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_2
-            tmpDoc.DOC_DISCOUNT_3 = this.grdSlsDisList.getSelectedData()[i].DOC_DISCOUNT_3
-            tmpDoc.DISCOUNT = this.grdSlsDisList.getSelectedData()[i].DISCOUNT
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
             tmpDoc.LOCKED = 1
             tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
@@ -166,7 +157,7 @@ export default class salesDisList extends React.PureComponent
             tmpDocCustomer.INPUT = tmpDocCls.dt()[0].INPUT
             tmpDocCustomer.OUTPUT = tmpDocCls.dt()[0].OUTPUT
             tmpDocCustomer.DESCRIPTION = tmpDocCls.dt()[0].DESCRIPTION
-            tmpDocCustomer.AMOUNT = tmpDocCls.dt()[0].TOTAL
+            
             let tmpCusotmerQuery = 
             {
                 query :"SELECT * FROM CUSTOMER_VW_02 WHERE GUID = @INPUT ",
@@ -254,13 +245,31 @@ export default class salesDisList extends React.PureComponent
                     }
                 }
             }
-            console.log(tmpDocCls.dt()[0]) 
-            console.log(tmpDocCls.docItems.dt())
             if(tmpDocCls.docItems.dt().length > 0)
             {
+                let tmpVat = 0
+                for (let i = 0; i < tmpDocCls.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                {
+                    if(tmpDocCls.dt()[0].VAT_ZERO != 1)
+                    {
+                        tmpVat = tmpVat + parseFloat(tmpDocCls.docItems.dt().where({'VAT_RATE':tmpDocCls.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                    }
+                }
+                tmpDocCls.dt()[0].AMOUNT = tmpDocCls.docItems.dt().sum("AMOUNT",2)
+                tmpDocCls.dt()[0].DISCOUNT = Number(parseFloat(tmpDocCls.docItems.dt().sum("AMOUNT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))).round(2)
+                tmpDocCls.dt()[0].DOC_DISCOUNT_1 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)
+                tmpDocCls.dt()[0].DOC_DISCOUNT_2 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)
+                tmpDocCls.dt()[0].DOC_DISCOUNT_3 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)
+                tmpDocCls.dt()[0].DOC_DISCOUNT = Number((parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
+                tmpDocCls.dt()[0].VAT = Number(tmpVat).round(2)
+                tmpDocCls.dt()[0].SUBTOTAL = parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))
+                tmpDocCls.dt()[0].TOTALHT = parseFloat(parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
+                tmpDocCls.dt()[0].TOTAL = Number((parseFloat(tmpDocCls.dt()[0].TOTALHT)) + parseFloat(tmpDocCls.dt()[0].VAT)).round(2)
+                tmpDocCls.docCustomer.dt()[0].AMOUNT = tmpDocCls.dt()[0].TOTAL
                 let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())                
                 tmpDocCls.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
                 tmpDocCls.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+                
                await tmpDocCls.save()
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
@@ -279,7 +288,6 @@ export default class salesDisList extends React.PureComponent
         }
 
         let tmpPrintDialog = await dialog(tmpConfObj2);
-        console.log(tmpPrintDialog)
         if(tmpPrintDialog == 'btn01')
         {
             let tmpLines = []

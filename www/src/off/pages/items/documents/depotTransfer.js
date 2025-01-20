@@ -1188,7 +1188,6 @@ export default class depotTransfer extends React.PureComponent
                                         }
                                     }}
                                     onRowRemoved={(e)=>{
-
                                     }}
                                     loadPanel={{enabled:true}}
                                     >
