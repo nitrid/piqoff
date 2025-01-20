@@ -104,6 +104,36 @@ export const prm =
             CAPTION : "Şipariş Sayfası kayır edince yeni evraka gecsin mi?"
         }
     },
+    // Satış Sayfasında Evrak Nunamarası en son evrak numarasından artarak devam etsin
+    {
+        TYPE : 0,
+        ID :"docNoAuto",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Satış Sayfasında Evrak Nunamarası en son evrak numarasından artarak devam etsin mi?"
+        }
+    },
+    // Birim kilitli mi
+    {
+        TYPE : 0,
+        ID :"unitLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim"
+        }
+    },
 //#endregion
     //#region Sale
     //defaultUnit
@@ -114,22 +144,6 @@ export const prm =
         {
             value : "Colis"
         },
-        SPECIAL : "",
-        PAGE : "sale.js",
-        ELEMENT : "",
-        APP : "TAB",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Satış",
-            CAPTION : "Sabit Birim"
-        }
-    },
-    // Birim kilitli mi
-    {
-        TYPE : 1,
-        ID :"unitLock",
-        VALUE : true,
         SPECIAL : "",
         PAGE : "sale.js",
         ELEMENT : "",

@@ -470,7 +470,7 @@ export default class salesPairing extends React.PureComponent
             }
             let tmpQuery = 
             {
-                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40 AND DOC.REF = DOC_VW_01.REF) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
+                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }

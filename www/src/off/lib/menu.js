@@ -1638,7 +1638,7 @@ export const menu = (e) =>
                 },
             ]
         },
-        //Müşteri Evrak İşlemler
+        //Evrak Liste İşlemler
         {
             id: 'saleList',
             text: e.t('menuOff.saleList'),

@@ -68,7 +68,12 @@ export const menu = (e) =>
                             id: 'prm_01_003',
                             text: e.t('menu.prm_01_003'), // MOBIL
                             path: 'parameters/systemParamMob'
-                        }
+                        },
+                        {
+                            id: 'prm_01_004',
+                            text: e.t('menu.prm_01_004'), // TAB
+                            path: 'parameters/systemParamTab'
+                        },
                     ]
                 },
                 {
