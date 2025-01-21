@@ -134,7 +134,7 @@ export default class NbItemPopUp extends NbBase
                         <div className='col-12' align={"right"}>
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",}}
                                     onClick={()=>
                                     {
                                         this.popCard.hide();
@@ -148,7 +148,7 @@ export default class NbItemPopUp extends NbBase
                     <div className='row pt-2'>
                         <div className='col-12'>
                             <div className='row'>
-                                <div className='col-12' style={{height:'350px'}}>
+                                <div className='col-12' style={{height:'400px'}}>
                                     <Carousel onSelect={(e)=>
                                     {
                                         for (let i = 0; i < 4; i++) 
