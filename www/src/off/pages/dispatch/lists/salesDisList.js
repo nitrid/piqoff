@@ -348,6 +348,8 @@ export default class salesDisList extends React.PureComponent
                 });
             App.instance.setState({isExecute:false})
         }
+
+        this._btnGetClick()
     }
     async printDispatch()
     {

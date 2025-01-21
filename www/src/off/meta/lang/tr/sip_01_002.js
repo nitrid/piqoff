@@ -52,8 +52,15 @@ const sip_01_002 =
     },
     btnView : "Görüntüle",
     btnMailsend : "Mail Gönder",
-    cmbMainGrp : "Müşteri Grubu"
-    
+    cmbMainGrp : "Müşteri Grubu",
+    btnPrint : "Yazdır",
+    msgPrintOrders :
+    {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        btn02 : "Vazgeç",
+        msg : "Seçilen Siparişleri Yazdırmak istediğinize emin misiniz?"
+    },
 }
 
 export default sip_01_002

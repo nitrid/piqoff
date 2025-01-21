@@ -267,31 +267,37 @@ export default class salesOrdList extends React.PureComponent
     }
     async printOrders()
     {
+        let tmpLines = []
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
             let tmpPrintQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID)  ORDER BY LINE_NO " ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
+                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpPrintQuery) 
-            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-            {
-                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
-                mywindow.onload = function() 
-                {
-                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                } 
-                // if(pResult.split('|')[0] != 'ERR')
-                // {
-                //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                // }
-            });
+            console.log(tmpData)
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
         }
-           
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',(pResult) => 
+        {
+            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+            mywindow.onload = function() 
+            {
+                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+            } 
+            // if(pResult.split('|')[0] != 'ERR')
+            // {
+            //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+            //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            // }
+        });
     }
     render()
     {
@@ -338,10 +344,7 @@ export default class salesOrdList extends React.PureComponent
                                 <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                 onClick={()=>
                                 {
-                                    if(this.grdSlsOrdList.getSelectedData().length > 0)
-                                        {
-                                            this.popAllDesign.show()
-                                        }
+                                    this.popAllDesign.show()
                                 }}/>
                                 </Item>
                                 <Item location="after"
