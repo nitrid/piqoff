@@ -57,7 +57,7 @@ export default class NbItemView extends NbBase
                     {this.state.items.map((function(object, i)
                     {
                         return (
-                            <div className='col-lg-2 col-md-3 col-sm-4 col-6 pb-2' key={'div' + i}>
+                            <div className='col-lg-3 col-md-3 col-sm-4 col-6 pb-2' key={'div' + i}>
                                 <NbItemCard id={'itemCard' + i} parent={this} key={'itemCard' + i} price={object.PRICE} name={object.NAME} prm={object.PRM}
                                 image={object.IMAGE == '' ? './css/img/noimage.jpg' : object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}
                                 defaultUnit={this.props.defaultUnit} unitLock={this.props.unitLock}/>
