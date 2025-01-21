@@ -334,6 +334,7 @@ export default class salesDisList extends React.PureComponent
                 })
               
             }
+            console.log(JSON.stringify(tmpLines))
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
                 {
                     if(pResult.split('|')[0] != 'ERR')
