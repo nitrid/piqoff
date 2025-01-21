@@ -130,9 +130,7 @@ function printNote(pData,pType)
     {
         import("../plugins/resto/meta/print/print-note.js").then(async(e)=>
         {
-            console.log(e)
             let tmpPrint = e.print(pData)
-            console.log(this)
             // let tmpArr = [];
             // for (let i = 0; i < tmpPrint.length; i++) 
             // {
@@ -674,11 +672,11 @@ function renderTables()
 
                             if(typeof this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() != 'undefined' && this.prmObj.filter({ID:'PosAddition',TYPE:0,USERS:this.user.CODE}).getValue() == true)
                             {   
-                                let tmpResultNoteDup = await this.nf525.signatureNoteDuplicate({GUID:datatable.uuidv4(),CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),
-                                REST:tmpData[0].REST_GUID,REF:tmpData[0].ZONE_CODE + "" + tmpData[0].REF.toString().padStart(8,'0'),TYPE:'Note'})
-                                
                                 let tmpResultNote = await this.nf525.signatureNote({CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),REST:tmpData[0].REST_GUID,
                                 TYPE:'Vente',TVA:tmpData.sum('VAT',2),TTC:tmpData.sum('TOTAL',2),APP_VERSION:this.core.appInfo.version})
+
+                                let tmpResultNoteDup = await this.nf525.signatureNoteDuplicate({GUID:datatable.uuidv4(),CUSER:tmpData[0].CUSER,CDATE:moment(tmpData[0].CDATE),
+                                REST:tmpData[0].REST_GUID,REF:tmpData[0].ZONE_CODE + "" + tmpData[0].REF.toString().padStart(8,'0'),TYPE:'Note'})
 
                                 let tmpSignNote = '-'
                                 if(tmpResultNote.SIGNATURE != '')
@@ -691,7 +689,7 @@ function renderTables()
                                 {
                                     tmpSignDup = tmpResultNoteDup.SIGNATURE.substring(2,3) + tmpResultNoteDup.SIGNATURE.substring(6,7) + tmpResultNoteDup.SIGNATURE.substring(12,13) + tmpResultNoteDup.SIGNATURE.substring(18,19)
                                 }
-                                console.log(tmpResultNoteDup)
+                                
                                 let tmpDt = 
                                 {
                                     firm : this.firm,
@@ -706,10 +704,6 @@ function renderTables()
 
                                 printNote = printNote.bind(this)
                                 printNote(tmpDt)
-                            }
-                            else
-                            {
-                                console.log(JSON.stringify(tmpData.toArray()))
                             }
                         }}>
                         </NbTableView>

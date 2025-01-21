@@ -61,7 +61,18 @@ export function print()
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:("Caissier: " + data.pos[0].CUSER).space(32,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
+        ()=>
+        {
+            if(data.special.type == 'Repas')
+            {
+                return {font:"a",style:"b",align:"ct",data:"****** Numero de Justificatif De Caisse ******"}
+            }
+            else
+            {
+                return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}
+            }
+            
+        },
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** " + data.pos[0].REF + " ******"}},
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
@@ -83,27 +94,36 @@ export function print()
         ()=>
         {
             let tmpArr = []
-            if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+            if(data.special.type == 'Repas')
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"TICKET DE VENTE"})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"JUSTIFICATIF DE PAYEMENT"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }
-            else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+            else
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
-                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+                {
+                    tmpArr.push({font:"b",style:"b",align:"ct",data:"TICKET DE VENTE"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+                {
+                    tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
+                    tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
+                {
+                    tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pospay.where({PAY_TYPE:4}).length > 0)
+                {
+                    tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
             }
-            else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
-            {
-                tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-            }
-            else if(data.pospay.where({PAY_TYPE:4}).length > 0)
-            {
-                tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-            } 
+
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         // BAŞLIK 1 (TERAZİ SERTİFİKASI İÇİN)
