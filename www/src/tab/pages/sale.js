@@ -366,7 +366,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],[VAT_ZERO],(SELECT ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],(SELECT ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -438,14 +438,7 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.PRICE = e.PRICE
         tmpDocOrders.AMOUNT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
         tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
-        if(this.docObj.dt()[0].VAT_ZERO == 1)
-        {
-            tmpDocOrders.VAT = 0
-        }
-        else
-        {
-            tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
-        }
+        tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
         tmpDocOrders.TOTAL = parseFloat(((tmpDocOrders.TOTALHT) + tmpDocOrders.VAT)).round(2)
         this.docLines.push(tmpDocOrders)
 
@@ -851,8 +844,8 @@ export default class Sale extends React.PureComponent
                 />
                 <div style={{height:'50px',backgroundColor:'#f5f6fa',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
                     <div className="row">
-                        <div className="col-1" align="left" style={{paddingLeft:'20px',paddingTop:'10px'}}>
-                            <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%"}}
+                        <div className="col-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
+                            <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
                             onClick={()=>
                             {
                                 for (let i = 0; i < this.docLines.length; i++) 
@@ -1484,7 +1477,6 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
-                                                this.docObj.dt()[0].VAT_ZERO = this.grdCustomer.getSelectedData()[0].VAT_ZERO
                                                 for (let i = 0; i < this.docLines.length; i++) 
                                                 {
                                                     this.docLines[i].INPUT = this.grdCustomer.getSelectedData()[0].GUID
