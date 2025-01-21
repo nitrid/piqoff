@@ -78,7 +78,7 @@ export default class NbItemCard extends NbBase
     {
         return(
             <div className="card shadow-sm">
-                <img src={this.state.image} className="card-img-top" height={'220px'} 
+                <img src={this.state.image} className="card-img-top" height={'150px'} 
                 onClick={()=>
                 {
                     this._onClick()
@@ -117,7 +117,7 @@ export default class NbItemCard extends NbBase
                     </div>
                     <div className='row pb-1'>
                         <div className='col-12'>
-                            <div className="overflow-hidden" style={{height:'75px'}}>{this.data.CODE + " - " + this.state.name}</div>
+                            <div className="overflow-hidden" style={{height:'35px',fontSize:'12px',fontWeight:500,fontStyle:'italic',color:'midnightblue'}}>{this.data.CODE + " - " + this.state.name}</div>
                         </div>
                     </div>
                     <div className='row'>
@@ -153,6 +153,8 @@ export default class NbItemCard extends NbBase
                                     location:'after',
                                     onClick:async()=>
                                     {
+                                        console.log(this.props.unitLock)
+                                        console.log(this.cmbUnit.displayValue)
                                         if(this.props.unitLock == true)
                                         {
                                             if(this.cmbUnit.displayValue != 'Colis' )

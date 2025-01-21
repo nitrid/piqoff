@@ -262,8 +262,8 @@ export const langFr =
         },
         orderGroup:
         {
-            Name: "NOM DU PRODUIT",
-            Code: "CODE PRODUIT",
+            Name: "NOM",
+            Code: "CODE",
             Favori: "FAVORIS",
         },
         msgWrongUnit:

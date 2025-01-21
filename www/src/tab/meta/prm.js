@@ -74,7 +74,7 @@ export const prm =
     // Şipariş Sayfası Ürünler Listelenirken "Name" mi Gore "Code" mı gore Listelensin
     {
         TYPE : 0,
-        ID :"salesİtemsType",
+        ID :"salesItemsType",
         VALUE : 
         {
             value : "NAME"
@@ -84,9 +84,16 @@ export const prm =
         APP : "TAB",
         VIEW : 
         {
-            TYPE : "checkbox",
+            TYPE : "popInput",
             PAGE_NAME : "Sistem",
-            CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin"
+            CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin",
+            FORM :
+            {
+                width : "400",
+                height : "280",
+                colCount : 1,
+                item : [{type:"text",caption:"Listeleme Şekli",field:"value",id:"txtSalesItemType"}]
+            }
         }
     },
      // Şipariş Sayfası kayır edince yeni evraka gecsin

@@ -264,9 +264,9 @@ export const langTr =
         },
         orderGroup:
         {
-            Name: "ÜRÜN İSMİ",
-            Code: "ÜRÜN KODU",
-            Favori: "FAVORİLER",
+            Name: "İSİM",
+            Code: "KOD",
+            Favori: "FAVORİ",
         },
         msgWrongUnit:
         {
