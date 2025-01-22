@@ -83,7 +83,7 @@ export default class Sale extends React.PureComponent
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
-        this.orderGroup.value = this.sysParam.filter({ID:'salesİtemsType',USERS:this.user.CODE}).getValue().value
+        this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
       
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
@@ -105,8 +105,8 @@ export default class Sale extends React.PureComponent
             {
                 this.docObj.dt()[0].GUID = this.docLines[0].DOC_GUID
                 this._calculateTotal();
-                this.getItems()
-            }         
+            }
+            this.getItems()
         }
         else
         {
@@ -182,8 +182,7 @@ export default class Sale extends React.PureComponent
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%')) OR (BARCODE = ?)) AND " +
                         "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
-            }
-            
+            }            
             let tmpBuf = await this.core.local.select(tmpQuery) 
 
             if(typeof tmpBuf.result.err == 'undefined')
@@ -859,7 +858,7 @@ export default class Sale extends React.PureComponent
                         </div>
                         
                         <div className="col-2" align="left" style={{paddingTop:'5px'}}>
-                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'150px'}} 
+                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'100px'}} 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
                             onValueChanged={(async(e)=>
@@ -899,12 +898,18 @@ export default class Sale extends React.PureComponent
                             />
                         </div>
                     </div>
-                </div>
+                </div>               
                 <div style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
                     <ScrollView showScrollbar={'never'} useNative={false}>
+                        {/* Müşteri title alanı */}
+                        <div className="col-12" style={{paddingLeft:'20px',paddingTop:'5px',marginBottom:'5px',textAlign:'center'}}>
+                            <h4 style={{color:'#2c3e50',margin:0}}>
+                                {this.docObj.dt() && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT_NAME || "" : ""}
+                            </h4>
+                        </div> 
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
                             </div>
                         </div>
                         <div className='row'>                            
