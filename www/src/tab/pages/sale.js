@@ -431,7 +431,6 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.ITEM_CODE = e.CODE
         tmpDocOrders.ITEM = e.GUID
         tmpDocOrders.ITEM_NAME = e.NAME
-        tmpDocOrders.VAT_RATE = e.VAT
         tmpDocOrders.QUANTITY = e.QUANTITY * e.UNIT_FACTOR
         tmpDocOrders.UNIT = e.UNIT
         tmpDocOrders.UNIT_FACTOR = e.UNIT_FACTOR
@@ -440,10 +439,12 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
         if(this.docObj.dt()[0].VAT_ZERO == 1)
         {
+            tmpDocOrders.VAT_RATE = 0
             tmpDocOrders.VAT = 0
         }
         else
         {
+            tmpDocOrders.VAT_RATE = e.VAT
             tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
         }
         tmpDocOrders.TOTAL = parseFloat(((tmpDocOrders.TOTALHT) + tmpDocOrders.VAT)).round(2)
@@ -463,7 +464,14 @@ export default class Sale extends React.PureComponent
                 tmpLine[0].DISCOUNT = e.DISCOUNT
                 tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
                 tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR))) - tmpLine[0].DISCOUNT).round(2)
-                tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
+                if(this.docObj.dt()[0].VAT_ZERO == 1)
+                {
+                    tmpLine[0].VAT = 0
+                }
+                else
+                {
+                    tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
+                }
                 tmpLine[0].TOTAL = parseFloat(((tmpLine[0].TOTALHT) + tmpLine[0].VAT)).round(2)
                 tmpLine[0].UNIT_FACTOR = e.UNIT_FACTOR
                 tmpLine[0].UNIT = e.UNIT
@@ -911,7 +919,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
                             </div>
                         </div>
                         <div className='row'>                            
