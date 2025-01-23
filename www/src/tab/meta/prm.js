@@ -141,6 +141,55 @@ export const prm =
             CAPTION : "Sabit Birim"
         }
     },
+    // Depo Seçme Kısıtlaması
+    {
+        TYPE : 0,
+        ID :"depotLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Depo Seçme Kısıtlaması"
+        }
+    },
+    // Liste Fiyatı Kısıtlaması
+    {
+        TYPE : 0,
+        ID :"listPriceLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Depo Seçme Kısıtlaması"
+        }
+    },
+        //Sayfalama Grid Liste Görünümünü Kontrol Etme
+    //pageListControl 
+    {
+        TYPE : 0,
+        ID :"pageListControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sayfadaki Liste Görünümünü Kontrol Etme(1,2,3)"
+        }
+    },
 //#endregion
     //#region Sale
     //defaultUnit

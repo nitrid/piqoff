@@ -15,7 +15,8 @@ export default class NbItemCard extends NbBase
         {
             image : typeof this.props.image == 'undefined' ? '../css/img/noimage.jpg' : this.props.image,
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
-            price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(3),
+            price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
+            unitPrice : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
         }
         
         this.data = this.props.data
@@ -84,35 +85,36 @@ export default class NbItemCard extends NbBase
                     this._onClick()
                 }}/>
                 <div className="card-body">
-                    <div className='row pb-2'>
+                    <div className='row pb-1'>
                         <div className='col-6'>
-                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
+                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€ /Co</h6>
                         </div>
                         <div className='col-6'>
                             <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
+                            readOnly={this.props.unitLock}
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
                                 await this.core.util.waitUntil(300)
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
-                                    
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value}).length > 0 ? this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR : 1
                                     this.props.data.UNIT = e.value
                                     let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                                     if(tmpDt.length > 0)
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
-                                      
                                     }
-                                   
                                     this._onValueChange(this.props.data)
                                 }
                             }).bind(this)}
                             />
+                        </div>
+                        <div className='col-12'>
+                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.unitPrice}€ / Unité</h5>
                         </div>
                     </div>
                     <div className='row pb-1'>
@@ -153,8 +155,6 @@ export default class NbItemCard extends NbBase
                                     location:'after',
                                     onClick:async()=>
                                     {
-                                        console.log(this.props.unitLock)
-                                        console.log(this.cmbUnit.displayValue)
                                         if(this.props.unitLock == true)
                                         {
                                             if(this.cmbUnit.displayValue != 'Colis' )

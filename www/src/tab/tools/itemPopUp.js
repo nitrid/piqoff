@@ -18,6 +18,7 @@ export default class NbItemPopUp extends NbBase
     {
         super(props)
         this.core = App.instance.core;
+        this.listPriceLock = this.props.listPriceLock
         this.state =
         {
             images : [],
@@ -214,6 +215,7 @@ export default class NbItemPopUp extends NbBase
                                             showClearButton={true} 
                                             notRefresh={true}  
                                             searchEnabled={true}
+                                            readOnly={this.listPriceLock}
                                             displayExpr="LIST_NAME"                       
                                             valueExpr="LIST_NO"
                                             data={{source: {select : {query:"SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC"},sql : this.core.sql}}}

@@ -60,13 +60,13 @@ export default class NbItemView extends NbBase
                             <div className='col-lg-3 col-md-3 col-sm-4 col-6 pb-2' key={'div' + i}>
                                 <NbItemCard id={'itemCard' + i} parent={this} key={'itemCard' + i} price={object.PRICE} name={object.NAME} prm={object.PRM}
                                 image={object.IMAGE == '' ? './css/img/noimage.jpg' : object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}
-                                defaultUnit={this.props.defaultUnit} unitLock={this.props.unitLock}/>
+                                defaultUnit={this.props.defaultUnit} unitLock={this.props.unitLock} />
                             </div>)
                     }).bind(this))}                
                 </div>    
                 {/* CARD POPUP */}
                 <div>
-                    <NbItemPopUp id={"itemPopUp"} parent={this} onValueChange={this._onValueChange}/>
+                    <NbItemPopUp id={"itemPopUp"} parent={this} onValueChange={this._onValueChange} listPriceLock={this.props.listPriceLock} />
                 </div>             
             </div>
         )

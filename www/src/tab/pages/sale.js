@@ -909,7 +909,7 @@ export default class Sale extends React.PureComponent
                         </div> 
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()} listPriceLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'listPriceLock'}).getValue()} />
                             </div>
                         </div>
                         <div className='row'>                            
@@ -1143,6 +1143,7 @@ export default class Sale extends React.PureComponent
                                                     valueExpr="GUID"
                                                     value=""
                                                     searchEnabled={true}
+                                                    readOnly={this.sysParam.filter({ID:'depotLock',USERS:this.user.CODE}).getValue()}
                                                     onValueChanged={(async()=>
                                                     {
                                                         this.checkRow()
@@ -1499,13 +1500,13 @@ export default class Sale extends React.PureComponent
                                             columnsAutoWidth={true} 
                                             headerFilter={{visible:true}}
                                             selection={{mode:"single"}}
-                                            height={'400'}
+                                            height={'600'}
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={10} />
-                                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                                <Scrolling mode="standart" />
-                                                <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={200}/>
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                                <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={130}/>
                                                 <Column dataField="TITLE" caption={this.t("popCustomer.clmName")} width={400}/>
                                                 <Column dataField="ADRESS" caption={this.t("popCustomer.clmAdress")} width={400}/>
                                             </NdGrid>
