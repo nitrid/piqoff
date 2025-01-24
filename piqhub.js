@@ -268,7 +268,7 @@ export default class piqhubApi
                 console.log('License updated successfully');
                 
                 // package.json'ı doğrudan oku
-                const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+                const packageJson = JSON.parse(fs.readFileSync(this.root_path + './package.json', 'utf8'));
                 this.socketHub.emit('piqhub-set-info', {macid: this.macId,version: packageJson.version});
             }
             else

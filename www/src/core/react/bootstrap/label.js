@@ -10,6 +10,16 @@ export default class NbLabel extends NbBase
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value;
         this.state.text = typeof props.value == 'undefined' ? ''  : props.value;
         this.state.style = this.props.style
+
+        this._isMounted = false;
+    }
+    componentDidMount()
+    {
+        this._isMounted = true;
+    }
+    componentWillUnmount()
+    {
+        this._isMounted = false;
     }
     get value()
     {
@@ -17,13 +27,17 @@ export default class NbLabel extends NbBase
     }
     set value(e)
     {
-        if(typeof this.props.format != 'undefined' && this.props.format == 'currency')
+        if(this._isMounted)
         {
-            this.setState({value:e == null ? 0 : e.toString(),text:Number(e).currency()})
-            return
+            if(typeof this.props.format != 'undefined' && this.props.format == 'currency')
+            {
+                this.setState({value:e == null ? 0 : e.toString(),text:Number(e).currency()})
+            }
+            else
+            {
+                this.setState({value:e == null ? '' : e.toString(),text:e.toString()})
+            }
         }
-        
-        this.setState({value:e == null ? '' : e.toString(),text:e.toString()})
     }
     get style()
     {

@@ -15,15 +15,14 @@ import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
-import TextBox from 'devextreme-react/text-box';
-import Button from 'devextreme-react/button';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
 import CustomerInfoScreen from '../pages/customerInfoScreen.js'
 import ItemInfoScreen from '../pages/itemInfoScreen.js'
+import PosSetting from '../pages/posSetting.js'
+import PosItemsList from '../pages/posItemsList.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
@@ -76,7 +75,8 @@ export default class App extends React.PureComponent
             transProgress : "",
             msgTransfer : "",
             licenced : false,
-            licenceMsg : ''
+            licenceMsg : '',
+            page:''
         }
         this.toolbarItems = 
         [
@@ -241,13 +241,6 @@ export default class App extends React.PureComponent
             App.instance.setState({logined:false,splash:false});
         }
     }
-    menuClick(data)
-    {
-        if(typeof data.path != 'undefined')
-        {
-            Panel.instance.addPage(data);
-        }
-    }
     textValueChanged(e) 
     {      
         if(e.element.id == 'VtAdi')
@@ -342,9 +335,13 @@ export default class App extends React.PureComponent
             resolve()
         })
     }
+    setPage(pPage)
+    {
+        this.setState({page:pPage})
+    }
     render() 
     {
-        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer } = this.state;
+        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer,page } = this.state;
 
         if(this.state.licenced)
         {
@@ -419,6 +416,15 @@ export default class App extends React.PureComponent
             return <Login />
         }
         
+        if(page == 'menu')
+        {
+            return <PosSetting/>
+        }
+        else if(page == 'itemsList')
+        {
+            return <PosItemsList/>
+        }
+
         return (
             <div>
                 <LoadPanel

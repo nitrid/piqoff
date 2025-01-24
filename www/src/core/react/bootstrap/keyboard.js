@@ -141,6 +141,8 @@ export default class NbKeyboard extends NbBase
                 inputName={this.state.inputName}
                 onChangeAll={(inputs) =>
                 {
+                    this.setCaretPosition(inputs[this.state.inputName].length)
+                    console.log(this.getCaretPositionEnd(),inputs[this.state.inputName])
                     this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
                     this.setState({inputs:inputs})
                 }}

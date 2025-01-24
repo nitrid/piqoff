@@ -998,4 +998,19 @@ export const langTr =
         msg : "Miktar 0 (sıfır) olamaz.",
         btn01 : "Tamam",
     },
+    posSettings :
+    {
+        posItemsList : "Ürünler",
+        posSaleReport : "Pos Satış Raporu",
+        posCustomerPointReport : "Müşteri Puan Raporu",
+        posTicketEndDescription : "Fiş Sonu Açıklama",
+        posGroupSaleReport : "Grup Bazlı Satış Raporu",
+        posZReport : "Z Raporu",
+    },
+    posItemsList :
+    {
+        title : "Ürün Listesi",
+        btnItemSearch : "Ara",
+        txtItemSearchPholder : "Ürün adı yada kodu giriniz",
+    },
 }
