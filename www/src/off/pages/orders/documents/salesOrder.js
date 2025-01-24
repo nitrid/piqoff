@@ -1091,6 +1091,10 @@ export default class salesOrder extends DocBase
                                     data = {{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
                                     param = {this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access = {this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                        {
+                                            this.priceListChange()
+                                        }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
