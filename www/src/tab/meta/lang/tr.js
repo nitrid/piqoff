@@ -17,6 +17,7 @@ export const langTr =
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     btnCancel : "Vazgeç",
     msgInvalidUser : "Kullanıcı adı veya şifre hatalı !",
+    chkRememberMe : "Beni Hatırla",
     menu:
     {
         dashboard : "DASHBOARD",

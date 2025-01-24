@@ -16,6 +16,7 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
+    chkRememberMe : "Je me souviens de moi",
     menu:
     {
         dashboard : "Tableau de bord",
