@@ -276,7 +276,6 @@ export default class Sale extends React.PureComponent
             this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
             this.itemView.setItemAll()
         }
-        
         this.setState({isExecute:false})
     }
     async getPrice(pItem,pQty,pDate,pCustomer,pDepot,pListNo,pType,pAddVat)

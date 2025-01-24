@@ -43,6 +43,7 @@ export default class NbItemCard extends NbBase
     }
     _onValueChange(e)
     {
+        console.log(e)
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
@@ -69,6 +70,7 @@ export default class NbItemCard extends NbBase
             this.data.UNIT_FACTOR = tmpDt[0].UNIT_FACTOR
             this.data.QUANTITY = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.setState({price:tmpPrice})
+            this.setState({unitPrice:tmpDt[0].PRICE})
         }
         else
         {
@@ -87,7 +89,7 @@ export default class NbItemCard extends NbBase
                 <div className="card-body">
                     <div className='row pb-1'>
                         <div className='col-6'>
-                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€ /Co</h6>
+                            <h4 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h4>
                         </div>
                         <div className='col-6'>
                             <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
@@ -108,13 +110,19 @@ export default class NbItemCard extends NbBase
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
                                     }
+                                    else
+                                    {
+                                        let tmpPrice = Number(this.props.price *  this.data.UNIT_FACTOR).round(2)
+                                        this.setState({price:tmpPrice})
+                                    }
+                                   
                                     this._onValueChange(this.props.data)
                                 }
                             }).bind(this)}
                             />
                         </div>
                         <div className='col-12'>
-                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.unitPrice}€ / Unité</h5>
+                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.unitPrice}€ / Unité</h6>
                         </div>
                     </div>
                     <div className='row pb-1'>
