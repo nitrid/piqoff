@@ -1092,9 +1092,9 @@ export default class salesOrder extends DocBase
                                     param = {this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access = {this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.priceListChange()
-                                        }).bind(this)}
+                                    {
+                                        this.priceListChange()
+                                    }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
