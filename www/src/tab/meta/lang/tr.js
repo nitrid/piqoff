@@ -256,6 +256,14 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        pg_adress:
+        {
+            title: "Adres Seçimi",
+            clmAdress: "Adres",
+            clmCity: "Şehir",
+            clmZipcode: "Posta Kodu",
+            clmCountry: "Ülke"
+        },
         msgPriceListChange:
         {
             title: "Dikkat",

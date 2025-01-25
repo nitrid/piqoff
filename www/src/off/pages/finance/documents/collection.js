@@ -229,6 +229,7 @@ export default class collection extends React.PureComponent
             {
                 tmpDocCustomer.INPUT = this.cmbCashSafe.value
                 tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                tmpDocCustomer.DOC_DATE = this.checkDate.value
                 tmpDocCustomer.PAY_TYPE = 1
                 tmpDocCustomer.AMOUNT = pAmount
                 tmpDocCustomer.DESCRIPTION = this.cashDescription.value
@@ -236,8 +237,8 @@ export default class collection extends React.PureComponent
                 let tmpCheck = {...this.docObj.checkCls.empty}
                 tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
                 tmpCheck.REF = this.checkReference.value
-                tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
+                tmpCheck.DOC_DATE =  this.checkDate.value
+                tmpCheck.CHECK_DATE =  this.checkDate.value
                 tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
                 tmpCheck.AMOUNT =  pAmount
                 tmpCheck.SAFE =  this.cmbCashSafe.value
@@ -789,8 +790,7 @@ export default class collection extends React.PureComponent
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
-                                            <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
-                                            <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
+                                            <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDocDate")}  dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
                                                 {
@@ -1010,6 +1010,17 @@ export default class collection extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
                                         >
                                         </NdTextBox>
+                                        <Item>
+                                    <Label text={this.t("checkDate")} alignment="right" />
+                                        <NdDatePicker simple={true}  parent={this} id={"checkDate"}
+                                        dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                        onValueChanged={(async()=>
+                                        {
+                                                
+                                        }).bind(this)}
+                                        >
+                                        </NdDatePicker>
+                                    </Item>
                                     </div>
                                 </Item>
                                 <Item>

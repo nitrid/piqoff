@@ -415,6 +415,24 @@ export default class CustomerCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT TOP 1 * FROM DOC_VW_01 WHERE INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER",
+                                            param : ['CUSTOMER:string|50'],
+                                            value : [this.customerObj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj)
+                                            return
+                                        }
                                         
                                         let tmpConfObj =
                                         {

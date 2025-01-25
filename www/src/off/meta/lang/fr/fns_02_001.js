@@ -68,7 +68,8 @@ const fns_02_001 =
         clmOutputName : "Coffre-fort/Banque",
         clmDescription : "Motif",
         clmInvoice : "Facture payée",
-        clmFacDate : "Date de facture "
+        clmFacDate : "Date de facture ",
+        clmDocDate : "Date"
     },
     msgDocValid:
     {

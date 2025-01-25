@@ -105,6 +105,7 @@ export default class salesOrdList extends React.PureComponent
                                 "SUM(DISCOUNT) as DISCOUNT,    " +
                                 "MAX(SHIPMENT_DATE) as SHIPMENT_DATE,    " +
                                 "(SELECT TOP 1 VAT_ZERO FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as VAT_ZERO,    " +
+                                "(SELECT TOP 1 ADDRESS FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as ADDRESS,    " +
                                 "SUM(DOC_DISCOUNT) as DOC_DISCOUNT,    " +  
                                 "SUM(DOC_DISCOUNT_1) as DOC_DISCOUNT_1,    " +
                                 "SUM(DOC_DISCOUNT_2) as DOC_DISCOUNT_2,    " +
@@ -168,7 +169,8 @@ export default class salesOrdList extends React.PureComponent
                 tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
                 tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
                 tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF,
-                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO
+                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO    
+                tmpDoc.ADDRESS = this.grdSlsOrdList.getSelectedData()[i].ADDRESS
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",

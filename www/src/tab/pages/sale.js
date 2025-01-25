@@ -22,6 +22,7 @@ import NdPopUp  from '../../core/react/devex/popup.js';
 import NdButton   from '../../core/react/devex/button.js';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NbItemView from '../tools/itemView.js';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
 
 import { docCls,docOrdersCls, docCustomerCls,docExtraCls }from '../../core/cls/doc.js';
 import { datatable } from '../../core/core.js';
@@ -1497,6 +1498,25 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [this.grdCustomer.getSelectedData()[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
+                                                    {
+                                                        if(pdata.length > 0)
+                                                        {
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                        }
+                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                }
                                                 for (let i = 0; i < this.docLines.length; i++) 
                                                 {
                                                     this.docLines[i].INPUT = this.grdCustomer.getSelectedData()[0].GUID
@@ -2395,6 +2415,24 @@ export default class Sale extends React.PureComponent
                                 </div>
                                 <div id={"printView"}></div>
                             </NbPopUp>
+                        </div>
+                          {/* Adres Seçim PopUp */}
+                        <div>
+                            <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
+                            visible={false}
+                            position={{of:'#root'}} 
+                            showTitle={true} 
+                            showBorders={true}
+                            width={'90%'}
+                            height={'90%'}
+                            title={this.t("pg_adress.title")} //
+                            deferRendering={true}
+                            >
+                                <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
+                                <Column dataField="CITY" caption={this.t("pg_adress.clmCity")} width={150} />
+                                <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
+                            </NdPopGrid>
                         </div>
                         {/* PRINTVIEW POPUP */}
                         {/* <div>

@@ -254,6 +254,14 @@ export const langFr =
             msgSuccess: "L'envoi du courrier a réussi !",
             msgFailed: "L'envoi du courrier a échoué !"
         },
+        pg_adress:
+        {
+            title: "Adresse de livraison",
+            clmAdress: "Adresse",
+            clmCity: "Ville",
+            clmZipcode: "Code postal",
+            clmCountry: "Pays"
+        },
         msgPriceListChange:
         {
             title: "Attention",

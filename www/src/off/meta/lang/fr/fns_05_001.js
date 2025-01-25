@@ -55,6 +55,7 @@ const fns_05_001 =
         clmInvoice : "Facture payée",
         clmFacDate : "Date de facture ",
         clmDate :"Date",
+        clmDocDate : "Date"
     },
  
 }

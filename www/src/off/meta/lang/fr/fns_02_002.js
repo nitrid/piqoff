@@ -54,7 +54,8 @@ const fns_02_002 =
         clmInputName : "Caisse/Banque",
         clmDescription : "Motif",
         clmInvoice : "Facture payée",
-        clmFacDate : "Date de facture "
+        clmFacDate : "Date de facture ",
+        clmDocDate : "Date"
     },
     msgDocValid:
     {
