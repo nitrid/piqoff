@@ -155,7 +155,7 @@ export default class salesInvList extends React.PureComponent
             query : "SELECT REPLACE(CONVERT(varchar,DOC_DATE,104),'.','') AS DOC_DATE, " +
                     "TYPE_NAME + '-' + CONVERT(nvarchar,REF_NO) AS REF, " +
                     "CASE WHEN TYPE_NAME = 'FAC' THEN 'Facture ' + INPUT_NAME ELSE 'Avoir ' + OUTPUT_NAME END AS CUSTOMER, " +
-                    "TOTAL, TOTALHT, VAT, " +
+                    "TOTAL, TOTAL - VAT AS TOTALHT, VAT, " +
                     "CASE WHEN REBATE = 0 THEN  INPUT_CODE ELSE OUTPUT_CODE END AS CUSTOMER_CODE, " +
                     " CASE WHEN REBATE = 0 THEN (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.INPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) " +
                     " ELSE (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.OUTPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) END AS COUNTRY, " +
@@ -171,7 +171,7 @@ export default class salesInvList extends React.PureComponent
 
         let tmpData = await this.core.sql.execute(tmpQuery)
         
-        let content = "Code journal;Date;N° Pièce;Désignation;Montant Net;Montant Brut;Compte;Compte;Taxe;Expiration\n";
+        let content = "Code journal;Date;N° Pièce;Désignation;Montant Net;Montant Brut;Compte;Compte;Taxe;Expiration\r\n";
         
         for(let i = 0; i < tmpData.result.recordset.length; i++)
         {
@@ -181,27 +181,27 @@ export default class salesInvList extends React.PureComponent
             {   
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\r\n`;
                     
                     // KDV satırı
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.VAT};;4457151;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.VAT};;4457151;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'CH')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079200;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079200;;${row.EXP_DATE}\r\n`;
                 }
               
             }
@@ -209,35 +209,35 @@ export default class salesInvList extends React.PureComponent
             {
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     if(row.VAT > 0)
                     {
                         // KDV'siz tutar satırı  
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7070000;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7070000;;${row.EXP_DATE}\r\n`;
                         
                         // KDV satırı
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.VAT};0;4457151;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.VAT};0;;4457151;;${row.EXP_DATE}\r\n`;
                     }
                     else
                     {
                         // KDV'siz tutar satırı  
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7087000;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7087000;;${row.EXP_DATE}\r\n`;
                     }
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'CH')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\r\n`;
                 }
 
             }
@@ -246,8 +246,10 @@ export default class salesInvList extends React.PureComponent
         }
 
         console.log(content)
-        // Dosyayı indir
-        let blob = new Blob([content], {type: 'text/plain'});
+        // ANSI formatında dosya oluştur
+        let encoder = new TextEncoder('windows-1252');
+        let ansiContent = encoder.encode(content);
+        let blob = new Blob([ansiContent], {type: 'text/plain;charset=windows-1252'});
         let url = window.URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = url;

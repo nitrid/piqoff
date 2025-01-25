@@ -206,9 +206,9 @@ export default class salesDisList extends React.PureComponent
                         tmpDocItems.PRICE =tmpLineData.result.recordset[x].PRICE
                         tmpDocItems.QUANTITY =tmpLineData.result.recordset[x].QUANTITY
                         tmpDocItems.VAT =tmpLineData.result.recordset[x].VAT
-                        tmpDocItems.AMOUNT =tmpLineData.result.recordset[x].AMOUNT
-                        tmpDocItems.TOTAL =tmpLineData.result.recordset[x].TOTAL
-                        tmpDocItems.TOTALHT =tmpLineData.result.recordset[x].TOTALHT
+                        tmpDocItems.AMOUNT =Number(tmpLineData.result.recordset[x].AMOUNT).round(2)
+                        tmpDocItems.TOTAL =Number(tmpLineData.result.recordset[x].TOTAL).round(2)
+                        tmpDocItems.TOTALHT =Number(tmpLineData.result.recordset[x].TOTALHT).round(2)
                         tmpDocItems.DESCRIPTION =tmpLineData.result.recordset[x].DESCRIPTION
                         tmpDocItems.INVOICE_DOC_GUID = tmpDocCls.dt()[0].GUID
                         tmpDocItems.INVOICE_LINE_GUID =tmpLineData.result.recordset[x].GUID
@@ -348,6 +348,8 @@ export default class salesDisList extends React.PureComponent
                 });
             App.instance.setState({isExecute:false})
         }
+
+        this._btnGetClick()
     }
     async printDispatch()
     {

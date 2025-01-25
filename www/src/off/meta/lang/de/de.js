@@ -175,6 +175,13 @@ export const langDe =
     favDell : "Aus Favoriten entfernen",
     menu : "Menü",
     favMenu : "Favoriten",
+    msgPriceListChange :
+    {
+        title : "Preisliste ändern",
+        btn01 : "Ja",
+        btn02 : "Nein",
+        msg : "Sind Sie sich sicher, dass Sie die Preise aktualisieren möchten?"
+    },
     menuOff:
     {
         stk: "Artikel",
