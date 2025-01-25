@@ -1334,7 +1334,7 @@ export default class salesDispatch extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
-                                                    let tmpQuery = 
+                                                let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                     param : ['CUSTOMER:string|50'],
