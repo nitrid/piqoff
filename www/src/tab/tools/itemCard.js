@@ -89,7 +89,7 @@ export default class NbItemCard extends NbBase
                 <div className="card-body">
                     <div className='row pb-1'>
                         <div className='col-6'>
-                            <h4 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h4>
+                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                         </div>
                         <div className='col-6'>
                             <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 

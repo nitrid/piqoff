@@ -996,7 +996,7 @@ export default class collection extends React.PureComponent
                         title={this.t("popCheck.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'180'}
+                        height={'260'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -1010,18 +1010,17 @@ export default class collection extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
                                         >
                                         </NdTextBox>
-                                        <Item>
-                                    <Label text={this.t("checkDate")} alignment="right" />
+                                    </div>
+                                </Item>
+                                <Item>
+                                        <Label text={this.t("checkDate")} alignment="right" />
                                         <NdDatePicker simple={true}  parent={this} id={"checkDate"}
-                                        dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                         onValueChanged={(async()=>
                                         {
                                                 
                                         }).bind(this)}
                                         >
                                         </NdDatePicker>
-                                    </Item>
-                                    </div>
                                 </Item>
                                 <Item>
                                     <div className='row'>

@@ -20,6 +20,7 @@ const  ftr_02_002 =
     cash : "Total" ,
     description :"Motif",
     checkReference : "Référence",
+    checkDate : "Date",
     btnCash : "Espèce",
     btnCheck : "Chèque",
     btnBank : "Virement",
