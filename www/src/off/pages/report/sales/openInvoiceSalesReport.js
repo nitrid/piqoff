@@ -163,7 +163,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
                            " GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID " +
                            ") AS TMP " +
                            "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
-                    param: ['INPUT_CODE:string|50', 'FIRST_DATE:date', 'LAST_DATE:date'],
                     param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
                 },

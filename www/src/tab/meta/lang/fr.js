@@ -49,6 +49,7 @@ export const langFr =
     {
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
+        popFactNonSolde : "Facture non solde",  
         popCart:
         {
             txtCustomer: "Client",
@@ -62,7 +63,8 @@ export const langFr =
             dtDocDate : "Date",
             dtDShipmentDate : "Date de Livraison",
             txtDescription : "Information",
-            cmbPricingList : "Numéro de tarif"
+            cmbPricingList : "Numéro de tarif",
+            txtFactNonSolde : "Facture non solde"
         },
         itemPopup:
         {
@@ -94,6 +96,12 @@ export const langFr =
             clmTotal : "Montant total",
             clmTotalHt : "Montant Hors Taxe",
             clmPriceAfterDiscount : "Remise Prix",
+        },
+        grdFactNonSolde :
+        {
+            clmDocDate : "Date",
+            clmRefNo : "Ligne",
+            clmRemainder : "Reste"
         },
         msgSave:
         {

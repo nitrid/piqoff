@@ -40,7 +40,13 @@ export default class Sale extends React.PureComponent
         this.vatRate =  new datatable()
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
+        this.balance = new datatable();
 
+        this.balance.selectCmd = 
+        {
+            query : "SELECT ROUND(BALANCE,2) AS FACT_NON_SOLDE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @ACCOUNT_GUID",
+            param : ['ACCOUNT_GUID:string|50'],
+        }
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -365,7 +371,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],(SELECT TOP 1 ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],BALANCE,(SELECT TOP 1 ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -860,13 +866,20 @@ export default class Sale extends React.PureComponent
                     <div className="row">
                         <div className="col-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
-                            onClick={()=>
+                            onClick={async()=>
                             {
                                 for (let i = 0; i < this.docLines.length; i++) 
                                 {
                                     this.docLines[i].DISCOUNT_RATE =  Number(this.docLines[i].QUANTITY * this.docLines[i].PRICE).rate2Num(this.docLines[i].DISCOUNT,3)
                                 }
                                 this.popCart.show()
+                                
+                                this.balance.clear()
+                                if(this.docObj.dt()[0].INPUT != "" && this.docObj.dt()[0].INPUT != '00000000-0000-0000-0000-000000000000') 
+                                {
+                                    this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                    await this.balance.refresh()
+                                }
                             }}>
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </NbButton>
@@ -1318,7 +1331,52 @@ export default class Sale extends React.PureComponent
                                                         <div className="col-12">
                                                             <Form colCount={2} parent={this} id={"frmSale"}>
                                                                 {/* Ara Toplam */}
-                                                                <EmptyItem/>
+                                                                <Item>
+                                                                    <Label text={this.t("popCart.txtFactNonSolde")} alignment="right" />
+                                                                    <NdTextBox id="txtFactNonSolde" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.balance,field:"FACT_NON_SOLDE"}}
+                                                                      button=
+                                                                      {
+                                                                          [
+                                                                              {
+                                                                                  id:'01',
+                                                                                  icon:'more',
+                                                                                  onClick:async ()  =>
+                                                                                  {
+                                                                                        let tmpQuery = 
+                                                                                        {
+                                                                                            query: "SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER " + 
+                                                                                                    "FROM ( " +
+                                                                                                    "SELECT " +
+                                                                                                    "TYPE, " +
+                                                                                                    "DOC_DATE, " +
+                                                                                                    "DOC_TYPE, " +
+                                                                                                    "INPUT_CODE, " +
+                                                                                                    "INPUT_NAME, " +
+                                                                                                    "DOC_REF, " +
+                                                                                                    "DOC_REF_NO, " +
+                                                                                                    "DOC_GUID ," +
+                                                                                                    "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  // Faturanın toplamı
+                                                                                                    "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + // Ödeme ve iadelerin toplamı
+                                                                                                    " FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                                                                                                    " WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
+                                                                                                    " GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID " +
+                                                                                                    ") AS TMP " +
+                                                                                                    "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
+                                                                                                param : ['INPUT_CODE:string|50'],
+                                                                                                value : [this.docObj.dt()[0].INPUT_CODE],
+                                                                                        }
+                                                                                        let tmpFactNonSoldeData = await this.core.sql.execute(tmpQuery) 
+                                                                                        if(tmpFactNonSoldeData.result.recordset.length > 0)
+                                                                                        {   
+                                                                                            await this.popFactNonSolde.show()
+                                                                                            await this.grdFactNonSolde.dataRefresh({source:tmpFactNonSoldeData.result.recordset})
+                                                                                        }                                                                       
+                                                                                  }
+                                                                              },
+                                                                          ]
+                                                                      }>
+                                                                    </NdTextBox>
+                                                                </Item>
                                                                 <Item>
                                                                     <Label text={this.t("popCart.txtAmount")} alignment="right" />
                                                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}/>
@@ -1498,6 +1556,10 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
+                                                this.balance.clear()
+                                                this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                                await this.balance.refresh()
+                                                
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
@@ -2434,6 +2496,44 @@ export default class Sale extends React.PureComponent
                                 <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                             </NdPopGrid>
                         </div>
+                           {/* Adres Seçim PopUp */}
+                           <div>
+                            <NdPopUp parent={this} id={"popFactNonSolde"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popFactNonSolde")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'550'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                <Item >
+
+                                <NdGrid parent={this} id={"grdFactNonSolde"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'100%'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowRemoved={async (e)=>{
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="DOC_DATE" caption={this.t("grdFactNonSolde.clmDocDate")} width={100} defaultSortOrder="asc" dataType="date"  />
+                                            <Column dataField="DOC_REF_NO" caption={this.t("grdFactNonSolde.clmRefNo")} width={100} />
+                                            <Column dataField="REMAINDER" caption={this.t("grdFactNonSolde.clmRemainder")} width={300} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        </NdGrid>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>
+                          
                         {/* PRINTVIEW POPUP */}
                         {/* <div>
                             <NbPopUp id={"popCriter"} parent={this} title={"jtjtyhtyh"} fullscreen={false} width={'300'} centered={true}

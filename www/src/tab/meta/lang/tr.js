@@ -51,6 +51,7 @@ export const langTr =
         loadMore : "Daha Fazla Göster",
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
+        popFactNonSolde : "Ödenmemiş Fatura",
         popCart:
         {
             txtCustomer: "Müşteri",
@@ -64,7 +65,8 @@ export const langTr =
             dtDocDate : "Tarih",
             dtDShıpmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
-            cmbPricingList : "Fiyat Liste No"
+            cmbPricingList : "Fiyat Liste No",
+            txtFactNonSolde : "Ödenmemiş Fatura"
         },
         itemPopup : 
         {
@@ -96,6 +98,12 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmPriceAfterDiscount : "İnd. Fiyat",
+        },
+        grdFactNonSolde :
+        {
+            clmDocDate : "Tarih",
+            clmRefNo : "Sıra",
+            clmRemainder : "Ödenmemiş"
         },
         msgSave:
         {
