@@ -1598,6 +1598,42 @@ export default class Sale extends React.PureComponent
                                             selection={{mode:"single"}}
                                             height={'600'}
                                             width={'100%'}
+                                            onRowClick={async(e)=>
+                                            {
+                                                this.docObj.dt()[0].INPUT = e.data.GUID
+                                                this.docObj.dt()[0].INPUT_NAME =  e.data.TITLE
+                                                this.docObj.dt()[0].INPUT_CODE =  e.data.CODE
+                                                this.docObj.dt()[0].REF = e.data.CODE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = e.data.PRICE_LIST_NO
+                                                this.balance.clear()
+                                                this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                                await this.balance.refresh()
+                                                
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [e.data.GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
+                                                    {
+                                                        if(pdata.length > 0)
+                                                        {
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                        }
+                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                }
+                                                for (let i = 0; i < this.docLines.length; i++) 
+                                                {
+                                                    this.docLines[i].INPUT = e.data.GUID
+                                                }
+                                                this.popCustomer.hide();
+                                            }}
                                             >
                                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
