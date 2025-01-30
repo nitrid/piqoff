@@ -49,6 +49,7 @@ export default class salesOrdList extends React.PureComponent
     {
         this.txtCustomerCode.CODE = ''
         this._btnGetClick()
+        this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
     async _btnGetClick()
     {

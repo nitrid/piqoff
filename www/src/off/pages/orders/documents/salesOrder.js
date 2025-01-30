@@ -131,6 +131,9 @@ export default class salesOrder extends DocBase
                 }
             })
         })
+        console.log(this.param)
+        console.log( this.param.filter({ID:'"closedOrder"',USERS:this.user.CODE}).getValue()),
+        this.cmbDesignList.value = this.param.filter({ID:'cmbDesignList',USERS:this.user.CODE}).getValue().value
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -1982,7 +1985,7 @@ export default class salesOrder extends DocBase
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

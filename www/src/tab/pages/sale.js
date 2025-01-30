@@ -312,7 +312,7 @@ export default class Sale extends React.PureComponent
                                 (CUSTOMER_GUID = ?) OR 
                                 (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
                             )
-                        ORDER BY DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
+                        ORDER BY LIST_NO DESC,DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
                         LIMIT 1;`,
                 values : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
             }
@@ -1583,6 +1583,10 @@ export default class Sale extends React.PureComponent
                                                 {
                                                     this.docLines[i].INPUT = this.grdCustomer.getSelectedData()[0].GUID
                                                 }
+                                                if(this.docLines.length > 0)
+                                                {
+                                                    this.priceListChange()
+                                                }
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
                                                 {this.t('popCustomer.btn02')}
@@ -1631,6 +1635,10 @@ export default class Sale extends React.PureComponent
                                                 for (let i = 0; i < this.docLines.length; i++) 
                                                 {
                                                     this.docLines[i].INPUT = e.data.GUID
+                                                }
+                                                if(this.docLines.length > 0)
+                                                {
+                                                    this.priceListChange()
                                                 }
                                                 this.popCustomer.hide();
                                             }}

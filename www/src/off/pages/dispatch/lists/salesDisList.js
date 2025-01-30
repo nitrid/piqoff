@@ -19,6 +19,8 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+
 
 export default class salesDisList extends React.PureComponent
 {
@@ -44,6 +46,7 @@ export default class salesDisList extends React.PureComponent
     async Init()
     {
         this.txtCustomerCode.CODE = ''
+        this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
 
     async _btnGetClick()
@@ -134,6 +137,21 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
             tmpDoc.LOCKED = 1
             tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
+            let tmpAdressQuery = 
+            {
+                query :"SELECT TOP 1 ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = @INPUT AND FACTURATION = 1 ",
+                param : ['INPUT:string|50'],
+                value : [this.grdSlsDisList.getSelectedData()[i].INPUT]
+            }
+            let tmpAdressData = await this.core.sql.execute(tmpAdressQuery) 
+            if(tmpAdressData.result.recordset.length > 0)
+            {
+                tmpDoc.ADRESS_NO = tmpAdressData.result.recordset[0].ADRESS_NO
+            }
+            else
+            {
+                tmpDoc.ADRESS_NO = 0
+            }
             let tmpQuery = 
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
@@ -369,7 +387,7 @@ export default class salesDisList extends React.PureComponent
             {
                 query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,'444',localStorage.getItem('lang').toUpperCase()]
+                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             for (let x = 0; x < tmpData.result.recordset.length; x++) 
@@ -504,8 +522,7 @@ export default class salesDisList extends React.PureComponent
                                         icon: 'print',
                                         onClick: async () => 
                                         {
-                                            this.printDispatch()
-                                            
+                                            this.popAllDesign.show()
                                         }
                                     }    
                                 } />
@@ -703,6 +720,53 @@ export default class salesDisList extends React.PureComponent
                         </div>
                     </div>
                 </ScrollView>
+                  {/* Dizayn Seçim PopUp */}
+                  <div>
+                        <NdPopUp parent={this} id={"popAllDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '12'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                             
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                this.printDispatch()
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popAllDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
             </div>
         )
     }

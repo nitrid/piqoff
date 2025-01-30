@@ -54,6 +54,8 @@ export default class salesInvoice extends DocBase
     {
         await this.core.util.waitUntil(100)
         await this.init()
+        this.cmbDesignList.value = this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE}).getValue().value
+
         if(typeof this.pagePrm != 'undefined')
         {
             console.log(this.pagePrm)
@@ -2213,7 +2215,7 @@ export default class salesInvoice extends DocBase
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
