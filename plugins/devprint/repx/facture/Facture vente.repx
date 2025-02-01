@@ -257,7 +257,7 @@
     </Item3>
     <Item4 Ref="136" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="16.33339">
       <GroupFields>
-        <Item1 Ref="137" FieldName="CONNECT_REF" />
+        <Item1 Ref="137" FieldName="SHIPMENT_DATE" />
       </GroupFields>
       <Controls>
         <Item1 Ref="138" ControlType="XRLabel" Name="label65" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" TextAlignment="TopCenter" SizeF="344.961578,13.0000134" LocationFloat="438.788483, 1.8750509" Font="Arial, 8pt, style=Bold, Underline" Padding="2,2,0,0,100" Borders="None" BorderDashStyle="Dot">
