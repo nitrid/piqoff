@@ -128,6 +128,20 @@ export default class CustomerCard extends React.PureComponent
     {
         this.customerObj.clearAll()
         await this.customerObj.load({CODE:pCode});
+        if(this.customerObj.dt('CUSTOMERS').length > 0)
+        {
+           if(this.customerObj.dt('CUSTOMERS')[0].TYPE == 0)
+           {
+                this.txtTitle.readOnly = true
+                this.setState({officalVisible:false})
+           }
+           else
+           {
+                this.txtTitle.readOnly = false
+                this.setState({officalVisible:true})
+           }
+
+        }
     }
     typeChange(pType)
     {
@@ -1207,6 +1221,15 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="CODE" caption={this.t("pg_subCustomer.clmCode")} width={'20%'} />
                                                             <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
+                                                    </Item>
+                                                     {/* txtAccountingCode */}
+                                                     <Item>
+                                                        <Label text={this.t("txtAccountingCode")} alignment="right" />
+                                                        <NdTextBox id="txtAccountingCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"ACCOUNTING_CODE"}} 
+                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                                        selectAll={true}                           
+                                                        >     
+                                                        </NdTextBox>      
                                                     </Item>
                                                     {/* chkRebate */}
                                                     <Item>

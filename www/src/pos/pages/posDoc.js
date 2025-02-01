@@ -4307,7 +4307,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnTotalLy"} id={"btnTotalLy"} parent={this} data-grid={{x:0,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnTotalLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}} type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnTotal")} 
                                     onClick={async ()=>
                                     {
                                         if(this.posObj.posSale.dt().length == 0)
@@ -4334,16 +4334,17 @@ export default class posDoc extends React.PureComponent
                                         this.rbtnPayType.value = 0                                                                       
                                         this.popTotal.show();
                                         this.txtPopTotal.newStart = true;
-                                    }}>
+                                        }}>
                                         <i className="text-white fa-solid fa-sack-dollar" style={{fontSize: "24px"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
                             {/* btnCreditCardLy */}
-                            <NdLayoutItem key={"btnCreditCardLy"} id={"btnCreditCardLy"} parent={this} data-grid={{x:5,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
+                            <NdLayoutItem key={"btnCreditCardLy"} id={"btnCreditCardLy"} parent={this} data-grid={{x:5,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}}
                             access={this.acsObj.filter({ELEMENT:'btnCreditCardLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}  
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCreditCard")} 
                                     onClick={async ()=>
                                     {                  
                                         if(this.posObj.posSale.dt().length == 0)
@@ -4418,7 +4419,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnSafeOpenLy"} id={"btnSafeOpenLy"} parent={this} data-grid={{x:5,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnSafeOpenLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}} 
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnSafeOpen")} 
                                     access={this.acsObj.filter({ELEMENT:'btnSafeOpen',USERS:this.user.CODE})}
                                     onClick={async ()=>
                                     {
@@ -4434,6 +4436,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCashLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCash")} 
                                     onClick={async ()=>
                                     {           
                                         if(this.posObj.posSale.dt().length == 0)
@@ -4469,6 +4472,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnExchangeLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnExchange"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnExchange")} 
                                     onClick={async ()=>
                                     {           
                                         if(this.posObj.posSale.dt().length == 0)
@@ -4516,6 +4520,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCardTicketLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCardTicket"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCardTicket")} 
                                     onClick={async ()=>
                                     {           
                                         if(this.posObj.posSale.dt().length == 0)
@@ -4593,6 +4598,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnDiscountLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnDiscount")} 
                                     access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                     onClick={async()=>
                                     {   
@@ -4608,6 +4614,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCheqpayLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCheqpay")} 
                                     onClick={async ()=>
                                     {
                                         //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
@@ -4691,6 +4698,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCustomerPointLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCustomerPoint")} 
                                     onClick={async ()=>
                                     {
                                         if(this.customerName.value == '')
@@ -4726,6 +4734,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnInfoLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnInfo")} 
                                     onClick={()=>
                                     {
                                         if(this.btnInfo.lock)
@@ -4864,7 +4873,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnDeleteLy"} id={"btnDeleteLy"} parent={this} data-grid={{x:35,y:42,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnDeleteLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnDelete")} 
                                     onClick={async()=>
                                     {
                                         let tmpAcsVal = this.acsObj.filter({ID:'btnFullDelete',USERS:this.user.CODE})
@@ -4900,7 +4910,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnLineDeleteLy"} id={"btnLineDeleteLy"} parent={this} data-grid={{x:35,y:58,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnLineDeleteLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnLineDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnLineDelete"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnLineDelete")} 
                                     onClick={async ()=>
                                     {
                                         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
@@ -4956,6 +4967,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnItemReturnLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:"#e84393"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnItemReturn")} 
                                     onClick={async ()=>
                                     {
                                         let tmpAcsVal = this.acsObj.filter({ID:'btnReturnEntry',USERS:this.user.CODE})
@@ -5028,6 +5040,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnPriceDiffLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnPriceDiff"} parent={this} className="form-group btn btn-block" style={{height:"100%",width:"100%",fontSize:"10pt",backgroundColor:"#e84393"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnPriceDiff")} 
                                     onClick={async()=>
                                     {          
                                         if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
@@ -5057,6 +5070,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnItemSearchLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnItemSearch"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnItemSearch")} 
                                     onClick={()=>
                                     {
                                         if(this.btnItemSearch.lock)
@@ -5077,6 +5091,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnZReportLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnZReport")} 
                                     onClick={()=>
                                     {
                                         this.ZReport()
@@ -5089,7 +5104,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnGrdListLy"} id={"btnGrdListLy"} parent={this} data-grid={{x:50,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnGrdListLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"9pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnGrdList")} 
                                     onClick={async()=>
                                     {
                                         await this.popGridList.show();
@@ -5116,7 +5132,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnFormationLy"} id={"btnFormationLy"} parent={this} data-grid={{x:55,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnFormationLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block" : "form-group btn btn-danger btn-block"} style={{height:"100%",width:"100%",fontSize:"18pt",color:"white"}}
+                                    <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block" : "form-group btn btn-danger btn-block"} style={{height:"100%",width:"100%",fontSize:"12pt",color:"white"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnFormation")} 
                                     onClick={async()=>
                                     {             
                                         let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
@@ -5148,6 +5165,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnOrderListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnOrderList")} 
                                     onClick={async()=>
                                     {
                                         await this.popOrderList.show();
@@ -5182,6 +5200,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnAdvanceLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnAdvance")} 
                                     onClick={async()=>
                                     {
                                         await this.popAdvance.show()
@@ -5210,7 +5229,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnParkListLy"} id={"btnParkListLy"} parent={this} data-grid={{x:35,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnParkListLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnParkList")} 
                                     onClick={async ()=>
                                     {
                                         await this.popParkList.show();
@@ -5227,6 +5247,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnSubtotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnSubtotal")} 
                                     onClick={async()=>
                                     {
                                         let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
@@ -5247,6 +5268,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCustomerAddLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerAdd"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCustomerAdd")} 
                                     onClick={async()=>
                                     {
                                         await this.popCustomerAdd.show()
@@ -5289,6 +5311,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnCustomerListLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCustomerList")} 
                                     onClick={()=>
                                     {                             
                                         this.popCustomerList.show();
@@ -5302,6 +5325,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnGetCustomerLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnGetCustomer")} 
                                     onClick={async ()=>
                                     {          
                                         if(this.btnGetCustomer.lock)
@@ -5340,7 +5364,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnCalculatorLy"} id={"btnCalculatorLy"} parent={this} data-grid={{x:35,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnCalculatorLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnCalculator"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnCalculator"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCalculator")} 
                                     onClick={()=>
                                     {                                                        
                                         this.Calculator.show();
@@ -5366,7 +5391,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnParkLy"} id={"btnParkLy"} parent={this} data-grid={{x:35,y:122,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnParkLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnPark"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnPark"} parent={this} className="form-group btn btn-warning btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnPark")} 
                                     onClick={()=>
                                     {
                                         if(this.posObj.posSale.dt().length > 0)
@@ -5390,7 +5416,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnPrintLy"} id={"btnPrintLy"} parent={this} data-grid={{x:30,y:138,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnPrintLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnTicketList")} 
                                     onClick={async()=>
                                     {     
                                         //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
@@ -5418,7 +5445,8 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnLastPrintLy"} id={"btnLastPrintLy"} parent={this} data-grid={{x:30,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnLastPrintLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnLastPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
+                                    <NbButton id={"btnLastPrint"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"10pt"}}
+                                    type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnLastPrint")} 
                                     onClick={async()=>
                                     {
                                         let tmpLastPosDt = new datatable();

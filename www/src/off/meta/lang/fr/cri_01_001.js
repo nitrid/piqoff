@@ -172,6 +172,7 @@ const cri_01_001 =
         msg : "Client déjà existant!"
     },
     chkTaxSucre : "Taxe sucrée",
+    txtAccountingCode : "Code comptable",
     tabTitleDetail : "Information détail",
     validation : 
     {

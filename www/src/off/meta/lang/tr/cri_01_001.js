@@ -172,6 +172,7 @@ const cri_01_001 =
         msg : "Girmiş olduğunuz Müşteri sistem de kayıtlı !"
     },
     chkTaxSucre : "Tax Sugar",
+    txtAccountingCode : "Muhasebe Kodu",
     tabTitleDetail : "Detay Bilgileri",
     validation :
     {

@@ -155,7 +155,7 @@ export default class salesInvList extends React.PureComponent
             query : "SELECT REPLACE(CONVERT(varchar,DOC_DATE,104),'.','') AS DOC_DATE, " +
                     "TYPE_NAME + '-' + CONVERT(nvarchar,REF_NO) AS REF, " +
                     "CASE WHEN TYPE_NAME = 'FAC' THEN 'Facture ' + INPUT_NAME ELSE 'Avoir ' + OUTPUT_NAME END AS CUSTOMER, " +
-                    "TOTAL, TOTAL - VAT AS TOTALHT, VAT, " +
+                    "TOTAL, TOTAL - VAT AS TOTALHT, VAT,(SELECT TOP 1 ACCOUNTING_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT OR CUSTOMER_VW_01.GUID = DOC_VW_01.OUTPUT) AS ACCOUNTING_CODE, " +
                     "CASE WHEN REBATE = 0 THEN  INPUT_CODE ELSE OUTPUT_CODE END AS CUSTOMER_CODE, " +
                     " CASE WHEN REBATE = 0 THEN (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.INPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) " +
                     " ELSE (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.OUTPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) END AS COUNTRY, " +
@@ -181,7 +181,7 @@ export default class salesInvList extends React.PureComponent
             {   
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
                     content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\r\n`;
@@ -191,7 +191,7 @@ export default class salesInvList extends React.PureComponent
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
                     content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\r\n`;
@@ -209,7 +209,7 @@ export default class salesInvList extends React.PureComponent
             {
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     if(row.VAT > 0)
                     {
@@ -227,14 +227,14 @@ export default class salesInvList extends React.PureComponent
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
                     content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'CH')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
                     content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\r\n`;
@@ -552,6 +552,8 @@ export default class salesInvList extends React.PureComponent
                                             onClick={async (e)=>
                                             {       
                                                 this.InvPrint()
+                                                this.popDesign.hide();  
+
                                             }}/>
                                         </div>
                                         <div className='col-6'>

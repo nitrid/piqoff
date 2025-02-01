@@ -184,6 +184,7 @@ const cri_01_001 =
         msg : "Der eingegebene Kunde ist bereits im System registriert!"
     },
     chkTaxSucre : "Zuckersteuer",
+    txtAccountingCode : "Kontokonto",
     tabTitleDetail : "Detailinformationen",
     validation :
     {
