@@ -259,6 +259,38 @@ export default class salesInvList extends React.PureComponent
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }
+    async InvPrint()
+    {
+        let tmpLines = []
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < this.grdSlsIvcList.getSelectedData().length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [this.grdSlsIvcList.getSelectedData()[i].GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
+        }
+       
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
+        {
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                { 
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+            }
+        });
+        App.instance.setState({isExecute:false})
+    }
     render()
     {
         return(
@@ -506,7 +538,7 @@ export default class salesInvList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1015'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
@@ -519,36 +551,7 @@ export default class salesInvList extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query : "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                                "FROM DOC_VW_01 " +
-                                                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND " + 
-                                                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                                                " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
-                                                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
-                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbDesignList.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    App.instance.setState({isExecute:true})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
-                                                    {
-                                                        App.instance.setState({isExecute:false})
-                                                        if(pResult.split('|')[0] != 'ERR')
-                                                        {
-                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            mywindow.onload = function() 
-                                                            {
-                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                            } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                        }
-                                                    });
-                                                    this.popDesign.hide();  
-                                                }
+                                                this.InvPrint()
                                             }}/>
                                         </div>
                                         <div className='col-6'>
