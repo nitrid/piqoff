@@ -11,6 +11,8 @@ export default class NbKeyboard extends NbBase
         this.state.layoutName = typeof this.props.layoutName == 'undefined' ?  "default" : this.props.layoutName
         this.state.inputName = this.props.inputName
         this.state.inputs = {}
+        this.state.position = {top: 0}
+        this.state.visible = false
         
         this.keyPattern = 
         {
@@ -133,16 +135,51 @@ export default class NbKeyboard extends NbBase
     {
         this.keyboard.setCaretPosition(e)
     }
+    show(inputId)
+    {
+        if(this.props.autoPosition)
+        {
+            const element = document.getElementById(inputId);
+            if(element)
+            {
+                const rect = element.getBoundingClientRect();
+                this.setState({
+                    visible: true,
+                    position: {top: rect.bottom + window.scrollY}
+                });
+            }
+        }
+        else
+        {
+            this.setState({visible: true});
+        }
+    }
+    hide()
+    {
+        this.setState({visible: false});
+    }
     render()
     {
+        if(this.props.autoPosition && !this.state.visible)
+        {
+            return null;
+        }
+
         return(
-            <div>
+            <div style={this.props.autoPosition ? {
+                position: 'absolute',
+                top: this.state.position.top + 'px',
+                left: '0px',
+                zIndex: 2000,
+                backgroundColor: '#fff',
+                boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
+                padding: '10px',
+                width: '100%'
+            } : {}}>
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
                 onChangeAll={(inputs) =>
                 {
-                    this.setCaretPosition(inputs[this.state.inputName].length)
-                    console.log(this.getCaretPositionEnd(),inputs[this.state.inputName])
                     this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
                     this.setState({inputs:inputs})
                 }}
@@ -150,24 +187,15 @@ export default class NbKeyboard extends NbBase
                 {
                     if (button === "{shift}" || button === "{lock}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "default" ? "shift" : "default"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "default" ? "shift" : "default"});
                     }
                     if (button === "{capslock}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "mail" ? "mailShift" : "mail"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "mail" ? "mailShift" : "mail"});
                     }
                     if (button === "{numbers}" || button === "{abc}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "numbers" ? this.props.layoutName : "numbers"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "numbers" ? this.props.layoutName : "numbers"});
                     }
                 }}
                 layoutName={this.state.layoutName}

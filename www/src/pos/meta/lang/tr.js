@@ -1012,5 +1012,27 @@ export const langTr =
         title : "Ürün Listesi",
         btnItemSearch : "Ara",
         txtItemSearchPholder : "Ürün adı yada kodu giriniz",
-    },
+        grdItemList :
+        {
+            CODE : "Ürün Kodu",
+            NAME : "Ürün Adı",
+            VAT : "Vat"
+        },
+        popItemEdit :
+        {
+            title : "Yeni Ürün",
+            txtRef : "Ürün Kodu",
+            txtName : "Ürün Adı",
+            cmbMainUnit : "Ana Birim",
+            cmbUnderUnit : "Alt Birim",
+            cmbItemGrp : "Ürün Grubu",
+            cmbOrigin : "Menşei",
+            cmbTax : "Vergi",
+            chkActive : "Aktif",
+            chkCaseWeighed : "Kasada Tartılsın",
+            chkLineMerged : "Satış da Satırları Ayır",
+            btnSave : "Kaydet",
+            btnCancel : "İptal"
+        }
+    }
 }
