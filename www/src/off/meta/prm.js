@@ -525,7 +525,7 @@ export const prm =
             mail : "control@piqsoft.com"
         },
         SPECIAL : "",
-        PAGE : "irs_01_002",
+        PAGE : "",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
@@ -2084,6 +2084,25 @@ export const prm =
             CAPTION : "Belge no kontrolu"
         }
     },
+    // Dizayn Seçimi
+    {
+        TYPE : 2,
+        ID :"cmbDesignList",
+        VALUE : 
+        {
+            value : "33"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "cmbDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
     //#endregion
     //#region Fire Alış Faturası
     //txtRef
@@ -3443,6 +3462,25 @@ export const prm =
     },  
     //#endregion
     //#region Satış Sipariş
+    //cmbAllDesignList
+    {
+        TYPE : 1,
+        ID :"cmbDesignList",
+        VALUE : 
+        {
+            value : "20"
+        },
+        SPECIAL : "",
+        PAGE : "sip_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
     //negativeQuantity
     {
         TYPE : 1,
@@ -3601,6 +3639,69 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Satış Sipariş onaylama",
             CAPTION : "Yazdırma Dizaynı Tagı"
+        }
+    },
+    //#endregion
+      //#region Satış Sipariş Listesi
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "223"
+        },
+        SPECIAL : "",
+        PAGE : "sip_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş Listesi",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
+    //#endregion
+      //#region Satış İrsaliye Listesi
+    //cmbAllDesignList
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "444"
+        },
+        SPECIAL : "",
+        PAGE : "irs_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış İrsaliye Listesi",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
+    //#endregion
+     //#region Satış Fatura Listesi
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "333"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Fatura Listesi",
+            CAPTION : "Dizayn Tagı"
         }
     },
     //#endregion

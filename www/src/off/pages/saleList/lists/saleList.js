@@ -3,18 +3,14 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { EmptyItem, Label } from 'devextreme-react/form';
+import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
+import { docCls,docExtraCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import NdGrid,{Column,Paging,Pager,Export,Scrolling,Summary,TotalItem,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdTabPanel from '../../../../core/react/devex/tabpanel.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -42,10 +38,10 @@ export default class saleList extends React.PureComponent
     {
         setTimeout(async () => 
         {
-            this.Init()
+            this.init()
         }, 1000);
     }
-    async Init()
+    async init()
     {
         this.dtFirst.startDate=moment(new Date()).format("YYYY-MM-DD");
         this.dtFirst.endDate=moment(new Date()).format("YYYY-MM-DD");
@@ -318,7 +314,7 @@ export default class saleList extends React.PureComponent
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
                 {
-                    await this.MailSend(tmpDocCls.dt()[0].GUID,tmpDocCls.dt()[0].INPUT,tmpDocCls.dt()[0].REF_NO)
+                    await this.mailSend(tmpDocCls.dt()[0].GUID,tmpDocCls.dt()[0].INPUT,tmpDocCls.dt()[0].REF_NO)
                 }
                 tmpDocGuids.push(tmpDocCls.dt()[0])
             }
@@ -438,7 +434,7 @@ export default class saleList extends React.PureComponent
         });
         App.instance.setState({isExecute:false})
     }
-    async MailSend(pGuid,pCustomer,pRefno)
+    async mailSend(pGuid,pCustomer,pRefno)
     {
         let tmpMAilQuery = 
         {
@@ -764,15 +760,15 @@ export default class saleList extends React.PureComponent
                                             e.component.refresh(true);
                                         }}
                                         onRowDblClick={async(e)=>
-                                            {                                            
-                                                App.instance.menuClick(
-                                                    {
-                                                        id: 'sip_02_002',
-                                                        text: this.t('menu.tabTitleOrder'),
-                                                        path: 'orders/documents/salesOrder.js',
-                                                        pagePrm:{GUID:e.data.GUID}
-                                                    })                                           
-                                            }}
+                                        {                                            
+                                            App.instance.menuClick(
+                                            {
+                                                id: 'sip_02_002',
+                                                text: this.t('menu.tabTitleOrder'),
+                                                path: 'orders/documents/salesOrder.js',
+                                                pagePrm:{GUID:e.data.GUID}
+                                            })                                           
+                                        }}
                                         >         
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrderList"}/>                                
                                             <ColumnChooser enabled={true} />                                                                                  
@@ -866,15 +862,15 @@ export default class saleList extends React.PureComponent
                                             e.component.refresh(true);
                                         }}
                                         onRowDblClick={async(e)=>
-                                            {                                            
-                                                App.instance.menuClick(
-                                                    {
-                                                        id: 'irs_02_002',
-                                                        text: this.t('menu.tabTitleDispatch'),
-                                                        path: 'dispatch/documents/salesDispatch.js',
-                                                        pagePrm:{GUID:e.data.GUID}
-                                                    })                                         
-                                            }}
+                                        {                                            
+                                            App.instance.menuClick(
+                                            {
+                                                id: 'irs_02_002',
+                                                text: this.t('menu.tabTitleDispatch'),
+                                                path: 'dispatch/documents/salesDispatch.js',
+                                                pagePrm:{GUID:e.data.GUID}
+                                            })                                         
+                                        }}
                                         >        
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsDispatchList"}/>                                
                                             <ColumnChooser enabled={true} />                                                                                   

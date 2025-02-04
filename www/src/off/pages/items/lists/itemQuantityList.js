@@ -148,11 +148,11 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ID = @UNIT_ID),UNIT_NAME) AS UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,([dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE())/ ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ID = @UNIT_ID),1))  AS QUANTITY FROM ITEMS_VW_01 " +
                                 "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) <> 0 AND " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
-                        param : ['NAME:string|250','DEPOT:string|50'],
-                        value : [this.txtUrunAdi.value,this.cmbDepot.value]
+                        param : ['NAME:string|250','DEPOT:string|50','UNIT_ID:string|50'],
+                        value : [this.txtUrunAdi.value,this.cmbDepot.value,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
                     },
                     sql : this.core.sql
                 }

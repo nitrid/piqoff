@@ -1334,7 +1334,7 @@ export default class salesDispatch extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
-                                                    let tmpQuery = 
+                                                let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                     param : ['CUSTOMER:string|50'],
@@ -1460,6 +1460,10 @@ export default class salesDispatch extends DocBase
                                     data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                        {
+                                            this.priceListChange()
+                                        }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1688,6 +1692,7 @@ export default class salesDispatch extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            this.cmbMultiItemType.value = 1
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)

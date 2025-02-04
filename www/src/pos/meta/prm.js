@@ -1537,4 +1537,20 @@ export const prm =
             CAPTION : "Pos Adisyon kullanımı"
         }
     },
+     //Adisyon Kullanım 
+     {
+        TYPE : 0,
+        ID :"PosBtnText",
+        VALUE : "textIcon",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Buton Text"
+        }
+    },
 ]

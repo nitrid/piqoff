@@ -155,7 +155,7 @@ export default class salesInvList extends React.PureComponent
             query : "SELECT REPLACE(CONVERT(varchar,DOC_DATE,104),'.','') AS DOC_DATE, " +
                     "TYPE_NAME + '-' + CONVERT(nvarchar,REF_NO) AS REF, " +
                     "CASE WHEN TYPE_NAME = 'FAC' THEN 'Facture ' + INPUT_NAME ELSE 'Avoir ' + OUTPUT_NAME END AS CUSTOMER, " +
-                    "TOTAL, TOTALHT, VAT, " +
+                    "TOTAL, TOTAL - VAT AS TOTALHT, VAT,(SELECT TOP 1 ACCOUNTING_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT OR CUSTOMER_VW_01.GUID = DOC_VW_01.OUTPUT) AS ACCOUNTING_CODE, " +
                     "CASE WHEN REBATE = 0 THEN  INPUT_CODE ELSE OUTPUT_CODE END AS CUSTOMER_CODE, " +
                     " CASE WHEN REBATE = 0 THEN (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.INPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) " +
                     " ELSE (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_VW_01.OUTPUT AND CUSTOMER_ADRESS_VW_01.TYPE = 0) END AS COUNTRY, " +
@@ -171,7 +171,7 @@ export default class salesInvList extends React.PureComponent
 
         let tmpData = await this.core.sql.execute(tmpQuery)
         
-        let content = "Code journal;Date;N° Pièce;Désignation;Montant Net;Montant Brut;Compte;Compte;Taxe;Expiration\n";
+        let content = "Code journal;Date;N° Pièce;Désignation;Montant Net;Montant Brut;Compte;Compte;Taxe;Expiration\r\n";
         
         for(let i = 0; i < tmpData.result.recordset.length; i++)
         {
@@ -181,27 +181,27 @@ export default class salesInvList extends React.PureComponent
             {   
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7070000;;${row.EXP_DATE}\r\n`;
                     
                     // KDV satırı
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.VAT};;4457151;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.VAT};;4457151;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079120;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'CH')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTAL};0;411${row.CUSTOMER_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079200;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTALHT};;7079200;;${row.EXP_DATE}\r\n`;
                 }
               
             }
@@ -209,35 +209,35 @@ export default class salesInvList extends React.PureComponent
             {
                 if(row.COUNTRY == 'FR')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     if(row.VAT > 0)
                     {
                         // KDV'siz tutar satırı  
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7070000;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7070000;;${row.EXP_DATE}\r\n`;
                         
                         // KDV satırı
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.VAT};0;4457151;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.VAT};0;;4457151;;${row.EXP_DATE}\r\n`;
                     }
                     else
                     {
                         // KDV'siz tutar satırı  
-                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;7087000;;${row.EXP_DATE}\n`;
+                        content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7087000;;${row.EXP_DATE}\r\n`;
                     }
                 }
                 else if(row.COUNTRY == 'DE')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079120;;${row.EXP_DATE}\r\n`;
                 }
                 else if(row.COUNTRY == 'CH')
                 {
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};411${row.CUSTOMER_CODE};411000000;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};0;${row.TOTAL};${row.ACCOUNTING_CODE};4110000;;${row.EXP_DATE}\r\n`;
             
                     // KDV'siz tutar satırı  
-                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\n`;
+                    content += `VE;${row.DOC_DATE};${row.REF};${row.CUSTOMER};${row.TOTALHT};0;;7079200;;${row.EXP_DATE}\r\n`;
                 }
 
             }
@@ -246,8 +246,10 @@ export default class salesInvList extends React.PureComponent
         }
 
         console.log(content)
-        // Dosyayı indir
-        let blob = new Blob([content], {type: 'text/plain'});
+        // ANSI formatında dosya oluştur
+        let encoder = new TextEncoder('windows-1252');
+        let ansiContent = encoder.encode(content);
+        let blob = new Blob([ansiContent], {type: 'text/plain;charset=windows-1252'});
         let url = window.URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = url;
@@ -256,6 +258,38 @@ export default class salesInvList extends React.PureComponent
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+    }
+    async InvPrint()
+    {
+        let tmpLines = []
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < this.grdSlsIvcList.getSelectedData().length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [this.grdSlsIvcList.getSelectedData()[i].GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
+        }
+       
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
+        {
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                { 
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+            }
+        });
+        App.instance.setState({isExecute:false})
     }
     render()
     {
@@ -504,7 +538,7 @@ export default class salesInvList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1015'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
@@ -517,36 +551,9 @@ export default class salesInvList extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query : "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                                "FROM DOC_VW_01 " +
-                                                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND " + 
-                                                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                                                " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
-                                                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
-                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbDesignList.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    App.instance.setState({isExecute:true})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
-                                                    {
-                                                        App.instance.setState({isExecute:false})
-                                                        if(pResult.split('|')[0] != 'ERR')
-                                                        {
-                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            mywindow.onload = function() 
-                                                            {
-                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                            } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                        }
-                                                    });
-                                                    this.popDesign.hide();  
-                                                }
+                                                this.InvPrint()
+                                                this.popDesign.hide();  
+
                                             }}/>
                                         </div>
                                         <div className='col-6'>

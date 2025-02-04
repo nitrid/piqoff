@@ -16,6 +16,7 @@ const fns_02_002 =
     cash : "Total",
     description :"Motif",
     checkReference : "Référence",
+    checkDate : "Date",
     btnCash : "Saisie Réglement",
     invoiceSelect : "Sélectionner Facture",
     ValidCash : "Veuillez saisir un montant supérieur à 0", 
@@ -54,7 +55,8 @@ const fns_02_002 =
         clmInputName : "Caisse/Banque",
         clmDescription : "Motif",
         clmInvoice : "Facture payée",
-        clmFacDate : "Date de facture "
+        clmFacDate : "Date de facture ",
+        clmDocDate : "Date"
     },
     msgDocValid:
     {

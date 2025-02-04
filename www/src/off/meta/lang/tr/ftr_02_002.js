@@ -19,6 +19,7 @@ const  ftr_02_002 =
     cash : "Tutar",
     description :"Açıklama",
     checkReference : "Referans",
+    checkDate : "Tarih",
     btnCash : "Tahsilat Ekle",
     btnCheck : "Çek",
     btnBank : "Havale",

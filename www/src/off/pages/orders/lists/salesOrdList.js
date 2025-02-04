@@ -12,6 +12,7 @@ import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -46,10 +47,9 @@ export default class salesOrdList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
         this._btnGetClick()
+        this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
     async _btnGetClick()
     {
@@ -71,7 +71,7 @@ export default class salesOrdList extends React.PureComponent
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " +
                                 " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC", 
                                 param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                                value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
+                                value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -105,6 +105,7 @@ export default class salesOrdList extends React.PureComponent
                                 "SUM(DISCOUNT) as DISCOUNT,    " +
                                 "MAX(SHIPMENT_DATE) as SHIPMENT_DATE,    " +
                                 "(SELECT TOP 1 VAT_ZERO FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as VAT_ZERO,    " +
+                                "(SELECT TOP 1 ADDRESS FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as ADDRESS,    " +
                                 "SUM(DOC_DISCOUNT) as DOC_DISCOUNT,    " +  
                                 "SUM(DOC_DISCOUNT_1) as DOC_DISCOUNT_1,    " +
                                 "SUM(DOC_DISCOUNT_2) as DOC_DISCOUNT_2,    " +
@@ -123,7 +124,7 @@ export default class salesOrdList extends React.PureComponent
                                 ") AS TMP WHERE PEND_QUANTITY > 0 AND (( MAIN_GROUP_CODE = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = ''))" +
                                 "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -168,7 +169,8 @@ export default class salesOrdList extends React.PureComponent
                 tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
                 tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
                 tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF,
-                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO
+                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO    
+                tmpDoc.ADDRESS = this.grdSlsOrdList.getSelectedData()[i].ADDRESS
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
@@ -220,9 +222,9 @@ export default class salesOrdList extends React.PureComponent
                         tmpdocItems.VAT_RATE = tmpLineData.result.recordset[x].VAT_RATE
                         tmpdocItems.PRICE = tmpLineData.result.recordset[x].PRICE
                         tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
-                        tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
-                        tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
-                        tmpdocItems.TOTAL = tmpLineData.result.recordset[x].TOTAL
+                        tmpdocItems.AMOUNT = Number(tmpLineData.result.recordset[x].AMOUNT).round(2)
+                        tmpdocItems.TOTALHT = Number(tmpLineData.result.recordset[x].TOTALHT).round(2)
+                        tmpdocItems.TOTAL = Number(tmpLineData.result.recordset[x].TOTAL).round(2)
                         tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
                         tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
     
@@ -267,31 +269,37 @@ export default class salesOrdList extends React.PureComponent
     }
     async printOrders()
     {
+        let tmpLines = []
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
             let tmpPrintQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID)  ORDER BY LINE_NO " ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
+                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpPrintQuery) 
-            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-            {
-                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
-                mywindow.onload = function() 
-                {
-                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                } 
-                // if(pResult.split('|')[0] != 'ERR')
-                // {
-                //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                // }
-            });
+            console.log(tmpData)
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
         }
-           
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',(pResult) => 
+        {
+            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+            mywindow.onload = function() 
+            {
+                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+            } 
+            // if(pResult.split('|')[0] != 'ERR')
+            // {
+            //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+            //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            // }
+        });
     }
     render()
     {
@@ -338,10 +346,7 @@ export default class salesOrdList extends React.PureComponent
                                 <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                 onClick={()=>
                                 {
-                                    if(this.grdSlsOrdList.getSelectedData().length > 0)
-                                        {
-                                            this.popAllDesign.show()
-                                        }
+                                    this.popAllDesign.show()
                                 }}/>
                                 </Item>
                                 <Item location="after"
@@ -377,16 +382,10 @@ export default class salesOrdList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NbDateRange id={"dtFirst"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />

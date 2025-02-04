@@ -17,6 +17,7 @@ export const langTr =
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     btnCancel : "Vazgeç",
     msgInvalidUser : "Kullanıcı adı veya şifre hatalı !",
+    chkRememberMe : "Beni Hatırla",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -50,6 +51,7 @@ export const langTr =
         loadMore : "Daha Fazla Göster",
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
+        popFactNonSolde : "Ödenmemiş Fatura",
         popCart:
         {
             txtCustomer: "Müşteri",
@@ -63,7 +65,8 @@ export const langTr =
             dtDocDate : "Tarih",
             dtDShıpmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
-            cmbPricingList : "Fiyat Liste No"
+            cmbPricingList : "Fiyat Liste No",
+            txtFactNonSolde : "Ödenmemiş Fatura"
         },
         itemPopup : 
         {
@@ -95,6 +98,12 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmPriceAfterDiscount : "İnd. Fiyat",
+        },
+        grdFactNonSolde :
+        {
+            clmDocDate : "Tarih",
+            clmRefNo : "Sıra",
+            clmRemainder : "Ödenmemiş"
         },
         msgSave:
         {
@@ -255,6 +264,14 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        pg_adress:
+        {
+            title: "Adres Seçimi",
+            clmAdress: "Adres",
+            clmCity: "Şehir",
+            clmZipcode: "Posta Kodu",
+            clmCountry: "Ülke"
+        },
         msgPriceListChange:
         {
             title: "Dikkat",
@@ -264,9 +281,9 @@ export const langTr =
         },
         orderGroup:
         {
-            Name: "ÜRÜN İSMİ",
-            Code: "ÜRÜN KODU",
-            Favori: "FAVORİLER",
+            Name: "İSİM",
+            Code: "KOD",
+            Favori: "FAVORİ",
         },
         msgWrongUnit:
         {

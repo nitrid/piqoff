@@ -13,11 +13,14 @@ import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+
 
 export default class salesDisList extends React.PureComponent
 {
@@ -42,15 +45,12 @@ export default class salesDisList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
+        this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
 
     async _btnGetClick()
     {
-        console.log(this.cmbMainGrp.value)
-        console.log(this.chkOpenDispatch.value)
         if(this.chkOpenDispatch.value == false)
         {
             let tmpSource =
@@ -69,7 +69,7 @@ export default class salesDisList extends React.PureComponent
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
                                 " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -96,7 +96,7 @@ export default class salesDisList extends React.PureComponent
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
                                 " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value] 
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value] 
                     },
                     sql : this.core.sql
                 }
@@ -137,6 +137,21 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
             tmpDoc.LOCKED = 1
             tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
+            let tmpAdressQuery = 
+            {
+                query :"SELECT TOP 1 ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = @INPUT AND FACTURATION = 1 ",
+                param : ['INPUT:string|50'],
+                value : [this.grdSlsDisList.getSelectedData()[i].INPUT]
+            }
+            let tmpAdressData = await this.core.sql.execute(tmpAdressQuery) 
+            if(tmpAdressData.result.recordset.length > 0)
+            {
+                tmpDoc.ADRESS_NO = tmpAdressData.result.recordset[0].ADRESS_NO
+            }
+            else
+            {
+                tmpDoc.ADRESS_NO = 0
+            }
             let tmpQuery = 
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
@@ -206,9 +221,9 @@ export default class salesDisList extends React.PureComponent
                         tmpDocItems.PRICE =tmpLineData.result.recordset[x].PRICE
                         tmpDocItems.QUANTITY =tmpLineData.result.recordset[x].QUANTITY
                         tmpDocItems.VAT =tmpLineData.result.recordset[x].VAT
-                        tmpDocItems.AMOUNT =tmpLineData.result.recordset[x].AMOUNT
-                        tmpDocItems.TOTAL =tmpLineData.result.recordset[x].TOTAL
-                        tmpDocItems.TOTALHT =tmpLineData.result.recordset[x].TOTALHT
+                        tmpDocItems.AMOUNT =Number(tmpLineData.result.recordset[x].AMOUNT).round(2)
+                        tmpDocItems.TOTAL =Number(tmpLineData.result.recordset[x].TOTAL).round(2)
+                        tmpDocItems.TOTALHT =Number(tmpLineData.result.recordset[x].TOTALHT).round(2)
                         tmpDocItems.DESCRIPTION =tmpLineData.result.recordset[x].DESCRIPTION
                         tmpDocItems.INVOICE_DOC_GUID = tmpDocCls.dt()[0].GUID
                         tmpDocItems.INVOICE_LINE_GUID =tmpLineData.result.recordset[x].GUID
@@ -348,6 +363,8 @@ export default class salesDisList extends React.PureComponent
                 });
             App.instance.setState({isExecute:false})
         }
+
+        this._btnGetClick()
     }
     async printDispatch()
     {
@@ -370,7 +387,7 @@ export default class salesDisList extends React.PureComponent
             {
                 query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,'444',localStorage.getItem('lang').toUpperCase()]
+                value:  [this.grdSlsDisList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             for (let x = 0; x < tmpData.result.recordset.length; x++) 
@@ -505,8 +522,7 @@ export default class salesDisList extends React.PureComponent
                                         icon: 'print',
                                         onClick: async () => 
                                         {
-                                            this.printDispatch()
-                                            
+                                            this.popAllDesign.show()
                                         }
                                     }    
                                 } />
@@ -543,17 +559,12 @@ export default class salesDisList extends React.PureComponent
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
                                 <Item>
-                                    <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                <Label text={this.t("dtFirst")} alignment="right" />
+                                <NbDateRange id={"dtFirst"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                  
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -709,6 +720,53 @@ export default class salesDisList extends React.PureComponent
                         </div>
                     </div>
                 </ScrollView>
+                  {/* Dizayn Seçim PopUp */}
+                  <div>
+                        <NdPopUp parent={this} id={"popAllDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '12'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                             
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                this.printDispatch()
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popAllDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
             </div>
         )
     }

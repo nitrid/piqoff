@@ -49,6 +49,7 @@ const fns_05_001 =
         clmAmount : "Betrag",
         clmInputName : "Tresor/Bank",
         clmDescription : "Beschreibung",
+        clmDocDate : "Zahlungsdatum"
     },
     msgDocValid:
     {

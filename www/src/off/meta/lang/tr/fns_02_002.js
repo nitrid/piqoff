@@ -65,7 +65,8 @@ const fns_02_002 =
         clmInputName : "Kasa/Banka",
         clmDescription : "Açıklama",
         clmInvoice : "Ödenen Fatura",
-        clmFacDate : "Fatura Tarihi "
+        clmFacDate : "Fatura Tarihi ",
+        clmDocDate : "Tarih"
     },
     msgDocValid:
     {

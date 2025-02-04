@@ -181,6 +181,13 @@ export const langTr =
     favDell : "Favoriden  Kaldır",
     menu : "Menu",
     favMenu : "Favoriler",
+    msgPriceListChange :
+    {
+        title : "Fiyat Listesi Değiştirme",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        msg : "Fiyatlar güncellensin mi ?"
+    },
     menuOff:
     {
         stk: "Ürün",                

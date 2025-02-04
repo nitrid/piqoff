@@ -54,6 +54,8 @@ export default class salesInvoice extends DocBase
     {
         await this.core.util.waitUntil(100)
         await this.init()
+        this.cmbDesignList.value = this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE}).getValue().value
+
         if(typeof this.pagePrm != 'undefined')
         {
             console.log(this.pagePrm)
@@ -624,9 +626,14 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
-            param : ['INPUT:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
+            query : "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
+            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         super.getDispatch(tmpQuery)
     }
@@ -1387,6 +1394,10 @@ export default class salesInvoice extends DocBase
                                     data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.priceListChange()
+                                    }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1696,6 +1707,7 @@ export default class salesInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            this.cmbMultiItemType.value = 1
                                             if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -2204,7 +2216,7 @@ export default class salesInvoice extends DocBase
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
