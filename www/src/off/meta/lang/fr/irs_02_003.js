@@ -361,5 +361,6 @@ const irs_02_003 =
         btn01: "OK", //BAK
         msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
     },
+
 }
 export default irs_02_003
