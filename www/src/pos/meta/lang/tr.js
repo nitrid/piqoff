@@ -1031,6 +1031,33 @@ export const langTr =
             chkActive : "Aktif",
             chkCaseWeighed : "Kasada Tartılsın",
             chkLineMerged : "Satış da Satırları Ayır",
+            chkTicketRest : "Ticket Rest.",
+            tabTitlePrice : "Fiyat",
+            tabTitleUnit : "Birim",
+            tabTitleBarcode : "Barkod",
+            grdPrice :
+            {
+                clmStartDate : "Baş. Tarihi",
+                clmFinishDate : "Bit. Tarihi",
+                clmQuantity : "Miktar",
+                clmPrice : "Fiyat",
+                clmPriceHT : "Vergi Hariç",
+                clmPriceTTC : "Vergi Fiyat",
+            },
+            grdUnit :
+            {
+                clmType : "Tip",
+                clmName : "Adı",
+                clmFactor : "Çarpan",
+            },
+            grdBarcode :
+            {
+                clmBarcode : "Barkod",
+                clmUnit : "Birim",
+                clmType : "Tip",
+            },
+            cmbMainUnit : "Ana Birim",
+            cmbUnderUnit : "Alt Birim",
             btnSave : "Kaydet",
             btnCancel : "İptal"
         }
