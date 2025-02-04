@@ -2770,6 +2770,7 @@ export default class itemCard extends React.PureComponent
                                                 
                                                     tmpEmpty.TYPE = 0
                                                     tmpEmpty.LIST_NO = this.cmbPopPriListNo.value
+                                                    tmpEmpty.LIST_NAME = this.cmbPopPriListNo.displayValue
                                                     tmpEmpty.TYPE_NAME = 'Satis'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmpty.DEPOT = this.cmbPopPriDepot.value
