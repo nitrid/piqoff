@@ -432,12 +432,6 @@ const irs_02_002 =
     },
 
     btnSave: "Enregistrer",
-    msgNoteSaved:
-    {
-        title: "Enregistre Votre Note",
-        btn01: "OK",
-        msg: "Note Enregistrée avec succès !"
-    }
 
 }
 export default irs_02_002

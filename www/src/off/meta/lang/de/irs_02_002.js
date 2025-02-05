@@ -454,7 +454,8 @@ const irs_02_002 =
         count: "Gesamtzeilen",
         quantity: "Gesamtmenge",
         quantity2: "2. Einheitsmenge",
-        margin : "Marge"
+        margin : "Marge",
+        explanation: "Erklärung"
     },
     msgCustomerLock: 
     {

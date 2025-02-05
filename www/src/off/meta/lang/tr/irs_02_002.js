@@ -426,7 +426,8 @@ const irs_02_002 =
         count: "Toplam Satır",
         quantity: "Toplam Miktar",
         quantity2: "2. Birim Toplamı ",
-        margin : "Marj"
+        margin : "Marj",
+        explanation: "Açıklama"
     },
     msgCustomerLock:
     {
