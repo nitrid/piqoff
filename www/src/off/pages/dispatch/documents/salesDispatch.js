@@ -1092,6 +1092,7 @@ export default class salesDispatch extends DocBase
                                     onClick={async()=>
                                     {
                                         await this.popDetail.show()
+                                        this.txtDetailExplanation.value = this.docObj.dt()[0].DESCRIPTION
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value = Number(this.docObj.docItems.dt().sum("QUANTITY",2))
                                         let tmpQuantity2 = 0
@@ -1113,7 +1114,8 @@ export default class salesDispatch extends DocBase
                                         let tmpExVat = Number(this.docObj.docItems.dt().sum("PRICE",2))
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("COST_PRICE",2)) 
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("COST_PRICE",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" + isNaN(tmpMarginRate) ? 0 : tmpMarginRate.toFixed(2);                 
+                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" + isNaN(tmpMarginRate) ? 0 : tmpMarginRate.toFixed(2);   
+                                                
                                         
                                     }}/>
                                 </Item>
@@ -2320,7 +2322,7 @@ export default class salesDispatch extends DocBase
                         title={this.t("popDetail.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'300'}
+                        height={'360'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2375,6 +2377,23 @@ export default class salesDispatch extends DocBase
                                     <Label text={this.t("popDetail.margin")} alignment="right" />
                                     <NdTextBox id="txtDetailMargin" parent={this} simple={true} readOnly={true}
                                     maxLength={32}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDetail.explanation")} alignment="right" />
+                                    <NdTextBox id="txtDetailExplanation" parent={this} simple={true} 
+                                    maxLength={512}/>
+                                </Item>
+                                <Item>
+                                <NdButton 
+                                    id="btnDetailSave" 
+                                    text={this.t("btnSave")}  
+                                    type="success"
+                                    onClick={async () => {
+                                      
+                                        this.docObj.dt('DOC')[0].DESCRIPTION = this.txtDetailExplanation.value;
+                                        this.popDetail.hide();
+                                        }}
+                                    />
                                 </Item>
                             </Form>
                         </NdPopUp>

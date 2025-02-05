@@ -32,6 +32,7 @@ export const langFr =
     checkAll :"Tout saisir",
     msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
+    addExplanation: "Ajouter Explication",
     constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
