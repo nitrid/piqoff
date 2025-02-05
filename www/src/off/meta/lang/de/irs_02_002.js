@@ -448,6 +448,7 @@ const irs_02_002 =
     txtDiscountPer1 : "1. Rabattprozentsatz",
     txtDiscountPer2 : "2. Rabattprozentsatz",
     txtDiscountPer3 : "3. Rabattprozentsatz",
+    btnSave: "Speichern",
     popDetail:
     {
         title: "Dokumentinhalt",
