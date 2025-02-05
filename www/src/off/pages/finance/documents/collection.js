@@ -40,6 +40,7 @@ export default class collection extends React.PureComponent
         
         this._calculateTotal = this._calculateTotal.bind(this)
         this._addPayment = this._addPayment.bind(this)
+        this._btnCloseInvoice = this._btnCloseInvoice.bind(this)
 
         this.docLocked = false;        
     }
@@ -274,7 +275,41 @@ export default class collection extends React.PureComponent
             /******************************************************************************/
             this._calculateTotal()
         }
-    }    
+    }
+    async _btnCloseInvoice(pCustomer)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT " +
+            "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE," +
+            "DOC.REF,DOC.REF_NO, " +
+            "DOC.DOC_DATE," +
+            "DOC.AMOUNT, " +
+            "DEPT.PAYING_AMOUNT " +
+            "FROM DOC_CUSTOMER_VW_01 AS DOC " +
+            "LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC " +
+            "WHERE DEPT.PAYING_DOC = @pCustomer " +
+            "UNION ALL " +
+            "SELECT " +
+            "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE," +
+            "DOC.REF,DOC.REF_NO, " +
+            "DOC.DOC_DATE," +
+            "DOC.AMOUNT, " +
+            "DEPT.PAYING_AMOUNT " +
+            "FROM DOC_CUSTOMER_VW_01 AS DOC " +
+            "LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC " +
+            "WHERE DEPT.PAYING_DOC = (SELECT TOP 1 PAID_DOC FROM [DEPT_CREDIT_MATCHING] WHERE PAYING_DOC = @pCustomer) " +
+            "AND DOC.PAY_TYPE = -1",
+            param : ['pCustomer:string|50'],
+            value : [pCustomer]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        if(tmpData.result.recordset.length > 0)
+        {
+            await this.grdPopCloseInvoice.dataRefresh({source: tmpData.result.recordset});
+            this.popCloseInvoice.show()
+        }
+    }
     render()
     {
         return(
@@ -757,6 +792,10 @@ export default class collection extends React.PureComponent
                                         height={'500'} 
                                         width={'100%'}
                                         dbApply={false}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            this._btnCloseInvoice(e.data.GUID)
+                                        }}
                                         onRowUpdating={async(e)=>{      
                                             
                                             if(this.deptCreditMatchingObj.popUpList.length > 0)
@@ -800,7 +839,7 @@ export default class collection extends React.PureComponent
                                                     }
                                                     
                                                     return
-                                                }}/>
+                                                }}/>     
                                         </NdGrid>
                                         <ContextMenu
                                         dataSource={this.rightItems}
@@ -1046,6 +1085,64 @@ export default class collection extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
+                    {/* Close Invoice PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popCloseInvoice"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popCloseInvoice.title")}
+                        container={"#root"} 
+                        width={'1200'}
+                        height={'360'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdPopCloseInvoice"} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            showBorders={true}
+                                            selection={{mode:"multiple"}}
+                                            onSelectionChanged={(e)=>
+                                            {
+                                                e.component.refresh(true);
+                                            }}
+                                            >
+                                                <Column dataField="REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
+                                                <Column dataField="REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
+                                                <Column dataField="DOC_TYPE" caption={this.lang.t("popDeptCreditList.clmTypeName")} width={100}/>
+                                                <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
+                                                <Column dataField="AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
+                                                <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
+                                                <Summary calculateCustomSummary={(options) =>
+                                                {
+                                                    if (options.name === 'SelectedRowsSummary') 
+                                                    {
+                                                        if (options.summaryProcess === 'start') 
+                                                        {
+                                                            options.totalValue = 0;
+                                                        } 
+                                                        else if (options.summaryProcess === 'calculate') 
+                                                        {
+                                                            if (options.component.isRowSelected(options.value)) 
+                                                            {
+                                                                options.totalValue += Number(options.value.PAYING_DAY).round(2);
+                                                            }
+                                                        }
+                                                    }
+                                                }}>
+                                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency:Number.money.code,precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                                                </Summary>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>     
             </div>
         )
