@@ -363,6 +363,8 @@ export const langDe =
         pos_02_015 : "Kundenbasiertes Verkaufsbericht",
         pos_02_016 : "Bericht über Punktänderungen",  
         pos_02_017 : "Verkaufsbericht nach Zeitintervallen",
+        pos_02_018 : "Bericht über Freie Rabatte",
+        pos_02_019 : "Monatlicher Artikelgruppenverkaufsbericht",
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         pos_03_002: "Auslosung",
