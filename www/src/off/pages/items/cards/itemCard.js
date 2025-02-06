@@ -2920,38 +2920,38 @@ export default class itemCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
                                     {
-                                                let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
-                                                let tmpEmptyStat = true
-                                                
-                                                if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '') != 'undefined')
-                                                {
-                                                    tmpEmptyStat = false;
-                                                    tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '')
-                                                }
-                                                
-                                                tmpEmpty.BARCODE = this.txtPopBarcode.value
-                                                tmpEmpty.TYPE = this.cmbPopBarType.value
-                                                tmpEmpty.UNIT_GUID = this.cmbPopBarUnit.value
-                                                tmpEmpty.UNIT_NAME = this.cmbPopBarUnit.displayValue
-                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                        let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
+                                        let tmpEmptyStat = true
+                                        
+                                        if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '') != 'undefined')
+                                        {
+                                            tmpEmptyStat = false;
+                                            tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '')
+                                        }
+                                        
+                                        tmpEmpty.BARCODE = this.txtPopBarcode.value
+                                        tmpEmpty.TYPE = this.cmbPopBarType.value
+                                        tmpEmpty.UNIT_GUID = this.cmbPopBarUnit.value
+                                        tmpEmpty.UNIT_NAME = this.cmbPopBarUnit.displayValue
+                                        tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
-                                                let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
-                                                if(tmpResult == 2) //KAYIT VAR
-                                                {
-                                                    this.popBarcode.hide(); 
-                                                }
-                                                else if(tmpResult == 1) //KAYIT YOK
-                                                {
-                                                    if(tmpEmptyStat)
-                                                    {
-                                                        this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
-                                                    }
-                                                    this.popBarcode.hide(); 
-                                                }
-                                                else if(tmpResult == 3 && tmpEmptyStat == false)
-                                                {
-                                                    this.itemsObj.itemBarcode.dt()[0].BARCODE = ''
-                                                }
+                                        let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
+                                        if(tmpResult == 2) //KAYIT VAR
+                                        {
+                                            this.popBarcode.hide(); 
+                                        }
+                                        else if(tmpResult == 1) //KAYIT YOK
+                                        {
+                                            if(tmpEmptyStat)
+                                            {
+                                                this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
+                                            }
+                                            this.popBarcode.hide(); 
+                                        }
+                                        else if(tmpResult == 3 && tmpEmptyStat == false)
+                                        {
+                                            this.itemsObj.itemBarcode.dt()[0].BARCODE = ''
+                                        }
                                     })}
                                     onValueChanged={(e)=>
                                     {

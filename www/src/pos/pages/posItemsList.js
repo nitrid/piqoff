@@ -1,5 +1,6 @@
 import React from "react";
 import App from "../lib/app.js";
+import moment from "moment";
 
 import { dataset,datatable } from "../../core/core.js";
 import {itemsCls,unitCls} from "../../core/cls/items.js";
@@ -9,13 +10,16 @@ import Toolbar from 'devextreme-react/toolbar';
 
 import NbButton from "../../core/react/bootstrap/button.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
-import NdTextBox from "../../core/react/devex/textbox.js";
+import NdTextBox,{ Validator,RequiredRule } from "../../core/react/devex/textbox.js";
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
 import NdPopUp from "../../core/react/devex/popup.js";
 import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NdNumberBox from "../../core/react/devex/numberbox.js";
 import NdCheckBox from "../../core/react/devex/checkbox.js";
 import NdTabPanel from '../../core/react/devex/tabpanel';
+import NdDatePicker from "../../core/react/devex/datepicker.js";
+import NdButton from "../../core/react/devex/button.js";
+import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 
 export default class posItemsList extends React.PureComponent
 {
@@ -34,8 +38,11 @@ export default class posItemsList extends React.PureComponent
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
         this.onItemRendered = this.onItemRendered.bind(this)
+        this.onSave = this.onSave.bind(this)
+        this.onDelete = this.onDelete.bind(this)
     }
     async init()
+
     {
         this.itemsObj.clearAll();
         this.itemsObj.addEmpty();
@@ -67,6 +74,8 @@ export default class posItemsList extends React.PureComponent
             this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
             this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
         }
+
+        await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
     }
     async componentDidMount()
     {
@@ -85,7 +94,6 @@ export default class posItemsList extends React.PureComponent
     }
     async onItemRendered(e)
     {
-        console.log(this.grdPrice)
         if(e.itemData.title == this.lang.t("posItemsList.popItemEdit.tabTitlePrice") && typeof this.grdPrice != 'undefined')
         {
             await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -98,6 +106,126 @@ export default class posItemsList extends React.PureComponent
         {
             await this.grdBarcode.dataRefresh({source:this.itemsObj.itemBarcode.dt('ITEM_BARCODE')});
         }
+    }
+    async onSave()
+    {
+        let tmpMsgType = ""
+
+        if(this.itemsObj.dt()[0].CODE == "")
+        {
+            tmpMsgType = "msg1"
+        }
+        if(this.itemsObj.dt()[0].NAME == "")
+        {
+            tmpMsgType = "msg2"
+        }
+
+        if(tmpMsgType != "")
+        {
+            let tmpConfObj =
+            {
+                id:"msgItemValidation",showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemValidation.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgItemValidation.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgItemValidation." + tmpMsgType)}</div>)
+            }
+            await dialog(tmpConfObj);
+            return;
+        }
+        
+        //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
+        let tmpData = this.prmObj.filter({ID:'ItemGrpForNotPriceSave'}).getValue()
+        if(typeof tmpData == 'undefined' || !Array.isArray(tmpData) || typeof tmpData.find(x => x == this.cmbItemGrp.value) == 'undefined')
+        {
+            if(this.itemsObj.dt('ITEM_PRICE').length == 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgPriceSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgPriceSave.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgPriceSave.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;
+            }
+        }
+        //************************************ */
+        let tmpConfObj =
+        {
+            id:'msgSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgSave.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgSave.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgSave.msg")}</div>)
+        }
+
+        let pResult = await dialog(tmpConfObj);
+
+        if(pResult == 'btn01')
+        {
+            let tmpConfObj1 =
+            {
+                id:'msgSaveResult',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgSaveResult.btn01"),location:'after'}],
+            }
+
+            this.itemsObj.dt('ITEMS')[0].SNAME = this.itemsObj.dt('ITEMS')[0].NAME.substring(0,32)
+            console.log(this.itemsObj.dt('ITEMS')[0])
+            if((await this.itemsObj.save()) == 0)
+            {         
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("posItemsList.popItemEdit.msgSaveResult.msgSuccess")}</div>)
+                await dialog(tmpConfObj1);
+            }
+            else
+            {
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("posItemsList.popItemEdit.msgSaveResult.msgFailed")}</div>)
+                await dialog(tmpConfObj1);
+            }
+        }
+    }
+    async onDelete()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT TOP 1 * FROM POS_SALE_VW_01 WHERE ITEM_GUID = @CODE ",
+
+            param : ['CODE:string|50'],
+            value : [this.itemsObj.dt()[0].GUID]
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        
+        if(tmpData.result.recordset.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgNotDelete.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgNotDelete.msg")}</div>)
+            }
+            await dialog(tmpConfObj); 
+            return
+        }
+
+        let tmpConfObj =
+        {
+            id:'msgDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgDelete.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgDelete.msg")}</div>)
+        }
+
+        let pResult = await dialog(tmpConfObj);
+
+        if(pResult == 'btn01')
+        {
+            this.itemsObj.dt('ITEMS').removeAt(0)
+            await this.itemsObj.dt('ITEMS').delete();
+            this.init(); 
+        }
+    }
+    async getItem(pCode)
+    {
+        this.itemsObj.clearAll();
+
+        await this.itemsObj.load({CODE:pCode})
+        await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
     }
     render()
     {
@@ -120,11 +248,9 @@ export default class posItemsList extends React.PureComponent
                             {
                                 await this.popItemEdit.show()
                                 this.init();
-                                console.log(this)
                             }}>
                                 <i className="fa-regular fa-file" style={{fontSize:'20px'}}></i>
                             </NbButton>
-
                         </div>
                     </div>
                     <div className="row pt-2">
@@ -179,12 +305,14 @@ export default class posItemsList extends React.PureComponent
                             width={"100%"}
                             dbApply={false}
                             selection={{mode:"single"}}
-                            onRowDblClick={(e)=>
+                            onRowDblClick={async(e)=>
                             {
-                                this.popItemEdit.show()
+                                await this.popItemEdit.show()
+                                this.getItem(e.data.CODE)
                             }}
                             onRowPrepared={(e)=>
                             {
+
                                 if(e.rowType == "header")
                                 {
                                     e.rowElement.style.fontWeight = "bold";    
@@ -215,22 +343,36 @@ export default class posItemsList extends React.PureComponent
                     >
                         <div style={{display:'flex',justifyContent:'end'}}>
                             <div className="px-1">
+                                <NbButton id={"btnNew"} parent={this} className="form-group btn btn-primary btn-block" 
+                                style={{height:"50px",width:"50px"}}
+                                onClick={async() => 
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNewItem',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgNewItem.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgNewItem.msg")}</div>)
+                                    }
+                                    let tmpResult = await dialog(tmpConfObj);
+                                    if(tmpResult == "btn01")
+                                    {
+                                        this.init();
+                                    }
+                                }}>
+                                    <i className="fa-regular fa-file" style={{fontSize:'20px'}}></i>
+                                </NbButton>
+                            </div>
+                            <div className="px-1">
                                 <NbButton id={"btnSave"} parent={this} className="form-group btn btn-success btn-block" 
                                 style={{height:"50px",width:"50px"}}
-                                onClick={() => 
-                                {
-                                    this.popItemEdit.show()
-                                }}>
+                                onClick={this.onSave}>
                                     <i className="fa-regular fa-floppy-disk" style={{fontSize:'20px'}}></i>
                                 </NbButton>
                             </div>
                             <div className="px-1">
                                 <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block" 
                                 style={{height:"50px",width:"50px"}}
-                                onClick={() => 
-                                {
-                                    this.popItemEdit.show()
-                                }}>
+                                onClick={this.onDelete}>
                                     <i className="fa-regular fa-trash-can" style={{fontSize:'20px'}}></i>
                                 </NbButton>
                             </div>
@@ -243,7 +385,7 @@ export default class posItemsList extends React.PureComponent
                                     </div>
                                     <div className="col-8 p-0">
                                         <NdTextBox id="popTxtRef" parent={this} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} simple={true}
-                                        upper={true}
+                                        selectAll={false}
                                         button=
                                         {
                                             [
@@ -277,13 +419,36 @@ export default class posItemsList extends React.PureComponent
                                         }
                                         onChange={(async()=>
                                         {
-                                            let tmpResult = await this.checkItem(this.popTxtRef.value)
-                                            if(tmpResult == 3)
+                                            let tmpQuery = 
                                             {
-                                                this.popTxtRef.value = "";
+                                                query : `SELECT TOP 1 * FROM ITEMS WHERE CODE = '${this.popTxtRef.value}'`
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery)
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgItemExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgItemExist.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgItemExist.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgItemExist.msg")}</div>)
+                                                }
+                                                let tmpResult = await dialog(tmpConfObj);
+                                                if(tmpResult == "btn01")
+                                                {
+                                                    this.getItem(tmpData.result.recordset[0].CODE)
+                                                }
+                                                else
+                                                {
+                                                    this.init();
+                                                }
                                             }
                                         }).bind(this)}
-                                        selectAll={false}                        
+
+
+                                        onValueChanged={(e)=>
+                                        {
+                                            console.log(e)
+                                        }}
                                         >     
                                         </NdTextBox>      
                                     </div>
@@ -372,7 +537,15 @@ export default class posItemsList extends React.PureComponent
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                        data={{source:
+                                        {
+                                            select:
+                                            {
+                                                query : `SELECT '' AS CODE,'' AS NAME, '00000000-0000-0000-0000-000000000000' AS GUID
+                                                        UNION ALL SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC`
+                                            },
+                                            sql:this.core.sql
+                                        }}}
                                         />
                                     </div>
                                 </div>
@@ -471,112 +644,62 @@ export default class posItemsList extends React.PureComponent
                                                 height={'100%'} 
                                                 width={'100%'}
                                                 dbApply={false}
-                                                onCellPrepared={(e) =>
+                                                selection={{mode: 'single'}}
+                                                onToolbarPreparing={(e)=>
                                                 {
-                                                    if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
+                                                    e.toolbarOptions.items.unshift(
                                                     {
-                                                        e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
-                                                    }
-                                                    if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
-                                                    {
-                                                        e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
-                                                    }
-                                                }}
-                                                onRowUpdating={async(e)=>
-                                                {
-                                                    let tmpCancel = false
-                                                    
-                                                    if(typeof e.newData.FINISH_DATE != 'undefined')
-                                                    {
-                                                        let tmpFinish = e.newData.FINISH_DATE
-                                                        let numbersFinish = tmpFinish.match(/[0-9]/g); 
-                                                        if(numbersFinish.length > 17)
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
                                                         {
-                                                            tmpCancel = true
-                                                        }
-                                                    }
-                                                    if(typeof e.newData.START_DATE != 'undefined')
-                                                    {
-                                                        let tmpStart = e.newData.START_DATE
-                                                        let numbersStart = tmpStart.match(/[0-9]/g); 
-                                                        if(numbersStart.length > 17)
-                                                        {
-                                                            tmpCancel = true
-                                                        }
-                                                    }
-
-                                                    if (tmpCancel) 
-                                                    {
-                                                        e.cancel = true;
-                                                        e.component.cancelEditData()  
-                                                        let tmpConfObj1 = {
-                                                            id: 'msgDateInvalid',
-                                                            showTitle: true,
-                                                            title: this.t("msgDateInvalid.title"),
-                                                            showCloseButton: true,
-                                                            width: '500px',
-                                                            height: '200px',
-                                                            button: [{id: "btn01", caption: this.t("msgDateInvalid.btn01"), location: 'after'}],
-                                                            content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgDateInvalid.msg")}</div>)
-                                                        };
-                                                        
-                                                        await dialog(tmpConfObj1);
-                                                    }
-                                                    if(typeof e.newData.PRICE != 'undefined')
-                                                    {
-                                                        //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                        if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE)
-                                                        {
-                                                            e.cancel = true;
-                                                            e.component.cancelEditData()  
-                                                            let tmpConfObj =
+                                                            icon: 'minus',
+                                                            onClick: async () => 
                                                             {
-                                                                id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
+                                                                let tmpData = this.grdPrice.getSelectedData();
+                                                                if(tmpData.length > 0)
+                                                                {
+                                                                    this.itemsObj.itemPrice.dt().removeAt(this.itemsObj.itemPrice.dt().indexOf(tmpData[0]));
+                                                                    await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
+                                                                }
                                                             }
-                                                            
-                                                            await dialog(tmpConfObj);  
                                                         }
-                                                        //********************************** */
-                                                    }
+                                                    });
+                                                    e.toolbarOptions.items.unshift(
+                                                    {
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
+                                                        {
+                                                            icon: 'add',
+                                                            onClick: async () => 
+                                                            {
+                                                                this.dtPopPriStartDate.value = "1970-01-01"
+                                                                this.dtPopPriEndDate.value = "1970-01-01"
+                                                                this.txtPopPriQuantity.value = 1
+                                                                this.txtPopPriPrice.value = 0
+                                                                
+                                                                this.editMode = false;
+                                                                this.editRow = null;
+
+                                                                this.popPrice.show();
+                                                            }
+                                                        }
+                                                    });
                                                 }}
-                                                onRowUpdated={async(e)=>
+                                                onRowDblClick={(e)=>
                                                 {
-                                                    if(typeof e.data.PRICE != 'undefined')
-                                                    {
-                                                        if(e.key.LIST_VAT_TYPE == 0)
-                                                        {
-                                                            e.key.PRICE_TTC = e.data.PRICE
-                                                            e.key.PRICE_HT = Number(e.data.PRICE).rateInNum(this.itemsObj.dt("ITEMS")[0].VAT,3)
-                                                        }
-                                                        else
-                                                        {
-                                                            e.key.PRICE_HT = e.data.PRICE
-                                                            e.key.PRICE_TTC =  Number(e.data.PRICE).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
-                                                        }
-                                                        e.key.MARGIN =  Number(((e.key.PRICE_HT  / this.txtCostPrice.value)) * 100).round(2)
-                                                    }
-                                                    if(typeof e.data.MARGIN != 'undefined')
-                                                    {
+                                                    this.dtPopPriStartDate.value = e.data.START_DATE;
+                                                    this.dtPopPriEndDate.value = e.data.FINISH_DATE;
+                                                    this.txtPopPriQuantity.value = e.data.QUANTITY;
+                                                    this.txtPopPriPrice.value = e.data.PRICE;
+                                                    this.editMode = true;
+                                                    this.editRow = e.data;
                                                     
-                                                        if(e.key.LIST_VAT_TYPE == 0)
-                                                        {
-                                                            e.key.PRICE_HT =   Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100) )).round(3);
-                                                            e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
-                                                            e.key.PRICE =  e.key.PRICE_TTC
-                                                        }
-                                                        else
-                                                        {
-                                                            e.key.PRICE_HT =  Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100))).round(3);
-                                                            e.key.PRICE_TTC = Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
-                                                            e.key.PRICE =  e.key.PRICE_HT
-                                                        }
-                                                    }
+                                                    this.popPrice.show();
                                                 }}
                                                 >
                                                     <Paging defaultPageSize={6} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                     <Column dataField="START_DATE" caption={this.lang.t("posItemsList.popItemEdit.grdPrice.clmStartDate")} dataType="date" 
                                                     editorOptions={{value:null}}
                                                     cellRender={(e) => 
@@ -602,8 +725,6 @@ export default class posItemsList extends React.PureComponent
                                                     }}/>
                                                     <Column dataField="QUANTITY" caption={this.lang.t("posItemsList.popItemEdit.grdPrice.clmQuantity")}/>
                                                     <Column dataField="PRICE" caption={this.lang.t("posItemsList.popItemEdit.grdPrice.clmPrice")} dataType="number" format={Number.money.sign +"##0.000"}/>
-                                                    <Column dataField="PRICE_HT" caption={this.lang.t("posItemsList.popItemEdit.grdPrice.clmPriceHT")} dataType="number" format={Number.money.sign +"##0.000"} allowEditing={false}/>
-                                                    <Column dataField="PRICE_TTC" caption={this.lang.t("posItemsList.popItemEdit.grdPrice.clmPriceTTC")} dataType="number" format={Number.money.sign +"##0.000"} allowEditing={false}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -619,28 +740,88 @@ export default class posItemsList extends React.PureComponent
                                                 height={'100%'} 
                                                 width={'100%'}
                                                 dbApply={false}
-                                                onRowRemoving={async (e)=>
+                                                selection={{mode: 'single'}}
+                                                onToolbarPreparing={(e)=>
                                                 {
-                                                    if(e.key.TYPE != 2)
+                                                    e.toolbarOptions.items.unshift(
                                                     {
-                                                        e.cancel = true
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
+                                                        {
+                                                            icon: 'minus',
+                                                            onClick: async () => 
+                                                            {
+                                                                let tmpData = this.grdUnit.getSelectedData();
+                                                                if(tmpData.length > 0)
+                                                                {
+                                                                    if(tmpData[0].TYPE != 2)
+                                                                    {
+                                                                        let tmpConfObj =
+                                                                        {
+                                                                            id:'msgUnitRowNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                            button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.btn01"),location:'after'}],
+                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.msg")}</div>)
+                                                                        }                                                                    
+
+                                                                        dialog(tmpConfObj);
+                                                                        return;
+                                                                    }
+
+                                                                    this.itemsObj.itemUnit.dt().removeAt(this.itemsObj.itemUnit.dt().indexOf(tmpData[0]));
+                                                                    await this.grdUnit.dataRefresh({source:this.itemsObj.itemUnit.dt('ITEM_UNIT')});
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    e.toolbarOptions.items.unshift(
+                                                    {
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
+                                                        {
+                                                            icon: 'add',
+                                                            onClick: async () => 
+                                                            {
+                                                                this.cmbPopUnitName.value = "001"
+                                                                this.txtPopUnitFactor.value = 1
+
+                                                                this.editMode = false;
+                                                                this.editRow = null;
+
+                                                                this.popUnit.show();
+                                                            }
+                                                        }
+                                                    });
+                                                }}
+                                                onRowDblClick={(e)=>
+                                                {
+                                                    if(e.data.TYPE != 2)
+                                                    {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgUnitRowNotDelete',showTitle:true,title:this.t("msgUnitRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgUnitRowNotDelete.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnitRowNotDelete.msg")}</div>)
-                                                        }
-                                                    
+                                                            id:'msgUnitRowNotEdit',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.msg")}</div>)
+                                                        }                                                                    
+
                                                         dialog(tmpConfObj);
-                                                        e.component.cancelEditData()
+                                                        return;
                                                     }
+
+                                                    this.cmbPopUnitName.value = e.data.ID
+                                                    this.txtPopUnitFactor.value = e.data.FACTOR
+
+                                                    this.editMode = true;
+                                                    this.editRow = e.data;
+                                                    
+                                                    this.popUnit.show();
                                                 }}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="TYPE_NAME" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmType")} width={250} allowEditing={false}/>
-                                                    <Column dataField="NAME" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmName")} allowEditing={false}/>
-                                                    <Column dataField="FACTOR" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmFactor")} allowEditing={false}/>
+                                                    <Column dataField="TYPE_NAME" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmType")} width={250}/>
+                                                    <Column dataField="NAME" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmName")}/>
+                                                    <Column dataField="FACTOR" caption={this.lang.t("posItemsList.popItemEdit.grdUnit.clmFactor")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -656,9 +837,64 @@ export default class posItemsList extends React.PureComponent
                                                 height={'100%'} 
                                                 width={'100%'}
                                                 dbApply={false}
+                                                selection={{mode: 'single'}}
+                                                onToolbarPreparing={(e)=>
+                                                {
+                                                    e.toolbarOptions.items.unshift(
+
+                                                    {
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
+                                                        {
+                                                            icon: 'minus',
+                                                            onClick: async () => 
+                                                            {
+                                                                let tmpData = this.grdBarcode.getSelectedData();
+                                                                if(tmpData.length > 0)
+                                                                {
+                                                                    this.itemsObj.itemBarcode.dt().removeAt(this.itemsObj.itemBarcode.dt().indexOf(tmpData[0]));
+                                                                    await this.grdBarcode.dataRefresh({source:this.itemsObj.itemBarcode.dt('ITEM_BARCODE')});
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    e.toolbarOptions.items.unshift(
+                                                    {
+                                                        location: 'after',
+                                                        widget: 'dxButton',
+                                                        options: 
+                                                        {
+                                                            icon: 'add',
+                                                            onClick: async () => 
+                                                            {
+                                                                this.txtPopBarcode.value = ""
+                                                                this.cmbPopBarType.value = "0"
+                                                                this.cmbPopBarUnitType.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
+
+                                                                this.editMode = false;
+                                                                this.editRow = null;
+
+                                                                this.popBarcode.show();
+
+                                                                await this.cmbPopBarUnitType.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
+                                                            }
+                                                        }
+                                                    });
+                                                }}
+                                                onRowDblClick={(e)=>
+                                                {
+                                                    this.txtPopBarcode.value = e.data.BARCODE
+                                                    this.cmbPopBarType.value = e.data.TYPE
+                                                    this.cmbPopBarUnitType.value = e.data.UNIT_GUID
+
+                                                    this.editMode = true;
+                                                    this.editRow = e.data;
+                                                    
+                                                    this.popBarcode.show();
+                                                }}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                     <Column dataField="BARCODE" caption={this.lang.t("posItemsList.popItemEdit.grdBarcode.clmBarcode")} allowEditing={false}/>
                                                     <Column dataField="UNIT_NAME" caption={this.lang.t("posItemsList.popItemEdit.grdBarcode.clmUnit")} allowEditing={false}/>
                                                     <Column dataField="TYPE_NAME" caption={this.lang.t("posItemsList.popItemEdit.grdBarcode.clmType")} allowEditing={false}/>
@@ -669,6 +905,494 @@ export default class posItemsList extends React.PureComponent
                                 </NdTabPanel>
                             </div>
                         </div>
+                    </NdPopUp>
+                </div>
+                {/* Fiyat Popup */}
+                <div>
+                    <NdPopUp id="popPrice" parent={this} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("posItemsList.popItemEdit.popPrice.title")}
+                    container={"#root"} 
+                    width={"500"}
+                    height={"320"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={1} height={'fit-content'} id={"frmPrice"}>
+                            {/* dtPopPriStartDate */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.dtPopPriStartDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}/>
+                            </Item>
+                            {/* dtPopPriEndDate */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.dtPopPriEndDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtPopPriEndDate"}/>
+                            </Item>
+                            {/* txtPopPriQuantity */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.txtPopPriQuantity")} alignment="right" />
+                                <NdTextBox id={"txtPopPriQuantity"} parent={this} simple={true} selectAll={false}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtPopPriQuantity')
+                                                this.keyboardRef.inputName = "txtPopPriQuantity"
+                                                this.keyboardRef.setInput(this.txtPopPriQuantity.value)
+                                            }
+                                        }
+                                    }
+                                ]}>
+                                </NdTextBox>
+                            </Item>
+                            {/* txtPopPriPrice */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.txtPopPriPrice")} alignment="right" />
+                                <NdTextBox id={"txtPopPriPrice"} parent={this} simple={true} selectAll={false}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtPopPriPrice')
+                                                this.keyboardRef.inputName = "txtPopPriPrice"
+                                                this.keyboardRef.setInput(this.txtPopPriPrice.value)
+                                            }
+                                        }
+                                    }
+                                ]}>                                    
+                                </NdTextBox>
+                            </Item>                           
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popPrice.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={async (e)=>
+                                        {
+                                            if(this.txtPopPriQuantity.value == "" || this.txtPopPriQuantity.value == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPriceQuantityEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            if(isNaN(this.txtPopPriQuantity.value))
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPriceQuantityNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            if(this.txtPopPriPrice.value == "" || this.txtPopPriPrice.value == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPriceEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            if(isNaN(this.txtPopPriPrice.value))
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPriceNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            //*********************************** */
+                                            //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
+                                            if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= this.txtPopPriPrice.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgCostPriceValid',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            // BENZER FİYAT KAYIT KONTROLÜ                                               
+                                            let tmpCheckData = this.itemsObj.itemPrice.dt('ITEM_PRICE').where({START_DATE:new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()})
+
+                                            tmpCheckData = tmpCheckData.where({FINISH_DATE:new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()})
+                                            tmpCheckData = tmpCheckData.where({TYPE:0})
+                                            tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
+                                            tmpCheckData = tmpCheckData.where({DEPOT:'00000000-0000-0000-0000-000000000000'})
+                                            tmpCheckData = tmpCheckData.where({LIST_NO:1})
+
+                                            if(this.editMode)
+                                            {
+                                                tmpCheckData = tmpCheckData.where({GUID:{'<>':this.editRow.GUID}})
+                                            }
+
+                                            if(tmpCheckData.length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgCheckPrice',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+
+                                            if(this.editMode)
+                                            {
+                                                let tmpData = this.itemsObj.itemPrice.dt().where({GUID:this.editRow.GUID})
+                                                if(tmpData.length > 0)
+                                                {
+                                                    tmpData[0].START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
+                                                    tmpData[0].FINISH_DATE = new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()
+                                                    tmpData[0].QUANTITY = this.txtPopPriQuantity.value
+                                                    tmpData[0].PRICE = this.txtPopPriPrice.value
+                                                }
+                                                this.popPrice.hide();
+                                            }
+                                            else
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemPrice.empty};
+                                            
+                                                tmpEmpty.TYPE = 0
+                                                tmpEmpty.LIST_NO = 1
+                                                tmpEmpty.TYPE_NAME = 'Satis'
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                tmpEmpty.DEPOT = '00000000-0000-0000-0000-000000000000'
+                                                tmpEmpty.START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
+                                                tmpEmpty.FINISH_DATE = new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()
+                                                tmpEmpty.QUANTITY = this.txtPopPriQuantity.value
+                                                tmpEmpty.PRICE = this.txtPopPriPrice.value
+
+                                                this.itemsObj.itemPrice.addEmpty(tmpEmpty); 
+                                                
+                                                this.popPrice.hide();
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popPrice.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popPrice.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>
+                {/* Birim Popup */}
+                <div>
+                    <NdPopUp id="popUnit" parent={this} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("posItemsList.popItemEdit.popUnit.title")}
+                    container={"#root"} 
+                    width={"500"}
+                    height={"230"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={1} height={'fit-content'} id={"frmUnit"}>
+                            {/* cmbPopUnitName */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popUnit.cmbPopUnitName")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbPopUnitName"
+                                displayExpr="NAME"                       
+                                valueExpr="ID"
+                                value="001"
+                                data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
+                                />
+                            </Item>
+                            {/* txtPopUnitQuantity */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popUnit.txtPopUnitFactor")} alignment="right" />
+                                <NdTextBox id={"txtPopUnitFactor"} parent={this} simple={true} selectAll={false}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtPopUnitFactor')
+                                                this.keyboardRef.inputName = "txtPopUnitFactor"
+                                                this.keyboardRef.setInput(this.txtPopUnitFactor.value)
+                                            }
+                                        }
+                                    }
+                                ]}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popUnit.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={async (e)=>
+                                        {
+                                            if(this.txtPopUnitFactor.value == "" || this.txtPopUnitFactor.value == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgUnitFactorEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            if(isNaN(this.txtPopUnitFactor.value))
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgUnitFactorNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            if(this.editMode)
+
+                                            {
+                                                let tmpData = this.itemsObj.itemUnit.dt().where({GUID:this.editRow.GUID})
+                                                if(tmpData.length > 0)
+                                                {
+                                                    tmpData[0].ID = this.cmbPopUnitName.value
+                                                    tmpData[0].NAME = this.cmbPopUnitName.displayValue
+                                                    tmpData[0].FACTOR = this.txtPopUnitFactor.value
+                                                }
+                                                this.popUnit.hide();
+                                            }
+                                            else
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemUnit.empty};
+
+                                                tmpEmpty.TYPE = 2
+                                                tmpEmpty.TYPE_NAME = 'Condition'
+                                                tmpEmpty.ID = this.cmbPopUnitName.value
+                                                tmpEmpty.NAME = this.cmbPopUnitName.displayValue
+                                                tmpEmpty.FACTOR = this.txtPopUnitFactor.value
+                                                tmpEmpty.WEIGHT = 0
+                                                tmpEmpty.VOLUME = 0
+                                                tmpEmpty.WIDTH = 0
+                                                tmpEmpty.HEIGHT = 0
+                                                tmpEmpty.SIZE = 0
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+
+                                                this.itemsObj.itemUnit.addEmpty(tmpEmpty); 
+                                                this.popUnit.hide();
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popUnit.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popUnit.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>
+                {/* Barkod Popup */}
+                <div>
+                    <NdPopUp id="popBarcode" parent={this} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("posItemsList.popItemEdit.popBarcode.title")}
+                    container={"#root"} 
+                    width={"500"}
+                    height={"270"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={1} height={'fit-content'} id={"frmBarcode"}>
+                            {/* txtPopBarcode */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popBarcode.txtPopBarcode")} alignment="right" />
+                                <NdTextBox id={"txtPopBarcode"} parent={this} simple={true} selectAll={false}
+                                onValueChanged={(e)=>
+                                {
+                                    if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
+                                    {
+                                        this.cmbPopBarType.value = "2"
+                                        return;
+                                    }
+                                    if(e.value.length == 8)
+                                    {                                            
+                                        this.cmbPopBarType.value = "0"
+                                    }
+                                    else if(e.value.length == 13)
+                                    {
+                                        this.cmbPopBarType.value = "1"
+                                    }
+                                    else
+                                    {
+                                        this.cmbPopBarType.value = "2"
+                                    }
+                                }}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtPopBarcode')
+                                                this.keyboardRef.inputName = "txtPopBarcode"
+                                                this.keyboardRef.setInput(this.txtPopBarcode.value)
+                                            }
+                                        }
+                                    }
+                                ]}>
+                                </NdTextBox>
+                            </Item>
+                            {/* cmbPopBarUnitType */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popBarcode.cmbPopBarUnitType")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbPopBarUnitType" displayExpr="NAME" valueExpr="GUID"/>
+                            </Item>
+                            {/* cmbPopBarType */}
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popBarcode.cmbPopBarType")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbPopBarType"
+                                displayExpr="VALUE"                       
+                                valueExpr="ID"
+                                value="0"
+                                data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}
+                                />
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popBarcode.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={async (e)=>
+                                        {
+                                            if(this.txtPopBarcode.value == "")
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgBarcodeEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            let tmpChkBarDt = new datatable();                                        
+                                            tmpChkBarDt.selectCmd =
+                                            {
+
+                                                query : `SELECT * FROM ITEM_BARCODE WHERE BARCODE = '${this.txtPopBarcode.value}'`
+                                            }
+                                            
+                                            await tmpChkBarDt.refresh();
+
+                                            if(tmpChkBarDt.length > 0 || this.itemsObj.itemBarcode.dt().where({BARCODE:this.txtPopBarcode.value}).length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgBarcodeExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            if(this.editMode)
+                                            {
+                                                let tmpData = this.itemsObj.itemUnit.dt().where({GUID:this.editRow.GUID})
+                                                if(tmpData.length > 0)
+                                                {
+                                                    tmpData[0].BARCODE = this.txtPopBarcode.value
+                                                    tmpData[0].TYPE = this.cmbPopBarType.displayValue
+                                                    tmpData[0].UNIT_GUID = this.cmbPopBarUnitType.value
+                                                    tmpData[0].UNIT_NAME = this.cmbPopBarUnitType.displayValue
+                                                }
+                                                this.popBarcode.hide();
+                                            }
+                                            else
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
+
+                                                tmpEmpty.BARCODE = this.txtPopBarcode.value
+                                                tmpEmpty.TYPE = this.cmbPopBarType.value
+                                                tmpEmpty.UNIT_GUID = this.cmbPopBarUnitType.value
+                                                tmpEmpty.UNIT_NAME = this.cmbPopBarUnitType.displayValue
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+
+                                                this.itemsObj.itemBarcode.addEmpty(tmpEmpty); 
+                                                this.popBarcode.hide();
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popBarcode.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popBarcode.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
                     </NdPopUp>
                 </div>
                 <div>

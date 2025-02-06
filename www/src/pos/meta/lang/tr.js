@@ -1068,6 +1068,60 @@ export const langTr =
             tabTitlePrice : "Fiyat",
             tabTitleUnit : "Birim",
             tabTitleBarcode : "Barkod",
+            msgItemValidation :
+            {
+                title : "Dikkat",
+                btn01 : "Tamam",
+                msg1 : "Ürün kodunu boş bırakamazsınız !",
+                msg2 : "Ürün adını boş bırakamazsınız !",
+            },
+            msgPriceSave:
+            {
+                title: "Dikkat",
+                btn01: "Tamam",
+                msg: "Lütfen fiyat giriniz !"
+            },
+            msgNewItem :
+            {
+                title : "Dikkat",
+                btn01 : "Tamam",
+                btn02 : "İptal",
+                msg : "Yeni ürün oluşturmak istediğinize emin misiniz ?"
+            },
+            msgSave:
+            {
+                title: "Dikkat",
+                btn01: "Tamam",
+                btn02: "Vazgeç",
+                msg: "Kayıt etmek istediğinize eminmisiniz !"
+            },
+            msgSaveResult:
+            {
+                title: "Dikkat",
+                btn01: "Tamam",
+                msgSuccess: "Kayıt işleminiz başarılı !",
+                msgFailed: "Kayıt işleminiz başarısız !"
+            },
+            msgDelete:
+            {
+                title: "Dikkat",
+                btn01: "Tamam",
+                btn02: "Vazgeç",
+                msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            },
+            msgNotDelete:
+            {
+                title: "Dikkat",
+                btn01: "Tamam",
+                msg: "Bu ürün işlem gördüğü için silinemez !!"
+            },
+            msgItemExist:
+            {
+                title: "Dikkat",
+                btn01: "Evet",
+                btn02: "Hayır",
+                msg: "Girmiş olduğunuz ürün mevcut. Ürüne gitmek istermisiniz ?"
+            },
             grdPrice :
             {
                 clmStartDate : "Baş. Tarihi",
@@ -1091,8 +1145,111 @@ export const langTr =
             },
             cmbMainUnit : "Ana Birim",
             cmbUnderUnit : "Alt Birim",
-            btnSave : "Kaydet",
-            btnCancel : "İptal"
+            popPrice :
+            {
+                title : "Fiyat",
+                dtPopPriStartDate : "Baş. Tarihi",
+                dtPopPriEndDate : "Bit. Tarihi",
+                txtPopPriQuantity : "Miktar",
+                txtPopPriPrice : "Fiyat",
+                btnSave : "Kaydet",
+                btnCancel : "İptal",
+                msgCheckPrice:
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Benzer kayıt oluşturamazsınız !"
+                },
+                msgCostPriceValid:
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Lütfen alış fiyatından yüksek fiyat giriniz !"
+                },
+                msgPriceAdd:
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Lütfen gerekli alanları doldurunuz !"
+                },
+                msgPriceEmpty :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Fiyat alanı boş bırakılamaz yada sıfır olamaz !"
+                },
+                msgPriceNotNumber :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Fiyat alanı sayısal bir değer olmalıdır !"
+                },
+                msgPriceQuantityEmpty :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Miktar alanı boş bırakılamaz yada sıfır olamaz !"
+                },
+                msgPriceQuantityNotNumber :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Miktar alanı sayısal bir değer olmalıdır !"
+                }
+            },
+            popUnit :
+            {
+                title : "Birim",
+                cmbPopUnitName : "Birim",
+                txtPopUnitFactor : "Çarpan",
+                btnSave : "Kaydet",
+                btnCancel : "İptal",
+                msgUnitRowNotDelete :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Ana birim yada Alt birim i silemezsiniz !"
+                },
+                msgUnitRowNotEdit :
+                {
+                    title: "Dikkat",
+                    btn01: "Tamam",
+                    msg: "Ana birim yada Alt birim i düzenleyemezsiniz !"
+                },
+                msgUnitFactorEmpty :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Çarpan alanı boş bırakılamaz yada sıfır olamaz !"
+                },
+                msgUnitFactorNotNumber :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Çarpan alanı sayısal bir değer olmalıdır !"
+                }
+            },
+            popBarcode :
+            {
+                title : "Barkod",
+                txtPopBarcode : "Barkod",
+                cmbPopBarType : "Tip",
+                cmbPopBarUnitType : "Birim",
+                btnSave : "Kaydet",
+                btnCancel : "İptal",
+                msgBarcodeExist :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Bu barkod zaten mevcut !"
+                },
+                msgBarcodeEmpty :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Barkod alanı boş bırakılamaz !"
+                }
+            }
         }
     }
 }

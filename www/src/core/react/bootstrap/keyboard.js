@@ -175,7 +175,7 @@ export default class NbKeyboard extends NbBase
                 boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
                 padding: '10px',
                 width: '100%'
-            } : {}}>
+                } : {}}>
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
                 onChangeAll={(inputs) =>
