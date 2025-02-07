@@ -37,6 +37,8 @@ export default class salesOrdList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnGrdPrint = this._btnGrdPrint.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -300,6 +302,17 @@ export default class salesOrdList extends React.PureComponent
             //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
             // }
         });
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     render()
     {
