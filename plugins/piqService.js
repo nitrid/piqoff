@@ -138,14 +138,14 @@ class piqService
 
             let tmpQuantityUpdateQuery = 
             {
-                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.dbo.GETDATE())) ",
+                query : "UPDATE ITEM_QUANTITY SET QUANTITY = (SELECT dbo.FN_DEPOT_QUANTITY2(ITEM,DEPOT,dbo.GETDATE())) ",
             }
 
             await core.instance.sql.execute(tmpQuantityUpdateQuery)
             
             let tmpBalanceUpdateQuery = 
             {
-                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.dbo.GETDATE())) ",
+                query : "UPDATE ACCOUNT_BALANCE SET BALANCE = (SELECT [dbo].[FN_CUSTOMER_BALANCE](ACCOUNT_GUID,dbo.GETDATE())) ",
             }
         
             await core.instance.sql.execute(tmpBalanceUpdateQuery)
