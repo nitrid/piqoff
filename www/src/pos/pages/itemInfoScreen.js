@@ -98,7 +98,7 @@ export default class itemInfoScreen extends React.PureComponent
                 param : ['CODE:string|25','LIST_NO:int'],
                 value: [pCode,this.pricingListNo],
             }
-            await tmpDt.refresh();            
+            await tmpDt.refresh();     
             resolve(tmpDt)
         });
     }
@@ -114,7 +114,7 @@ export default class itemInfoScreen extends React.PureComponent
                     splash : false,
                     name : tmpItemsDt[0].NAME,
                     price : Number(tmpItemsDt[0].PRICE).toFixed(2) + Number.money.sign + " / " + tmpItemsDt[0].UNIT_NAME,
-                    under_unit : (Number(tmpItemsDt[0].UNDER_UNIT_FACTOR) / Number(tmpItemsDt[0].PRICE)).toFixed(2) + Number.money.sign + " / " + Number(tmpItemsDt[0].UNDER_UNIT_FACTOR).toFixed(3) + tmpItemsDt[0].UNDER_UNIT_SYMBOL,
+                    under_unit : (Number(tmpItemsDt[0].PRICE) / Number(tmpItemsDt[0].UNDER_UNIT_FACTOR)).toFixed(2) + Number.money.sign + " / " + "1 " + tmpItemsDt[0].UNDER_UNIT_SYMBOL,
                     itemImg : tmpItemsDt[0].IMAGE,
                     timeout : this.timeout
                 })
