@@ -34,7 +34,7 @@ if [ ! -f "$FONT_DIR/arial.ttf" ]; then
     FONTS="arial32.exe arialb32.exe comic32.exe courie32.exe georgi32.exe impact32.exe times32.exe trebuc32.exe verdan32.exe webdin32.exe"
     
     for font in $FONTS; do
-        echo "İndiriliyor: $font"
+        echo "Indiriliyor: $font"
         wget -q "https://downloads.sourceforge.net/project/corefonts/the%20fonts/final/$font"
         cabextract -q -d "$FONT_DIR" "$font"
     done
