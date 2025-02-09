@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -86,6 +86,8 @@ export default class itemCard extends React.PureComponent
         this._onItemRendered = this._onItemRendered.bind(this)
         this.taxSugarCalculate = this.taxSugarCalculate.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
 
         this.extraCostData = new datatable
@@ -867,6 +869,17 @@ export default class itemCard extends React.PureComponent
         {
             return false
         }
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPriceState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdPriceState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     render()
     {           
@@ -1921,6 +1934,8 @@ export default class itemCard extends React.PureComponent
                                                 }
                                             }}
                                             >
+                                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPrice"}/>                                
+                                                <ColumnChooser enabled={true} />  
                                                 <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="LIST_NO" caption={this.t("grdPrice.clmListNo")} width={60} allowEditing={false}/>
@@ -2770,6 +2785,7 @@ export default class itemCard extends React.PureComponent
                                                 
                                                     tmpEmpty.TYPE = 0
                                                     tmpEmpty.LIST_NO = this.cmbPopPriListNo.value
+                                                    tmpEmpty.LIST_NAME = this.cmbPopPriListNo.displayValue
                                                     tmpEmpty.TYPE_NAME = 'Satis'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmpty.DEPOT = this.cmbPopPriDepot.value

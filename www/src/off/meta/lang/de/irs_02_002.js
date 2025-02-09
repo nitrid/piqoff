@@ -448,13 +448,15 @@ const irs_02_002 =
     txtDiscountPer1 : "1. Rabattprozentsatz",
     txtDiscountPer2 : "2. Rabattprozentsatz",
     txtDiscountPer3 : "3. Rabattprozentsatz",
+    btnSave: "Speichern",
     popDetail:
     {
         title: "Dokumentinhalt",
         count: "Gesamtzeilen",
         quantity: "Gesamtmenge",
         quantity2: "2. Einheitsmenge",
-        margin : "Marge"
+        margin : "Marge",
+        explanation: "Erklärung"
     },
     msgCustomerLock: 
     {

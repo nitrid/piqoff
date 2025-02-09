@@ -379,13 +379,6 @@ const irs_02_004 =
         btnSend : "Envoyer",
         cmbMailAddress : "Adresse E-mail de l'Expéditeur" // BAK
     },
-    msgMailSendResult:
-    {
-        title: "Attention",   
-        btn01: "OK",   
-        msgSuccess: "Mail envoyé avec succès  !",   
-        msgFailed: "Echec envoi Mail  !"   
-    },
     msgDiscountEntry : 
     {   
         title : "Saisie du montant de remise",  
@@ -409,5 +402,6 @@ const irs_02_004 =
         btn01: "OK", //BAK
         msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
     },
+
 }
 export default irs_02_004

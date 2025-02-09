@@ -420,13 +420,16 @@ const irs_02_002 =
     txtDiscountPer1 : "1. İndirim Oranı",
     txtDiscountPer2 : "2. İndirim Oranı",
     txtDiscountPer3 : "3. İndirim Oranı",
+    btnSave: "Kaydet",
     popDetail:
+
     {
         title: "Evrak İçeriği",
         count: "Toplam Satır",
         quantity: "Toplam Miktar",
         quantity2: "2. Birim Toplamı ",
-        margin : "Marj"
+        margin : "Marj",
+        explanation: "Açıklama"
     },
     msgCustomerLock:
     {

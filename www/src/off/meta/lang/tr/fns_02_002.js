@@ -152,6 +152,10 @@ const fns_02_002 =
         title: "Havale Girişi",
         btnApprove : "Ekle"
     },
+    popCloseInvoice : 
+    {
+        title: "Ödeme Yapılan Faturalar",
+    },
     validRef :"Seri Boş Geçilemez",
     validRefNo : "Sıra Boş Geçilemez",
     validDepot : "Depo Seçmelisiniz",

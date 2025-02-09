@@ -434,6 +434,7 @@ const irs_02_006 =
         btn01 : "Oui", 
         btn02 : "Non", 
         title : "Attention" 
-    },
+    },   
+
 }
 export default irs_02_006

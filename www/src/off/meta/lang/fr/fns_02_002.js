@@ -142,6 +142,10 @@ const fns_02_002 =
         title: "Saisi Virement",
         btnApprove : "Ajouter"
     },
+    popCloseInvoice : 
+    {
+        title: "Factures Payées",
+    },
     validRef :"La référence ne peut pas être vide",
     validRefNo : "Le numéro de référence ne peut pas être vide",
     validDepot : "Vous devez choisir l'entrepôt",
