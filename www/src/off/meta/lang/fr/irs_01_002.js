@@ -18,6 +18,13 @@ const irs_01_002 =
         clmTypeName : "Type",
         clmGenusName : "Genre"
     },
+    popDesign :
+    {
+        title : "Choix Dizayn",
+        design : "Choix Dizayn",
+        btnPrint : "Imprimer",
+        btnCancel : "Fermer"
+    },
     grdSlsDisList: 
     {
         clmRef: "Référence",

@@ -1133,6 +1133,65 @@ export default class DocBase extends React.PureComponent
             }
         }
     }
+    async priceListChange()
+    {
+        let tmpConfObj1 =
+        {
+            id:'msgPriceListChange',showTitle:true,title:this.lang.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgPriceListChange.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceListChange.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgPriceListChange.msg")}</div>)
+        }
+
+        let pResult = await dialog(tmpConfObj1);
+        
+        if(pResult == 'btn01')
+        {
+            for (let i = 0; i < this.docDetailObj.dt().length; i++) 
+            {
+                let tmpDepot = typeof this.cmbDepot != 'undefined' ? this.cmbDepot.value : '00000000-0000-0000-0000-000000000000'
+                let tmpCustomer = '00000000-0000-0000-0000-000000000000'
+                let tmpListNo = typeof this.cmbPricingList != 'undefined' ? this.cmbPricingList.value : 1
+                if(this.type == 0)
+                {
+                    tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].OUTPUT : '00000000-0000-0000-0000-000000000000'
+                }
+                else
+                {
+                    tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
+                }
+                let priceType = 0
+                if(this.docObj.dt()[0].REBATE == 0)
+                {
+                    priceType = this.type == 0 ? 1 : 0
+                }
+                else
+                {
+                    priceType = this.type == 0 ? 0 : 1
+                }
+                this.docDetailObj.dt()[i].PRICE = await this.getPrice(this.docDetailObj.dt()[i].ITEM,this.docDetailObj.dt()[i].QUANTITY,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
+                this.docDetailObj.dt()[i].TOTALHT = Number(Number(parseFloat((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY)) - (parseFloat(this.docDetailObj.dt()[i].DISCOUNT))).toFixed(3)).round(2)
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                {
+                    this.docDetailObj.dt()[i].VAT = parseFloat(((((this.docDetailObj.dt()[i].TOTALHT) - (parseFloat(this.docDetailObj.dt()[i].DOC_DISCOUNT))) * (this.docDetailObj.dt()[i].VAT_RATE) / 100))).round(6);
+                }
+                else
+                {
+                    this.docDetailObj.dt()[i].VAT = 0
+                    this.docDetailObj.dt()[i].VAT_RATE = 0
+                }
+                this.docDetailObj.dt()[i].AMOUNT = parseFloat((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY).toFixed(3)).round(2)
+                this.docDetailObj.dt()[i].TOTAL = Number(((this.docDetailObj.dt()[i].TOTALHT - this.docDetailObj.dt()[i].DOC_DISCOUNT) + this.docDetailObj.dt()[i].VAT)).round(2)
+
+                let tmpMargin = (this.docDetailObj.dt()[i].TOTAL - this.docDetailObj.dt()[i].VAT) - (this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY)
+                let tmpMarginRate = (tmpMargin /(this.docDetailObj.dt()[i].TOTAL - this.docDetailObj.dt()[i].VAT)) * 100
+                this.docDetailObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                this.docDetailObj.dt()[i].SUB_PRICE = Number(parseFloat((this.docDetailObj.dt()[i].PRICE).toFixed(4)) / this.docDetailObj.dt()[i].SUB_FACTOR).round(2)
+               
+            }
+        
+            this.calculateTotal()
+        }
+    }
     render()
     {
         return(

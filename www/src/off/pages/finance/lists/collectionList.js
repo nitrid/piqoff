@@ -334,6 +334,7 @@ export default class collectionList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdColList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -341,8 +342,9 @@ export default class collectionList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 
@@ -453,7 +455,7 @@ export default class collectionList extends React.PureComponent
                                                                 (SELECT TOP 1 AMOUNT FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS AMOUNT,
                                                                 ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
 
-                                                                FROM DOC_CUSTOMER_VW_01 WHERE GUID IN (SELECT PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT1 WHERE DEPT1.PAID_DOC IN ( SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC IN (SELECT GUID FROM DOC_CUSTOMER_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200 AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')))) AND ISNULL((SELECT TOP 1 TYPE FROM  DOC_CUSTOMER_VW_01 where DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0)
+                                                                FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND  GUID IN (SELECT PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT1 WHERE DEPT1.PAID_DOC IN ( SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC IN (SELECT GUID FROM DOC_CUSTOMER_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200 AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')))) AND ISNULL((SELECT TOP 1 TYPE FROM  DOC_CUSTOMER_VW_01 where DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0)
                                                                 `,
                                                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]

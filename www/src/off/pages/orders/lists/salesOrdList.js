@@ -7,11 +7,12 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem,StateStoring,ColumnChooser,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -33,22 +34,11 @@ export default class salesOrdList extends React.PureComponent
         this.printGuid = ''
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsOrdList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsOrdList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOrdList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsOrdList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsOrdList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsOrdList.clmTotal")},
-        ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
         this._btnGrdPrint = this._btnGrdPrint.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -59,72 +49,9 @@ export default class salesOrdList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
         this._btnGetClick()
-    }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsOrdList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsOrdList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
     async _btnGetClick()
     {
@@ -146,7 +73,7 @@ export default class salesOrdList extends React.PureComponent
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " +
                                 " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC", 
                                 param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                                value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
+                                value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -180,6 +107,7 @@ export default class salesOrdList extends React.PureComponent
                                 "SUM(DISCOUNT) as DISCOUNT,    " +
                                 "MAX(SHIPMENT_DATE) as SHIPMENT_DATE,    " +
                                 "(SELECT TOP 1 VAT_ZERO FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as VAT_ZERO,    " +
+                                "(SELECT TOP 1 ADDRESS FROM DOC_VW_01 WHERE DOC_VW_01.GUID = MAX(DOC_ORDERS_VW_01.DOC_GUID)) as ADDRESS,    " +
                                 "SUM(DOC_DISCOUNT) as DOC_DISCOUNT,    " +  
                                 "SUM(DOC_DISCOUNT_1) as DOC_DISCOUNT_1,    " +
                                 "SUM(DOC_DISCOUNT_2) as DOC_DISCOUNT_2,    " +
@@ -198,7 +126,7 @@ export default class salesOrdList extends React.PureComponent
                                 ") AS TMP WHERE PEND_QUANTITY > 0 AND (( MAIN_GROUP_CODE = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = ''))" +
                                 "ORDER BY DOC_DATE DESC,REF_NO DESC   ",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbMainGrp.value]
+                        value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
                     sql : this.core.sql
                 }
@@ -241,18 +169,10 @@ export default class salesOrdList extends React.PureComponent
                 tmpDoc.REBATE = 0
                 tmpDoc.INPUT = this.grdSlsOrdList.getSelectedData()[i].INPUT
                 tmpDoc.OUTPUT = this.grdSlsOrdList.getSelectedData()[i].OUTPUT
-                tmpDoc.AMOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].AMOUNT).round(2)
-                tmpDoc.VAT = Number(this.grdSlsOrdList.getSelectedData()[i].VAT).round(2)
                 tmpDoc.VAT_ZERO = this.grdSlsOrdList.getSelectedData()[i].VAT_ZERO
-                tmpDoc.TOTALHT = Number(this.grdSlsOrdList.getSelectedData()[i].TOTALHT).round(2)   
-                tmpDoc.TOTAL = Number(this.grdSlsOrdList.getSelectedData()[i].TOTAL).round(2)
-                tmpDoc.DOC_DISCOUNT = Number(this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT).round(2)
-                tmpDoc.DOC_DISCOUNT_1 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_1
-                tmpDoc.DOC_DISCOUNT_2 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_2
-                tmpDoc.DOC_DISCOUNT_3 = this.grdSlsOrdList.getSelectedData()[i].DOC_DISCOUNT_3
-                tmpDoc.DISCOUNT = this.grdSlsOrdList.getSelectedData()[i].DISCOUNT
                 tmpDoc.REF = this.grdSlsOrdList.getSelectedData()[i].REF,
-                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO
+                tmpDoc.PRICE_LIST_NO = this.grdSlsOrdList.getSelectedData()[i].PRICE_LIST_NO    
+                tmpDoc.ADDRESS = this.grdSlsOrdList.getSelectedData()[i].ADDRESS
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
@@ -304,9 +224,9 @@ export default class salesOrdList extends React.PureComponent
                         tmpdocItems.VAT_RATE = tmpLineData.result.recordset[x].VAT_RATE
                         tmpdocItems.PRICE = tmpLineData.result.recordset[x].PRICE
                         tmpdocItems.VAT = tmpLineData.result.recordset[x].VAT
-                        tmpdocItems.AMOUNT = tmpLineData.result.recordset[x].AMOUNT
-                        tmpdocItems.TOTALHT = tmpLineData.result.recordset[x].TOTALHT
-                        tmpdocItems.TOTAL = tmpLineData.result.recordset[x].TOTAL
+                        tmpdocItems.AMOUNT = Number(tmpLineData.result.recordset[x].AMOUNT).round(2)
+                        tmpdocItems.TOTALHT = Number(tmpLineData.result.recordset[x].TOTALHT).round(2)
+                        tmpdocItems.TOTAL = Number(tmpLineData.result.recordset[x].TOTAL).round(2)
                         tmpdocItems.ORDER_DOC_GUID = tmpLineData.result.recordset[x].DOC_GUID
                         tmpdocItems.ORDER_LINE_GUID = tmpLineData.result.recordset[x].GUID
     
@@ -315,6 +235,24 @@ export default class salesOrdList extends React.PureComponent
                 }
                 if(tmpDocCls.docItems.dt().length > 0)
                 {
+                    let tmpVat = 0
+                    for (let i = 0; i < tmpDocCls.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                    {
+                        if(tmpDocCls.dt()[0].VAT_ZERO != 1)
+                        {
+                            tmpVat = tmpVat + parseFloat(tmpDocCls.docItems.dt().where({'VAT_RATE':tmpDocCls.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                        }
+                    }
+                    tmpDocCls.dt()[0].AMOUNT = tmpDocCls.docItems.dt().sum("AMOUNT",2)
+                    tmpDocCls.dt()[0].DISCOUNT = Number(parseFloat(tmpDocCls.docItems.dt().sum("AMOUNT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))).round(2)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_1 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_2 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT_3 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)
+                    tmpDocCls.dt()[0].DOC_DISCOUNT = Number((parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
+                    tmpDocCls.dt()[0].VAT = Number(tmpVat).round(2)
+                    tmpDocCls.dt()[0].SUBTOTAL = parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))
+                    tmpDocCls.dt()[0].TOTALHT = parseFloat(parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
+                    tmpDocCls.dt()[0].TOTAL = Number((parseFloat(tmpDocCls.dt()[0].TOTALHT)) + parseFloat(tmpDocCls.dt()[0].VAT)).round(2)
                     let tmptest = await tmpDocCls.save()
                     console.log(tmptest)
                 }
@@ -333,31 +271,48 @@ export default class salesOrdList extends React.PureComponent
     }
     async printOrders()
     {
+        let tmpLines = []
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
             let tmpPrintQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID)  ORDER BY LINE_NO " ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
+                value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpPrintQuery) 
-            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-            {
-                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
-                mywindow.onload = function() 
-                {
-                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                } 
-                // if(pResult.split('|')[0] != 'ERR')
-                // {
-                //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                // }
-            });
+            console.log(tmpData)
+            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+            {
+                tmpLines.push(tmpData.result.recordset[x])
+            }
         }
-           
+        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',(pResult) => 
+        {
+            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+            mywindow.onload = function() 
+            {
+                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+            } 
+            // if(pResult.split('|')[0] != 'ERR')
+            // {
+            //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+            //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            // }
+        });
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     render()
     {
@@ -404,10 +359,7 @@ export default class salesOrdList extends React.PureComponent
                                 <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                 onClick={()=>
                                 {
-                                    if(this.grdSlsOrdList.getSelectedData().length > 0)
-                                        {
-                                            this.popAllDesign.show()
-                                        }
+                                    this.popAllDesign.show()
                                 }}/>
                                 </Item>
                                 <Item location="after"
@@ -443,16 +395,10 @@ export default class salesOrdList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NbDateRange id={"dtFirst"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -550,13 +496,6 @@ export default class salesOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             
@@ -577,6 +516,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -593,9 +533,12 @@ export default class salesOrdList extends React.PureComponent
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
-                            >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                            >   
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrdList"}/>                                
+                                <ColumnChooser enabled={true} />  
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
@@ -608,7 +551,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                                 <Column dataField="LIVRE" caption={this.t("grdSlsOrdList.clmLivre")} visible={true} width={100}/>
-                                <Column type="buttons" width={70}>
+                                <Column type="buttons" width={70} fixed={true} fixedPosition="right">
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>
                                 <Summary>

@@ -131,6 +131,9 @@ export default class salesOrder extends DocBase
                 }
             })
         })
+        console.log(this.param)
+        console.log( this.param.filter({ID:'"closedOrder"',USERS:this.user.CODE}).getValue()),
+        this.cmbDesignList.value = this.param.filter({ID:'cmbDesignList',USERS:this.user.CODE}).getValue().value
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -1091,6 +1094,10 @@ export default class salesOrder extends DocBase
                                     data = {{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
                                     param = {this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access = {this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.priceListChange()
+                                    }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1475,6 +1482,7 @@ export default class salesOrder extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            this.cmbMultiItemType.value = 1
                                             if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
@@ -1978,7 +1986,7 @@ export default class salesOrder extends DocBase
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

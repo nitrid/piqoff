@@ -52,6 +52,14 @@ const sip_01_002 =
     },
     btnView : "Aperçu", 
     btnMailsend : "Envoyer E-Mail", 
-    cmbMainGrp : "Client Groupe"
+    cmbMainGrp : "Client Groupe",
+    btnPrint : "Imprimer",
+    msgPrintOrders :
+    {
+        title : "Attention",
+        btn01 : "Imprimer",
+        btn02 : "Annuler",
+        msg : "Voulez-vous imprimer les commandes sélectionnées ?"
+    }
 }
 export default sip_01_002

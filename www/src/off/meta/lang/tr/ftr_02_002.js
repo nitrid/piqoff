@@ -19,6 +19,7 @@ const  ftr_02_002 =
     cash : "Tutar",
     description :"Açıklama",
     checkReference : "Referans",
+    checkDate : "Tarih",
     btnCash : "Tahsilat Ekle",
     btnCheck : "Çek",
     btnBank : "Havale",
@@ -560,7 +561,13 @@ const  ftr_02_002 =
         title: "Dikkat",
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
-    }
+    },
+    cmbExpiryType : "Ödeme Şekli",
+    cmbTypeData : 
+    {
+        encaissement : "Vadeli",
+        debit : "Peşin",
+    },
 }
 
 export default ftr_02_002

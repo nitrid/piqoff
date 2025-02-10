@@ -40,7 +40,8 @@ const cri_01_001 =
         clmZipcode : "Posta Kodu",
         clmCity :"Şehir",
         clmCountry : "Ülke",
-        clmSiret : "Siret"
+        clmSiret : "Siret",
+        clmFacturation : "Fatura Adresi"
     },
     grdLegal : 
     {
@@ -78,7 +79,8 @@ const cri_01_001 =
         cmbPopZipcode :"Posta Kodu",
         cmbPopCity :"Şehir",
         cmbPopCountry :"Ülke",
-        txtPopAdressSiret : "Siret"
+        txtPopAdressSiret : "Siret",
+        txtPopAdressFacturation : "Fatura Adresi"
     },
     popBank : 
     {
@@ -170,6 +172,7 @@ const cri_01_001 =
         msg : "Girmiş olduğunuz Müşteri sistem de kayıtlı !"
     },
     chkTaxSucre : "Tax Sugar",
+    txtAccountingCode : "Muhasebe Kodu",
     tabTitleDetail : "Detay Bilgileri",
     validation :
     {
@@ -221,7 +224,7 @@ const cri_01_001 =
     tabTitleNote : "Notlar",
     grdNote:
     {
-        clmNote : "NOT"
+        clmName : "NOT"
     },
     txtMainGroup : "Ana Grup",
     pg_MainGroup : 

@@ -3,6 +3,7 @@ import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
+import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 
 export default class NbItemCard extends NbBase
 {
@@ -14,7 +15,8 @@ export default class NbItemCard extends NbBase
         {
             image : typeof this.props.image == 'undefined' ? '../css/img/noimage.jpg' : this.props.image,
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
-            price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(3),
+            price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
+            unitPrice : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
         }
         
         this.data = this.props.data
@@ -26,16 +28,12 @@ export default class NbItemCard extends NbBase
     {        
         this.cmbUnit.data.onLoaded = async(pData)=>
         {
-            console.log(pData)
             if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined' && typeof this.data.QUANTITY == 'undefined')
             {
                 this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
-                console.log(this.props.data.GUID)
                 let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                 if(tmpDt.length > 0)
                 {
-                    console.log(option.FACTOR)
-                    console.log(tmpDt[0].PRICE)
 
                     let tmpPrice = Number(tmpDt[0].PRICE * option.FACTOR).round(3)
                     this.setState({price:tmpPrice})
@@ -45,6 +43,7 @@ export default class NbItemCard extends NbBase
     }
     _onValueChange(e)
     {
+        console.log(e)
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
@@ -66,10 +65,12 @@ export default class NbItemCard extends NbBase
             this.cmbUnit.value = tmpDt[0].UNIT
             let tmpPrice = Number(tmpDt[0].PRICE * tmpDt[0].UNIT_FACTOR).round(3)
             this.data.DISCOUNT = tmpDt[0].DISCOUNT
+            this.data.PRICE = tmpDt[0].PRICE
             this.data.UNIT = tmpDt[0].UNIT
             this.data.UNIT_FACTOR = tmpDt[0].UNIT_FACTOR
             this.data.QUANTITY = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.setState({price:tmpPrice})
+            this.setState({unitPrice:tmpDt[0].PRICE})
         }
         else
         {
@@ -80,13 +81,13 @@ export default class NbItemCard extends NbBase
     {
         return(
             <div className="card shadow-sm">
-                <img src={this.state.image} className="card-img-top" height={'220px'} 
+                <img src={this.state.image} className="card-img-top" height={'150px'} 
                 onClick={()=>
                 {
                     this._onClick()
                 }}/>
                 <div className="card-body">
-                    <div className='row pb-2'>
+                    <div className='row pb-1'>
                         <div className='col-6'>
                             <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                         </div>
@@ -95,6 +96,7 @@ export default class NbItemCard extends NbBase
                             displayExpr="NAME"                       
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
+                            readOnly={this.props.unitLock}
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
@@ -107,7 +109,11 @@ export default class NbItemCard extends NbBase
                                     if(tmpDt.length > 0)
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
-                                      
+                                    }
+                                    else
+                                    {
+                                        let tmpPrice = Number(this.props.price *  this.data.UNIT_FACTOR).round(2)
+                                        this.setState({price:tmpPrice})
                                     }
                                    
                                     this._onValueChange(this.props.data)
@@ -115,10 +121,13 @@ export default class NbItemCard extends NbBase
                             }).bind(this)}
                             />
                         </div>
+                        <div className='col-12'>
+                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.unitPrice}€ / Unité</h6>
+                        </div>
                     </div>
                     <div className='row pb-1'>
                         <div className='col-12'>
-                            <div className="overflow-hidden" style={{height:'75px'}}>{this.data.CODE + " - " + this.state.name}</div>
+                            <div className="overflow-hidden" style={{height:'35px',fontSize:'12px',fontWeight:500,fontStyle:'italic',color:'midnightblue'}}>{this.data.CODE + " - " + this.state.name}</div>
                         </div>
                     </div>
                     <div className='row'>
@@ -154,6 +163,20 @@ export default class NbItemCard extends NbBase
                                     location:'after',
                                     onClick:async()=>
                                     {
+                                        if(this.props.unitLock == true)
+                                        {
+                                            if(this.cmbUnit.displayValue != 'Colis' )
+                                            {
+                                                let confObj = 
+                                                {
+                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgWrongUnit.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgWrongUnit.msg")}</div>)
+                                                }
+                                                await dialog(confObj);  
+                                                return
+                                            }
+                                        }
                                         this["txtQuantity" + this.props.id].value = Number(this["txtQuantity" + this.props.id].value) + 1 
                                         this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
                                         this._onValueChange(this.props.data)

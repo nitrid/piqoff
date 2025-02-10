@@ -1521,33 +1521,36 @@ export const prm =
             CAPTION : "Pos lcd Ekran Çıkacak yazısı"
         }
     },
-    //Adisyon Yazıcı
+    //Adisyon Kullanım 
     {
         TYPE : 0,
         ID :"PosAddition",
-        VALUE : {active:false,printerName:"TP809",printerDesign:"adisyon/AdisyonTicket.repx"},
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
         APP : "POS",
         VIEW : 
         {
-            TYPE : "popInput",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
-            CAPTION : "Adisyon Yazıcı",
-            DISPLAY : "printerName",
-            FORM : 
-            {
-                width:"400",
-                height:"220",
-                colCount:1,
-                item:
-                [
-                    {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopPosAdditionPrinterActive"},
-                    {type:"text",caption:"Yazıcı Adı",field:"printerName",id:"txtPopPosAdditionPrinterName"},
-                    {type:"text",caption:"Yazıcı Dizaynı",field:"printerDesign",id:"txtPopPosAdditionPrinterDesign"},
-                ]
-            }
+            CAPTION : "Pos Adisyon kullanımı"
         }
-    }
+    },
+     //Adisyon Kullanım 
+     {
+        TYPE : 0,
+        ID :"PosBtnText",
+        VALUE : "textIcon",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Buton Text"
+        }
+    },
 ]

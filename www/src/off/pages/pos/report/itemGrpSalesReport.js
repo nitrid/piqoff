@@ -273,8 +273,9 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     this.getDetail(e.data.ITEM_GRP_NAME)
                                 }}
                             >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_GRP_CODE" caption={this.t("grdGroupSalesReport.clmGrpCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdGroupSalesReport.clmGrpName")} visible={true} width={300}/> 
@@ -356,7 +357,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     {
                                     }}
                                     >                            
-                                        <Scrolling mode="standart" />
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                         <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grpGrpDetail.clmCode")} visible={true} width={100}/> 
                                         <Column dataField="ITEM_NAME" caption={this.t("grpGrpDetail.clmName")} visible={true} width={250}/> 

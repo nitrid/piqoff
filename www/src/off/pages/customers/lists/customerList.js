@@ -34,7 +34,7 @@ export default class barcodeList extends React.PureComponent
             {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
             {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},       
             {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
-            {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
+            {CODE : "ZIPCODE",NAME : this.t("grdListe.clmZipcode")},       
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
             {CODE : "CITY",NAME : this.t("grdListe.clmCity")},       
             {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
@@ -241,6 +241,7 @@ export default class barcodeList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -270,15 +271,16 @@ export default class barcodeList extends React.PureComponent
                                 }
                             }}
                             >                            
-                                <Paging defaultPageSize={15} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.cri_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 
                                 <Column dataField="GENUS_NAME" caption={this.t("grdListe.clmGenus")} visible={true}/> 
                                 <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
-                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
+                                <Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
                                 <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
                                 <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 

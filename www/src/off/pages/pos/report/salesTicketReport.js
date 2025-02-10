@@ -794,7 +794,7 @@ export default class salesOrdList extends React.PureComponent
 
                             }}
                             >                            
-                                <Scrolling mode="standart" />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
@@ -833,6 +833,7 @@ export default class salesOrdList extends React.PureComponent
                             <div className="col-7 pe-0">
                             <NdGrid id="grdSaleTicketItems" parent={this} 
                                 selection={{mode:"multiple"}} 
+                                height={600}
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
@@ -841,8 +842,9 @@ export default class salesOrdList extends React.PureComponent
                                 allowColumnResizing={true}
                                
                                 >                            
-                                    <Paging defaultPageSize={20} />
-                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                     <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={150}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 

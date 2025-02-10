@@ -283,7 +283,8 @@ export default class promotionList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            selection={{mode:"multiple"}}
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -318,8 +319,9 @@ export default class promotionList extends React.PureComponent
                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPromoList"}/>
                                 <ColumnChooser enabled={true} />
                                 <GroupPanel visible={true} allowColumnDragging={false}/>
-                                <Paging defaultPageSize={15} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={"promo"} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ACTIVE" caption={this.t("grdListe.clmCode")} visible={false} defaultSortOrder="desc"/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 

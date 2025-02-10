@@ -12,6 +12,7 @@ import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import NdDialog from '../../core/react/devex/dialog.js';
 import NdButton from '../../core/react/devex/button.js';
+import NdCheckBox from 'devextreme-react/check-box';
 
 export default class Login extends React.PureComponent
 {
@@ -41,7 +42,8 @@ export default class Login extends React.PureComponent
             kullanici: '',
             sifre: '',
             alert: '',
-            showTransferButton: false
+            showTransferButton: false,
+            rememberMe: false
         }  
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
@@ -53,6 +55,17 @@ export default class Login extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
+        
+        if(typeof localStorage.userName != 'undefined' && typeof localStorage.userPwd != 'undefined')
+        {
+            this.setState({rememberMe: true})
+            this.setState({
+                kullanici: localStorage.userName,
+                sifre: localStorage.userPwd
+            })
+            this.Kullanici.value = localStorage.userName 
+            this.Sifre.value = localStorage.userPwd
+        }
         this.Kullanici.focus()
     }
     textValueChanged(e) 
@@ -71,6 +84,17 @@ export default class Login extends React.PureComponent
         if(this.state.kullanici == '' && this.state.sifre == '')
         {
             return;
+        }
+
+        if(this.state.rememberMe)
+        {
+            localStorage.userName = this.state.kullanici
+            localStorage.userPwd = this.state.sifre
+        }
+        else
+        {
+            localStorage.removeItem('userName')
+            localStorage.removeItem('userPwd')
         }
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
@@ -176,6 +200,14 @@ export default class Login extends React.PureComponent
                                 placeholder={this.lang.t("txtPass")}
                                 />
                             </div>
+                        </div>
+                        <div className="dx-field">
+                            <NdCheckBox id="chkRememberMe" 
+                                parent={this} 
+                                text={this.lang.t("chkRememberMe")} 
+                                value={this.state.rememberMe}
+                                onValueChanged={(e) => this.setState({rememberMe: e.value})}
+                            />
                         </div>
                         <div className="row py-1">
                             <div className="col-12">

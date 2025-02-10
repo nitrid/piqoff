@@ -493,7 +493,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            selection={{mode:"multiple"}}
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -501,8 +502,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                              >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={false} width={100}/> 

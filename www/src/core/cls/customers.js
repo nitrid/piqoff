@@ -47,6 +47,7 @@ export class customersCls
             MAIN_GROUP : '00000000-0000-0000-0000-000000000000',
             MAIN_GROUP_NAME : '',
             MAIN_GROUP_CODE : '',
+            ACCOUNTING_CODE : '',
         }
 
         this.customerOffical = new customerOfficalCls();
@@ -101,13 +102,14 @@ export class customersCls
                     "@AREA = @PAREA, " +
                     "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER, " +
-                    "@MAIN_GROUP = @PMAIN_GROUP ",
+                    "@MAIN_GROUP = @PMAIN_GROUP, " +
+                    "@ACCOUNTING_CODE = @PACCOUNTING_CODE ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|100','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                     'PTAX_TYPE:int','PCAPITAL:float','PVAT_ZERO:bit','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit','PSECTOR:string|50',
-                    'PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50'],
+                    'PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50','PACCOUNTING_CODE:string|50'],
             dataprm :['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL','VAT_ZERO',
-                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER','MAIN_GROUP']
+                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER','MAIN_GROUP','ACCOUNTING_CODE']
         }
         tmpDt.updateCmd = 
         {
@@ -144,13 +146,14 @@ export class customersCls
                     "@AREA = @PAREA, " +
                     "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER, " +
-                    "@MAIN_GROUP = @PMAIN_GROUP ",
+                    "@MAIN_GROUP = @PMAIN_GROUP, " +
+                    "@ACCOUNTING_CODE = @PACCOUNTING_CODE ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|100','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                     'PTAX_TYPE:int','PCAPITAL:float','PVAT_ZERO:bit','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit',
-                    'PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50'],
+                    'PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50','PMAIN_GROUP:string|50','PACCOUNTING_CODE:string|50'],
             dataprm :['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL','VAT_ZERO',
-                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER','MAIN_GROUP']
+                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER','MAIN_GROUP','ACCOUNTING_CODE']
         }
         tmpDt.deleteCmd = 
         {
@@ -409,7 +412,9 @@ export class customerAdressCls
             ZIPCODE : '',
             CITY : '',
             COUNTRY : '',
-            ADRESS_NO : 0
+            ADRESS_NO : 0,
+            SIRET : '',
+            FACTURATION : 0
         }
 
         this._initDs()
@@ -434,9 +439,11 @@ export class customerAdressCls
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
-                    "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
-            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
+                    "@ADRESS_NO = @PADRESS_NO, " +
+                    "@SIRET = @PSIRET, " +
+                    "@FACTURATION = @PFACTURATION ",
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int','PSIRET:string|50','PFACTURATION:int'],
+            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO','SIRET','FACTURATION']
         }
         tmpDt.updateCmd = 
         {
@@ -449,9 +456,11 @@ export class customerAdressCls
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
-                    "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
-            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
+                    "@ADRESS_NO = @PADRESS_NO, " +
+                    "@SIRET = @PSIRET, " +
+                    "@FACTURATION = @PFACTURATION ",
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|25','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int','PSIRET:string|50','PFACTURATION:int'],
+            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO','SIRET','FACTURATION']
         }
         tmpDt.deleteCmd = 
         {

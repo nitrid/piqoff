@@ -32,6 +32,7 @@ export const langFr =
     checkAll :"Tout saisir",
     msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
+    addExplanation: "Ajouter Explication",
     constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
@@ -181,6 +182,13 @@ export const langFr =
     favDell : "Retirer des favoris",
     menu : "Menu",
     favMenu : "Favoris",
+    msgPriceListChange :
+    {
+        title : "Changement de la liste de prix",
+        btn01 : "Oui",
+        btn02 : "Non",
+        msg : "Voulez-vous mettre à jour les prix ?"
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -316,6 +324,8 @@ export const langFr =
         cnt_03 : "Rapports",
         cnt_04 : "Opérations",
         cnt_04_001 : "Contrat de vente multiple",
+        saleList : "Traitement des Listes de Documents",
+        saleList_01: "Liste Groupée de Documents",
         piqx : "PiqX",
         piqx_01 : "Factures", //BAK
         piqx_01_001 : "Factures d'achat reçues", //BAK
@@ -387,6 +397,7 @@ export const langFr =
         pos_02_016 : "Rapport des Mouvements de Points",
         pos_02_017 : "Rapport de ventes par intervalle horaire",
         pos_02_018 : "Rapport des Remises",
+        pos_02_019 : "Rapport de ventes par groupe de produits par mois",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",

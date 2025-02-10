@@ -272,8 +272,9 @@ export default class purchaseInvoiceAgingReport extends React.PureComponent
                                 }
                             }}
                             >
-                                <Paging defaultPageSize={30} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={30} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdList.clmDate")} dataType={"date"} visible={true} width={100}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdList.clmType")} visible={true} width={200}/> 

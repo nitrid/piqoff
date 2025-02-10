@@ -402,242 +402,242 @@
 - **ID:** txtCustomerName
 - **Description:** Définit le nom du client dans la facture d'achat. Valeur par défaut: `""`.
 
-### Excel Formatı
+### Format Excel
 - **ID:** excelFormat
-- **Açıklama:** Alış faturasında Excel formatını tanımlar. Varsayılan değerler: `CODE:'CODE', QTY:'QTY', PRICE:'PRICE', DISC:'DISC', DISC_PER:'DISC_PER', TVA:'TVA'`.
+- **Description:** Définit le format Excel dans la facture d'achat. Valeurs par défaut: `CODE:'CODE', QTY:'QTY', PRICE:'PRICE', DISC:'DISC', DISC_PER:'DISC_PER', TVA:'TVA'`.
 
-### Tedarikçişi olmayan ürünü kaydetme
+### Enregistrer un produit sans fournisseur
 - **ID:** compulsoryCustomer
-- **Açıklama:** Alış faturasında tedarikçisi olmayan ürünü kaydetmeyi engeller. Varsayılan değer: `true`.
+- **Description:** Empêche l'enregistrement d'un produit sans fournisseur dans la facture d'achat. Valeur par défaut: `true`.
 
-### Belge no kontrolu
+### Contrôle du numéro de document
 - **ID:** checkDocNo
-- **Açıklama:** Alış faturasında belge numarası kontrolünü etkinleştirir. Varsayılan değer: `false`.
+- **Description:** Active le contrôle du numéro de document dans la facture d'achat. Valeur par défaut: `false`.
 
-## Gönderilen İade Faturası Parametreleri
+## Paramètres de la Facture de Retour Envoyée
 
-### Belge no kontrolu
+### Contrôle du numéro de document
 - **ID:** checkDocNo
-- **Açıklama:** Gönderilen iade faturasında belge numarası kontrolünü etkinleştirir. Varsayılan değer: `false`.
+- **Description:** Active le contrôle du numéro de document dans la facture de retour envoyée. Valeur par défaut: `false`.
 
-## Fiyat Farki Faturası Parametreleri
+## Paramètres de la Facture de Différence de Prix
 
-### Belge no kontrolu
+### Contrôle du numéro de document
 - **ID:** checkDocNo
-- **Açıklama:** Fiyat farkı faturasında belge numarası kontrolünü etkinleştirir. Varsayılan değer: `false`.
+- **Description:** Active le contrôle du numéro de document dans la facture de différence de prix. Valeur par défaut: `false`.
 
-## Şubeler Arası Alış Faturası Parametreleri
+## Paramètres de la Facture d'Achat Inter-Branches
 
-### Belge no kontrolu
+### Contrôle du numéro de document
 - **ID:** checkDocNo
-- **Açıklama:** Şubeler arası alış faturasında belge numarası kontrolünü etkinleştirir. Varsayılan değer: `false`.
+- **Description:** Active le contrôle du numéro de document dans la facture d'achat inter-branches. Valeur par défaut: `false`.
 
-### Tedarikçişi olmayan ürünü kaydetme
+### Enregistrer un produit sans fournisseur
 - **ID:** compulsoryCustomer
-- **Açıklama:** Şubeler arası alış faturasında tedarikçisi olmayan ürünü kaydetmeyi engeller. Varsayılan değer: `true`.
+- **Description:** Empêche l'enregistrement d'un produit sans fournisseur dans la facture d'achat inter-branches. Valeur par défaut: `true`.
 
-## Promosyon Parametreleri
+## Paramètres de la Promotion
 
-### Kodu
+### Code
 - **ID:** txtCode
-- **Açıklama:** Promosyon tanımlarında kod bilgisini tanımlar. Bu alan, belirli bir doğrulama grubuna aittir ve gerekli olarak işaretlenmiştir.
+- **Description:** Définit le code dans les descriptions de promotion. Ce champ appartient à un groupe de validation spécifique et est marqué comme requis.
 
-## Proforma Satış Faturası Parametreleri
+## Paramètres de la Facture Proforma de Vente
 
-### Seri
+### Série
 - **ID:** txtRef
-- **Açıklama:** Proforma satış faturasında seri bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit la série dans la facture proforma de vente. Valeur par défaut: `""`.
 
-### Sıra
+### Rang
 - **ID:** txtRefno
-- **Açıklama:** Proforma satış faturasında sıra bilgisini tanımlar. Varsayılan değer: `"0"`.
+- **Description:** Définit le rang dans la facture proforma de vente. Valeur par défaut: `"0"`.
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Proforma satış faturasında depo bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit le dépôt dans la facture proforma de vente. Valeur par défaut: `""`.
 
-### Cari Kodu
+### Code Client
 - **ID:** txtCustomerCode
-- **Açıklama:** Proforma satış faturasında cari kod bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit le code client dans la facture proforma de vente. Valeur par défaut: `""`.
 
-### Cari Adı
+### Nom du Client
 - **ID:** txtCustomerName
-- **Açıklama:** Proforma satış faturasında cari ad bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit le nom du client dans la facture proforma de vente. Valeur par défaut: `""`.
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Proforma satış faturasında eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la facture proforma de vente. Valeur par défaut: `false`.
 
-## Depo Miktar Listesi Parametreleri
+## Paramètres de la Liste des Quantités en Stock
 
-### Varsayılan Depo
+### Dépôt par Défaut
 - **ID:** cmbDepot
-- **Açıklama:** Depo miktar listesinde varsayılan depo bilgisini tanımlar. Varsayılan değer: `'1A428DFC-48A9-4AC6-AF20-4D0A4D33F316'`.
+- **Description:** Définit le dépôt par défaut dans la liste des quantités en stock. Valeur par défaut: `'1A428DFC-48A9-4AC6-AF20-4D0A4D33F316'`.
 
-## Depo Sevk Parametreleri
+## Paramètres de Transfert de Dépôt
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Depolar arası transferde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans le transfert entre dépôts. Valeur par défaut: `false`.
 
-## İade Ürün Toplama Parametreleri
+## Paramètres de Collecte des Produits Retournés
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** İade ürün toplamada eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la collecte des produits retournés. Valeur par défaut: `false`.
 
-### Çıkış Depo
+### Dépôt de Sortie
 - **ID:** cmbDepot1
-- **Açıklama:** İade ürün toplamada çıkış depo bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit le dépôt de sortie dans la collecte des produits retournés. Valeur par défaut: `""`.
 
-### Giriş Depo
+### Dépôt d'Entrée
 - **ID:** cmbDepot2
-- **Açıklama:** İade ürün toplamada giriş depo bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit le dépôt d'entrée dans la collecte des produits retournés. Valeur par défaut: `""`.
 
-## Kayıp Ürün Parametreleri
+## Paramètres des Produits Perdus
 
-### Satır Açıklamalarını Zorunlu Kıl
+### Rendre Obligatoires les Descriptions des Lignes
 - **ID:** descriptionControl
-- **Açıklama:** Kayıp ürün fişinde satır açıklamalarını zorunlu kılar. Varsayılan değer: `true`.
+- **Description:** Rend obligatoires les descriptions des lignes dans le document des produits perdus. Valeur par défaut: `true`.
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Kayıp ürün fişinde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans le document des produits perdus. Valeur par défaut: `false`.
 
-## Gün Sonu Parametreleri
+## Paramètres de Fin de Journée
 
-### Merkez Kasa
+### Caisse Centrale
 - **ID:** SafeCenter
-- **Açıklama:** Gün sonu işlemlerinde merkez kasayı tanımlar. Varsayılan değer: `"FB529408-4AE5-4B34-9262-7956E3477F47"`.
+- **Description:** Définit la caisse centrale dans les opérations de fin de journée. Valeur par défaut: `"FB529408-4AE5-4B34-9262-7956E3477F47"`.
 
-### Kredi Kartı Kasası
+### Caisse de Carte de Crédit
 - **ID:** BankSafe
-- **Açıklama:** Gün sonu işlemlerinde kredi kartı kasasını tanımlar. Varsayılan değer: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
+- **Description:** Définit la caisse de carte de crédit dans les opérations de fin de journée. Valeur par défaut: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
 
-### Ticket Restorant Kasası
+### Caisse de Ticket Restaurant
 - **ID:** TicketRestSafe
-- **Açıklama:** Gün sonu işlemlerinde Ticket Restorant kasasını tanımlar. Varsayılan değer: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
+- **Description:** Définit la caisse de ticket restaurant dans les opérations de fin de journée. Valeur par défaut: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
 
-### Çek Kasası
+### Caisse de Chèque
 - **ID:** CheckSafe
-- **Açıklama:** Gün sonu işlemlerinde çek kasasını tanımlar. Varsayılan değer: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
+- **Description:** Définit la caisse de chèque dans les opérations de fin de journée. Valeur par défaut: `"3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3"`.
 
-### Avans Tutarı
+### Montant de l'Avance
 - **ID:** advanceAmount
-- **Açıklama:** Gün sonu işlemlerinde avans tutarını tanımlar. Varsayılan değer: `"450"`.
+- **Description:** Définit le montant de l'avance dans les opérations de fin de journée. Valeur par défaut: `"450"`.
 
-## Satış İrsaliye Parametreleri
+## Paramètres de la Note de Livraison de Vente
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Satış irsaliyesinde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la note de livraison de vente. Valeur par défaut: `false`.
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Satış irsaliyesinde depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans la note de livraison de vente. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-## Şube Satış İrsaliye Parametreleri
+## Paramètres de la Note de Livraison de Vente Inter-Branches
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Şube satış irsaliyesinde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la note de livraison de vente inter-branches. Valeur par défaut: `false`.
 
-### Otomatik mail gönderme
+### Envoi automatique de mail
 - **ID:** autoMailSend
-- **Açıklama:** Şube satış irsaliyesinde otomatik mail gönderme özelliğini etkinleştirir. Varsayılan değer: `true`.
+- **Description:** Active l'envoi automatique de mail dans la note de livraison de vente inter-branches. Valeur par défaut: `true`.
 
-## Alış Anlaşması Parametreleri
+## Paramètres de l'Accord d'Achat
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Alış anlaşmasında depo bilgisini tanımlar. Varsayılan değer: `"1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"`.
+- **Description:** Définit le dépôt dans l'accord d'achat. Valeur par défaut: `"1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"`.
 
-## Satış Anlaşması Parametreleri
+## Paramètres de l'Accord de Vente
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Satış anlaşmasında depo bilgisini tanımlar. Varsayılan değer: `"1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"`.
+- **Description:** Définit le dépôt dans l'accord de vente. Valeur par défaut: `"1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"`.
 
-### İzin Verilen En Yüksek İndirim Yüzde
+### Pourcentage de Remise Maximum Autorisé
 - **ID:** maxDiscount
-- **Açıklama:** Satış anlaşmasında izin verilen en yüksek indirim yüzdesini tanımlar. Varsayılan değer: `30`.
+- **Description:** Définit le pourcentage de remise maximum autorisé dans l'accord de vente. Valeur par défaut: `30`.
 
-## Özel Etiket Basımı Parametreleri
+## Paramètres de l'Étiquette Spéciale
 
-### Maliyet Fiyatından Düşük Etikete İzin Verme
+### Autoriser une Étiquette Inférieure au Coût
 - **ID:** underMinCostPrice
-- **Açıklama:** Özel etiket basımında maliyet fiyatından düşük etikete izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si une étiquette inférieure au coût est autorisée dans l'impression d'étiquettes spéciales. Valeur par défaut: `false`.
 
-## Stok Çıkış Fişi Parametreleri
+## Paramètres de la Note de Sortie de Stock
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Stok çıkış fişinde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la note de sortie de stock. Valeur par défaut: `false`.
 
-## Ürün Giriş Çıkış Fişi Parametreleri
+## Paramètres de la Note d'Entrée et de Sortie de Produits
 
-### Eksiye Düşemeye İzin Verme
+### Autoriser la Quantité Négative
 - **ID:** negativeQuantity
-- **Açıklama:** Ürün giriş çıkış fişinde eksiye düşmeye izin verilip verilmeyeceğini belirler. Varsayılan değer: `false`.
+- **Description:** Détermine si la quantité négative est autorisée dans la note d'entrée et de sortie de produits. Valeur par défaut: `false`.
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Ürün giriş çıkış fişinde depo bilgisini tanımlar. Varsayılan değer: `"00000000-0000-0000-0000-000000000000"`.
+- **Description:** Définit le dépôt dans la note d'entrée et de sortie de produits. Valeur par défaut: `"00000000-0000-0000-0000-000000000000"`.
 
-## Toplu Tahsilat Giriş Parametreleri
+## Paramètres de l'Entrée de Recouvrement en Masse
 
-### Seri
+### Série
 - **ID:** txtRef
-- **Açıklama:** Toplu tahsilat girişinde seri bilgisini tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit la série dans l'entrée de recouvrement en masse. Valeur par défaut: `""`.
 
-### Excel Formatı
+### Format Excel
 - **ID:** excelFormat
-- **Açıklama:** Toplu tahsilat girişinde Excel formatını tanımlar. Varsayılan değerler: `DATE:'DATE', DESC:'DESC', AMOUNT:'AMOUNT'`.
+- **Description:** Définit le format Excel dans l'entrée de recouvrement en masse. Valeurs par défaut: `DATE:'DATE', DESC:'DESC', AMOUNT:'AMOUNT'`.
 
-## Tax Sugar Report Parametreleri
+## Paramètres du Rapport Tax Sugar
 
-### Tax Sugar Uygulanacak Gruplar
+### Groupes Applicables pour Tax Sugar
 - **ID:** taxSugarGroupValidation
-- **Açıklama:** Tax Sugar raporunda uygulanacak grupları tanımlar.
+- **Description:** Définit les groupes applicables pour Tax Sugar dans le rapport.
 
-## Satış Sipariş Parametreleri
+## Paramètres de la Commande de Vente
 
-### Kapanmış Sipaişleri Gösterme
+### Afficher les Commandes Fermées
 - **ID:** closedOrder
-- **Açıklama:** Satış siparişinde kapanmış siparişlerin gösterilip gösterilmeyeceğini belirler. Varsayılan değer: `true`.
+- **Description:** Détermine si les commandes fermées doivent être affichées dans la commande de vente. Valeur par défaut: `true`.
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Satış siparişinde depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans la commande de vente. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-## Alış Sipariş Parametreleri
+## Paramètres de la Commande d'Achat
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Alış siparişinde depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans la commande d'achat. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-## Alış İrsaliye Parametreleri
+## Paramètres de la Note de Livraison d'Achat
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Alış irsaliyesinde depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans la note de livraison d'achat. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-## Satış Teklif Parametreleri
+## Paramètres de l'Offre de Vente
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Satış teklifinde depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans l'offre de vente. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-### Mail Açıklaması
+### Description du Mail
 - **ID:** mailText
-- **Açıklama:** Satış teklifinde mail açıklamasını tanımlar. Varsayılan değer: `""`.
+- **Description:** Définit la description du mail dans l'offre de vente. Valeur par défaut: `""`.
 
-## Satış Sipariş Onaylama Parametreleri
+## Paramètres de Confirmation de Commande de Vente
 
-### Depo
+### Dépôt
 - **ID:** cmbDepot
-- **Açıklama:** Satış sipariş onaylamada depo bilgisini tanımlar. Varsayılan değer: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
+- **Description:** Définit le dépôt dans la confirmation de commande de vente. Valeur par défaut: `"EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"`.
 
-### Yazdırma Dizaynı Tagı
+### Tag de Design d'Impression
 - **ID:** printDesing
-- **Açıklama:** Satış sipariş onaylamada yazdırma dizaynı tagını tanımlar. Varsayılan değer: `"55"`.
+- **Description:** Définit le tag de design d'impression dans la confirmation de commande de vente. Valeur par défaut: `"55"`.

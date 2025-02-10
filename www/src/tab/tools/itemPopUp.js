@@ -11,12 +11,14 @@ import NdSelectBox from '../../core/react/devex/selectbox'
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
 import NdButton from '../../core/react/devex/button.js';
 import NdNumberBox from '../../core/react/devex/numberbox.js'
+import NbLabel from "../../core/react/bootstrap/label.js";
 export default class NbItemPopUp extends NbBase
 {
     constructor(props)
     {
         super(props)
         this.core = App.instance.core;
+        this.listPriceLock = this.props.listPriceLock
         this.state =
         {
             images : [],
@@ -133,7 +135,7 @@ export default class NbItemPopUp extends NbBase
                         <div className='col-12' align={"right"}>
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",}}
                                     onClick={()=>
                                     {
                                         this.popCard.hide();
@@ -147,7 +149,7 @@ export default class NbItemPopUp extends NbBase
                     <div className='row pt-2'>
                         <div className='col-12'>
                             <div className='row'>
-                                <div className='col-12' style={{height:'350px'}}>
+                                <div className='col-12' style={{height:'400px'}}>
                                     <Carousel onSelect={(e)=>
                                     {
                                         for (let i = 0; i < 4; i++) 
@@ -206,8 +208,47 @@ export default class NbItemPopUp extends NbBase
                             <div className='col-12'>
                                 <Form colCount={2}>
                                     <Item>
+                                        <Label text={this.t("itemPopup.txtItemListName")} alignment="right" />
+                                        <NdSelectBox simple={true} 
+                                            parent={this} 
+                                            id="txtItemListName" 
+                                            showClearButton={true} 
+                                            notRefresh={true}  
+                                            searchEnabled={true}
+                                            readOnly={this.listPriceLock}
+                                            displayExpr="LIST_NAME"                       
+                                            valueExpr="LIST_NO"
+                                            data={{source: {select : {query:"SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC"},sql : this.core.sql}}}
+                                            onValueChanged={async (e)=>
+                                            {
+                                                if(e.value)
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : `SELECT (SELECT [dbo].[FN_PRICE](GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@LIST_NO,@TYPE,0)) AS PRICE FROM ITEMS WHERE GUID = @GUID`,
+                                                        param : ['GUID:string|50','TYPE:int','QUANTITY:float','DEPOT:string|50','LIST_NO:int','CUSTOMER:string|50'],
+                                                        value : [this.data.GUID,0,this.data.QUANTITY == 0 ? 1 : this.data.QUANTITY,'00000000-0000-0000-0000-000000000000',e.value,'00000000-0000-0000-0000-000000000000'],
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(this)
+                                                    if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtPrice.value = tmpData.result.recordset[0].PRICE
+                                                        this.data.PRICE = this.txtPrice.value
+                                                        this._onValueChange(this.data)
+                                                    }
+                                                }
+                                            }}
+                                        />    
+                                    </Item>
+                                    <Item>
                                         <Label text={this.t("itemPopup.txtPrice")} alignment="right" />
-                                        <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
+                                        <NdNumberBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.data.PRICE = this.txtPrice.value
+                                            this._onValueChange(this.data)
+                                        }).bind(this)}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.cmbUnit")} alignment="right" />
@@ -278,12 +319,10 @@ export default class NbItemPopUp extends NbBase
                                                 location:'before',
                                                 onClick:async()=>
                                                 {
-                                                    if(this["txtQuantity" + this.props.id].value > 0)
-                                                    {
-                                                        this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                        this.data.QUANTITY = this.txtQuantity.value
-                                                        this._onValueChange(this.data)
-                                                    }
+                                                
+                                                    this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                    this.data.QUANTITY = this.txtQuantity.value
+                                                    this._onValueChange(this.data)
                                                     
                                                 }
                                             },

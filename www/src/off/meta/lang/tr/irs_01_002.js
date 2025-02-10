@@ -18,6 +18,13 @@ const irs_01_002 =
         clmTypeName : "TİPİ",
         clmGenusName : "CİNSİ"
     },
+    popDesign :
+    {
+        title : "Dizayn Seçimi",
+        design : "Dizayn Seçimi",
+        btnPrint : "Yazdır",
+        btnCancel : "Kapat"
+    },
     grdSlsDisList: 
     {
         clmRef: "Seri",

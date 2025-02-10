@@ -16,6 +16,7 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
+    chkRememberMe : "Je me souviens de moi",
     menu:
     {
         dashboard : "Tableau de bord",
@@ -48,6 +49,7 @@ export const langFr =
     {
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
+        popFactNonSolde : "Facture non solde",  
         popCart:
         {
             txtCustomer: "Client",
@@ -61,7 +63,8 @@ export const langFr =
             dtDocDate : "Date",
             dtDShipmentDate : "Date de Livraison",
             txtDescription : "Information",
-            cmbPricingList : "Numéro de tarif"
+            cmbPricingList : "Numéro de tarif",
+            txtFactNonSolde : "Facture non solde"
         },
         itemPopup:
         {
@@ -69,7 +72,8 @@ export const langFr =
             txtPrice: "Prix",
             cmbUnit: "Unité",
             txtQuantity: "Quantité",
-            txtDiscount: "Remise"
+            txtDiscount: "Remise",
+            txtItemListName : "Nom de la liste"
         },
         popCustomer:
         {
@@ -92,6 +96,12 @@ export const langFr =
             clmTotal : "Montant total",
             clmTotalHt : "Montant Hors Taxe",
             clmPriceAfterDiscount : "Remise Prix",
+        },
+        grdFactNonSolde :
+        {
+            clmDocDate : "Date",
+            clmRefNo : "Ligne",
+            clmRemainder : "Reste"
         },
         msgSave:
         {
@@ -252,6 +262,14 @@ export const langFr =
             msgSuccess: "L'envoi du courrier a réussi !",
             msgFailed: "L'envoi du courrier a échoué !"
         },
+        pg_adress:
+        {
+            title: "Adresse de livraison",
+            clmAdress: "Adresse",
+            clmCity: "Ville",
+            clmZipcode: "Code postal",
+            clmCountry: "Pays"
+        },
         msgPriceListChange:
         {
             title: "Attention",
@@ -261,10 +279,16 @@ export const langFr =
         },
         orderGroup:
         {
-            Name: "NOM DU PRODUIT",
-            Code: "CODE PRODUIT",
+            Name: "NOM",
+            Code: "CODE",
             Favori: "FAVORIS",
-        }
+        },
+        msgWrongUnit:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "La quantité doit être en Colis !"
+        },
     },
     extract :
     {
@@ -308,7 +332,8 @@ export const langFr =
     {
         txtItem : "Veuillez choisir un produit",
         txtItemGroup : "Groupe de produit",  
-        txtItemPrice : "Prix",  
+        txtItemPrice : "Prix", 
+        txtItemListName : "Liste de prix",
         grdListe : 
         {
            clmName : "Dépôt",  

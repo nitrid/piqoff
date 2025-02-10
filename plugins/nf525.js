@@ -142,11 +142,13 @@ class nf525
                         await this.archiveDuplicatePosFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicateFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicateNote(tmpFirstDate,tmpLastDate)
+                        await this.archiveDuplicateJustPay(tmpFirstDate,tmpLastDate)
                         await this.archiveDayTicket(tmpFirstDate,tmpLastDate)
                         await this.archiveDayNote(tmpFirstDate,tmpLastDate)
                         await this.archiveDayFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDayProfFact(tmpFirstDate,tmpLastDate)
-                        
+                        await this.archiveDayJustPay(tmpFirstDate,tmpLastDate)
+
                         let zip = new AdmZip()
                         zip.addLocalFolder(this.core.root_path + '/archiveFiscal/' + this.folder);
                         zip.writeZip(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip');
@@ -785,6 +787,28 @@ class nf525
             resolve()
         });
     }
+    async archiveDuplicateJustPay(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_JUSTPAY_DUPLICATE_VW_01 " +
+                        "WHERE TAG_DUP_HOR_GDH >= @FIRST_DATE AND " +
+                        "TAG_DUP_HOR_GDH <= @LAST_DATE " +
+                        "ORDER BY TAG_DUP_HOR_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_JUSTPAY_DUPLICATE","DUPLICATE",this.folder)
+            }
+            resolve()
+        });
+    }
     archiveDayTicket(pFirst,pLast)
     {
         return new Promise(async resolve =>
@@ -898,7 +922,7 @@ class nf525
 
             let tmpMasterQuery = 
             {
-                query : "SELECT * FROM NF525_NOTE_VW_01 WHERE TAG_TIK_HOR_GDH >= @FIRST_DATE AND TAG_TIK_HOR_GDH <= @LAST_DATE ORDER BY TAG_TIK_HOR_GDH ASC",
+                query : "SELECT * FROM NF525_NOTE_VW_02 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_HOR_GDH ASC",
                 param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                 value : [pFirst,pLast]
             }
@@ -906,7 +930,37 @@ class nf525
             let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
             if(tmpMasterResult.length > 0)
             {
-                this.exportExcel(tmpMasterResult,tmpFileName,"NOTE",this.folder)                
+                let tmpLineQuery = 
+                {
+                    query : "SELECT * FROM NF525_NOTE_DETAIL_VW_01 WHERE ENC_TIK_LIG_HOR_GDH >= @FIRST_DATE AND ENC_TIK_LIG_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_LIG_HOR_GDH ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+
+                this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult},tmpFileName,'',this.folder)
+            }
+            resolve()
+        })
+    }
+    archiveDayJustPay(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "JUSTPAY_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF525_JUSTPAY_VW_01 WHERE TAG_JDP_HOR_GDH >= @FIRST_DATE AND TAG_JDP_HOR_GDH <= @LAST_DATE ORDER BY TAG_JDP_HOR_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+            
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,'',this.folder)
             }
             resolve()
         })

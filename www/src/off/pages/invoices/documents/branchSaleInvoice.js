@@ -1550,6 +1550,7 @@ export default class branchSaleInvoice extends DocBase
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()
+                                            this.cmbMultiItemType.value = 1
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {

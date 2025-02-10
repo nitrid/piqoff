@@ -1491,7 +1491,13 @@ export const menu = (e) =>
                            id: 'pos_02_018',
                            text: e.t('menuOff.pos_02_018'),
                            path: 'pos/report/freeDiscountsReport'
-                       }
+                       },
+                         //Serbest Yapılan İndirimler İçin Rapor.
+                         {
+                            id: 'pos_02_019',
+                            text: e.t('menuOff.pos_02_019'),
+                            path: 'pos/report/itemGrpDateReport'
+                        }
                     ]
                 },
             ]
@@ -1636,6 +1642,20 @@ export const menu = (e) =>
                         }
                     ]
                 },
+            ]
+        },
+        //Evrak Liste İşlemler
+        {
+            id: 'saleList',
+            text: e.t('menuOff.saleList'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'saleList_01',
+                    text: e.t('menuOff.saleList_01'),//'Toplu Müşteri Evrak Listesi',
+                    path: 'saleList/lists/saleList'
+                }
             ]
         },
         //Ayarlar
