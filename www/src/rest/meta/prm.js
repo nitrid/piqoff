@@ -133,7 +133,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"MultiQtyGrp",
-        VALUE : ['013','014','015','012'],
+        VALUE : ['013','014','015','012','011'],
         SPECIAL : "",
         PAGE : "bill.js",
         ELEMENT : "",
