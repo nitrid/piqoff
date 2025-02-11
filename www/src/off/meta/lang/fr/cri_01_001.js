@@ -144,7 +144,9 @@ const cri_01_001 =
         title: "Attention",
         btn01: "OK",
         btn02: "Abandonner",
-        msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
+        msgFailed: "Échec de la suppression car un document associé au client existe !",
+        msgSuccess: "Suppression réussie !"
     },
     cmbTypeData : 
     {
