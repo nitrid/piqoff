@@ -26,5 +26,12 @@ const  ftr_01_003 =
         clmAmount : "Total" ,
         clmTotal : "Total",
     },
+    popDesign :
+    {
+        title : "Choix du design",
+        design : "Veuillez sélectionner un design",
+        btnPrint : "Imprimer"
+    },
+    validDesign : "Veuillez sélectionner un design.",
 }
 export default ftr_01_003

@@ -27,6 +27,14 @@ const ftr_01_001 =
         clmTotal : "Toplam",
         clmInputName : "Depo",
     },
+    popDesign :
+    {
+        title : "Seçim",
+        design : "Lütfen bir seçim yapınız",
+        btnPrint : "Yazdır"
+
+    },
+    validDesign : "Lütfen bir seçim yapınız.",
 
 }
 
