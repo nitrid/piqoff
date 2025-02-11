@@ -40,7 +40,8 @@ const cri_01_001 =
         clmZipcode : "Postleitzahl",
         clmCity :"Stadt",
         clmCountry : "Land",
-        clmSiret : "Siret"
+        clmSiret : "Siret",
+        clmFacturation : "Faktura Adresse"
     },
     grdLegal : 
     {
@@ -78,7 +79,8 @@ const cri_01_001 =
         cmbPopZipcode :"Postleitzahl",
         cmbPopCity :"Stadt",
         cmbPopCountry :"Land",
-        txtPopAdressSiret : "Siret"
+        txtPopAdressSiret : "Siret",
+        txtPopAdressFacturation : "Faktura Adresse"
     },
     popBank : 
     {
@@ -131,6 +133,19 @@ const cri_01_001 =
         btn01: "OK",
         msg: "Bitte geben Sie die Steuernummer ein!"
     },
+    msgSave :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveValid :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+    },
     msgAdressNotValid:
     {
         title: "Achtung",
@@ -169,6 +184,7 @@ const cri_01_001 =
         msg : "Der eingegebene Kunde ist bereits im System registriert!"
     },
     chkTaxSucre : "Zuckersteuer",
+    txtAccountingCode : "Kontokonto",
     tabTitleDetail : "Detailinformationen",
     validation :
     {

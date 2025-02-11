@@ -115,6 +115,8 @@ export default class NbButton extends NbBase
             onClick={this._onClick}
             >
                 {this.props.children}
+                {this.props.type == 'textIcon' ? <p className="text-white text-center m-0"> {this.props.text} <span className="text-dark">
+                </span></p> : null}
             </button>
         )
     }

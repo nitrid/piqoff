@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,GroupPanel} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,GroupPanel,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -21,6 +21,8 @@ export default class promotionList extends React.PureComponent
     constructor(props)
     {
         super(props)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.state = 
         {
@@ -53,6 +55,17 @@ export default class promotionList extends React.PureComponent
         {
 
         }, 1000);
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdPromoListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdPromoListState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     _columnListBox(e)
     {
@@ -270,7 +283,8 @@ export default class promotionList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            selection={{mode:"multiple"}}
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -302,9 +316,12 @@ export default class promotionList extends React.PureComponent
                                     }
                                 }
                             }}>
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPromoList"}/>
+                                <ColumnChooser enabled={true} />
                                 <GroupPanel visible={true} allowColumnDragging={false}/>
-                                <Paging defaultPageSize={15} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={"promo"} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ACTIVE" caption={this.t("grdListe.clmCode")} visible={false} defaultSortOrder="desc"/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 

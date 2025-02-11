@@ -137,7 +137,8 @@ const stk_01_001 =
         clmPrice: "Fiyat",
         clmGrossMargin: "Brüt Marj",
         clmNetMargin: "Net Marj",
-        clmMargin : "Marj %"
+        clmMargin : "Marj %",
+        clmListName: "Liste Adı"
     },
     grdUnit: 
     {

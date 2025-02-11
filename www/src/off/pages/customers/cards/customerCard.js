@@ -128,6 +128,20 @@ export default class CustomerCard extends React.PureComponent
     {
         this.customerObj.clearAll()
         await this.customerObj.load({CODE:pCode});
+        if(this.customerObj.dt('CUSTOMERS').length > 0)
+        {
+           if(this.customerObj.dt('CUSTOMERS')[0].TYPE == 0)
+           {
+                this.txtTitle.readOnly = true
+                this.setState({officalVisible:false})
+           }
+           else
+           {
+                this.txtTitle.readOnly = false
+                this.setState({officalVisible:true})
+           }
+
+        }
     }
     typeChange(pType)
     {
@@ -415,6 +429,24 @@ export default class CustomerCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT TOP 1 * FROM DOC_VW_01 WHERE INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER",
+                                            param : ['CUSTOMER:string|50'],
+                                            value : [this.customerObj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj)
+                                            return
+                                        }
                                         
                                         let tmpConfObj =
                                         {
@@ -734,6 +766,14 @@ export default class CustomerCard extends React.PureComponent
                                                             this.cmbPopCity.value = "";
                                                             this.cmbPopCountry.value = ''
                                                             this.txtPopAdressSiret.value = "";
+                                                            if(this.customerObj.customerAdress.dt().length > 0)
+                                                            {
+                                                                this.txtPopAdressFacturation.value = true
+                                                            }
+                                                            else
+                                                            {
+                                                                this.txtPopAdressFacturation.value = false
+                                                            }
                                                             this.popAdress.show();
                                                         }}/>
                                                     </Item>
@@ -758,6 +798,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
                                                     <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")} allowEditing={false}/>
                                                     <Column dataField="SIRET" caption={this.t("grdAdress.clmSiret")}/>
+                                                    <Column dataField="FACTURATION" caption={this.t("grdAdress.clmFacturation")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -1181,6 +1222,15 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
                                                     </Item>
+                                                     {/* txtAccountingCode */}
+                                                     <Item>
+                                                        <Label text={this.t("txtAccountingCode")} alignment="right" />
+                                                        <NdTextBox id="txtAccountingCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"ACCOUNTING_CODE"}} 
+                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                                        selectAll={true}                           
+                                                        >     
+                                                        </NdTextBox>      
+                                                    </Item>
                                                     {/* chkRebate */}
                                                     <Item>
                                                         <Label text={this.t("chkRebate")} alignment="right" />
@@ -1405,8 +1455,8 @@ export default class CustomerCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popAdress.title")}
                         container={"#root"} 
-                        width={'500'}
-                        height={'350'}
+                        width={'600'}
+                        height={'400'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -1542,6 +1592,10 @@ export default class CustomerCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
+                                    <Label text={this.t("popAdress.txtPopAdressFacturation")} alignment="right" />
+                                    <NdCheckBox id={"txtPopAdressFacturation"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
@@ -1557,6 +1611,7 @@ export default class CustomerCard extends React.PureComponent
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
                                                 tmpEmpty.SIRET = this.txtPopAdressSiret.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+                                                tmpEmpty.FACTURATION = this.txtPopAdressFacturation.value
 
                                                 this.customerObj.customerAdress.addEmpty(tmpEmpty);    
                                                 this.popAdress.hide(); 

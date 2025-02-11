@@ -27,6 +27,7 @@ const tkf_01_002 =
         clmAmount : "Total" ,
         clmTotal : "Total",
         clmOutputName :"Réserve",
+        clmLivre : "Livré"
     },
 }
 export default tkf_01_002

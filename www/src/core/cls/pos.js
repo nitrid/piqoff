@@ -1,7 +1,8 @@
-import { core,dataset,datatable } from "../core.js";
+import { core,dataset,datatable,param } from "../core.js";
 import moment from 'moment';
 import { jsPDF } from "jspdf";
 import "jspdf-barcode";
+import {prm} from '../../off/meta/prm.js'
 
 export class posCls
 {
@@ -1174,6 +1175,7 @@ export class posDeviceCls
             this.escpos.Serial = global.require('escpos-serialport');
             this.escpos.Screen = global.require('escpos-screen');
             this.escpos.USB = global.require('escpos-usb');
+            this.escpos.Network = global.require('escpos-network');
             this.path = global.require('path')
             this.serialport = global.require('serialport');
             this.net = global.require('net')
@@ -1206,6 +1208,9 @@ export class posDeviceCls
         this.payPort = null;
         this.scannerPort = null;
         this.version = "v.1.0.1"
+       
+      
+      
 
         this._initDs();
     }
@@ -1664,18 +1669,24 @@ export class posDeviceCls
             }
 
             let device = undefined;
-            if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+            if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT.startsWith('TCP:'))
             {
-                device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
+                const ip = this.dt()[0].PRINTER_PORT.split(':')[1];
+                const port = 9100;
+                device = new this.escpos.Network(ip, port);
             }
-            else if(this.dt()[0].PRINTER_PORT == 'USB')
+            else if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT == 'USB')
             {
                 device = new this.escpos.USB();
+            }
+            else if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT.startsWith('COM'))
+            {
+                device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
             }
 
             let options = { encoding: "GB18030" /* default */ }
             let printer = new this.escpos.Printer(device, options);
-    
+
             let imgLoad = (imgPath) => 
             {
                 return new Promise((mresolve) =>
@@ -1689,6 +1700,12 @@ export class posDeviceCls
             
             device.open(async function(error)
             {   
+                if (error) {
+                    console.error("Printer connection error:", error);
+                    resolve();
+                    return;
+                }
+
                 let tmpArr = [];
                 for (let i = 0; i < pData.length; i++) 
                 {
@@ -1943,32 +1960,27 @@ export class posDeviceCls
         }           
         return docPdf
     }
-    pdfPrint(pData,pMail)
+    pdfPrint(pData,pMail,pSubject,pText)
     {
         return new Promise(async resolve => 
         {
+            if(typeof pSubject == 'undefined')
+            {
+                pSubject = 'Ticket de vente'
+            }
+            if(typeof pText == 'undefined')
+            {
+                let Prm = new param(prm);
+                let sysParam = Prm.filter({TYPE:0})
+                pText =''
+                console.log(sysParam.filter({ID:'MailExplanation'}).getValue())
+                pText = sysParam.filter({ID:'MailExplanation'}).getValue()
+            }
             let docPdf = this.pdf(pData)
-
-            let tmpText = "Bonjour Cher Client, \n" + 
-            " \n "+
-           "Merci pour votre achat dans notre magasin. \n" +
-           "Ci-joint votre ticket de caisse. \n" +
-           "Ceci est un e-mail automatique,veuillez ne pas y répondre! \n"+
-           "Pour toute information, vous pouvez nous joindre sur les coordonnées indiquées sur votre ticket de caisse. \n"+
-           " \n"+
-           " \n"+
-           " \n"+
-           " \n"+
-           "Cordialement \n"+
-           " \n"+
-           " \n"+ 
-           "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +
-           " \n"+
-           " \n"+
-           "This message is confidential. Any unauthorised disclosure, use or dissemination, either whole or partial, is prohibited. If you are not the intended recipient of the message, please notify the sender immediatly and delete the message. Thank you. "
             let tmpHtml = ''
             let tmpAttach = btoa(docPdf.output())
-            let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
+            let tmpMailData = {html:tmpHtml,subject:pSubject,sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,html:pText}
+           
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
                 console.log(pResult1)
@@ -2015,6 +2027,7 @@ export class posPromoCls
             TOTAL : 0,
             PROMO_TYPE : 0
         }
+        
 
         this._initDs();
     }

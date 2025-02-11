@@ -57,7 +57,7 @@ export const langTr =
     msgMaxQuantity :
     {
         title : "Uyarı",
-        msg : "Miktar 999.999'dan büyük giremezsiniz !",
+        msg : "Miktar 999'dan büyük giremezsiniz !",
         btn01 : "Tamam",
     },
     msgPriceNotFound : 
@@ -991,5 +991,44 @@ export const langTr =
         clmVendorId : "Vendor Id",
         clmSerialNo : "Seri No"
     },
-    lblTicketCount : "Müşteri :"
+    lblTicketCount : "Müşteri :",
+    msgPopDiffAlert : 
+    {
+        title : "Uyarı",
+        msg : "Miktar 0 (sıfır) olamaz.",
+        btn01 : "Tamam",
+    },
+    btnList :
+    {
+        btnCheqpay : "T.R Çek",
+        btnInfo : "Bilgi",
+        btnDelete : "Sil",
+        btnLineDelete : "Satır Sil",
+        btnItemReturn : "İade",
+        btnPriceDiff : "Fiyat Farkı",
+        btnItemSearch : "Ürün Ara",
+        btnZReport : "Z Raporu",
+        btnGrdList : "Liste",
+        btnFormation : "Formasyon",
+        btnOrderList : "Sipariş Listesi",
+        btnAdvance : "Avans",
+        btnParkList : "Park Listesi",
+        btnCustomerAdd : "Müşteri Ekle",
+        btnCustomerList : "Müşteri Listesi",
+        btnGetCustomer : "Müşteri",
+        btnCalculator : "Hesap Makinesi",
+        btnPark : "Park",
+        btnTicketList : "Ticket Listesi",
+        btnLastPrint : "Son Yazdırma",
+        btnTotal : "Toplam",
+        btnSubtotal : "Ara T.",
+        btnCardTicket : "T.R Kart",
+        btnDiscount : "İndirim",
+        btnExchange : "Dönüşüm",
+        btnCreditCard : "Kredi Kartı",
+        btnCash : "Nakit",
+        btnCheck : "Çek",
+        btnCustomerPoint : "Puan Kullan",
+        btnSafeOpen : "Kasa Aç",
+    }
 }

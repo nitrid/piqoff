@@ -65,7 +65,8 @@ const fns_02_002 =
         clmInputName : "Kasa/Banka",
         clmDescription : "Açıklama",
         clmInvoice : "Ödenen Fatura",
-        clmFacDate : "Fatura Tarihi "
+        clmFacDate : "Fatura Tarihi ",
+        clmDocDate : "Tarih"
     },
     msgDocValid:
     {
@@ -150,6 +151,10 @@ const fns_02_002 =
     {
         title: "Havale Girişi",
         btnApprove : "Ekle"
+    },
+    popCloseInvoice : 
+    {
+        title: "Ödeme Yapılan Faturalar",
     },
     validRef :"Seri Boş Geçilemez",
     validRefNo : "Sıra Boş Geçilemez",

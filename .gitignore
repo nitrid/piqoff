@@ -1,5 +1,5 @@
 /config.js
-plugins/lic
+lic
 tmp/
 node_modules/
 package-lock.json
@@ -17,3 +17,4 @@ www/src/pos/plugins/private
 plugins/devprint
 www/src/config.js
 plugins/private
+/cloud

@@ -45,7 +45,7 @@ export default class salesPairing extends React.PureComponent
             "ITEMS.STATUS AS STATUS,   "  +
             "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
             "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
-            "ITEMS.UNIT_GUID AS UNIT_GUID, " +
+            "ORDERS.UNIT AS UNIT_GUID, " +
             "(BARCODE) AS BARCODE,   "  +
             "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
             "ORDERS.GUID AS ORDER_LINE_GUID,   "  +
@@ -62,7 +62,7 @@ export default class salesPairing extends React.PureComponent
             "ORDERS.VAT AS VAT,   "  +
             "ORDERS.VAT_RATE AS VAT_RATE   "  +
             "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
-            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM   "  +
+            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM AND ORDERS.CLOSED = 0  "  +
             "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
             param : ['DOC_GUID:string|50','CODE:string|50'],
         }
@@ -78,7 +78,15 @@ export default class salesPairing extends React.PureComponent
         }
         this.orderDetailDt.selectCmd = 
         {
-            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0",
+            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,PEND_QUANTITY/UNIT_FACTOR AS PEND_QUANTITY,LINE_NO FROM  " +
+                    "(SELECT GUID,  " +
+                    "ITEM_NAME,  " +
+                    "ITEM_CODE,  " +
+                    "LINE_NO,  " +
+                    "CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY ,  " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.GUID = DOC_ORDERS_VW_01.UNIT),1) AS UNIT_FACTOR , " +
+                    "ISNULL((SELECT SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.GUID = DOC_ORDERS_VW_01.UNIT),'U') AS UNIT_NAME " +
+                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP ORDER BY LINE_NO ASC",
             param : ['DOC_GUID:string|50'],
         }
 
@@ -131,9 +139,10 @@ export default class salesPairing extends React.PureComponent
     {
         this.itemDt.clear();
         this.unitDt.clear();
-        this.priceDt.clear();
+        this.priceDt.clear();   
 
         this.lblItemName.value = ""
+        this.lblOrderName.value = ""
         this.lblDepotQuantity.value = 0
         this.txtPendQuantity.value = 0
         this.txttotalQuantity.value = 0
@@ -161,7 +170,7 @@ export default class salesPairing extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
+                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,MAX(VAT_ZERO) AS VAT_ZERO,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
                             "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
                             "FROM DOC_ORDERS_VW_01 " + 
                             "WHERE CLOSED = 0 AND CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (DOC_ORDERS_VW_01.APPROVED_QUANTITY - DOC_ORDERS_VW_01.COMP_QUANTITY) ELSE DOC_ORDERS_VW_01.COMP_QUANTITY END > 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = ''))" + 
@@ -185,15 +194,12 @@ export default class salesPairing extends React.PureComponent
             
             if(this.itemDt.length > 0)
             {
-                this.lblItemName.value = this.itemDt[0].NAME
-               
+                this.lblItemName.value = this.itemDt[0].NAME               
 
                 this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
                 await this.unitDt.refresh()
                 this.cmbUnit.setData(this.unitDt)
 
-                console.log(this.unitDt)
-                console.log(this.itemDt[0].UNIT_GUID)
                 if(this.unitDt.length > 0)
                 {
                     if(this.itemDt[0].UNIT_GUID != '00000000-0000-0000-0000-000000000000')
@@ -313,6 +319,7 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = this.txttotalQuantity.value
         tmpDocItems.VAT_RATE = this.itemDt[0].VAT_RATE
         tmpDocItems.PRICE = this.itemDt[0].PRICE
@@ -380,6 +387,7 @@ export default class salesPairing extends React.PureComponent
                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
                 await dialog(tmpConfObj1);
             }
+            this.getOrderName()
             resolve()
         })
     }
@@ -404,6 +412,7 @@ export default class salesPairing extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+        this.getOrderName()
 
         this.pageView.activePage('Entry')
     }
@@ -422,6 +431,7 @@ export default class salesPairing extends React.PureComponent
     {
         this.txtOrderRef.value = ''
         this.pageView.activePage('Orders')
+        this.txtOrderRef.focus()
     }
     async ordersSelect(pGuid)
     {
@@ -460,7 +470,7 @@ export default class salesPairing extends React.PureComponent
             }
             let tmpQuery = 
             {
-                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40 AND DOC.REF = DOC_VW_01.REF) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
+                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }
@@ -468,11 +478,13 @@ export default class salesPairing extends React.PureComponent
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {
+                console.log(tmpData.result.recordset[0])
                 this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT,
                 this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
                 this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
                 this.docObj.dt()[0].REF = tmpData.result.recordset[0].REF
+                this.docObj.dt()[0].VAT_ZERO = tmpData.result.recordset[0].VAT_ZERO
                 this.orderGuid = tmpData.result.recordset[0].GUID
                 this.txtRefNo.value = tmpData.result.recordset[0].NEW_REF_NO
                 this.onClickBarcodeShortcut()
@@ -485,6 +497,7 @@ export default class salesPairing extends React.PureComponent
             this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
             this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
             this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            this.docObj.dt()[0].VAT_ZERO = this.grdOrderList.getSelectedData()[0].VAT_ZERO
             this.orderGuid = this.grdOrderList.getSelectedData()[0].DOC_GUID
             let tmpQuery = 
             {
@@ -500,6 +513,16 @@ export default class salesPairing extends React.PureComponent
                 this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
             }
             this.onClickBarcodeShortcut()
+        }
+    }
+    async getOrderName()
+    {
+        console.log(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue())
+        if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue() == true)
+        {
+            this.orderDetailDt.selectCmd.value = [this.orderGuid]
+            await this.orderDetailDt.refresh();  
+            this.lblOrderName.value = this.orderDetailDt.where({PEND_QUANTITY:{'>':'0'}}).orderBy('LINE_NO',"asc")[0].ITEM_NAME
         }
     }
     async getOrderList()
@@ -749,7 +772,7 @@ export default class salesPairing extends React.PureComponent
                                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                                 
-                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()?.value ==  true)
+                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() ==  true)
                                                                     {
                                                                         this.txtRef.value = data[0].CODE;
                                                                         this.txtRef.props.onChange(data[0].CODE)
@@ -880,6 +903,13 @@ export default class salesPairing extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
+                                    <div className='row'>
+                                        <div className='col-12'>
+                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
+                                                <NbLabel id="lblOrderName" parent={this} value={""}/>
+                                            </h6>
+                                        </div>
+                                    </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
@@ -1524,10 +1554,10 @@ export default class salesPairing extends React.PureComponent
                                                 <Paging defaultPageSize={10} />
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                                <Column dataField="REF" caption={this.t("grdList.clmItemName")} width={80} />
-                                                <Column dataField="REF_NO" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmAmount")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmPrice")} width={150}/>
+                                                <Column dataField="REF" caption={this.t("grdList.clmRef")} width={150} />
+                                                <Column dataField="REF_NO" caption={this.t("grdList.clmRefNo")} dataType={'number'} width={80}/>
+                                                <Column dataField="DOC_DATE" caption={this.t("grdList.clmDate")} allowEditing={false} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmCustomerName")} width={150}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1574,7 +1604,7 @@ export default class salesPairing extends React.PureComponent
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
                                                 <Column dataField="ITEM_NAME" caption={this.t("grdOrderDetail.clmItemName")} width={250} />
-                                                <Column dataField="PEND_QUANTITY" caption={this.t("grdOrderDetail.clmQuantity")} dataType={'number'} width={60}/>
+                                                <Column dataField="PEND_QUANTITY" caption={this.t("grdOrderDetail.clmQuantity")} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_NAME}} dataType={'number'} width={160}/>
                                             </NdGrid>
                                         </div>
                                     </div>

@@ -49,6 +49,7 @@ const fns_05_001 =
         clmAmount : "Tutar",
         clmInputName : "Kasa/Banka",
         clmDescription : "Açıklama",
+        clmDocDate : "Tarih"
     },
     msgDocValid:
     {

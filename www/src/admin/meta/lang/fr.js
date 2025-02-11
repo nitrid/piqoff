@@ -329,6 +329,7 @@ export const langFr =
         prm_01_001: "OFF",
         prm_01_002: "POS",
         prm_01_003: "MOB",
+        prm_01_004: "TAB",
         prm_02: "Paramètres Document",
         prm_02_001: "OFF",
         prm_02_003: "MOB",
@@ -429,6 +430,19 @@ export const langFr =
     prm_01_003 :
     {
         lblUser : "Utilisateur",
+        btnMetaSave : "Meta Enregistre",
+        btnSave : "Enregistre",
+        pg_UserList :
+        {
+            title : "Choix Utilisateur",
+            clmCode : "CODE",
+            clmName : "NOM"
+        }
+    },
+    prm_01_004 :
+    {
+        lblUser : "Utilisateur",
+        lblDoc : "Document",
         btnMetaSave : "Meta Enregistre",
         btnSave : "Enregistre",
         pg_UserList :

@@ -61,7 +61,7 @@ export const langFr =
     msgMaxQuantity :
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas entrer une quantité supérieure à 999.999 !",
+        msg : "Vous ne pouvez pas entrer une quantité supérieure à 999 !",
         btn01 : "OK",
     },
     msgPriceNotFound : 
@@ -996,5 +996,44 @@ export const langFr =
         clmVendorId: "ID du fournisseur",
         clmSerialNo: "Numéro de série"
     },
-    lblTicketCount : "Client :"
+    lblTicketCount : "Client :",
+    msgPopDiffAlert : 
+    {
+        title : "Attention",
+        msg : "La quantité ne peut être 0 (zéro).",
+        btn01 : "OK",
+    },
+    btnList :
+    {
+        btnCheqpay : "Cheque",
+        btnInfo : "Info",
+        btnDelete : "Sup. Ticket",
+        btnLineDelete : "Sup. Ligne",
+        btnItemReturn : "Retour",
+        btnPriceDiff : "Différence de prix",
+        btnItemSearch : "Recherche Produit",
+        btnZReport : "Z Rapport",
+        btnGrdList : "Liste Produit",
+        btnFormation : "Formation",
+        btnOrderList : "Commande",
+        btnAdvance : "Avance",
+        btnParkList : "En Attente",
+        btnCustomerAdd : "Ajouter Client",
+        btnCustomerList : "Liste Client",
+        btnGetCustomer : "Client",
+        btnCalculator : "Calculatrice",
+        btnPark : "Mettre Att.",
+        btnTicketList : "Ticket List",
+        btnLastPrint : "Imprimer",
+        btnTotal : "Total",
+        btnSubtotal : "Sous Total",
+        btnCardTicket : "T.R Carte",
+        btnDiscount : "Remise",
+        btnExchange : "Échange",
+        btnCreditCard : "C.B",
+        btnCash : "Espece",
+        btnCheck : "Chèque",
+        btnCustomerPoint : "Point Utilisé",
+        btnSafeOpen : "Ouvrir C.",
+    }
 }

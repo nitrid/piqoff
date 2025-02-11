@@ -18,7 +18,7 @@ export default class Dashboard extends React.PureComponent
   {
     super(props)
     this.core = App.instance.core;
-    this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0};
+    this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0,AllItemGroups:0 };
     this.t = App.instance.lang.getFixedT(null ,null ,"dashboard")
     this.date = moment(new Date()).format("YYYY-MM-DD")
     this.companyName = ''
@@ -45,6 +45,7 @@ export default class Dashboard extends React.PureComponent
       salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },  
       balanceTicketCreated : { query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED FROM BALANCE_COUNTER WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
+      AllItemGroups : { query : "SELECT COUNT(DISTINCT ITEM_GRP_NAME) AS TOTAL_ITEM_GROUPS FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME IS NOT NULL",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
     }
   }
   async componentDidMount()
@@ -58,6 +59,7 @@ export default class Dashboard extends React.PureComponent
     this.getSalesCount();
     this.getBestItemGroup();
     this.getExtra()
+    this.getAllItemGroups()
     let tmpQuery = 
     {
         query : " SELECT TOP 1 * FROM COMPANY_VW_01",
@@ -76,6 +78,14 @@ export default class Dashboard extends React.PureComponent
     if (bestItemGroup.length > 0) 
     {
       this.setState({ bestItemGroup: bestItemGroup });
+    }
+  }
+  async getAllItemGroups()
+  {
+    const { result: { recordset: AllItemGroups } } = await this.core.sql.execute(this.query.AllItemGroups);
+    if (AllItemGroups.length > 0) 
+    {
+      this.setState({ AllItemGroups: AllItemGroups[0].TOTAL_ITEM_GROUPS });
     }
   }
   async getSalesTotal()
@@ -264,11 +274,13 @@ export default class Dashboard extends React.PureComponent
                 this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.balanceTicketCreated.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.AllItemGroups.value =  [this.dtDate.startDate,this.dtDate.endDate]
 
                 
                 this.getSalesTotal();
                 this.getSalesCount();
                 this.getBestItemGroup();
+                this.getAllItemGroups()
                 this.getExtra()
               }).bind(this)}/>
           </div>
@@ -631,8 +643,38 @@ export default class Dashboard extends React.PureComponent
               </div>
             </div>
           </div>
-
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#56487b" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("popAllItemGroups")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.AllItemGroups ? parseFloat(this.state.AllItemGroups) : 0)}  type={'number'} onClicks={(async()=>
+                  {
+                    let tmpSource =
+                    {
+                      source : 
+                      {
+                        groupBy : this.groupList,
+                        select : 
+                        {
+                          query : "SELECT ROUND(SUM(TOTAL),2) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME ORDER BY SUM(TOTAL) DESC",
+                          param : ['FISRT_DATE:date','LAST_DATE:date'],
+                          value : [this.dtDate.startDate,this.dtDate.endDate]
+                        },
+                        sql : this.core.sql
+                      }
+                    }
+                    await this.popAllItemGroups.show()
+                    await this.grdAllItemGroups.dataRefresh(tmpSource)
+                  }).bind(this)}/>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        
         <div className="row py-1 px-3">
           <div className="col-12">
             <PieChart
@@ -1259,6 +1301,24 @@ export default class Dashboard extends React.PureComponent
                 </div>
               </div>
             </div>
+        </NbPopUp>
+        <NbPopUp id={"popAllItemGroups"} parent={this} title={this.t("detail")} fullscreen={false} centered={true}>
+          <div>
+            <div className="row  p-1">
+                <div className="col-12">
+                  <NdGrid parent={this} id={"grdAllItemGroups"} 
+                  showBorders={true} 
+                  columnsAutoWidth={true} 
+                  allowColumnReordering={true} 
+                  allowColumnResizing={true} 
+                  showRowLines={true}
+                  >
+                    <Column caption={this.t("grdAllItemGroups.itemGroupName")} dataField="ITEM_GRP_NAME" width={200}/>
+                    <Column caption={this.t("grdAllItemGroups.itemGroupAmount")} dataField="QUANTITY" width={100} format={"#,##0.00€"}/>                                                
+                  </NdGrid>
+                </div>
+            </div>
+          </div>  
         </NbPopUp>
       </ScrollView>
     )

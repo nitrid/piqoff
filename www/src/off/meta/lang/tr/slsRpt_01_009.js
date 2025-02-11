@@ -1,6 +1,7 @@
 // "Açık Satış Fatura Raporu"
 const slsRpt_01_009 =
 {
+    menu : "Satış Faturası",
     btnGet: "Getir",
     txtCustomerCode : "Müşteri", 
     grdListe : 

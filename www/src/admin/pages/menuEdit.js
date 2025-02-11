@@ -118,6 +118,39 @@ export default class menuEdit extends React.Component
             resolve()
         });
     }
+    async mergeLicMenu(tmpMenu,tmpMenuData)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof tmpMenuData == 'undefined' || tmpMenuData.length == 0)
+            {
+                resolve(tmpMenu)
+                return
+            }
+
+            tmpMenu.forEach(async function (element,index,object)
+            {
+                let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
+
+                if(typeof tmpMerge != 'undefined')
+                {
+                    object[index].visible = true
+                }
+                else
+                {
+                    object[index].visible = false
+                }
+                
+                if(typeof element.items != 'undefined')
+                {
+                    this.mergeLicMenu(element.items,tmpMenuData)
+                    
+                }
+            }.bind(this));
+
+            resolve(tmpMenu)
+        });
+    }
     async visibleBuild(tmpMenu)
     {
         return new Promise(async resolve =>
@@ -183,6 +216,8 @@ export default class menuEdit extends React.Component
                                             if(e.value == 'OFF')
                                             {
                                                 this.menu = menuOff(App.instance.lang)
+                                                let tmpLicMenu = await App.instance.getLicence('OFF','MENU');
+                                                this.menu = await this.mergeLicMenu(this.menu, tmpLicMenu);
                                                 this.prmObj = new menu(this.menu)
                                             }
                                             else if(e.value == 'MOB')
@@ -212,6 +247,8 @@ export default class menuEdit extends React.Component
                                             if(this.cmbApp.value == 'OFF')
                                             {
                                                 this.menu = menuOff(App.instance.lang)
+                                                let tmpLicMenu = await App.instance.getLicence('OFF','MENU');
+                                                this.menu = await this.mergeLicMenu(this.menu, tmpLicMenu);
                                                 this.prmObj = new menu(this.menu)
                                             }
                                             else if(this.cmbApp.value == 'MOB')
@@ -221,6 +258,7 @@ export default class menuEdit extends React.Component
                                             }
                                             let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
                                             await this.mergeMenu(this.menu,tmpMenu)
+
                                             this.setState({menu:this.menu})
                                         }}
                                         />

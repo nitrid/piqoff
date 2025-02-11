@@ -140,6 +140,8 @@ export default class salesDispatch extends React.PureComponent
 
                 this.txtBarcode.value = ""
                 this.txtQuantity.focus();
+                this.txtQuantity.value = 1
+                this.calcEntry()
             }
             else
             {                               
@@ -191,7 +193,7 @@ export default class salesDispatch extends React.PureComponent
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
             if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
                 this.txtPrice.value = Number(
-                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, this.docObj.dt()[0].OUTPUT))
                 ).round(2);
             }
     
@@ -563,7 +565,7 @@ export default class salesDispatch extends React.PureComponent
                                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                                 
-                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()?.value ==  true)
+                                                                    if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() ==  true)
                                                                     {
                                                                         this.txtRef.value = data[0].CODE;
                                                                         this.txtRef.props.onChange(data[0].CODE)

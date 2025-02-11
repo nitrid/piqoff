@@ -1,8 +1,13 @@
 import {core} from 'gensrv'
-import config from './config.js'
+import piqhubApi from './piqhub.js';
+import config from './config.js';
 
-let gensrv = new core(config);
+let piqhub = new piqhubApi();
+let gensrv = new core(config);    
 gensrv.listen(config.port);
+piqhub.coreInit();
+
+await piqhub.getCustomerFiles(config.macId);
 
 const originalLog = console.log;
 const originalError = console.error;

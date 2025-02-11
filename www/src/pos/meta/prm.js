@@ -1315,7 +1315,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"SaleClosePrint",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1505,22 +1505,6 @@ export const prm =
             CAPTION : "Klavye Deseni"
         }
     },
-    //Adisyon kullanım 
-    {
-        TYPE : 0,
-        ID :"PosAddition",
-        VALUE : false,
-        SPECIAL : "",
-        PAGE : "pos",
-        ELEMENT : "",
-        APP : "POS",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "Pos Adisyon kullanımı"
-        }
-    },
     //#Lcd kucuk ekrana giriş yazısı eklemek
     {
         TYPE : 0,
@@ -1537,5 +1521,36 @@ export const prm =
             CAPTION : "Pos lcd Ekran Çıkacak yazısı"
         }
     },
-   
+    //Adisyon Kullanım 
+    {
+        TYPE : 0,
+        ID :"PosAddition",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Adisyon kullanımı"
+        }
+    },
+     //Adisyon Kullanım 
+     {
+        TYPE : 0,
+        ID :"PosBtnText",
+        VALUE : "textIcon",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Buton Text"
+        }
+    },
 ]

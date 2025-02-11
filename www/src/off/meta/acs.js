@@ -1666,6 +1666,33 @@ export const acs =
             }
         }
     },
+    //grdPromoListState
+    {
+        TYPE : 2,
+        ID :"grdPromoListState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "promo_02_001",
+        ELEMENT : "grdPromoListState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
     //grdPurcInvState
     {
         TYPE : 2,
@@ -1855,4 +1882,58 @@ export const acs =
             }
         }
     },
+    //grdPriceState
+    {
+        TYPE : 2,
+        ID :"grdPriceState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "grdPriceState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    //grdSlsOrdListState
+    {
+        TYPE : 2,
+        ID :"grdSlsOrdListState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "sip_01_002",
+        ELEMENT : "grdSlsOrdListState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    }       
 ]

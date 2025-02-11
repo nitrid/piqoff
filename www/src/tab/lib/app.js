@@ -62,6 +62,8 @@ export default class App extends React.PureComponent
         {
             logined : false,
             connected : false,
+            licenced : false,
+            licenceMsg : '',
             splash : 
             {
                 type : 0,
@@ -69,7 +71,7 @@ export default class App extends React.PureComponent
                 title : 'Sunucu ile bağlantı kuruluyor.',
                 value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
             },
-            page:'dashboard.js',
+            page:'sale.js',
         }
         this.pagePrm = null
         this.prmObj = null
@@ -133,6 +135,13 @@ export default class App extends React.PureComponent
 
                 this.core.auth.logout()
                 window.location.reload()
+            }
+            //LİSANS KONTROLÜ YAPILDIKTAN SONRA KULLANICI DISCONNECT EDİLİYOR.
+            else if(typeof e.id != 'undefined' && e.id == 'M001')
+            {
+                this.core.auth.logout()
+                this.core.socket.disconnect();
+                this.setState({licenced:true,connected:false,logined:false,licenceMsg:e.data});                
             }
         })
 
@@ -259,6 +268,25 @@ export default class App extends React.PureComponent
     {
         const { logined,connected,splash } = this.state;
 
+        if(this.state.licenced)
+        {
+            //LİSANS KONTROLÜ YAPILDIKTAN SONRA BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
+            return(
+                <div style={this.style.splash_body}>
+                    <div className="card" style={this.style.splash_box}>
+                        <div className="card-header">{"Licence"}</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h5 className="text-center">{this.state.licenceMsg}</h5>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            )                
+        }
+
         if(!connected)
         {
             //SPLASH EKRANI
@@ -293,10 +321,7 @@ export default class App extends React.PureComponent
             <div style={{height:'90%'}}>
                 <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
-                        <img src="./css/img/logo.png" width="45px" height="45px"/>
-                    </div>
-                    <div className="col-4" style={{paddingTop:"10px"}} align="center">
-                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                    <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
                         onClick={()=>
                         {
                             if(!this.popMenu.state.show)
@@ -311,15 +336,8 @@ export default class App extends React.PureComponent
                             <i className="fa-solid fa-bars fa-2x"></i>
                         </NbButton>
                     </div>
-                    <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
-                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
-                        onClick={()=>
-                        {
-                            this.core.auth.logout()
-                            window.location.reload()
-                        }}>
-                            <i className="fa-solid fa-share fa-2x"></i>
-                        </NbButton>
+                    <div className="col-4" style={{paddingTop:"10px"}} align="center">
+                        <img src="./css/img/logo.png" width="45px" height="45px"/>
                     </div>
                 </div>
                 <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
@@ -353,7 +371,19 @@ export default class App extends React.PureComponent
                             </div>
                             <div className='row' >
                                 {this.menu()}
-                            </div>                  
+                            </div>  
+                            <div className='col-12' style={{paddingTop:"10px"}}>
+                            </div>   
+                            <div className="col-12" style={{paddingRight:"25px",paddingTop:"10px"}} align="center">
+                                <NbButton className="form-group btn btn-primary btn-block btn-danger" style={{height:"45px",width:"20%"}}
+                                onClick={()=>
+                                {
+                                    this.core.auth.logout()
+                                    window.location.reload()
+                                }}>
+                                    <i className="fa-solid fa-share fa-2x"></i>
+                                </NbButton>
+                            </div>              
                         </div>
                     </NbPopUp>
                 </div>

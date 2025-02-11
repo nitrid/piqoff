@@ -31,6 +31,7 @@ const sip_04_002 =
         clmApprovedQuantity: "Quantité à Approuver",
         clmTotalHt: "Total HT",
         clmTotal: "Total TTC",
+        clmLivre : "Livré"
     },
     btnSave: "Approuver les Lignes Sélectionnées",
     msgApprovedBig: 

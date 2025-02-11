@@ -58,6 +58,12 @@ export default class salesOffer extends DocBase
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
+        // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        await this.discObj.loadDocDisc(
+        {
+            START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+            FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+        })
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -456,6 +462,9 @@ export default class salesOffer extends DocBase
             this.docObj.docOffers.dt()[pIndex].DISCOUNT = 0
             this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -471,7 +480,9 @@ export default class salesOffer extends DocBase
                     let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
                     this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                     this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docOffers.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(6)
+                    this.docObj.docOffers.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docOffers.dt()[pIndex].DISCOUNT) * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docOffers.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
                     this.docObj.docOffers.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
                     this.docObj.docOffers.dt()[pIndex].TOTALHT = Number((this.docObj.docOffers.dt()[pIndex].AMOUNT - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
@@ -481,6 +492,8 @@ export default class salesOffer extends DocBase
             else
             {
                 this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docOffers.dt()[pIndex].DISCOUNT = Number(pPrice * pQuantity).rateInc(tmpDiscRate,4)
+                this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
                 this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOffers.dt()[pIndex].DISCOUNT) * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docOffers.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docOffers.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
@@ -1344,6 +1357,7 @@ export default class salesOffer extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            this.cmbMultiItemType.value = 1
                                             if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
@@ -1496,6 +1510,29 @@ export default class salesOffer extends DocBase
                                             e.key.DISCOUNT_3 = 0
                                             e.key.DISCOUNT_RATE = 0
                                             return
+                                        }
+                                        //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                        let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,e.key.ITEM)
+                                        if(e.key.DISCOUNT == 0)
+                                        {
+                                            e.key.DISCOUNT_RATE = 0
+                                            e.key.DISCOUNT_1 = 0
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
+                                        }
+
+                                        if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                        {
+                                            if(tmpDiscRate != 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = tmpDiscRate
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                            }
+                                            else
+                                            {
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                            }
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)

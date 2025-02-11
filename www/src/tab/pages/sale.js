@@ -22,6 +22,7 @@ import NdPopUp  from '../../core/react/devex/popup.js';
 import NdButton   from '../../core/react/devex/button.js';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NbItemView from '../tools/itemView.js';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
 
 import { docCls,docOrdersCls, docCustomerCls,docExtraCls }from '../../core/cls/doc.js';
 import { datatable } from '../../core/core.js';
@@ -39,7 +40,13 @@ export default class Sale extends React.PureComponent
         this.vatRate =  new datatable()
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
+        this.balance = new datatable();
 
+        this.balance.selectCmd = 
+        {
+            query : "SELECT ROUND(BALANCE,2) AS FACT_NON_SOLDE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @ACCOUNT_GUID",
+            param : ['ACCOUNT_GUID:string|50'],
+        }
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -83,7 +90,7 @@ export default class Sale extends React.PureComponent
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
-        this.orderGroup.value = this.sysParam.filter({ID:'salesİtemsType',USERS:this.user.CODE}).getValue().value
+        this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
       
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
@@ -105,8 +112,8 @@ export default class Sale extends React.PureComponent
             {
                 this.docObj.dt()[0].GUID = this.docLines[0].DOC_GUID
                 this._calculateTotal();
-                this.getItems()
-            }         
+            }
+            this.getItems()
         }
         else
         {
@@ -178,12 +185,11 @@ export default class Sale extends React.PureComponent
             
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
-                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
-            }
-            
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%')) OR (BARCODE = ?)) AND " +
+                        "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
+            }            
             let tmpBuf = await this.core.local.select(tmpQuery) 
 
             if(typeof tmpBuf.result.err == 'undefined')
@@ -204,9 +210,9 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-                        "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY " + this.orderGroup.value,
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                        "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%')) OR (BARCODE = @VAL)) AND " +
+                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,FAVORI ORDER BY " + this.orderGroup.value,
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
                 value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
                 buffer : true
@@ -241,10 +247,10 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
-                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))  OR (BARCODE = ?)) AND " +
+                        "((MAIN_GRP = ?) OR (? = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
             
             let tmpBuf = await this.core.local.select(tmpQuery) 
@@ -277,7 +283,6 @@ export default class Sale extends React.PureComponent
             this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
             this.itemView.setItemAll()
         }
-        
         this.setState({isExecute:false})
     }
     async getPrice(pItem,pQty,pDate,pCustomer,pDepot,pListNo,pType,pAddVat)
@@ -302,12 +307,12 @@ export default class Sale extends React.PureComponent
                                 (DEPOT = ?) OR 
                                 (DEPOT = '00000000-0000-0000-0000-000000000000')
                             ) AND 
-                            (LIST_NO = ? OR LIST_NO = 0) AND
+                            (LIST_NO = ? OR LIST_NO = 1) AND
                             (
                                 (CUSTOMER_GUID = ?) OR 
                                 (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
                             )
-                        ORDER BY DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
+                        ORDER BY LIST_NO DESC,DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
                         LIMIT 1;`,
                 values : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
             }
@@ -366,7 +371,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],BALANCE,(SELECT TOP 1 ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -384,7 +389,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-30 ORDER BY DOC_DATE,REF_NO DESC ",
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > dbo.GETDATE()-3 AND CUSER = '" + this.user.CODE + "' ORDER BY DOC_DATE,REF_NO DESC ",
                 },
                 sql : this.core.sql
             }
@@ -431,14 +436,22 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.ITEM_CODE = e.CODE
         tmpDocOrders.ITEM = e.GUID
         tmpDocOrders.ITEM_NAME = e.NAME
-        tmpDocOrders.VAT_RATE = e.VAT
         tmpDocOrders.QUANTITY = e.QUANTITY * e.UNIT_FACTOR
         tmpDocOrders.UNIT = e.UNIT
         tmpDocOrders.UNIT_FACTOR = e.UNIT_FACTOR
         tmpDocOrders.PRICE = e.PRICE
         tmpDocOrders.AMOUNT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
         tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
-        tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
+        if(this.docObj.dt()[0].VAT_ZERO == 1)
+        {
+            tmpDocOrders.VAT_RATE = 0
+            tmpDocOrders.VAT = 0
+        }
+        else
+        {
+            tmpDocOrders.VAT_RATE = e.VAT
+            tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
+        }
         tmpDocOrders.TOTAL = parseFloat(((tmpDocOrders.TOTALHT) + tmpDocOrders.VAT)).round(2)
         this.docLines.push(tmpDocOrders)
 
@@ -452,10 +465,18 @@ export default class Sale extends React.PureComponent
             if(e.QUANTITY > 0)
             { 
                 tmpLine[0].QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+                tmpLine[0].PRICE = e.PRICE
                 tmpLine[0].DISCOUNT = e.DISCOUNT
                 tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
                 tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR))) - tmpLine[0].DISCOUNT).round(2)
-                tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
+                if(this.docObj.dt()[0].VAT_ZERO == 1)
+                {
+                    tmpLine[0].VAT = 0
+                }
+                else
+                {
+                    tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
+                }
                 tmpLine[0].TOTAL = parseFloat(((tmpLine[0].TOTALHT) + tmpLine[0].VAT)).round(2)
                 tmpLine[0].UNIT_FACTOR = e.UNIT_FACTOR
                 tmpLine[0].UNIT = e.UNIT
@@ -519,7 +540,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 " + (this.sysParam.filter({ID:'docNoAuto',USERS:this.user.CODE}).getValue() == false ? " AND REF = @REF " : ""),
                 param : ['REF:string|25'],
                 value : [this.docObj.dt()[0].REF]
             }
@@ -554,6 +575,14 @@ export default class Sale extends React.PureComponent
                 tmpDocOrders.TOTAL = this.docLines[i].TOTAL
                 tmpDocOrders.UNIT = this.docLines[i].UNIT
                 tmpDocOrders.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocOrders.DISCOUNT_1 = this.docLines[i].DISCOUNT_1   
+                tmpDocOrders.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocOrders.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocOrders.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocOrders.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocOrders.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT   
+                tmpDocOrders.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docOrders.addEmpty(tmpDocOrders)
             }
         }
@@ -573,6 +602,10 @@ export default class Sale extends React.PureComponent
             await dialog(tmpConfObj1);
 
             localStorage.removeItem("data")
+            if(this.sysParam.filter({ID:'autoNewOrder',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.init()
+            }
         }
         else
         {
@@ -645,6 +678,14 @@ export default class Sale extends React.PureComponent
                 tmpDocItems.TOTAL = this.docLines[i].TOTAL
                 tmpDocItems.UNIT = this.docLines[i].UNIT
                 tmpDocItems.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                tmpDocItems.DISCOUNT_1 = this.docLines[i].DISCOUNT_1
+                tmpDocItems.DISCOUNT_2 = this.docLines[i].DISCOUNT_2
+                tmpDocItems.DISCOUNT_3 = this.docLines[i].DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT_1 = this.docLines[i].DOC_DISCOUNT_1
+                tmpDocItems.DOC_DISCOUNT_2 = this.docLines[i].DOC_DISCOUNT_2
+                tmpDocItems.DOC_DISCOUNT_3 = this.docLines[i].DOC_DISCOUNT_3
+                tmpDocItems.DOC_DISCOUNT = this.docLines[i].DOC_DISCOUNT
+                tmpDocItems.DISCOUNT = this.docLines[i].DISCOUNT
                 this.docObj.docItems.addEmpty(tmpDocItems)
             }
         }
@@ -823,18 +864,29 @@ export default class Sale extends React.PureComponent
                 />
                 <div style={{height:'50px',backgroundColor:'#f5f6fa',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
                     <div className="row">
-                        <div className="col-1" align="left" style={{paddingLeft:'20px',paddingTop:'10px'}}>
-                            <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%"}}
-                            onClick={()=>
+                        <div className="col-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
+                            <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
+                            onClick={async()=>
                             {
+                                for (let i = 0; i < this.docLines.length; i++) 
+                                {
+                                    this.docLines[i].DISCOUNT_RATE =  Number(this.docLines[i].QUANTITY * this.docLines[i].PRICE).rate2Num(this.docLines[i].DISCOUNT,3)
+                                }
                                 this.popCart.show()
+                                
+                                this.balance.clear()
+                                if(this.docObj.dt()[0].INPUT != "" && this.docObj.dt()[0].INPUT != '00000000-0000-0000-0000-000000000000') 
+                                {
+                                    this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                    await this.balance.refresh()
+                                }
                             }}>
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </NbButton>
                         </div>
                         
                         <div className="col-2" align="left" style={{paddingTop:'5px'}}>
-                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'150px'}} 
+                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'100px'}} 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
                             onValueChanged={(async(e)=>
@@ -874,12 +926,18 @@ export default class Sale extends React.PureComponent
                             />
                         </div>
                     </div>
-                </div>
+                </div>               
                 <div style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
                     <ScrollView showScrollbar={'never'} useNative={false}>
+                        {/* Müşteri title alanı */}
+                        <div className="col-12" style={{paddingLeft:'20px',paddingTop:'5px',marginBottom:'5px',textAlign:'center'}}>
+                            <h4 style={{color:'#2c3e50',margin:0}}>
+                                {this.docObj.dt() && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT_NAME || "" : ""}
+                            </h4>
+                        </div> 
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()} listPriceLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'listPriceLock'}).getValue()} />
                             </div>
                         </div>
                         <div className='row'>                            
@@ -1113,6 +1171,7 @@ export default class Sale extends React.PureComponent
                                                     valueExpr="GUID"
                                                     value=""
                                                     searchEnabled={true}
+                                                    readOnly={this.sysParam.filter({ID:'depotLock',USERS:this.user.CODE}).getValue()}
                                                     onValueChanged={(async()=>
                                                     {
                                                         this.checkRow()
@@ -1233,7 +1292,7 @@ export default class Sale extends React.PureComponent
                                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(4);
                                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+                                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)                                                    
                                                         this._calculateTotal()
                                                     }}
                                                     onRowRemoved={async (e)=>
@@ -1255,6 +1314,9 @@ export default class Sale extends React.PureComponent
                                                         <Column dataField="ITEM_NAME" caption={this.t("grdSale.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                                         <Column dataField="QUANTITY" caption={this.t("grdSale.clmQuantity")} width={70} dataType={'number'} />
                                                         <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                                        <Column caption={this.t("grdSale.clmPriceAfterDiscount")} width={90} allowEditing={true} calculateCellValue={(rowData) => {
+                                                            return (rowData.PRICE - (rowData.DISCOUNT / rowData.QUANTITY)).toFixed(2);
+                                                        }} format={{ style: "currency", currency: "EUR", precision: 2 }} />
                                                         <Column dataField="AMOUNT" caption={this.t("grdSale.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                                         <Column dataField="DISCOUNT" caption={this.t("grdSale.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSale.clmDiscountRate")} dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
@@ -1269,7 +1331,52 @@ export default class Sale extends React.PureComponent
                                                         <div className="col-12">
                                                             <Form colCount={2} parent={this} id={"frmSale"}>
                                                                 {/* Ara Toplam */}
-                                                                <EmptyItem/>
+                                                                <Item>
+                                                                    <Label text={this.t("popCart.txtFactNonSolde")} alignment="right" />
+                                                                    <NdTextBox id="txtFactNonSolde" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.balance,field:"FACT_NON_SOLDE"}}
+                                                                      button=
+                                                                      {
+                                                                          [
+                                                                              {
+                                                                                  id:'01',
+                                                                                  icon:'more',
+                                                                                  onClick:async ()  =>
+                                                                                  {
+                                                                                        let tmpQuery = 
+                                                                                        {
+                                                                                            query: "SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER " + 
+                                                                                                    "FROM ( " +
+                                                                                                    "SELECT " +
+                                                                                                    "TYPE, " +
+                                                                                                    "DOC_DATE, " +
+                                                                                                    "DOC_TYPE, " +
+                                                                                                    "INPUT_CODE, " +
+                                                                                                    "INPUT_NAME, " +
+                                                                                                    "DOC_REF, " +
+                                                                                                    "DOC_REF_NO, " +
+                                                                                                    "DOC_GUID ," +
+                                                                                                    "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  // Faturanın toplamı
+                                                                                                    "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + // Ödeme ve iadelerin toplamı
+                                                                                                    " FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                                                                                                    " WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
+                                                                                                    " GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID " +
+                                                                                                    ") AS TMP " +
+                                                                                                    "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
+                                                                                                param : ['INPUT_CODE:string|50'],
+                                                                                                value : [this.docObj.dt()[0].INPUT_CODE],
+                                                                                        }
+                                                                                        let tmpFactNonSoldeData = await this.core.sql.execute(tmpQuery) 
+                                                                                        if(tmpFactNonSoldeData.result.recordset.length > 0)
+                                                                                        {   
+                                                                                            await this.popFactNonSolde.show()
+                                                                                            await this.grdFactNonSolde.dataRefresh({source:tmpFactNonSoldeData.result.recordset})
+                                                                                        }                                                                       
+                                                                                  }
+                                                                              },
+                                                                          ]
+                                                                      }>
+                                                                    </NdTextBox>
+                                                                </Item>
                                                                 <Item>
                                                                     <Label text={this.t("popCart.txtAmount")} alignment="right" />
                                                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}/>
@@ -1449,9 +1556,36 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
+                                                this.balance.clear()
+                                                this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                                await this.balance.refresh()
+                                                
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [this.grdCustomer.getSelectedData()[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
+                                                    {
+                                                        if(pdata.length > 0)
+                                                        {
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                        }
+                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                }
                                                 for (let i = 0; i < this.docLines.length; i++) 
                                                 {
                                                     this.docLines[i].INPUT = this.grdCustomer.getSelectedData()[0].GUID
+                                                }
+                                                if(this.docLines.length > 0)
+                                                {
+                                                    this.priceListChange()
                                                 }
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
@@ -1466,14 +1600,55 @@ export default class Sale extends React.PureComponent
                                             columnsAutoWidth={true} 
                                             headerFilter={{visible:true}}
                                             selection={{mode:"single"}}
-                                            height={'400'}
+                                            height={'600'}
                                             width={'100%'}
+                                            onRowClick={async(e)=>
+                                            {
+                                                this.docObj.dt()[0].INPUT = e.data.GUID
+                                                this.docObj.dt()[0].INPUT_NAME =  e.data.TITLE
+                                                this.docObj.dt()[0].INPUT_CODE =  e.data.CODE
+                                                this.docObj.dt()[0].REF = e.data.CODE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = e.data.PRICE_LIST_NO
+                                                this.balance.clear()
+                                                this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
+                                                await this.balance.refresh()
+                                                
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [e.data.GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
+                                                    {
+                                                        if(pdata.length > 0)
+                                                        {
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                        }
+                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                }
+                                                for (let i = 0; i < this.docLines.length; i++) 
+                                                {
+                                                    this.docLines[i].INPUT = e.data.GUID
+                                                }
+                                                if(this.docLines.length > 0)
+                                                {
+                                                    this.priceListChange()
+                                                }
+                                                this.popCustomer.hide();
+                                            }}
                                             >
-                                                <Paging defaultPageSize={10} />
-                                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                                <Scrolling mode="standart" />
-                                                <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={200}/>
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                                <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={130}/>
                                                 <Column dataField="TITLE" caption={this.t("popCustomer.clmName")} width={400}/>
+                                                <Column dataField="ADRESS" caption={this.t("popCustomer.clmAdress")} width={400}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2347,6 +2522,62 @@ export default class Sale extends React.PureComponent
                                 <div id={"printView"}></div>
                             </NbPopUp>
                         </div>
+                          {/* Adres Seçim PopUp */}
+                        <div>
+                            <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
+                            visible={false}
+                            position={{of:'#root'}} 
+                            showTitle={true} 
+                            showBorders={true}
+                            width={'90%'}
+                            height={'90%'}
+                            title={this.t("pg_adress.title")} //
+                            deferRendering={true}
+                            >
+                                <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
+                                <Column dataField="CITY" caption={this.t("pg_adress.clmCity")} width={150} />
+                                <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
+                            </NdPopGrid>
+                        </div>
+                           {/* Adres Seçim PopUp */}
+                           <div>
+                            <NdPopUp parent={this} id={"popFactNonSolde"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popFactNonSolde")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'550'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                <Item >
+
+                                <NdGrid parent={this} id={"grdFactNonSolde"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'100%'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowRemoved={async (e)=>{
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="DOC_DATE" caption={this.t("grdFactNonSolde.clmDocDate")} width={100} defaultSortOrder="asc" dataType="date"  />
+                                            <Column dataField="DOC_REF_NO" caption={this.t("grdFactNonSolde.clmRefNo")} width={100} />
+                                            <Column dataField="REMAINDER" caption={this.t("grdFactNonSolde.clmRemainder")} width={300} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        </NdGrid>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>
+                          
                         {/* PRINTVIEW POPUP */}
                         {/* <div>
                             <NbPopUp id={"popCriter"} parent={this} title={"jtjtyhtyh"} fullscreen={false} width={'300'} centered={true}

@@ -115,6 +115,38 @@ export default class itemCount extends React.PureComponent
             this.btnPrint.setState({disabled:true});
         })
 
+        this.msgQuantity.onShowed = async ()=>
+        {
+            this.txtPopQteUnitQuantity.value = 1
+            this.txtPopQuantity.value = 1
+            this.txtPopQuantity.focus()
+            
+            let tmpUnitDt = new datatable()
+            tmpUnitDt.selectCmd = 
+            {
+                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                param: ['ITEM:string|50'],
+                value: [this.msgQuantity.tmpData.GUID]
+            }
+            await tmpUnitDt.refresh()
+            
+            if(tmpUnitDt.length > 0)
+            {   
+                this.cmbPopQteUnit.setData(tmpUnitDt)
+                let tmpDefaultUnit = tmpUnitDt.where({TYPE:{'<>' : 0}}).where({NAME:this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value})
+                if(tmpDefaultUnit.length > 0)
+                {
+                    this.cmbPopQteUnit.value = tmpDefaultUnit[0].GUID
+                    this.txtPopQteUnitFactor.value = tmpDefaultUnit[0].FACTOR
+                    this.txtPopQteUnitQuantity.value = this.txtPopQuantity.value * this.txtPopQteUnitFactor.value
+                }
+                else
+                {
+                    this.cmbPopQteUnit.value = this.msgQuantity.tmpData.UNIT
+                    this.txtPopQteUnitFactor.value = 1
+                }
+            }
+        }
 
 
         this.txtRef.setState({value:this.user.CODE})
@@ -383,30 +415,23 @@ export default class itemCount extends React.PureComponent
     async addItem(pData,pIndex)
     {
         let tmpQuantity = 1
-        let tmpBreak = false
-        await this.msgQuantity.show().then(async (e) =>
+        this.msgQuantity.tmpData = pData
+        let tmpResult = await this.msgQuantity.show()
+        if(tmpResult == 'btn02')
         {
-            if(e == 'btn01')
+            if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
             {
-                tmpQuantity = this.txtQuantity.value
-                this.msgQuantity.hide()
+                await this.grdItemCount.devGrid.deleteRow(0)
             }
-            else if(e == 'btn02')
-            {
-                tmpBreak = true
-                if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
-                {
-                    await this.grdItemCount.devGrid.deleteRow(0)
-                }
-                this.msgQuantity.hide()
-                this.txtBarcode.focus()
-            }
-        })
-        
-        if(tmpBreak == true)
-        {
+            this.msgQuantity.hide()
+            this.txtBarcode.focus()
             return
         }
+        else
+        {
+            tmpQuantity = this.txtPopQteUnitQuantity.value
+        }
+      
 
         for (let i = 0; i < this.countObj.dt().length; i++) 
         {
@@ -502,6 +527,10 @@ export default class itemCount extends React.PureComponent
                 if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
                 {
                     this.groupList.push('TOTAL_COST')
+                }
+                if(typeof e.value.find(x => x == 'CUSTOMER_NAME') != 'undefined')
+                {
+                    this.groupList.push('CUSTOMER_NAME')
                 }
 
                 for (let i = 0; i < this.grdItemCount.devGrid.columnCount(); i++) 
@@ -1025,7 +1054,7 @@ export default class itemCount extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50'],
@@ -1292,47 +1321,82 @@ export default class itemCount extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                 </ScrollView>  
-                {/* Miktar Dialog  */}
-                <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    {/* Miktar Dialog  */}
+                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
+                    width={"400px"}
+                    height={"400px"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
-                    onShowed={()=>
-                    {
-                        this.txtQuantity.setState({value:1})
-                        setTimeout(() => {
-                            this.txtQuantity.focus()
-                        }, 500);
-                    }}
+                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                            <Form>
-                                {/* txtQuantity */}
-                                <Item>
-                                    <Label text={this.t("txtQuantity")} alignment="right" />
-                                    <NdTextBox id="txtQuantity" parent={this} simple={true}  
-                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                    value ={1}
-                                    onFocusIn={(async(e)=>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    <Item>
+                                        <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
                                         {
-                                           
+                                            this.txtPopQteUnitFactor.value = this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
                                         }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                            </Form>
+                                        >
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        />
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
+                                        <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
+                                        </NdNumberBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}>
+                                        </NdNumberBox>
+                                    </Item>
+                                   
+                                   
+                                </Form>
+                            </div>
                             </div>
                         </div>
-                </NdDialog>       
+                    </NdDialog>  
                     {/* Dizayn Seçim PopUp */}
                     <div>
                     <NdPopUp parent={this} id={"popDesign"} 

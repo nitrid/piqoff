@@ -109,6 +109,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/rest")
+            },
+            {
+                directory: path.join(__dirname, "public")
             }
         ],
         port: 3000,
@@ -166,7 +169,7 @@ module.exports =
                 { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },  
                 { from: "./src/rest/css/", to: "./rest/css/" },
                 { from: "./src/rest/appUpdate.html", to: "./rest/appUpdate.html" },
-                { from: "./src/rest/lib/bootstrap.bundle.min.js", to: "./rest/lib/bootstrap.bundle.min.js" },    
+                { from: "./src/rest/lib/bootstrap.bundle.min.js", to: "./rest/lib/bootstrap.bundle.min.js" }
             ]
         }),
         new htmlWebPackPlugin(

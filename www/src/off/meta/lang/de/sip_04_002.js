@@ -31,6 +31,7 @@ const sip_04_002 =
         clmApprovedQuantity: "Genehmigte Menge",
         clmTotalHt: "Betrag ohne Steuern",
         clmTotal: "Gesamt",
+        clmLivre : "Geliefert"
     },
     btnSave: "Ausgewählte Zeilen genehmigen",
     msgApprovedBig: 

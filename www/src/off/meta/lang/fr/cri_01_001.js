@@ -40,7 +40,8 @@ const cri_01_001 =
         clmZipcode : "Code Postal",
         clmCity :"Ville",
         clmCountry : "Pays",
-        clmSiret : "Siret"
+        clmSiret : "Siret",
+        clmFacturation : "Facturation Adresse"
     },
     grdLegal : 
     {
@@ -78,7 +79,8 @@ const cri_01_001 =
         cmbPopZipcode :"Code Postal",
         cmbPopCity :"Ville",
         cmbPopCountry :"Pays",
-        txtPopAdressSiret : "Siret"
+        txtPopAdressSiret : "Siret",
+        txtPopAdressFacturation : "Facturation Adresse"
     },
     popBank : 
     {
@@ -170,6 +172,7 @@ const cri_01_001 =
         msg : "Client déjà existant!"
     },
     chkTaxSucre : "Taxe sucrée",
+    txtAccountingCode : "Code comptable",
     tabTitleDetail : "Information détail",
     validation : 
     {

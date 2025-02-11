@@ -456,4 +456,300 @@ export class nf525Cls
             resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
         })
     }
+    signatureNoteDuplicate(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            let tmpPrintCount = -1
+            
+            let tmpQuery = 
+            {
+                query : `SELECT TOP 1 TTC FROM NF525_NOTE WHERE REST = @REST`,
+                param : ['REST:string|50'],
+                value : [pData.REST]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+
+            if(tmpResult.result.recordset.length > 0)
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT TOP 1 PRINT_COUNT,SIGNATURE FROM NF525_NOTE_DUPLICATE WHERE REST = @REST ORDER BY PRINT_COUNT DESC",
+                    param : ['REST:string|50'],
+                    value : [pData.REST]
+                }
+                
+                tmpResult = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    if(tmpResult.result.recordset[0].PRINT_COUNT != null)
+                    {
+                        tmpPrintCount = tmpResult.result.recordset[0].PRINT_COUNT
+                    }
+                    if(tmpResult.result.recordset[0].SIGNATURE != null)
+                    {
+                        tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                    }
+                }
+                
+                tmpSignatureSum = pData.GUID
+                tmpSignatureSum = tmpSignatureSum + "," + pData.TYPE
+                tmpSignatureSum = tmpSignatureSum + "," + tmpPrintCount + 1
+                tmpSignatureSum = tmpSignatureSum + "," + pData.CUSER
+                tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+                tmpSignatureSum = tmpSignatureSum + "," + pData.REF.toString().padStart(8,'0') 
+                tmpSignatureSum = tmpSignatureSum + "," + (tmpLastSignature == "" ? "N" : "O")
+                tmpSignatureSum = tmpSignatureSum + "," + tmpLastSignature
+
+                tmpSignature = this.sign(tmpSignatureSum)                
+
+                let tmpInsertQuery = 
+                {
+                    query : `EXEC [dbo].[PRD_NF525_NOTE_DUPLICATE_INSERT] 
+                            @GUID = @PGUID, 
+                            @CDATE = @PCDATE, 
+                            @CUSER = @PCUSER, 
+                            @REST = @PREST, 
+                            @REF = @PREF, 
+                            @TYPE = @PTYPE, 
+                            @PRINT_COUNT = @PPRINT_COUNT, 
+                            @DESCRIPTION = @PDESCRIPTION, 
+                            @SIGNATURE = @PSIGNATURE, 
+                            @SIGNATURE_SUM = @PSIGNATURE_SUM`,
+                    param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PREST:string|50','PREF:string|50','PTYPE:string|50',
+                            'PPRINT_COUNT:int','PDESCRIPTION:string|max','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+                    value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.REST,pData.REF,pData.TYPE,
+                             tmpPrintCount + 1,'Le client a demandé un reçu',tmpSignature,tmpSignatureSum],
+                }
+
+                await this.core.sql.execute(tmpInsertQuery)
+            }
+            
+            resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum,COUNT:tmpPrintCount + 1})
+        })
+    }
+    signatureNote(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+
+            let tmpQuery = 
+            {
+                query : `SELECT TOP 1 SIGNATURE FROM NF525_NOTE ORDER BY CDATE DESC`
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)            
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+
+            tmpSignatureSum = pData.TVA
+            tmpSignatureSum = tmpSignatureSum + "," + pData.TTC
+            tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+            tmpSignatureSum = tmpSignatureSum + "," + pData.REST
+            tmpSignatureSum = tmpSignatureSum + "," + pData.TYPE
+            tmpSignatureSum = tmpSignatureSum + "," + (tmpLastSignature == "" ? "N" : "O")
+            tmpSignatureSum = tmpSignatureSum + "," + tmpLastSignature
+
+            tmpSignature = this.sign(tmpSignatureSum)
+
+            tmpQuery = 
+            {
+                query : `SELECT TOP 1 TTC FROM NF525_NOTE WHERE REST = @REST`,
+                param : ['REST:string|50'],
+                value : [pData.REST]
+            }
+            
+            tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if((tmpResult.result.recordset.length == 0) || (tmpResult.result.recordset[0].TTC != pData.TTC))
+            {
+                let tmpInsertQuery = 
+                {
+                    query : `EXEC [dbo].[PRD_NF525_NOTE_INSERT] 
+                            @GUID = @PGUID, 
+                            @CDATE = @PCDATE, 
+                            @CUSER = @PCUSER, 
+                            @REST = @PREST, 
+                            @TYPE = @PTYPE, 
+                            @TVA = @PTVA, 
+                            @TTC = @PTTC, 
+                            @APP_VERSION = @PAPP_VERSION,
+                            @SIGNATURE = @PSIGNATURE, 
+                            @SIGNATURE_SUM = @PSIGNATURE_SUM`,
+                    param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PREST:string|50','PTYPE:string|50','PTVA:float','PTTC:float','PAPP_VERSION:string|25','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+                    value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.REST,pData.TYPE,pData.TVA,pData.TTC,pData.APP_VERSION,tmpSignature,tmpSignatureSum],
+                }
+
+                await this.core.sql.execute(tmpInsertQuery)   
+            }
+            
+            resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
+        })
+    }
+    signatureJustPay(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            let tmpMaxRef = 0
+
+            let tmpQuery = 
+            {
+                query : `SELECT TOP 1 SIGNATURE,SIGNATURE_SUM FROM NF525_JUSTPAY WHERE POS = @POS`,
+                param : ['POS:string|50'],
+                value : [pData.POS]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+
+            if(tmpResult.result.recordset.length == 0)
+            {
+                tmpQuery = 
+                {
+                    query : `SELECT TOP 1 SIGNATURE FROM NF525_JUSTPAY ORDER BY CDATE DESC`
+                }
+                
+                tmpResult = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    if(tmpResult.result.recordset[0].SIGNATURE != null)
+                    {
+                        tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                    }
+                }
+
+                tmpQuery = 
+                {
+                    query : `SELECT ISNULL(MAX(REF),0) AS MAXREF FROM NF525_JUSTPAY`
+                }
+
+                tmpResult = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    if(tmpResult.result.recordset[0].MAXREF != null)
+                    {
+                        tmpMaxRef = tmpResult.result.recordset[0].MAXREF
+                    }
+                }
+
+                tmpSignatureSum = tmpMaxRef
+                tmpSignatureSum = tmpSignatureSum + "," + pData.TTC
+                tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+                tmpSignatureSum = tmpSignatureSum + "," + pData.POS
+                tmpSignatureSum = tmpSignatureSum + "," + (tmpLastSignature == "" ? "N" : "O")
+                tmpSignatureSum = tmpSignatureSum + "," + tmpLastSignature
+
+                tmpSignature = this.sign(tmpSignatureSum)            
+                
+                
+                let tmpInsertQuery = 
+                {
+                    query : `EXEC [dbo].[PRD_NF525_JUSTPAY_INSERT] 
+                            @GUID = @PGUID, 
+                            @CDATE = @PCDATE, 
+                            @CUSER = @PCUSER, 
+                            @POS = @PPOS,
+                            @REF = @PREF,
+                            @REPAS = @PREPAS,
+                            @SIGNATURE = @PSIGNATURE, 
+                            @SIGNATURE_SUM = @PSIGNATURE_SUM, 
+                            @APP_VERSION = @PAPP_VERSION`,
+                    param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PPOS:string|50','PREF:string|50','PREPAS:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                    value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.POS,tmpMaxRef + 1,pData.REPAS,tmpSignature,tmpSignatureSum,pData.APP_VERSION],
+                }
+
+                await this.core.sql.execute(tmpInsertQuery)
+
+                resolve({STATE:true,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum,REF:tmpMaxRef + 1})
+            }
+            else
+            {
+                console.log(tmpResult)
+                tmpSignature = tmpResult.result.recordset[0].SIGNATURE
+                tmpSignatureSum = tmpResult.result.recordset[0].SIGNATURE_SUM
+                resolve({STATE:false,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum,REF:tmpMaxRef + 1})
+            }
+        })
+    }
+    signatureJustPayDuplicate(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            let tmpPrintCount = 0
+
+            let tmpQuery = 
+            {
+                query : "SELECT TOP 1 PRINT_COUNT,SIGNATURE FROM NF525_JUSTPAY_DUPLICATE WHERE POS = @POS ORDER BY PRINT_COUNT DESC",
+                param : ['POS:string|50'],
+                value : [pData.POS]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].PRINT_COUNT != null)
+                {
+                    tmpPrintCount = tmpResult.result.recordset[0].PRINT_COUNT
+                }
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+            
+            tmpSignatureSum = pData.POS
+            tmpSignatureSum = tmpSignatureSum + "," + pData.TYPE
+            tmpSignatureSum = tmpSignatureSum + "," + tmpPrintCount + 1
+            tmpSignatureSum = tmpSignatureSum + "," + pData.CUSER
+            tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+            tmpSignatureSum = tmpSignatureSum + "," + (tmpLastSignature == "" ? "N" : "O")
+            tmpSignatureSum = tmpSignatureSum + "," + tmpLastSignature
+
+            tmpSignature = this.sign(tmpSignatureSum)                
+
+            let tmpInsertQuery = 
+            {
+                query : `EXEC [dbo].[PRD_NF525_JUSTPAY_DUPLICATE_INSERT] 
+                        @GUID = @PGUID, 
+                        @CDATE = @PCDATE, 
+                        @CUSER = @PCUSER, 
+                        @POS = @PPOS, 
+                        @TYPE = @PTYPE, 
+                        @PRINT_COUNT = @PPRINT_COUNT, 
+                        @DESCRIPTION = @PDESCRIPTION, 
+                        @SIGNATURE = @PSIGNATURE, 
+                        @SIGNATURE_SUM = @PSIGNATURE_SUM,
+                        @APP_VERSION = @PAPP_VERSION`,
+                param : ['PGUID:string|50','PCDATE:string|25','PCUSER:string|25','PPOS:string|50','PTYPE:string|50',
+                        'PPRINT_COUNT:int','PDESCRIPTION:string|max','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                value : [datatable.uuidv4(),moment(pData.CDATE).format('YYYY-MM-DD HH:mm:ss'),pData.CUSER,pData.POS,pData.TYPE,
+                        tmpPrintCount + 1,'Le client a demandé un reçu',tmpSignature,tmpSignatureSum,pData.APP_VERSION],
+            }
+
+            await this.core.sql.execute(tmpInsertQuery)
+            resolve({SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum,COUNT:tmpPrintCount + 1})
+        })
+    }
 }

@@ -6,8 +6,10 @@ const irs_01_002 =
     dtFirst : "Date Début",
     dtLast : "Date Fin",
     txtCustomerCode : "Client",
+    cmbMainGrp : "Groupe Client",
     menu:"Bon de Livraison de Vente ",
     chkOpenDispatch : "Affichez uniquement ceux sans facture", 
+    msgNoMailAddress : "Le client n'a pas d'adresse e-mail. ",
     pg_txtCustomerCode : 
     {
         title : "Choix Client",
@@ -15,6 +17,13 @@ const irs_01_002 =
         clmTitle : "Nom Client",
         clmTypeName : "Type",
         clmGenusName : "Genre"
+    },
+    popDesign :
+    {
+        title : "Choix Dizayn",
+        design : "Choix Dizayn",
+        btnPrint : "Imprimer",
+        btnCancel : "Fermer"
     },
     grdSlsDisList: 
     {
@@ -27,7 +36,9 @@ const irs_01_002 =
         clmVat : "TVA",
         clmAmount : "Total TH" ,
         clmTotal : "Total TTC",
+        clmMainGroup : "Groupe Client",
         clmOutputName :"Réserve",
+        clmFacture : "Converti en Facture "
     },
     msgConvertInvoices:
 {  
@@ -42,6 +53,13 @@ msgConvertSucces:
     btn01: "Imprimer",
     btn02: "Fermer",
     msg: "Les factures ont été créées. Voulez-vous les imprimer ?"         
+},
+msgPrintDispatch :
+{  
+    title: "Attention",
+    btn01: "Imprimer",
+    btn02: "Fermer",
+    msg: "Les bons de livraison seront imprimés. Voulez-vous les imprimer ?"         
 },
 
 }

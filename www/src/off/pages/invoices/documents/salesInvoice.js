@@ -54,15 +54,15 @@ export default class salesInvoice extends DocBase
     {
         await this.core.util.waitUntil(100)
         await this.init()
+        this.cmbDesignList.value = this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE}).getValue().value
+
         if(typeof this.pagePrm != 'undefined')
         {
+            console.log(this.pagePrm)
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
-        } 
-        
-        
-        console.log(this.discObj.getDocDisc('86D606F3-8FFC-4067-8D74-0348BE4AFC15','DF85EDA0-EDF5-4499-B6EF-29D9FEAC5601'))
+        }
     }
     loadState() 
     {
@@ -104,7 +104,8 @@ export default class salesInvoice extends DocBase
             this.frmDocItems.option('disabled',true)
 
             // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
-            await this.discObj.loadDocDisc({
+            await this.discObj.loadDocDisc(
+            {
                 START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
                 FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
             })
@@ -117,11 +118,13 @@ export default class salesInvoice extends DocBase
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                    if(this.txtRefno.value == 0)
+                    {
+                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                    }
                 }
             }, 1000);
-        
 
             this.pg_txtItemsCode.on('showing',()=>
             {
@@ -589,7 +592,7 @@ export default class salesInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE))
                     this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
-                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -623,9 +626,14 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
-            param : ['INPUT:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
+            query : "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
+            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         super.getDispatch(tmpQuery)
     }
@@ -1386,6 +1394,10 @@ export default class salesInvoice extends DocBase
                                     data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.priceListChange()
+                                    }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1420,8 +1432,19 @@ export default class salesInvoice extends DocBase
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                 {/* öEDEME TİPİ */}
+                                <Item>
+                                    <Label text={this.t("cmbExpiryType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbExpiryType" height='fit-content' dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_TYPE"}}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.encaissement")},{ID:1,VALUE:this.t("cmbTypeData.debit")}]}}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       
+                                    }).bind(this)}
+                                    />
+                                </Item>
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
@@ -1684,6 +1707,7 @@ export default class salesInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            this.cmbMultiItemType.value = 1
                                             if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -1876,6 +1900,10 @@ export default class salesInvoice extends DocBase
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+                                            if(typeof e.data.SUB_FACTOR != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
+                                            }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
@@ -1915,7 +1943,31 @@ export default class salesInvoice extends DocBase
                                                 e.key.DISCOUNT_RATE = 0
                                                 return
                                             }
-
+                                            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                            let tmpDiscRate = this.discObj.getDocDisc(e.key.TYPE == 0 ? e.key.OUTPUT : e.key.INPUT,e.key.ITEM)
+                                                                                        
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                            {
+                                                if(tmpDiscRate != 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = tmpDiscRate
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                }
+                                                else
+                                                {
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                }
+                                            }
+                                            
                                             e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
@@ -1932,17 +1984,9 @@ export default class salesInvoice extends DocBase
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                             e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
-                                            if(e.key.DISCOUNT == 0)
-                                            {
-                                                e.key.DISCOUNT_RATE = 0
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                            }
-                                            if(typeof e.data.DISCOUNT_RATE == 'undefined')
-                                            {
-                                               e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
-                                            }
+
+                                           
+                                            console.log(e.key.DISCOUNT_RATE)
                                             this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>
@@ -1968,7 +2012,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
@@ -2172,7 +2216,7 @@ export default class salesInvoice extends DocBase
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

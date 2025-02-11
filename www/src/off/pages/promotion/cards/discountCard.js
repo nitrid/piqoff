@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {promoCls} from '../../../../core/cls/promotion.js'
+import {discountCls} from '../../../../core/cls/discount.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -33,9 +33,9 @@ export default class discountCard extends React.PureComponent
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
-        this.promo = new promoCls();
-        this.condDt = new datatable();
-        this.appDt = new datatable();
+        this.discount = new discountCls();
+        this.customerCondDt = new datatable();
+        this.itemCondDt = new datatable();
 
         this.tabIndex = props.data.tabkey
 
@@ -47,50 +47,53 @@ export default class discountCard extends React.PureComponent
         this.init();
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm.CODE)
             this.txtCode.value = this.pagePrm.CODE
-            await this.getPromotion(this.pagePrm.CODE);
+            await this.getDiscount(this.pagePrm.CODE);
         }
     }
     async init()
     {
+        this.customerCondDt.clear();
+        this.itemCondDt.clear();
 
+        this.discount.clearAll();
+        this.discount.addEmpty();
+        this.discount.app.addEmpty();
+
+        this.cmbPrmType.value = 0;
+        this.cmbPrmType2.value = 10;        
+        this.cmbRstType.value = 0;
+        this.txtAmount.value = 0;
     }
-    async getPromotion(pCode)
+    async getDiscount(pCode)
     {
-        this.clearItemList();
+        this.customerCondDt.clear();
+        this.itemCondDt.clear();
 
-        this.condDt.clear();
-        this.appDt.clear();
-
-        this.promo.clearAll();
-        await this.promo.load({CODE:pCode});
+        this.discount.clearAll();
         
-        if(this.promo.cond.dt().length == 0)
-        {
-            this.promo.cond.addEmpty();
-        }
-        if(this.promo.app.dt().length == 0)
-        {
-            this.promo.app.addEmpty();
-        }
+        await this.discount.load({CODE:pCode});
 
-        this.condDt.import(this.promo.cond.dt().groupBy('WITHAL').toArray())
-        this.appDt.import(this.promo.app.dt().groupBy('WITHAL').toArray())
+        this.customerCondDt = this.discount.cond.dt().where({TYPE:{'IN':[0,1]}})
+        this.itemCondDt = this.discount.cond.dt().where({TYPE:{'IN':[10,11]}})
+        
+        this.cmbPrmType.value = this.customerCondDt.length > 0 ? this.customerCondDt[0].TYPE : 0;
+        this.cmbPrmType2.value = this.itemCondDt.length > 0 ? this.itemCondDt[0].TYPE : 10;
+        
+        this.cmbRstType.value = this.discount.app.dt().length > 0 ? this.discount.app.dt()[0].TYPE : 0;
+        this.txtAmount.value = this.discount.app.dt().length > 0 ? this.discount.app.dt()[0].AMOUNT : 0;
 
         this.setState({discPrice : 0})
         
         await this.core.util.waitUntil(0);
-        await this.lstPromo.dataRefresh();
-        await this.lstPromo1.dataRefresh();
     }
-    async checkPromotion(pCode)
+    async checkDiscount(pCode)
     {
         return new Promise(async resolve => 
         {            
             if(pCode !== '')
             {
-                let tmpData = await new promoCls().load({CODE:pCode});
+                let tmpData = await new discountCls().load({CODE:pCode});
     
                 if(tmpData.length > 0)
                 {
@@ -109,7 +112,7 @@ export default class discountCard extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getPromotion(pCode)
+                        this.getDiscount(pCode)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -128,21 +131,6 @@ export default class discountCard extends React.PureComponent
             }
         });
     }
-    groupTemplate(pItem) 
-    {
-        return (
-            <div className='row'>
-                <div className='col-6'>
-                    {pItem.text}
-                </div>
-                <div className='col-6'>
-                    <Toolbar style={{backgroundColor:"#f1f4f5"}}>
-                       
-                    </Toolbar>
-                </div>
-            </div>
-        )
-    }
     async getDocs(pType)
     {
         let tmpQuery 
@@ -150,14 +138,14 @@ export default class discountCard extends React.PureComponent
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 WHERE CDATE > dbo.GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 WHERE CDATE > dbo.GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
             }
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
             }
         }
 
@@ -175,705 +163,8 @@ export default class discountCard extends React.PureComponent
         {
             if(data.length > 0)
             {
-                this.getPromotion(data[0].CODE)
+                this.getDiscount(data[0].CODE)
             }
-        }
-    }
-    itemTemplate(pItem)
-    {               
-        if(pItem.SECTOR == 'COND')
-        {            
-            if(typeof this["itemList" + pItem.WITHAL] == 'undefined' || this["itemList" + pItem.WITHAL].length == 0)
-            {
-                this["itemList" + pItem.WITHAL] = this.promo.cond.dt().where({WITHAL:pItem.WITHAL})
-                this["itemList" + pItem.WITHAL].forEach(async x =>
-                {
-                    x.PRICE = await this.getPrice(x.ITEM_GUID)
-                })
-            }
-
-            this.state["prmType" + pItem.WITHAL] = pItem.TYPE
-
-            return(
-                <div className='row'>
-                    <div className='col-12 pb-4'>                    
-                        <Form colCount={3} id={"frmCond"  + this.tabIndex}>
-                            {/* cmbPrmType */}
-                            <Item>
-                                <Label text={this.t("cmbPrmType")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id={"cmbPrmType" + pItem.WITHAL}
-                                displayExpr="NAME"                       
-                                valueExpr="ID"
-                                value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:this.t("cmbType.item")},{ID:1,NAME:this.t("cmbType.generalAmount")}]}}
-                                onValueChanged={(e)=>
-                                {
-                                    if(e.previousValue == 0 && this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).length > 1)
-                                    {
-                                        this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).forEach((item)=>
-                                        {
-                                            this.promo.cond.dt().removeAt(item)
-                                        })
-                                    }
-
-                                    if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                    {
-                                        this.condDt.where({WITHAL:pItem.WITHAL})[0].TYPE = e.value
-                                    }
-
-                                    this.setState({["prmType" + pItem.WITHAL] :e.value})
-                                }}
-                                />
-                            </Item>
-                            <EmptyItem />
-                            <EmptyItem />
-                            <GroupItem colSpan={3}>
-                                <GroupItem colCount={3} visible={this.state["prmType" + pItem.WITHAL] == 0 ? true : false}>
-                                    {/* txtPrmItem */}
-                                    <Item>
-                                        <Label text={this.t("txtPrmItem")} alignment="right" />
-                                        <NdButton text={this.t("btnPrmItem")} type="default" width="100%" 
-                                        onClick={()=>
-                                        {
-                                            this["grdPopItemList" + pItem.WITHAL].dataRefresh({source:this["itemList" + pItem.WITHAL]})
-                                            this["pop_PrmItemList" + pItem.WITHAL].show()
-                                        }}></NdButton> 
-                                        {/* SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_txtPrmItem" + pItem.WITHAL} parent={this} container={"#root"} 
-                                        visible={false}
-                                        position={{of:'#root'}} 
-                                        showTitle={true} 
-                                        showBorders={true}
-                                        width={'90%'}
-                                        height={'90%'}
-                                        title={this.t("pg_Grid.title")} 
-                                        search={true}
-                                        data = 
-                                        {{
-                                            source:
-                                            {
-                                                select:
-                                                {
-                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,(SELECT TOP 1 COST_PRICE FROM ITEMS WHERE ITEMS.GUID = MAX(ITEM_GUID)) AS COST_PRICE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
-                                                            "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
-                                                            "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
-                                                    param : ['VAL:string|50']
-                                                },
-                                                sql:this.core.sql
-                                            }
-                                        }}>
-                                            <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
-                                            <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
-                                            <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                            <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
-                                            <Column dataField="COST_PRICE" caption={this.t("pg_Grid.clmCostPrice")} width={100}/>
-                                            <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
-                                        </NdPopGrid>
-                                        {/* SEÇİM LİSTE POPUP */}
-                                        <NdPopUp parent={this} id={"pop_PrmItemList" + pItem.WITHAL} container={"#root"}
-                                        position={{of:'#root'}}
-                                        showCloseButton={false}
-                                        showTitle={true}
-                                        title={this.t("pg_Grid.title")}
-                                        width={'70%'}
-                                        height={'90%'}
-                                        >
-                                            <div className="row pb-1">
-                                                <div className='col-12'>
-                                                <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
-                                                onClick={()=>
-                                                {
-                                                    //this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
-                                                    this["pg_txtPrmItem" + pItem.WITHAL].show()
-                                                    this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
-                                                    {         
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            if(this["itemList" + pItem.WITHAL].where({ITEM_GUID:data[i].GUID}).length > 0)
-                                                            {
-                                                                let tmpConfObj =
-                                                                {
-                                                                    id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
-                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
-                                                                }
-                                                                await dialog(tmpConfObj)
-                                                                return
-                                                            }
-                                                        }
-                                                        
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            let tmpData = {...this.promo.cond.empty}
-
-                                                            tmpData.GUID = datatable.uuidv4();
-                                                            tmpData.ITEM_GUID = data[i].GUID;
-                                                            tmpData.ITEM_CODE = data[i].CODE;
-                                                            tmpData.ITEM_NAME = data[i].NAME;
-                                                            tmpData.PRICE = data[i].PRICE;
-                                                            tmpData.PROMO = this.promo.dt()[0].GUID
-                                                            tmpData.QUANTITY = 1;
-                                                            tmpData.AMOUNT = 0;
-                                                            tmpData.WITHAL = pItem.WITHAL
-
-                                                            this["itemList" + pItem.WITHAL].push(tmpData);
-                                                        }
-
-                                                        if(data.length > 0)
-                                                        {
-                                                            //this["txtPrmItem" + pItem.WITHAL].value = data[0].CODE;
-                                                            //this["txtPrmItem" + pItem.WITHAL].displayValue = data[0].NAME
-
-                                                            if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                                            {
-                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_GUID = data[0].GUID
-                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_CODE = data[0].CODE
-                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_NAME = data[0].NAME
-                                                            }
-                                                        }
-                                                    }
-                                                }}></NdButton> 
-                                                </div>
-                                            </div>
-                                            {/* grdPopGridList */}
-                                            <div className="row pb-1" style={{height:"85%"}}>
-                                                <div className="col-12">
-                                                    <NdGrid parent={this} id={"grdPopItemList" + pItem.WITHAL} 
-                                                    showBorders={true} 
-                                                    columnsAutoWidth={false} 
-                                                    allowColumnResizing={true} 
-                                                    allowColumnReordering={false}
-                                                    height={"100%"} 
-                                                    width={"100%"}
-                                                    dbApply={false}
-                                                    selection={{mode:"single"}}
-                                                    loadPanel={{enabled:false}}
-                                                    sorting={{ mode: 'none' }}
-                                                    >
-                                                        <Editing mode="cell" allowUpdating={false} allowDeleting={true}/>
-                                                        <Scrolling mode="standart" />
-                                                        <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
-                                                        <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
-                                                        <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
-                                                    </NdGrid>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-6">
-                                                <NdButton type="danger" width="100%" icon={"trash"}
-                                                onClick={async()=>
-                                                {
-                                                    let tmpConfObj1 =
-                                                    {
-                                                        id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
-                                                    }
-                                                    if((await dialog(tmpConfObj1)) == 'btn01')
-                                                    {
-                                                        this["itemList" + pItem.WITHAL].removeAll()
-                                                    }
-                                                }}>
-                                                    <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
-                                                </NdButton>
-                                                </div>
-                                                <div className="col-6">
-                                                    <NdButton type="success" width="100%" icon={"todo"}
-                                                    onClick={()=>
-                                                    {
-                                                        this["pop_PrmItemList" + pItem.WITHAL].hide()
-                                                    }}>
-                                                        <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
-                                                    </NdButton>
-                                                </div>
-                                            </div>
-                                        </NdPopUp>
-                                    </Item>
-                                    {/* txtPrmQuantity */}  
-                                    <Item>                                                                    
-                                        <Label text={this.t("txtPrmQuantity")} alignment="right" />
-                                        <NdTextBox id={"txtPrmQuantity" + pItem.WITHAL} parent={this} simple={true} value={pItem.QUANTITY}
-                                        onValueChanged={(e)=>
-                                        {
-                                            this["txtPrmAmount" + pItem.WITHAL].value = 0
-                                            if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                            {
-                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = e.value
-                                            }
-                                        }}
-                                        button={
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemQuantity")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}>
-                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
-                                                <RequiredRule message={this.t("validation.txtPrmQuantityValid")} />
-                                                <RangeRule min={0} message={this.t("validation.txtPrmQuantityMinValid")}/>
-                                            </Validator> 
-                                        </NdTextBox>     
-                                    </Item>
-                                    {/* txtPrmAmount */}  
-                                    <Item>                                                                    
-                                        <Label text={this.t("txtPrmAmount")} alignment="right" />
-                                        <NdTextBox id={"txtPrmAmount" + pItem.WITHAL} parent={this} simple={true} value={pItem.AMOUNT}
-                                        onValueChanged={(e)=>
-                                        {
-                                            this["txtPrmQuantity" + pItem.WITHAL].value = 0
-                                            if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                            {
-                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
-                                            }
-                                        }}
-                                        button={
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemAmount")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}/>     
-                                    </Item>
-                                </GroupItem>
-                                <GroupItem colCount={3} visible={this.state["prmType" + pItem.WITHAL] == 1 ? true : false}>
-                                    {/* txtPrmAmount */}  
-                                    <Item>                                                                    
-                                        <Label text={this.t("txtPrmAmount")} alignment="right" />
-                                        <NdTextBox id={"txtPrmAmount" + pItem.WITHAL} parent={this} simple={true} value={pItem.AMOUNT}
-                                        onValueChanged={(e)=>
-                                        {
-                                            if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                            {
-                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
-                                            }
-                                        }}
-                                        button={
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condGeneralAmount")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}/>     
-                                    </Item> 
-                                    <EmptyItem /> 
-                                    <EmptyItem /> 
-                                </GroupItem>
-                            </GroupItem>
-                        </Form>
-                    </div>
-                </div>            
-            )
-        }
-        else if(pItem.SECTOR == 'APP')
-        {
-            this.state["rstType" + pItem.WITHAL] = pItem.TYPE
-            
-            return(
-                <div className='row'>
-                    <div className='col-12 pb-4'>
-                        <Form colCount={3} id={"frmApp"  + this.tabIndex}>
-                            {/* cmbRstType */}
-                            <Item>
-                                <Label text={this.t("cmbRstType")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id={"cmbRstType" + pItem.WITHAL}
-                                displayExpr="NAME"                       
-                                valueExpr="ID"
-                                value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:this.t("cmbType.discountRate")},{ID:1,NAME:this.t("cmbType.moneyPoint")},{ID:2,NAME:this.t("cmbType.giftCheck")},]}}  
-                                onValueChanged={(e) =>
-                                {
-                                    if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                    {
-                                        this.appDt.where({WITHAL:pItem.WITHAL})[0].TYPE = e.value
-                                    }
-                                    this.setState({["rstType" + pItem.WITHAL]:e.value,discPrice:0})
-                                }}                                  
-                                />
-                            </Item>                                
-                            <EmptyItem/>
-                            <EmptyItem/>
-                            <GroupItem colSpan={3}>
-                                {/* İskonto Oran */}
-                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 0 || this.state["rstType" + pItem.WITHAL] == 5 ? true : false}>
-                                    {/* txtRstDiscount */}
-                                    <Item>
-                                        <Label text={this.t("txtRstQuantity")} alignment="right" />
-                                        <NdTextBox id={"txtRstQuantity" + pItem.WITHAL} parent={this} simple={true} readOnly={true} value={pItem.AMOUNT}                                        
-                                        button=
-                                        {[
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:async()=>
-                                                {
-                                                    if(this.condDt.length > 0)
-                                                    {
-                                                        let tmpPrice = await this.getPrice(this.condDt[0].ITEM_GUID)
-                                                        this.setState({discPrice:tmpPrice})
-                                                    }
-                                                    if(this.state["rstType" + pItem.WITHAL] == 0)
-                                                    {
-                                                        this["txtDiscRate" + pItem.WITHAL].value = this["txtRstQuantity" + pItem.WITHAL].value
-                                                        this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this["txtRstQuantity" + pItem.WITHAL].value,2)).toFixed(2)
-                                                    }
-                                                    else if(this.state["rstType" + pItem.WITHAL] == 5)
-                                                    {
-                                                        this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(this["txtRstQuantity" + pItem.WITHAL].value,2)).toFixed(2)
-                                                        this["txtDiscAmount" + pItem.WITHAL].value = this["txtRstQuantity" + pItem.WITHAL].value
-                                                    }                                                    
-                                                    this["popDiscount" + pItem.WITHAL].show()
-                                                }
-                                            },
-                                            {
-                                                id:'02',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj = {}
-                                                    if(this.state["rstType" + pItem.WITHAL] == 0)
-                                                    {
-                                                        tmpConfObj =
-                                                        {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscRate")}</div>)
-                                                        }
-                                                    }
-                                                    else if(this.state["rstType" + pItem.WITHAL] == 5)
-                                                    {
-                                                        tmpConfObj =
-                                                        {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscAmount")}</div>)
-                                                        }
-                                                    }
-
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}/>
-                                    </Item>
-                                    <EmptyItem/>
-                                    <EmptyItem/>
-                                </GroupItem>
-                                {/* Puan - Hediye Çeki - Genel İskonto */}
-                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 1 || this.state["rstType" + pItem.WITHAL] == 2 || this.state["rstType" + pItem.WITHAL] == 4 ? true : false}>
-                                    {/* txtRstPointGift */}
-                                    <Item>
-                                        <Label text={this.t("txtRstQuantity")} alignment="right" />
-                                        <NdTextBox id={"txtRstPointGift" + pItem.WITHAL} parent={this} simple={true} value={pItem.AMOUNT}
-                                        onValueChanged={(e)=>
-                                        {
-                                            if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                            {
-                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
-                                            }
-                                        }}
-                                        button={
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj = {}
-                                                    if(this.state["rstType" + pItem.WITHAL] == 1)
-                                                    {
-                                                        tmpConfObj =
-                                                        {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appPoint")}</div>)
-                                                        }
-                                                    }
-                                                    else if(this.state["rstType" + pItem.WITHAL] == 2)
-                                                    {
-                                                        tmpConfObj =
-                                                        {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGiftCheck")}</div>)
-                                                        }
-                                                    }
-                                                    else if(this.state["rstType" + pItem.WITHAL] == 4)
-                                                    {
-                                                        tmpConfObj =
-                                                        {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGeneralAmount")}</div>)
-                                                        }
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}/>
-                                    </Item>
-                                    <EmptyItem/>
-                                    <EmptyItem/>
-                                </GroupItem>
-                                {/* Ürün İskonto */}
-                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 3 ? true : false}>
-                                    {/* txtRstItem */}                                
-                                    <Item>
-                                        <Label text={this.t("txtRstItem")} alignment="right" />
-                                        <NdTextBox id={"txtRstItem" + pItem.WITHAL} parent={this} simple={true} readOnly={true}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        value={pItem.ITEM_CODE}
-                                        displayValue={pItem.ITEM_NAME}
-                                        placeholder={this.t("txtRstItemPlace")}
-                                        button=
-                                        {[
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this["pg_txtRstItem" + pItem.WITHAL]["txtpg_txtRstItem" + pItem.WITHAL].value = ""
-                                                    this["pg_txtRstItem" + pItem.WITHAL].show()
-                                                    this["pg_txtRstItem" + pItem.WITHAL].onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this["txtRstItem" + pItem.WITHAL].value = data[0].CODE;
-                                                            this["txtRstItem" + pItem.WITHAL].displayValue = data[0].NAME
-
-                                                            if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                                            {
-                                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].ITEM_GUID = data[0].GUID
-                                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].ITEM_CODE = data[0].CODE
-                                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].ITEM_NAME = data[0].NAME
-                                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = 1;
-                                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = 0;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        ]}
-                                        >     
-                                        </NdTextBox> 
-                                        {/* SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_txtRstItem" + pItem.WITHAL} parent={this} container={"#root"} 
-                                        visible={false}
-                                        position={{of:'#root'}} 
-                                        showTitle={true} 
-                                        showBorders={true}
-                                        width={'90%'}
-                                        height={'90%'}
-                                        title={this.t("pg_Grid.title")} 
-                                        search={true}
-                                        data = 
-                                        {{
-                                            source:
-                                            {
-                                                select:
-                                                {
-                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
-                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
-                                                    param : ['VAL:string|50']
-                                                },
-                                                sql:this.core.sql
-                                            }
-                                        }}>
-                                            <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
-                                            <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
-                                            <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                            <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
-                                        </NdPopGrid>
-                                    </Item>     
-                                    {/* txtRstItemQuantity */}  
-                                    <Item>                                                                    
-                                        <Label text={this.t("txtRstItemQuantity")} alignment="right" />
-                                        <NdTextBox id={"txtRstItemQuantity" + pItem.WITHAL} parent={this} simple={true} value={pItem.QUANTITY}
-                                        onValueChanged={(e)=>
-                                        {
-                                            if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                            {
-                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = e.value
-                                            }
-                                        }}
-                                        button={
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemQuantity")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}>
-                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
-                                                <RangeRule min={0.001} message={this.t("validation.txtRstItemQuantityValid")} />
-                                            </Validator> 
-                                        </NdTextBox>     
-                                    </Item> 
-                                    {/* txtRstItemAmount */}  
-                                    <Item>                                                                    
-                                        <Label text={this.t("txtRstItemAmount")} alignment="right" />
-                                        <NdTextBox id={"txtRstItemAmount" + pItem.WITHAL} parent={this} simple={true} readOnly={true} value={pItem.AMOUNT}
-                                        button=
-                                        {[
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:async()=>
-                                                {
-                                                    if(this.appDt.length > 0)
-                                                    {
-                                                        let tmpPrice = await this.getPrice(this.appDt[0].ITEM_GUID)
-                                                        this.setState({discPrice:tmpPrice})
-                                                    }
-                                                    this["txtDiscRate" + pItem.WITHAL].value = this["txtRstItemAmount" + pItem.WITHAL].value
-                                                    this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this["txtRstItemAmount" + pItem.WITHAL].value,2)).toFixed(2)
-                                                    this["popDiscount" + pItem.WITHAL].show()
-                                                }
-                                            },
-                                            {
-                                                id:'02',
-                                                icon:'help',
-                                                onClick:async()=>
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemAmount")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }
-                                        ]}/>     
-                                    </Item>
-                                </GroupItem>
-                            </GroupItem>
-                        </Form>
-                        {/* ISKONTO POPUP */}
-                        <div>
-                            <NdPopUp parent={this} id={"popDiscount" + pItem.WITHAL} container={"#root"}
-                            position={{of:'#root'}}
-                            showCloseButton={true}
-                            showTitle={true}
-                            title={this.t("popDiscount.title")}
-                            width={'400'}
-                            height={'260'}
-                            >
-                                <div className='row'>
-                                    <div className='col-12'>
-                                        <h5 className='text-center'>{this.state.discPrice}</h5>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <Form colCount={1}>
-                                        <Item>
-                                            <Label text={this.t("popDiscount.txtDiscRate")} alignment="right" />
-                                            <NdTextBox id={"txtDiscRate" + pItem.WITHAL} parent={this} simple={true} 
-                                            onValueChanged={async(e)=>
-                                            {
-                                                if(e.value >= 0 && e.value <= 100)
-                                                {
-                                                    this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(e.value,2)).toFixed(2)
-                                                }
-                                                else
-                                                {
-                                                    this["txtDiscAmount" + pItem.WITHAL].value = 0;
-                                                    this["txtDiscRate" + pItem.WITHAL].value = 0;
-
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }                                                
-                                            }}/>
-                                        </Item>
-                                        <Item>
-                                            <Label text={this.t("popDiscount.txtDiscAmount")} alignment="right" />
-                                            <NdTextBox id={"txtDiscAmount" + pItem.WITHAL} parent={this} simple={true}
-                                            onValueChanged={async(e)=>
-                                            { 
-                                                if(Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) <= 100)
-                                                {
-                                                    this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value.replace(",","."),2)).toFixed(2)
-                                                }
-                                                else
-                                                {
-                                                    this["txtDiscAmount" + pItem.WITHAL].value = 0;
-                                                    this["txtDiscRate" + pItem.WITHAL].value = 0;
-
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }}/>
-                                        </Item>
-                                        <Item>
-                                            <NdButton id={"btnDiscSave" + pItem.WITHAL} parent={this} text={this.t("popDiscount.btnSave")} type="success" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                if(this.state["rstType" + pItem.WITHAL] == 0)
-                                                {
-                                                    this["txtRstQuantity" + pItem.WITHAL].value = this["txtDiscRate" + pItem.WITHAL].value
-                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscRate" + pItem.WITHAL].value
-                                                }                                                
-                                                else if(this.state["rstType" + pItem.WITHAL] == 3)
-                                                {
-                                                    this["txtRstItemAmount" + pItem.WITHAL].value = this["txtDiscRate" + pItem.WITHAL].value
-                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscRate" + pItem.WITHAL].value
-                                                }
-                                                else if(this.state["rstType" + pItem.WITHAL] == 5)
-                                                {
-                                                    this["txtRstQuantity" + pItem.WITHAL].value = Number(this["txtDiscAmount" + pItem.WITHAL].value)
-                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = Number(this["txtDiscAmount" + pItem.WITHAL].value)
-                                                }
-
-                                                
-                                                this["popDiscount" + pItem.WITHAL].hide()
-                                            }}/>
-                                        </Item>
-                                    </Form>
-                                </div>
-                            </NdPopUp>
-                        </div>
-                    </div>
-                </div> 
-            )
         }
     }
     render()
@@ -892,20 +183,32 @@ export default class discountCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPromo"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDiscount"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
+                                        if(this.txtAmount.value == 0)
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgQuantityOrAmount',showTitle:true,title:this.t("msgQuantityOrAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgQuantityOrAmount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantityOrAmount.msg")}</div>)
+                                                id:'msgAmount',showTitle:true,title:this.t("msgAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAmount.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        if(this.customerCondDt.length == 0 || this.itemCondDt.length == 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCondOrApp',showTitle:true,title:this.t("msgCondOrApp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCondOrApp.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCondOrApp.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -924,147 +227,83 @@ export default class discountCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                this.condDt.forEach((item)=>
+                                                this.customerCondDt.forEach((item)=>
                                                 {
-                                                    if(item.TYPE == 0)
-                                                    {
-                                                        if(this["itemList" + item.WITHAL].length > 0)
-                                                        {
-                                                            this["itemList" + item.WITHAL].forEach((list)=>
-                                                            {
-                                                                let tmpCond = this.promo.cond.dt().where({GUID:list.GUID}).where({ITEM_GUID:list.ITEM_GUID})
+                                                    let tmpCond = this.discount.cond.dt().where({LINK_GUID:item.LINK_GUID})
                                                                 
-                                                                if(tmpCond.length > 0)
-                                                                {                                                                
-                                                                    tmpCond[0].TYPE = item.TYPE
-                                                                    tmpCond[0].ITEM_CODE = list.ITEM_CODE
-                                                                    tmpCond[0].ITEM_NAME = list.ITEM_NAME
-                                                                    tmpCond[0].QUANTITY = item.QUANTITY
-                                                                    tmpCond[0].AMOUNT = item.AMOUNT
-                                                                }
-                                                                else
-                                                                {                                                                    
-                                                                    let tmpEmpty = {...this.promo.cond.empty}
-
-                                                                    tmpEmpty.PROMO = this.promo.dt()[0].GUID
-                                                                    tmpEmpty.ITEM_GUID = list.ITEM_GUID
-                                                                    tmpEmpty.ITEM_CODE = list.ITEM_CODE
-                                                                    tmpEmpty.ITEM_NAME = list.ITEM_NAME
-                                                                    tmpEmpty.TYPE = item.TYPE
-                                                                    tmpEmpty.QUANTITY = item.QUANTITY
-                                                                    tmpEmpty.AMOUNT = item.AMOUNT
-                                                                    tmpEmpty.WITHAL = item.WITHAL
-                                                                    
-                                                                    this.promo.cond.addEmpty(tmpEmpty)
-                                                                }
-                                                            })
-                                                        }
-                                                        // else
-                                                        // {
-                                                        //     let tmpEmpty = {...this.promo.cond.empty}
-                                                                    
-                                                        //     tmpEmpty.PROMO = this.promo.dt()[0].GUID
-                                                        //     tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                        //     tmpEmpty.ITEM_CODE = ''
-                                                        //     tmpEmpty.ITEM_NAME = ''
-                                                        //     tmpEmpty.TYPE = item.TYPE
-                                                        //     tmpEmpty.QUANTITY = item.QUANTITY
-                                                        //     tmpEmpty.AMOUNT = item.AMOUNT
-                                                        //     tmpEmpty.WITHAL = item.WITHAL
-                                                            
-                                                        //     this.promo.cond.addEmpty(tmpEmpty)
-                                                        // }
+                                                    if(tmpCond.length > 0)
+                                                    {                                                                
+                                                        tmpCond[0].TYPE = item.TYPE
+                                                        tmpCond[0].LINK_GUID = item.LINK_GUID
+                                                        tmpCond[0].LINK_CODE = item.LINK_CODE
+                                                        tmpCond[0].LINK_NAME = item.LINK_NAME
+                                                        tmpCond[0].WITHAL = item.WITHAL
                                                     }
-                                                    else if(item.TYPE == 1)
-                                                    {
-                                                        let tmpCond = this.promo.cond.dt().where({GUID:item.GUID})
+                                                    else
+                                                    {                                                                    
+                                                        let tmpEmpty = {...this.discount.cond.empty}
+
+                                                        tmpEmpty.GUID = item.GUID
+                                                        tmpEmpty.DISCOUNT = item.DISCOUNT
+                                                        tmpEmpty.TYPE = item.TYPE
+                                                        tmpEmpty.TYPE_NAME = item.TYPE_NAME
+                                                        tmpEmpty.LINK_GUID = item.LINK_GUID
+                                                        tmpEmpty.LINK_CODE = item.LINK_CODE
+                                                        tmpEmpty.LINK_NAME = item.LINK_NAME
+                                                        tmpEmpty.WITHAL = item.WITHAL
                                                         
-                                                        if(tmpCond.length > 0)
-                                                        {
-                                                            tmpCond[0].TYPE = item.TYPE
-                                                            tmpCond[0].ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                            tmpCond[0].ITEM_CODE = ''
-                                                            tmpCond[0].ITEM_NAME = ''
-                                                            tmpCond[0].QUANTITY = item.QUANTITY
-                                                            tmpCond[0].AMOUNT = item.AMOUNT
-                                                        }
-                                                        else
-                                                        {
-                                                            let tmpEmpty = {...this.promo.cond.empty}
-                                                            tmpEmpty.PROMO = this.promo.dt()[0].GUID
-                                                            tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                            tmpEmpty.ITEM_CODE = ''
-                                                            tmpEmpty.ITEM_NAME = ''
-                                                            tmpEmpty.TYPE = item.TYPE
-                                                            tmpEmpty.QUANTITY = item.QUANTITY
-                                                            tmpEmpty.AMOUNT = item.AMOUNT
-                                                            tmpEmpty.WITHAL = item.WITHAL
-                                                            
-                                                            this.promo.cond.addEmpty(tmpEmpty)
-                                                        }
+                                                        this.discount.cond.addEmpty(tmpEmpty)
                                                     }
                                                 })
-
-                                                this.appDt.forEach((item)=>
+                                                this.itemCondDt.forEach((item)=>
                                                 {
-                                                    let tmpApp = this.promo.app.dt().where({GUID:item.GUID})
+                                                    let tmpCond = this.discount.cond.dt().where({LINK_GUID:item.LINK_GUID})
 
-                                                    if(tmpApp.length > 0)
+                                                    if(tmpCond.length > 0)
                                                     {
-                                                        tmpApp[0].TYPE = item.TYPE
-
-                                                        if(item.TYPE != 3)
-                                                        {
-                                                            tmpApp[0].ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                            tmpApp[0].ITEM_CODE = ''
-                                                            tmpApp[0].ITEM_NAME = ''
-                                                        }
-                                                        else
-                                                        {
-                                                            tmpApp[0].ITEM_GUID = item.ITEM_GUID
-                                                            tmpApp[0].ITEM_CODE = item.ITEM_CODE
-                                                            tmpApp[0].ITEM_NAME = item.ITEM_NAME
-                                                        }
-
-                                                        tmpApp[0].QUANTITY = item.QUANTITY
-                                                        tmpApp[0].AMOUNT = item.AMOUNT
+                                                        tmpCond[0].TYPE = item.TYPE
+                                                        tmpCond[0].LINK_GUID = item.LINK_GUID
+                                                        tmpCond[0].LINK_CODE = item.LINK_CODE
+                                                        tmpCond[0].LINK_NAME = item.LINK_NAME
+                                                        tmpCond[0].WITHAL = item.WITHAL
                                                     }
                                                     else
                                                     {
-                                                        let tmpEmpty = {...this.promo.app.empty}
+                                                        let tmpEmpty = {...this.discount.cond.empty}
 
-                                                        tmpEmpty.PROMO = this.promo.dt()[0].GUID
+                                                        tmpEmpty.GUID = item.GUID
+                                                        tmpEmpty.DISCOUNT = item.DISCOUNT
                                                         tmpEmpty.TYPE = item.TYPE
-
-                                                        if(item.TYPE != 3)
-                                                        {
-                                                            tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                            tmpEmpty.ITEM_CODE = ''
-                                                            tmpEmpty.ITEM_NAME = ''
-                                                        }
-                                                        else
-                                                        {
-                                                            tmpEmpty.ITEM_GUID = item.ITEM_GUID
-                                                            tmpEmpty.ITEM_CODE = item.ITEM_CODE
-                                                            tmpEmpty.ITEM_NAME = item.ITEM_NAME
-                                                        }
-
-                                                        
-                                                        tmpEmpty.QUANTITY = item.QUANTITY
-                                                        tmpEmpty.AMOUNT = item.AMOUNT
+                                                        tmpEmpty.TYPE_NAME = item.TYPE_NAME
+                                                        tmpEmpty.LINK_GUID = item.LINK_GUID
+                                                        tmpEmpty.LINK_CODE = item.LINK_CODE
+                                                        tmpEmpty.LINK_NAME = item.LINK_NAME
                                                         tmpEmpty.WITHAL = item.WITHAL
-                                                        
-                                                        this.promo.app.addEmpty(tmpEmpty)
+
+                                                        this.discount.cond.addEmpty(tmpEmpty)
                                                     }
+                                                }) 
+
+                                                this.discount.app.dt()[0].DISCOUNT = this.discount.dt()[0].GUID
+                                                this.discount.app.dt()[0].TYPE = this.cmbRstType.value 
+                                                this.discount.app.dt()[0].AMOUNT = this.txtAmount.value
+                                                this.discount.app.dt()[0].WITHAL = 0
+
+                                                this.customerCondDt._deleteList.forEach((item)=>
+                                                {
+                                                    console.log(item)
+                                                    this.discount.cond.dt()._deleteList.push(item)
+                                                })
+                                                this.itemCondDt._deleteList.forEach((item)=>
+                                                {
+                                                    this.discount.cond.dt()._deleteList.push(item)
                                                 })
 
-                                                this.promo.cond.dt()._deleteList = this["itemList" + this.condDt[0].WITHAL]._deleteList
-                                                console.log(this["itemList" + this.condDt[0].WITHAL]._deleteList)
                                                 await this.core.util.waitUntil(0)
                                                 
-                                                if((await this.promo.save()) == 0)
+                                                if((await this.discount.save()) == 0)
                                                 {                                                    
-                                                    this.getPromotion(this.txtCode.value)
+                                                    this.getDiscount(this.txtCode.value)
 
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -1103,8 +342,8 @@ export default class discountCard extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.promo.dt().removeAt(0)
-                                            await this.promo.dt().delete();
+                                            this.discount.dt().removeAt(0)
+                                            await this.discount.dt().delete();
                                             this.init(); 
                                         }
                                     }}/>
@@ -1139,7 +378,7 @@ export default class discountCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2"> 
                         <div className="col-12">
-                            <Form colCount={3} id={"frmPromo"  + this.tabIndex}>
+                            <Form colCount={3} id={"frmDiscount"  + this.tabIndex}>
                                 <GroupItem colSpan={3}>
                                     <GroupItem colCount={3}>
                                         {/* txtCode */}
@@ -1147,7 +386,7 @@ export default class discountCard extends React.PureComponent
                                             <Label text={this.t("txtCode")} alignment="right" />
                                             <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            dt={{data:this.promo.dt(),field:"CODE"}}
+                                            dt={{data:this.discount.dt(),field:"CODE"}}
                                             placeholder={this.t("txtCodePlace")}
                                             button=
                                             {
@@ -1172,7 +411,7 @@ export default class discountCard extends React.PureComponent
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpResult = await this.checkPromotion(this.txtCode.value)
+                                                let tmpResult = await this.checkDiscount(this.txtCode.value)
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtCode.value = "";
@@ -1180,11 +419,11 @@ export default class discountCard extends React.PureComponent
                                             }).bind(this)} 
                                             param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
                                             >     
-                                                <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmDiscount"  + this.tabIndex}>
                                                     <RequiredRule />
                                                 </Validator>  
                                             </NdTextBox>  
-                                            {/* PROMOSYON SEÇİM POPUP */}
+                                            {/* INDIRIM SEÇİM POPUP */}
                                             <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"} 
                                             visible={false}
                                             position={{of:'#root'}} 
@@ -1205,14 +444,12 @@ export default class discountCard extends React.PureComponent
                                                         }
                                                     }
                                                 ]
-                                                
                                             }
                                             >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                 <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={350}  />
                                                 <Column dataField="START_DATE" caption={this.t("pg_Grid.clmStartDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"} defaultSortOrder="asc"/>
                                                 <Column dataField="FINISH_DATE" caption={this.t("pg_Grid.clmFinishDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>
-                                                <Column dataField="ITEM" caption={this.t("pg_Grid.clmItem")} width={350} defaultSortOrder="asc" />
                                             </NdPopGrid>    
                                         </Item>
                                         {/* txtName */}
@@ -1221,24 +458,24 @@ export default class discountCard extends React.PureComponent
                                             <NdTextBox id="txtName" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             placeholder={this.t("txtNamePlace")}
-                                            dt={{data:this.promo.dt(),field:"NAME"}}
+                                            dt={{data:this.discount.dt(),field:"NAME"}}
                                             />     
                                         </Item>
                                         {/* dtStartDate */}
                                         <Item>
                                             <Label text={this.t("dtStartDate")} alignment="right" />
-                                            <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} dt={{data:this.promo.dt(),field:"START_DATE"}}/>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} dt={{data:this.discount.dt(),field:"START_DATE"}}/>
                                         </Item>
                                         {/* dtFinishDate */}
                                         <Item>
                                             <Label text={this.t("dtFinishDate")} alignment="right" />
-                                            <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} dt={{data:this.promo.dt(),field:"FINISH_DATE"}}/>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} dt={{data:this.discount.dt(),field:"FINISH_DATE"}}/>
                                         </Item>
                                         {/* cmbDepot */}
                                         <Item>
                                             <Label text={this.t("cmbDepot")} alignment="right" />
                                             <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                            dt={{data:this.promo.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
+                                            dt={{data:this.discount.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
                                             displayExpr="DEPOT_NAME"                       
                                             valueExpr="DEPOT_GUID"
                                             data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS DEPOT_GUID, 'ALL DEPOT' AS DEPOT_NAME UNION ALL SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01"},sql:this.core.sql}}}
@@ -1247,32 +484,32 @@ export default class discountCard extends React.PureComponent
                                             }}
                                             />
                                         </Item> 
-                                        {/* cmbPrmType */}
+                                        {/* cmbType */}
                                         <Item>
                                             <Label text={this.t("cmbPrmType")} alignment="right" />
                                             <NdSelectBox simple={true} parent={this} id={"cmbPrmType"}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
-                                            data={{source:[{ID:0,NAME:this.t("cmbType.item")},{ID:1,NAME:this.t("cmbType.generalAmount")}]}}
+                                            data={{source:[{ID:0,NAME:this.t("cmbType.customer")},{ID:1,NAME:this.t("cmbType.customerGroup")}]}}
                                             onValueChanged={(e)=>
                                             {
-                                            
+                                                this.customerCondDt.removeAll();
                                             }}
                                             />
                                         </Item>
                                         <EmptyItem />
-                                       <EmptyItem />
-                                        {/* txtPrmItem */}
+                                        <EmptyItem />
+                                        {/* txtPrmCustomer */}
                                         <Item>
-                                            <Label text={this.t("txtPrmItem")} alignment="right" />
-                                            <NdButton text={this.t("btnPrmItem")} type="default" width="100%" 
+                                            <Label text={this.t("txtPrmCustomer")} alignment="right" />
+                                            <NdButton text={this.t("btnPrmCustomer")} type="default" width="100%" 
                                             onClick={()=>
                                             {
-                                                this["grdPopItemList"].dataRefresh({source:this["itemList"]})
-                                                this["pop_PrmItemList"].show()
+                                                this.grdPopCustomerList.dataRefresh({source:this.customerCondDt})
+                                                this.popPrmCustomerList.show()
                                             }}></NdButton> 
                                             {/* SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtPrmItem"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"popPrmCustomer"} parent={this} container={"#root"} 
                                             visible={false}
                                             position={{of:'#root'}} 
                                             showTitle={true} 
@@ -1281,30 +518,12 @@ export default class discountCard extends React.PureComponent
                                             height={'90%'}
                                             title={this.t("pg_Grid.title")} 
                                             search={true}
-                                            data = 
-                                            {{
-                                                source:
-                                                {
-                                                    select:
-                                                    {
-                                                        query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,(SELECT TOP 1 COST_PRICE FROM ITEMS WHERE ITEMS.GUID = MAX(ITEM_GUID)) AS COST_PRICE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
-                                                                "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
-                                                                "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                                "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
-                                                        param : ['VAL:string|50']
-                                                    },
-                                                    sql:this.core.sql
-                                                }
-                                            }}>
-                                                <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
+                                            >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                 <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                                <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
-                                                <Column dataField="COST_PRICE" caption={this.t("pg_Grid.clmCostPrice")} width={100}/>
-                                                <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                             </NdPopGrid>
                                             {/* SEÇİM LİSTE POPUP */}
-                                            <NdPopUp parent={this} id={"pop_PrmItemList"} container={"#root"}
+                                            <NdPopUp parent={this} id={"popPrmCustomerList"} container={"#root"}
                                             position={{of:'#root'}}
                                             showCloseButton={false}
                                             showTitle={true}
@@ -1314,65 +533,80 @@ export default class discountCard extends React.PureComponent
                                             >
                                                 <div className="row pb-1">
                                                     <div className='col-12'>
-                                                    <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
-                                                    onClick={()=>
-                                                    {
-                                                        //this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
-                                                        this["pg_txtPrmItem"].show()
-                                                        this["pg_txtPrmItem"].onClick = async(data) =>
-                                                        {         
-                                                            for (let i = 0; i < data.length; i++) 
+                                                        <NdButton text={this.t("pg_Grid.btnCustomer")} type="default" width="100%" 
+                                                        onClick={async()=>
+                                                        {
+                                                            if(this.cmbPrmType.value == 0)
                                                             {
-                                                                if(this["itemList"].where({ITEM_GUID:data[i].GUID}).length > 0)
+                                                                this.popPrmCustomer.setSource(
                                                                 {
-                                                                    let tmpConfObj =
+                                                                    source:
                                                                     {
-                                                                        id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                        button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
-                                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
+                                                                        select:
+                                                                        {
+                                                                            query : "SELECT GUID,CODE,TITLE AS NAME FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                            param : ['VAL:string|50']
+                                                                        },
+                                                                        sql:this.core.sql
                                                                     }
-                                                                    await dialog(tmpConfObj)
-                                                                    return
-                                                                }
+                                                                })
                                                             }
-                                                            
-                                                            for (let i = 0; i < data.length; i++) 
+                                                            else
                                                             {
-                                                                let tmpData = {...this.promo.cond.empty}
-
-                                                                tmpData.GUID = datatable.uuidv4();
-                                                                tmpData.ITEM_GUID = data[i].GUID;
-                                                                tmpData.ITEM_CODE = data[i].CODE;
-                                                                tmpData.ITEM_NAME = data[i].NAME;
-                                                                tmpData.PRICE = data[i].PRICE;
-                                                                tmpData.PROMO = this.promo.dt()[0].GUID
-                                                                tmpData.QUANTITY = 1;
-                                                                tmpData.AMOUNT = 0;
-                                                            
-
-                                                                this["itemList"].push(tmpData);
-                                                            }
-
-                                                            if(data.length > 0)
-                                                            {
-                                                                //this["txtPrmItem" + pItem.WITHAL].value = data[0].CODE;
-                                                                //this["txtPrmItem" + pItem.WITHAL].displayValue = data[0].NAME
-
-                                                                if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
+                                                                this.popPrmCustomer.setSource(
                                                                 {
-                                                                    this.condDt.where({})[0].ITEM_GUID = data[0].GUID
-                                                                    this.condDt.where({})[0].ITEM_CODE = data[0].CODE
-                                                                    this.condDt.where({})[0].ITEM_NAME = data[0].NAME
+                                                                    source:
+                                                                    {
+                                                                        select:
+                                                                        {
+                                                                            query : "SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                                            param : ['VAL:string|50']
+                                                                        },
+                                                                        sql:this.core.sql
+                                                                    }
+                                                                })
+                                                            }
+
+                                                            this.popPrmCustomer.show()
+                                                            this.popPrmCustomer.onClick = async(data) =>
+                                                            {         
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(this.customerCondDt.where({LINK_GUID:data[i].GUID}).length > 0)
+                                                                    {
+                                                                        let tmpConfObj =
+                                                                        {
+                                                                            id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                            button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
+                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
+                                                                        }
+                                                                        await dialog(tmpConfObj)
+                                                                        return
+                                                                    }
+                                                                }
+                                                                
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    let tmpData = {...this.discount.cond.empty}
+
+                                                                    tmpData.GUID = datatable.uuidv4();
+                                                                    tmpData.TYPE = this.cmbPrmType.value;
+                                                                    tmpData.LINK_GUID = data[i].GUID;
+                                                                    tmpData.LINK_CODE = data[i].CODE;
+                                                                    tmpData.LINK_NAME = data[i].NAME;
+                                                                    tmpData.DISCOUNT = this.discount.dt()[0].GUID
+                                                                    tmpData.WITHAL = 0;
+
+                                                                    this.customerCondDt.push(tmpData);
                                                                 }
                                                             }
-                                                        }
-                                                    }}></NdButton> 
+                                                        }}></NdButton> 
                                                     </div>
                                                 </div>
                                                 {/* grdPopGridList */}
                                                 <div className="row pb-1" style={{height:"85%"}}>
                                                     <div className="col-12">
-                                                        <NdGrid parent={this} id={"grdPopItemList"} 
+                                                        <NdGrid parent={this} id={"grdPopCustomerList"} 
                                                         showBorders={true} 
                                                         columnsAutoWidth={false} 
                                                         allowColumnResizing={true} 
@@ -1386,36 +620,35 @@ export default class discountCard extends React.PureComponent
                                                         >
                                                             <Editing mode="cell" allowUpdating={false} allowDeleting={true}/>
                                                             <Scrolling mode="standart" />
-                                                            <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
-                                                            <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
-                                                            <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
+                                                            <Column dataField="LINK_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
+                                                            <Column dataField="LINK_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
                                                         </NdGrid>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-6">
-                                                    <NdButton type="danger" width="100%" icon={"trash"}
-                                                    onClick={async()=>
-                                                    {
-                                                        let tmpConfObj1 =
+                                                        <NdButton type="danger" width="100%" icon={"trash"}
+                                                        onClick={async()=>
                                                         {
-                                                            id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
-                                                        }
-                                                        if((await dialog(tmpConfObj1)) == 'btn01')
-                                                        {
-                                                            this["itemList"]
-                                                        }
-                                                    }}>
-                                                        <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
-                                                    </NdButton>
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
+                                                            }
+                                                            if((await dialog(tmpConfObj1)) == 'btn01')
+                                                            {
+                                                                this.customerCondDt.removeAll()
+                                                            }
+                                                        }}>
+                                                            <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
+                                                        </NdButton>
                                                     </div>
                                                     <div className="col-6">
                                                         <NdButton type="success" width="100%" icon={"todo"}
                                                         onClick={()=>
                                                         {
-                                                            this["pop_PrmItemList"]
+                                                            this.popPrmCustomerList.hide()
                                                         }}>
                                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                                         </NdButton>
@@ -1427,32 +660,32 @@ export default class discountCard extends React.PureComponent
                                     <EmptyItem />
                                     <EmptyItem />
                                     <GroupItem colCount={3}>
-                                        {/* cmbPrmType ürün için*/}
+                                        {/* cmbPrmType2 */}
                                         <Item>
                                             <Label text={this.t("cmbPrmType2")} alignment="right" />
                                             <NdSelectBox simple={true} parent={this} id={"cmbPrmType2"}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
-                                            data={{source:[{ID:0,NAME:this.t("cmbType2.item")},{ID:1,NAME:this.t("cmbType2.generalAmount")}]}}
+                                            data={{source:[{ID:10,NAME:this.t("cmbType2.item")},{ID:11,NAME:this.t("cmbType2.itemGroup")}]}}
                                             onValueChanged={(e)=>
                                             {
-                                            
+                                                this.itemCondDt.removeAll();
                                             }}
                                             />
                                         </Item>
                                         <EmptyItem />
-                                       <EmptyItem />
+                                        <EmptyItem />
                                         {/* txtPrmItem */}
                                         <Item>
                                             <Label text={this.t("txtPrmItem2")} alignment="right" />
                                             <NdButton text={this.t("btnPrmItem2")} type="default" width="100%" 
                                             onClick={()=>
                                             {
-                                                this["grdPopItemList"].dataRefresh({source:this["itemList"]})
-                                                this["pop_PrmItemList"].show()
+                                                this.grdPopItemList.dataRefresh({source:this.itemCondDt})
+                                                this.popPrmItemList.show()
                                             }}></NdButton> 
                                             {/* SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtPrmItem"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"popPrmItem"} parent={this} container={"#root"} 
                                             visible={false}
                                             position={{of:'#root'}} 
                                             showTitle={true} 
@@ -1461,30 +694,12 @@ export default class discountCard extends React.PureComponent
                                             height={'90%'}
                                             title={this.t("pg_Grid.title")} 
                                             search={true}
-                                            data = 
-                                            {{
-                                                source:
-                                                {
-                                                    select:
-                                                    {
-                                                        query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,(SELECT TOP 1 COST_PRICE FROM ITEMS WHERE ITEMS.GUID = MAX(ITEM_GUID)) AS COST_PRICE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
-                                                                "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
-                                                                "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                                "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
-                                                        param : ['VAL:string|50']
-                                                    },
-                                                    sql:this.core.sql
-                                                }
-                                            }}>
-                                                <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
+                                            >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                 <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                                <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
-                                                <Column dataField="COST_PRICE" caption={this.t("pg_Grid.clmCostPrice")} width={100}/>
-                                                <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                             </NdPopGrid>
                                             {/* SEÇİM LİSTE POPUP */}
-                                            <NdPopUp parent={this} id={"pop_PrmItemList"} container={"#root"}
+                                            <NdPopUp parent={this} id={"popPrmItemList"} container={"#root"}
                                             position={{of:'#root'}}
                                             showCloseButton={false}
                                             showTitle={true}
@@ -1497,13 +712,43 @@ export default class discountCard extends React.PureComponent
                                                     <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
                                                     onClick={()=>
                                                     {
-                                                        //this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
-                                                        this["pg_txtPrmItem"].show()
-                                                        this["pg_txtPrmItem"].onClick = async(data) =>
+                                                        if(this.cmbPrmType2.value == 10)
+                                                        {
+                                                            this.popPrmItem.setSource(
+                                                            {
+                                                                source:
+                                                                {
+                                                                    select:
+                                                                    {
+                                                                        query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                        param : ['VAL:string|50']
+                                                                    },
+                                                                    sql:this.core.sql
+                                                                }
+                                                            })
+                                                        }
+                                                        else
+                                                        {
+                                                            this.popPrmItem.setSource(
+                                                            {
+                                                                source:
+                                                                {
+                                                                    select:
+                                                                    {
+                                                                        query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                        param : ['VAL:string|50']
+                                                                    },
+                                                                    sql:this.core.sql
+                                                                }
+                                                            })
+                                                        }
+
+                                                        this.popPrmItem.show()
+                                                        this.popPrmItem.onClick = async(data) =>
                                                         {         
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                if(this["itemList"].where({ITEM_GUID:data[i].GUID}).length > 0)
+                                                                if(this.itemCondDt.where({LINK_GUID:data[i].GUID}).length > 0)
                                                                 {
                                                                     let tmpConfObj =
                                                                     {
@@ -1518,32 +763,17 @@ export default class discountCard extends React.PureComponent
                                                             
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                let tmpData = {...this.promo.cond.empty}
+                                                                let tmpData = {...this.discount.cond.empty}
 
                                                                 tmpData.GUID = datatable.uuidv4();
-                                                                tmpData.ITEM_GUID = data[i].GUID;
-                                                                tmpData.ITEM_CODE = data[i].CODE;
-                                                                tmpData.ITEM_NAME = data[i].NAME;
-                                                                tmpData.PRICE = data[i].PRICE;
-                                                                tmpData.PROMO = this.promo.dt()[0].GUID
-                                                                tmpData.QUANTITY = 1;
-                                                                tmpData.AMOUNT = 0;
-                                                            
+                                                                tmpData.TYPE = this.cmbPrmType2.value;
+                                                                tmpData.LINK_GUID = data[i].GUID;
+                                                                tmpData.LINK_CODE = data[i].CODE;
+                                                                tmpData.LINK_NAME = data[i].NAME;
+                                                                tmpData.DISCOUNT = this.discount.dt()[0].GUID
+                                                                tmpData.WITHAL = 1;
 
-                                                                this["itemList"].push(tmpData);
-                                                            }
-
-                                                            if(data.length > 0)
-                                                            {
-                                                                //this["txtPrmItem" + pItem.WITHAL].value = data[0].CODE;
-                                                                //this["txtPrmItem" + pItem.WITHAL].displayValue = data[0].NAME
-
-                                                                if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                                                {
-                                                                    this.condDt.where({})[0].ITEM_GUID = data[0].GUID
-                                                                    this.condDt.where({})[0].ITEM_CODE = data[0].CODE
-                                                                    this.condDt.where({})[0].ITEM_NAME = data[0].NAME
-                                                                }
+                                                                this.itemCondDt.push(tmpData);
                                                             }
                                                         }
                                                     }}></NdButton> 
@@ -1566,9 +796,8 @@ export default class discountCard extends React.PureComponent
                                                         >
                                                             <Editing mode="cell" allowUpdating={false} allowDeleting={true}/>
                                                             <Scrolling mode="standart" />
-                                                            <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
-                                                            <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
-                                                            <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
+                                                            <Column dataField="LINK_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
+                                                            <Column dataField="LINK_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
                                                         </NdGrid>
                                                     </div>
                                                 </div>
@@ -1585,7 +814,7 @@ export default class discountCard extends React.PureComponent
                                                         }
                                                         if((await dialog(tmpConfObj1)) == 'btn01')
                                                         {
-                                                            this["itemList"]
+                                                            this.itemCondDt.removeAll()
                                                         }
                                                     }}>
                                                         <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
@@ -1595,7 +824,7 @@ export default class discountCard extends React.PureComponent
                                                         <NdButton type="success" width="100%" icon={"todo"}
                                                         onClick={()=>
                                                         {
-                                                            this["pop_PrmItemList"]
+                                                            this.popPrmItemList.hide()
                                                         }}>
                                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                                         </NdButton>
@@ -1613,22 +842,20 @@ export default class discountCard extends React.PureComponent
                                             <NdSelectBox simple={true} parent={this} id={"cmbRstType"}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
-                                            data={{source:[{ID:0,NAME:this.t("cmbType.discountRate")},{ID:1,NAME:this.t("cmbType.moneyPoint")},{ID:2,NAME:this.t("cmbType.giftCheck")},]}}  
+                                            data={{source:[{ID:0,NAME:this.t("cmbType2.discountRate")},{ID:1,NAME:this.t("cmbType2.discountAmount")}]}}  
                                             onValueChanged={(e) =>
                                             {
                                                
-                                            }}                                  
+                                            }}
                                             />
                                         </Item> 
                                         <EmptyItem/>
-                                       <EmptyItem/>
-                                         {/* txtName */}
-                                        <Item colSpan={2}>                                    
-                                            <Label text={this.t("cmbRstType")} alignment="right" />
-                                            <NdTextBox id="cmbRstType" parent={this} simple={true} 
+                                        <EmptyItem/>
+                                        {/* txtAmount */}
+                                        <Item>                                    
+                                            <Label text={this.t("txtAmount")} alignment="right" />
+                                            <NdTextBox id="txtAmount" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            placeholder={this.t("cmbType.discountRate")}
-                                            dt={{data:this.promo.dt(),field:"NAME"}}
                                             />     
                                         </Item>       
                                     </GroupItem>

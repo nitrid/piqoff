@@ -1,7 +1,7 @@
 // "Pos Plu Kopyalama",
 const pos_01_002 =
 {
-    cmbUser : "Utilistauer à copier", 
+    cmbUser : "Utilisateur à copier", 
     btnSave :"Enregistrer",  
     grdUserList : 
     {

@@ -221,10 +221,35 @@ export default class purchaseInvoice extends DocBase
 
             this.frmDocItems.option('disabled',true)        
             
+            // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+            await this.discObj.loadDocDisc(
+            {
+                START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
+                FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
+            })
+
             this.txtDiffrentPositive.value = 0
             this.txtDiffrentNegative.value = 0
             this.txtDiffrentTotal.value = 0
             this.txtDiffrentInv.value = 0
+            this.frmDocItems.option('disabled',true)  
+
+            if(typeof this?.txtDiffrentPositive?.value != 'undefined')
+            {
+                this.txtDiffrentPositive.value = 0
+            }
+            if(typeof this?.txtDiffrentNegative?.value != 'undefined')
+            {
+                this.txtDiffrentNegative.value = 0
+            }
+            if(typeof this?.txtDiffrentTotal?.value != 'undefined')
+            {
+                this.txtDiffrentTotal.value = 0
+            }
+            if(typeof this?.txtDiffrentInv?.value != 'undefined')
+            {
+                this.txtDiffrentInv.value = 0
+            }
 
             this.pg_txtItemsCode.on('showing',()=>
             {
@@ -821,8 +846,7 @@ export default class purchaseInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-            }
-           
+            }           
 
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
@@ -844,6 +868,9 @@ export default class purchaseInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
 
+            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
+
             let tmpQuery = 
             {
                 query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
@@ -856,7 +883,9 @@ export default class purchaseInvoice extends DocBase
                 if(tmpData.result.recordset.length > 0)
                 {
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docItems.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(6)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docItems.dt()[pIndex].VAT = Number(((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).round(6)
                     this.docObj.docItems.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
@@ -881,6 +910,12 @@ export default class purchaseInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : ((this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity).toFixed(4)
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscountPer == 'undefined' ? 0 : pDiscountPer
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = this.docObj.docItems.dt()[pIndex].DISCOUNT
+                }
+                else if(tmpDiscRate != 0)
+                {
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
                 }
                 else
                 {
@@ -1892,9 +1927,11 @@ export default class purchaseInvoice extends DocBase
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                console.log(tmpData)
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
+                                                    console.log(this.txtRef.value)
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -2396,68 +2433,72 @@ export default class purchaseInvoice extends DocBase
                                         onCellPrepared={(e) =>
                                         {
                                             if (e.column.dataField === 'PRICE' && e.data && e.data.PRICE < 0) 
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
-                                                    }
-                                                
-                                                    dialog(tmpConfObj);
-                                                    e.data.PRICE = Math.abs(e.data.PRICE);
-                                                }
-    
-                                                if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0 && e.data.PRICE >= 0)
-                                                {
-                                                    if(e.data.PRICE > e.data.CUSTOMER_PRICE)
-                                                    {
-                                                        e.cellElement.style.color ="red"
-                                                        e.cellElement.style.fontWeight ="bold"
-                                                    }
-                                                    else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
-                                                    {
-                                                        e.cellElement.style.color ="green"
-                                                        e.cellElement.style.fontWeight ="bold"
-                                                    }
-                                                    else
-                                                    {
-                                                        e.cellElement.style.color ="blue"
-                                                    }
-                                                }
-                                            }}
-                                            onRowUpdated={async(e)=>
                                             {
-                                                if(typeof e.data.QUANTITY != 'undefined')
+                                                let tmpConfObj =
                                                 {
-                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
-                                                    let tmpQuery = 
-                                                    {
-                                                        query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                        param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                        value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                        e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
-                                                        
-                                                        this.calculateTotal()
-                                                    }
+                                                    id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
                                                 }
-                                                if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                            
+                                                dialog(tmpConfObj);
+                                                e.data.PRICE = Math.abs(e.data.PRICE);
+                                            }
+
+                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0 && e.data.PRICE >= 0)
+                                            {
+                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
                                                 {
-                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                                    e.cellElement.style.color ="red"
+                                                    e.cellElement.style.fontWeight ="bold"
                                                 }
-                                                if(typeof e.data.PRICE != 'undefined' && e.data.PRICE >= 0)
+                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
                                                 {
-                                                    e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
+                                                    e.cellElement.style.color ="green"
+                                                    e.cellElement.style.fontWeight ="bold"
                                                 }
-                                                if(typeof e.data.SUB_PRICE != 'undefined')
+                                                else
                                                 {
-                                                    e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                                    e.cellElement.style.color ="blue"
                                                 }
+                                            }
+                                        }}
+                                        onRowUpdated={async(e)=>
+                                        {
+                                            if(typeof e.data.QUANTITY != 'undefined')
+                                            {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
+                                                    
+                                                    this.calculateTotal()
+                                                }
+                                            }
+                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.SUB_FACTOR != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.PRICE != 'undefined' && e.data.PRICE >= 0)
+                                            {
+                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.SUB_PRICE != 'undefined')
+                                            {
+                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                            }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -2494,6 +2535,32 @@ export default class purchaseInvoice extends DocBase
                                                     return
                                                 }
                                             }
+
+                                            //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                            let tmpDiscRate = this.discObj.getDocDisc(e.key.TYPE == 0 ? e.key.OUTPUT : e.key.INPUT,e.key.ITEM)
+                                                                                        
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined' && typeof e.data.DISCOUNT == 'undefined')
+                                            {
+                                                if(tmpDiscRate != 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = tmpDiscRate
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc(tmpDiscRate,4)
+                                                }
+                                                else
+                                                {
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                }
+                                            }
+
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT)))).round(2)
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
@@ -2507,17 +2574,7 @@ export default class purchaseInvoice extends DocBase
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
-                                            if(e.key.DISCOUNT == 0)
-                                            {
-                                                e.key.DISCOUNT_RATE = 0
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                            }
-                                            if(typeof e.data.DISCOUNT_RATE == 'undefined')
-                                            {
-                                               e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
-                                            }
+                                            
                                             this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>
@@ -2545,7 +2602,7 @@ export default class purchaseInvoice extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdPurcInv.clmOrigin")} width={60} allowEditing={true}  allowHeaderFiltering={false} editCellRender={this._cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdPurcInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdPurcInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdPurcInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>

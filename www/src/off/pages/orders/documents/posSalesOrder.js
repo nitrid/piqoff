@@ -1610,7 +1610,7 @@ export default class posSalesOrder extends DocBase
                                             }
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {

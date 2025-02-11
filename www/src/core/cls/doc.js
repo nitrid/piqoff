@@ -274,8 +274,8 @@ export class docItemsCls
             REBATE : 0,
             REF : '',
             REF_NO : 0,
-            DOC_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
-            SHIPMENT_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            SHIPMENT_DATE : moment(new Date()).format("YYYY-MM-DD"),
             INPUT : '00000000-0000-0000-0000-000000000000',
             INPUT_CODE : '',
             INPUT_NAME : '',
@@ -396,7 +396,7 @@ export class docItemsCls
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                     'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
                     'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
-                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
+                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
                     'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
                         'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN']
@@ -446,7 +446,7 @@ export class docItemsCls
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                     'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
                     'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
-                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
+                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
                     'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
                         'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN']
@@ -569,6 +569,7 @@ export class docCustomerCls
             INVOICE_DATE : '',
             EXPIRY_DATE :  moment(new Date()).format("YYYY-MM-DD"),
             EXPIRY_FEE : 0,
+            EXPIRY_TYPE : 0,
             INPUT_BALANCE  : 0,
             OUTPUT_BALANCE  : 0,
             ROUND : 0
@@ -605,10 +606,11 @@ export class docCustomerCls
                     "@INVOICE_GUID = @PINVOICE_GUID, "+
                     "@EXPIRY_DATE = @PEXPIRY_DATE, "+
                     "@EXPIRY_FEE = @PEXPIRY_FEE, " +
+                    "@EXPIRY_TYPE = @PEXPIRY_TYPE, " +
                     "@ROUND = @PROUND",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PROUND:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','ROUND']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int','PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
         }
         tmpDt.updateCmd = 
         {
@@ -630,10 +632,11 @@ export class docCustomerCls
                     "@INVOICE_GUID = @PINVOICE_GUID, "+
                     "@EXPIRY_DATE = @PEXPIRY_DATE, "+
                     "@EXPIRY_FEE = @PEXPIRY_FEE, " +
+                    "@EXPIRY_TYPE = @PEXPIRY_TYPE, " +
                     "@ROUND = @PROUND",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PROUND:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','ROUND']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int','PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
         }
         tmpDt.deleteCmd = 
         {

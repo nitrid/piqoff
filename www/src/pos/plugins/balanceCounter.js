@@ -292,6 +292,7 @@ posDoc.prototype.getItem = async function(pCode)
                             }
 
                             tmpItemsDt[0].DISCOUNT = Number(tmpItemsDt[0].QUANTITY * tmpItemsDt[0].PRICE).round(2)
+                            tmpItemsDt[0].PROMO_TYPE = 1
                         }
 
                         this.saleAdd(tmpItemsDt[0])

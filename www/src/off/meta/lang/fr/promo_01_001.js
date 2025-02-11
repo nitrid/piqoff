@@ -71,6 +71,13 @@ const promo_01_001 =
         btn02: "Abandonner",
         msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
     },
+    msgNewPage:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Abandonner",
+        msg: "Êtes-vous sûr de vouloir ouvrir une nouvelle page ?"
+    },
     pop_PrmItemList: 
     {
         title: "Stock sélectionné",

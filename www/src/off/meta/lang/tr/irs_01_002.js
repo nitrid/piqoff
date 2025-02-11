@@ -6,8 +6,10 @@ const irs_01_002 =
     dtFirst : "İlk Tarih",
     dtLast : "Son Tarih",
     txtCustomerCode : "Müşteri",
+    cmbMainGrp : "Müşteri Grubu",
     menu:"Satış İrsaliyesi",
     chkOpenDispatch : "Sadece Faturası Olmayanları Göster",
+    msgNoMailAddress : "Müşteri mail adresi bulunmamaktadır ve fatura gönderimi yapılmamıştır. - ",
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -15,6 +17,13 @@ const irs_01_002 =
         clmTitle : "CARİ ADI",
         clmTypeName : "TİPİ",
         clmGenusName : "CİNSİ"
+    },
+    popDesign :
+    {
+        title : "Dizayn Seçimi",
+        design : "Dizayn Seçimi",
+        btnPrint : "Yazdır",
+        btnCancel : "Kapat"
     },
     grdSlsDisList: 
     {
@@ -27,7 +36,9 @@ const irs_01_002 =
         clmVat : "KDV",
         clmAmount : "Tutar",
         clmTotal : "Toplam",
+        clmMainGroup : "Müşteri Grubu",
         clmOutputName :"Depo",
+        clmFacture : "Faturaya çevrildi"
     },
     msgConvertInvoices :
     {  
@@ -43,7 +54,13 @@ const irs_01_002 =
         btn02: "Kapat",
         msg: "Faturalar Oluşturuldu yazdırmak istermisiniz ?"         
     },
-
+    msgPrintDispatch :
+    {  
+        title: "Dikkat",
+        btn01: "Yazdır",
+        btn02: "Kapat",
+        msg: "İrsaliyeler yazdırılacak. Yazdırmak istermisiniz ?"         
+    },
 }
 
 export default irs_01_002

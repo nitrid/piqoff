@@ -8,6 +8,7 @@ export default class NdTabPanel extends Base
     constructor(props)
     {
         super(props)
+        this.state.deferRendering = typeof props.deferRendering == 'undefined' ? true : props.deferRendering
         this.state.accessValue = {}
         
         this.itemData = []
@@ -114,7 +115,7 @@ export default class NdTabPanel extends Base
     render()
     {
         return (
-            <TabPanel height={this.props.height} onItemRendered={this._onItemRendered} itemTitleRender={this._onRenderTitle}
+            <TabPanel deferRendering={this.state.deferRendering} height={this.props.height} onItemRendered={this._onItemRendered} itemTitleRender={this._onRenderTitle}
             onInitialized={(e)=>
             {
                 this.devTab = e.component

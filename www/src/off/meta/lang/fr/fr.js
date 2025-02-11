@@ -32,6 +32,7 @@ export const langFr =
     checkAll :"Tout saisir",
     msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
+    addExplanation: "Ajouter Explication",
     constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
@@ -181,6 +182,13 @@ export const langFr =
     favDell : "Retirer des favoris",
     menu : "Menu",
     favMenu : "Favoris",
+    msgPriceListChange :
+    {
+        title : "Changement de la liste de prix",
+        btn01 : "Oui",
+        btn02 : "Non",
+        msg : "Voulez-vous mettre à jour les prix ?"
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -300,6 +308,7 @@ export const langFr =
         sip_04 : "Opérations", 
         sip_01_001: "Liste de Commande Achat ",
         sip_01_002: "Liste de Commande Vente ",
+        sip_01_003 : "Liste de commande de preparation",
         sip_02_001: "Saisie Commande Achat",
         sip_02_002: "Saisie Commande Vente  ",
         sip_02_003: "Saisie Commande Vente Pos",
@@ -315,6 +324,8 @@ export const langFr =
         cnt_03 : "Rapports",
         cnt_04 : "Opérations",
         cnt_04_001 : "Contrat de vente multiple",
+        saleList : "Traitement des Listes de Documents",
+        saleList_01: "Liste Groupée de Documents",
         piqx : "PiqX",
         piqx_01 : "Factures", //BAK
         piqx_01_001 : "Factures d'achat reçues", //BAK
@@ -350,6 +361,7 @@ export const langFr =
         prsnl_01 : "Saisie",
         prsnl_01_001 : "Définitions du personnel",
         prsnl_01_002 : "Définitions d'adresse",
+        prsnl_01_003 : "Définitions du statut",
         prsnl_02 : "Listes",
         prsnl_02_001 : "Listes du personnel",
         prsnl_03 : "Lesopérations ",
@@ -384,6 +396,8 @@ export const langFr =
         pos_02_015 : "Rapport vente client",
         pos_02_016 : "Rapport des Mouvements de Points",
         pos_02_017 : "Rapport de ventes par intervalle horaire",
+        pos_02_018 : "Rapport des Remises",
+        pos_02_019 : "Rapport de ventes par groupe de produits par mois",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
@@ -397,7 +411,8 @@ export const langFr =
         rest_02_001 : "Suivi des tables",
         promo: "Promotion",
         promo_01: "Saisie",
-        promo_01_001: "Saisie promotions", 
+        promo_01_001: "Saisie promotions",
+        promo_01_002: "Définition de la réduction",
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_02_002: "Liste Detaillée promotion",
@@ -491,6 +506,7 @@ export const langFr =
         slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
         slsRpt_02_005 : "Rapport détaillé DEB",
         slsRpt_02_006 : "Rapport de facturation des achats ouvertes",
+        slsRpt_02_007 : "Rapport de facturation des achats ouvertes",
     },
     login:
     {
@@ -601,5 +617,13 @@ export const langFr =
         txtRecieverNote : "Instruction Destinataire",
         txtSenderDate : "Chargement Date",
         txtRecieverDate : "Livraison Date"
-    }
+    },
+    smallImage : "Petite image",
+    bigImage : "Grande image",
+    msgPayNotBigToPay: 
+    {
+        title : "Attention",
+        msg : "Le montant saisi ne peut être supérieur au montant total du ticket de caisse ! " ,
+        btn01 : "OK"
+    },
 }

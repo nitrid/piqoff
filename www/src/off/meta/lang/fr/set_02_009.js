@@ -8,7 +8,7 @@ const set_02_009 =
     grdMailSettings:
     {
         clmDate:"Date",
-        clmUser : "Utilistauer",
+        clmUser : "Utilisateur",
         clmMail: "Mail",
         clmMailService: "Service",
         clmMailPassword: "Mot de passe",

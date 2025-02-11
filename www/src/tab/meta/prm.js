@@ -74,7 +74,7 @@ export const prm =
     // Şipariş Sayfası Ürünler Listelenirken "Name" mi Gore "Code" mı gore Listelensin
     {
         TYPE : 0,
-        ID :"salesİtemsType",
+        ID :"salesItemsType",
         VALUE : 
         {
             value : "NAME"
@@ -84,9 +84,110 @@ export const prm =
         APP : "TAB",
         VIEW : 
         {
+            TYPE : "popInput",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin",
+            FORM :
+            {
+                width : "400",
+                height : "280",
+                colCount : 1,
+                item : [{type:"text",caption:"Listeleme Şekli",field:"value",id:"txtSalesItemType"}]
+            }
+        }
+    },
+     // Şipariş Sayfası kayır edince yeni evraka gecsin
+     {
+        TYPE : 0,
+        ID :"autoNewOrder",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Şipariş Sayfası Ürünler Listelenirken mi Name Gore Code mı gore Listelensin"
+            CAPTION : "Şipariş Sayfası kayır edince yeni evraka gecsin mi?"
+        }
+    },
+    // Satış Sayfasında Evrak Nunamarası en son evrak numarasından artarak devam etsin
+    {
+        TYPE : 0,
+        ID :"docNoAuto",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Satış Sayfasında Evrak Nunamarası en son evrak numarasından artarak devam etsin mi?"
+        }
+    },
+    // Birim kilitli mi
+    {
+        TYPE : 0,
+        ID :"unitLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim"
+        }
+    },
+    // Depo Seçme Kısıtlaması
+    {
+        TYPE : 0,
+        ID :"depotLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Depo Seçme Kısıtlaması"
+        }
+    },
+    // Liste Fiyatı Kısıtlaması
+    {
+        TYPE : 0,
+        ID :"listPriceLock",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Depo Seçme Kısıtlaması"
+        }
+    },
+        //Sayfalama Grid Liste Görünümünü Kontrol Etme
+    //pageListControl 
+    {
+        TYPE : 0,
+        ID :"pageListControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sayfadaki Liste Görünümünü Kontrol Etme(1,2,3)"
         }
     },
 //#endregion

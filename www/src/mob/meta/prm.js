@@ -2201,6 +2201,21 @@ export const prm =
             DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
         }
     },
+        //Şipariş satır göstergesi
+    {
+        TYPE : 1,
+        ID :"showOrderLine",
+        VALUE : true,
+        APP : "MOB",
+        PAGE : "kar_01",
+        ELEMENT : "",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Eşleştirme",
+            CAPTION : "Şipariş satır göstergesi"
+        }
+    },
     //
     {
         TYPE : 1,

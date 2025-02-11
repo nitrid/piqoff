@@ -55,10 +55,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"randomRefNo",
-        VALUE : 
-        {
-            value : false
-        },
+        VALUE : false,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -67,6 +64,25 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Seri Numarası Rastgele Oluştursun"
+        }
+    },
+    //Sayfalama Grid Liste Görünümünü Kontrol Etme
+    //pageListControl 
+    {
+        TYPE : 0,
+        ID :"pageListControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sayfadaki Liste Görünümünü Kontrol Etme(1,2,3)"
         }
     },
     //Alış Faturasından Fiyat Güncelleme
@@ -189,10 +205,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"costForInvoıces",
-        VALUE : 
-        {
-            value : false
-        },
+        VALUE : false,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -252,7 +265,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"maxItemPrice",
-        VALUE : 1000,
+        VALUE : 100000,
         SPECIAL : "",
         ELEMENT : "",
         APP : "OFF",
@@ -499,6 +512,54 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
+        }
+    },
+    //autoMailSend
+    {
+        TYPE : 0,
+        ID :"autoFactureMailSend",
+        VALUE : 
+        {
+            value : true,
+            design : "33",
+            mail : "control@piqsoft.com"
+        },
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Fatura otomatik mail gonderme",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"value",field:"value",id:"chkAutomail"},
+                    {type:"text",caption:"design",field:"design",id:"txtAutoMailDesing"},
+                    {type:"text",caption:"mail",field:"mail",id:"txtAutoMailAdres"}
+                ]
+            }
+        }
+    }, 
+    //#mail acıklaması parametresi
+    {
+        TYPE : 0,
+        ID :"MailExplanation",
+        VALUE : "",
+        SPECIAL : "",
+        PAGE : "off",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "html",
+            PAGE_NAME : "Off",
+            CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
     //#endregion
@@ -1622,8 +1683,8 @@ export const prm =
             CAPTION : "Ünvan"
         }
     },
-     //txtCustomerName
-     {
+    //txtCustomerName
+    {
         TYPE : 2,
         ID :"txtCustomerName",
         VALUE : 
@@ -2023,6 +2084,25 @@ export const prm =
             CAPTION : "Belge no kontrolu"
         }
     },
+    // Dizayn Seçimi
+    {
+        TYPE : 2,
+        ID :"cmbDesignList",
+        VALUE : 
+        {
+            value : "33"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "cmbDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
     //#endregion
     //#region Fire Alış Faturası
     //txtRef
@@ -2157,7 +2237,6 @@ export const prm =
     },
     //#endregion
     //#region Şubeler Arası Satış Faturası
-    
     //txtRef
     {
         TYPE : 2,
@@ -2290,7 +2369,6 @@ export const prm =
     },
     //#endregion
     //#region Fiyat Farki Alış Faturası
-
     // checkDocNo
     {
         TYPE : 1,
@@ -2309,7 +2387,6 @@ export const prm =
     },
     //#endregion
     //#region Gelen İade Alış Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2516,7 +2593,6 @@ export const prm =
     },
     //#endregion
     //#region Gönderilen İade Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2535,7 +2611,6 @@ export const prm =
     },
     //#endregion
     //#region Fiyat Farki Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2554,7 +2629,6 @@ export const prm =
     },
     //#endregion
     //#region Şubeler Arası Alis Faturası
-    
     // checkDocNo
     {
         TYPE : 1,
@@ -2751,22 +2825,22 @@ export const prm =
     },
     // negativeQuantity
     {
-    TYPE : 1,
-    ID :"negativeQuantity",
-    VALUE : 
-    {
-        value : false
-    },
-    SPECIAL : "",
-    PAGE : "ftr_04_002",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Proforma Satış Faturası",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
-    }
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_04_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Proforma Satış Faturası",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
     },
     //#endregion
     //#region Depo Miktar Listesi
@@ -2798,7 +2872,7 @@ export const prm =
             }
         }
     },
-        //#endregion
+    //#endregion
     //#region Depo Sevk
     // negativeQuantity
     {
@@ -2917,7 +2991,7 @@ export const prm =
             CAPTION : "Satır Açıklamalarını Zorunlu Kıl"
         }
     },
-     // negativeQuantity
+    // negativeQuantity
     {
         TYPE : 1,
         ID :"negativeQuantity",
@@ -3144,46 +3218,45 @@ export const prm =
                 },
             }
         }
+    },   
+    //autoMailSend
+    {
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şube Satış İrsaliye",
+            CAPTION : "Otomatik mail gonderme"
+        }
     },
-    
-//autoMailSend
-{
-    TYPE : 1,
-    ID :"autoMailSend",
-    VALUE : 
+    //autoMailSend
     {
-        value : true
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Satış",
+            CAPTION : "Otomatik mail gonderme"
+        }
     },
-    SPECIAL : "",
-    PAGE : "irs_02_004",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şube Satış İrsaliye",
-        CAPTION : "Otomatik mail gonderme"
-    }
-},
-//autoMailSend
-{
-    TYPE : 1,
-    ID :"autoMailSend",
-    VALUE : 
-    {
-        value : true
-    },
-    SPECIAL : "",
-    PAGE : "ftr_02_005",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şubeler Arası Satış",
-        CAPTION : "Otomatik mail gonderme"
-    }
-},
     //#endregion
     //#region Satış Anlaşması
     //cmbDepot
@@ -3365,30 +3438,49 @@ export const prm =
     },
     //#endregion
     //#region Tax Sugar Report
-        //Tax Sugar
+    //Tax Sugar
+    {
+        TYPE : 1,
+        ID :"taxSugarGroupValidation",
+        VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60FE2360-029B-4284-B7FB-6D5DD842EA58'],
+        SPECIAL : "",
+        PAGE : "slsRpt_02_003",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
         {
-            TYPE : 1,
-            ID :"taxSugarGroupValidation",
-            VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60FE2360-029B-4284-B7FB-6D5DD842EA58'],
-            SPECIAL : "",
-            PAGE : "slsRpt_02_003",
-            ELEMENT : "",
-            APP : "OFF",
-            VIEW : 
+            TYPE : "popTextList",
+            PAGE_NAME : "Tax Sugar Report",
+            CAPTION : "Tax Sugar Uygulanacak Gruplar",
+            FORM: 
             {
-                TYPE : "popTextList",
-                PAGE_NAME : "Tax Sugar Report",
-                CAPTION : "Tax Sugar Uygulanacak Gruplar",
-                FORM: 
-                {
-                    width:"400",
-                    height:"400",
-                    textHeight:"260"
-                }
+                width:"400",
+                height:"400",
+                textHeight:"260"
             }
-        },
+        }
+    },  
     //#endregion
     //#region Satış Sipariş
+    //cmbAllDesignList
+    {
+        TYPE : 1,
+        ID :"cmbDesignList",
+        VALUE : 
+        {
+            value : "20"
+        },
+        SPECIAL : "",
+        PAGE : "sip_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
     //negativeQuantity
     {
         TYPE : 1,
@@ -3530,8 +3622,8 @@ export const prm =
             CAPTION : "Depo"
         }
     },
-     //cmbDepot
-     {
+    //cmbDepot
+    {
         TYPE : 1,
         ID :"printDesing",
         VALUE : 
@@ -3547,6 +3639,69 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Satış Sipariş onaylama",
             CAPTION : "Yazdırma Dizaynı Tagı"
+        }
+    },
+    //#endregion
+      //#region Satış Sipariş Listesi
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "223"
+        },
+        SPECIAL : "",
+        PAGE : "sip_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş Listesi",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
+    //#endregion
+      //#region Satış İrsaliye Listesi
+    //cmbAllDesignList
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "444"
+        },
+        SPECIAL : "",
+        PAGE : "irs_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış İrsaliye Listesi",
+            CAPTION : "Dizayn Tagı"
+        }
+    },
+    //#endregion
+     //#region Satış Fatura Listesi
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbAllDesignList",
+        VALUE : 
+        {
+            value : "333"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_01_002",
+        ELEMENT : "cmbAllDesignList",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Fatura Listesi",
+            CAPTION : "Dizayn Tagı"
         }
     },
     //#endregion

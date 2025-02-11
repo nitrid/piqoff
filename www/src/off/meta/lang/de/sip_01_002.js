@@ -28,6 +28,7 @@ const sip_01_002 =
         clmAmount : "Betrag",
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
+        clmLivre : "Geliefert"
     },
     popDesign : 
     {

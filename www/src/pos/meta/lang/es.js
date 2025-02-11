@@ -57,7 +57,7 @@ export const langEs =
     msgMaxQuantity:
     {
         title: "Advertencia",
-        msg: "¡No puede introducir una cantidad mayor de 999.999!",
+        msg: "¡No puede introducir una cantidad mayor de 999!",
         btn01: "Aceptar",
     },
     msgPriceNotFound:
@@ -953,5 +953,38 @@ export const langEs =
         clmVendorId: "ID del proveedor",
         clmSerialNo: "Número de serie"
     },
-    lblTicketCount : "Cliente :"
+    lblTicketCount : "Cliente :",
+    btnList :
+    {
+        btnCheqpay : "Cheque",
+        btnInfo : "Info",
+        btnDelete : "Eliminar Ticket",
+        btnLineDelete : "Eliminar Línea", 
+        btnItemReturn : "Devolución",
+        btnPriceDiff : "Diferencia de precio",
+        btnItemSearch : "Búsqueda de Producto",
+        btnZReport : "Informe Z",
+        btnGrdList : "Lista de Productos",
+        btnFormation : "Formación",
+        btnOrderList : "Pedido",
+        btnAdvance : "Anticipo",
+        btnParkList : "En Espera",
+        btnCustomerAdd : "Añadir Cliente",
+        btnCustomerList : "Lista de Clientes",
+        btnGetCustomer : "Cliente",
+        btnCalculator : "Calculadora",
+        btnPark : "Poner en Espera",
+        btnTicketList : "Lista de Tickets",
+        btnLastPrint : "Imprimir",
+        btnTotal : "Total",
+        btnSubtotal : "Subtotal",
+        btnCardTicket : "Tarjeta T.R",
+        btnDiscount : "Descuento",
+        btnExchange : "Cambio",
+        btnCreditCard : "Tarjeta de Crédito",
+        btnCash : "Efectivo",
+        btnCheck : "Cheque",
+        btnCustomerPoint : "Usar Puntos",
+        btnSafeOpen : "Abrir Caja",
+    }
 }

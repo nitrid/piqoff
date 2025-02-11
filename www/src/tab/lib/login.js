@@ -11,6 +11,8 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import NdDialog from '../../core/react/devex/dialog.js';
+import NdButton from '../../core/react/devex/button.js';
+import NdCheckBox from 'devextreme-react/check-box';
 
 export default class Login extends React.PureComponent
 {
@@ -39,7 +41,9 @@ export default class Login extends React.PureComponent
         {
             kullanici: '',
             sifre: '',
-            alert: ''
+            alert: '',
+            showTransferButton: false,
+            rememberMe: false
         }  
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
@@ -51,6 +55,17 @@ export default class Login extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
+        
+        if(typeof localStorage.userName != 'undefined' && typeof localStorage.userPwd != 'undefined')
+        {
+            this.setState({rememberMe: true})
+            this.setState({
+                kullanici: localStorage.userName,
+                sifre: localStorage.userPwd
+            })
+            this.Kullanici.value = localStorage.userName 
+            this.Sifre.value = localStorage.userPwd
+        }
         this.Kullanici.focus()
     }
     textValueChanged(e) 
@@ -70,19 +85,31 @@ export default class Login extends React.PureComponent
         {
             return;
         }
+
+        if(this.state.rememberMe)
+        {
+            localStorage.userName = this.state.kullanici
+            localStorage.userPwd = this.state.sifre
+        }
+        else
+        {
+            localStorage.removeItem('userName')
+            localStorage.removeItem('userPwd')
+        }
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
         {
             localStorage.setItem('lang',localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
+            
             if(this.core.local.platform != '')
             {
-                this.msgDataTransfer.show()
-                await App.instance.transfer.transferSql(true)
-                this.msgDataTransfer.hide()        
+                this.setState({showTransferButton: true});
+                this.msgDataTransferOption.show();
             }
-            
-            await App.instance.loadTab()
-            App.instance.setState({logined:true});            
+            else 
+            {
+                await this.completeLogin();
+            }
         }
         else
         {
@@ -105,6 +132,18 @@ export default class Login extends React.PureComponent
     closePage()
     {
         window.close()
+    }
+    async completeLogin(withTransfer = false)
+    {
+        if(withTransfer)
+        {
+            this.msgDataTransfer.show()
+            await App.instance.transfer.transferSql(true)
+            this.msgDataTransfer.hide()
+        }
+        
+        await App.instance.loadTab()
+        App.instance.setState({logined:true});
     }
     render()
     {
@@ -162,6 +201,14 @@ export default class Login extends React.PureComponent
                                 />
                             </div>
                         </div>
+                        <div className="dx-field">
+                            <NdCheckBox id="chkRememberMe" 
+                                parent={this} 
+                                text={this.lang.t("chkRememberMe")} 
+                                value={this.state.rememberMe}
+                                onValueChanged={(e) => this.setState({rememberMe: e.value})}
+                            />
+                        </div>
                         <div className="row py-1">
                             <div className="col-12">
                                 <div className="dx-field">
@@ -218,7 +265,40 @@ export default class Login extends React.PureComponent
                    </div>
                 </div>
                 <div className="p-2"></div>
-                {/* Data Transfer Popup */} 
+                {/* Veri Transfer Seçenek Popup'ı */}
+                <div>
+                    <NdDialog id={"msgDataTransferOption"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.lang.t("msgDataTransferOption.title")} 
+                    showCloseButton={false}
+                    width={"400px"}
+                    height={"200px"}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDataTransferOption.msg")}</div>
+                            </div>
+                            <div className='col-6'>
+                                <NdButton text={this.lang.t("msgDataTransferOption.btnYes")} type="normal" stylingMode="contained" width={'100%'}
+                                onClick={async()=>
+                                {
+                                    this.msgDataTransferOption.hide();
+                                    await this.completeLogin(true);  
+                                }}/>
+                            </div>
+                            <div className="col-6">
+                                <NdButton text={this.lang.t("msgDataTransferOption.btnNo")} type="normal" stylingMode="contained" width={'100%'}
+                                onClick={async()=>
+                                {
+                                    this.msgDataTransferOption.hide();
+                                    await this.completeLogin(false);  
+                                }}/>
+                            </div>
+                        </div>
+                    </NdDialog>
+                </div>
+                {/* Mevcut Data Transfer Popup'ı */}
                 <div>
                     <NdDialog id={"msgDataTransfer"} container={"#root"} parent={this}
                     position={{of:'#root'}} 

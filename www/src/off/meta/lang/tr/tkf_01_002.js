@@ -27,6 +27,7 @@ const tkf_01_002 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
         clmOutputName :"Depo",
+        clmLivre : "Gönderildi"
     },
 }
 

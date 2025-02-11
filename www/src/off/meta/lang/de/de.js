@@ -175,6 +175,13 @@ export const langDe =
     favDell : "Aus Favoriten entfernen",
     menu : "Menü",
     favMenu : "Favoriten",
+    msgPriceListChange :
+    {
+        title : "Preisliste ändern",
+        btn01 : "Ja",
+        btn02 : "Nein",
+        msg : "Sind Sie sich sicher, dass Sie die Preise aktualisieren möchten?"
+    },
     menuOff:
     {
         stk: "Artikel",
@@ -291,6 +298,7 @@ export const langDe =
         sip_04: "Operationen",
         sip_01_001: "Einkaufsbestellungsliste",
         sip_01_002: "Verkaufsbestellungsliste",
+        sip_01_003: "Zu erstellende Bestellliste", // bak
         sip_02_001: "Einkaufsbestellung",
         sip_02_002: "Verkaufsbestellung",
         sip_02_003: "POS Verkaufsbestellung",
@@ -355,6 +363,8 @@ export const langDe =
         pos_02_015 : "Kundenbasiertes Verkaufsbericht",
         pos_02_016 : "Bericht über Punktänderungen",  
         pos_02_017 : "Verkaufsbericht nach Zeitintervallen",
+        pos_02_018 : "Bericht über Freie Rabatte",
+        pos_02_019 : "Monatlicher Artikelgruppenverkaufsbericht",
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         pos_03_002: "Auslosung",
@@ -453,6 +463,20 @@ export const langDe =
         slsRpt_02_004: "Detailierter Artikel Einkaufsbericht",
         slsRpt_02_005 : "DEB Detaillebericht",
         slsRpt_02_006: "Bericht über offene Einkaufsrechnungen",
+        rest: "Restaurant",
+        rest_01: "Definitionen",
+        rest_01_001: "Restaurant-Definition",
+        rest_02: "Listen",
+        rest_02_001: "Restaurant-Liste",
+        rest_03: "Berichte",
+        rest_03_001: "Restaurant-Bericht",
+        prsnl: "Personal",
+        prsnl_01: "Definitionen",
+        prsnl_01_001: "Personal-Definition",
+        prsnl_02: "Listen",
+        prsnl_02_001: "Personal-Liste",
+        prsnl_03: "Berichte",
+        prsnl_03_001: "Personal-Bericht",
 
     },
     login:
@@ -564,5 +588,13 @@ export const langDe =
         txtRecieverNote : "Empfängers Beschreibung",
         txtSenderDate : "Empfängers Datum",
         txtRecieverDate : "Absenders Datum"
+    },
+    smallImage : "Kleine Bild",
+    bigImage : "Großes Bild",
+    msgPayNotBigToPay: 
+    {
+        title : "Achtung",
+        msg : "Der eingegebene Betrag kann nicht größer sein als der Gesamtbetrag des Kassenbelegs!",
+        btn01 : "OK"
     }
 }

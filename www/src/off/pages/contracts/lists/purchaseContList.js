@@ -317,6 +317,7 @@ export default class purchaseContList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdPurcContList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -324,8 +325,9 @@ export default class purchaseContList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.cnt_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcContList.clmCreateDate")} visible={true} width={200}/> 
                                 <Column dataField="LUSER_NAME" caption={this.t("grdPurcContList.clmUser")} visible={true} width={200}/> 

@@ -167,6 +167,32 @@ export default class itemDetail extends React.PureComponent
                                     </h5>
                                 </div>
                             </Item>
+                            <Item colSpan={4}> 
+                                <Label text={this.t("txtItemListName")} alignment="right" />
+                                <NdSelectBox simple={true} 
+                                    parent={this} 
+                                    id="txtItemListName" 
+                                    showClearButton={true} 
+                                    notRefresh={true}  
+                                    searchEnabled={true}
+                                    displayExpr="LIST_NAME"                       
+                                    valueExpr="LIST_NO"
+                                    data={{source: {select : {query:"SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC"},sql : this.core.sql}}}
+                                    onValueChanged={async (e)=>
+                                    {
+                                        if(e.value)
+                                        {
+                                            let tmpQuery = {
+                                                query: "SELECT PRICE FROM ITEM_PRICE_VW_01 WHERE ITEM_CODE = @ITEM AND LIST_NO = @LIST_NO",
+                                                param: ['ITEM:string|50','LIST_NO:int'],
+                                                value: [this.itemName.CODE, e.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery);
+                                            this.txtItemPrice.value = tmpData.result.recordset[0].PRICE;                                                
+                                        }
+                                    }}
+                                />
+                            </Item>
                             <Item colSpan={3}> 
                                 <div>
                                     <h5 className="text-center">
@@ -237,6 +263,7 @@ export default class itemDetail extends React.PureComponent
                                         {
                                             this.itemName.GUID = this.grdItem.getSelectedData()[0].GUID
                                             this.itemName.value = this.grdItem.getSelectedData()[0].NAME
+                                            this.itemName.CODE = this.grdItem.getSelectedData()[0].CODE
                                             this._btnGetirClick()
                                             this.popItem.hide();
                                         }).bind(this)}>

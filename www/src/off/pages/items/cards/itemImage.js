@@ -281,14 +281,14 @@ export default class itemImage extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <h3>Küçük Resim - 120X90</h3>
+                            <h3>{this.lang.t('smallImage')}</h3>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">  
                         <div className="col-2">
                             <div className='row'>
                                 <div className='col-12'>
-                                    <NdImageUpload id="imgFile1" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:0}}} imageWidth={"120"} imageHeight={"90"} imageScale={true} buttonTrigger={"#btnSmallImg"}
+                                    <NdImageUpload id="imgFile1" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:0}}} imageWidth={"360"} imageHeight={"270"} imageScale={true} buttonTrigger={"#btnSmallImg"}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile1.getResolution()
@@ -312,7 +312,7 @@ export default class itemImage extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <h3>Büyük Resim - 620X465</h3>
+                            <h3>{this.lang.t('bigImage')}</h3>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">  

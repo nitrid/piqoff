@@ -16,6 +16,8 @@ export const langTr =
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     btnCancel : "Vazgeç",
+    msgInvalidUser : "Kullanıcı adı veya şifre hatalı !",
+    chkRememberMe : "Beni Hatırla",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -37,11 +39,19 @@ export const langTr =
         title : "Lütfen Bekleyiniz !",
         msg : "Verileriniz güncelleniyor...",
     },
+    msgDataTransferOption :
+    {
+        title : "Dikkat",
+        msg : "Verileri güncellemek ister misiniz?",
+        btnYes : "EVET",
+        btnNo : "HAYIR",
+    },
     sale:  // "Satış"
     {
         loadMore : "Daha Fazla Göster",
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
+        popFactNonSolde : "Ödenmemiş Fatura",
         popCart:
         {
             txtCustomer: "Müşteri",
@@ -55,7 +65,8 @@ export const langTr =
             dtDocDate : "Tarih",
             dtDShıpmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
-            cmbPricingList : "Fiyat Liste No"
+            cmbPricingList : "Fiyat Liste No",
+            txtFactNonSolde : "Ödenmemiş Fatura"
         },
         itemPopup : 
         {
@@ -63,7 +74,8 @@ export const langTr =
             txtPrice  :"Fiyat",
             cmbUnit : "Birim",
             txtQuantity : "Miktar",
-            txtDiscount : "İndirim"
+            txtDiscount : "İndirim",
+            txtItemListName : "Liste Adı"
         },
         popCustomer:
         {
@@ -71,7 +83,8 @@ export const langTr =
             btn01 : "Ara",
             btn02 : "Seç",
             clmCode : "KODU",
-            clmName : "ADI"
+            clmName : "ADI",
+            clmAdress : "ADRES"
         },
         grdSale: 
         {
@@ -79,11 +92,18 @@ export const langTr =
             clmPrice: "Fiyat",
             clmQuantity : "Adet",
             clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
+            clmDiscountRate : "% İndirim",
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
+            clmPriceAfterDiscount : "İnd. Fiyat",
+        },
+        grdFactNonSolde :
+        {
+            clmDocDate : "Tarih",
+            clmRefNo : "Sıra",
+            clmRemainder : "Ödenmemiş"
         },
         msgSave:
         {
@@ -244,6 +264,14 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        pg_adress:
+        {
+            title: "Adres Seçimi",
+            clmAdress: "Adres",
+            clmCity: "Şehir",
+            clmZipcode: "Posta Kodu",
+            clmCountry: "Ülke"
+        },
         msgPriceListChange:
         {
             title: "Dikkat",
@@ -253,9 +281,15 @@ export const langTr =
         },
         orderGroup:
         {
-            Name: "ÜRÜN İSMİ",
-            Code: "ÜRÜN KODU",
-            Favori: "FAVORİLER",
+            Name: "İSİM",
+            Code: "KOD",
+            Favori: "FAVORİ",
+        },
+        msgWrongUnit:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Birim koli olmak zorundadır !"
         },
     },
     extract :
@@ -300,6 +334,7 @@ export const langTr =
     {
         txtItem : "Lütfen Ürün Seçiniz",
         txtItemGroup : "Ürün Grubu",
+        txtItemListName : "Fiyat Liste",
         txtItemPrice : "Fiyat",
         grdListe : 
         {

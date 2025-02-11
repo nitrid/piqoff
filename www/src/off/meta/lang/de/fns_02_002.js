@@ -52,7 +52,8 @@ const fns_02_002 =
         clmInputName : "Kasse/Bank",
         clmDescription : "Beschreibung",
         clmInvoice : "Bezahlte Rechnung",
-        clmFacDate : "Rechnungsdatum"
+        clmFacDate : "Rechnungsdatum",
+        clmDocDate : "Zahlungsdatum"
     },
     msgDocValid:
     {

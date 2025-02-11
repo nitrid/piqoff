@@ -181,6 +181,13 @@ export const langTr =
     favDell : "Favoriden  Kaldır",
     menu : "Menu",
     favMenu : "Favoriler",
+    msgPriceListChange :
+    {
+        title : "Fiyat Listesi Değiştirme",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        msg : "Fiyatlar güncellensin mi ?"
+    },
     menuOff:
     {
         stk: "Ürün",                
@@ -300,6 +307,7 @@ export const langTr =
         sip_04 : "Operasyonlar",
         sip_01_001: "Alış Sipariş Listesi",
         sip_01_002: "Satış Sipariş Listesi",
+        sip_01_003 : "Hazırlanacak Sipariş Listesi",
         sip_02_001: "Alış Sipariş",
         sip_02_002: "Satış Sipariş",
         sip_02_003 : "Pos Satış Sipariş",
@@ -316,6 +324,8 @@ export const langTr =
         cnt_03 : "Raporlar",
         cnt_04 : "Operasyonlar",
         cnt_04_001 : "Çoklu Satış Anlaşması",
+        saleList : "Evrak Liste İşlemleri",
+        saleList_01: "Toplu Evrak Listesi",
         piqx : "PiqX",
         piqx_01 : "Faturalar",
         piqx_01_001 : "Gelen Alış Faturaları",
@@ -387,6 +397,7 @@ export const langTr =
         pos_02_016 : "Puan Hareketleri Raporu",
         pos_02_017 : "Saat aralıklı Satış Raporu",
         pos_02_018 : "Serbest İndirimler Raporu",
+        pos_02_019 : "Aylık Ürün Grup Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",
@@ -610,7 +621,13 @@ export const langTr =
         selectSenderName : "Gönderici Adı", 
         selectRecieverInfo : "Alıcı Seçimi",
         selectRecieverName : "Alıcı Adı",
-        
-        
     },
+    smallImage : "Küçük Resim",
+    bigImage : "Büyük Resim",
+    msgPayNotBigToPay: 
+    {
+        title : "Dikkat",
+        msg : "Girdiğiniz miktar toplam fiş tutarından büyük olamaz !",
+        btn01 : "Tamam"
+    }
 }

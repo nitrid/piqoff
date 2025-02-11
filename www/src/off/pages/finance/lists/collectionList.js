@@ -52,8 +52,8 @@ export default class collectionList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
+        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
+        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
     _columnListBox(e)
@@ -334,6 +334,7 @@ export default class collectionList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdColList" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -341,8 +342,9 @@ export default class collectionList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 
@@ -408,7 +410,7 @@ export default class collectionList extends React.PureComponent
                                                     {
                                                         query : `SELECT 
                                                                 FACT.DOC_DATE AS FACT_DATE,
-                                                                FACT.REF AS FACT_REF,
+                                                                FACT.REF  AS FACT_REF,
                                                                 FACT.REF_NO AS FACT_REF_NO,
                                                                 FACT.PAY_TYPE AS FACT_PAY_TYPE,
                                                                 FACT.INPUT_CODE AS CUSTOMER_CODE,
@@ -428,15 +430,38 @@ export default class collectionList extends React.PureComponent
                                                                 INNER JOIN DOC_CUSTOMER_VW_01 AS FACT ON
                                                                 DEPTH.PAYING_DOC = FACT.GUID
                                                                 INNER JOIN DOC_CUSTOMER_VW_01 AS TAH ON
-                                                                DEPTH.PAID_DOC = TAH.GUID
-                                                                WHERE ((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                                                                DEPTH.PAID_DOC = TAH.GUID WHERE
+                                                                ((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
                                                                 ((TAH.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((TAH.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
-                                                                AND TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 ORDER BY TAH.DOC_DATE DESC`,
+                                                                AND 
+                                                                TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 
+                                                                UNION ALL 
+                                                                SELECT 
+                                                                DOC_DATE AS FACT_DATE,
+                                                                REF  AS FACT_REF,
+                                                                REF_NO AS FACT_REF_NO,
+                                                                PAY_TYPE AS FACT_PAY_TYPE,
+                                                                OUTPUT_CODE AS CUSTOMER_CODE,
+                                                                OUTPUT_NAME AS CUSTOMER_NAME,
+                                                                ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT,
+                                                                ISNULL((SELECT VAT * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_VAT,
+                                                                ISNULL((SELECT TOTAL * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_TOTAL,
+                                                                (SELECT TOP 1 DOC_DATE FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_DATE,
+                                                                (SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF,
+                                                                (SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF_NO,
+                                                                (SELECT TOP 1 PAY_TYPE_NAME FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_PAY_TYPE,
+                                                                '' AS BANK_NAME,
+                                                                ''  AS DESCRIPTION,
+                                                                (SELECT TOP 1 AMOUNT FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS AMOUNT,
+                                                                ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+
+                                                                FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND  GUID IN (SELECT PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT1 WHERE DEPT1.PAID_DOC IN ( SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC IN (SELECT GUID FROM DOC_CUSTOMER_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200 AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')))) AND ISNULL((SELECT TOP 1 TYPE FROM  DOC_CUSTOMER_VW_01 where DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0)
+                                                                `,
                                                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) 
+                                                    console.log(tmpData) 
                                                     App.instance.setState({isExecute:true})
                                                     if(tmpData.result.recordset.length > 0)
                                                     {

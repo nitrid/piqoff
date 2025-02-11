@@ -206,7 +206,7 @@ export default class rebateDispatch extends DocBase
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue() == true)
         {
             this.txtRefno.value = Math.floor(Date.now() / 1000)
         }
@@ -1154,7 +1154,7 @@ export default class rebateDispatch extends DocBase
                                             maxLength={32}
                                             onChange={(async(e)=>
                                             {
-                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
+                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue() == false)
                                                 {
                                                     let tmpQuery = 
                                                     {
@@ -1727,7 +1727,11 @@ export default class rebateDispatch extends DocBase
                                       
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_FACTOR != 'undefined')
+                                        {
+                                            e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                         }
                                         if(typeof e.data.PRICE != 'undefined')
                                         {
@@ -1804,7 +1808,7 @@ export default class rebateDispatch extends DocBase
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
-                                        <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="SUB_PRICE" caption={this.t("grdRebtDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>

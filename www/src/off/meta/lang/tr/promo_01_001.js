@@ -71,6 +71,13 @@ const promo_01_001 =
         btn02: "Vazgeç",
         msg: "Kaydı silmek istediğinize eminmisiniz ?"
     },
+    msgNewPage:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        btn02: "Vazgeç",
+        msg: "Yeni Sayfa Açmak İstediginizden Emin Misiniz?"
+    },
     pop_PrmItemList:
     {
         title: "Seçilmiş Ürünlar",

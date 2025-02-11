@@ -57,7 +57,7 @@ export const langEn =
     msgMaxQuantity :
     {
         title : "Attention",  // BAK
-        msg : "You cannot enter a quantity greater than 999,999!",  // BAK
+        msg : "You cannot enter a quantity greater than 999!",  // BAK
         btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
@@ -952,5 +952,38 @@ export const langEn =
         clmVendorId: "Vendor Id",
         clmSerialNo: "Serial No"
     },
-    lblTicketCount : "Customer :"
+    lblTicketCount : "Customer :",
+    btnList :
+    {
+        btnCheqpay : "Cheque",
+        btnInfo : "Info", 
+        btnDelete : "Delete Ticket",
+        btnLineDelete : "Delete Line",
+        btnItemReturn : "Return",
+        btnPriceDiff : "Price Diff.",
+        btnItemSearch : "Product Search",
+        btnZReport : "Z Report",
+        btnGrdList : "Product List",
+        btnFormation : "Training",
+        btnOrderList : "Order",
+        btnAdvance : "Advance",
+        btnParkList : "On Hold",
+        btnCustomerAdd : "Add Customer",
+        btnCustomerList : "Customer List",
+        btnGetCustomer : "Customer",
+        btnCalculator : "Calculator",
+        btnPark : "Put On Hold",
+        btnTicketList : "Ticket List",
+        btnLastPrint : "Print",
+        btnTotal : "Total",
+        btnSubtotal : "Subtotal",
+        btnCardTicket : "T.R Card",
+        btnDiscount : "Discount",
+        btnExchange : "Exchange",
+        btnCreditCard : "Credit Card",
+        btnCash : "Cash",
+        btnCheck : "Check",
+        btnCustomerPoint : "Use Points",
+        btnSafeOpen : "Open Register",
+    }
 }

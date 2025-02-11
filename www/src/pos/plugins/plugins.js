@@ -11,7 +11,35 @@ App.prototype.init = async function()
 
   try 
   {
-    pluginsConf = require('../../config.js').default;
+    let configPath;
+    if(typeof App.instance.electron?.ipcRenderer != 'undefined') 
+    {
+      configPath = 'file://' + process.cwd() + '/public/config.js';
+      const fs = window.require('fs');
+      
+      if (fs.existsSync(process.cwd() + '/config.json')) 
+      {
+        try 
+        {
+          const configData = JSON.parse(fs.readFileSync(process.cwd() + '/config.json', 'utf8'));
+          if(configData.local === false)
+          {
+            configPath = '/config.js';
+          }
+        }
+        catch(err) 
+        {
+          console.error('Error reading config.json:', err);
+        }
+      }
+    } 
+    else 
+    {
+      configPath = '/config.js';
+    }
+    const response = await fetch(configPath);
+    const configText = await response.text();
+    pluginsConf = eval('(' + configText.replace('export default','').replace(/;$/, '') + ')');
   } 
   catch (error) 
   {

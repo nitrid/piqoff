@@ -62,6 +62,31 @@ const  ftr_02_002 =
         btn01: "OK",
         msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
     },
+    msgSave :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?",
+        btn02: "Abbrechen"
+    },
+    msgSaveResult :
+    {
+        title: "Erfolgreich",
+        btn01: "OK",
+        msg: "Die Änderungen wurden erfolgreich gespeichert!"
+    },
+    msgSaveFailed :
+    {
+        title: "Fehler",
+        btn01: "OK",
+        msg: "Das Speichern der Änderungen ist fehlgeschlagen!"
+    },
+    msgSaveValid :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+    },
     msgMailSendResult:
     {
         title: "Achtung",
@@ -75,6 +100,7 @@ const  ftr_02_002 =
         txtMailSubject : "Betreff der E-Mail",
         txtSendMail : "E-Mail-Adresse",
         btnSend : "Senden",
+        btnCancel : "Abbrechen",
         cmbMailAddress : "Gesendete Mailadresse" // 
     },
     pg_Docs :
@@ -345,7 +371,10 @@ const  ftr_02_002 =
     {
         title: "Design-Auswahl",
         design: "Design",
-        lang: "Dokumentsprache"
+        lang: "Dokumentsprache",
+        btnApprove : "Bestätigen",
+        btnCancel : "Abbrechen",
+        btnSave : "Speichern",
     },
     msgMissItemCode:
     {

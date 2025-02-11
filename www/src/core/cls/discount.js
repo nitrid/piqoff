@@ -37,46 +37,42 @@ export class discountCls
         let tmpDt = new datatable('DISCOUNT');            
         tmpDt.selectCmd = 
         {
-            query : `SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
-                    ((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND 
-                    ((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC`,
-            param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','CUSTOMER_GUID:string|50','DEPOT_GUID:string|50'],
+            query : `SELECT * FROM [dbo].[DISCOUNT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1`,
+            param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','DEPOT_GUID:string|50'],
         } 
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_INSERT] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@START_DATE = @PSTART_DATE, " + 
                     "@FINISH_DATE = @PFINISH_DATE, " + 
-                    "@CUSTOMER = @PCUSTOMER, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@STATUS = @PSTATUS " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PCUSTOMER:string|50','PDEPOT:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','STATUS']
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date','PDEPOT:string|50','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','DEPOT_GUID','STATUS']
         } 
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_UPDATE] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@START_DATE = @PSTART_DATE, " + 
                     "@FINISH_DATE = @PFINISH_DATE, " + 
-                    "@CUSTOMER = @PCUSTOMER, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@STATUS = @PSTATUS ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
-                    'PCUSTOMER:string|50','PDEPOT:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','STATUS']
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date','PDEPOT:string|50','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','DEPOT_GUID','STATUS']
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_DELETE] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID, " + 
@@ -145,7 +141,6 @@ export class discountCls
                 CODE : '',
                 START_DATE : '19700101',
                 FINISH_DATE : '19700101',
-                CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
                 DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
             }
 
@@ -156,17 +151,13 @@ export class discountCls
                     tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                     tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? '19700101' : arguments[0].START_DATE;
                     tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? '19700101' : arguments[0].FINISH_DATE;
-                    tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
                     tmpPrm.DEPOT_GUID = typeof arguments[0].DEPOT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT_GUID;
                 }
                 else
                 {
                     tmpPrm = {CODE:arguments[0].CODE}
-                    this.ds.get('DISCOUNT').selectCmd.query = "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) AND STATUS = 1 ORDER BY TYPE ASC"
+                    this.ds.get('DISCOUNT').selectCmd.query = "SELECT * FROM [dbo].[DISCOUNT_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) AND STATUS = 1"
                     this.ds.get('DISCOUNT').selectCmd.param = ['CODE:string|25']
-
-                    this.ds.get('DISCOUNT').selectCmd.local.query = "SELECT * FROM PROMO_VW_01 WHERE ((CODE = ?) OR (? = '')) AND STATUS = 1 ORDER BY TYPE ASC"
-                    this.ds.get('DISCOUNT').selectCmd.local.values = [tmpPrm.CODE,tmpPrm.CODE]
                 }
             }
             
@@ -182,8 +173,8 @@ export class discountCls
 
             if(tmpGuids != '')
             {
-                await this.cond.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
-                await this.app.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
+                await this.cond.load({DISCOUNT:tmpGuids.substring(0,tmpGuids.length - 1)})
+                await this.app.load({DISCOUNT:tmpGuids.substring(0,tmpGuids.length - 1)})
             }
 
             resolve(this.ds.get('DISCOUNT'));    
@@ -223,10 +214,10 @@ export class discountCls
     }
     getDocDisc(pCustomer,pItem)
     {
-        let tmpCustDisc = this.docDiscDt.where({TYPE : {'>' : 2}}).where({DETAIL_GUID : pCustomer})
+        let tmpCustDisc = this.docDiscDt.where({TYPE : {'IN' : [0,1]}}).where({DETAIL_GUID : pCustomer})
         if(tmpCustDisc.length > 0)
         {
-            let tmpItemDisc = this.docDiscDt.where({GUID : tmpCustDisc[0].GUID}).where({TYPE : {'<' : 3}}).where({DETAIL_GUID : pItem})
+            let tmpItemDisc = this.docDiscDt.where({GUID : {'IN' : tmpCustDisc.map(disc => disc.GUID)}}).where({TYPE : {'IN' : [10,11]}}).where({DETAIL_GUID : pItem})
             if(tmpItemDisc.length > 0)
             {
                 return tmpItemDisc[0].AMOUNT
@@ -244,14 +235,12 @@ export class discCondCls
         this.empty = 
         {
             GUID : '00000000-0000-0000-0000-000000000000',
-            PROMO : '00000000-0000-0000-0000-000000000000',
+            DISCOUNT : '00000000-0000-0000-0000-000000000000',
             TYPE : 0,
             TYPE_NAME : '',
-            ITEM_GUID : '00000000-0000-0000-0000-000000000000',
-            ITEM_CODE : '',
-            ITEM_NAME : '',
-            QUANTITY : 0,
-            AMOUNT : 0,
+            LINK_GUID : '00000000-0000-0000-0000-000000000000',
+            LINK_CODE : '',
+            LINK_NAME : '',
             WITHAL : 0,
             SECTOR : 'COND'
         }
@@ -264,47 +253,40 @@ export class discCondCls
         let tmpDt = new datatable('DISC_CONDITION');            
         tmpDt.selectCmd = 
         {
-            query : `SELECT *,'COND' AS SECTOR FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
-                    ((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC`,
-            param : ['GUID:string|50','PROMO:string|max'],
+            query : `SELECT *,'COND' AS SECTOR FROM [dbo].[DISCOUNT_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((DISCOUNT IN (SELECT value FROM STRING_SPLIT(@DISCOUNT,','))) OR (@DISCOUNT = '')) ORDER BY WITHAL ASC`,
+            param : ['GUID:string|50','DISCOUNT:string|max'],
         } 
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_CONDITION_INSERT] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_CONDITION_INSERT] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@TYPE = @PTYPE, " + 
-                    "@ITEM_CODE = @PITEM_CODE, " + 
-                    "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT, " + 
+                    "@LINK = @PLINK, " + 
                     "@WITHAL = @PWITHAL " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
+            param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PLINK:string|50','PWITHAL:int'],
+            dataprm : ['GUID','DISCOUNT','TYPE','LINK_GUID','WITHAL']
         } 
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_CONDITION_UPDATE] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_CONDITION_UPDATE] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@TYPE = @PTYPE, " + 
-                    "@ITEM_CODE = @PITEM_CODE, " + 
-                    "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT, " + 
+                    "@LINK = @PLINK, " + 
                     "@WITHAL = @PWITHAL " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
+            param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PLINK:string|50','PWITHAL:int'],
+            dataprm : ['GUID','DISCOUNT','TYPE','LINK_GUID','WITHAL']
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_CONDITION_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_CONDITION_DELETE] " + 
                     "@UPDATE = 1, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@GUID = @PGUID ", 
-            param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],
-            dataprm : ['CUSER','PROMO','GUID']
+            param : ['PDISCOUNT:string|50','PGUID:string|50'],
+            dataprm : ['DISCOUNT','GUID']
         }
 
         this.ds.add(tmpDt);
@@ -355,15 +337,13 @@ export class discCondCls
             let tmpPrm = 
             {
                 GUID : '00000000-0000-0000-0000-000000000000',
-                PROMO : '00000000-0000-0000-0000-000000000000',
+                DISCOUNT : '00000000-0000-0000-0000-000000000000',
             }
 
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
-                tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
-
-                this.ds.get('PROMO_CONDITION').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,tmpPrm.PROMO,tmpPrm.PROMO]
+                tmpPrm.DISCOUNT = typeof arguments[0].DISCOUNT == 'undefined' ? '' : arguments[0].DISCOUNT;
             }
             this.ds.get('DISC_CONDITION').selectCmd.value = Object.values(tmpPrm)
 
@@ -389,13 +369,9 @@ export class discAppCls
         this.empty = 
         {
             GUID : '00000000-0000-0000-0000-000000000000',
-            PROMO : '00000000-0000-0000-0000-000000000000',
+            DISCOUNT : '00000000-0000-0000-0000-000000000000',
             TYPE : 0,
             TYPE_NAME : '',
-            ITEM_GUID : '00000000-0000-0000-0000-000000000000',
-            ITEM_CODE : '',
-            ITEM_NAME : '',
-            QUANTITY : 0,
             AMOUNT : 0,
             WITHAL : 0,
             SECTOR : 'APP'
@@ -409,47 +385,40 @@ export class discAppCls
         let tmpDt = new datatable('DISC_APPLICATION');            
         tmpDt.selectCmd = 
         {
-            query : `SELECT *,'APP' AS SECTOR FROM [dbo].[PROMO_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
-                    ((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC`,
-            param : ['GUID:string|50','PROMO:string|max']
+            query : `SELECT *,'APP' AS SECTOR FROM [dbo].[DISCOUNT_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((DISCOUNT IN (SELECT value FROM STRING_SPLIT(@DISCOUNT,','))) OR (@DISCOUNT = '')) ORDER BY WITHAL ASC`,
+            param : ['GUID:string|50','DISCOUNT:string|max']
         } 
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_APPLICATION_INSERT] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_APPLICATION_INSERT] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@TYPE = @PTYPE, " + 
-                    "@ITEM_CODE = @PITEM_CODE, " + 
-                    "@QUANTITY = @PQUANTITY, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@WITHAL = @PWITHAL " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
+            param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','DISCOUNT','TYPE','AMOUNT','WITHAL']
         } 
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_APPLICATION_UPDATE] " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_APPLICATION_UPDATE] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@TYPE = @PTYPE, " + 
-                    "@ITEM_CODE = @PITEM_CODE, " + 
-                    "@QUANTITY = @PQUANTITY, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@WITHAL = @PWITHAL " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
+            param : ['PGUID:string|50','PDISCOUNT:string|50','PTYPE:int','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','DISCOUNT','TYPE','AMOUNT','WITHAL']
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_PROMO_APPLICATION_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
+            query : "EXEC [dbo].[PRD_DISCOUNT_APPLICATION_DELETE] " + 
                     "@UPDATE = 1, " + 
-                    "@PROMO = @PPROMO, " + 
+                    "@DISCOUNT = @PDISCOUNT, " + 
                     "@GUID = @PGUID ", 
-            param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],
-            dataprm : ['CUSER','PROMO','GUID']
+            param : ['PDISCOUNT:string|50','PGUID:string|50'],
+            dataprm : ['DISCOUNT','GUID']
         }
 
         this.ds.add(tmpDt);
@@ -498,15 +467,13 @@ export class discAppCls
             let tmpPrm = 
             {
                 GUID : '00000000-0000-0000-0000-000000000000',
-                PROMO : '00000000-0000-0000-0000-000000000000',
+                DISCOUNT : '00000000-0000-0000-0000-000000000000',
             }
 
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
-                tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
-
-                this.ds.get('DISC_APPLICATION').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,tmpPrm.PROMO,tmpPrm.PROMO]
+                tmpPrm.DISCOUNT = typeof arguments[0].DISCOUNT == 'undefined' ? '' : arguments[0].DISCOUNT;
             }
 
             this.ds.get('DISC_APPLICATION').selectCmd.value = Object.values(tmpPrm)

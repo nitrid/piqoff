@@ -32,6 +32,31 @@ const tkf_02_001 =
         btn01: "OK",
         msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
     },
+    msgSave :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveResult :
+    {
+        title: "Erfolgreich",
+        btn01: "OK",
+        msg: "Die Änderungen wurden erfolgreich gespeichert!"
+    },
+    msgSaveFailed :
+    {
+        title: "Fehler",
+        btn01: "OK",
+        msg: "Das Speichern der Änderungen ist fehlgeschlagen!"
+    },
+    msgSaveValid :
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+    },
     msgMailSendResult:
     {
         title: "Achtung",

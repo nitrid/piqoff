@@ -61,7 +61,18 @@ export function print()
         ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:("Caissier: " + data.pos[0].CUSER).space(32,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
+        ()=>
+        {
+            if(data.special.type == 'Repas')
+            {
+                return {font:"a",style:"b",align:"ct",data:"****** Numero de Justificatif De Caisse ******"}
+            }
+            else
+            {
+                return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}
+            }
+            
+        },
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** " + data.pos[0].REF + " ******"}},
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
@@ -83,27 +94,36 @@ export function print()
         ()=>
         {
             let tmpArr = []
-            if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+            if(data.special.type == 'Repas')
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"TICKET DE VENTE"})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"JUSTIFICATIF DE PAYEMENT"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }
-            else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+            else
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
-                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+                {
+                    tmpArr.push({font:"b",style:"b",align:"ct",data:"TICKET DE VENTE"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+                {
+                    tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
+                    tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
+                {
+                    tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
+                else if(data.pospay.where({PAY_TYPE:4}).length > 0)
+                {
+                    tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
+                    tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+                }
             }
-            else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
-            {
-                tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-            }
-            else if(data.pospay.where({PAY_TYPE:4}).length > 0)
-            {
-                tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
-                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-            } 
+
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         // BAŞLIK 1 (TERAZİ SERTİFİKASI İÇİN)
@@ -330,7 +350,7 @@ export function print()
                                 font: "b",
                                 style: "b",
                                 align: "rt",
-                                data: "Remise ".space(46,"s") + (Number(tmpSaleItem.DISCOUNT).rate2In(tmpSaleItem.FAMOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(10,"s")
+                                data: "Remise ".space(40,"s") + (Number(tmpSaleItem.AMOUNT).rate2Num(tmpSaleItem.DISCOUNT,2) + "% - " + parseFloat(tmpSaleItem.DISCOUNT).toFixed(2) + "EUR").space(16,"s")
                             })
                         }
                     }
@@ -574,7 +594,7 @@ export function print()
         // SCALE_MANUEL
         {font:"b",style:"a",align:"lt",data:"(M) POIDS ENTRE MANUELLEMENT *Article(s)".space(52)},
         {font:"b",style:"bu",align:"lt",data:" ".space(64)},
-        ()=>{return {font:"b",align:"lt",data: (data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).length.toString() + " Aricle(s)").space(14)}},
+        ()=>{return {font:"b",align:"lt",data: (data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).length.toString() + " Article(s)").space(14)}},
         ()=>
         {
             let tmpArr = [];
@@ -621,14 +641,14 @@ export function print()
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après edition..."});
             }
             else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'>':0}}).length > 0)
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après edition..."});
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
@@ -675,7 +695,7 @@ export function print()
             {
                 let tmpArr = []
 
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Réimpression " + (data.special.reprint - 1)})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numero de Reimpression " + (data.special.reprint - 1)})
                 tmpArr.push({font:"b",align:"ct",data:moment(new Date()).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')})
                 tmpArr.push({font:"b",style:"b",align:"ct",data:data.special.dupCertificate})
 
