@@ -305,7 +305,7 @@ export default class App extends React.PureComponent
             //************************************************************************** */
         }
     }
-    loadPos()
+    async loadPos()
     {
         return new Promise(async (resolve) =>
         {
@@ -317,8 +317,10 @@ export default class App extends React.PureComponent
             
             if(this.core.util.isElectron() && !this.core.offline)
             {
+                let deviceData = await this.core.local.select({ query: "SELECT * FROM POS_DEVICE_VW_01" });
+                let userData = await this.core.local.select({ query: "SELECT * FROM USERS WHERE STATUS = 1" });
                 this.core.appInfo.version = await this.core.util.getVersion()
-                if(localStorage.getItem('version') == null || localStorage.getItem('version') != this.core.appInfo.version)
+                if(localStorage.getItem('version') == null || localStorage.getItem('version') != this.core.appInfo.version || deviceData.result.recordset.length === 0 || userData.result.recordset.length === 0)
                 {
                     App.instance.setState({splash:false,transferPanel:true});
                     //DATA TRANSFER İŞLEMİ
