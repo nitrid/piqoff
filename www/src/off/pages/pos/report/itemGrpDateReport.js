@@ -144,7 +144,7 @@ export default class itemGrpDateReport extends React.PureComponent
                                     dataField: "MOUNT",
                                     dataType: "text",
                                     area: "row",
-                                    expanded: false
+                                    expanded: false,
 
                                 },
                                 {
