@@ -205,6 +205,13 @@ export const langFr =
         msg : "Vous ne pouvez pas saisir de montant sans vente ",
         btn01 : "OK"
     },
+    msgSaleInfo:
+    {
+        title : "Information",
+        btn01 : "Oui",
+        btn02 : "Non",
+        infoTotal : "Le montant de la vente est supérieur à 1000 €, voulez-vous continuer ?"
+    },
     msgTicketForNotCustomer: 
     {
         title : "Attention",

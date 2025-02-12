@@ -201,6 +201,13 @@ export const langTr =
         msg : "Satış işlemi yapmadan tahsilat giremezsiniz !",
         btn01 : "Tamam"
     },
+    msgSaleInfo:
+    {
+        title : "Bilgi",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        infoTotal : "Satış tutarı 1000 €'den büyük, Devam etmek istiyor musunuz?"
+    },
     msgTicketForNotCustomer: 
     {
         title : "Uyarı",
