@@ -5804,7 +5804,31 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
+                                onClick={async()=>
+                                {
+                                    if(this.txtPopCardPay.value > 999)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaleInfo',showTitle:true,title:this.lang.t("msgSaleInfo.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgSaleInfo.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgSaleInfo.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaleInfo.infoTotal")}</div>)
+                                        }
+                                        let tmpConfResult = await dialog(tmpConfObj);
+                                        if(tmpConfResult == 'btn01')
+                                        {
+                                            this.payAdd(1,this.txtPopCardPay.value)
+                                        }
+                                        else
+                                        {
+                                            return
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.payAdd(1,this.txtPopCardPay.value)
+                                    }
+                                }}>
                                     {this.lang.t("send")}
                                 </NbButton>
                             </div>
@@ -5908,7 +5932,31 @@ export default class posDoc extends React.PureComponent
                                 <div className="row pt-2">
                                     <div className="col-12">
                                         <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                        onClick={()=>{this.payAdd(0,this.txtPopCashPay.value)}}>
+                                        onClick={async()=>
+                                        {
+                                            if(this.txtPopCashPay.value > 999)   
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgSaleInfo',showTitle:true,title:this.lang.t("msgSaleInfo.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgSaleInfo.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgSaleInfo.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaleInfo.infoTotal")}</div>)
+                                                }
+                                                let tmpConfResult = await dialog(tmpConfObj);
+                                                if(tmpConfResult == 'btn01')
+                                                {
+                                                    this.payAdd(0,this.txtPopCashPay.value)
+                                                }
+                                                else
+                                                {
+                                                    return
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.payAdd(0,this.txtPopCashPay.value)
+                                            }
+                                        }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
