@@ -104,6 +104,10 @@ export default class endOfDay extends React.PureComponent
             rest :"green",
         }
         this.paymentData = new datatable
+
+        this.state = {
+            ticketId: "",
+        }
     }
     async componentDidMount()
     {
@@ -397,7 +401,17 @@ export default class endOfDay extends React.PureComponent
                     <NdNumberBox id="txtCash" parent={this} simple={true} 
                     param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
                     access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
-                    />
+                    button={[
+                        {
+                            id:'001',
+                            icon:'more',
+                            onClick:async()=>
+                            {
+                                await this.popTotalCash.show()
+                            }
+                        }
+                    ]}>
+                    </NdNumberBox>
                 </Item>
             </Form>
         )
@@ -412,7 +426,17 @@ export default class endOfDay extends React.PureComponent
                     <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
                     param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
                     access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
-                    />
+                    button={[
+                        {
+                            id:'001',
+                            icon:'more',
+                            onClick:async()=>
+                            {
+                                await this.popTotalCreditCard.show()
+                            }
+                        }
+                    ]}>
+                    </NdNumberBox>
                 </Item>
             </Form>      
         )
@@ -598,6 +622,31 @@ export default class endOfDay extends React.PureComponent
             this.cmbSafe.value = ''
         }
     }
+
+    async saveTotalCash()
+    {
+        let total = this.txtAmountCash1.value  + 
+                   this.txtAmountCash2.value + 
+                   this.txtAmountCash3.value + 
+                   this.txtAmountCash4.value + 
+                   this.txtAmountCash5.value;
+        this.Cash = total;
+        this.txtCash.value = total;
+        this.txtAmountCashTotal.value = total;
+    }
+
+    async saveTotalCreditCard()
+    {
+        let total = this.txtAmountCreditCard1.value + 
+                   this.txtAmountCreditCard2.value + 
+                   this.txtAmountCreditCard3.value +
+                   this.txtAmountCreditCard4.value +
+                   this.txtAmountCreditCard5.value;
+        this.DebitCard = total;
+        this.txtCreditCard.value = total;
+        this.txtAmountCreditCardTotal.value = total;
+    }
+
     render()
     {
         return(
@@ -612,7 +661,183 @@ export default class endOfDay extends React.PureComponent
                         </div>
                     </div>
                 </div>
-                {/* Finish PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popTotalCash"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popTotalCash.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'420'}
+                        position={{of:'#root'}}
+                        deferRendering={false}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("txtAmountCash1")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCash1" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCash()
+                                        
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCash2")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCash2" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCash()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCash3")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCash3" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCash()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label  text={this.t("txtAmountCash4")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCash4" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCash()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCash5")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCash5" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCash()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCashTotal")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCashTotal" parent={this} simple={true}
+                                    readOnly={true}
+                                    />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnSaveTotalCash")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={async (e)=>
+                                            {       
+                                                this.popTotalCash.hide();
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnCancelTotalCash")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.txtAmountCash1.value = 0;
+                                                this.txtAmountCash2.value = 0;
+                                                this.txtAmountCash3.value = 0;
+                                                this.txtAmountCash4.value = 0;
+                                                this.txtAmountCash5.value = 0;
+                                                this.txtCash.value = 0;
+                                                this.Cash = 0;
+                                                this.txtAmountCashTotal.value = 0;
+                                                this.popTotalCash.hide();
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    <div>
+                    <NdPopUp parent={this} id={"popTotalCreditCard"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popTotalCreditCard.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'420'}
+                        position={{of:'#root'}}
+                        deferRendering={false}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("txtAmountCreditCard1")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCard1" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCreditCard()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCreditCard2")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCard2" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCreditCard()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCreditCard3")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCard3" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCreditCard()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label  text={this.t("txtAmountCreditCard4")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCard4" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCreditCard()
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCreditCard5")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCard5" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.saveTotalCreditCard()
+                                    }}/>    
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtAmountCreditCardTotal")} alignment="right" />
+                                    <NdNumberBox id="txtAmountCreditCardTotal" parent={this} simple={true}
+                                    readOnly={true}
+                                    />    
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnSaveTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={async (e)=>
+                                            {       
+                                                this.popTotalCreditCard.hide(); 
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnCancelTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.txtAmountCreditCard1.value = 0;
+                                                this.txtAmountCreditCard2.value = 0;
+                                                this.txtAmountCreditCard3.value = 0;
+                                                this.txtAmountCreditCard4.value = 0;
+                                                this.txtAmountCreditCard5.value = 0;
+                                                this.txtCreditCard.value = 0;
+                                                this.DebitCard = 0;
+                                                this.txtAmountCreditCardTotal.value = 0;
+                                                this.popTotalCreditCard.hide();
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>                {/* Finish PopUp */}
                 <div>
                     <NdPopUp parent={this} id={"popFinish"} 
                     visible={false}
@@ -839,6 +1064,21 @@ export default class endOfDay extends React.PureComponent
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
                                                 this.safeTransfer()
+                                                
+                                                // Tüm amount değerlerini sıfırla
+                                                this.setState({
+                                                    amountCash1: 0,
+                                                    amountCash2: 0,
+                                                    amountCash3: 0,
+                                                    amountCash4: 0,
+                                                    amountCash5: 0,
+                                                    amountCreditCard1: 0,
+                                                    amountCreditCard2: 0,
+                                                    amountCreditCard3: 0,
+                                                    amountCreditCard4: 0,
+                                                    amountCreditCard5: 0
+                                                });
+
                                                 this.popAdvance.hide()
                                                 this.popFinish.hide()
                                             }

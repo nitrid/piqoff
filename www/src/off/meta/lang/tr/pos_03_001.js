@@ -102,6 +102,31 @@ const pos_03_001 =
         btn01: "Tamam",
         msg: "1000€ dan yüksek avans giremezsiniz ! "
     },
+    txtAmountCreditCard : "Kredi Kartı",
+    btnSaveTotalCreditCard : "Kaydet",
+    btnCancelTotalCreditCard : "İptal",
+    txtAmountCreditCard1 : "Kredi Kartı Değeri 1",
+    txtAmountCreditCard2 : "Kredi Kartı Değeri 2", 
+    txtAmountCreditCard3 : "Kredi Kartı Değeri 3",
+    txtAmountCreditCard4 : "Kredi Kartı Değeri 4",
+    txtAmountCreditCard5 : "Kredi Kartı Değeri 5",
+    txtAmountCreditCardTotal : "Kredi Kartı Toplam",
+    popTotalCreditCard :
+    {
+        title: "Kredi Kartı Toplam Detayı",    
+    },
+    txtAmountCash : "Nakit",
+    btnSaveTotalCash : "Kaydet",
+    btnCancelTotalCash : "İptal", 
+    txtAmountCash1 : "Nakit Değeri 1",
+    txtAmountCash2 : "Nakit Değeri 2",
+    txtAmountCash3 : "Nakit Değeri 3",
+    txtAmountCash4 : "Nakit Değeri 4",
+    txtAmountCash5 : "Nakit Değeri 5",
+    popTotalCash :
+    {
+        title: "Nakit Toplam Detayı",    
+    },
 }
 
 export default pos_03_001

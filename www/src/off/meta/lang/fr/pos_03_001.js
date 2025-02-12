@@ -102,5 +102,32 @@ const pos_03_001 =
         btn01: "OK",   
         msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
     },
+    txtAmountCreditCard : "CB",
+    btnSaveTotalCreditCard : "Enregistrer",
+    btnCancelTotalCreditCard : "Annuler",
+    txtAmountCreditCard1 : "Valeur du CB 1",
+    txtAmountCreditCard2 : "Valeur du CB 2",
+    txtAmountCreditCard3 : "Valeur du CB 3",
+    txtAmountCreditCard4 : "Valeur du CB 4",
+    txtAmountCreditCard5 : "Valeur du CB 5",
+    txtAmountCreditCardTotal : "Total CB",
+    popTotalCreditCard :
+    {
+        title: "Total CB détaillé",    
+    },
+    txtAmountCash : "Espece",
+    btnSaveTotalCash : "Enregistrer",
+    btnCancelTotalCash : "Annuler",
+    txtAmountCash1 : "Valeur de l'espèce 1",
+    txtAmountCash2 : "Valeur de l'espèce 2",
+    txtAmountCash3 : "Valeur de l'espèce 3",
+    txtAmountCash4 : "Valeur de l'espèce 4",
+    txtAmountCash5 : "Valeur de l'espèce 5",
+    txtAmountCashTotal : "Total Espece",
+    popTotalCash :
+    {
+        title: "Total Espece détaillé",    
+    },
+
 }
 export default pos_03_001
