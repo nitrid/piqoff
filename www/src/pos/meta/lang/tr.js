@@ -36,6 +36,14 @@ export const langTr =
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtMount : "Bu Ay",
+    dtLastMount : "Geçen Ay",
+    dtYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl",
     msgDeviceChange : 
     {
         title : "Dikkat",
@@ -998,15 +1006,6 @@ export const langTr =
         msg : "Miktar 0 (sıfır) olamaz.",
         btn01 : "Tamam",
     },
-    posSettings :
-    {
-        posItemsList : "Ürünler",
-        posSaleReport : "Pos Satış Raporu",
-        posCustomerPointReport : "Müşteri Puan Raporu",
-        posTicketEndDescription : "Fiş Sonu Açıklama",
-        posGroupSaleReport : "Grup Bazlı Satış Raporu",
-        posZReport : "Z Raporu",
-    },
     btnList :
     {
         btnCheqpay : "T.R Çek",
@@ -1039,6 +1038,15 @@ export const langTr =
         btnCheck : "Çek",
         btnCustomerPoint : "Puan Kullan",
         btnSafeOpen : "Kasa Aç",
+    },
+    posSettings :
+    {
+        posItemsList : "Ürünler",
+        posSaleReport : "Pos Satış Raporu",
+        posCustomerPointReport : "Müşteri Puan Raporu",
+        posTicketEndDescription : "Fiş Sonu Açıklama",
+        posGroupSaleReport : "Grup Bazlı Satış Raporu",
+        posZReport : "Z Raporu",
     },
     posItemsList :
     {
@@ -1249,7 +1257,33 @@ export const langTr =
                     btn01 : "Tamam",
                     msg : "Barkod alanı boş bırakılamaz !"
                 }
+            },
+            popAddItemGrp :
+            {
+                title : "Ürün Grubu Ekle",
+                txtAddItemGrpCode : "Kodu",
+                txtAddItemGrpName : "Adı",
+                btnSave : "Kaydet",
+                btnCancel : "İptal",
+                msgAddItemGrpEmpty :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Lütfen gerekli alanları doldurunuz !"
+                },
+                msgAddItemGrpExist :
+                {
+                    title : "Dikkat",
+                    btn01 : "Tamam",
+                    msg : "Bu kod zaten mevcut !"
+                }
             }
         }
+    },
+    posSaleReport :
+    {
+        btnGet : "Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        txtTicketAvg : "Ortalama Fiş Tutarı",
     }
 }

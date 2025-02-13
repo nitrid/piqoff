@@ -14,11 +14,6 @@ import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-//PDF cikti//
-// import { exportDataGrid } from 'devextreme/pdf_exporter';
-// import { jsPDF } from 'jspdf';
-
-// const exportFormats = ['pdf'];
 
 export default class posSalesReport extends React.PureComponent
 {
@@ -120,7 +115,7 @@ export default class posSalesReport extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query:"SELECT " +
+            query:  "SELECT " +
                     "POS.DOC_DATE AS DOC_DATE, " +
                     "'CAISSE :' + POS.DEVICE AS DEVICE, " +
                     "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
@@ -145,23 +140,19 @@ export default class posSalesReport extends React.PureComponent
                     "FROM POS_SALE_VW_01 AS POS " +
                     "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
                     "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " ,
-    param : ['START:date','END:date'],
-    value : [this.dtDate.startDate,this.dtDate.endDate]
+            param : ['START:date','END:date'],
+            value : [this.dtDate.startDate,this.dtDate.endDate]
         }
+        
         App.instance.setState({isExecute:true})
         let tmpData = await this.core.sql.execute(tmpQuery) 
         App.instance.setState({isExecute:false})
-        console.log(tmpData)
-        console.log(JSON.stringify(tmpData.result.recordset))
+        
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
         {
-            console.log(tmpData.result.recordset[0].PATH)
-            console.log(pResult.split('|')[0])
-            console.log(tmpData.result.recordset)
             if(pResult.split('|')[0] != 'ERR')
             {
                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                console.log(mywindow)
                 mywindow.onload = function() 
                 {
                     mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
@@ -177,11 +168,11 @@ export default class posSalesReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                            <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                      this.printReport()
+                                        this.printReport()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -223,16 +214,12 @@ export default class posSalesReport extends React.PureComponent
                                 <Item  >
                                     <Label text={this.lang.t("txtTotalTicket")} alignment="right" />
                                     <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
+                                    maxLength={32}/>
                                 </Item>
                                 <Item  >
                                     <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
                                     <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
+                                    maxLength={32}/>
                                 </Item>
                             </Form>
                         </div>
@@ -295,7 +282,7 @@ export default class posSalesReport extends React.PureComponent
                                 }
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                console.log(JSON.stringify(tmpData.result.recordset))
+
                                 App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
                                 {
@@ -488,56 +475,6 @@ export default class posSalesReport extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
-                    {/* PDF cikti
-                     <Item>
-                        <NdGrid parent={this} id={"pdfExportGrid"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                filterRow={{visible:true}}
-                                height={350} 
-                                width={'100%'}
-                                dbApply={false}
-                                onClick={async (e)=>
-                                {
-                                    const onExporting = React.useCallback(({ component }) => 
-                                    {
-                                    const docObj = new jsPDF();
-                                    exportDataGrid
-                                    (
-                                        {
-                                        jsPDFDocument: docObj,
-                                    
-                                        onRowExporting: (e) => {
-                                          const isHeader = e.rowCells[0].text === 'data';
-                                          if (!isHeader) {
-                                            e.rowHeight = 40;
-                                          }
-                                        },
-                                        }).then(() => {
-                                        docObj.save('DataGrid.pdf');
-                                      });
-                                    },);
-                                    onExporting={onExporting}
-                                }}
-                                onRowDblClick={async(e)=>
-                                {
-                                    this.btnGetDetail(e.data.GUID)
-                                    this.setState({ticketId:e.data.TICKET_ID})
-                                }}
-                                >
-                                    <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                    <Export enabled={true} formats={exportFormats} />
-                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                    <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} headerFilter={{visible:true}}/>
-                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                        </NdGrid>
-                    </Item> */}
                 </ScrollView>
             </div>
         )

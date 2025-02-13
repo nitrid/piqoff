@@ -3,7 +3,7 @@ import App from "../lib/app.js";
 import moment from "moment";
 
 import { dataset,datatable } from "../../core/core.js";
-import {itemsCls,unitCls} from "../../core/cls/items.js";
+import {itemsCls,unitCls,mainGroupCls} from "../../core/cls/items.js";
 
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
@@ -74,6 +74,16 @@ export default class posItemsList extends React.PureComponent
             this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
             this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
         }
+
+        let tmpMainGrpDt = new datatable();
+        tmpMainGrpDt.selectCmd = 
+        {
+            query : `SELECT '' AS CODE,'' AS NAME, '00000000-0000-0000-0000-000000000000' AS GUID
+                    UNION ALL SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC`
+        }
+
+        await tmpMainGrpDt.refresh();
+        await this.popCmbItemGrp.dataRefresh({source:tmpMainGrpDt});
 
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
     }
@@ -224,6 +234,16 @@ export default class posItemsList extends React.PureComponent
     {
         this.itemsObj.clearAll();
 
+        let tmpMainGrpDt = new datatable();
+        tmpMainGrpDt.selectCmd = 
+        {
+            query : `SELECT '' AS CODE,'' AS NAME, '00000000-0000-0000-0000-000000000000' AS GUID
+                    UNION ALL SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC`
+        }
+
+        await tmpMainGrpDt.refresh();
+        await this.popCmbItemGrp.dataRefresh({source:tmpMainGrpDt});
+
         await this.itemsObj.load({CODE:pCode})
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
     }
@@ -341,7 +361,7 @@ export default class posItemsList extends React.PureComponent
                     showTitle={true}
                     deferRendering={true}
                     >
-                        <div style={{display:'flex',justifyContent:'end'}}>
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
                             <div className="px-1">
                                 <NbButton id={"btnNew"} parent={this} className="form-group btn btn-primary btn-block" 
                                 style={{height:"50px",width:"50px"}}
@@ -524,10 +544,10 @@ export default class posItemsList extends React.PureComponent
                             </div>
                             <div className="col-6">
                                 <div className="row py-1">
-                                    <div className='col-4 p-0 pe-1'>
+                                    <div className='col-3 p-0 pe-1'>
                                         <label className="col-form-label d-flex justify-content-end">{this.lang.t("posItemsList.popItemEdit.cmbItemGrp") + " :"}</label>
                                     </div>
-                                    <div className="col-8 p-0 pe-3">
+                                    <div className="col-7 p-0">
                                         <NdSelectBox parent={this} id="popCmbItemGrp" tabIndex={this.tabIndex} simple={true}
                                         dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GUID",display:"MAIN_GRP_NAME"}}
                                         displayExpr="NAME"                 
@@ -537,23 +557,21 @@ export default class posItemsList extends React.PureComponent
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT '' AS CODE,'' AS NAME, '00000000-0000-0000-0000-000000000000' AS GUID
-                                                        UNION ALL SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC`
-                                            },
-                                            sql:this.core.sql
-                                        }}}
                                         />
+                                    </div>
+                                    <div className="col-2 p-0 pe-3">
+                                        <NdButton text={"+"} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={()=>
+                                        {
+                                            this.popAddItemGrp.show();
+                                        }}/>
                                     </div>
                                 </div>
                                 <div className="row py-1">
-                                    <div className='col-4 p-0 pe-1'>
+                                    <div className='col-3 p-0 pe-1'>
                                         <label className="col-form-label d-flex justify-content-end">{this.lang.t("posItemsList.popItemEdit.cmbTax") + " :"}</label>
                                     </div>
-                                    <div className="col-8 p-0 pe-3">
+                                    <div className="col-9 p-0 pe-3">
                                         <NdSelectBox parent={this} id="popCmbTax" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}} simple={true}
                                         displayExpr="VAT"                       
                                         valueExpr="VAT"
@@ -562,10 +580,10 @@ export default class posItemsList extends React.PureComponent
                                     </div>
                                 </div>
                                 <div className="row py-1">
-                                    <div className='col-4 p-0 pe-1'>
+                                    <div className='col-3 p-0 pe-1'>
                                         <label className="col-form-label d-flex justify-content-end">{this.lang.t("posItemsList.popItemEdit.cmbOrigin") + " :"}</label>
                                     </div>
-                                    <div className="col-8 p-0 pe-3">
+                                    <div className="col-9 p-0 pe-3">
                                         <NdSelectBox simple={true} parent={this} id="popCmbOrigin"
                                         dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
                                         displayExpr="NAME"                       
@@ -1388,6 +1406,134 @@ export default class posItemsList extends React.PureComponent
                                         onClick={()=>
                                         {
                                             this.popBarcode.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>
+                {/* Item Group Popup */}
+                <div>
+                    <NdPopUp id="popAddItemGrp" parent={this}
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.title")}
+                    container={"#root"}
+                    width={"500"}
+                    height={"230"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={1} height={'fit-content'} id={"frmAddItemGrp"}>
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.txtAddItemGrpCode")} alignment="right" />
+                                <NdTextBox simple={true} parent={this} id="txtAddItemGrpCode" selectAll={false}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtAddItemGrpCode')
+                                                this.keyboardRef.inputName = "txtAddItemGrpCode"
+                                                this.keyboardRef.setInput(this.txtAddItemGrpCode.value)
+                                            }
+                                        }
+                                    }
+                                ]}/>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.txtAddItemGrpName")} alignment="right" />
+                                <NdTextBox simple={true} parent={this} id="txtAddItemGrpName" selectAll={false}
+                                button=
+                                {[
+                                    {
+                                        id:'01',
+                                        icon:'edit',
+                                        onClick:async()=>
+                                        {
+                                            const tmpKeyboard = document.querySelector('.simple-keyboard');
+                                            if(tmpKeyboard && !tmpKeyboard.contains(document.activeElement))
+                                            {
+                                                this.keyboardRef.hide()
+                                            }
+                                            else
+                                            {
+                                                this.keyboardRef.show('txtAddItemGrpName')
+                                                this.keyboardRef.inputName = "txtAddItemGrpName"    
+                                                this.keyboardRef.setInput(this.txtAddItemGrpName.value)
+                                            }
+                                        }
+                                    }
+                                ]}/>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={async (e)=>
+                                        {
+                                            if(this.txtAddItemGrpCode.value == "" || this.txtAddItemGrpName.value == "")
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAddItemGrpEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            let tmpMainGrpObj = new mainGroupCls();
+                                            await tmpMainGrpObj.load({CODE:this.txtAddItemGrpCode.value});
+
+                                            if(tmpMainGrpObj.dt().length > 0)
+                                            {
+                                                let tmpConfObj = 
+                                                {
+                                                    id:'msgAddItemGrpExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            let tmpEmpty = {...tmpMainGrpObj.empty};
+                                            tmpEmpty.CODE = this.txtAddItemGrpCode.value
+                                            tmpEmpty.NAME = this.txtAddItemGrpName.value
+
+                                            tmpMainGrpObj.addEmpty(tmpEmpty);
+                                            await tmpMainGrpObj.save();
+
+                                            let tmpMainGrpDt = new datatable();
+                                            tmpMainGrpDt.selectCmd = 
+                                            {
+                                                query : `SELECT '' AS CODE,'' AS NAME, '00000000-0000-0000-0000-000000000000' AS GUID
+                                                        UNION ALL SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC`
+                                            }
+
+                                            await tmpMainGrpDt.refresh();
+                                            await this.popCmbItemGrp.dataRefresh({source:tmpMainGrpDt});
+
+                                            this.popAddItemGrp.hide();
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popAddItemGrp.hide();  
                                         }}/>
                                     </div>
                                 </div>

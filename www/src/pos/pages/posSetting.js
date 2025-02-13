@@ -31,7 +31,8 @@ export default class posSetting extends React.PureComponent
                     </div>
                     <div className="col-3 px-1">
                         <NbButton id={"btnSaleReport"} parent={this} className="form-group btn btn-primary btn-block" 
-                        style={{height:"100px",width:"100%"}}>
+                        style={{height:"100px",width:"100%"}}
+                        onClick={() => App.instance.setPage('posSaleReport')}>
                             <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posSaleReport")}</span>
                         </NbButton>
                     </div>
