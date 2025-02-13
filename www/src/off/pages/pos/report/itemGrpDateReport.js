@@ -84,11 +84,12 @@ export default class itemGrpDateReport extends React.PureComponent
                             onClick={async (e)=>
                             {
                                 let lang = ''
-                                if(localStorage.getItem('lang').toUpperCase() == "fr")
+                                console.log(localStorage.getItem('lang').toUpperCase())
+                                if(localStorage.getItem('lang').toUpperCase() == "FR")
                                 {
                                     lang = "french"
                                 }
-                                else if(localStorage.getItem('lang').toUpperCase() == "tr")
+                                else if(localStorage.getItem('lang').toUpperCase() == "TR")
                                 {
                                     lang = "turkish"
                                 }
@@ -99,9 +100,10 @@ export default class itemGrpDateReport extends React.PureComponent
 
                                 let tmpQuery = 
                                 {
-                                    query : `SET language @LANG
-                                            SELECT 
-                                            datename(month,(POS.DOC_DATE)) AS MOUNT, 
+                                    query : `SET language ` + lang +
+                                            ` SELECT 
+                                            datename(month,(POS.DOC_DATE)) AS MOUNT,
+                                            MONTH(POS.DOC_DATE) AS MONTH_NUMBER, 
                                             '' AS RAPT,
                                             POS.DOC_DATE AS DOC_DATE, 
                                             ITEM_GRP_NAME AS ITEM_GRP_NAME,
@@ -117,6 +119,7 @@ export default class itemGrpDateReport extends React.PureComponent
                                     param : ['LANG:string','START:date','END:date'],
                                     value : [lang,this.dtDate.startDate,this.dtDate.endDate]
                                 }
+                                console.log(lang)
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 App.instance.setState({isExecute:false})
@@ -142,7 +145,9 @@ export default class itemGrpDateReport extends React.PureComponent
                                     dataField: "MOUNT",
                                     dataType: "text",
                                     area: "row",
-                                    expanded: false
+                                    sortBySummaryField: "MONTH_NUMBER", 
+                                    sortOrder: "asc", 
+                                    expanded: false,
 
                                 },
                                 {
@@ -166,6 +171,7 @@ export default class itemGrpDateReport extends React.PureComponent
                                     dataType: "number",
                                     summaryType: "sum",
                                     area: "data",
+                                    format:"###.00"
                                 },
                                 {
                                     caption: this.t("grdTotalCost"),
