@@ -38,7 +38,8 @@ export default class posSetting extends React.PureComponent
                     </div>
                     <div className="col-3 px-1">
                         <NbButton id={"btnCustomerPointReport"} parent={this} className="form-group btn btn-primary btn-block" 
-                        style={{height:"100px",width:"100%"}}>
+                        style={{height:"100px",width:"100%"}}
+                        onClick={() => App.instance.setPage('posCustomerPointReport')}>
                             <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posCustomerPointReport")}</span>
                         </NbButton>
                     </div>
@@ -58,9 +59,9 @@ export default class posSetting extends React.PureComponent
                         </NbButton>
                     </div>
                     <div className="col-3 px-1">
-                        <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-primary btn-block" 
+                        <NbButton id={"btnCompanyInfo"} parent={this} className="form-group btn btn-primary btn-block" 
                         style={{height:"100px",width:"100%"}}>
-                            <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posZReport")}</span>
+                            <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posCompanyInfo")}</span>
                         </NbButton>
                     </div>
                 </div>

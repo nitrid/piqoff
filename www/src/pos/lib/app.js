@@ -24,6 +24,7 @@ import ItemInfoScreen from '../pages/itemInfoScreen.js'
 import PosSetting from '../pages/posSetting.js'
 import PosItemsList from '../pages/posItemsList.js'
 import PosSaleReport from '../pages/posSaleReport.js'
+import PosCustomerPointReport from '../pages/posCustomerPointReport.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
@@ -430,6 +431,10 @@ export default class App extends React.PureComponent
         else if(page == 'posSaleReport')
         {
             return <PosSaleReport/>
+        }
+        else if(page == 'posCustomerPointReport')
+        {
+            return <PosCustomerPointReport/>
         }
 
         return (

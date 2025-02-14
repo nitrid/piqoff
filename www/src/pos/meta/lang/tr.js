@@ -1046,7 +1046,7 @@ export const langTr =
         posCustomerPointReport : "Müşteri Puan Raporu",
         posTicketEndDescription : "Fiş Sonu Açıklama",
         posGroupSaleReport : "Grup Bazlı Satış Raporu",
-        posZReport : "Z Raporu",
+        posCompanyInfo : "Firma Bilgileri",
     },
     posItemsList :
     {
