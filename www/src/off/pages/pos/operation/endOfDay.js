@@ -89,6 +89,11 @@ export default class endOfDay extends React.PureComponent
             stepName: this.t("ticketRest"),
             stepIcon: "tim-icons icon-settings-gear-63",
             component: this.stepRestorant()
+        },
+        {
+            stepName: this.t("ticketCard"),
+            stepIcon: "tim-icons icon-settings-gear-63",
+            component: this.stepTicketCard()
         }];
 
 
@@ -96,12 +101,14 @@ export default class endOfDay extends React.PureComponent
         this.DebitCard = '';
         this.Check = '';
         this.TicketRest =  ''
+        this.TicketCard = ''
         this.color =
         {
             cash :"green",
             card :"green",
             check :"green",
             rest :"green",
+            ticket :"green",
         }
         this.paymentData = new datatable
 
@@ -314,6 +321,30 @@ export default class endOfDay extends React.PureComponent
             this.TicketRest = tmpTicketValue
             this.setState({TicketRest:tmpTikcet})
         }
+        if(parseFloat(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')) ==  this.txtTicketCard.value)
+            {
+                this.color.ticket = "green"
+                this.TicketCard = this.t("txtReal")
+                this.setState({TicketCard:this.t("txtReal")})
+            }
+            else 
+            {
+                let tmpTicketCard = parseFloat((this.txtTicketCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT'))).toFixed(2))
+                let tmpTicketCardValue
+                if(tmpTicketCard > 0)
+                {
+                    this.color.ticket = "blue"
+                    tmpTicketCardValue = '+' + tmpTicketCard.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+                }
+                else
+                {
+                    this.color.ticket = "red"
+                    tmpTicketCardValue = tmpTicketCard.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+                }
+                this.TicketCard = tmpTicketCardValue
+                this.setState({TicketCard:tmpTicketCard})
+            }
+
         
 
         this.popFinish.show()
@@ -399,6 +430,7 @@ export default class endOfDay extends React.PureComponent
                 <Item>
                     <Label text={this.t("txtCash")} alignment="right" />
                     <NdNumberBox id="txtCash" parent={this} simple={true} 
+                    readOnly={this.sysParam.filter({ID:'paymentWriteType',USERS:this.user.CODE}).getValue()}
                     param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
                     access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
                     button={[
@@ -424,6 +456,7 @@ export default class endOfDay extends React.PureComponent
                 <Item>
                     <Label text={this.t("txtCreditCard")} alignment="right" />
                     <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
+                    readOnly={this.sysParam.filter({ID:'paymentWriteType',USERS:this.user.CODE}).getValue()}
                     param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
                     access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
                     button={[
@@ -471,6 +504,21 @@ export default class endOfDay extends React.PureComponent
             </Form>      
         )
     }
+    stepTicketCard()
+    {
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                    <Label text={this.t("txtTicketCard")} alignment="right" />
+                    <NdNumberBox id="txtTicketCard" parent={this} simple={true} 
+                    param={this.param.filter({ELEMENT:'txtTicketCard',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'txtTicketCard',USERS:this.user.CODE})}
+                    />
+                </Item>
+            </Form>
+        )
+    }
     async safeTransfer()
     {
         this.enddayObj.clearAll()
@@ -488,6 +536,7 @@ export default class endOfDay extends React.PureComponent
         tmpEndday.CREDIT = this.txtCreditCard.value
         tmpEndday.CHECK = this.txtCheck.value
         tmpEndday.TICKET = this.txtRestorant.value
+        tmpEndday.TICKETCARD = this.txtTicketCard.value
         tmpEndday.ADVANCE = this.txtAdvance.value
         tmpEndday.SAFE = tmpCodeSafe
         
@@ -578,6 +627,22 @@ export default class endOfDay extends React.PureComponent
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCheck.value
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
+        if(this.txtTicketCard.value > 0)
+            {
+                this.docObj.docCustomer.addEmpty()
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'TicketCardSafe',TYPE:1}).getValue()
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 21
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtTicketCard.value
+                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+            }
 
         this.docObj.docCustomer.addEmpty()
         this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
@@ -618,6 +683,7 @@ export default class endOfDay extends React.PureComponent
             this.txtCash.value = 0
             this.txtCreditCard.value = 0
             this.txtRestorant.value = 0
+            this.txtTicketCard.value = 0
             this.txtCheck.value = 0
             this.cmbSafe.value = ''
         }
@@ -881,6 +947,14 @@ export default class endOfDay extends React.PureComponent
                                     <h2> : {this.TicketRest}</h2>
                                 </div>
                             </div>
+                            <div className='row'>
+                                <div className='col-6'>
+                                    <h2>{this.t("ticketCard")}</h2>
+                                </div>
+                                <div className='col-6' style={{color:this.color.ticket}}>
+                                    <h2> : {this.TicketCard}</h2>
+                                </div>
+                            </div>
                             <div className='row px-4'>
                                 <div className='col-12'>
                                     <h2>{this.t("advanceMsg1")}</h2>
@@ -1064,21 +1138,6 @@ export default class endOfDay extends React.PureComponent
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
                                                 this.safeTransfer()
-                                                
-                                                // Tüm amount değerlerini sıfırla
-                                                this.setState({
-                                                    amountCash1: 0,
-                                                    amountCash2: 0,
-                                                    amountCash3: 0,
-                                                    amountCash4: 0,
-                                                    amountCash5: 0,
-                                                    amountCreditCard1: 0,
-                                                    amountCreditCard2: 0,
-                                                    amountCreditCard3: 0,
-                                                    amountCreditCard4: 0,
-                                                    amountCreditCard5: 0
-                                                });
-
                                                 this.popAdvance.hide()
                                                 this.popFinish.hide()
                                             }

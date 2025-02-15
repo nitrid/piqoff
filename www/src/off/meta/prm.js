@@ -216,6 +216,21 @@ export const prm =
             CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
+    //Odeme Yazma Bicimi
+    {
+        TYPE : 0,
+        ID :"paymentWriteType",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Gun sonunda parcali odeme zorunlulugu"
+        }
+    },
     //underMinCostPrice
     {
         TYPE : 0,

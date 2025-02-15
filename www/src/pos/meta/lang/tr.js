@@ -1037,5 +1037,11 @@ export const langTr =
         btnCheck : "Çek",
         btnCustomerPoint : "Puan Kullan",
         btnSafeOpen : "Kasa Aç",
+    },
+    msgCardPayType :
+    {
+        title : "Ödeme Tipi",
+        btn01 : "Kredi Kartı",
+        btn02 : "Ticket Kartı",
     }
 }

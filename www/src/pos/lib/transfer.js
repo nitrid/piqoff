@@ -1411,34 +1411,17 @@ export default class transferCls
                                 {
                                     tmpArr.push([tmpInserts.querys[i],tmpInserts.values[i]])
                                 }
-
-                                this.core.local.db.sqlBatch(tmpArr, 
-                                () => 
+                                await this.sqlBatchAsync(tmpArr).catch(err => 
                                 {
-                                    //console.log('Pos is now populated.');
-                                },
-                                (error) => 
-                                {
-                                    console.log('Populate table error: ' + error.message);
-                                })
+                                    console.log('db transfer error - ' +  pTemp.name + ' : ' + err.message);
+                                });
                             }
                             else if(this.core.local.platform == 'electron')
                             {
-                                this.core.local.db.serialize(() => 
+                                await this.serializeAsync(tmpInserts).catch(err => 
                                 {
-                                    this.core.local.db.run('BEGIN TRANSACTION;');
-                                    for (let i = 0; i < tmpInserts.querys.length; i++) 
-                                    {
-                                        this.core.local.db.run(tmpInserts.querys[i], typeof tmpInserts.values[i] == 'undefined' ? [] : tmpInserts.values[i],(err) => 
-                                        {
-                                            if (err) 
-                                            {
-                                                console.log(err.message + " - " + pTemp.name)
-                                            }
-                                        });
-                                    }
-                                    this.core.local.db.run('COMMIT;');
-                                })
+                                    console.log('db transfer error - ' +  pTemp.name + ' : ' + err.message);
+                                });
                             }
                         }
                     }
@@ -1609,6 +1592,59 @@ export default class transferCls
         {
             await this.core.local.clearTbl(pTblName)
             resolve()
+        });
+    }
+    serializeAsync(pInserts) 
+    {
+        return new Promise((resolve, reject) => 
+        {
+            this.core.local.db.serialize(async () => 
+            {
+                this.core.local.db.run('BEGIN TRANSACTION;');
+                for(let i = 0; i < pInserts.querys.length; i++) 
+                {
+                    try 
+                    {
+                        await new Promise((rresolve, rreject) => 
+                        {
+                            this.core.local.db.run(pInserts.querys[i], typeof pInserts.values[i] == 'undefined' ? [] : pInserts.values[i], (err) => 
+                            {
+                                if(err)
+                                {
+                                    rreject(err);
+                                } 
+                                else 
+                                {
+                                    rresolve();
+                                }
+                            });
+                        });
+                    } 
+                    catch (err) 
+                    {
+                        reject(err);
+                        return;
+                    }
+                }
+                this.core.local.db.run('COMMIT;', (err) => 
+                {
+                    if(err) 
+                    {
+                        reject(err);
+                    } 
+                    else 
+                    {
+                        resolve();
+                    }
+                });
+            });
+        });
+    }
+    sqlBatchAsync(pInserts) 
+    {
+        return new Promise((resolve, reject) => 
+        {
+            this.core.local.db.sqlBatch(pInserts, resolve, reject);
         });
     }
 }

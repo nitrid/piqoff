@@ -19,6 +19,8 @@ const pos_03_001 =
     txtCreditCard : "Kredi Kartı",
     txtCheck : "Çek",
     txtRestorant : "Tike Restorant",
+    txtTicketCard : "Tike Kart",
+    ticketCard : "Tike Kart",
     txtReal : "Doğru",
     payTransfer : "Tutarları Aktar",
     validPriceFloat : "Avans 0'dan büyük olmalıdır",
