@@ -958,8 +958,6 @@ export default class promotionCard extends React.PureComponent
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={async (e)=>
                                     {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
                                             let tmpConfObj =
                                             {
                                                 id:'msgNewPage',showTitle:true,title:this.t("msgNewPage.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -971,7 +969,6 @@ export default class promotionCard extends React.PureComponent
                                             {    
                                                 this.init();
                                             } 
-                                        }    
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
