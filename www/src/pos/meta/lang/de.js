@@ -994,5 +994,11 @@ export const langDe =
         btnCheck : "Scheck",
         btnCustomerPoint : "Punkte einlösen",
         btnSafeOpen : "Kasse öffnen",
+    },
+    msgCardPayType :
+    {
+        title : "Zahlungsmethode",
+        btn01 : "CB",
+        btn02 : "T.Rest Card",
     }
 }

@@ -1042,5 +1042,11 @@ export const langFr =
         btnCheck : "Chèque",
         btnCustomerPoint : "Point Utilisé",
         btnSafeOpen : "Ouvrir C.",
+    },
+    msgCardPayType :
+    {
+        title : "Méthode de Paiement",
+        btn01 : "CB",
+        btn02 : "T.Rest Card",
     }
 }
