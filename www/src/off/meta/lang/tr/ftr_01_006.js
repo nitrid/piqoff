@@ -27,6 +27,15 @@ const ftr_01_006 =
         clmAmount : "Tutar",
         clmTotal : "Toplam",
     },
+    popDesign :
+    {
+        title : "Seçim",
+        design : "Lütfen bir seçim yapınız",
+        btnPrint : "Yazdır"
+
+    },
+    validDesign : "Lütfen bir seçim yapınız.",
 }
+
 
 export default ftr_01_006

@@ -50,6 +50,19 @@ export default class CustomerCard extends React.PureComponent
             {
                 this.customerObj.clearAll()
                 await this.customerObj.load({GUID:this.pagePrm.GUID});
+                if(this.customerObj.dt('CUSTOMERS').length > 0)
+                {
+                    if(this.customerObj.dt('CUSTOMERS')[0].TYPE == 0)
+                    {
+                        this.txtTitle.readOnly = true
+                        this.setState({officalVisible:false})
+                    }
+                    else
+                    {
+                        this.txtTitle.readOnly = false
+                        this.setState({officalVisible:true})
+                    }
+                }
             }, 1000);
            
         }
@@ -140,7 +153,6 @@ export default class CustomerCard extends React.PureComponent
                 this.txtTitle.readOnly = false
                 this.setState({officalVisible:true})
            }
-
         }
     }
     typeChange(pType)

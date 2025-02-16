@@ -102,7 +102,8 @@ export default class itemGrpDateReport extends React.PureComponent
                                 {
                                     query : `SET language ` + lang +
                                             ` SELECT 
-                                            datename(month,(POS.DOC_DATE)) AS MOUNT, 
+                                            datename(month,(POS.DOC_DATE)) AS MOUNT,
+                                            MONTH(POS.DOC_DATE) AS MONTH_NUMBER, 
                                             '' AS RAPT,
                                             POS.DOC_DATE AS DOC_DATE, 
                                             ITEM_GRP_NAME AS ITEM_GRP_NAME,
@@ -144,6 +145,8 @@ export default class itemGrpDateReport extends React.PureComponent
                                     dataField: "MOUNT",
                                     dataType: "text",
                                     area: "row",
+                                    sortBySummaryField: "MONTH_NUMBER", 
+                                    sortOrder: "asc", 
                                     expanded: false,
 
                                 },

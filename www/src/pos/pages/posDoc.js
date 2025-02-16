@@ -5382,7 +5382,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }
                                     }}>
-                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "2rem"}} />
+                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "2.1.6rem"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
