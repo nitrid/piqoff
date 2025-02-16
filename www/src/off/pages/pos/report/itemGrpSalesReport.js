@@ -46,7 +46,8 @@ export default class itemGrpSalesReport extends React.PureComponent
     }
     async _btnGetClick()
     {
-        let tmpQuery = {
+        let tmpQuery = 
+        {
             query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
             param : ['FISRT_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
@@ -112,8 +113,7 @@ export default class itemGrpSalesReport extends React.PureComponent
             App.instance.setState({isExecute:true})
             await this.grdGroupSalesReport.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
-        }
-       
+        }       
     }
     async getDetail(pGrp)
     {
@@ -183,7 +183,6 @@ export default class itemGrpSalesReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                              
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -269,9 +268,9 @@ export default class itemGrpSalesReport extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             onRowDblClick={async(e)=>
-                                {
-                                    this.getDetail(e.data.ITEM_GRP_NAME)
-                                }}
+                            {
+                                this.getDetail(e.data.ITEM_GRP_NAME)
+                            }}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
@@ -349,13 +348,6 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     allowColumnReordering={true}
                                     allowColumnResizing={true}
                                     loadPanel={{enabled:true}}
-                                    onCellPrepared={(e) =>
-                                    {
-
-                                    }}
-                                    onRowDblClick={async(e)=>
-                                    {
-                                    }}
                                     >                            
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                         <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
@@ -390,12 +382,12 @@ export default class itemGrpSalesReport extends React.PureComponent
                                             valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                         </Summary>
                                     </NdGrid>
-                                    </Item>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* İstatistik POPUP */}
-                      <div>
+                    {/* İstatistik POPUP */}
+                    <div>
                         <NdPopUp parent={this} id={"popAnalysis"} 
                         visible={false}
                         showCloseButton={true}
@@ -409,23 +401,23 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={3}>
                                     <Chart id="chart" dataSource={this.state.dataSource} width={'1400'} height={'600'} autoHidePointMarkers={false}>
-                                    <CommonSeriesSettings
+                                        <CommonSeriesSettings
                                         argumentField="state"
                                         type="bar"
                                         hoverMode="allArgumentPoints"
                                         selectionMode="allArgumentPoints"
                                         autoHidePointMarkers={false}
                                         >
-                                        <Label visible={true}>
-                                            <Format type="fixedPoint" precision={1} />
-                                        </Label>
+                                            <Label visible={true}>
+                                                <Format type="fixedPoint" precision={1} />
+                                            </Label>
                                         </CommonSeriesSettings>
-                                            <Series
-                                            valueField="TOTAL"
-                                            argumentField="ITEM_GRP_CODE"
-                                            name="Vente"
-                                            type="bar"
-                                            color="#008000" />
+                                        <Series
+                                        valueField="TOTAL"
+                                        argumentField="ITEM_GRP_CODE"
+                                        name="Vente"
+                                        type="bar"
+                                        color="#008000" />
                                     </Chart>
                                 </Item>
                             </Form>

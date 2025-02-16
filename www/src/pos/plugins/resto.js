@@ -412,7 +412,6 @@ function renderTables()
                                     }
                                     return tmpGrpArr
                                 })()}
-                                
                             </div>
                         </div>
                         <div className="col-2 pt-1 pb-1">

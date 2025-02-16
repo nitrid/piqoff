@@ -31,7 +31,6 @@ export default class posItemsList extends React.PureComponent
         this.lang = App.instance.lang;
         this.user = this.core.auth.data
         this.prmObj = App.instance.prmObj
-        this.acsObj = App.instance.acsObj
         this.itemsObj = new itemsCls();
         this.itemListDt = new datatable()
 
@@ -42,7 +41,6 @@ export default class posItemsList extends React.PureComponent
         this.onDelete = this.onDelete.bind(this)
     }
     async init()
-
     {
         this.itemsObj.clearAll();
         this.itemsObj.addEmpty();
@@ -251,28 +249,49 @@ export default class posItemsList extends React.PureComponent
     {
         return (
             <div style={{display:'flex',flexDirection:'column',height:'100%',backgroundColor:'#fff'}}>
-                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.5rem',borderBottom:'1px solid #dee2e6',backgroundColor:'#f8f9fa'}}>
-                    <div style={{margin:0,fontWeight:'500',color:'#212529', textAlign:'center', flexGrow: 1}}>
-                        <h3 style={{margin: 0}}>{this.lang.t("posSettings.posItemsList")}</h3>
-                    </div>
-                    <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-                        <button type="button" className="btn-close" onClick={() => App.instance.setPage('menu')}></button>
+                <div className="row px-2 pt-2">
+                    <div className="col-12">
+                        <Toolbar>
+                            <Item location="after"
+                            locateInMenu="auto"
+                            widget="dxButton"
+                            options=
+                            {{
+                                type: 'default',
+                                icon: 'file',
+                                onClick: async () => 
+                                {
+                                    await this.popItemEdit.show()
+                                    this.init();
+                                }
+                            }}/>
+                            <Item location="after"
+                            locateInMenu="auto"
+                            widget="dxButton"
+                            options=
+                            {{
+                                type: 'default',
+                                icon: 'clear',
+                                onClick: async () => 
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                    }
+                                    
+                                    let pResult = await dialog(tmpConfObj);
+                                    if(pResult == 'btn01')
+                                    {
+                                        App.instance.setPage('menu')
+                                    }
+                                }
+                            }}/>
+                        </Toolbar>
                     </div>
                 </div>
                 <div style={{flex:1,padding:'0.5rem',overflowY:'auto'}}>
-                    <div className="row">
-                        <div className="col-1 offset-11">
-                            <NbButton id={"btnNewItem"} parent={this} className="form-group btn btn-primary btn-block" 
-                            style={{height:"50px",width:"100%"}}
-                            onClick={async() => 
-                            {
-                                await this.popItemEdit.show()
-                                this.init();
-                            }}>
-                                <i className="fa-regular fa-file" style={{fontSize:'20px'}}></i>
-                            </NbButton>
-                        </div>
-                    </div>
                     <div className="row pt-2">
                         <div className="col-10">
                             <NdTextBox id="txtItemSearch" 
@@ -332,7 +351,6 @@ export default class posItemsList extends React.PureComponent
                             }}
                             onRowPrepared={(e)=>
                             {
-
                                 if(e.rowType == "header")
                                 {
                                     e.rowElement.style.fontWeight = "bold";    

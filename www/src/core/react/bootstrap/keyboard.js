@@ -20,35 +20,35 @@ export default class NbKeyboard extends NbBase
             {
                 shift: 
                 [
-                "q w e r t y u i o p ü . :",
-                "a s d f g h j k l ş - , /",
-                "z x c v b n m ö ç * _ % {shift}",
-                "{numbers} {space} {backspace} @"
+                    "q w e r t y u i o p ü . :",
+                    "a s d f g h j k l ş - , /",
+                    "z x c v b n m ö ç * _ % {shift}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 default: 
                 [
-                "Q W E R T Y U I O P Ü . :",
-                "A S D F G H J K L Ş - , /",
-                "Z X C V B N M Ö Ç * _ % {shift}",
-                "{numbers} {space} {backspace} @"
+                    "Q W E R T Y U I O P Ü . :",
+                    "A S D F G H J K L Ş - , /",
+                    "Z X C V B N M Ö Ç * _ % {shift}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 mail: 
                 [
-                "q w e r t y u i o p ü . :",
-                "a s d f g h j k l ş - , /",
-                "z x c v b n m ö ç * _ % {capslock}",
-                "{numbers} {space} {backspace} @",
-                "hotmail gmail outlook .com",
-                "icloud orange yahoo .fr"
+                    "q w e r t y u i o p ü . :",
+                    "a s d f g h j k l ş - , /",
+                    "z x c v b n m ö ç * _ % {capslock}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
+                    "hotmail gmail outlook .com",
+                    "icloud orange yahoo .fr"
                 ],
                 mailShift: 
                 [
-                "Q W E R T Y U I O P Ü . :",
-                "A S D F G H J K L Ş - , /",
-                "Z X C V B N M Ö Ç * _ % {capslock}",
-                "{numbers} {space} {backspace} @",
-                "hotmail gmail outlook .com",
-                "icloud orange yahoo .fr"
+                    "Q W E R T Y U I O P Ü . :",
+                    "A S D F G H J K L Ş - , /",
+                    "Z X C V B N M Ö Ç * _ % {capslock}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
+                    "hotmail gmail outlook .com",
+                    "icloud orange yahoo .fr"
                 ],
                 numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
                 numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
@@ -60,21 +60,21 @@ export default class NbKeyboard extends NbBase
                     "a z e r t y u i o p % *",
                     "q s d f g h j k l m - |",
                     "w x c v b n , : . _ {shift}",
-                    "{numbers} {space} {backspace} @"
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 default: 
                 [
                     "A Z E R T Y U I O P % *",
                     "Q S D F G H J K L M - |",
                     "W X C V B N , : . _ {shift}",
-                    "{numbers} {space} {backspace} @"
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 mail: 
                 [
                     "a z e r t y u i o p % *",
                     "q s d f g h j k l m - |",
                     "w x c v b n , : . _ {capslock}",
-                    "{numbers} {space} {backspace} @",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
                     "hotmail gmail outlook .com",
                     "icloud orange yahoo .fr"
                 ],
@@ -83,7 +83,7 @@ export default class NbKeyboard extends NbBase
                     "A Z E R T Y U I O P % *",
                     "Q S D F G H J K L M - |",
                     "W X C V B N , : . _ {capslock}",
-                    "{numbers} {space} {backspace} @",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
                     "hotmail gmail outlook .com",
                     "icloud orange yahoo .fr"
                 ],
@@ -178,6 +178,7 @@ export default class NbKeyboard extends NbBase
                 } : {}}>
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
+                newLineOnEnter={this.props.newLineOnEnter}
                 onChangeAll={(inputs) =>
                 {
                     this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
@@ -202,7 +203,7 @@ export default class NbKeyboard extends NbBase
                 layout={this.state.keyboard}
                 display={{
                     "{numbers}": "123",
-                    "{ent}": "return",
+                    "{enter}": "↵",
                     "{escape}": "esc ⎋",
                     "{tab}": "tab ⇥",
                     "{backspace}": "⌫",

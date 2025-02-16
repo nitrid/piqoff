@@ -6,14 +6,11 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../core/react/devex/grid.js';
-import NdCheckBox from '../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../core/react/devex/pivot.js';
 import NdButton from '../../core/react/devex/button.js';
-import NdPopUp from '../../core/react/devex/popup.js';
+import { dialog } from '../../core/react/devex/dialog.js';
 
 export default class posSaleReport extends React.PureComponent
 {
@@ -25,7 +22,6 @@ export default class posSaleReport extends React.PureComponent
         this.lang = App.instance.lang;
         this.user = this.core.auth.data
         this.prmObj = App.instance.prmObj
-        this.acsObj = App.instance.acsObj
 
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
     }
@@ -86,16 +82,19 @@ export default class posSaleReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={async()=>
+                                <Item location="after" locateInMenu="auto" widget="dxButton"
+                                options=
+                                {
                                     {
-                                        this.printReport()
-                                    }}/>
-                                </Item>
-                                <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
+                                        type: 'default',
+                                        icon: 'print',
+                                        onClick: async()=>
+                                        {
+                                            this.printReport()
+                                        }
+                                    }
+                                }/>
+                                <Item location="after" locateInMenu="auto" widget="dxButton"
                                 options=
                                 {
                                     {
@@ -103,7 +102,18 @@ export default class posSaleReport extends React.PureComponent
                                         icon: 'clear',
                                         onClick: async () => 
                                         {
-                                            App.instance.setPage('menu')
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.setPage('menu')
+                                            }
                                         }
                                     }    
                                 } />

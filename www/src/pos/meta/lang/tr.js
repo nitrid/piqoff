@@ -1285,5 +1285,129 @@ export const langTr =
         btnGet : "Getir",
         txtTotalTicket : "Toplam Fiş Adedi",
         txtTicketAvg : "Ortalama Fiş Tutarı",
+    },
+    posCustomerPointReport :
+    {
+        txtCustomerCode : "Müşteri Kodu",
+        txtCustomerName : "Müşteri Adı",
+        txtAmount : "Toplam Tutar",
+        btnGet : "Getir",
+        popCustomers :
+        {
+            title : "Müşteri Seçimi",
+            clmCode : "Kodu",
+            clmTitle : "Adı",
+            clmTypeName : "Tipi",
+            clmGenusName : "Cinsi",
+            btnSelectCustomer : "Seç",
+            btnCustomerSearch : "Ara",
+        },
+        grdCustomerPointReport :
+        {
+            clmCode: "Kodu",
+            clmTitle: "Adı",
+            clmPoint: "Puan",
+            clmLdate : "Son Günc.Tarihi",
+            clmEur : "Euro"
+        },
+        popPointDetail :
+        {
+            title : "Puan Detayı",
+            clmDate : "Tarih",
+            clmPosId : "Pos Kodu",
+            clmPoint : "Puan",
+            clmDescription : "Açıklama",
+            exportFileName : "customer_point_detail",
+            btnAddPoint : "Puan Ekle",
+        },
+        popPointSaleDetail :
+        {
+            title : "Puan Satış Detayı",
+            TicketId : "Fiş No",
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Toplam",
+            clmPayName : "Ödeme Tipi",
+            clmLineTotal : "Toplam",
+            exportFileName : "customer_point_sale_detail",
+        },
+        popPointEntry :
+        {
+            title : "Puan Girişi",
+            cmbPointType : "Tip",
+            cmbTypeData :
+            {
+                in : "Giriş",
+                out : "Çıkış",
+            },
+            txtPoint : "Puan",
+            txtPointAmount : "Puan Tutarı",
+            txtDescription : "Açıklama",
+            descriptionPlace : "Açıklama giriniz",
+            btnAdd : "Ekle",
+            msgDescription :
+            {
+                title : "Dikkat",
+                btn01 : "Tamam",
+                msg : "Açıklama en az 14 karakter olmalıdır !",
+            },
+            msgPointNotNumber :
+            {
+                title : "Dikkat",
+                btn01 : "Tamam",
+                msg : "Puan alanı sayısal bir değer olmalıdır !",
+            }
+        }
+    },
+    posTicketEndDescription :
+    {
+        cmbFirm : "Firma",
+        txtDescriptionPlaceHolder : "Açıklama giriniz",
+        msgSaveResult :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msgSuccess : "Kayıt işleminiz başarılı !",
+        }
+    },
+    posGrpSalesReport :
+    {
+        chkTicket : "Fiş Adedi",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        txtTicketAvg : "Ortalama Fiş Tutarı",
+        btnGet : "Getir",
+        btnGetAnalysis : "Analiz",
+        grdGroupSalesReport :
+        {
+            clmGrpCode : "Kodu",
+            clmGrpName : "Adı",
+            clmTicket : "Fiş Adedi",
+            clmQuantity : "Miktar",
+            clmTotalCost : "Toplam Maliyet",
+            clmFamount : "Vergi Hariç",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRestTotal : "Kalan Toplam",
+            exportFileName : "grp_sales_report",
+        },
+        grpGrpDetail :
+        {
+            title : "Ürün Grubu Detayı",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotalCost : "Toplam Maliyet",
+            clmFamount : "Vergi Hariç",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRestTotal : "Kalan Toplam",
+            exportFileName : "grp_grp_detail",
+        },
+        popAnalysis :
+        {
+            title : "Analiz",
+        }
     }
 }

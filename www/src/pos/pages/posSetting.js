@@ -45,7 +45,8 @@ export default class posSetting extends React.PureComponent
                     </div>
                     <div className="col-3 ps-1">
                         <NbButton id={"btnTicketEndDescription"} parent={this} className="form-group btn btn-primary btn-block" 
-                        style={{height:"100px",width:"100%"}}>
+                        style={{height:"100px",width:"100%"}}
+                        onClick={() => App.instance.setPage('posTicketEndDescription')}>
                             <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posTicketEndDescription")}</span>
                         </NbButton>
                     </div>
@@ -54,13 +55,14 @@ export default class posSetting extends React.PureComponent
                     <div className="col-3 pe-1">
                         <NbButton id={"btnGroupSaleReport"} parent={this} className="form-group btn btn-primary btn-block" 
                         style={{height:"100px",width:"100%"}}
-                        onClick={() => App.instance.setPage('itemsList')}>
+                        onClick={() => App.instance.setPage('posGrpSalesReport')}>
                             <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posGroupSaleReport")}</span>
                         </NbButton>
                     </div>
                     <div className="col-3 px-1">
                         <NbButton id={"btnCompanyInfo"} parent={this} className="form-group btn btn-primary btn-block" 
-                        style={{height:"100px",width:"100%"}}>
+                        style={{height:"100px",width:"100%"}}
+                        onClick={() => App.instance.setPage('posCompanyInfo')}>
                             <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.posCompanyInfo")}</span>
                         </NbButton>
                     </div>
