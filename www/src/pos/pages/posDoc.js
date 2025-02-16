@@ -2226,6 +2226,11 @@ export default class posDoc extends React.PureComponent
         localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
         localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
 
+        if((this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:9}).length > 0) && this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 1)
+        {
+            this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = true
+        }
+
         //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
         if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
         {
@@ -4639,6 +4644,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.customerName.value != '')
                                             {
+                                                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -4647,6 +4653,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return
+
                                             }
                                         }
 
