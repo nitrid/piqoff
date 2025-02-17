@@ -1,17 +1,17 @@
 import React from "react";
-import App from "../lib/app.js";
+import App from "../../../lib/app.js";
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../core/react/devex/grid.js';
-import NdTextBox from '../../core/react/devex/textbox.js'
-import NdSelectBox from '../../core/react/devex/selectbox.js';
-import NdPopUp from '../../core/react/devex/popup.js';
-import NdButton from '../../core/react/devex/button.js';
-import { dialog } from '../../core/react/devex/dialog.js';
-import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+import NdButton from '../../../../core/react/devex/button.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
+import NbKeyboard from "../../../../core/react/bootstrap/keyboard.js";
 export default class posCustomerPointReport extends React.PureComponent
 {
     constructor(props)

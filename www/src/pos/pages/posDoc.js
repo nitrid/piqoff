@@ -5551,31 +5551,6 @@ export default class posDoc extends React.PureComponent
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
-                            {/* btnSystemLy */}
-                            <NdLayoutItem key={"btnSystemLy"} id={"btnSystemLy"} parent={this} data-grid={{x:30,y:154,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
-                            access={this.acsObj.filter({ELEMENT:'btnSystemLy',USERS:this.user.CODE})}>
-                                <div>
-                                    <NbButton id={"btnSystem"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={async()=>
-                                    {
-                                        //burayı Yusuf Kaan 14.02.2025 tarihinde yaptı.
-                                        let tmpAcsVal = this.acsObj.filter({ID:'btnSystem',USERS:this.user.CODE})
-                            
-                                        if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
-                                        {   
-                                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
-                                            if(!tmpResult)
-                                            {
-                                                return
-                                            }
-                                        }
-                                        //***************************************** */
-                                        App.instance.setPage('menu')
-                                    }}>
-                                        <i className="text-white fa-solid fa-cog" style={{fontSize: "24px"}} />
-                                    </NbButton>
-                                </div>
-                            </NdLayoutItem>
                         </NdLayout>
                     </div>
                 </div>

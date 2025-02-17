@@ -1,7 +1,7 @@
 import React from "react";
-import App from "../lib/app.js";
+import App from "../../../lib/app.js";
 
-import NbButton from "../../core/react/bootstrap/button.js";
+import NbButton from "../../../../core/react/bootstrap/button.js";
 
 export default class posSetting extends React.PureComponent
 {

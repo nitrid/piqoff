@@ -21,12 +21,6 @@ import Login from './login.js'
 import Pos from '../pages/posDoc.js'
 import CustomerInfoScreen from '../pages/customerInfoScreen.js'
 import ItemInfoScreen from '../pages/itemInfoScreen.js'
-import PosSetting from '../pages/posSetting.js'
-import PosItemsList from '../pages/posItemsList.js'
-import PosSaleReport from '../pages/posSaleReport.js'
-import PosCustomerPointReport from '../pages/posCustomerPointReport.js'
-import PosTicketEndDescription from '../pages/posTicketEndDescription.js'
-import PosGrpSalesReport from '../pages/posGrpSalesReport.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
@@ -422,55 +416,6 @@ export default class App extends React.PureComponent
             return <Login />
         }
         
-        if(page == 'menu')
-        {
-            return <PosSetting/>
-        }
-        else if(page == 'itemsList')
-        {
-            return <PosItemsList/>
-        }
-        else if(page == 'posSaleReport')
-        {
-            return <PosSaleReport/>
-        }
-        else if(page == 'posCustomerPointReport')
-        {
-            return (
-                <div>
-                    <LoadPanel
-                    shadingColor="rgba(0,0,0,0.4)"
-                    position={{ of: '#root' }}
-                    visible={this.state.isExecute}
-                    showIndicator={true}
-                    shading={true}
-                    showPane={true}
-                    />
-                    <PosCustomerPointReport/>
-                </div>
-            )
-        }
-        else if(page == 'posTicketEndDescription')
-        {
-            return <PosTicketEndDescription/>
-        }
-        else if(page == 'posGrpSalesReport')
-        {
-            return (
-                <div>
-                    <LoadPanel
-                    shadingColor="rgba(0,0,0,0.4)"
-                    position={{ of: '#root' }}
-                    visible={this.state.isExecute}
-                    showIndicator={true}
-                    shading={true}
-                    showPane={true}
-                    />
-                    <PosGrpSalesReport/>
-                </div>
-            )
-        }
-
         return (
             <div>
                 <LoadPanel

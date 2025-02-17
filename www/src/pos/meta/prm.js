@@ -1537,8 +1537,8 @@ export const prm =
             CAPTION : "Pos Adisyon kullanımı"
         }
     },
-     //Pos Buton Text Kullanım 
-     {
+    //Pos Buton Text Kullanım 
+    {
         TYPE : 0,
         ID :"PosBtnText",
         VALUE : "textIcon",

@@ -1,14 +1,14 @@
 import React from "react";
-import App from "../lib/app.js";
+import App from "../../../lib/app.js";
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 
-import NdSelectBox from '../../core/react/devex/selectbox.js';
-import { dialog } from '../../core/react/devex/dialog.js';
-import NdTextArea from '../../core/react/devex/textarea.js';
-import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdTextArea from '../../../../core/react/devex/textarea.js';
+import NbKeyboard from "../../../../core/react/bootstrap/keyboard.js";
 
 export default class posTicketEndDescription extends React.PureComponent
 {

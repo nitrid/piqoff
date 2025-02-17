@@ -1,25 +1,25 @@
 import React from "react";
-import App from "../lib/app.js";
+import App from "../../../lib/app.js";
 import moment from "moment";
 
-import { dataset,datatable } from "../../core/core.js";
-import {itemsCls,unitCls,mainGroupCls} from "../../core/cls/items.js";
+import { dataset,datatable } from "../../../../core/core.js";
+import {itemsCls,unitCls,mainGroupCls} from "../../../../core/cls/items.js";
 
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
 
-import NbButton from "../../core/react/bootstrap/button.js";
-import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
-import NdTextBox,{ Validator,RequiredRule } from "../../core/react/devex/textbox.js";
-import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
-import NdPopUp from "../../core/react/devex/popup.js";
-import NdSelectBox from "../../core/react/devex/selectbox.js";
-import NdNumberBox from "../../core/react/devex/numberbox.js";
-import NdCheckBox from "../../core/react/devex/checkbox.js";
-import NdTabPanel from '../../core/react/devex/tabpanel';
-import NdDatePicker from "../../core/react/devex/datepicker.js";
-import NdButton from "../../core/react/devex/button.js";
-import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
+import NbButton from "../../../../core/react/bootstrap/button.js";
+import NbKeyboard from "../../../../core/react/bootstrap/keyboard.js";
+import NdTextBox,{ Validator,RequiredRule } from "../../../../core/react/devex/textbox.js";
+import NdGrid,{Column,Editing,Paging,Scrolling} from "../../../../core/react/devex/grid.js";
+import NdPopUp from "../../../../core/react/devex/popup.js";
+import NdSelectBox from "../../../../core/react/devex/selectbox.js";
+import NdNumberBox from "../../../../core/react/devex/numberbox.js";
+import NdCheckBox from "../../../../core/react/devex/checkbox.js";
+import NdTabPanel from '../../../../core/react/devex/tabpanel.js';
+import NdDatePicker from "../../../../core/react/devex/datepicker.js";
+import NdButton from "../../../../core/react/devex/button.js";
+import NdDialog,{ dialog } from "../../../../core/react/devex/dialog.js";
 
 export default class posItemsList extends React.PureComponent
 {

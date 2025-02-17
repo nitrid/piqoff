@@ -1,16 +1,16 @@
 import React from "react";
-import App from "../lib/app.js";
+import App from "../../../lib/app.js";
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdTextBox from '../../core/react/devex/textbox.js'
-import NbDateRange from '../../core/react/bootstrap/daterange.js';
-import NdPivot,{FieldChooser,Export} from '../../core/react/devex/pivot.js';
-import NdButton from '../../core/react/devex/button.js';
-import { dialog } from '../../core/react/devex/dialog.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
+import NdPivot,{FieldChooser,Export,StateStoring} from '../../../../core/react/devex/pivot.js';
+import NdButton from '../../../../core/react/devex/button.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class posSaleReport extends React.PureComponent
 {
@@ -22,8 +22,28 @@ export default class posSaleReport extends React.PureComponent
         this.lang = App.instance.lang;
         this.user = this.core.auth.data
         this.prmObj = App.instance.prmObj
+        this.acsObj = App.instance.acsObj
 
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
+    }
+    loadState() 
+    {
+        let tmpLoad = this.acsObj.filter({ELEMENT:'pvtSaleReport',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        if (e.fields.length === 0 && e.columnExpandedPaths.length === 0 && e.rowExpandedPaths.length === 0) 
+        {
+            return;
+        }
+
+        let tmpSave = this.acsObj.filter({ELEMENT:'pvtSaleReport',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async printReport()
     {
@@ -330,6 +350,7 @@ export default class posSaleReport extends React.PureComponent
                                     }
                                 }}
                                 >
+                                    <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={"pvtSaleReport"}/>
                                     <Export fileName={"Report"} enabled={true} allowExportSelectedData={true} />
                                     <FieldChooser enabled={true} height={400} />
                                 </NdPivot>
