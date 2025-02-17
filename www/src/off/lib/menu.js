@@ -1139,6 +1139,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.fns_02_002'),//'Tahsilat',
                             path: 'finance/documents/collection'
                         },
+                    //     {
+                    //         id: 'fns_02_003',
+                    //         text: e.t('menuOff.fns_02_003'),//'Taksitli Ödeme',
+                    //         path: 'finance/documents/payPlan'
+                    //     }
                     ]
                 },
                 {

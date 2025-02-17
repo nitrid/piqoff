@@ -2226,6 +2226,11 @@ export default class posDoc extends React.PureComponent
         localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
         localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
 
+        if((this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:9}).length > 0) && this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 1)
+        {
+            this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = true
+        }
+
         //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
         if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
         {
@@ -4362,14 +4367,31 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }
                                         
-                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+                                        if(this.prmObj.filter({ID:'PosCardTicketQuestion',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+                                        {
+                                            let tmpResult2 = await this.msgCardPayType.show()
+                                            if(tmpResult2 == "btn01")
+                                            {
+                                                this.popCardPay.show();
+                                                this.txtPopCardPay.newStart = true;
+                                            }
+                                            else if(tmpResult2 == "btn02")
+                                            {
+                                                this.popCardTicketPay.show();
+                                                this.txtPopCardTicketPay.newStart = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                         
-                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
-                                        this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
-
-                                        this.popCardPay.show();
-                                        this.txtPopCardPay.newStart = true;
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+    
+                                            this.popCardPay.show();
+                                            this.txtPopCardPay.newStart = true;
+                                        }
                                     }}>
                                         <i className={"text-white fa-solid " + (this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].ICON : "")} style={{fontSize: "1.6rem"}} />
                                     </NbButton>
@@ -4622,6 +4644,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.customerName.value != '')
                                             {
+                                                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -4630,6 +4653,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return
+
                                             }
                                         }
 
@@ -5332,7 +5356,7 @@ export default class posDoc extends React.PureComponent
                                     {          
                                         if(this.btnGetCustomer.lock)
                                         {
-                                            this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
+                                            this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"5px"})
                                         }
                                         else
                                         {
@@ -5350,11 +5374,11 @@ export default class posDoc extends React.PureComponent
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                         }
                                                         await dialog(tmpConfObj);
-                                                        this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
+                                                        this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"5px"})
                                                         return
                                                     }
                                                 }
-                                                this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%"})
+                                                this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%",fontSize:"0.6rem",padding:"5px"})
                                             }
                                         }
                                     }}>
@@ -5829,7 +5853,31 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
+                                onClick={async()=>
+                                {
+                                    if(this.txtPopCardPay.value > 999)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaleInfo',showTitle:true,title:this.lang.t("msgSaleInfo.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgSaleInfo.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgSaleInfo.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaleInfo.infoTotal")}</div>)
+                                        }
+                                        let tmpConfResult = await dialog(tmpConfObj);
+                                        if(tmpConfResult == 'btn01')
+                                        {
+                                            this.payAdd(1,this.txtPopCardPay.value)
+                                        }
+                                        else
+                                        {
+                                            return
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.payAdd(1,this.txtPopCardPay.value)
+                                    }
+                                }}>
                                     {this.lang.t("send")}
                                 </NbButton>
                             </div>
@@ -5933,7 +5981,31 @@ export default class posDoc extends React.PureComponent
                                 <div className="row pt-2">
                                     <div className="col-12">
                                         <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                        onClick={()=>{this.payAdd(0,this.txtPopCashPay.value)}}>
+                                        onClick={async()=>
+                                        {
+                                            if(this.txtPopCashPay.value > 999)   
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgSaleInfo',showTitle:true,title:this.lang.t("msgSaleInfo.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgSaleInfo.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgSaleInfo.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaleInfo.infoTotal")}</div>)
+                                                }
+                                                let tmpConfResult = await dialog(tmpConfObj);
+                                                if(tmpConfResult == 'btn01')
+                                                {
+                                                    this.payAdd(0,this.txtPopCashPay.value)
+                                                }
+                                                else
+                                                {
+                                                    return
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.payAdd(0,this.txtPopCashPay.value)
+                                            }
+                                        }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -6084,8 +6156,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL,TAX_NO,SIRET_ID, " +
-                                    "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,dbo.GETDATE())),0) AS POINT_COUNT " + 
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL,TAX_NO,SIRET_ID " +
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
                             local : 
@@ -6101,29 +6172,41 @@ export default class posDoc extends React.PureComponent
                     {
                         if(pData.length > 0)
                         {
-                            if(pData[0].POINT_COUNT > 3)
+                            let tmpQuery = 
                             {
-                                let tmpConfObj =
+                                query : "SELECT COUNT(*) AS POINT_COUNT FROM CUSTOMER_POINT WHERE CUSTOMER = @CUSTOMER AND CONVERT(DATE,LDATE) = CONVERT(DATE,dbo.GETDATE())",
+                                param : ['CUSTOMER:string|50'],
+                                value : [pData[0].GUID]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery)
+                            if(tmpData.result.recordset.length > 0  )
+                            {
+                                if(tmpData.result.recordset[0].POINT_COUNT > 3)
                                 {
-                                    id:'msgCustomerPointCount',showTitle:true,title:this.lang.t("msgCustomerPointCount.title"),showCloseButton:true,width:'450px',height:'250px',
-                                    button:[{id:"btn01",caption:this.lang.t("msgCustomerPointCount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerPointCount.btn02"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerPointCount.msg")}</div>)
-                                }
-                                let tmpConfResult = await dialog(tmpConfObj)
-                                if(tmpConfResult == 'btn01')
-                                {
-                                    let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
-
-                                    if(!tmpResult)
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgCustomerPointCount',showTitle:true,title:this.lang.t("msgCustomerPointCount.title"),showCloseButton:true,width:'450px',height:'250px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgCustomerPointCount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerPointCount.btn02"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerPointCount.msg")}</div>)
+                                    }
+                                    let tmpConfResult = await dialog(tmpConfObj)
+                                    if(tmpConfResult == 'btn01')
+                                    {
+                                        let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+    
+                                        if(!tmpResult)
+                                        {
+                                            return
+                                        }
+                                    }
+                                    else
                                     {
                                         return
                                     }
                                 }
-                                else
-                                {
-                                    return
-                                }
                             }
+
+                           
 
                             this.posObj.dt()[0].CUSTOMER_GUID = pData[0].GUID
                             this.posObj.dt()[0].CUSTOMER_TYPE = pData[0].CUSTOMER_TYPE
@@ -10082,6 +10165,43 @@ export default class posDoc extends React.PureComponent
                         <Column dataField="LIST_TAG" caption={this.lang.t("priceListChoicePopUp.clmTag")} width={200}/>
                         <Column dataField="PRICE" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.lang.t("priceListChoicePopUp.clmPrice")} width={100}/>
                     </NdPopGrid>
+                </div>
+               {/* Alert CardPay Type Popup */}
+               <div>
+                    <NdDialog id={"msgCardPayType"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true}
+                    title={this.lang.t("msgCardPayType.title")} 
+                    showCloseButton={false}
+                    width={"300px"}
+                    height={"200px"}
+                    deferRendering={true}
+                    >
+                        <div className="row">
+                          
+                            <div className="col-6 py-2">
+                                <NbButton id={"btnMsgCardPayCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgCardPayType._onClick("btn01")
+                                }}>
+                                    <div className="row"><div className="col-12">{this.lang.t("msgCardPayType.btn01")}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].ICON : "")} style={{fontSize: "24px"}}/></div></div>                                    
+                                </NbButton>
+                            </div>
+                           
+                            <div className="col-6 py-2">
+                                <NbButton id={"btnMsgCardPayTR"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgCardPayType._onClick("btn02")
+                                }}>
+                                    <div className="row"><div className="col-12">{this.lang.t("msgCardPayType.btn02")}</div></div>
+                                    <div className="row"><div className="col-12"><i className={"text-white fa-solid " + (this.payType.where({TYPE:3}).length > 0 ? this.payType.where({TYPE:3})[0].ICON : "")} style={{fontSize: "24px"}} /></div></div>                                    
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdDialog>
                 </div>
             </div>
         )

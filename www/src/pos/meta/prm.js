@@ -1537,7 +1537,7 @@ export const prm =
             CAPTION : "Pos Adisyon kullanımı"
         }
     },
-     //Adisyon Kullanım 
+     //Pos Buton Text Kullanım 
      {
         TYPE : 0,
         ID :"PosBtnText",
@@ -1551,6 +1551,22 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Pos Buton Text"
+        }
+    },
+    //Pos Kart Fiş Soru
+    {
+        TYPE : 0,
+        ID :"PosCardTicketQuestion",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Pos Kredi Kartı veya Ticket Kart Sorusu"
         }
     },
 ]

@@ -74,6 +74,11 @@ export const menu = (e) =>
                             text: e.t('menu.prm_01_004'), // TAB
                             path: 'parameters/systemParamTab'
                         },
+                        {
+                            id: 'prm_01_005',
+                            text: e.t('menu.prm_01_005'), // REST
+                            path: 'parameters/systemParamRest'
+                        }
                     ]
                 },
                 {

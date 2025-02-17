@@ -456,7 +456,17 @@ export default class CustomerCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                             }
-                                            await dialog(tmpConfObj)
+                                            let pResult = await dialog(tmpConfObj)
+                                            if(pResult == 'btn01')
+                                            {
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgDeleteResult',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msgFailed")}</div>)
+                                                }   
+                                                await dialog(tmpConfObj1)
+                                            }
                                             return
                                         }
                                         
@@ -472,6 +482,13 @@ export default class CustomerCard extends React.PureComponent
                                         {
                                             this.customerObj.dt('CUSTOMERS').removeAt(0)
                                             await this.customerObj.dt('CUSTOMERS').delete();
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDeleteResult',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msgSuccess")}</div>)
+                                            }
+                                            await dialog(tmpConfObj)
                                             this.init(); 
                                         }
                                         

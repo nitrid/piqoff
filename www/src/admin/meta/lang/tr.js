@@ -331,6 +331,7 @@ export const langTr =
         prm_01_002: "POS",
         prm_01_003: "MOB",
         prm_01_004: "TAB",
+        prm_01_005: "REST",
         prm_02: "Evrak Parametreleri",
         prm_02_001: "OFF",
         prm_02_003: "MOB",
@@ -444,6 +445,18 @@ export const langTr =
     {
         lblUser : "Kullanıcı",
         lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        btnMetaSave : "Meta Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_01_005 :
+    {
+        lblUser : "Kullanıcı",
         btnSave : "Kaydet",
         btnMetaSave : "Meta Kaydet",
         pg_UserList :

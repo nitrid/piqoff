@@ -986,5 +986,11 @@ export const langIt =
         btnCheck : "Assegno",
         btnCustomerPoint : "Usa Punti",
         btnSafeOpen : "Apri Cassa",
+    },
+    msgCardPayType :
+    {
+        title : "Metodo di Pagamento",
+        btn01 : "CB",
+        btn02 : "T.Rest Card",
     }
 }

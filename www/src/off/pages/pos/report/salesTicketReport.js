@@ -934,6 +934,13 @@ export default class salesOrdList extends React.PureComponent
                                                     style:{height:'49px',width:'100%'},
                                                     icon:"fa-rectangle-list",
                                                     text:"CHQe"
+                                                },
+                                                {
+                                                    id:"btn09",
+                                                    style:{height:'49px',width:'100%'},
+                                                    icon:"fa-brands fa-cc-amazon-pay",
+                                                    text:"CB REST",
+                                                    index:9
                                                 }
                                             ]}/>
                                         </div>
@@ -1073,9 +1080,9 @@ export default class salesOrdList extends React.PureComponent
                                                         {
                                                             tmpTypeName = "T.R"
                                                         }
-                                                        else if(this.rbtnTotalPayType.value == 4)
+                                                        else if(this.rbtnTotalPayType.value == 9)
                                                         {
-                                                            tmpTypeName = "BON D'AVOIR"
+                                                            tmpTypeName = "CB REST"
                                                         }
                                                             
                                                         if(tmpChange < 0)

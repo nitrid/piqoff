@@ -1,5 +1,5 @@
 import React from 'react';
-import {NumberBox} from 'devextreme-react/number-box';
+import {NumberBox, Button} from 'devextreme-react/number-box';
 import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
 
@@ -70,10 +70,66 @@ export default class NdNumberBox extends Base
             this.props.onChange();
         }
     }
+    _buttonView()
+    {
+        if(typeof this.props.button != 'undefined')
+        {
+            let tmp = []
+            let tmpStyle = undefined
+
+            if(typeof this.props.displayValue != 'undefined')
+            {
+                tmpStyle = {style:'z-index:2'}
+            }
+
+            for (let i = 0; i < this.props.button.length; i++) 
+            {
+                tmp.push (
+                    <Button key={i}
+                        name={"btn_" + this.props.button[i].id}
+                        location= {typeof this.props.button[i].location == 'undefined' ? "after" : this.props.button[i].location}
+                        options=
+                        {
+                            {
+                                visible: typeof this.props.button[i].visible == 'undefined' ? true : this.props.button[i].visible,
+                                disabled:false,
+                                icon: this.props.button[i].icon,
+                                stylingMode: "text",
+                                onClick: this.props.button[i].onClick,
+                                elementAttr: tmpStyle 
+                            }
+                        }
+                    >                
+                    </Button>
+                )
+            }
+            return tmp
+        }
+    }
+    _displayView()
+    {               
+        if(typeof this.props.displayValue != 'undefined')
+        {
+            return (
+                <div id={"dsp" + this.props.id}  className="dsp-textbox " 
+                style={
+                {
+                    zIndex: 1,
+                    borderRadius:'4px',
+                    height:'100%',
+                    padding:'5px',
+                    margin:'2px',
+                    width:'100%',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden'
+                }}>{this.state.displayValue}</div>
+            )            
+        }
+    }
     _txtView()
     {
         return (
-            <NumberBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
+            <NumberBox showClearButton={this.state.showClearButton} height='fit-content' 
                 elementAttr={this.props.elementAttr}
                 style={this.props.style}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
@@ -87,6 +143,8 @@ export default class NdNumberBox extends Base
                 step={this.props.step}
                 format={this.props.format}>                    
                     {this.props.children}
+                    {this._buttonView()}                    
+                    {this._displayView()}
                     {this.validationView()}
             </NumberBox>
         )

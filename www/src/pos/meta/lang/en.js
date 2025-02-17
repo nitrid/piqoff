@@ -985,5 +985,11 @@ export const langEn =
         btnCheck : "Check",
         btnCustomerPoint : "Use Points",
         btnSafeOpen : "Open Register",
+    },
+    msgCardPayType :
+    {
+        title : "Payment Method",
+        btn01 : "CB",
+        btn02 : "T.Rest Card",
     }
 }

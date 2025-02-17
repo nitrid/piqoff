@@ -142,9 +142,11 @@ const cri_01_001 =
     msgDelete:
     {
         title: "Dikkat",
-        btn01: "Tamam",
-        btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        btn01: "Evet",
+        btn02: "Hayır",
+        msg: "Kaydı silmek istediğinize eminmisiniz ?",
+        msgFailed: "Kayıt silme işleminiz başarısız  çünkü müşteriye ait bir evrak bulunuyor !",
+        msgSuccess: "Kayıt silme işleminiz başarılı !"
     },
     cmbTypeData : 
     {
