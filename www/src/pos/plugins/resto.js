@@ -25,6 +25,8 @@ const orgRender = posDoc.prototype.render
 
 App.prototype.loadPos = async function()
 {
+    orgLoadPos.call(this)
+
     let tmpLang = localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')
     const resources = await import(`./resto/meta/lang/${tmpLang}.js`)
     
@@ -36,7 +38,8 @@ App.prototype.loadPos = async function()
     this.acsObj.meta = this.acsObj.meta.concat(acs)
     this.prmObj.meta = this.prmObj.meta.concat(prm)
 
-    return orgLoadPos.call(this)
+    await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+    await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 }
 posDoc.prototype.init = function() 
 {
