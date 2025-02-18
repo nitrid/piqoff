@@ -15,6 +15,8 @@ export class payPlanCls
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             REF : '',
             REF_NO : 0,
             FAC_GUID : '00000000-0000-0000-0000-000000000000',
@@ -34,8 +36,8 @@ export class payPlanCls
         let tmpDt = new datatable('DOC_INSTALLMENT');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM DOC_INSTALLMENT WHERE DOC_GUID = @DOC_GUID",
-            param : ['DOC_GUID:string|50']
+            query : "SELECT * FROM DOC_INSTALLMENT_VW_01 WHERE FAC_GUID = @FAC_GUID",
+            param : ['FAC_GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -43,6 +45,8 @@ export class payPlanCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@DOC_GUID = @PDOC_GUID, " +
+                    "@DOC_DATE = @PDOC_DATE, " +
+                    "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
                     "@FAC_GUID = @PFAC_GUID, " +
@@ -52,8 +56,8 @@ export class payPlanCls
                     "@TOTAL = @PTOTAL, " +
                     "@STATUS = @PSTATUS, " +
                     "@DELETED = @PDELETED ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
-            dataprm : ['GUID','CUSER','DOC_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
+            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
         }
         tmpDt.updateCmd = 
         {
@@ -61,6 +65,8 @@ export class payPlanCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
                     "@DOC_GUID = @PDOC_GUID, " +    
+                    "@DOC_DATE = @PDOC_DATE, " +
+                    "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
                     "@FAC_GUID = @PFAC_GUID, " +
@@ -70,17 +76,17 @@ export class payPlanCls
                     "@TOTAL = @PTOTAL, " +
                     "@STATUS = @PSTATUS, " +
                     "@DELETED = @PDELETED ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
-            dataprm : ['GUID','CUSER','DOC_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
+            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
         }
         tmpDt.deleteCmd = 
         {
             query : "EXEC [dbo].[PRD_DOC_INSTALLMENT_DELETE] " +
-                    "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID']
+                    "@FAC_GUID = @PFAC_GUID, " +
+                    "@UPDATE = 1 " ,
+            param : ['PCUSER:string|25','PFAC_GUID:string|50'],
+            dataprm : ['CUSER','FAC_GUID']
         }   
 
         this.ds.add(tmpDt);
@@ -124,10 +130,10 @@ export class payPlanCls
     {
         return new Promise(async resolve => 
         {
-            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000'}
+            let tmpPrm = {FAC_GUID:'00000000-0000-0000-0000-000000000000'}
             if(arguments.length > 0)
             {
-                tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
+                tmpPrm.FAC_GUID = typeof arguments[0].FAC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].FAC_GUID;
             }
             this.ds.get('DOC_INSTALLMENT').selectCmd.value = Object.values(tmpPrm);
 

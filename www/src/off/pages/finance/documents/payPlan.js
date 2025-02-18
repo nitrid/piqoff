@@ -42,82 +42,102 @@ export default class payPlan extends React.PureComponent
         this.docObj.type = 1
         this.payPlanObj.lang = this.lang
         this.payPlanObj.type = 1
-    
-        this.payPlanObj.addEmpty()
-        this.tmpDocGuid = ''
-        this.tmpDocCode = ''
-        this.tmpDocName = ''
+        this.tabIndex = props.data.tabkey        
 
+        this.docLocked = false;    
     }
     async componentDidMount()
     {
+        await this.core.util.waitUntil(0)
         await this.init()
     }
     async init()
     {
-
+        console.log("init")
         this.payPlanObj.clearAll();
 
         this.payPlanObj.ds.on('onAddRow',(pTblName,pData) =>
+        {
+            if(pData.stat == 'new')
             {
-                if(pData.stat == 'new')
-                {
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:false});
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
-                    this.btnSave.setState({disabled:false});
-                    this.btnDelete.setState({disabled:false});
-                    this.btnCopy.setState({disabled:false});
-                    this.btnPrint.setState({disabled:false});
-                }
-            })
-        this.payPlanObj.ds.on('onEdit',(pTblName,pData) =>
-            {            
-                if(pData.rowData.stat == 'edit')
-                {
-                    this.btnBack.setState({disabled:false});
-                    this.btnNew.setState({disabled:true});
-                    this.btnSave.setState({disabled:false});
-                    this.btnDelete.setState({disabled:false});
-                    this.btnCopy.setState({disabled:false});
-                    this.btnPrint.setState({disabled:false});
-    
-                    pData.rowData.CUSER = this.user.CODE
-                }                 
-            })
-        this.payPlanObj.ds.on('onRefresh',(pTblName) =>
-            {            
-                this.btnBack.setState({disabled:true});
                 this.btnNew.setState({disabled:false});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});          
-            })
-        this.payPlanObj.ds.on('onDelete',(pTblName) =>
-            {            
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:false});
+                this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
-            })
+            }
+        })
+        this.payPlanObj.ds.on('onEdit',(pTblName,pData) =>
+        {            
+            if(pData.rowData.stat == 'edit')
+            {
+                this.btnBack.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
+                this.btnSave.setState({disabled:false});
+                this.btnDelete.setState({disabled:false});
+                this.btnCopy.setState({disabled:false});
+                this.btnPrint.setState({disabled:false});
 
+                pData.rowData.CUSER = this.user.CODE
+            }                 
+        })
+        this.payPlanObj.ds.on('onRefresh',(pTblName) =>
+        {            
+            this.btnBack.setState({disabled:true});
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});          
+        })
+        this.payPlanObj.ds.on('onDelete',(pTblName) =>
+        {            
+            this.btnBack.setState({disabled:false});
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});
+        })
+        this.txtRef.readOnly = true;
+        this.txtRef.setState({value:''})
+    
+        this.txtRefno.readOnly = false;
+        this.txtRefno.setState({value:''})
 
-        await this.payPlanObj.load({GUID:this.tmpDocGuid,REF:this.tmpDocCode,REF_NO:this.tmpDocName,TYPE:1,DOC_TYPE:200})
+        this.dtDocDate.setState({value:moment().format('YYYY-MM-DD')})
+        
+        this.txtCustomerCode.setState({value:''})
+        this.txtCustomerName.setState({value:''})
+        this.docLocked = false
+
     }
-    async _addInstallment(pDate,pAmount,pNo,pFacRefNo,pFacRef,pFacGuid,pTotalAmount)
+    async checkRow()
+    {
+        for (let i = 0; i < this.payPlanObj.dt().length; i++) 
+        {
+            this.payPlanObj.dt()[i].DOC_DATE = this.dtDocDate.value
+            this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
+            console.log(this.payPlanObj.dt()[i].DOC_DATE)
+            console.log(this.payPlanObj.dt()[i].REF_NO)
+        }
+    }
+    async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount)
     {
         let tmpPayPlan = {...this.payPlanObj.empty}
-        
         tmpPayPlan.FAC_GUID = pFacGuid
         tmpPayPlan.TOTAL = pTotalAmount
 
         tmpPayPlan.INSTALLMENT_DATE = pDate
 
         tmpPayPlan.DOC_GUID = '00000000-0000-0000-0000-000000000000' 
+        tmpPayPlan.DOC_DATE = this.dtDocDate.value
+        tmpPayPlan.CUSTOMER_GUID = this.tmpCustomerGuid
+        tmpPayPlan.CUSTOMER_CODE = this.txtCustomerCode.value
+        tmpPayPlan.CUSTOMER_NAME = this.txtCustomerName.value
         tmpPayPlan.REF_NO = pFacRefNo
         tmpPayPlan.INSTALLMENT_NO = pNo 
         tmpPayPlan.REF = pFacRef
@@ -126,14 +146,15 @@ export default class payPlan extends React.PureComponent
         console.log(tmpPayPlan)
         this.payPlanObj.addEmpty(tmpPayPlan)
         this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
+
     }
-    async checkDoc(pGuid,pRef,pRefno)
+    async checkDoc(pRef,pRefno,pFacGuid)
     {
         return new Promise(async resolve =>
         {
             if(pRef !== '')
             {
-                let tmpData = await new payPlanCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new payPlanCls().load({FAC_GUID:pFacGuid});
 
                 if(tmpData.length > 0)
                 {
@@ -152,7 +173,7 @@ export default class payPlan extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getDoc(pGuid,pRef,pRefno)
+                        this.getDoc(pFacGuid)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -171,35 +192,19 @@ export default class payPlan extends React.PureComponent
             }
         });
     }
-    async getDoc(pGuid,pRef,pRefno)
+    async getDoc(pFacGuid)
     {
         this.payPlanObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.payPlanObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
+        await this.payPlanObj.load({FAC_GUID:pFacGuid});
 
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        if(this.payPlanObj.dt()[0].LOCKED != 0)
-        {
-            this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            this.frmPayment.option('disabled',true)
-        }
-        else
-        {
-            this.docLocked = false
-            this.frmPayment.option('disabled',false)
-        }
+        this.docLocked = false
+        this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
     }
     async _btnGetClick()
     {
@@ -210,10 +215,12 @@ export default class payPlan extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN ISNULL((SELECT TOP 1 RECIEVER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_01.GUID),'') <> '' THEN  'OK' ELSE 'X' END AS MAIL FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query: "SELECT *,CASE WHEN ISNULL((SELECT TOP 1 RECIEVER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_02.GUID),'') <> '' THEN 'OK' ELSE 'X' END AS MAIL FROM DOC_VW_02 " +
+                    "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
+                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                    "AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                    "AND INSTALLMENT_STATUS = 0 " +
+                    "ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.value,this.dtFirst.startDate,this.dtFirst.endDate]
                 },
@@ -251,6 +258,7 @@ export default class payPlan extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async (e)=>
                                     {
+                                        console.log(this.payPlanObj.dt())
                                         if(this.payPlanObj.dt().length > 0)
                                         {
                                             let tmpConfObj =
@@ -269,13 +277,14 @@ export default class payPlan extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.payPlanObj.save()) == 0)
+                                                if((await this.payPlanObj.save()) == 0 && this.txtRefno.value != '')
                                                 {
                                                     await this.payPlanObj.save()
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.init()
                                                 }
                                                 else
                                                 {
@@ -311,10 +320,10 @@ export default class payPlan extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-
+                                            console.log(this.payPlanObj.dt())
                                             this.payPlanObj.dt().removeAll()
                                             await this.payPlanObj.dt().delete()
-                                            this.init(); 
+                                            this.init()
                                         }
                                         
                                     }}/>
@@ -364,13 +373,13 @@ export default class payPlan extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmInstallment" + this.tabIndex}>
+                            <Form colCount={3} id={"frmPayPlan"  + this.tabIndex}> 
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdTextBox id="txtRef" parent={this} simple={true} 
+                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
@@ -378,7 +387,7 @@ export default class payPlan extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT  WHERE REF = @REF GROUP BY REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT_VW_01  WHERE REF = @REF GROUP BY REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -391,14 +400,19 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayment"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} 
-                                            readOnly={true}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF_NO"}}
+                                            readOnly={false}
+                                            onValueChanged={(async(e)=>
+                                            {
+                                                console.log(e)
+                                                await this.checkRow()
+                                            }).bind(this)}
                                             button=
                                             {
                                                 [
@@ -412,8 +426,8 @@ export default class payPlan extends React.PureComponent
                                                             {
                                                                 if(data.length > 0)
                                                                 {
-                                                                    console.log(data[0].REF_NO)
-                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                    console.log(data[0])
+                                                                    this.getDoc(data[0].FAC_GUID)
                                                                 }
                                                             }
                                                                    
@@ -422,17 +436,18 @@ export default class payPlan extends React.PureComponent
                                                     {
                                                         id:'02',
                                                         icon:'arrowdown',
-                                                        onClick:()=>
+                                                        onClick:async()=>
                                                         {
                                                             console.log(this.txtRefno.value)
                                                             this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            await this.checkRow()
                                                         }
                                                     }
                                                 ]
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                let tmpResult = await this.checkDoc(this.txtRef.value,this.txtRefno.value,this.tmpFacGuid)
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -441,7 +456,7 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayment"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -456,7 +471,7 @@ export default class payPlan extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT DOC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE),AMOUNT,TOTAL FROM DOC_INSTALLMENT GROUP BY DOC_GUID,REF,REF_NO,TOTAL "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT FAC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MAX(INSTALLMENT_NO) AS PAY_PLAN,CUSTOMER_NAME,CUSTOMER_CODE FROM DOC_INSTALLMENT_VW_01 GROUP BY FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -465,31 +480,46 @@ export default class payPlan extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                   
+                                                
                                                 }
                                             }
                                         ]
                                         
                                     }
                                     >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INSTALLMENT_NO" caption={this.t("pg_Docs.clmInstallmentNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INSTALLMENT_DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="AMOUNT" caption={this.t("pg_Docs.clmAmount")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} defaultSortOrder="asc"/>
+                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmCustomerName")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmCustomerCode")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="PAY_PLAN" caption={this.t("pg_Docs.clmInstallmentNo")} width={150} defaultSortOrder="asc" />
+                                        <Column dataField="DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={200} defaultSortOrder="asc" />
+                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={100} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.payPlanObj.dt(),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        await this.checkRow()
+                                        console.log(this.dtDocDate.value)
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPayPlan" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />   
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     value={this.tmpDocCode}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.txtCustomerName.value = this.tmpDocName
-                                    }}
                                     onEnterKey={(async()=>
                                     {
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -498,14 +528,9 @@ export default class payPlan extends React.PureComponent
                                         {
                                             if(data.length > 0)
                                             {
-                                                this.tmpDocGuid = data[0].GUID
-                                                this.tmpDocCode = data[0].CODE
-                                                this.tmpDocName = data[0].TITLE
                                                 this.txtCustomerCode.value = data[0].CODE
                                                 this.txtCustomerName.value = data[0].TITLE
-                                                console.log(this.tmpDocGuid)
-                                                console.log(this.tmpDocCode)
-                                                console.log(this.tmpDocName)
+                                                this.txtRef.value = data[0].CODE
                                             }
                                         }
                                     }).bind(this)}
@@ -520,14 +545,9 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     if(data.length > 0)
                                                     {
-                                                        this.tmpDocGuid = data[0].GUID
-                                                        this.tmpDocCode = data[0].CODE
-                                                        this.tmpDocName = data[0].TITLE
                                                         this.txtCustomerCode.value = data[0].CODE
                                                         this.txtCustomerName.value = data[0].TITLE
-                                                        console.log(this.tmpDocGuid)
-                                                        console.log(this.tmpDocCode)
-                                                        console.log(this.tmpDocName)
+                                                        this.txtRef.value = data[0].CODE
                                                     }
                                                 }
                                             }
@@ -562,25 +582,25 @@ export default class payPlan extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                     </NdPopGrid>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                                 {/* txtCustomerName */}
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"CUSTOMER_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     />
                                 </Item>
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* btnInstallment */}
                                 <Item>
                                     <Label text={this.t("lblInstallment")} alignment="right" />
                                     <NdButton id="btnInstallment" parent={this} icon="add" type="default"
                                     onClick={async ()=>
                                     {
-                                        if(this.tmpDocGuid == '') {
+                                        if(this.txtCustomerCode.value == '' || this.txtCustomerCode.value == undefined) {
                                             let tmpConfObj =
                                             {
                                                 id:'msgCustomerNotSelected',showTitle:true,title:this.t("msgCustomerNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -599,7 +619,7 @@ export default class payPlan extends React.PureComponent
                                     <NdButton id="btnInstallmentCount" parent={this} icon="add" type="default"
                                     onClick={async ()=>
                                     {
-                                        if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined) {
+                                        if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined || this.txtRefno.value == '') {
                                             let tmpConfObj =
                                             {
                                                 id:'msgCustomerNotSelected',showTitle:true,title:this.t("msgCustomerNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -622,19 +642,23 @@ export default class payPlan extends React.PureComponent
                             <NdGrid id="grdInstallment" parent={this} dataSource={this.payPlanObj.dt()} 
                             onRowInserted={async(e)=>
                             {
-                                this.grdInstallment.refresh()
+                                this.grdInstallment.dataRefresh()
                             }}
                             onRowRemoved={async(e)=>
                             {
-                                this.grdInstallment.refresh()
                             }}
                             >
                             <Paging defaultPageSize={10} />
                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                             <Scrolling mode="standart" />
-                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                            <Editing mode="cell" allowUpdating={true} />
                             <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
+                            <Column dataField="DOC_DATE" caption={this.t("grdInstallment.clmDocDate")} width={100} allowEditing={false}/>
+                            <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
+                            <Column dataField="REF" caption={this.t("grdInstallment.clmRef")} width={100} allowEditing={false}/>
+                            <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
+                            <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false}/>
                             <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={false}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
@@ -646,9 +670,8 @@ export default class payPlan extends React.PureComponent
                                     
                                     return
                                 }}/>
-                            <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={200} allowEditing={false}/>
-                            <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                            <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                            <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                            <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
                         </NdGrid>
                         </div>  
                     </div> 
@@ -695,10 +718,13 @@ export default class payPlan extends React.PureComponent
                                                 allowColumnResizing={true}
                                                 onRowDblClick={async(e)=>
                                                 {
+                                                    console.log(e.data)
                                                     this.installmentTotal.value = e.data.TOTAL
                                                     this.tmpFacGuid = e.data.GUID
-                                                    this.tmpFacRefNo = e.data.REF_NO
                                                     this.tmpFacRef = e.data.REF
+                                                    this.tmpCustomerGuid = e.data.INPUT
+                                                    this.txtCustomerName.value = e.data.INPUT_NAME
+
                                                     this.popInstallment.hide()
                                                 }}
                                                 >
@@ -745,7 +771,13 @@ export default class payPlan extends React.PureComponent
                                         {
                                             console.log(e.value)
                                         }}
-                                        />
+                                        param={this.param.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmInstallmentPeriod"  + this.tabIndex}>
+                                        <RangeRule min={3} max={24} step={3} message={this.t("ValidInstallmentPeriod")} />
+                                        </Validator>  
+                                        </NdNumberBox>
                                     </Item>
                                     <Item>
                                         <Label text={this.t("paymentDate")} alignment="right" />
@@ -759,6 +791,8 @@ export default class payPlan extends React.PureComponent
                                         <NdButton id="btnInstallmentCount" parent={this} icon="check" type="default" 
                                         onClick={()=>
                                         {
+                                            this.payPlanObj.clearAll()
+
                                             let totalAmount = this.installmentTotal.value;
                                             let installmentPeriod = this.installmentPeriod.value;
                                             let installmentAmount = totalAmount / installmentPeriod;
@@ -769,7 +803,7 @@ export default class payPlan extends React.PureComponent
                                                 documentDate.setMonth(documentDate.getMonth() + i);
 
                                                 console.log(`Taksit ${i}: Tarih - ${documentDate.toLocaleDateString()}, Miktar - ${installmentAmount}`);
-                                                this._addInstallment(documentDate,installmentAmount,i,this.tmpFacRefNo,this.tmpFacRef,this.tmpFacGuid,this.installmentTotal.value)
+                                                this._addInstallment(documentDate,installmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value)
                                             }
                                             this.popInstallmentCount.hide()
                                         }}/>
