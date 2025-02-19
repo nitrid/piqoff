@@ -24,11 +24,15 @@ posLcdCls.prototype.print = async function(pData)
         }
         // let vendorId = 1659;
         // let productId = 9123;
-
+        console.log(vendorId, productId)
+        console.log(1453)
         window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
         {
+            console.log(1454)
+            console.log(permissionMessage);
             window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
             {
+                console.log(1455)
                 window.SerialUSBPlugin.write('\x0c');
                 window.SerialUSBPlugin.write(pData.text);
                 setTimeout(() => 
