@@ -371,7 +371,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],BALANCE,(SELECT TOP 1 ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO],VAT_ZERO,BALANCE,(SELECT TOP 1 ADRESS + ' ' + CITY  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = CUSTOMER_VW_02.GUID) AS ADRESS FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -442,6 +442,7 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.PRICE = e.PRICE
         tmpDocOrders.AMOUNT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
         tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
+        console.log(this.docObj.dt()[0].VAT_ZERO)
         if(this.docObj.dt()[0].VAT_ZERO == 1)
         {
             tmpDocOrders.VAT_RATE = 0
@@ -842,7 +843,15 @@ export default class Sale extends React.PureComponent
             for (let i = 0; i < this.docLines.length; i++) 
             {
                 this.docLines[i].PRICE = await this.getPrice(this.docLines[i].ITEM,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false)
-                this.docLines[i].VAT = parseFloat(((((this.docLines[i].PRICE * this.docLines[i].QUANTITY) - (parseFloat(this.docLines[i].DISCOUNT) + parseFloat(this.docLines[i].DOC_DISCOUNT))) * (this.docLines[i].VAT_RATE) / 100))).round(4);
+                if(this.docObj.dt()[0].VAT_ZERO == 1)
+                {
+                    this.docLines[i].VAT_RATE = 0
+                    this.docLines[i].VAT = 0
+                }
+                else
+                {
+                    this.docLines[i].VAT = parseFloat(((((this.docLines[i].PRICE * this.docLines[i].QUANTITY) - (parseFloat(this.docLines[i].DISCOUNT) + parseFloat(this.docLines[i].DOC_DISCOUNT))) * (this.docLines[i].VAT_RATE) / 100))).round(4);
+                }
                 this.docLines[i].AMOUNT = parseFloat((this.docLines[i].PRICE * this.docLines[i].QUANTITY).toFixed(3)).round(2)
                 this.docLines[i].TOTALHT = Number((parseFloat((this.docLines[i].PRICE * this.docLines[i].QUANTITY).toFixed(3)) - (parseFloat(this.docLines[i].DISCOUNT)))).round(2)
                 this.docLines[i].TOTAL = Number(((this.docLines[i].TOTALHT - this.docLines[i].DOC_DISCOUNT) + this.docLines[i].VAT)).round(2)
@@ -1195,10 +1204,10 @@ export default class Sale extends React.PureComponent
                                                     >
                                                     </NdDatePicker>
                                                 </Item>
-                                                 {/* dtDShıpmentDate */}
+                                                {/* dtDShipmentDate */}
                                                 <Item>
-                                                    <Label text={this.t("popCart.dtDShıpmentDate")} alignment="right" />
-                                                    <NdDatePicker simple={true}  parent={this} id={"dtDShıpmentDate"}
+                                                    <Label text={this.t("popCart.dtDShipmentDate")} alignment="right" />
+                                                    <NdDatePicker simple={true}  parent={this} id={"dtDShipmentDate"}
                                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                                     onValueChanged={(async()=>
                                                     {
@@ -1551,11 +1560,14 @@ export default class Sale extends React.PureComponent
                                             <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
                                             onClick={(async()=>
                                             {
+                                                console.log(111)
                                                 this.docObj.dt()[0].INPUT = this.grdCustomer.getSelectedData()[0].GUID
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
+                                                this.docObj.dt()[0].VAT_ZERO = this.grdCustomer.getSelectedData()[0].VAT_ZERO
+                                                console.log(this.grdCustomer.getSelectedData()[0].VAT_ZERO)
                                                 this.balance.clear()
                                                 this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
                                                 await this.balance.refresh()
@@ -1609,6 +1621,7 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_CODE =  e.data.CODE
                                                 this.docObj.dt()[0].REF = e.data.CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = e.data.PRICE_LIST_NO
+                                                this.docObj.dt()[0].VAT_ZERO = e.data.VAT_ZERO
                                                 this.balance.clear()
                                                 this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
                                                 await this.balance.refresh()
