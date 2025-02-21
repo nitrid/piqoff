@@ -1857,6 +1857,7 @@ export class deptCreditMatchingCls
                                 {
                                     this.popDeptCreditList.hide()
                                     this.popDeptCreditList.onClick(this.grdPopDeptCreditList.getSelectedData())
+                                    console.log(this.grdPopDeptCreditList.getSelectedData())
                                 }
                             }}
                             />
