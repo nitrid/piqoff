@@ -4,7 +4,7 @@ const fns_01_005 =
     txtCustomerCode : "Fournisseur",
     txtTotal : "Total",
     validDesign : "Veuillez choisir le design",
-    menu : "Encaissement",
+    menu : "Echelonnement",
     pg_txtCustomerCode : 
     {
         title : "Choix Fournisseur",

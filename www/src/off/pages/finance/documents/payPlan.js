@@ -50,6 +50,12 @@ export default class payPlan extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         await this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.payPlanObj.clearAll()
+            await this.payPlanObj.load({DOC_GUID:this.pagePrm.DOC_GUID});
+            this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
+        }
     }
     async init()
     {
@@ -62,12 +68,8 @@ export default class payPlan extends React.PureComponent
             if(pData.stat == 'new')
             {
                 this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -75,11 +77,9 @@ export default class payPlan extends React.PureComponent
         {            
             if(pData.rowData.stat == 'edit')
             {
-                this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -87,20 +87,16 @@ export default class payPlan extends React.PureComponent
         })
         this.payPlanObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.payPlanObj.ds.on('onDelete',(pTblName) =>
         {            
-            this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
         this.txtRef.readOnly = true;
@@ -249,13 +245,6 @@ export default class payPlan extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.init(); 
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
@@ -293,7 +282,6 @@ export default class payPlan extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
-                                                    this.init()
                                                 }
                                                 else
                                                 {
@@ -335,13 +323,6 @@ export default class payPlan extends React.PureComponent
                                             await this.payPlanObj.dt().delete()
                                             this.init()
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
@@ -834,19 +815,20 @@ export default class payPlan extends React.PureComponent
                                                     let installmentAmount = totalAmount / installmentPeriod;
                                                     let doc_guid = datatable.uuidv4();
                                                     console.log(doc_guid)
+                                                    let roundedInstallmentAmount = Math.floor(installmentAmount * 100) / 100;
                                                     for (let i = 1; i <= installmentPeriod; i++) 
                                                     {
                                                         console.log(i)
                                                         let documentDate = new Date(this.paymentDate.value);
                                                         documentDate.setMonth(documentDate.getMonth() + i)
                                                         // Son taksit için kusurat kontrolü
-                                                        let currentInstallmentAmount =  Math.floor(installmentAmount)
+                                                        let currentInstallmentAmount = roundedInstallmentAmount;
                                                         if(i == installmentPeriod)
                                                         {
                                                             // Önceki taksitlerin toplamını hesapla
-                                                            let previousTotal = Math.floor(installmentAmount) * (installmentPeriod - 1)
+                                                            let previousTotal = roundedInstallmentAmount * (installmentPeriod - 1);
                                                             // Son taksite kalan kusuratı ekle
-                                                            currentInstallmentAmount = totalAmount - previousTotal;
+                                                            currentInstallmentAmount = +(totalAmount - previousTotal).toFixed(2);
                                                             console.log(currentInstallmentAmount)
                                                         }
                                                         console.log(currentInstallmentAmount)

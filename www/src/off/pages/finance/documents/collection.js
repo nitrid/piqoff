@@ -393,7 +393,18 @@ export default class collection extends React.PureComponent
                                                 if((await this.docObj.save()) == 0)
                                                 {                       
                                                     await this.deptCreditMatchingObj.save()
-                                                    await this.payPlanMatchingObj.save()      
+                                                    await this.payPlanMatchingObj.save()  
+                                                    if(this.deptCreditMatchingObj.dt().length > 0)
+                                                    {
+                                                        console.log(this.deptCreditMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_DOC_GUID)
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE FAC_GUID = @FAC_GUID",
+                                                            param : ['FAC_GUID:string|50'],
+                                                            value : [this.deptCreditMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_DOC_GUID]
+                                                        }
+                                                        await this.core.sql.execute(tmpQuery)
+                                                    }
                                                     
                                                     if(this.payPlanMatchingObj.dt().length > 0)
                                                     {

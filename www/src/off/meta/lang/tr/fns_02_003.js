@@ -70,6 +70,12 @@ const fns_02_003 =
         btn01: "Tamam",
         msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
     },
+    msgPayPlanNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Seçilen Fatura Taksitlenmiş !"
+    },
     msgCustomerNotSelected:
     {
         title: "Dikkat",

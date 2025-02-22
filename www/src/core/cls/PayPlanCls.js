@@ -340,8 +340,8 @@ export class payPlanMatchingCls
                                 <Column dataField="REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
                                 <Column dataField="REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
                                 <Column dataField="CUSTOMER_NAME" caption={this.lang.t("popDeptCreditList.clmCustomer")} width={300}/>
-                                <Column dataField="INSTALLMENT_NO" caption={this.lang.t("popDeptCreditList.clmInstallmentNo")} width={100}/>
-                                <Column dataField="INSTALLMENT_DATE" caption={this.lang.t("popDeptCreditList.clmInstallmentDate")} width={100} dataType={"date"}/>
+                                <Column dataField="DATE" caption={this.lang.t("popDeptCreditList.clmInstallmentDate")} width={100} dataType={"date"}/>
+                                <Column dataField="PAY_PLAN" caption={this.lang.t("popDeptCreditList.clmInstallmentNo")} width={100}/>
                                 <Column dataField="AMOUNT" caption={this.lang.t("popDeptCreditList.clmAmount")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
                                 <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
                                 <Column dataField="TOTAL" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
@@ -381,10 +381,10 @@ export class payPlanMatchingCls
         {
             let tmpQuery = 
             {
-                query : "SELECT * " + 
+                query : "SELECT DOC_DATE,DOC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MIN(INSTALLMENT_NO) AS PAY_PLAN,MIN(AMOUNT)AS AMOUNT,REMAINDER,CUSTOMER_NAME,CUSTOMER_CODE " + 
                         "FROM DOC_INSTALLMENT_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " + 
                         "AND STATUS = 0 " +
-                        "ORDER BY DOC_DATE ASC,LDATE ASC",
+                        "GROUP BY DOC_GUID,FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE,DOC_DATE,REMAINDER",
                 param : ['CUSTOMER_GUID:string|50','FIRST_DATE:date','LAST_DATE:date'],
                 value : [pCustomer,this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
             }
@@ -418,8 +418,16 @@ export class payPlanMatchingCls
             this.popDeptCreditList.onClick = async(data) =>
             {
                 console.log(data)
+                let tmpQuery = 
+                {
+                    query : "SELECT * FROM DOC_INSTALLMENT_VW_02 WHERE DOC_GUID = @DOC_GUID AND INSTALLMENT_NO = @INSTALLMENT_NO",
+                    param : ['DOC_GUID:string|50','INSTALLMENT_NO:int'],
+                    value : [data[0].DOC_GUID,data[0].PAY_PLAN]
+                }   
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
                 let tmpInvDt = new datatable()
-                tmpInvDt.import(data)
+                tmpInvDt.import(tmpData.result.recordset)
                 this.popUpList = tmpInvDt
                 resolve(tmpInvDt)
             }

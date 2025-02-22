@@ -3,7 +3,7 @@ const fns_01_005 =
 {
     txtCustomerCode : "Müşteri",
     txtTotal : "Toplam",
-    menu : "Tahsilat",
+    menu : "Taksitlendirme",
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",

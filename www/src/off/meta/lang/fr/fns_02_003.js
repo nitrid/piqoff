@@ -70,6 +70,12 @@ const fns_02_003 =
         btn01: "OK",
         msg: "Les informations de base du document ne peuvent pas être laissées vides avant de saisir un produit !"
     },
+    msgPayPlanNotSelected:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "La facture a été téritée !"
+    },
     msgCustomerNotSelected:
     {
         title: "Attention",

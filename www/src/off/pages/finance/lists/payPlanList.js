@@ -165,9 +165,9 @@ export default class payPlanList extends React.PureComponent
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'fns_02_002',
+                                                id: 'fns_02_003',
                                                 text: this.t('menu'),
-                                                path: 'finance/documents/collection.js'
+                                                path: 'finance/documents/payPlan.js'
                                             })
                                         }
                                     }    
@@ -342,6 +342,17 @@ export default class payPlanList extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                            {
+                                console.log(e.data)
+                                App.instance.menuClick(
+                                    {
+                                        id: 'fns_02_003',
+                                        text: this.t('menu'),
+                                        path: 'finance/documents/payPlan.js',
+                                        pagePrm:{DOC_GUID:e.data.DOC_GUID}
+                                    })
+                            }}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
