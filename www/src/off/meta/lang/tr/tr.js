@@ -342,9 +342,11 @@ export const langTr =
         fns_01_002 : "Tahsilat Listesi",
         fns_01_003 : "Banka Hareketleri Listesi",
         fns_01_004 : "Kasa Hareketleri Listesi",
+        fns_01_005 : "Taksitli Ödeme Listesi",
         fns_02 : "Evraklar",
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
+        fns_02_003 : "Taksitlendirme",
         fns_03 : "Kasa - Banka İşlemieri",
         fns_03_001 : "Kasa Tanıtım",
         fns_03_002 : "Banka Tanıtım",
@@ -539,6 +541,9 @@ export const langTr =
         clmTotal : "TOPLAM",
         clmClosed : "KAPANAN",
         clmBalance  : "KALAN",
+        clmInstallmentNo : "TAKSİT NO",
+        clmInstallmentDate : "TAKSİT TARİHİ",
+        clmAmount : "TAKSİT TUTAR",
     },
     pg_ordersGrid : 
     {

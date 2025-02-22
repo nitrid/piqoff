@@ -342,9 +342,11 @@ export const langFr =
         fns_01_002 : "Liste de encaissement",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
+        fns_01_005 : "Liste Echelonnement",
         fns_02 : "Document",
         fns_02_001 : "Paiement",
         fns_02_002 : "Encaissement",
+        fns_02_003 : "Échelonnement",
         fns_03 : "Mouvement caisse-banque",
         fns_03_001 : "Choix caisse",
         fns_03_002 : "Sélection banque",
@@ -539,6 +541,9 @@ export const langFr =
         clmTotal : "Total",
         clmClosed : "Fermé",
         clmBalance  : "Restant",
+        clmInstallmentNo : "Numéro d'échéance",
+        clmInstallmentDate : "Date d'échéance",
+        clmAmount : "Montant de l'échéance",
     },
     pg_ordersGrid : //BAK
     {

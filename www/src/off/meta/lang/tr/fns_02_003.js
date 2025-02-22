@@ -10,6 +10,18 @@ const fns_02_003 =
     paymentDate : "Ödeme Başlangıç Tarihi",
     installmentTotal : "Toplam Tutar",
     dtDocDate : "Tarih",
+    dtFirst : "Fatura Tarihi",
+    installmentAdd : "Ekle",
+    btnInstallment : "Fatura Seçimi",
+    btnInstallmentCount : "Taksit Oluşturma",
+    popInstallment :
+    {
+        title : "Fatura Seçimi",
+    },
+    popInstallmentCount :
+    {
+        title : "Taksit Oluşturma",
+    },
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -50,14 +62,25 @@ const fns_02_003 =
         clmRefNo : "SIRA",
         clmInputName : "FİRMA ADI",
         clmDate : "TARİH",
-        clmMail : "MAİL",
-        clmTotal : "TOPLAM TUTAR"
+        clmAmount : "TUTAR"
     },
     msgDocValid:
     {
         title: "Dikkat",
         btn01: "Tamam",
         msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
+    },
+    msgCustomerNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Müşteri Seçilmedi !"
+    },
+    msgFactureNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Fatura veya Evrak Numarası Seçilmedi !"
     },
     msgSave:
     {

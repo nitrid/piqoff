@@ -1038,6 +1038,10 @@ export default class collection extends React.PureComponent
                                                 await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
                                                 this.numCash.value = Number(this.payPlanMatchingObj.popUpList[0].AMOUNT)
                                                 this.numCash.readOnly = true
+                                                if(this.payPlanMatchingObj.popUpList[0].STATUS == 1)
+                                                {
+                                                    this.numCash.value = 0
+                                                }
                                             }}/>
                                         </div>
                                     </div>

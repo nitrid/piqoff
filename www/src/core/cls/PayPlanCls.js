@@ -330,33 +330,22 @@ export class payPlanMatchingCls
                             height={'100%'} 
                             width={'100%'}
                             showBorders={true}
-                            selection={{mode:"multiple"}}
+                            selection={{mode:"single"}}
                             onSelectionChanged={(e)=>
                             {
                                 e.component.refresh(true);
                             }}
-                            onRowRemoved={async(e)=>
-                            {
-                                let tmpPayPlanObj = new payPlanCls()
-                                await tmpPayPlanObj.load({FAC_GUID:e.data.FAC_GUID,REF:e.data.REF,REF_NO:e.data.REF_NO})
-                                tmpPayPlanObj.dt().removeAll()
-                                await tmpPayPlanObj.dt().delete()
-                                gridRefresh()
-                            }}
                             >
-                                <Editing mode="row" allowDeleting={true} useIcons={true}/>
                                 <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>                                
                                 <Column dataField="REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
                                 <Column dataField="REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
-                                <Column dataField="TYPE_NAME" caption={this.lang.t("popDeptCreditList.clmTypeName")} width={100}/>
                                 <Column dataField="CUSTOMER_NAME" caption={this.lang.t("popDeptCreditList.clmCustomer")} width={300}/>
                                 <Column dataField="INSTALLMENT_NO" caption={this.lang.t("popDeptCreditList.clmInstallmentNo")} width={100}/>
                                 <Column dataField="INSTALLMENT_DATE" caption={this.lang.t("popDeptCreditList.clmInstallmentDate")} width={100} dataType={"date"}/>
                                 <Column dataField="AMOUNT" caption={this.lang.t("popDeptCreditList.clmAmount")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
-                                <Column dataField="TOTAL" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
-                                <Column dataField="PAID_AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
-                                <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
                                 <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
+                                <Column dataField="TOTAL" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} format={{ style: "currency", currency:Number.money.code,precision: 3}}/>
+
                                 <Summary calculateCustomSummary={(options) =>
                                 {
                                     if (options.name === 'SelectedRowsSummary') 
@@ -402,11 +391,11 @@ export class payPlanMatchingCls
             
             if(this.chkPopDeptCreditList.value == false)
             {
-                tmpQuery.query = tmpQuery.query.replace('{0}','AND BALANCE <> 0')
+                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0 ','AND STATUS = 0 ')
             }
             else
             {
-                tmpQuery.query = tmpQuery.query.replace('{0}','')
+                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0 ','')
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -447,6 +436,7 @@ export class payPlanMatchingCls
             
             for (let i = 0; i < tmpPaidDt.length; i++) 
             {
+                console.log(tmpPaidDt[i])
                 for (let x = 0; x < tmpPayingDt.length; x++) 
                 {
                     if(tmpPaidDt[i].REMAINDER != 0 && tmpPayingDt[x].REMAINDER != 0)

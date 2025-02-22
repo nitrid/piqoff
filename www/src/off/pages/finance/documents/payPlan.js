@@ -618,8 +618,7 @@ export default class payPlan extends React.PureComponent
                                 <EmptyItem />
                                 {/* btnInstallment */}
                                 <Item>
-                                    <Label text={this.t("lblInstallment")} alignment="right" />
-                                    <NdButton id="btnInstallment" parent={this} icon="add" type="default"
+                                    <NdButton text={this.t("btnInstallment")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.payPlanObj.dt().length > 0)
@@ -637,13 +636,13 @@ export default class payPlan extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return;
                                         }
-                                        this.popInstallment.show()
+                                        await this.popInstallment.show()
+                        
                                     }}/>
                                 </Item> 
                                 {/* btnInstallmentCount */}
                                 <Item>
-                                    <Label text={this.t("lblInstallmentCount")} alignment="right" />
-                                    <NdButton id="btnInstallmentCount" parent={this} icon="add" type="default"
+                                    <NdButton text={this.t("btnInstallmentCount")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined || this.txtRefno.value == '') {
@@ -724,6 +723,10 @@ export default class payPlan extends React.PureComponent
                             width={'1200'}
                             height={'800'}
                             position={{of:'#root'}}
+                            onShowing={async()=>
+                            {
+                                await this._btnGetClick()
+                            }}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -738,7 +741,6 @@ export default class payPlan extends React.PureComponent
                                                             endDate={moment(new Date())}
                                                             onApply={(e)=>
                                                             {
-                                                                console.log("burak")
                                                                 this._btnGetClick()
                                                             }}
                                                             
@@ -760,6 +762,7 @@ export default class payPlan extends React.PureComponent
                                                     this.installmentTotal.value = e.data.AMOUNT
                                                     this.tmpFacGuid = e.data.GUID
                                                     this.tmpFacRef = e.data.REF
+                                                    this.txtRefno.value = e.data.REF_NO
                                                     this.tmpCustomerGuid = e.data.INPUT
                                                     this.txtCustomerName.value = e.data.INPUT_NAME
 
@@ -773,12 +776,8 @@ export default class payPlan extends React.PureComponent
                                                     <Column dataField="REF_NO" caption={this.t("grdPopInstallment.clmRefNo")} visible={true} width={100}/> 
                                                     <Column dataField="INPUT_CODE" caption={this.t("grdPopInstallment.clmInputCode")} visible={false}/> 
                                                     <Column dataField="INPUT_NAME" caption={this.t("grdPopInstallment.clmInputName")} visible={true}/> 
-                                                    <Column dataField="OUTPUT_NAME" caption={this.t("grdPopInstallment.clmOutputName")} visible={false}/> 
+                                                    <Column dataField="AMOUNT" caption={this.t("grdPopInstallment.clmAmount")} visible={true}/> 
                                                     <Column dataField="DOC_DATE" caption={this.t("grdPopInstallment.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                                    <Column dataField="AMOUNT" caption={this.t("grdPopInstallment.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                                    <Column dataField="VAT" caption={this.t("grdPopInstallment.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                                    <Column dataField="TOTAL" caption={this.t("grdPopInstallment.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
-                                                    <Column dataField="MAIL" caption={this.t("grdPopInstallment.clmMail")} visible={true} /> 
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -795,8 +794,8 @@ export default class payPlan extends React.PureComponent
                             showTitle={true}
                             title={this.t("popInstallmentCount.title")}
                             container={"#root"} 
-                            width={'1200'}
-                            height={'800'}
+                            width={'400'}
+                            height={'400'}
                             position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
@@ -825,35 +824,39 @@ export default class payPlan extends React.PureComponent
                                         <NdNumberBox id="installmentTotal" readOnly={true} value={''} visible={true} parent={this} simple={true} width={200} />
                                     </Item>
                                     <Item>
-                                        <NdButton id="btnInstallmentCount" parent={this} icon="check" type="default" 
-                                        onClick={()=>
-                                        {
-                                            let totalAmount = this.installmentTotal.value;
-                                            let installmentPeriod = this.installmentPeriod.value;
-                                            let installmentAmount = totalAmount / installmentPeriod;
-                                            let doc_guid = datatable.uuidv4();
-                                            console.log(doc_guid)
-                                            for (let i = 1; i <= installmentPeriod; i++) 
-                                            {
-                                                console.log(i)
-                                                let documentDate = new Date(this.paymentDate.value);
-                                                documentDate.setMonth(documentDate.getMonth() + i)
-                                                // Son taksit için kusurat kontrolü
-                                                let currentInstallmentAmount =  Math.floor(installmentAmount)
-                                                if(i == installmentPeriod)
+                                        <div className="row">
+                                            <div className="col-12" style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                                <NdButton text={this.t("installmentAdd")} type="normal" stylingMode="contained" width={'25%'} 
+                                                onClick={()=>
                                                 {
-                                                    // Önceki taksitlerin toplamını hesapla
-                                                    let previousTotal = Math.floor(installmentAmount) * (installmentPeriod - 1)
-                                                    // Son taksite kalan kusuratı ekle
-                                                    currentInstallmentAmount = totalAmount - previousTotal;
-                                                    console.log(currentInstallmentAmount)
-                                                }
-                                                console.log(currentInstallmentAmount)
+                                                    let totalAmount = this.installmentTotal.value;
+                                                    let installmentPeriod = this.installmentPeriod.value;
+                                                    let installmentAmount = totalAmount / installmentPeriod;
+                                                    let doc_guid = datatable.uuidv4();
+                                                    console.log(doc_guid)
+                                                    for (let i = 1; i <= installmentPeriod; i++) 
+                                                    {
+                                                        console.log(i)
+                                                        let documentDate = new Date(this.paymentDate.value);
+                                                        documentDate.setMonth(documentDate.getMonth() + i)
+                                                        // Son taksit için kusurat kontrolü
+                                                        let currentInstallmentAmount =  Math.floor(installmentAmount)
+                                                        if(i == installmentPeriod)
+                                                        {
+                                                            // Önceki taksitlerin toplamını hesapla
+                                                            let previousTotal = Math.floor(installmentAmount) * (installmentPeriod - 1)
+                                                            // Son taksite kalan kusuratı ekle
+                                                            currentInstallmentAmount = totalAmount - previousTotal;
+                                                            console.log(currentInstallmentAmount)
+                                                        }
+                                                        console.log(currentInstallmentAmount)
 
-                                                this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid)
-                                            }
-                                            this.popInstallmentCount.hide()
-                                        }}/>
+                                                        this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid)
+                                                    }
+                                                    this.popInstallmentCount.hide()
+                                                }}/>
+                                            </div>
+                                        </div>
                                     </Item>
                                 </Form>
                             </NdPopUp>
