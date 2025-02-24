@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Log dosyalarını temizle
+LOG_DIR="/home/LogFiles"
+if [ -d "$LOG_DIR" ]; then
+    echo "Log dosyalari temizleniyor..."
+    rm -f $LOG_DIR/*.log
+    echo "Log dosyalari temizlendi."
+fi
+
 # .NET Core SDK kurulumunu kontrol et
 if [ ! -d "/home/site/dotnet" ]; then
     echo "Installing .NET Core SDK..."

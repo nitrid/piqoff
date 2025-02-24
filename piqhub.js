@@ -530,7 +530,6 @@ export default class piqhubApi
             const directory = await unzipper.Open.file(tempZipPath);
             const totalEntries = directory.files.length;
             let extractedEntries = 0;
-
             await new Promise((resolve, reject) => 
             {
                 fs.createReadStream(tempZipPath).pipe(unzipper.Parse()).on('entry', (entry) => 
@@ -538,7 +537,12 @@ export default class piqhubApi
                     const fileName = entry.path;
                     const type = entry.type;
                     const fullPath = path.join(__dirname, fileName);
-
+                    // startup.sh dosyasını atla
+                    if (fileName === 'setup/appservice/startup.sh') 
+                    {
+                        entry.autodrain();
+                        return;
+                    }
                     if (type === 'File') 
                     {
                         entry.pipe(fs.createWriteStream(fullPath)).on('finish', () => 
@@ -566,7 +570,6 @@ export default class piqhubApi
             });
 
             fs.unlinkSync(tempZipPath);
-
             progressCallback(
             {
                 status: 'completed',
@@ -578,7 +581,7 @@ export default class piqhubApi
         } 
         catch (error) 
         {
-            console.error('App files update error');
+            console.error('App files update error', error.message);
             progressCallback(
             {
                 status: 'error',
