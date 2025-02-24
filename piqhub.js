@@ -268,7 +268,7 @@ export default class piqhubApi
                 console.log('License updated successfully');
                 
                 // package.json'ı doğrudan oku
-                const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+                const packageJson = JSON.parse(fs.readFileSync(this.root_path + './package.json', 'utf8'));
                 this.socketHub.emit('piqhub-set-info', {macid: this.macId,version: packageJson.version});
             }
             else
@@ -530,7 +530,6 @@ export default class piqhubApi
             const directory = await unzipper.Open.file(tempZipPath);
             const totalEntries = directory.files.length;
             let extractedEntries = 0;
-
             await new Promise((resolve, reject) => 
             {
                 fs.createReadStream(tempZipPath).pipe(unzipper.Parse()).on('entry', (entry) => 
@@ -539,8 +538,20 @@ export default class piqhubApi
                     const type = entry.type;
                     const fullPath = path.join(__dirname, fileName);
 
+                    if (fileName === 'setup/appservice/startup.sh') 
+                    {
+                        entry.autodrain();
+                        return;
+                    }
+
                     if (type === 'File') 
                     {
+                        const dirPath = path.dirname(fullPath);
+                        if (!fs.existsSync(dirPath)) 
+                        {
+                            fs.mkdirSync(dirPath, { recursive: true });
+                        }
+
                         entry.pipe(fs.createWriteStream(fullPath)).on('finish', () => 
                         {
                             extractedEntries++;
@@ -566,7 +577,6 @@ export default class piqhubApi
             });
 
             fs.unlinkSync(tempZipPath);
-
             progressCallback(
             {
                 status: 'completed',
@@ -578,7 +588,7 @@ export default class piqhubApi
         } 
         catch (error) 
         {
-            console.error('App files update error');
+            console.error('App files update error', error.message);
             progressCallback(
             {
                 status: 'error',
