@@ -537,14 +537,21 @@ export default class piqhubApi
                     const fileName = entry.path;
                     const type = entry.type;
                     const fullPath = path.join(__dirname, fileName);
-                    // startup.sh dosyasını atla
+
                     if (fileName === 'setup/appservice/startup.sh') 
                     {
                         entry.autodrain();
                         return;
                     }
+
                     if (type === 'File') 
                     {
+                        const dirPath = path.dirname(fullPath);
+                        if (!fs.existsSync(dirPath)) 
+                        {
+                            fs.mkdirSync(dirPath, { recursive: true });
+                        }
+
                         entry.pipe(fs.createWriteStream(fullPath)).on('finish', () => 
                         {
                             extractedEntries++;
