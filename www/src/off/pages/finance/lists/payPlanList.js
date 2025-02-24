@@ -344,7 +344,6 @@ export default class payPlanList extends React.PureComponent
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
                             {
-                                console.log(e.data)
                                 App.instance.menuClick(
                                     {
                                         id: 'fns_02_003',

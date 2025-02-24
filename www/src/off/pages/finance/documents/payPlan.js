@@ -43,8 +43,6 @@ export default class payPlan extends React.PureComponent
         this.payPlanObj.lang = this.lang
         this.payPlanObj.type = 1
         this.tabIndex = props.data.tabkey        
-
-        this.docLocked = false;    
     }
     async componentDidMount()
     {
@@ -59,9 +57,7 @@ export default class payPlan extends React.PureComponent
     }
     async init()
     {
-        console.log("init")
         this.payPlanObj.clearAll()
-        console.log(this.payPlanObj.dt())
 
         this.payPlanObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -106,11 +102,13 @@ export default class payPlan extends React.PureComponent
         this.txtRefno.setState({value:''})
 
         this.dtDocDate.value =  moment(new Date()).format("YYYY-MM-DD"),
-        console.log(this.dtDocDate.value)
+        this.paymentDate.setState({value:moment(new Date()).format("YYYY-MM-DD")})
+
+        this.installmentPeriod.setState({value:0})
+        this.installmentTotal.setState({value:0})
         
         this.txtCustomerCode.setState({value:''})
         this.txtCustomerName.setState({value:''})
-        this.docLocked = false
 
     }
     async checkRow()
@@ -119,8 +117,6 @@ export default class payPlan extends React.PureComponent
         {
             this.payPlanObj.dt()[i].DOC_DATE = this.dtDocDate.value
             this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
-            console.log(this.payPlanObj.dt()[i].DOC_DATE)
-            console.log(this.payPlanObj.dt()[i].REF_NO)
         }
     }
     async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid)
@@ -141,7 +137,6 @@ export default class payPlan extends React.PureComponent
         tmpPayPlan.REF = pFacRef
         tmpPayPlan.AMOUNT = pAmount 
 
-        console.log(tmpPayPlan)
         this.payPlanObj.addEmpty(tmpPayPlan)
         this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
 
@@ -202,12 +197,10 @@ export default class payPlan extends React.PureComponent
         this.tmpFacRef = this.payPlanObj.dt()[0].REF
         this.tmpFacRefNo = this.payPlanObj.dt()[0].REF_NO
         this.tmpDocGuid = this.payPlanObj.dt()[0].DOC_GUID
-        console.log(this.tmpDocGuid)
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = false
         
-        this.docLocked = false
         this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
     }
     async _btnGetClick()
@@ -256,7 +249,6 @@ export default class payPlan extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.payPlanObj.dt())
                                         if(this.payPlanObj.dt().length > 0)
                                         {
                                             let tmpConfObj =
@@ -318,7 +310,6 @@ export default class payPlan extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             this.tmpDocGuid = ''
-                                            console.log(this.payPlanObj.dt())
                                             this.payPlanObj.dt().removeAll()
                                             await this.payPlanObj.dt().delete()
                                             this.init()
@@ -412,7 +403,6 @@ export default class payPlan extends React.PureComponent
                                             readOnly={false}
                                             onValueChanged={(async(e)=>
                                             {
-                                                console.log(e)
                                                 await this.checkRow()
                                             }).bind(this)}
                                             button=
@@ -428,7 +418,6 @@ export default class payPlan extends React.PureComponent
                                                             {
                                                                 if(data.length > 0)
                                                                 {
-                                                                    console.log(data[0])
                                                                     this.getDoc(data[0].DOC_GUID)
                                                                 }
                                                             }
@@ -440,7 +429,6 @@ export default class payPlan extends React.PureComponent
                                                         icon:'arrowdown',
                                                         onClick:async()=>
                                                         {
-                                                            console.log(this.txtRefno.value)
                                                             this.txtRefno.value = Math.floor(Date.now() / 1000)
                                                             await this.checkRow()
                                                         }
@@ -506,7 +494,6 @@ export default class payPlan extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         await this.checkRow()
-                                        console.log(this.dtDocDate.value)
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPayPlan" + this.tabIndex}>
@@ -526,7 +513,6 @@ export default class payPlan extends React.PureComponent
                                     {
                                         if(this.payPlanObj.dt().length > 0)
                                         {
-                                            console.log(this.payPlanObj.dt())
                                             this.txtCustomerCode.readOnly = true
                                             return
                                         }
@@ -550,7 +536,6 @@ export default class payPlan extends React.PureComponent
                                             {
                                                 if(this.payPlanObj.dt().length > 0)
                                                 {
-                                                    console.log(this.payPlanObj.dt())
                                                     this.txtCustomerCode.readOnly = true
                                                     return
                                                 }
@@ -649,7 +634,6 @@ export default class payPlan extends React.PureComponent
                                         }
                                         if(this.tmpDocGuid != '' && this.tmpDocGuid != undefined)
                                         {
-                                            console.log(this.tmpDocGuid)
                                             let tmpConfObj =
                                             {
                                                 id:'msgPayPlanNotSelected',showTitle:true,title:this.t("msgPayPlanNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -659,7 +643,6 @@ export default class payPlan extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return;
                                         }
-                                        this.payPlanObj.clearAll()
                                         this.popInstallmentCount.show()
                                     }}
                                     />
@@ -750,7 +733,6 @@ export default class payPlan extends React.PureComponent
                                                 allowColumnResizing={true}
                                                 onRowDblClick={async(e)=>
                                                 {
-                                                    console.log(e.data)
                                                     this.installmentTotal.value = e.data.AMOUNT
                                                     this.tmpFacGuid = e.data.GUID
                                                     this.tmpFacRef = e.data.REF
@@ -758,6 +740,7 @@ export default class payPlan extends React.PureComponent
                                                     this.tmpCustomerGuid = e.data.INPUT
                                                     this.txtCustomerName.value = e.data.INPUT_NAME
 
+                                                    this.popInstallmentCount.show()
                                                     this.popInstallment.hide()
                                                 }}
                                                 >
@@ -821,15 +804,15 @@ export default class payPlan extends React.PureComponent
                                                 <NdButton text={this.t("installmentAdd")} type="normal" stylingMode="contained" width={'25%'} 
                                                 onClick={()=>
                                                 {
+                                                    this.payPlanObj.clearAll()
+
                                                     let totalAmount = this.installmentTotal.value;
                                                     let installmentPeriod = this.installmentPeriod.value;
                                                     let installmentAmount = totalAmount / installmentPeriod;
                                                     let doc_guid = datatable.uuidv4();
-                                                    console.log(doc_guid)
                                                     let roundedInstallmentAmount = Math.floor(installmentAmount * 100) / 100;
                                                     for (let i = 1; i <= installmentPeriod; i++) 
                                                     {
-                                                        console.log(i)
                                                         let documentDate = new Date(this.paymentDate.value);
                                                         documentDate.setMonth(documentDate.getMonth() + i)
                                                         // Son taksit için kusurat kontrolü
@@ -840,9 +823,7 @@ export default class payPlan extends React.PureComponent
                                                             let previousTotal = roundedInstallmentAmount * (installmentPeriod - 1);
                                                             // Son taksite kalan kusuratı ekle
                                                             currentInstallmentAmount = +(totalAmount - previousTotal).toFixed(2);
-                                                            console.log(currentInstallmentAmount)
                                                         }
-                                                        console.log(currentInstallmentAmount)
 
                                                         this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid)
                                                     }
@@ -909,7 +890,8 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)",
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                               " ORDER BY INSTALLMENT_NO",
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -950,7 +932,8 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)",
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                               " ORDER BY INSTALLMENT_NO",
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }

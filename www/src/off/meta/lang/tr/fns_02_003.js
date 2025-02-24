@@ -17,6 +17,12 @@ const fns_02_003 =
     btnPrint : "Yazdır",
     btnMailsend : "Email Gönder",
     btnInstallmentCount : "Taksit Oluşturma",
+    isMsgSave :
+    {  
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+    },
     popInstallment :
     {
         title : "Fatura Seçimi",

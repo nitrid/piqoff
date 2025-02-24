@@ -17,6 +17,12 @@ const fns_02_003 =
     btnView : "Voir",
     btnPrint : "Imprimer",
     btnMailsend : "Envoyer un Email",
+    isMsgSave :
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Impossible de procéder sans enregistrement du document !"
+    },
     popInstallment :
     {
         title : "Sélection de la Facture",

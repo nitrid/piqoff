@@ -35,6 +35,7 @@ export class payPlanCls
             STATUS : 0,
             DELETED : 0
         }   
+        this.isSaved = false
         this._initDs();
     }
     //#region Private
@@ -131,6 +132,7 @@ export class payPlanCls
         for(let i = 0; i < this.ds.length; i++)
         {
             this.dt(i).clear();
+            this.isSaved = false
         }
     }
     load()
@@ -146,6 +148,7 @@ export class payPlanCls
             }
             this.ds.get('DOC_INSTALLMENT').selectCmd.value = Object.values(tmpPrm);
 
+            this.isSaved = true
             await this.ds.get('DOC_INSTALLMENT').refresh();
             resolve(this.ds.get('DOC_INSTALLMENT'));
         });
@@ -154,6 +157,7 @@ export class payPlanCls
     {
         return new Promise(async resolve => 
         {
+            this.isSaved = true
             this.ds.delete();
             resolve(await this.ds.update());
         });
@@ -417,7 +421,6 @@ export class payPlanMatchingCls
             this.popDeptCreditList.show()
             this.popDeptCreditList.onClick = async(data) =>
             {
-                console.log(data)
                 let tmpQuery = 
                 {
                     query : "SELECT * FROM DOC_INSTALLMENT_VW_02 WHERE DOC_GUID = @DOC_GUID AND INSTALLMENT_NO = @INSTALLMENT_NO",
@@ -439,12 +442,9 @@ export class payPlanMatchingCls
         {
             let tmpPaidDt = pData.where({FAC_TYPE : 1}).orderBy('LDATE',"asc")
             let tmpPayingDt = pData.where({TYPE : 0}).orderBy('LDATE',"asc")
-            console.log(tmpPaidDt)
-            console.log(tmpPayingDt)
             
             for (let i = 0; i < tmpPaidDt.length; i++) 
             {
-                console.log(tmpPaidDt[i])
                 for (let x = 0; x < tmpPayingDt.length; x++) 
                 {
                     if(tmpPaidDt[i].REMAINDER != 0 && tmpPayingDt[x].REMAINDER != 0)
