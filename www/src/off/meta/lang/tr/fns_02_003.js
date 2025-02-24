@@ -13,6 +13,9 @@ const fns_02_003 =
     dtFirst : "Fatura Tarihi",
     installmentAdd : "Ekle",
     btnInstallment : "Fatura Seçimi",
+    btnView : "Görüntüle",
+    btnPrint : "Yazdır",
+    btnMailsend : "Email Gönder",
     btnInstallmentCount : "Taksit Oluşturma",
     popInstallment :
     {
@@ -21,6 +24,12 @@ const fns_02_003 =
     popInstallmentCount :
     {
         title : "Taksit Oluşturma",
+    },
+    popDesign : 
+    {
+        title: "Dizayn seçimi",
+        design : "Dizayn",
+        lang : "Evrak Dili"
     },
     pg_txtCustomerCode : 
     {

@@ -14,6 +14,9 @@ const fns_02_003 =
     installmentAdd : "Ajouter",
     btnInstallment : "Sélection de la Facture",
     btnInstallmentCount : "Création de Tranches",
+    btnView : "Voir",
+    btnPrint : "Imprimer",
+    btnMailsend : "Envoyer un Email",
     popInstallment :
     {
         title : "Sélection de la Facture",
@@ -21,6 +24,12 @@ const fns_02_003 =
     popInstallmentCount :
     {
         title : "Création de Tranches",
+    },
+    popDesign : 
+    {
+        title: "Choix du Design",
+        design : "Design" ,
+        lang : "Langue Document" 
     },
     pg_txtCustomerCode : 
     {

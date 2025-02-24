@@ -1139,11 +1139,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.fns_02_002'),//'Tahsilat',
                             path: 'finance/documents/collection'
                         },
-                    //     {
-                    //         id: 'fns_02_003',
-                    //         text: e.t('menuOff.fns_02_003'),//'Taksitli Ödeme',
-                    //         path: 'finance/documents/payPlan'
-                    //     }
+                        {
+                            id: 'fns_02_003',
+                            text: e.t('menuOff.fns_02_003'),//'Taksitli Ödeme',
+                            path: 'finance/documents/payPlan'
+                        }
                     ]
                 },
                 {
@@ -1187,13 +1187,18 @@ export const menu = (e) =>
                         },
                         {
                             id: 'fns_01_003',
-                            text: e.t('menuOff.fns_01_003'),//'Tahsilat Listesi',
+                            text: e.t('menuOff.fns_01_003'),//'Banka Listesi',
                             path: 'finance/lists/bankList'
                         },
                         {
                             id: 'fns_01_004',
-                            text: e.t('menuOff.fns_01_004'),//'Tahsilat Listesi',
+                            text: e.t('menuOff.fns_01_004'),//'Kasa Listesi',
                             path: 'finance/lists/safeList'
+                        },
+                        {
+                            id: 'fns_01_005',
+                            text: e.t('menuOff.fns_01_005'),//'Taksitli Ödeme Listesi',
+                            path: 'finance/lists/payPlanList'
                         },
                     ]
                 },
