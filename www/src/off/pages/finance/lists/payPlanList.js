@@ -26,7 +26,7 @@ export default class payPlanList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','CUSTOMER_NAME','CUSTOMER_CODE','DOC_DATE','TOTAL']
+            columnListValue : ['REF','REF_NO','CUSTOMER_NAME','CUSTOMER_CODE','DOC_DATE','PAY_PLAN','DATE','TOTAL']
         }
         
         this.core = App.instance.core;
@@ -37,6 +37,8 @@ export default class payPlanList extends React.PureComponent
             {CODE : "CUSTOMER_NAME",NAME : this.t("grdColList.clmCustomerName")},                                   
             {CODE : "CUSTOMER_CODE",NAME : this.t("grdColList.clmCustomerCode")},
             {CODE : "DOC_DATE",NAME : this.t("grdColList.clmDate")},
+            {CODE : "PAY_PLAN",NAME : this.t("grdColList.clmInstallmentNo")},
+            {CODE : "DATE",NAME : this.t("grdColList.clmInstallmentDate")},
             {CODE : "TOTAL",NAME : this.t("grdColList.clmTotal")},
         ]
         this.groupList = [];
@@ -142,7 +144,7 @@ export default class payPlanList extends React.PureComponent
         await this.grdColList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
 
-        let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
+        let tmpTotal =  this.grdColList.data.datatable.sum("TOTAL",2)
         this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
     }
     render()
@@ -342,6 +344,10 @@ export default class payPlanList extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onSelectionChanged={async(e)=>
+                            {
+                                this.selectedRowKeys = e.selectedRowKeys
+                            }}
                             onRowDblClick={async(e)=>
                             {
                                 App.instance.menuClick(
@@ -384,6 +390,7 @@ export default class payPlanList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
+                    {/* Dizayn Seçim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDesign"} 
                         visible={false}
@@ -392,9 +399,9 @@ export default class payPlanList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'180'}
+                        height={'280'}
                         position={{of:'#root'}}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -404,7 +411,23 @@ export default class payPlanList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1200'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '25'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={localStorage.getItem('lang').toUpperCase()}
+                                    searchEnabled={true}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
@@ -419,81 +442,41 @@ export default class payPlanList extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    let tmpQuery = 
+                                                    if(this.selectedRowKeys.length == 0)
                                                     {
-                                                        query : `SELECT 
-                                                                FACT.DOC_DATE AS FACT_DATE,
-                                                                FACT.REF  AS FACT_REF,
-                                                                FACT.REF_NO AS FACT_REF_NO,
-                                                                FACT.PAY_TYPE AS FACT_PAY_TYPE,
-                                                                FACT.INPUT_CODE AS CUSTOMER_CODE,
-                                                                FACT.INPUT_NAME AS CUSTOMER_NAME,
-                                                                ISNULL((SELECT AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3) FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_AMOUNT,
-                                                                ISNULL((SELECT VAT FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_VAT,
-                                                                ISNULL((SELECT TOTAL FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_TOTAL,
-                                                                TAH.DOC_DATE AS TAH_DATE,
-                                                                TAH.REF AS TAH_REF,
-                                                                TAH.REF_NO AS TAH_REF_NO,
-                                                                TAH.PAY_TYPE_NAME AS TAH_PAY_TYPE,
-                                                                TAH.INPUT_NAME AS BANK_NAME,
-                                                                TAH.DESCRIPTION AS DESCRIPTION,
-                                                                TAH.AMOUNT,
-                                                                ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
-                                                                FROM DEPT_CREDIT_MATCHING AS DEPTH
-                                                                INNER JOIN DOC_CUSTOMER_VW_01 AS FACT ON
-                                                                DEPTH.PAYING_DOC = FACT.GUID
-                                                                INNER JOIN DOC_CUSTOMER_VW_01 AS TAH ON
-                                                                DEPTH.PAID_DOC = TAH.GUID WHERE
-                                                                ((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
-                                                                ((TAH.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((TAH.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
-                                                                AND 
-                                                                TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 
-                                                                UNION ALL 
-                                                                SELECT 
-                                                                DOC_DATE AS FACT_DATE,
-                                                                REF  AS FACT_REF,
-                                                                REF_NO AS FACT_REF_NO,
-                                                                PAY_TYPE AS FACT_PAY_TYPE,
-                                                                OUTPUT_CODE AS CUSTOMER_CODE,
-                                                                OUTPUT_NAME AS CUSTOMER_NAME,
-                                                                ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT,
-                                                                ISNULL((SELECT VAT * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_VAT,
-                                                                ISNULL((SELECT TOTAL * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_TOTAL,
-                                                                (SELECT TOP 1 DOC_DATE FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_DATE,
-                                                                (SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF,
-                                                                (SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF_NO,
-                                                                (SELECT TOP 1 PAY_TYPE_NAME FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_PAY_TYPE,
-                                                                '' AS BANK_NAME,
-                                                                ''  AS DESCRIPTION,
-                                                                (SELECT TOP 1 AMOUNT FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS AMOUNT,
-                                                                ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
-
-                                                                FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND  GUID IN (SELECT PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT1 WHERE DEPT1.PAID_DOC IN ( SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC IN (SELECT GUID FROM DOC_CUSTOMER_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200 AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')))) AND ISNULL((SELECT TOP 1 TYPE FROM  DOC_CUSTOMER_VW_01 where DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0)
-                                                                `,
-                                                        param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
-                                                        value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    console.log(tmpData) 
-                                                    App.instance.setState({isExecute:true})
-                                                    if(tmpData.result.recordset.length > 0)
+                                                        this.msgBox.show({text: this.t("msgSelect"),type:"warning"});
+                                                        return;
+                                                    } 
+                                                    for(let i = 0; i < this.selectedRowKeys.length; i++)
                                                     {
-                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        let tmpQuery = 
                                                         {
-                                                            App.instance.setState({isExecute:false})
-                                                            if(pResult.split('|')[0] != 'ERR')
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                               " ORDER BY INSTALLMENT_NO",
+                                                        param : ['DESIGN:string|25','LANG:string|10','DOC_GUID:string|50'],
+                                                        value : [this.cmbDesignList.value,this.cmbDesignLang.value,this.selectedRowKeys[i].DOC_GUID]
+                                                        }
+
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)
+                                                        App.instance.setState({isExecute:true})
+                                                        
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {
+                                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                             {
-                                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                                mywindow.onload = function() 
+                                                                App.instance.setState({isExecute:false})
+                                                                if(pResult.split('|')[0] != 'ERR')
                                                                 {
-                                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                                } 
-                                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                            }
-                                                        });
+                                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                                    mywindow.onload = function() 
+                                                                    {
+                                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                        this.popDesign.hide();  
                                                     }
-                                                    this.popDesign.hide();  
                                                 }
                                             }}/>
                                         </div>
@@ -505,10 +488,72 @@ export default class payPlanList extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    for(let i = 0; i < this.selectedRowKeys.length; i++)
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                                " ORDER BY INSTALLMENT_NO",
+                                                            param : ['DESIGN:string|25','LANG:string|10','DOC_GUID:string|50'],
+                                                            value : [this.cmbDesignList.value,this.cmbDesignLang.value,this.selectedRowKeys[i].DOC_GUID]
+                                                        }
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        App.instance.setState({isExecute:false})
+
+                                                        let tmpObj = {DATA:tmpData.result.recordset}
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {
+                                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                                mywindow.onload = function() 
+                                                                {
+                                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                                } 
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                                                        param:  ['CODE:string|50'],
+                                                        value:  [this.txtCustomerCode.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        await this.popMailSend.show()
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        await this.popMailSend.show()
+                                                    }
+                                                }
+                                            }}/>
+                                        </div>
+                                    </div>
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>
+                    </div> 
                 </ScrollView>
             </div>
         )

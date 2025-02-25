@@ -5,6 +5,9 @@ const fns_01_005 =
     txtTotal : "Total",
     validDesign : "Veuillez choisir le design",
     menu : "Echelonnement",
+    btnView : "Voir",
+    btnPrint : "Imprimer",
+    btnMailsend : "Envoyer un Email",
     pg_txtCustomerCode : 
     {
         title : "Choix Fournisseur",
@@ -33,6 +36,7 @@ const fns_01_005 =
     {
         title: "Choix du Design",
         design : "Design" ,
+        lang : "Langue Document" 
     },
 }
 export default fns_01_005

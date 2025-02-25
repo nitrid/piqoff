@@ -4,6 +4,9 @@ const fns_01_005 =
     txtCustomerCode : "Müşteri",
     txtTotal : "Toplam",
     menu : "Taksitlendirme",
+    btnView : "Görüntüle",
+    btnPrint : "Yazdır",
+    btnMailsend : "Email Gönder",
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -32,6 +35,7 @@ const fns_01_005 =
     {
         title: "Dizayn seçimi",
         design : "Dizayn",
+        lang : "Dizayn dil"
     },
     validDesign : "Lütfen Dizayn seçiniz.",
 }
