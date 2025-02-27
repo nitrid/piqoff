@@ -186,6 +186,8 @@ export default class posDeviceCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
+
+                                            console.log('tmpConfObj',tmpConfObj)
                                             
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
@@ -442,6 +444,13 @@ export default class posDeviceCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtPrinterPort")} alignment="right" />
                                     <NdTextBox id="txtPrinterPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PRINTER_PORT"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtScannerPort")} alignment="right" />
+                                    <NdTextBox id="txtScannerPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"SCANNER_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     >
                                     </NdTextBox>
