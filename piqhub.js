@@ -20,13 +20,18 @@ export default class piqhubApi
         this.root_path = '';
         if(typeof process.env.APP_DIR_PATH != 'undefined')
         {
-            this.root_path = process.env.APP_DIR_PATH
+            this.root_path = process.env.APP_DIR_PATH;
+            this.fileRoot = process.env.APP_DIR_PATH;
+        }
+        else
+        {
+            this.fileRoot = path.join(__dirname);
         }
 
         this.macId = this.getStableMacId();
         this.checkLicenseExpiry();
-        this.socketHub = client('https://piqhub.piqsoft.com',
-        //this.socketHub = client('http://localhost:81',
+        //this.socketHub = client('https://piqhub.piqsoft.com',
+        this.socketHub = client('http://localhost:81',
         {
             reconnection: true,
             reconnectionAttempts: Infinity,
@@ -369,6 +374,162 @@ export default class piqhubApi
         this.socketHub.on('restartService', async () => 
         {
             this.restartService();
+        });
+
+        // Dosya listesi alma
+        this.socketHub.on('piqhub-get-files', async (data, callback) => 
+        {
+            try 
+            {
+                // Path'i düzgün şekilde işle
+                let pathStr = '/';
+                if (data.path) 
+                {
+                    pathStr = typeof data.path === 'object' ? data.path.name || data.path.key || '/' : data.path;
+                }
+
+                const targetPath = path.join(this.fileRoot, pathStr);
+
+                // Hedef klasör files klasörü dışına çıkıyorsa engelle
+                if (!targetPath.startsWith(this.fileRoot)) 
+                {
+                    callback({success:false,error:'Access denied'});
+                    return;
+                }
+
+                const files = await fs.promises.readdir(targetPath);
+                const fileStats = [];
+
+                for(const file of files) 
+                {
+                    try 
+                    {
+                        if(file.startsWith('.')) 
+                        {
+                            continue;
+                        }
+
+                        const filePath = path.join(targetPath, file);
+                        const stat = await fs.promises.stat(filePath);
+                        
+                        fileStats.push({
+                            name: file,
+                            isDirectory: stat.isDirectory(),
+                            size: stat.size,
+                            dateModified: stat.mtime,
+                            hasSubDirectories: stat.isDirectory()
+                        });
+                    }
+                    catch(error)
+                    {
+                        console.log(`Skipping file ${file} due to permission error`);
+                        continue;
+                    }
+                }
+                callback({success:true,files:fileStats});
+            } 
+            catch (error) 
+            {
+                console.error('Get files error:', error);
+                callback({success:false,error:error.message});
+            }
+        });
+
+        // Dosya yükleme
+        this.socketHub.on('piqhub-upload-file', async (data, callback) => 
+        {
+            try 
+            {
+                const filePath = path.join(this.fileRoot, data.path, data.fileName);
+                
+                // Path validation
+                if (!filePath.startsWith(this.fileRoot)) {
+                    callback({ 
+                        success: false, 
+                        error: 'Access denied' 
+                    });
+                    return;
+                }
+
+                // Klasör yoksa oluştur
+                await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+                
+                // Dosyayı yaz
+                await fs.promises.writeFile(filePath, data.content);
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Upload file error:', error);
+                callback({ 
+                    success: false, 
+                    error: error.message 
+                });
+            }
+        });
+
+        // Dosya indirme
+        this.socketHub.on('piqhub-download-file', async (data, callback) => 
+        {
+            try 
+            {
+                const filePath = path.join(this.fileRoot, data.path, data.fileName);
+
+                // Path validation
+                if (!filePath.startsWith(this.fileRoot)) {
+                    callback({ 
+                        success: false, 
+                        error: 'Access denied' 
+                    });
+                    return;
+                }
+
+                const fileContent = await fs.promises.readFile(filePath);
+                
+                callback({ 
+                    success: true, 
+                    data: fileContent 
+                });
+            }
+            catch (error) 
+            {
+                console.error('Download file error:', error);
+                callback({ 
+                    success: false, 
+                    error: error.message 
+                });
+            }
+        });
+
+        // Klasör oluşturma
+        this.socketHub.on('piqhub-create-folder', async (data, callback) => 
+        {
+            try 
+            {
+                const folderPath = path.join(this.fileRoot, data.path);
+
+                // Path validation
+                if (!folderPath.startsWith(this.fileRoot)) {
+                    callback({ 
+                        success: false, 
+                        error: 'Access denied' 
+                    });
+                    return;
+                }
+
+                await fs.promises.mkdir(folderPath, { recursive: true });
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Create folder error:', error);
+                callback({ 
+                    success: false, 
+                    error: error.message 
+                });
+            }
         });
     }
     getLicence(pType,pField)
