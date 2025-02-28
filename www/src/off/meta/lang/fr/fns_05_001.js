@@ -41,6 +41,7 @@ const fns_05_001 =
        clmAmount :"Montant",
         clmDate :"Date",
         shemaSave :"Sauvegarder" ,
+        clmOutputCode : "Code client"
     },
     grdDocPayments: 
     {

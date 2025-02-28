@@ -3407,7 +3407,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "A"
         },
         SPECIAL : "",
         PAGE : "fns_05_001",
@@ -3426,7 +3426,7 @@ export const prm =
         ID :"excelFormat",
         VALUE : 
         {
-            DATE:'DATE',DESC:'DESC',AMOUNT:'AMOUNT'
+            DATE:'DATE',DESC:'DESC',AMOUNT:'AMOUNT',OUTPUT_CODE:'OUTPUT_CODE'
         },
         SPECIAL : "",
         PAGE : "fns_05_001",
@@ -3447,6 +3447,7 @@ export const prm =
                     {type:"text",caption:"DATE",field:"DATE",id:"txtPopExcelFormatDate"},
                     {type:"text",caption:"DESC",field:"DESC",id:"txtPopExcelFormatDesc"},
                     {type:"text",caption:"AMOUNT",field:"AMOUNT",id:"txtPopExcelFormatAmount"},
+                    {type:"text",caption:"OUTPUT_CODE",field:"OUTPUT_CODE",id:"txtPopExcelFormatOutputCode"},
                 ]
             }
         }
