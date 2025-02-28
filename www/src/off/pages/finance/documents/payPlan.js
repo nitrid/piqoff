@@ -119,7 +119,7 @@ export default class payPlan extends React.PureComponent
             this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
         }
     }
-    async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid)
+    async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
     {
         let tmpPayPlan = {...this.payPlanObj.empty}
         tmpPayPlan.FAC_GUID = pFacGuid
@@ -133,6 +133,7 @@ export default class payPlan extends React.PureComponent
         tmpPayPlan.CUSTOMER_CODE = this.txtCustomerCode.value
         tmpPayPlan.CUSTOMER_NAME = this.txtCustomerName.value
         tmpPayPlan.REF_NO = pFacRefNo
+        tmpPayPlan.VAT = pVatAmount
         tmpPayPlan.INSTALLMENT_NO = pNo 
         tmpPayPlan.REF = pFacRef
         tmpPayPlan.AMOUNT = pAmount 
@@ -683,6 +684,7 @@ export default class payPlan extends React.PureComponent
                                     return
                                 }}/>
                             <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                            <Column dataField="VAT" caption={this.t("grdInstallment.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                             <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
                         </NdGrid>
                         </div>  
@@ -737,6 +739,7 @@ export default class payPlan extends React.PureComponent
                                                     this.tmpFacGuid = e.data.GUID
                                                     this.tmpFacRef = e.data.REF
                                                     this.txtRefno.value = e.data.REF_NO
+                                                    this.tmpVatTotal = e.data.VAT
                                                     this.tmpCustomerGuid = e.data.INPUT
                                                     this.txtCustomerName.value = e.data.INPUT_NAME
 
@@ -809,23 +812,28 @@ export default class payPlan extends React.PureComponent
                                                     let totalAmount = this.installmentTotal.value;
                                                     let installmentPeriod = this.installmentPeriod.value;
                                                     let installmentAmount = totalAmount / installmentPeriod;
+                                                    let vatAmount = this.tmpVatTotal / installmentPeriod;
                                                     let doc_guid = datatable.uuidv4();
                                                     let roundedInstallmentAmount = Math.floor(installmentAmount * 100) / 100;
+                                                    let roundedVatAmount = Math.floor(vatAmount * 100) / 100;
                                                     for (let i = 1; i <= installmentPeriod; i++) 
                                                     {
                                                         let documentDate = new Date(this.paymentDate.value);
                                                         documentDate.setMonth(documentDate.getMonth() + i)
                                                         // Son taksit için kusurat kontrolü
                                                         let currentInstallmentAmount = roundedInstallmentAmount;
+                                                        let currentVatAmount = roundedVatAmount;
                                                         if(i == installmentPeriod)
                                                         {
                                                             // Önceki taksitlerin toplamını hesapla
                                                             let previousTotal = roundedInstallmentAmount * (installmentPeriod - 1);
+                                                            let previousVatTotal = roundedVatAmount * (installmentPeriod - 1);
                                                             // Son taksite kalan kusuratı ekle
                                                             currentInstallmentAmount = +(totalAmount - previousTotal).toFixed(2);
+                                                            currentVatAmount = +(this.tmpVatTotal - previousVatTotal).toFixed(2);
                                                         }
 
-                                                        this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid)
+                                                        this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid,currentVatAmount)
                                                     }
                                                     this.popInstallmentCount.hide()
                                                 }}/>
