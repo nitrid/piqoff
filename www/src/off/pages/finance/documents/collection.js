@@ -278,7 +278,6 @@ export default class collection extends React.PureComponent
             /******************************************************************************/
 
             let tmpPayDCPaidDt = this.payPlanMatchingObj.popUpList.where({AMOUNT: {'>' : 0}})
-            console.log(tmpPayDCPaidDt)
             if(tmpPayDCPaidDt.length > 0)
             {
                 tmpPayDCPaidDt.push
@@ -292,7 +291,6 @@ export default class collection extends React.PureComponent
                         REMAINDER : pAmount * -1,
                     }
                 )
-                console.log(tmpPayDCPaidDt)
                 await this.payPlanMatchingObj.matching(tmpPayDCPaidDt)
             }
             /******************************************************************************/
@@ -396,7 +394,6 @@ export default class collection extends React.PureComponent
                                                     await this.payPlanMatchingObj.save()  
                                                     if(this.deptCreditMatchingObj.dt().length > 0)
                                                     {
-                                                        console.log(this.deptCreditMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_DOC_GUID)
                                                         let tmpQuery = 
                                                         {
                                                             query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE FAC_GUID = @FAC_GUID",
@@ -408,8 +405,6 @@ export default class collection extends React.PureComponent
                                                     
                                                     if(this.payPlanMatchingObj.dt().length > 0)
                                                     {
-                                                        console.log(this.payPlanMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_GUID)
-
                                                         let tmpQuery = 
                                                         {
                                                             query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE GUID = @GUID",
@@ -422,6 +417,7 @@ export default class collection extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.init();
                                                 }
                                                 else
                                                 {
@@ -1036,16 +1032,13 @@ export default class collection extends React.PureComponent
                                             onClick={async (e)=>
                                             {       
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
-                                                console.log(this.deptCreditMatchingObj.popUpList)
                                                 this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
-                                                console.log(this.deptCreditMatchingObj.popUpList)
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.t("installmentSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                                console.log(this.docObj.dt()[0].OUTPUT)
                                                 await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
                                                 this.numCash.value = Number(this.payPlanMatchingObj.popUpList[0].AMOUNT)
                                                 this.numCash.readOnly = true

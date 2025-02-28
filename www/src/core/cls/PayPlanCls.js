@@ -27,6 +27,7 @@ export class payPlanCls
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             REF : '',
             REF_NO : 0,
+            VAT : 0, 
             FAC_GUID : '00000000-0000-0000-0000-000000000000',
             INSTALLMENT_NO : 0,
             INSTALLMENT_DATE : moment(new Date()).format("YYYY-MM-DD"),
@@ -57,6 +58,7 @@ export class payPlanCls
                     "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
+                    "@VAT = @PVAT, " +
                     "@FAC_GUID = @PFAC_GUID, " +
                     "@INSTALLMENT_NO = @PINSTALLMENT_NO, " +
                     "@INSTALLMENT_DATE = @PINSTALLMENT_DATE, " +
@@ -64,8 +66,8 @@ export class payPlanCls
                     "@TOTAL = @PTOTAL, " +
                     "@STATUS = @PSTATUS, " +
                     "@DELETED = @PDELETED ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
-            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PVAT:float','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
+            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','VAT','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
         }
         tmpDt.updateCmd = 
         {
@@ -77,6 +79,7 @@ export class payPlanCls
                     "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
+                    "@VAT = @PVAT, " +
                     "@FAC_GUID = @PFAC_GUID, " +
                     "@INSTALLMENT_NO = @PINSTALLMENT_NO, " +
                     "@INSTALLMENT_DATE = @PINSTALLMENT_DATE, " +
@@ -84,8 +87,8 @@ export class payPlanCls
                     "@TOTAL = @PTOTAL, " +
                     "@STATUS = @PSTATUS, " +
                     "@DELETED = @PDELETED ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
-            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PDOC_DATE:date','PCUSTOMER_GUID:string|50','PREF:string|50','PREF_NO:int','PVAT:float','PFAC_GUID:string|50','PINSTALLMENT_NO:int','PINSTALLMENT_DATE:date','PAMOUNT:float','PTOTAL:float','PSTATUS:int','PDELETED:int'],
+            dataprm : ['GUID','CUSER','DOC_GUID','DOC_DATE','CUSTOMER_GUID','REF','REF_NO','VAT','FAC_GUID','INSTALLMENT_NO','INSTALLMENT_DATE','AMOUNT','TOTAL','STATUS','DELETED']
         }
         tmpDt.deleteCmd = 
         {

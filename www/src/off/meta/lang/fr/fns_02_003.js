@@ -68,7 +68,8 @@ const fns_02_003 =
         clmInstallmentNo : "NUMERO DE TRANCHE",
         clmInstallmentDate : "DATE DE TRANCHE",
         clmAmount : "MONTANT DE TRANCHE",
-        clmTotal : "TOTAL"
+        clmTotal : "TOTAL",
+        clmVat : "TVA"
     },
     grdPopInstallment : 
     {
