@@ -656,37 +656,37 @@ export default class payPlan extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdInstallment" parent={this} dataSource={this.payPlanObj.dt()} 
-                            onRowInserted={async(e)=>
-                            {
-                                this.grdInstallment.dataRefresh()
-                            }}
-                            >
-                            <Paging defaultPageSize={10} />
-                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                            <Scrolling mode="standart" />
-                            <Editing mode="cell" allowUpdating={true} />
-                            <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
-                            <Column dataField="DOC_DATE" caption={this.t("grdInstallment.clmDocDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
-                            <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
-                            <Column dataField="REF" caption={this.t("grdInstallment.clmRef")} width={100} allowEditing={false}/>
-                            <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
-                            <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false} sortOrder={"asc"}/>
-                            <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={true} dataType="datetime" format={"dd/MM/yyyy"}
-                                editorOptions={{value:null}}
-                                cellRender={(e) => 
+                                onRowInserted={async(e)=>
                                 {
-                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                    this.grdInstallment.dataRefresh()
+                                }}
+                                >
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={true} />
+                                <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="DOC_DATE" caption={this.t("grdInstallment.clmDocDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
+                                <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
+                                <Column dataField="REF" caption={this.t("grdInstallment.clmRef")} width={100} allowEditing={false}/>
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
+                                <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false} sortOrder={"asc"}/>
+                                <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={true} dataType="datetime" format={"dd/MM/yyyy"}
+                                    editorOptions={{value:null}}
+                                    cellRender={(e) => 
                                     {
-                                        return e.text
-                                    }
-                                    
-                                    return
-                                }}/>
-                            <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                            <Column dataField="VAT" caption={this.t("grdInstallment.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                            <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
-                        </NdGrid>
+                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                        {
+                                            return e.text
+                                        }
+                                        
+                                        return
+                                    }}/>
+                                <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                                <Column dataField="VAT" caption={this.t("grdInstallment.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
+                            </NdGrid>
                         </div>  
                     </div> 
                     {/* popInstallment */}

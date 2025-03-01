@@ -189,6 +189,7 @@ export class payPlanMatchingCls
         this.lang = undefined;
         this.type = 0; //0 = ÖDEME, 1 = TAHSİLAT
         this.popUpList = new datatable()
+        this.currentCustomer = null;
         this._initDs();
     }
     //#region Private
@@ -286,6 +287,7 @@ export class payPlanMatchingCls
     }
     async showPopUp(pCustomer)
     {
+        this.currentCustomer = pCustomer;
         this.popUpList = new datatable()
         let tmpJsx = 
         (
@@ -390,19 +392,19 @@ export class payPlanMatchingCls
             {
                 query : "SELECT DOC_DATE,DOC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MIN(INSTALLMENT_NO) AS PAY_PLAN,MIN(AMOUNT)AS AMOUNT,REMAINDER,CUSTOMER_NAME,CUSTOMER_CODE " + 
                         "FROM DOC_INSTALLMENT_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " + 
-                        "AND STATUS = 0 " +
+                        "AND STATUS = 0" +
                         "GROUP BY DOC_GUID,FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE,DOC_DATE,REMAINDER",
                 param : ['CUSTOMER_GUID:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                value : [pCustomer,this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
+                value : [this.currentCustomer,this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
             }
             
             if(this.chkPopDeptCreditList.value == false)
             {
-                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0 ','AND STATUS = 0 ')
+                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0','AND STATUS = 0')
             }
             else
             {
-                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0 ','')
+                tmpQuery.query = tmpQuery.query.replace('AND STATUS = 0','AND REMAINDER = 0')
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
