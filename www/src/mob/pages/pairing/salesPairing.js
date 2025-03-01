@@ -170,7 +170,7 @@ export default class salesPairing extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,MAX(VAT_ZERO) AS VAT_ZERO,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
+                    query : "SELECT REF,REF_NO,DOC_GUID,DOC_DATE,(SELECT TOP 1 VAT_ZERO FROM DOC WHERE DOC.GUID = DOC_ORDERS_VW_01.DOC_GUID) AS VAT_ZERO,INPUT AS CUSTOMER,INPUT_CODE AS CUSTOMER_CODE,INPUT_NAME AS CUSTOMER_NAME, " + 
                             "OUTPUT_CODE AS DEPOT_CODE,OUTPUT_NAME AS DEPOT_NAME,OUTPUT AS DEPOT " +  
                             "FROM DOC_ORDERS_VW_01 " + 
                             "WHERE CLOSED = 0 AND CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (DOC_ORDERS_VW_01.APPROVED_QUANTITY - DOC_ORDERS_VW_01.COMP_QUANTITY) ELSE DOC_ORDERS_VW_01.COMP_QUANTITY END > 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = ''))" + 
@@ -257,6 +257,13 @@ export default class salesPairing extends React.PureComponent
             return
         }
 
+        if(this.txtQuantity.value > 15000000)
+        {
+            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
+            document.getElementById("Sound").play(); 
+            await dialog(this.alertContent);
+            return
+        }
         let prmRowMerge = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'rowMerge'}).getValue().value
 
         if(prmRowMerge > 0)
@@ -514,6 +521,7 @@ export default class salesPairing extends React.PureComponent
             }
             this.onClickBarcodeShortcut()
         }
+        this.docObj.dt()[0].DOC_DATE = moment(new Date())
     }
     async getOrderName()
     {
@@ -546,7 +554,6 @@ export default class salesPairing extends React.PureComponent
         {              
             for (let i = 0; i < this.orderDetailDt.length; i++) 
             {
-                console.log(this.orderDetailDt)
                 if(this.orderDetailDt[i].PEND_QUANTITY > 0)
                 {
                     let tmpQuery = 

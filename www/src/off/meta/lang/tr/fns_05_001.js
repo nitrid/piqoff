@@ -21,7 +21,8 @@ const fns_05_001 =
         clmDate : "Tarih",
         clmDesc : "Açıklama",
         clmAmount : "Tutar",
-        shemaSave : "Şema Kaydet"
+        shemaSave : "Şema Kaydet",
+        clmOutputCode : "Müşteri Kodu"
     },
     cmbPayType : 
     {

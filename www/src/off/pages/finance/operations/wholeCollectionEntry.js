@@ -121,12 +121,27 @@ export default class wholeCollectionEntry extends React.PureComponent
                     pData[i][tmpShema.DATE] = new Date((pData[i][tmpShema.DATE] - (25567 + 2))*86400*1000)
                 }
                 
+                let tmpOutput = '00000000-0000-0000-0000-000000000000'
+                let tmpOutputCode = ''
+                let tmpOutputName = ''
+                console.log(pData[i][tmpShema.OUTPUT_CODE])
+                let tmpQuery = {query : "SELECT * FROM CUSTOMER_VW_01 WHERE CODE = '" + pData[i][tmpShema.OUTPUT_CODE] + "'"}
+                let tmpCustomerData = await this.core.sql.execute(tmpQuery)
+                console.log(tmpCustomerData)
+                if(tmpCustomerData.result.recordset.length > 0)
+                {
+                    tmpOutput = tmpCustomerData.result.recordset[0].GUID
+                    tmpOutputCode = tmpCustomerData.result.recordset[0].CODE
+                    tmpOutputName = tmpCustomerData.result.recordset[0].TITLE
+                }
+                
+
                 let tmpData =
                 {
                     DOC_DATE : pData[i][tmpShema.DATE],
-                    OUTPUT : '00000000-0000-0000-0000-000000000000',
-                    OUTPUT_CODE : '',
-                    OUTPUT_NAME : '',
+                    OUTPUT : tmpOutput,
+                    OUTPUT_CODE : tmpOutputCode,
+                    OUTPUT_NAME : tmpOutputName,
                     INPUT : this.cmbCashSafeEx.value,
                     INPUT_NAME : this.cmbCashSafeEx.displayValue,
                     PAY_TYPE : this.cmbPayTypeEx.value,
@@ -342,6 +357,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         this.txtPopExcelDate.value = tmpShema.DATE
                                         this.txtPopExcelDesc.value = tmpShema.DESC
                                         this.txtPopExcelAmount.value = tmpShema.AMOUNT
+                                        this.txtPopExcelOutputCode.value = tmpShema.OUTPUT_CODE
 
                                         this.popExcel.show()
                                     }}/>
@@ -830,6 +846,16 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                 </Item>
+                                <Item>
+                                    <Label text={this.t("popExcel.clmOutputCode")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelOutputCode" parent={this} simple={true} notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
                             </Form>
                             <Form colCount={2}>
                                 <Item>
@@ -857,7 +883,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     <NdButton id="btnShemaSave" parent={this} text={this.t('popExcel.shemaSave')} type="default"
                                     onClick={async()=>
                                     {
-                                        let shemaJson={DATE:this.txtPopExcelDate.value,DESC:this.txtPopExcelDesc.value,AMOUNT:this.txtPopExcelAmount.value}
+                                        let shemaJson={DATE:this.txtPopExcelDate.value,DESC:this.txtPopExcelDesc.value,AMOUNT:this.txtPopExcelAmount.value,OUTPUT_CODE:this.txtPopExcelOutputCode.value}
                                         this.prmObj.add({ID:'excelFormat',VALUE:shemaJson,USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:'fns_05_001'})
                                         await this.prmObj.save()
                                     }}/>
