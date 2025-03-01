@@ -52,10 +52,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"refForCustomerCode",
-        VALUE : 
-        {
-            value : true
-        },
+        VALUE : true,
         SPECIAL : "",
         PAGE : "",
         ELEMENT : "",
