@@ -1052,6 +1052,17 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_011'),//'Eksik Gönderilen Siparişler Raporu',
                             path: 'report/sales/incompleteShippedOrdersReport'
                         },
+                        {
+                            id: 'slsRpt_01_012',
+                            text: e.t('menuOff.slsRpt_01_012'),//'Ürün Karlılık Raporu',
+                            path: 'report/sales/productProfitReport'
+                        },
+                        {
+                            id: 'slsRpt_01_013',
+                            text: e.t('menuOff.slsRpt_01_013'),//'Müşteri Karlılık Raporu',
+                            path: 'report/sales/customerProfitReport'
+                        }
+
                     ]
                 }
             ]

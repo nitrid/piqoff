@@ -252,10 +252,9 @@ export default class safeEkstreReport extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={90} visible={true}/> 
                                 <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
                                 <Summary>
-                                    <TotalItem
-                                    column="DOC_AMOUNT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    <TotalItem column="DEBIT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR", precision: 2}} />
+                                    <TotalItem column="CREDIT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR", precision: 2}} />
+                                    <TotalItem column="BALANCE" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR", precision: 2}} />
                                 </Summary> 
                             </NdGrid>
                         </div>

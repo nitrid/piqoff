@@ -16,6 +16,7 @@ export const langFr =
     msgSqlService3: "Installation réussi de la base de données. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
+    msgNoData : "Aucune donnée trouvée pour les critères sélectionnés.",
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
@@ -501,6 +502,8 @@ export const langFr =
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
         slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
+        slsRpt_01_012: "Rapport sur le profit des produits",
+        slsRpt_01_013: "Rapport sur le profit des clients",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
