@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
-import { payPlanCls } from '../../../../core/cls/PayPlanCls.js';
+import { payPlanCls } from '../../../../core/cls/payPlan.js';
 
 import moment from 'moment';
 
@@ -148,7 +148,7 @@ export default class payPlan extends React.PureComponent
         {
             if(pRef !== '' && pRefNo !== '')
             {
-                let tmpData = await new payPlanCls().load({REF:pRef,REF_NO:pRefNo});
+                let tmpData = await new payPlan().load({REF:pRef,REF_NO:pRefNo});
 
                 if(tmpData.length > 0)
                 {
