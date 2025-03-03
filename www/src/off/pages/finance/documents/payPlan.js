@@ -117,6 +117,7 @@ export default class payPlan extends React.PureComponent
         {
             this.payPlanObj.dt()[i].DOC_DATE = this.dtDocDate.value
             this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
+            this.payPlanObj.dt()[i].REF = this.txtRef.value
         }
     }
     async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
@@ -737,7 +738,7 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     this.installmentTotal.value = e.data.AMOUNT
                                                     this.tmpFacGuid = e.data.GUID
-                                                    this.tmpFacRef = e.data.REF
+                                                    this.tmpFacRef = e.data.INPUT_CODE
                                                     this.txtRefno.value = e.data.REF_NO
                                                     this.tmpVatTotal = e.data.VAT
                                                     this.tmpCustomerGuid = e.data.INPUT
