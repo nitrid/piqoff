@@ -42,98 +42,113 @@ export default class payPlan extends React.PureComponent
         this.docObj.type = 1
         this.payPlanObj.lang = this.lang
         this.payPlanObj.type = 1
-    
-        this.payPlanObj.addEmpty()
-        this.tmpDocGuid = ''
-        this.tmpDocCode = ''
-        this.tmpDocName = ''
-
+        this.tabIndex = props.data.tabkey        
     }
     async componentDidMount()
     {
+        await this.core.util.waitUntil(0)
         await this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.payPlanObj.clearAll()
+            await this.payPlanObj.load({DOC_GUID:this.pagePrm.DOC_GUID});
+            this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
+        }
     }
     async init()
     {
-
-        this.payPlanObj.clearAll();
+        this.payPlanObj.clearAll()
 
         this.payPlanObj.ds.on('onAddRow',(pTblName,pData) =>
+        {
+            if(pData.stat == 'new')
             {
-                if(pData.stat == 'new')
-                {
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:false});
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
-                    this.btnSave.setState({disabled:false});
-                    this.btnDelete.setState({disabled:false});
-                    this.btnCopy.setState({disabled:false});
-                    this.btnPrint.setState({disabled:false});
-                }
-            })
-        this.payPlanObj.ds.on('onEdit',(pTblName,pData) =>
-            {            
-                if(pData.rowData.stat == 'edit')
-                {
-                    this.btnBack.setState({disabled:false});
-                    this.btnNew.setState({disabled:true});
-                    this.btnSave.setState({disabled:false});
-                    this.btnDelete.setState({disabled:false});
-                    this.btnCopy.setState({disabled:false});
-                    this.btnPrint.setState({disabled:false});
-    
-                    pData.rowData.CUSER = this.user.CODE
-                }                 
-            })
-        this.payPlanObj.ds.on('onRefresh',(pTblName) =>
-            {            
-                this.btnBack.setState({disabled:true});
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});          
-            })
-        this.payPlanObj.ds.on('onDelete',(pTblName) =>
-            {            
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
-            })
+            }
+        })
+        this.payPlanObj.ds.on('onEdit',(pTblName,pData) =>
+        {            
+            if(pData.rowData.stat == 'edit')
+            {
+                this.btnNew.setState({disabled:true});
+                this.btnSave.setState({disabled:false});
+                this.btnDelete.setState({disabled:false});
+                this.btnPrint.setState({disabled:false});
 
+                pData.rowData.CUSER = this.user.CODE
+            }                 
+        })
+        this.payPlanObj.ds.on('onRefresh',(pTblName) =>
+        {            
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
+            this.btnDelete.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});          
+        })
+        this.payPlanObj.ds.on('onDelete',(pTblName) =>
+        {            
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});
+        })
+        this.txtRef.readOnly = true;
+        this.txtRef.setState({value:''})
+    
+        this.txtRefno.readOnly = false;
+        this.txtRefno.setState({value:''})
 
-        await this.payPlanObj.load({GUID:this.tmpDocGuid,REF:this.tmpDocCode,REF_NO:this.tmpDocName,TYPE:1,DOC_TYPE:200})
+        this.dtDocDate.value =  moment(new Date()).format("YYYY-MM-DD"),
+        this.paymentDate.setState({value:moment(new Date()).format("YYYY-MM-DD")})
+
+        this.installmentPeriod.setState({value:0})
+        this.installmentTotal.setState({value:0})
+        
+        this.txtCustomerCode.setState({value:''})
+        this.txtCustomerName.setState({value:''})
+
     }
-    async _addInstallment(pDate,pAmount,pNo,pFacRefNo,pFacRef,pFacGuid,pTotalAmount)
+    async checkRow()
+    {
+        for (let i = 0; i < this.payPlanObj.dt().length; i++) 
+        {
+            this.payPlanObj.dt()[i].DOC_DATE = this.dtDocDate.value
+            this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
+        }
+    }
+    async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
     {
         let tmpPayPlan = {...this.payPlanObj.empty}
-        
         tmpPayPlan.FAC_GUID = pFacGuid
         tmpPayPlan.TOTAL = pTotalAmount
 
         tmpPayPlan.INSTALLMENT_DATE = pDate
 
-        tmpPayPlan.DOC_GUID = '00000000-0000-0000-0000-000000000000' 
+        tmpPayPlan.DOC_GUID = pDocGuid
+        tmpPayPlan.DOC_DATE = this.dtDocDate.value
+        tmpPayPlan.CUSTOMER_GUID = this.tmpCustomerGuid
+        tmpPayPlan.CUSTOMER_CODE = this.txtCustomerCode.value
+        tmpPayPlan.CUSTOMER_NAME = this.txtCustomerName.value
         tmpPayPlan.REF_NO = pFacRefNo
+        tmpPayPlan.VAT = pVatAmount
         tmpPayPlan.INSTALLMENT_NO = pNo 
         tmpPayPlan.REF = pFacRef
         tmpPayPlan.AMOUNT = pAmount 
 
-        console.log(tmpPayPlan)
         this.payPlanObj.addEmpty(tmpPayPlan)
         this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
+
     }
-    async checkDoc(pGuid,pRef,pRefno)
+    async checkDoc(pRef,pRefNo)
     {
         return new Promise(async resolve =>
         {
-            if(pRef !== '')
+            if(pRef !== '' && pRefNo !== '')
             {
-                let tmpData = await new payPlanCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new payPlanCls().load({REF:pRef,REF_NO:pRefNo});
 
                 if(tmpData.length > 0)
                 {
@@ -152,7 +167,7 @@ export default class payPlan extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getDoc(pGuid,pRef,pRefno)
+                        this.getDoc(tmpData[0].DOC_GUID)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -171,35 +186,23 @@ export default class payPlan extends React.PureComponent
             }
         });
     }
-    async getDoc(pGuid,pRef,pRefno)
+    async getDoc(pDocGuid)
     {
         this.payPlanObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.payPlanObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
+        await this.payPlanObj.load({DOC_GUID:pDocGuid});
 
         App.instance.setState({isExecute:false})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-        
-        if(this.payPlanObj.dt()[0].LOCKED != 0)
-        {
-            this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
+        this.tmpFacGuid = this.payPlanObj.dt()[0].FAC_GUID
+        this.tmpFacRef = this.payPlanObj.dt()[0].REF
+        this.tmpFacRefNo = this.payPlanObj.dt()[0].REF_NO
+        this.tmpDocGuid = this.payPlanObj.dt()[0].DOC_GUID
 
-            await dialog(tmpConfObj);
-            this.frmPayment.option('disabled',true)
-        }
-        else
-        {
-            this.docLocked = false
-            this.frmPayment.option('disabled',false)
-        }
+        this.txtRef.readOnly = true
+        this.txtRefno.readOnly = false
+        
+        this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
     }
     async _btnGetClick()
     {
@@ -210,10 +213,12 @@ export default class payPlan extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN ISNULL((SELECT TOP 1 RECIEVER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_01.GUID),'') <> '' THEN  'OK' ELSE 'X' END AS MAIL FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query: "SELECT * FROM DOC_CUSTOMER_VW_01 " +
+                    "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
+                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                    "AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
+                    "AND INSTALLMENT_STATUS = 0 " +
+                    "ORDER BY DOC_DATE DESC,REF_NO DESC",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.value,this.dtFirst.startDate,this.dtFirst.endDate]
                 },
@@ -234,16 +239,10 @@ export default class payPlan extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.init(); 
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
+                                        this.tmpDocGuid = ''
                                         this.init(); 
                                     }}/>
                                 </Item>
@@ -269,7 +268,7 @@ export default class payPlan extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.payPlanObj.save()) == 0)
+                                                if((await this.payPlanObj.save()) == 0 && this.txtRefno.value != '')
                                                 {
                                                     await this.payPlanObj.save()
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -311,25 +310,29 @@ export default class payPlan extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-
+                                            this.tmpDocGuid = ''
                                             this.payPlanObj.dt().removeAll()
                                             await this.payPlanObj.dt().delete()
-                                            this.init(); 
+                                            this.init()
                                         }
                                         
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
+                                        if(this.payPlanObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
@@ -364,13 +367,13 @@ export default class payPlan extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmInstallment" + this.tabIndex}>
+                            <Form colCount={3} id={"frmPayPlan"  + this.tabIndex}> 
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdTextBox id="txtRef" parent={this} simple={true} 
+                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
@@ -378,7 +381,7 @@ export default class payPlan extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT  WHERE REF = @REF GROUP BY REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT_VW_01  WHERE REF = @REF GROUP BY REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -391,14 +394,18 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayment"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} 
-                                            readOnly={true}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF_NO"}}
+                                            readOnly={false}
+                                            onValueChanged={(async(e)=>
+                                            {
+                                                await this.checkRow()
+                                            }).bind(this)}
                                             button=
                                             {
                                                 [
@@ -412,8 +419,7 @@ export default class payPlan extends React.PureComponent
                                                             {
                                                                 if(data.length > 0)
                                                                 {
-                                                                    console.log(data[0].REF_NO)
-                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                    this.getDoc(data[0].DOC_GUID)
                                                                 }
                                                             }
                                                                    
@@ -422,17 +428,17 @@ export default class payPlan extends React.PureComponent
                                                     {
                                                         id:'02',
                                                         icon:'arrowdown',
-                                                        onClick:()=>
+                                                        onClick:async()=>
                                                         {
-                                                            console.log(this.txtRefno.value)
                                                             this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            await this.checkRow()
                                                         }
                                                     }
                                                 ]
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                let tmpResult = await this.checkDoc(this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -441,7 +447,7 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayment"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -456,7 +462,7 @@ export default class payPlan extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT DOC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE),AMOUNT,TOTAL FROM DOC_INSTALLMENT GROUP BY DOC_GUID,REF,REF_NO,TOTAL "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT DOC_GUID,FAC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MAX(INSTALLMENT_NO) AS PAY_PLAN,CUSTOMER_NAME,CUSTOMER_CODE FROM DOC_INSTALLMENT_VW_01 GROUP BY DOC_GUID,FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -465,47 +471,61 @@ export default class payPlan extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                   
+                                                
                                                 }
                                             }
                                         ]
                                         
                                     }
                                     >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INSTALLMENT_NO" caption={this.t("pg_Docs.clmInstallmentNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INSTALLMENT_DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="AMOUNT" caption={this.t("pg_Docs.clmAmount")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} defaultSortOrder="asc"/>
+                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmCustomerName")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmCustomerCode")} width={120} defaultSortOrder="asc" />
+                                        <Column dataField="PAY_PLAN" caption={this.t("pg_Docs.clmInstallmentNo")} width={150} defaultSortOrder="asc" />
+                                        <Column dataField="DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={200}  dataType="datetime" format={"dd/MM/yyyy"} defaultSortOrder="asc" />
+                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={100} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.payPlanObj.dt(),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        await this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPayPlan" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Boş */}
+                                <EmptyItem />   
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     value={this.tmpDocCode}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.txtCustomerName.value = this.tmpDocName
-                                    }}
                                     onEnterKey={(async()=>
                                     {
+                                        if(this.payPlanObj.dt().length > 0)
+                                        {
+                                            this.txtCustomerCode.readOnly = true
+                                            return
+                                        }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.show()
                                         this.pg_txtCustomerCode.onClick = (data) =>
                                         {
                                             if(data.length > 0)
                                             {
-                                                this.tmpDocGuid = data[0].GUID
-                                                this.tmpDocCode = data[0].CODE
-                                                this.tmpDocName = data[0].TITLE
                                                 this.txtCustomerCode.value = data[0].CODE
                                                 this.txtCustomerName.value = data[0].TITLE
-                                                console.log(this.tmpDocGuid)
-                                                console.log(this.tmpDocCode)
-                                                console.log(this.tmpDocName)
+                                                this.txtRef.value = data[0].CODE
                                             }
                                         }
                                     }).bind(this)}
@@ -515,19 +535,19 @@ export default class payPlan extends React.PureComponent
                                             icon:'more',
                                             onClick:()=>
                                             {
+                                                if(this.payPlanObj.dt().length > 0)
+                                                {
+                                                    this.txtCustomerCode.readOnly = true
+                                                    return
+                                                }
                                                 this.pg_txtCustomerCode.show()
                                                 this.pg_txtCustomerCode.onClick = (data) =>
                                                 {
                                                     if(data.length > 0)
                                                     {
-                                                        this.tmpDocGuid = data[0].GUID
-                                                        this.tmpDocCode = data[0].CODE
-                                                        this.tmpDocName = data[0].TITLE
                                                         this.txtCustomerCode.value = data[0].CODE
                                                         this.txtCustomerName.value = data[0].TITLE
-                                                        console.log(this.tmpDocGuid)
-                                                        console.log(this.tmpDocCode)
-                                                        console.log(this.tmpDocName)
+                                                        this.txtRef.value = data[0].CODE
                                                     }
                                                 }
                                             }
@@ -562,25 +582,29 @@ export default class payPlan extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                     </NdPopGrid>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                                 {/* txtCustomerName */}
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"CUSTOMER_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     />
                                 </Item>
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* btnInstallment */}
                                 <Item>
-                                    <Label text={this.t("lblInstallment")} alignment="right" />
-                                    <NdButton id="btnInstallment" parent={this} icon="add" type="default"
+                                    <NdButton text={this.t("btnInstallment")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
-                                        if(this.tmpDocGuid == '') {
+                                        if(this.payPlanObj.dt().length > 0)
+                                        {
+                                            this.btnInstallment.readOnly = true
+                                            return
+                                        }
+                                        if(this.txtCustomerCode.value == '' || this.txtCustomerCode.value == undefined) {
                                             let tmpConfObj =
                                             {
                                                 id:'msgCustomerNotSelected',showTitle:true,title:this.t("msgCustomerNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -590,27 +614,39 @@ export default class payPlan extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return;
                                         }
-                                        this.popInstallment.show()
+                                        await this.popInstallment.show()
+                        
                                     }}/>
                                 </Item> 
                                 {/* btnInstallmentCount */}
                                 <Item>
-                                    <Label text={this.t("lblInstallmentCount")} alignment="right" />
-                                    <NdButton id="btnInstallmentCount" parent={this} icon="add" type="default"
+                                    <NdButton text={this.t("btnInstallmentCount")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
-                                        if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined) {
+                                        if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined || this.txtRefno.value == '') {
                                             let tmpConfObj =
                                             {
-                                                id:'msgCustomerNotSelected',showTitle:true,title:this.t("msgCustomerNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerNotSelected.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotSelected.msg")}</div>)
+                                                id:'msgFactureNotSelected',showTitle:true,title:this.t("msgFactureNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgFactureNotSelected.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFactureNotSelected.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+                                        if(this.tmpDocGuid != '' && this.tmpDocGuid != undefined)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgPayPlanNotSelected',showTitle:true,title:this.t("msgPayPlanNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgPayPlanNotSelected.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayPlanNotSelected.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return;
                                         }
                                         this.popInstallmentCount.show()
-                                    }}/>
+                                    }}
+                                    />
                                 </Item>
                                        
                             </Form>
@@ -620,36 +656,37 @@ export default class payPlan extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdInstallment" parent={this} dataSource={this.payPlanObj.dt()} 
-                            onRowInserted={async(e)=>
-                            {
-                                this.grdInstallment.refresh()
-                            }}
-                            onRowRemoved={async(e)=>
-                            {
-                                this.grdInstallment.refresh()
-                            }}
-                            >
-                            <Paging defaultPageSize={10} />
-                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                            <Scrolling mode="standart" />
-                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                            <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
-                            <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={false}
-                                editorOptions={{value:null}}
-                                cellRender={(e) => 
+                                onRowInserted={async(e)=>
                                 {
-                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                    this.grdInstallment.dataRefresh()
+                                }}
+                                >
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={true} />
+                                <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="DOC_DATE" caption={this.t("grdInstallment.clmDocDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
+                                <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
+                                <Column dataField="REF" caption={this.t("grdInstallment.clmRef")} width={100} allowEditing={false}/>
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
+                                <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false} sortOrder={"asc"}/>
+                                <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={true} dataType="datetime" format={"dd/MM/yyyy"}
+                                    editorOptions={{value:null}}
+                                    cellRender={(e) => 
                                     {
-                                        return e.text
-                                    }
-                                    
-                                    return
-                                }}/>
-                            <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={200} allowEditing={false}/>
-                            <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                            <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                        </NdGrid>
+                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                        {
+                                            return e.text
+                                        }
+                                        
+                                        return
+                                    }}/>
+                                <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
+                                <Column dataField="VAT" caption={this.t("grdInstallment.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
+                            </NdGrid>
                         </div>  
                     </div> 
                     {/* popInstallment */}
@@ -663,6 +700,10 @@ export default class payPlan extends React.PureComponent
                             width={'1200'}
                             height={'800'}
                             position={{of:'#root'}}
+                            onShowing={async()=>
+                            {
+                                await this._btnGetClick()
+                            }}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -677,7 +718,6 @@ export default class payPlan extends React.PureComponent
                                                             endDate={moment(new Date())}
                                                             onApply={(e)=>
                                                             {
-                                                                console.log("burak")
                                                                 this._btnGetClick()
                                                             }}
                                                             
@@ -695,27 +735,27 @@ export default class payPlan extends React.PureComponent
                                                 allowColumnResizing={true}
                                                 onRowDblClick={async(e)=>
                                                 {
-                                                    this.installmentTotal.value = e.data.TOTAL
+                                                    this.installmentTotal.value = e.data.AMOUNT
                                                     this.tmpFacGuid = e.data.GUID
-                                                    this.tmpFacRefNo = e.data.REF_NO
                                                     this.tmpFacRef = e.data.REF
+                                                    this.txtRefno.value = e.data.REF_NO
+                                                    this.tmpVatTotal = e.data.VAT
+                                                    this.tmpCustomerGuid = e.data.INPUT
+                                                    this.txtCustomerName.value = e.data.INPUT_NAME
+
+                                                    this.popInstallmentCount.show()
                                                     this.popInstallment.hide()
                                                 }}
                                                 >
                                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                                <Export fileName={this.lang.t("menuOff.ftr_01_002")} enabled={true} allowExportSelectedData={true} />
                                                     <Column dataField="REF" caption={this.t("grdPopInstallment.clmRef")} visible={true} width={200}/> 
                                                     <Column dataField="REF_NO" caption={this.t("grdPopInstallment.clmRefNo")} visible={true} width={100}/> 
                                                     <Column dataField="INPUT_CODE" caption={this.t("grdPopInstallment.clmInputCode")} visible={false}/> 
                                                     <Column dataField="INPUT_NAME" caption={this.t("grdPopInstallment.clmInputName")} visible={true}/> 
-                                                    <Column dataField="OUTPUT_NAME" caption={this.t("grdPopInstallment.clmOutputName")} visible={false}/> 
+                                                    <Column dataField="AMOUNT" caption={this.t("grdPopInstallment.clmAmount")} visible={true}/> 
                                                     <Column dataField="DOC_DATE" caption={this.t("grdPopInstallment.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                                    <Column dataField="AMOUNT" caption={this.t("grdPopInstallment.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                                    <Column dataField="VAT" caption={this.t("grdPopInstallment.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                                    <Column dataField="TOTAL" caption={this.t("grdPopInstallment.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
-                                                    <Column dataField="MAIL" caption={this.t("grdPopInstallment.clmMail")} visible={true} /> 
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -732,8 +772,8 @@ export default class payPlan extends React.PureComponent
                             showTitle={true}
                             title={this.t("popInstallmentCount.title")}
                             container={"#root"} 
-                            width={'1200'}
-                            height={'800'}
+                            width={'400'}
+                            height={'400'}
                             position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
@@ -745,7 +785,13 @@ export default class payPlan extends React.PureComponent
                                         {
                                             console.log(e.value)
                                         }}
-                                        />
+                                        param={this.param.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmInstallmentPeriod"  + this.tabIndex}>
+                                        <RangeRule min={3} max={24} step={3} message={this.t("ValidInstallmentPeriod")} />
+                                        </Validator>  
+                                        </NdNumberBox>
                                     </Item>
                                     <Item>
                                         <Label text={this.t("paymentDate")} alignment="right" />
@@ -756,28 +802,198 @@ export default class payPlan extends React.PureComponent
                                         <NdNumberBox id="installmentTotal" readOnly={true} value={''} visible={true} parent={this} simple={true} width={200} />
                                     </Item>
                                     <Item>
-                                        <NdButton id="btnInstallmentCount" parent={this} icon="check" type="default" 
-                                        onClick={()=>
-                                        {
-                                            let totalAmount = this.installmentTotal.value;
-                                            let installmentPeriod = this.installmentPeriod.value;
-                                            let installmentAmount = totalAmount / installmentPeriod;
-                                            for (let i = 1; i <= installmentPeriod; i++) 
-                                            {
-                                                console.log(i)
-                                                let documentDate = new Date(this.paymentDate.value);
-                                                documentDate.setMonth(documentDate.getMonth() + i);
+                                        <div className="row">
+                                            <div className="col-12" style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                                <NdButton text={this.t("installmentAdd")} type="normal" stylingMode="contained" width={'25%'} 
+                                                onClick={()=>
+                                                {
+                                                    this.payPlanObj.clearAll()
 
-                                                console.log(`Taksit ${i}: Tarih - ${documentDate.toLocaleDateString()}, Miktar - ${installmentAmount}`);
-                                                this._addInstallment(documentDate,installmentAmount,i,this.tmpFacRefNo,this.tmpFacRef,this.tmpFacGuid,this.installmentTotal.value)
-                                            }
-                                            this.popInstallmentCount.hide()
-                                        }}/>
+                                                    let totalAmount = this.installmentTotal.value;
+                                                    let installmentPeriod = this.installmentPeriod.value;
+                                                    let installmentAmount = totalAmount / installmentPeriod;
+                                                    let vatAmount = this.tmpVatTotal / installmentPeriod;
+                                                    let doc_guid = datatable.uuidv4();
+                                                    let roundedInstallmentAmount = Math.floor(installmentAmount * 100) / 100;
+                                                    let roundedVatAmount = Math.floor(vatAmount * 100) / 100;
+                                                    for (let i = 1; i <= installmentPeriod; i++) 
+                                                    {
+                                                        let documentDate = new Date(this.paymentDate.value);
+                                                        documentDate.setMonth(documentDate.getMonth() + i)
+                                                        // Son taksit için kusurat kontrolü
+                                                        let currentInstallmentAmount = roundedInstallmentAmount;
+                                                        let currentVatAmount = roundedVatAmount;
+                                                        if(i == installmentPeriod)
+                                                        {
+                                                            // Önceki taksitlerin toplamını hesapla
+                                                            let previousTotal = roundedInstallmentAmount * (installmentPeriod - 1);
+                                                            let previousVatTotal = roundedVatAmount * (installmentPeriod - 1);
+                                                            // Son taksite kalan kusuratı ekle
+                                                            currentInstallmentAmount = +(totalAmount - previousTotal).toFixed(2);
+                                                            currentVatAmount = +(this.tmpVatTotal - previousVatTotal).toFixed(2);
+                                                        }
+
+                                                        this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid,currentVatAmount)
+                                                    }
+                                                    this.popInstallmentCount.hide()
+                                                }}/>
+                                            </div>
+                                        </div>
                                     </Item>
                                 </Form>
                             </NdPopUp>
                         </div>
                     </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'280'}
+                        position={{of:'#root'}}
+                        deferRendering={false}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '25'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={localStorage.getItem('lang').toUpperCase()}
+                                    searchEnabled={true}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    >
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                               " ORDER BY INSTALLMENT_NO",
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+
+                                                    let tmpObj = {DATA:tmpData.result.recordset}
+                                                    this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
+                                                    {
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            {
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                        }
+                                                    });
+                                                    this.popDesign.hide();  
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
+                                                               " ORDER BY INSTALLMENT_NO",
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+
+                                                    let tmpObj = {DATA:tmpData.result.recordset}
+                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
+                                                    {
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            {
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                        }
+                                                    });
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                                                        param:  ['CODE:string|50'],
+                                                        value:  [this.txtCustomerCode.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        await this.popMailSend.show()
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        await this.popMailSend.show()
+                                                    }
+                                                }
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>     
             </div>
         )

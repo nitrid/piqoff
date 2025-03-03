@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
+import { payPlanCls,payPlanMatchingCls } from '../../../../core/cls/PayPlanCls.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -36,6 +37,8 @@ export default class collection extends React.PureComponent
         this.deptCreditMatchingObj = new deptCreditMatchingCls();
         this.deptCreditMatchingObj.lang = this.lang;
         this.deptCreditMatchingObj.type = 1
+        this.payPlanMatchingObj = new payPlanMatchingCls();
+        this.payPlanMatchingObj.lang = this.lang;
         this.tabIndex = props.data.tabkey
         
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -273,6 +276,24 @@ export default class collection extends React.PureComponent
                 await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
             }
             /******************************************************************************/
+
+            let tmpPayDCPaidDt = this.payPlanMatchingObj.popUpList.where({AMOUNT: {'>' : 0}})
+            if(tmpPayDCPaidDt.length > 0)
+            {
+                tmpPayDCPaidDt.push
+                (
+                    {
+                        LDATE : moment(new Date()),
+                        TYPE : 0,
+                        DOC_DATE : tmpDocCustomer.DOC_DATE,
+                        CUSTOMER_GUID : tmpDocCustomer.OUTPUT,
+                        DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                        REMAINDER : pAmount * -1,
+                    }
+                )
+                await this.payPlanMatchingObj.matching(tmpPayDCPaidDt)
+            }
+            /******************************************************************************/
             this._calculateTotal()
         }
     }
@@ -369,11 +390,34 @@ export default class collection extends React.PureComponent
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {                       
-                                                    await this.deptCreditMatchingObj.save()                             
+                                                    await this.deptCreditMatchingObj.save()
+                                                    await this.payPlanMatchingObj.save()  
+                                                    if(this.deptCreditMatchingObj.dt().length > 0)
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE FAC_GUID = @FAC_GUID",
+                                                            param : ['FAC_GUID:string|50'],
+                                                            value : [this.deptCreditMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_DOC_GUID]
+                                                        }
+                                                        await this.core.sql.execute(tmpQuery)
+                                                    }
+                                                    
+                                                    if(this.payPlanMatchingObj.dt().length > 0)
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE GUID = @GUID",
+                                                            param : ['GUID:string|50'],
+                                                            value : [this.payPlanMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_GUID]
+                                                        }
+                                                        await this.core.sql.execute(tmpQuery)
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.init();
                                                 }
                                                 else
                                                 {
@@ -983,12 +1027,26 @@ export default class collection extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <div className='row'>
-                                        <div className='col-12'>
+                                        <div className='col-6'>
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
                                                 this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("installmentSelect")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async (e)=>
+                                            {  
+                                                this.payPlanMatchingObj.clearAll();
+                                                await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
+                                                this.numCash.value = Number(this.payPlanMatchingObj.popUpList[0].AMOUNT)
+                                                this.numCash.readOnly = true
+                                                if(this.payPlanMatchingObj.popUpList[0].STATUS == 1)
+                                                {
+                                                    this.numCash.value = 0
+                                                }
                                             }}/>
                                         </div>
                                     </div>

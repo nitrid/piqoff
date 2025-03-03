@@ -161,7 +161,7 @@ export default class itemCount extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
-        if(this.txtQuantity.value == "" || this.txtQuantity.value == 0)
+        if(this.txtQuantity.value == "" || this.txtQuantity.value == 0 || this.txtQuantity.value > 15000000)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
             await dialog(this.alertContent);

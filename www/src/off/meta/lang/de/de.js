@@ -456,6 +456,8 @@ export const langDe =
         slsRpt_01_007: "Retourerechnungsbericht",
         slsRpt_01_008: "Artikeldetailierter Verkaufsbericht",
         slsRpt_01_009: "Bericht über offene Verkaufsrechnungen",
+        slsRpt_01_012: "Bericht über Produktgewinne",
+        slsRpt_01_013: "Bericht über Kundengewinne",
         purchaseReport: "Berichte",
         slsRpt_02_001: "Alle Rechnungen nach Datum sortiert",
         slsRpt_02_002: "DEB-Bericht",

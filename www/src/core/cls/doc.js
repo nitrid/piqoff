@@ -1773,6 +1773,8 @@ export class deptCreditMatchingCls
         {
             let tmpPaidDt = pData.where({TYPE : 1}).orderBy('LDATE',"asc")
             let tmpPayingDt = pData.where({TYPE : 0}).orderBy('LDATE',"asc")
+            console.log(tmpPaidDt)
+            console.log(tmpPayingDt)
             
             for (let i = 0; i < tmpPaidDt.length; i++) 
             {
@@ -1792,6 +1794,7 @@ export class deptCreditMatchingCls
                         tmpDeptCredit.PAYING_DAY = 0
                         tmpDeptCredit.PAID_AMOUNT = Number(tmpPaidDt[i].REMAINDER).round(2)
                         tmpDeptCredit.PAYING_AMOUNT = tmpPaying
+                        tmpDeptCredit.PAY_PLAN_DOC_GUID = tmpPaidDt[i].DOC
                         this.addEmpty(tmpDeptCredit)
 
                         tmpDeptCredit = {...this.empty}
@@ -1857,6 +1860,7 @@ export class deptCreditMatchingCls
                                 {
                                     this.popDeptCreditList.hide()
                                     this.popDeptCreditList.onClick(this.grdPopDeptCreditList.getSelectedData())
+                                    console.log(this.grdPopDeptCreditList.getSelectedData())
                                 }
                             }}
                             />

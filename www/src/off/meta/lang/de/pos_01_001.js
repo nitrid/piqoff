@@ -12,6 +12,7 @@ const pos_01_001 =
     txtMacId : "Mac Id",
     cmbDepot : "Lager",
     txtPrinterPort : "Druckeranschluss",
+    txtScannerPort : "Scanneranschluss",
     pg_txtCode : 
     {
         title : "Kassenauswahl",

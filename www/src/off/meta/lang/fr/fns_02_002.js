@@ -19,6 +19,7 @@ const fns_02_002 =
     checkDate : "Date",
     btnCash : "Saisie Réglement",
     invoiceSelect : "Sélectionner Facture",
+    installmentSelect : "Sélectionner l'échéance",
     ValidCash : "Veuillez saisir un montant supérieur à 0", 
     cmbPayType : 
     {

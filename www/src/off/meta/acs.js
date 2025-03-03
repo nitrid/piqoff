@@ -1935,5 +1935,32 @@ export const acs =
                 ]
             }
         }
-    }       
+    },
+    //grdProductProfitReportState
+    {
+        TYPE : 2,
+        ID :"grdListeState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "slsRpt_01_012",
+        ELEMENT : "grdListeState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    }        
 ]

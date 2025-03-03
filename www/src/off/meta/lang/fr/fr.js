@@ -16,6 +16,7 @@ export const langFr =
     msgSqlService3: "Installation réussi de la base de données. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
+    msgNoData : "Aucune donnée trouvée pour les critères sélectionnés.",
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
@@ -342,9 +343,11 @@ export const langFr =
         fns_01_002 : "Liste de encaissement",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
+        fns_01_005 : "Liste Echelonnement",
         fns_02 : "Document",
         fns_02_001 : "Paiement",
         fns_02_002 : "Encaissement",
+        fns_02_003 : "Échelonnement",
         fns_03 : "Mouvement caisse-banque",
         fns_03_001 : "Choix caisse",
         fns_03_002 : "Sélection banque",
@@ -499,6 +502,8 @@ export const langFr =
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
         slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
+        slsRpt_01_012: "Rapport sur le profit des produits",
+        slsRpt_01_013: "Rapport sur le profit des clients",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
@@ -539,6 +544,9 @@ export const langFr =
         clmTotal : "Total",
         clmClosed : "Fermé",
         clmBalance  : "Restant",
+        clmInstallmentNo : "Numéro d'échéance",
+        clmInstallmentDate : "Date d'échéance",
+        clmAmount : "Montant de l'échéance",
     },
     pg_ordersGrid : //BAK
     {

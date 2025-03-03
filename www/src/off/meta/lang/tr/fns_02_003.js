@@ -2,53 +2,40 @@
 const fns_02_003 = 
 {
     txtRefRefno : "Seri-Sıra",
-    menu : "Tahsilat",
-    cmbDepot: "Depo",
-    cmbCashSafe : "Kasa Seçimi",
-    cmbCheckSafe : "Çek Kasası",
-    cmbBank : "Banka Seçimi",
     txtCustomerCode : "Müşteri Kodu",
     txtCustomerName : "Müşteri Adı",
+    lblInstallment : "Fatura Seçimi",
+    lblInstallmentCount : "Taksit Oluşturma",
+    installmentPeriod : "Taksit Sayısı",
+    paymentDate : "Ödeme Başlangıç Tarihi",
+    installmentTotal : "Toplam Tutar",
     dtDocDate : "Tarih",
-    txtAmount : "Tutar",
-    txtTotal : "Genel Toplam",
-    dtShipDate :"Sevk Tarihi",
-    cash : "Tutar",
-    description :"Açıklama",
-    checkReference : "Referans",
-    btnCash : "Tahsilat Girişi",
-    invoiceSelect : "Fatura Seçimi",
-    ValidCash : "0'dan büyük bir tutar giriniz",
-    cmbPayType : {
-        title : "Ödeme Tipi",
-        cash : "Nakit",
-        check : "Çek",
-        bankTransfer : "Hesaba Havale",
-        otoTransfer : "Otomatik Ödeme",
-        foodTicket : "Yemek Çeki",
-        bill : "Senet",
+    dtFirst : "Fatura Tarihi",
+    installmentAdd : "Ekle",
+    btnInstallment : "Fatura Seçimi",
+    btnView : "Görüntüle",
+    btnPrint : "Yazdır",
+    btnMailsend : "Email Gönder",
+    btnInstallmentCount : "Taksit Oluşturma",
+    isMsgSave :
+    {  
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
     },
-    pg_Docs : 
-    {
-        title : "Evrak Seçimi",
-        clmDate : "TARIH",
-        clmRef : "SERİ",
-        clmRefNo : "SIRA",
-        clmOutputName : "CARİ ADI",
-        clmOutputCode  : "CARİ KODU",
-        clmTotal : "KDVLİ TOPLAM"
-    },
-    pg_invoices : 
+    popInstallment :
     {
         title : "Fatura Seçimi",
-        clmRef : "REF",
-        clmRefNo : "REF NO",
-        clmTypeName : "EVRAK TIP",
-        clmCustomer : "CARİ ADI",
-        clmDate : "TARIH",
-        clmTotal : "TOPLAM",
-        clmClosed : "KAPANAN",
-        clmBalance  : "KALAN",
+    },
+    popInstallmentCount :
+    {
+        title : "Taksit Oluşturma",
+    },
+    popDesign : 
+    {
+        title: "Dizayn seçimi",
+        design : "Dizayn",
+        lang : "Evrak Dili"
     },
     pg_txtCustomerCode : 
     {
@@ -58,21 +45,64 @@ const fns_02_003 =
         clmTypeName : "TİPİ",
         clmGenusName : "CİNSİ"
     },
-    grdDocPayments: 
+    pg_Docs : 
     {
-        clmCreateDate: "Kayıt Tarihi",
-        clmAmount : "Tutar",
-        clmInputName : "Kasa/Banka",
-        clmDescription : "Açıklama",
-        clmInvoice : "Ödenen Fatura",
-        clmFacDate : "Fatura Tarihi ",
-        clmDocDate : "Tarih"
+        title : "Evrak Seçimi",
+        clmDate : "TARIH",
+        clmRef : "SERİ",
+        clmRefNo : "SIRA",
+        clmCustomerName : "CARİ ADI",
+        clmCustomerCode : "CARİ KODU",
+        clmInstallmentNo : "TAKSİT SAYISI",
+        clmInstallmentDate : "TAKSİT BAŞLANGIÇ TARİHİ",
+        clmAmount : "TAKSİT TUTAR",
+        clmTotal : "TOPLAM TUTAR",
+        clmVat : "TAKSİT KDV"
+    },
+    grdInstallment : 
+    {
+        clmDocDate : "TARIH",
+        clmRef : "SERİ",
+        clmRefNo : "SIRA",
+        clmCustomerName : "CARİ ADI",
+        clmCustomerCode : "CARİ KODU",
+        clmInstallmentNo : "TAKSİT NO",
+        clmInstallmentDate : "TAKSİT TARİHİ",
+        clmAmount : "TAKSİT TUTAR",
+        clmTotal : "TOPLAM TUTAR"
+    },
+    grdPopInstallment : 
+    {
+        clmDocDate : "TARIH",
+        clmRef : "SERİ",
+        clmRefNo : "SIRA",
+        clmInputName : "FİRMA ADI",
+        clmDate : "TARİH",
+        clmAmount : "TUTAR"
     },
     msgDocValid:
     {
         title: "Dikkat",
         btn01: "Tamam",
         msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
+    },
+    msgPayPlanNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Seçilen Fatura Taksitlenmiş !"
+    },
+    msgCustomerNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Müşteri Seçilmedi !"
+    },
+    msgFactureNotSelected:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Fatura veya Evrak Numarası Seçilmedi !"
     },
     msgSave:
     {
@@ -137,28 +167,8 @@ const fns_02_003 =
         btn01: "Tamam",
         msg: "Müşteri Bulunmadı !!"
     },
-    popCash : 
-    {
-        title: "Nakit Girişi",
-        btnApprove : "Ekle"
-    },
-    popCheck : 
-    {
-        title: "Çek Girişi",
-        btnApprove : "Ekle"
-    },
-    popBank : 
-    {
-        title: "Havale Girişi",
-        btnApprove : "Ekle"
-    },
-    popCloseInvoice : 
-    {
-        title: "Ödeme Yapılan Faturalar",
-    },
     validRef :"Seri Boş Geçilemez",
     validRefNo : "Sıra Boş Geçilemez",
-    validDepot : "Depo Seçmelisiniz",
     validCustomerCode : "Müşteri Kodu Boş Geçilemez",
     validDocDate : "Tarih Seçmelisiniz",
     msgInvoiceSelect:

@@ -18,6 +18,7 @@ const fns_02_002 =
     checkReference : "Referans",
     btnCash : "Tahsilat Girişi",
     invoiceSelect : "Fatura Seçimi",
+    installmentSelect : "Taksit Seçimi",
     ValidCash : "0'dan büyük bir tutar giriniz",
     cmbPayType : {
         title : "Ödeme Tipi",

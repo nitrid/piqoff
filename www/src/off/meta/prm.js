@@ -1992,7 +1992,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "ftr_02_002",
@@ -2486,7 +2486,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",
@@ -3170,7 +3170,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "irs_02_002",
@@ -3407,7 +3407,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "A"
         },
         SPECIAL : "",
         PAGE : "fns_05_001",
@@ -3426,7 +3426,7 @@ export const prm =
         ID :"excelFormat",
         VALUE : 
         {
-            DATE:'DATE',DESC:'DESC',AMOUNT:'AMOUNT'
+            DATE:'DATE',DESC:'DESC',AMOUNT:'AMOUNT',OUTPUT_CODE:'OUTPUT_CODE'
         },
         SPECIAL : "",
         PAGE : "fns_05_001",
@@ -3447,6 +3447,7 @@ export const prm =
                     {type:"text",caption:"DATE",field:"DATE",id:"txtPopExcelFormatDate"},
                     {type:"text",caption:"DESC",field:"DESC",id:"txtPopExcelFormatDesc"},
                     {type:"text",caption:"AMOUNT",field:"AMOUNT",id:"txtPopExcelFormatAmount"},
+                    {type:"text",caption:"OUTPUT_CODE",field:"OUTPUT_CODE",id:"txtPopExcelFormatOutputCode"},
                 ]
             }
         }
@@ -3521,7 +3522,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "sip_02_002",
@@ -3542,7 +3543,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "sip_02_001",
@@ -3563,7 +3564,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "irs_02_001",
@@ -3584,7 +3585,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "tkf_02_002",
@@ -3624,7 +3625,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
         },
         SPECIAL : "",
         PAGE : "sip_04_002",

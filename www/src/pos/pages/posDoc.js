@@ -4743,7 +4743,7 @@ export default class posDoc extends React.PureComponent
                                         }
                                         else
                                         {
-                                            this.txtPopLoyalty.value = this.customerPoint.value
+                                            this.txtPopLoyalty.value =  Number(parseFloat(this.totalGrand.value * this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()).round(2)).toString()
                                         }
                                         
                                         this.popLoyalty.show()
@@ -7007,14 +7007,24 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-1">
                             <div className="col-12">
                                 <NdTextBox id="txtPopLoyalty" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
-                                onValueChanged={(e)=>
+                                onValueChanged={async (e)=> 
+
                                 { 
+                                    let pointValue = Number(this.customerPoint.state.value)
+                                    let conversionRate = Number(parseFloat(pointValue / this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()).round(2)).toString()
                                     if(e.value == 0)
                                     {
                                         this.popCustomerPointToEuro.value = 0 
                                         return
                                     }
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0,USERS:this.user.CODE}).getValue()).round(2)).toString()
+                                    if (e.value < pointValue) {
+                                        this.txtPopLoyalty.value = e.value
+                                        this.popCustomerPointToEuro.value = conversionRate
+                                    }
+                                    else {
+                                        this.txtPopLoyalty.value = pointValue
+                                        this.popCustomerPointToEuro.value = conversionRate
+                                    }
                                 }}>     
                                 </NdTextBox> 
                             </div>

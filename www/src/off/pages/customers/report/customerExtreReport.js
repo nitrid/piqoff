@@ -140,6 +140,11 @@ export default class customerBalanceReport extends React.PureComponent
                         "CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  " +
                         "'' AS REF,  " +
                         "0 AS REF_NO,  " +
+                        "'00000000-0000-0000-0000-000000000000' AS DOC_GUID,  " +
+                        "0 AS TYPE, " +
+                        "0 AS DOC_TYPE, " +
+                        "0 AS REBATE, " +
+                        "0 AS PAY_TYPE, " +
                         "'' AS TYPE_NAME,  " +
                         "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,  " +
                         "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  " +
@@ -149,6 +154,11 @@ export default class customerBalanceReport extends React.PureComponent
                         "DOC_DATE, " +
                         "REF, " +
                         "REF_NO, " +
+                        "DOC_GUID, " +
+                        "TYPE, " +
+                        "DOC_TYPE, " +
+                        "REBATE, " +
+                        "PAY_TYPE, " +
                         "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,  " +
                         "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,  " +
                         "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,  " +
@@ -189,6 +199,7 @@ export default class customerBalanceReport extends React.PureComponent
         }
            
     }
+
     render()
     {
         return(
@@ -356,7 +367,50 @@ export default class customerBalanceReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
-                            >                            
+                            onRowDblClick={async(e)=>
+                            {
+                                if(e.data.DOC_GUID != '00000000-0000-0000-0000-000000000000')
+                                {
+                                    if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)    
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_001',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/purchaseInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 1 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_002',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/salesInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 1)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_007',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/rebatePurcInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 1 && e.data.DOC_TYPE == 20 && e.data.REBATE == 1)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_003',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/rebateInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                }
+                               
+                            }}
+                            >
                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                 <ColumnChooser enabled={true} />
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
