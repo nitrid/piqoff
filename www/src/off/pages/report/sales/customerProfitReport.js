@@ -26,7 +26,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
-export default class productProfitReport extends React.PureComponent
+export default class customerProfitReport extends React.PureComponent
 {
     constructor(props)
     {
@@ -93,17 +93,17 @@ export default class productProfitReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-6">
-                            <NdSelectBox simple={true} parent={this} id="cmbMainGrp"
+                            <NdSelectBox simple={true} parent={this} id="cmbCustomerMainGrp"
                             value={''}
                             displayExpr="NAME"                       
                             valueExpr="CODE"
-                            placeholder={this.t("selectMainGrp")}
+                            placeholder={this.t("selectCustomerMainGrp")}
                             showClearButton={true}
                             data={{
                                 source:{
                                     select:{
-                                        query: "SELECT NAME,CODE FROM ITEM_GROUP " +
-                                               "ORDER BY NAME",
+                                        query:  "SELECT NAME,CODE FROM CUSTOMER_GROUP " +
+                                                "ORDER BY NAME",
                                     },
                                     sql: this.core.sql
                                 }
@@ -146,13 +146,14 @@ export default class productProfitReport extends React.PureComponent
                                     <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
                                     <ColumnChooser enabled={true} />
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={true} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} /> : <Paging enabled={true} />}
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                    <Export fileName={this.lang.t("menuOff.slsRpt_01_012")} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={this.lang.t("menuOff.slsRpt_01_013")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="ROW_NO" caption={this.t("grdListe.clmRowNo")}  width={70} visible={true}/>
-                                    <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmItemCode")} width={130} visible={true}/>
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmItemName")} width={300}visible={true}/>
-                                    <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrpName")}width={180} visible={true}/> 
+                                    <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmInputCode")} width={130} visible={true}/>
+                                    <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={300}visible={true}/>
+                                    <Column dataField="CUSTOMER_GROUP_CODE" caption={this.t("grdListe.clmCustomerGroupCode")}width={180} visible={true}/>
+                                    <Column dataField="CUSTOMER_GROUP_NAME" caption={this.t("grdListe.clmCustomerGroupName")}width={180} visible={true}/>
                                     <Column dataField="TOTAL_QUANTITY" caption={this.t("grdListe.clmQuantity")} width={100} visible={true}/>
                                     <Column dataField="AVG_COST_PRICE" caption={this.t("grdListe.clmAvgCostPrice")} width={100} visible={true}
                                     format={{ style: "currency", currency: "EUR", precision: 3}}/>
@@ -191,56 +192,43 @@ export default class productProfitReport extends React.PureComponent
 
     async _btnGetirClick()
     {
-        try {
-            this.setState({ noDataMessage: '' });
-            
-            let tmpQuery = {
-                query: "SELECT " +
-                       "ROW_NUMBER() OVER(ORDER BY MAIN_GRP_NAME, ITEM_NAME) AS ROW_NO, " +
-                       "MAIN_GRP_NAME, " +
-                       "ITEM_NAME, " +
-                       "ITEM_CODE, " +
-                       "SUM(QUANTITY) AS TOTAL_QUANTITY, " +
-                       "ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, " +
-                       "ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, " +
-                       "ROUND(SUM(TOTALHT), 2) AS TOTALHT, " +
-                       "ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, " +
-                       "ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE,  " +
-                       "CASE WHEN SUM(TOTAL_COST) > 0 THEN " +
-                       "ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) " +
-                       "ELSE 0 END AS PROFIT_PERCENT " +
-                       "FROM DOC_ITEMS_DETAIL_VW_01 " +
-                       "WHERE TYPE = 1 AND REBATE= 0 AND " +
-                       "(DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) " +
-                       "AND (MAIN_CODE = @MAIN_CODE OR @MAIN_CODE = '') " +
-                       "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                       "GROUP BY MAIN_GRP_NAME, ITEM_NAME,ITEM_CODE " +
-                       "ORDER BY MAIN_GRP_NAME, ITEM_NAME",
-                param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
-                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
-            };
-            let result = await this.core.sql.execute(tmpQuery);
-            
-            if(result && result.result && result.result.recordset && result.result.recordset.length > 0) {
-                let tmpSource =
+            let tmpSource =
+            {
+                source : 
                 {
-                    source : 
+                    groupBy : this.groupList,
+                    select: 
                     {
-                        select: tmpQuery,
-                        sql : this.core.sql
-                    }
+                        query: "SELECT " +
+                        "ROW_NUMBER() OVER(ORDER BY INPUT_CODE) AS ROW_NO, " +
+                        "CUSTOMER_GROUP_NAME, " +
+                        "CUSTOMER_GROUP_CODE, " +
+                        "INPUT_NAME, " +
+                        "INPUT_CODE, " +
+                        "SUM(QUANTITY) AS TOTAL_QUANTITY, " +
+                        "ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, " +
+                        "ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, " +
+                        "ROUND(SUM(TOTALHT), 2) AS TOTALHT, " +
+                        "ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, " +
+                        "ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, " +
+                        "CASE WHEN SUM(TOTAL_COST) > 0 THEN " +
+                        "ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) " +
+                        "ELSE 0 END AS PROFIT_PERCENT " +
+                        "FROM DOC_ITEMS_DETAIL_VW_01 " +
+                        "WHERE TYPE = 1 AND REBATE= 0 AND " +
+                        "(DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) " +
+                        "AND (CUSTOMER_GROUP_CODE = @MAIN_CODE OR @MAIN_CODE = '')  " +
+                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  " +
+                        "GROUP BY CUSTOMER_GROUP_NAME, CUSTOMER_GROUP_CODE, INPUT_NAME, INPUT_CODE " +
+                        "ORDER BY CUSTOMER_GROUP_NAME, INPUT_NAME",
+                    param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbCustomerMainGrp.value]
+                    },
+                    sql : this.core.sql
                 }
-                await this.grdListe.dataRefresh(tmpSource);
             }
-            else {
-                // Veri bulunamadığında mesajı güncelleyelim
-                this.setState({ noDataMessage: this.lang.t("msgNoData")});
-                console.log("Seçilen kriterlere uygun veri bulunamadı.");
-            }
-        }
-        catch(err) {
-            console.error("Veri yüklenirken bir hata oluştu:", err.message);
-        }
+    
+            await this.grdListe.dataRefresh(tmpSource)
     }
 
     loadState() 

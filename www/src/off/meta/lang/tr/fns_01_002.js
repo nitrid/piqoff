@@ -25,6 +25,7 @@ const fns_01_002 =
         clmDate: "Tarih",
         clmTotal : "Tutar",
         clmInputName :"Kasa/Banka",
+        clmPayTypeName : "Ödeme Tipi",
     },
     popDesign : 
     {

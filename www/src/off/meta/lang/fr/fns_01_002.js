@@ -26,6 +26,7 @@ const fns_01_002 =
         clmDate: "Date",
         clmTotal : "Total" ,
         clmInputName :"Caisse/Banque",
+        clmPayTypeName : "Type de paiement",
     },
     popDesign : 
     {

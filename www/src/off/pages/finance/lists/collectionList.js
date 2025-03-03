@@ -127,10 +127,12 @@ export default class collectionList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 200 ",
+                    query : "SELECT *, " +
+                            "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,(SELECT TOP 1 PAY_TYPE FROM DOC_CUSTOMER_VW_01 WHERE DOC_GUID = DOC_VW_01.GUID))) AND (LANG = '" + localStorage.getItem('lang') + "')) AS PAY_TYPE_NAME " +
+                            "FROM DOC_VW_01 " +
+                            "WHERE ((DOC_VW_01.OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
+                            "((DOC_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
+                            "AND DOC_VW_01.TYPE = 0 AND DOC_VW_01.DOC_TYPE = 200 ",
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -143,6 +145,7 @@ export default class collectionList extends React.PureComponent
 
         let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
         this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
+
     }
     render()
     {
@@ -348,6 +351,7 @@ export default class collectionList extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 
+                                <Column dataField="PAY_TYPE_NAME" caption={this.t("grdColList.clmPayTypeName")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdColList.clmOutputCode")} visible={false}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdColList.clmOutputName")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdColList.clmDate")} visible={true} width={200}/> 
@@ -441,6 +445,7 @@ export default class collectionList extends React.PureComponent
                                                                 REF  AS FACT_REF,
                                                                 REF_NO AS FACT_REF_NO,
                                                                 PAY_TYPE AS FACT_PAY_TYPE,
+                                                                PAY_TYPE_NAME AS FACT_PAY_TYPE_NAME,
                                                                 OUTPUT_CODE AS CUSTOMER_CODE,
                                                                 OUTPUT_NAME AS CUSTOMER_NAME,
                                                                 ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT,
@@ -461,7 +466,7 @@ export default class collectionList extends React.PureComponent
                                                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    console.log(tmpData) 
+                                                    console.log("tmpData",tmpData) 
                                                     App.instance.setState({isExecute:true})
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
