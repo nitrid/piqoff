@@ -978,7 +978,8 @@ export const langTr =
             msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
             msgNotSave : "Kayıt İşlemi Başarısız",
             msgOrderSelected : "Yeni evraka geçmeden yeni sipariş seçilemez",
-            msgOrderNotFound : "Sipariş Bulunamadı."
+            msgOrderNotFound : "Sipariş Bulunamadı.",
+            msgCompQuantityError : "Girdiğiniz Miktar Bekleyen Miktarı Aşamaz !"
         },
         grdList : 
         {
@@ -993,7 +994,9 @@ export const langTr =
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmItemName : "Ürün Adı",
+            clmQuantity : "Miktar"
         },
         popDoc : 
         {

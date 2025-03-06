@@ -92,7 +92,7 @@ export default class salesPairing extends React.PureComponent
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'50%',height:'200px',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -238,6 +238,15 @@ export default class salesPairing extends React.PureComponent
             this.txtPendQuantity.value = this.itemDt[0].PEND_QUANTITY / this.txtFactor.value
             // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
             this.txttotalQuantity.value = this.txtFactor.value * this.txtQuantity.value;
+
+            // COMP_QUANTITY kontrolü
+        if (this.txttotalQuantity.value > this.itemDt[0].PEND_QUANTITY) {
+            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgCompQuantityError")}</div>);
+            document.getElementById("Sound").play(); 
+            await dialog(this.alertContent);
+            this.txtQuantity.value = 0;
+            this.txttotalQuantity.value = 0;
+        }
     
         }
     }
@@ -904,6 +913,7 @@ export default class salesPairing extends React.PureComponent
                                 </div>
                             </div>
                         </PageContent>
+                        {/* VENTE/ENTER PRODUCT SIDE */}
                         <PageContent id={"Entry"} onActive={()=>
                         {
                             this.txtBarcode.focus();
@@ -1075,6 +1085,7 @@ export default class salesPairing extends React.PureComponent
                                 </div>
                             </div>
                         </PageContent>
+                        {/* VENTE/PROCESS SIDE - Traiter les */}
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
@@ -1602,6 +1613,7 @@ export default class salesPairing extends React.PureComponent
                                                 if(e.rowType == 'data' && e.data.PEND_QUANTITY == '0')
                                                 {
                                                     e.rowElement.style.backgroundColor ="green"
+                                                    e.rowElement.style.color = "white"
                                                 }
                                             }}
                                             >

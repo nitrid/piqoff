@@ -977,7 +977,8 @@ export const langFr =
             msgDiscount: "La remise ne peut pas être supérieure au montant !",
             msgNotSave: "L'enregistrement a échoué",
             msgOrderSelected: "Aucune nouvelle commande ne peut être sélectionnée avant de passer au nouveau document",
-            msgOrderNotFound: "Commande non trouvée."
+            msgOrderNotFound: "Commande non trouvée.",
+            msgCompQuantityError: "La quantité saisie est supérieure à la quantité en attente !"
         },
         grdList: 
         {
@@ -992,7 +993,9 @@ export const langFr =
             clmDiscount: "Remise",
             clmDiscountRate: "Remise %",
             clmVat: "TVA",
-            clmTotal: "Montant"
+            clmTotal: "Montant",
+            clmItemName: "Nom du Produit",
+            clmQuantity: "Quantité"
         },
         popDoc: 
         {
