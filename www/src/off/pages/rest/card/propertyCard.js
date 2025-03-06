@@ -28,7 +28,6 @@ export default class PropertyCard extends React.PureComponent
         this.propData = []
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
-        console.log('this.pr@mObj ',this.core)
     }
     async componentDidMount()
     {
