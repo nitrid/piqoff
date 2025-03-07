@@ -64,6 +64,7 @@ const sip_02_003 =
         clmInputName : "CARİ ADI",
         clmInputCode  : "CARİ KODU",
         clmAddress : "ADRES",
+        clmClosed: "Kasa durumu",
         clmTotal : "KDVLİ TOPLAM"
     },
     pg_txtCustomerCode : 

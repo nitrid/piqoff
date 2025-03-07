@@ -100,7 +100,6 @@ export default class itemInfoScreen extends React.PureComponent
             }
             await tmpDt.refresh();     
             resolve(tmpDt)
-            console.log(tmpDt)
         });
     }
     async getItem(pBarcode)
@@ -108,8 +107,6 @@ export default class itemInfoScreen extends React.PureComponent
         if(pBarcode != "")
         {
             let tmpItemsDt = await this.getItemDb(pBarcode)
-            console.log(pBarcode)
-            console.log(tmpItemsDt)
             if(tmpItemsDt.length > 0)
             {
                 this.setState(
