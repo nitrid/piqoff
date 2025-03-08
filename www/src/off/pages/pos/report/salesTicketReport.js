@@ -74,7 +74,7 @@ export default class salesOrdList extends React.PureComponent
                 select : 
                 {
                     query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE "
+                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE DESC "
                 },
                 sql : this.core.sql
             }
@@ -131,11 +131,11 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(REF) AS REF " +
                     " FROM (  "  +
                     " SELECT  "  +
-                    "SALE.POS_GUID AS SALE_POS_GUID, "  +
-                    "PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
+                    " SALE.POS_GUID AS SALE_POS_GUID, "  +
+                    " PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
                     " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
                     " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),103) AS DATE,   "  +
+                    " MAX(SALE.CDATE) AS DATE,   "  +
                     " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
                     " MAX(SALE.DEVICE) AS DEVICE,  "  +
                     " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
@@ -796,7 +796,7 @@ export default class salesOrdList extends React.PureComponent
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
+                                <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150} dataType={"date"} format={"dd/MM/yyyy"}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
                                 <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/>
                                 <Column dataField="REF" caption={this.t("grdSaleTicketReport.clmRef")} visible={true} />  
