@@ -21,7 +21,8 @@ const fns_05_001 =
         clmDate : "Datum",
         clmDesc : "Beschreibung",
         clmAmount : "Betrag",
-        shemaSpeichern : "Schema speichern"
+        shemaSpeichern : "Schema speichern",
+        clmOutputCode : "Kundennummer"
     },
     cmbPayType : 
     {

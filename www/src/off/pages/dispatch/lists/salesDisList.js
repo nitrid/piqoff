@@ -340,6 +340,8 @@ export default class salesDisList extends React.PureComponent
                     docDate : tmpData.result.recordset[0].DOC_DATE,
                     fromTax : tmpData.result.recordset[0].TAX_NO,
                     toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                    fromType: tmpData.result.recordset[0].DOC_TYPE,
+                    fromRebate: tmpData.result.recordset[0].REBATE,
                     json : JSON.stringify(tmpData.result.recordset),
                     pdf : "data:application/pdf;base64," + pResult.split('|')[1]
                 },
@@ -394,6 +396,24 @@ export default class salesDisList extends React.PureComponent
             {
                 tmpLines.push(tmpData.result.recordset[x])
             }
+            this.core.socket.emit('piqXInvoiceInsert',
+            {
+                fromUser : tmpData.result.recordset[0].LUSER,
+                toUser : '',
+                docGuid : tmpData.result.recordset[0].DOC_GUID,
+                docDate : tmpData.result.recordset[0].DOC_DATE,
+                fromTax : tmpData.result.recordset[0].TAX_NO,
+                toTax : tmpData.result.recordset[0].CUSTOMER_TAX_NO,
+                fromType: tmpData.result.recordset[0].DOC_TYPE,
+                fromRebate: tmpData.result.recordset[0].REBATE,
+                json : JSON.stringify(tmpData.result.recordset),
+                pdf : ""
+            },
+            (pData) =>
+            {
+                console.log(pData)
+            })
+                
         }
        
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
