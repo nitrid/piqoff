@@ -518,14 +518,17 @@ export default class Sale extends React.PureComponent
     }
     async updateLine()
     {
+        // LINE_NO'ya göre sırala
+        this.docLines.sort((a, b) => a.LINE_NO - b.LINE_NO);
+
+        // Sıralı listeyi güncelle
         for (let i = 0; i < this.docLines.length; i++) 
         {
-            let tmpDocOrders = this.docLines[i]; 
-            tmpDocOrders.LINE_NO = i + 1    
-            
-            this.docLines[i] = tmpDocOrders
+            let tmpDocOrders = this.docLines[i];
+            tmpDocOrders.LINE_NO = i + 1;
+            this.docLines[i] = tmpDocOrders;
         }
-    }  
+    }
     async checkRow()
     {
         for (let i = 0; i < this.docLines.length; i++) 
