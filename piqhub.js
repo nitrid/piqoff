@@ -438,7 +438,19 @@ export default class piqhubApi
         {
             try 
             {
-                const { filePath, targetPath, content } = data;
+                const { targetPath, content, isFolder } = data;
+                
+                if (!targetPath) 
+                {
+                    callback({ success: false, error: 'Hedef yol belirtilmemiş' });
+                    return;
+                }
+                
+                if (!content) 
+                {
+                    callback({ success: false, error: 'Dosya içeriği belirtilmemiş' });
+                    return;
+                }
                 
                 let fullTargetPath;
                 if (targetPath.startsWith('/')) 
@@ -455,54 +467,49 @@ export default class piqhubApi
                     callback({ success: false, error: 'Geçersiz hedef yolu' });
                     return;
                 }
-
-                const targetDir = path.dirname(fullTargetPath);
-                await fs.promises.mkdir(targetDir, { recursive: true });
-
-                if (filePath) 
+                
+                try 
                 {
-                    if (Buffer.isBuffer(filePath)) 
-                    {
-                        await fs.promises.writeFile(fullTargetPath, filePath);
-                    } 
-                    else 
-                    {
-                        await fs.promises.copyFile(filePath, fullTargetPath);
-                    }
+                    const targetDir = path.dirname(fullTargetPath);
+                    await fs.promises.mkdir(targetDir, { recursive: true });
+                    
+                    const buffer = Buffer.from(content, 'base64');
+                    await fs.promises.writeFile(fullTargetPath, buffer);
+                    
+                    callback({ success: true });
                 } 
-                else 
+                catch (error) 
                 {
-                    callback({ success: false, error: 'Dosya içeriği veya kaynak dosya belirtilmemiş' });
+                    console.error(`Dosya yazma hatası: ${error.message}`);
+                    callback({ success: false, error: `Dosya yazma hatası: ${error.message}` });
+                }
+            } 
+            catch (error) 
+            {
+                console.error(`Dosya yükleme hatası: ${error.message}`);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-create-folder', async (data, callback) => 
+        {
+            try 
+            {
+                const { path: relativePath } = data;
+                
+                const folderPath = path.join(this.fileRoot, relativePath);
+                
+                if (!folderPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Geçersiz klasör yolu' });
                     return;
                 }
+                
+                await fs.promises.mkdir(folderPath, { recursive: true });
                 
                 callback({ success: true });
             } 
             catch (error) 
             {
-                callback({ success: false, error: error.message });
-            }
-        });
-        this.socketHub.on('piqhub-create-folder', async (data, callback) => {
-            try {
-                const { path: relativePath } = data;
-                
-                // Tam yolu oluştur - fileRoot ile birleştir
-                const folderPath = path.join(this.fileRoot, relativePath);
-                
-                // Path güvenlik kontrolü
-                if (!folderPath.startsWith(this.fileRoot)) {
-                    callback({ success: false, error: 'Geçersiz klasör yolu' });
-                    return;
-                }
-                
-                console.log('Klasör oluşturuluyor:', folderPath);
-                
-                // Klasörü oluştur (recursive: true ile ara klasörler de oluşturulur)
-                await fs.promises.mkdir(folderPath, { recursive: true });
-                
-                callback({ success: true });
-            } catch (error) {
                 console.error('Klasör oluşturma hatası:', error);
                 callback({ success: false, error: error.message });
             }
@@ -514,31 +521,23 @@ export default class piqhubApi
                 const sourcePath = path.join(this.fileRoot, data.sourcePath);
                 const destinationPath = path.join(this.fileRoot, data.destinationPath, path.basename(sourcePath));
                 
-                // Path validation
                 if (!sourcePath.startsWith(this.fileRoot) || !destinationPath.startsWith(this.fileRoot)) 
                 {
                     callback({ success: false, error: 'Access denied' });
                     return;
                 }
 
-                console.log('Taşıma işlemi: ', sourcePath, '->', destinationPath);
-
-                // Hedef klasör yoksa oluştur
                 await fs.promises.mkdir(path.dirname(destinationPath), { recursive: true });
                 
-                // Dosya mı klasör mü olduğunu kontrol et
                 const stat = await fs.promises.stat(sourcePath);
                 
                 if (stat.isDirectory()) 
                 {
-                    // 1. Klasörü kopyala
                     await copyDir(sourcePath, destinationPath);
-                    // 2. Kaynak klasörü sil
                     await fs.promises.rm(sourcePath, { recursive: true, force: true });
                 } 
                 else 
                 {
-                    // Dosya taşıma işlemi - rename kullan
                     await fs.promises.rename(sourcePath, destinationPath);
                 }
                 
@@ -591,48 +590,49 @@ export default class piqhubApi
                 const dirName = path.dirname(oldPath);
                 const newPath = path.join(dirName, data.newName);
                 
-                // Path validation
                 if (!oldPath.startsWith(this.fileRoot) || !newPath.startsWith(this.fileRoot)) 
                 {
                     callback({ success: false, error: 'Access denied' });
                     return;
                 }
                 
-                // İlk olarak klasör mü dosya mı kontrolü yap
                 const stats = await fs.promises.stat(oldPath);
                 const isDirectory = stats.isDirectory();
                 
-                if (isDirectory) {
-                    // Klasör için alternatif yeniden adlandırma yöntemi
-                    try {
-                        // Önce yeni klasörü oluştur
+                if (isDirectory) 
+                {
+                    try 
+                    {
                         await fs.promises.mkdir(newPath, { recursive: true });
                         
-                        // Eski klasördeki dosyaları kopyala
                         const entries = await fs.promises.readdir(oldPath, { withFileTypes: true });
                         
-                        for (const entry of entries) {
+                        for (const entry of entries) 
+                        {
                             const srcPath = path.join(oldPath, entry.name);
                             const destPath = path.join(newPath, entry.name);
                             
-                            if (entry.isDirectory()) {
-                                // Özyinelemeli olarak alt klasörleri kopyala
+                            if (entry.isDirectory()) 
+                            {
                                 await copyDir(srcPath, destPath);
-                            } else {
-                                // Dosyaları kopyala
+                            } 
+                            else 
+                            {
                                 await fs.promises.copyFile(srcPath, destPath);
                             }
                         }
                         
-                        // Eski klasörü sil
                         await fs.promises.rm(oldPath, { recursive: true, force: true });
                         
-                    } catch (error) {
+                    } 
+                    catch (error) 
+                    {
                         console.error('Klasör kopyalama/silme hatası:', error);
                         throw error;
                     }
-                } else {
-                    // Dosya için normal yeniden adlandırma
+                } 
+                else 
+                {
                     await fs.promises.rename(oldPath, newPath);
                 }
                 
@@ -650,7 +650,6 @@ export default class piqhubApi
             {
                 const itemPath = path.join(this.fileRoot, data.path);
                 
-                // Path validation
                 if (!itemPath.startsWith(this.fileRoot)) 
                 {
                     callback({ success: false, error: 'Access denied' });
@@ -661,12 +660,10 @@ export default class piqhubApi
                 
                 if (stat.isDirectory()) 
                 {
-                    // Klasör için fs.rm kullan (recursive: true ile)
                     await fs.promises.rm(itemPath, { recursive: true, force: true });
                 } 
                 else 
                 {
-                    // Dosya silme
                     await fs.promises.unlink(itemPath);
                 }
                 
