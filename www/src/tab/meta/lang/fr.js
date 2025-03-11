@@ -50,6 +50,20 @@ export const langFr =
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
         popFactNonSolde : "Facture non solde",  
+        msgPriceZeroUnit : 
+        {
+            title : "Attention",
+            msg : "Le prix ne peut pas être 0, veuillez vérifier",
+            btn01 : "Continuer",
+            btn02 : "Annuler"
+        },
+        msgInvalidPrice : "Le prix ne peut pas être 0, veuillez vérifier",
+        msgItemPrice : {
+            title : "Attention",
+            msg : "Le prix ne peut pas être 0, voulez-vous continuer?",
+            btn01 : "Continuer",
+            btn02 : "Annuler"
+        },
         popCart:
         {
             txtCustomer: "Client",
