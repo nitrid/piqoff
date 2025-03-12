@@ -25,6 +25,7 @@ const fns_01_002 =
         clmDate: "Datum",
         clmTotal : "Betrag",
         clmInputName :"Kasse/Bank",
+        clmPayTypeName : "Zahlungsart",
     },
 }
 export default fns_01_002

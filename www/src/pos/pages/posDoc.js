@@ -1062,8 +1062,14 @@ export default class posDoc extends React.PureComponent
                 //FİYAT GÖR
                 if(this.btnInfo.lock)
                 {
-                    //PROMOSYON FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
                     let tmpInfoPrice = tmpPrice
+                    //KOLİ FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
+                    if(tmpItemsDt[0].UNIT_TYPE == 2)
+                    {
+                        tmpInfoPrice = tmpPrice * tmpItemsDt[0].UNIT_FACTOR
+                        tmpInfoPrice = tmpInfoPrice.toFixed(2)
+                    }
+                    //PROMOSYON FIYATINI GETİRMEK İÇİN YAPILDI ********************************************************
                     let tmpPromoCond = this.promoObj.cond.dt().where({ITEM_GUID : tmpItemsDt[0].GUID})
                     if(tmpPromoCond.length > 0)
                     {
@@ -2923,6 +2929,83 @@ export default class posDoc extends React.PureComponent
             await this.core.sql.execute(tmpQuery)
             resolve()
         });
+    }
+    async ticketCheckRetour(pGuid)
+    {
+        if(pGuid != "")
+        {
+            let tmpDt = new datatable();
+            tmpDt.selectCmd = 
+            {
+                query : "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID= @GUID",
+                param : ['GUID:string|50'], 
+                value : [pGuid] 
+            }
+            await tmpDt.refresh(); 
+            if(tmpDt.length > 0)
+            {
+                for (let i = 0; i < tmpDt.length; i++) 
+                {
+                    let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
+                    
+                    this.posObj.posSale.addEmpty()
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].NO = this.posObj.posSale.dt().length + 1
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).utcOffset(0, true)
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = this.posObj.dt()[0].DEPOT_GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = tmpMaxLine + 1
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = tmpDt[i].ITEM_GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE =  tmpDt[i].ITEM_CODE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = tmpDt[i].ITEM_NAME
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_SNAME = tmpDt[i].ITEM_SNAME
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].MIN_PRICE = tmpDt[i].MIN_PRICE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].MAX_PRICE = tmpDt[i].MAX_PRICE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].COST_PRICE = tmpDt[i].COST_PRICE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TICKET_REST = tmpDt[i].TICKET_REST
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].WEIGHING = tmpDt[i].WEIGHING
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = tmpDt[i].INPUT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = tmpDt[i].BARCODE_GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = tmpDt[i].BARCODE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = tmpDt[i].UNIT_GUID
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = tmpDt[i].UNIT_NAME
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_SHORT = tmpDt[i].UNIT_SHORT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = tmpDt[i].UNIT_FACTOR,
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NO = tmpDt[i].LIST_NO
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_NAME = tmpDt[i].LIST_NAME
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LIST_TAG = tmpDt[i].LIST_TAG
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = tmpDt[i].QUANTITY
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = tmpDt[i].PRICE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = tmpDt[i].FAMOUNT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpDt[i].AMOUNT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = typeof tmpDt[i].DISCOUNT == 'undefined' ? 0 : tmpDt[i].DISCOUNT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpDt[i].VAT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_RATE = tmpDt[i].VAT
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_TYPE = tmpDt[i].VAT_TYPE
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpDt[i].TOTAL
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PROMO_TYPE = (typeof tmpDt[i].PROMO_TYPE != 'undefined' ? tmpDt[i].PROMO_TYPE : (tmpDt[i].INPUT == tmpDt[i].UNIQ_CODE) ? 1 : 0)
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ORDER_GUID = typeof tmpDt[i].POS_SALE_ORDER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : tmpDt[i].POS_SALE_ORDER
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SCALE_MANUEL = tmpDt[i].SCALE_MANUEL
+                    this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
+                    
+                    await this.calcGrandTotal();
+                }
+                this.popLastSaleList.hide()
+            }
+        }        
     }
     async ticketCheck(pTicket)
     {
@@ -7128,8 +7211,18 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 p-1">
                                     
                                     </div>
+                                    {/* btnLastSaleRetour */}
                                     <div className="col-2 p-1">
-                                    
+                                        <NbButton id={"btnLastSaleRetour"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            let tmpLastPos = new datatable();
+                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                            console.log(tmpLastPos[0].GUID)
+                                            this.ticketCheckRetour(tmpLastPos[0].GUID)
+                                        }}>
+                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
+                                        </NbButton>
                                     </div>
                                     {/* btnLastSaleSendMail */}
                                     <div className="col-2 p-1">

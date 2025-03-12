@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
-import { payPlanCls,payPlanMatchingCls } from '../../../../core/cls/PayPlanCls.js';
+import { payPlanCls,payPlanMatchingCls } from '../../../../core/cls/payPlan.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';

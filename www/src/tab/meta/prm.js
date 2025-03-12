@@ -168,7 +168,7 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Depo Seçme Kısıtlaması"
+            CAPTION : "Fiyat Liste  Kısıtlaması"
         }
     },
         //Sayfalama Grid Liste Görünümünü Kontrol Etme

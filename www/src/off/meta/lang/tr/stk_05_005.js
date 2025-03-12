@@ -1,5 +1,5 @@
 // "Ürün Satış Raporu"
-const stk_05_004 =
+const stk_05_005 =
 {
     txtRef : "Ürün",
     cmbCustomer :"Müşteri",
@@ -50,4 +50,4 @@ const stk_05_004 =
     },
 }
 
-export default stk_05_004
+export default stk_05_005

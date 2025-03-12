@@ -392,12 +392,29 @@ export default class PropertyCard extends React.PureComponent
                                             height={'600'} 
                                             width={'100%'}
                                             dbApply={false}
-                                            sorting={{mode:'none'}}
-                                            selection={{mode:"single"}}
                                             loadPanel={{enabled:true}}
+                                            
                                             >
                                                 <Scrolling mode="standart" />
-                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.ITEM_NAME")} width={500}/>
+                                                <Column dataField="ITEM_NAME" 
+                                                        caption={this.t("grdList.ITEM_NAME")} 
+                                                        width={500} 
+                                                        defaultSortOrder="asc"
+                                                        calculateSortValue={(data) => {
+                                                            let text = data.ITEM_NAME || '';
+                                                            // BASTAKI NOKTA VE BOSLUKLAR ICIN
+                                                            text = text.replace(/^[.\s]+/, '');
+                                                            
+                                                            // SAYI ILE BASLIYORSA
+                                                            if(/^\d+/.test(text)) {
+                                                                let number = text.match(/^\d+/)[0];
+                                                                let paddedNumber = number.padStart(10, '0');
+                                                                return 'zzz' + paddedNumber + text.substring(number.length);
+                                                            }
+                                                            
+                                                            return text.toUpperCase(); 
+                                                        }}
+                                                />
                                             </NdGrid>
                                         </Item>
                                         <Item location="after">

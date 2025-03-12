@@ -17,7 +17,7 @@ import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class customerBalanceReport extends React.PureComponent
+export default class customerExtreReport extends React.PureComponent
 {
     constructor(props)
     {

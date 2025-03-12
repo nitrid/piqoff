@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
-import { payPlanCls } from '../../../../core/cls/PayPlanCls.js';
+import { payPlanCls } from '../../../../core/cls/payPlan.js';
 
 import moment from 'moment';
 
@@ -117,6 +117,7 @@ export default class payPlan extends React.PureComponent
         {
             this.payPlanObj.dt()[i].DOC_DATE = this.dtDocDate.value
             this.payPlanObj.dt()[i].REF_NO = this.txtRefno.value
+            this.payPlanObj.dt()[i].REF = this.txtRef.value
         }
     }
     async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
@@ -148,7 +149,7 @@ export default class payPlan extends React.PureComponent
         {
             if(pRef !== '' && pRefNo !== '')
             {
-                let tmpData = await new payPlanCls().load({REF:pRef,REF_NO:pRefNo});
+                let tmpData = await new payPlan().load({REF:pRef,REF_NO:pRefNo});
 
                 if(tmpData.length > 0)
                 {
@@ -478,13 +479,13 @@ export default class payPlan extends React.PureComponent
                                         
                                     }
                                     >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} defaultSortOrder="asc" />
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmCustomerName")} width={120} defaultSortOrder="asc" />
-                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmCustomerCode")} width={120} defaultSortOrder="asc" />
-                                        <Column dataField="PAY_PLAN" caption={this.t("pg_Docs.clmInstallmentNo")} width={150} defaultSortOrder="asc" />
+                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} />
+                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmCustomerName")} width={120} />
+                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmCustomerCode")} width={120} />
+                                        <Column dataField="PAY_PLAN" caption={this.t("pg_Docs.clmInstallmentNo")} width={150} />
                                         <Column dataField="DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={200}  dataType="datetime" format={"dd/MM/yyyy"} defaultSortOrder="asc" />
-                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={100} defaultSortOrder="asc" />
+                                        <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={100} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* dtDocDate */}
@@ -737,7 +738,7 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     this.installmentTotal.value = e.data.AMOUNT
                                                     this.tmpFacGuid = e.data.GUID
-                                                    this.tmpFacRef = e.data.REF
+                                                    this.tmpFacRef = e.data.INPUT_CODE
                                                     this.txtRefno.value = e.data.REF_NO
                                                     this.tmpVatTotal = e.data.VAT
                                                     this.tmpCustomerGuid = e.data.INPUT

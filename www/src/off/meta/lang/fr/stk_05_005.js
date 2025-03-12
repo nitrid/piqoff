@@ -1,51 +1,52 @@
-// "Ürün Satış Raporu"
+// "Stok Hareket Raporu"
 const stk_05_005 =
 {
-    txtRef : "Produit",    
-    cmbCustomer :"Client",    
-    btnGet :"Recherche",    
-    dtFirst : "Date Début",    
-    dtLast : "Date Fin",    
-    txtCustomerCode : "Client",    
-    cmbDevice :"Appareil",    
-    txtTicketno : "I.D Ticket",    
-    numFirstTicketAmount : "Unité Principale ",    
-    numLastTicketAmount : "Contenu Principal ",    
-    cmbUser :"Utilisateur",    
-    txtItem :"Code Produit",    
-    ckhDoublePay : "Paiement Multiple",    
-    cmbType :"Type de Description",    
-    dtDate : "Date",    
-    txtTotal : "Vente Totale",    
-    grdItemSaleReport: 
+    txtRef : "Produit",
+    cmbCustomer :"Client",
+    btnGet :"Rechercher",
+    dtFirst : "Première Date",
+    dtLast : "Dernière Date",
+    txtCustomerCode : "Code Client",
+    cmbDevice :"Appareil",
+    txtTicketno : "ID Ticket",
+    numFirstTicketAmount : "Unité Principale",
+    numLastTicketAmount : "Contenu Principal ",
+    cmbUser :"Utilisateur",
+    txtItem :"Code Produit",
+    ckhDoublePay : "Paiement Multiple",
+    cmbType :"Type de Description",
+    dtDate : "Date",
+    txtTotal : "Total des Ventes",
+    grdItemMoveReport: 
     {
         clmLuser: "Utilisateur",
         clmLdate: "Date",
-        clmTypeName: "Type de document",
+        clmTypeName: "Type de Document",
         clmRef: "Série",
         clmRefNo : "Numéro",
-        clmDocDate : "Date du document",
-        clmItemName : "Nom du produit",
+        clmDocDate : "Date du Document",
+        clmItemName : "Nom du Produit",
         clmInputName : "Entrée",
         clmOutputName : "Sortie",
         clmQuantity : "Quantité",
+        clmDepoQuantity: "Quantité en Stock",
         clmPrice : "Prix",
-        clmTotalHt : "Total HT",
+        clmTotalHt : "Montant HT",
     },
     pg_txtRef:
     {
-        title: "Choix Produit",   
-        clmCode: "Code",   
-        clmName: "nom",    
-        clmBarcode: "code-barres", 
-        clmStatus : "Statut" 
+        title: "Sélection de Produit",
+        clmCode: "CODE",
+        clmName: "NOM", 
+        clmBarcode: "CODE-BARRES", 
+        clmStatus : "STATUT"
     },
-    cancel : "Abandonner", 
+    cancel : "Annuler",
     msgItemSelect:
     {
-        title: "Attention",   
-        btn01: "OK",   
-        msg: "Veuillez Sélectionner le Produit !"   
+        title: "Attention",
+        btn01: "OK",
+        msg: "Veuillez sélectionner un produit !"
     },
 }
 export default stk_05_005

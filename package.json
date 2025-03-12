@@ -1,7 +1,7 @@
 {
     "type": "module",
     "name": "piqsoft",
-    "version": "1.0.17f",
+    "version": "1.0.17g",
     "dependencies": {
         "adm-zip": "^0.5.10",
         "axios": "^1.7.3",

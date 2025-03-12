@@ -610,6 +610,7 @@ export default class purchaseDispatch extends DocBase
         {
             App.instance.setState({isExecute:true})
     
+            console.log(1)
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
     
@@ -617,6 +618,8 @@ export default class purchaseDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            console.log(2)
+
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             if(pData.ITEM_TYPE == 0)
             {
@@ -635,6 +638,8 @@ export default class purchaseDispatch extends DocBase
                         tmpMergDt[0].VAT_RATE = 0
                     }
                     
+            console.log(3)
+
                     tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                     tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                     tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -644,7 +649,10 @@ export default class purchaseDispatch extends DocBase
                     //*****************************************/
                     App.instance.setState({isExecute:false})
                     resolve()
+                    console.log(4)
+
                     return
+
                 }
             }
             //******************************************************************************************************************/
@@ -672,7 +680,11 @@ export default class purchaseDispatch extends DocBase
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
+            console.log(5)
+
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            console.log(6)
+
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -683,6 +695,8 @@ export default class purchaseDispatch extends DocBase
     
             if(this.customerControl == true)
             {
+            console.log(7)
+
                 let tmpCheckQuery = 
                 {
                     query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -690,6 +704,7 @@ export default class purchaseDispatch extends DocBase
                     value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
                 }
                 let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            console.log(8)
                 if(tmpCheckData.result.recordset.length == 0)
                 {   
                     let tmpCustomerBtn = ''
@@ -741,6 +756,8 @@ export default class purchaseDispatch extends DocBase
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
             
+            console.log(9)
+
             let tmpQuery = 
             {
                 query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
@@ -748,6 +765,8 @@ export default class purchaseDispatch extends DocBase
                 value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(10)
+
             if(typeof pPrice == 'undefined')
             {
                 if(tmpData.result.recordset.length > 0)
@@ -803,8 +822,11 @@ export default class purchaseDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
     
+            console.log(11)
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
+            console.log(12)
+
             //*****************************************/
             App.instance.setState({isExecute:false})
             resolve()

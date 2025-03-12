@@ -64,6 +64,7 @@ const sip_02_003 =
         clmInputName : "Nom Client",
         clmInputCode  : "Code Client",
         clmAddress : "Adresse",
+        clmClosed: "État des Caisse",
         clmTotal : "Total TTC"
     },
     pg_txtCustomerCode : 

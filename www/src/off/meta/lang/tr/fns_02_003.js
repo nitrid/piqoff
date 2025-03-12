@@ -69,7 +69,8 @@ const fns_02_003 =
         clmInstallmentNo : "TAKSİT NO",
         clmInstallmentDate : "TAKSİT TARİHİ",
         clmAmount : "TAKSİT TUTAR",
-        clmTotal : "TOPLAM TUTAR"
+        clmTotal : "TOPLAM TUTAR",
+        clmVat : "TAKSİT KDV"
     },
     grdPopInstallment : 
     {
