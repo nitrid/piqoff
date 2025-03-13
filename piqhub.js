@@ -20,7 +20,12 @@ export default class piqhubApi
         this.root_path = '';
         if(typeof process.env.APP_DIR_PATH != 'undefined')
         {
-            this.root_path = process.env.APP_DIR_PATH
+            this.root_path = process.env.APP_DIR_PATH;
+            this.fileRoot = process.env.APP_DIR_PATH;
+        }
+        else
+        {
+            this.fileRoot = path.join(__dirname);
         }
 
         this.macId = this.getStableMacId();
@@ -370,6 +375,436 @@ export default class piqhubApi
         {
             this.restartService();
         });
+
+        this.socketHub.on('piqhub-get-files', async (data, callback) => 
+        {
+            try 
+            {
+                // Path'i düzgün şekilde işle
+                let pathStr = '/';
+                if (data.path) 
+                {
+                    pathStr = typeof data.path === 'object' ? data.path.name || data.path.key || '/' : data.path;
+                }
+
+                const targetPath = path.join(this.fileRoot, pathStr);
+
+                // Hedef klasör files klasörü dışına çıkıyorsa engelle
+                if (!targetPath.startsWith(this.fileRoot)) 
+                {
+                    callback({success:false,error:'Access denied'});
+                    return;
+                }
+
+                const files = await fs.promises.readdir(targetPath);
+                const fileStats = [];
+
+                for(const file of files) 
+                {
+                    try 
+                    {
+                        if(file.startsWith('.')) 
+                        {
+                            continue;
+                        }
+
+                        const filePath = path.join(targetPath, file);
+                        const stat = await fs.promises.stat(filePath);
+                        
+                        fileStats.push(
+                        {
+                            name: file,
+                            isDirectory: stat.isDirectory(),
+                            size: stat.size,
+                            dateModified: stat.mtime,
+                            hasSubDirectories: stat.isDirectory()
+                        });
+                    }
+                    catch(error)
+                    {
+                        console.log(`Skipping file ${file} due to permission error`);
+                        continue;
+                    }
+                }
+                callback({success:true,files:fileStats});
+            } 
+            catch (error) 
+            {
+                console.error('Get files error:', error);
+                callback({success:false,error:error.message});
+            }
+        });
+        this.socketHub.on('piqhub-upload-file', async (data, callback) => 
+        {
+            try 
+            {
+                const { targetPath, content, isFolder } = data;
+                
+                if (!targetPath) 
+                {
+                    callback({ success: false, error: 'Hedef yol belirtilmemiş' });
+                    return;
+                }
+                
+                if (!content) 
+                {
+                    callback({ success: false, error: 'Dosya içeriği belirtilmemiş' });
+                    return;
+                }
+                
+                let fullTargetPath;
+                if (targetPath.startsWith('/')) 
+                {
+                    fullTargetPath = path.join(this.fileRoot, targetPath.substring(1));
+                } 
+                else 
+                {
+                    fullTargetPath = path.join(this.fileRoot, targetPath);
+                }
+
+                if (!fullTargetPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Geçersiz hedef yolu' });
+                    return;
+                }
+                
+                try 
+                {
+                    const targetDir = path.dirname(fullTargetPath);
+                    await fs.promises.mkdir(targetDir, { recursive: true });
+                    
+                    const buffer = Buffer.from(content, 'base64');
+                    await fs.promises.writeFile(fullTargetPath, buffer);
+                    
+                    callback({ success: true });
+                } 
+                catch (error) 
+                {
+                    console.error(`Dosya yazma hatası: ${error.message}`);
+                    callback({ success: false, error: `Dosya yazma hatası: ${error.message}` });
+                }
+            } 
+            catch (error) 
+            {
+                console.error(`Dosya yükleme hatası: ${error.message}`);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-create-folder', async (data, callback) => 
+        {
+            try 
+            {
+                const { path: relativePath } = data;
+                
+                const folderPath = path.join(this.fileRoot, relativePath);
+                
+                if (!folderPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Geçersiz klasör yolu' });
+                    return;
+                }
+                
+                await fs.promises.mkdir(folderPath, { recursive: true });
+                
+                callback({ success: true });
+            } 
+            catch (error) 
+            {
+                console.error('Klasör oluşturma hatası:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-move-item', async (data, callback) => 
+        {
+            try 
+            {
+                const sourcePath = path.join(this.fileRoot, data.sourcePath);
+                const destinationPath = path.join(this.fileRoot, data.destinationPath, path.basename(sourcePath));
+                
+                if (!sourcePath.startsWith(this.fileRoot) || !destinationPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Access denied' });
+                    return;
+                }
+
+                await fs.promises.mkdir(path.dirname(destinationPath), { recursive: true });
+                
+                const stat = await fs.promises.stat(sourcePath);
+                
+                if (stat.isDirectory()) 
+                {
+                    await copyDir(sourcePath, destinationPath);
+                    await fs.promises.rm(sourcePath, { recursive: true, force: true });
+                } 
+                else 
+                {
+                    await fs.promises.rename(sourcePath, destinationPath);
+                }
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Move item error:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-copy-item', async (data, callback) => 
+        {
+            try 
+            {
+                const sourcePath = path.join(this.fileRoot, data.sourcePath);
+                const destinationPath = path.join(this.fileRoot, data.destinationPath, path.basename(sourcePath));
+                
+                if (!sourcePath.startsWith(this.fileRoot) || !destinationPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Access denied' });
+                    return;
+                }
+
+                await fs.promises.mkdir(path.dirname(destinationPath), { recursive: true });
+                const stat = await fs.promises.stat(sourcePath);
+                
+                if (stat.isDirectory()) 
+                {
+                    await copyDir(sourcePath, destinationPath);
+                } 
+                else 
+                {
+                    await fs.promises.copyFile(sourcePath, destinationPath);
+                }
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Copy item error:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-rename-item', async (data, callback) => 
+        {
+            try 
+            {
+                const oldPath = path.join(this.fileRoot, data.oldPath);
+                const dirName = path.dirname(oldPath);
+                const newPath = path.join(dirName, data.newName);
+                
+                if (!oldPath.startsWith(this.fileRoot) || !newPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Access denied' });
+                    return;
+                }
+                
+                const stats = await fs.promises.stat(oldPath);
+                const isDirectory = stats.isDirectory();
+                
+                if (isDirectory) 
+                {
+                    try 
+                    {
+                        await fs.promises.mkdir(newPath, { recursive: true });
+                        
+                        const entries = await fs.promises.readdir(oldPath, { withFileTypes: true });
+                        
+                        for (const entry of entries) 
+                        {
+                            const srcPath = path.join(oldPath, entry.name);
+                            const destPath = path.join(newPath, entry.name);
+                            
+                            if (entry.isDirectory()) 
+                            {
+                                await copyDir(srcPath, destPath);
+                            } 
+                            else 
+                            {
+                                await fs.promises.copyFile(srcPath, destPath);
+                            }
+                        }
+                        
+                        await fs.promises.rm(oldPath, { recursive: true, force: true });
+                        
+                    } 
+                    catch (error) 
+                    {
+                        console.error('Klasör kopyalama/silme hatası:', error);
+                        throw error;
+                    }
+                } 
+                else 
+                {
+                    await fs.promises.rename(oldPath, newPath);
+                }
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Rename item error:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-remove-item', async (data, callback) => 
+        {
+            try 
+            {
+                const itemPath = path.join(this.fileRoot, data.path);
+                
+                if (!itemPath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Access denied' });
+                    return;
+                }
+
+                const stat = await fs.promises.stat(itemPath);
+                
+                if (stat.isDirectory()) 
+                {
+                    await fs.promises.rm(itemPath, { recursive: true, force: true });
+                } 
+                else 
+                {
+                    await fs.promises.unlink(itemPath);
+                }
+                
+                callback({ success: true });
+            }
+            catch (error) 
+            {
+                console.error('Remove item error:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-get-file-content', async (data, callback) => 
+        {
+            try 
+            {
+                const { path: filePath } = data;
+                
+                if (!filePath || !filePath.startsWith(this.fileRoot)) 
+                {
+                    callback({ success: false, error: 'Geçersiz dosya yolu' });
+                    return;
+                }
+                
+                try 
+                {
+                    await fs.promises.access(filePath, fs.constants.R_OK);
+                }
+                catch (error) 
+                {
+                    callback({ success: false, error: 'Dosya bulunamadı veya okunamıyor' });
+                    return;
+                }
+                
+                try 
+                {
+                    const buffer = await fs.promises.readFile(filePath);
+                    const base64Content = buffer.toString('base64');
+                    
+                    callback({ success: true, content: base64Content });
+                } 
+                catch (error) 
+                {
+                    console.error('Dosya içeriği okuma hatası:', error);
+                    callback({ success: false, error: error.message });
+                }
+            } 
+            catch (error) 
+            {
+                console.error('Dosya işleme hatası:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        this.socketHub.on('piqhub-prepare-download', async (data, callback) => 
+        {
+            try 
+            {
+                const { paths } = data;
+                
+                if (!Array.isArray(paths) || paths.length === 0) 
+                {
+                    callback({ success: false, error: 'Geçersiz dosya yolları' });
+                    return;
+                }
+                
+                const files = [];
+                const fileRoot = this.fileRoot;
+                
+                for (const itemPath of paths) 
+                {
+                    try 
+                    {
+                        await collectFilePaths(itemPath, files, '', fileRoot);
+                    } 
+                    catch (error) 
+                    {
+                        console.error(`Dosya toplama hatası: ${itemPath}`, error);
+                    }
+                }
+                
+                callback({ success: true, files });
+            } 
+            catch (error) 
+            {
+                console.error('Dosya hazırlama hatası:', error);
+                callback({ success: false, error: error.message });
+            }
+        });
+        
+        async function collectFilePaths(itemPath, files, baseDir = '', fileRoot) 
+        {
+            try 
+            {
+                const normalizedPath = itemPath.startsWith('/') ? itemPath.slice(1) : itemPath;
+                const fullPath = path.join(fileRoot, normalizedPath);
+                
+                const stats = await fs.promises.stat(fullPath);
+                
+                if (stats.isDirectory()) 
+                {
+                    const dirName = baseDir ? path.join(baseDir, path.basename(normalizedPath)) : path.basename(normalizedPath);
+                    
+                    files.push({ path: fullPath,relativePath: dirName,isDirectory: true,size: 0 });
+                    
+                    const items = await fs.promises.readdir(fullPath);
+                    
+                    for (const item of items) 
+                    {
+                        await collectFilePaths(path.join(normalizedPath, item), files, dirName, fileRoot);
+                    }
+                } 
+                else 
+                {
+                    files.push({ path: fullPath,relativePath: baseDir ? path.join(baseDir, path.basename(normalizedPath)) : path.basename(normalizedPath),isDirectory: false,size: stats.size });
+                }
+            } 
+            catch (error) 
+            {
+                console.error(`Dosya veri toplama hatası: ${itemPath}`, error);
+                throw error;
+            }
+        }
+        async function copyDir(src, dest) 
+        {
+            await fs.promises.mkdir(dest, { recursive: true });
+            const entries = await fs.promises.readdir(src, { withFileTypes: true });
+            
+            for (const entry of entries) 
+            {
+                const srcPath = path.join(src, entry.name);
+                const destPath = path.join(dest, entry.name);
+                
+                if (entry.isDirectory()) 
+                {
+                    await copyDir(srcPath, destPath);
+                } 
+                else 
+                {
+                    await fs.promises.copyFile(srcPath, destPath);
+                }
+            }
+        }
     }
     getLicence(pType,pField)
     {
