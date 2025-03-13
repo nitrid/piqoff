@@ -45,21 +45,21 @@ const irs_01_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Iptal",
-        msg: "Seçilen irsaliyeleri faturaya cevirmek istediğinizden eminmisiniz ? Fatura oluştukdan sonra değiştirilemez !!"         
+        msg: "Seçilen irsaliyeleri faturaya cevirmek istediğinizden emin misiniz ? Fatura oluştuktan sonra değiştirilemez !!"         
     },
     msgConvertSucces :
     {  
         title: "Dikkat",
         btn01: "Yazdır",
         btn02: "Kapat",
-        msg: "Faturalar Oluşturuldu yazdırmak istermisiniz ?"         
+        msg: "Faturalar oluşturuldu yazdırmak ister misiniz ?"         
     },
     msgPrintDispatch :
     {  
         title: "Dikkat",
         btn01: "Yazdır",
         btn02: "Kapat",
-        msg: "İrsaliyeler yazdırılacak. Yazdırmak istermisiniz ?"         
+        msg: "İrsaliyeler yazdırılacak. Yazdırmak ister misiniz ?"         
     },
 }
 

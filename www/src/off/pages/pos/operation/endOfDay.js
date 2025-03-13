@@ -45,6 +45,7 @@ export default class endOfDay extends React.PureComponent
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
         this.state={ticketId :""}
+        this.tabIndex = props.data.tabkey
 
         this.reactWizardRef = React.createRef();
 
@@ -1055,7 +1056,7 @@ export default class endOfDay extends React.PureComponent
                             <Item>
                                 <Label text={this.t("txtPopAdvance")} alignment="right" />
                                 <NdNumberBox id="txtPopAdvance" parent={this} simple={true}>
-                                    <Validator validationGroup={"frmAdvance"}>
+                                    <Validator validationGroup={"frmAdvance" + this.tabIndex}>
                                         <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
                                     </Validator>
                                 </NdNumberBox>
@@ -1065,7 +1066,7 @@ export default class endOfDay extends React.PureComponent
                                     <div className='col-6'>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance"}
+                                        <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance" + this.tabIndex}
                                         onClick={async (e)=>
                                         {
                                             if(e.validationGroup.validate().status == "valid")

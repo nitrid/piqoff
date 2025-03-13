@@ -8678,7 +8678,7 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopAdvance"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={async()=>
+                                onClick={()=>
                                 {
                                     if(this.txtPopAdvance.value > 0)
                                     {

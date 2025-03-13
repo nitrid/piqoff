@@ -25,6 +25,7 @@ const ftr_02_005 =
     cmbCashSafe : "Kasa Seçimi",
     cmbCheckSafe : "Çek Kasası",
     cmbBank : "Banka Seçimi",
+    cmbPricingList : "Fiyat Listesi",
     txtPayInvoıceTotal : "Fatura Tutarı",
     txtPayTotal : "Tahsilat Toplamı",
     txtRemainder : "Kalan",

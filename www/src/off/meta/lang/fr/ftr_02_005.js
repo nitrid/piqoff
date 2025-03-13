@@ -25,6 +25,7 @@ const ftr_02_005 =
     cmbCashSafe : "Caisse Espèce",
     cmbCheckSafe : "Caisse Chèque",
     cmbBank : "Sélection Banque",
+    cmbPricingList : "Liste de prix",
     txtPayInvoıceTotal : "Total Facture",
     LINE_NO: "Numéro de ligne",
     txtPayTotal : "Total Encaissement",

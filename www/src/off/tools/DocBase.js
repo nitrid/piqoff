@@ -229,22 +229,15 @@ export default class DocBase extends React.PureComponent
                     if(this.docObj.dt()[0].REBATE == 0)
                     {
                         priceType = this.type == 0 ? 1 : 0
-                        tmpListNo = this.type == 0 ? 0 : this.cmbPricingList.value
+                        tmpListNo = this.type == 0 ? 0 : tmpListNo
                     }
                     else
                     {
                         priceType = this.type == 0 ? 0 : 1
-                        tmpListNo = this.type == 0 ? this.cmbPricingList.value : 0
+                        tmpListNo = this.type == 0 ? tmpListNo : 0
                     }
-                    console.log(tmpListNo)
-                    console.log(this.msgQuantity.tmpData.GUID)
-                    console.log(this.txtPopQteUnitFactor.value)
-                    console.log(tmpCustomer)
-                    console.log(tmpDepot)
-                    console.log(priceType)
 
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
-                    console.log(tmpPrice)
                     if(this.docObj.dt()[0].DOC_TYPE == 42 || this.docObj.dt()[0].DOC_TYPE == 22)
                     {
                         tmpPrice = this.msgQuantity.tmpData.COST_PRICE
