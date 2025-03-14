@@ -1254,10 +1254,6 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_NAME"} dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_CODE"} dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />)
-                                tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100}
-                                cellRender={(data) => {
-                                    return data.value == 2 ? '✓' : 'X';
-                                }} />)
                                 tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
                                 return tmpArr
                             }
@@ -1269,10 +1265,13 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)
-                                tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
-                                cellRender={(data) => {
-                                    return data.value == 2 ? '✓' : 'X';
-                                }} />)
+                                if(this.docType==62)
+                                {
+                                    tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
+                                    cellRender={(data) => {
+                                        return data.value == 2 ? '✓' : 'X';
+                                    }} />)
+                                }
                                 tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
                                 return tmpArr
                             }
