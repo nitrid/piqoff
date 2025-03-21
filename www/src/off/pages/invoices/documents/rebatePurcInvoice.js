@@ -591,7 +591,6 @@ export default class rebateInvoice extends DocBase
         }
         super.getRebate(tmpQuery)
     }
-    // ... existing code ...
     async getDocCustomerRecord(guid)
     {
         let query = {
