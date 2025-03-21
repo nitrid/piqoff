@@ -310,10 +310,44 @@ export default class NdDocAi extends Base
                         resolve(tmpData.result.recordset[0])
                         return
                     }
+                    else
+                    {
+                        // MULTICODE ile bulunamadıysa, barkod ile sorgula
+                        let barcodeQuery = 
+                        {
+                        query :	"SELECT " +
+                                "ITEMS.GUID AS ITEM_GUID, " +
+                                "ITEMS.CODE AS ITEM_CODE, " +
+                                "ITEMS.NAME AS ITEM_NAME, " +
+                                "0 AS ITEM_TYPE, " +
+                                "ITEMS.UNIT_GUID AS UNIT, " +
+                                "ITEMS.COST_PRICE AS COST_PRICE, " +
+                                "ITEMS.VAT AS VAT " +
+                                "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS " +
+                                "WHERE BARCODE = @BARCODE AND STATUS = 1  ",
+                        param : ['BARCODE:string|25'],      
+                        value : [pItem]
+                        }
+                    
+                        let barcodeData = await this.core.sql.execute(barcodeQuery)
+                        
+                        if(typeof barcodeData.result.err == 'undefined')
+                        {
+                            if(barcodeData.result.recordset.length > 0)
+                            {
+                                resolve(barcodeData.result.recordset[0])
+                                return
+                            }
+                        }
+                        else
+                        {
+                            console.log(barcodeQuery)
+                            console.log(barcodeData.result.err)
+                        }
+                    }
                 }
                 else
                 {
-                    console.log(tmpQuery)
                     console.log(tmpData.result.err)
                 }
             }
