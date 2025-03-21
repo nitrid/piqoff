@@ -62,6 +62,12 @@ export const menu = (e) =>
                     path : "items/privatePrinting.js",
                 },
                 {
+                    id: 'stk_09',
+                    text : e.t('menu.stk_09'), //'Fire Çıkışı'
+                    icon : "fa-solid fa-trash-can-arrow-up",
+                    path : "items/outageDoc.js",
+                },
+                {
                     id: 'stk_08',
                     text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
                     icon : "fa-arrow-right-arrow-left",
