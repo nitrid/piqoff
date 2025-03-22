@@ -137,14 +137,14 @@ const irs_02_006 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgVatDelete:
     {
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        msg: "Vergiyi Sıfırlamak istediğinize emin misiniz !"
     },
     msgDiscountPrice:
     {
@@ -424,7 +424,7 @@ const irs_02_006 =
     },
     msgPriceDateUpdate :
     {
-        msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+        msg : "Değişmeyen fiyatların tarihlerini güncellemek ister misiniz? ",
         btn01 : "Evet",
         btn02 : "Hayır",
         title : "Dikkat"

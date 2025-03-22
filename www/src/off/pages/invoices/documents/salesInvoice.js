@@ -1108,8 +1108,9 @@ export default class salesInvoice extends DocBase
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value
+                                                this.docObj.docCustomer.dt()[0].REF = e.value;
                                             }).bind(this)}
+                                            
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
@@ -1261,6 +1262,7 @@ export default class salesInvoice extends DocBase
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE
+                                                        this.docObj.docCustomer.dt()[0].REF = data[0].CODE
                                                     }
                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
@@ -1332,6 +1334,7 @@ export default class salesInvoice extends DocBase
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
+                                                                this.docObj.docCustomer.dt()[0].REF = data[0].CODE
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

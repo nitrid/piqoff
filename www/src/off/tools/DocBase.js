@@ -229,22 +229,15 @@ export default class DocBase extends React.PureComponent
                     if(this.docObj.dt()[0].REBATE == 0)
                     {
                         priceType = this.type == 0 ? 1 : 0
-                        tmpListNo = this.type == 0 ? 0 : this.cmbPricingList.value
+                        tmpListNo = this.type == 0 ? 0 : tmpListNo
                     }
                     else
                     {
                         priceType = this.type == 0 ? 0 : 1
-                        tmpListNo = this.type == 0 ? this.cmbPricingList.value : 0
+                        tmpListNo = this.type == 0 ? tmpListNo : 0
                     }
-                    console.log(tmpListNo)
-                    console.log(this.msgQuantity.tmpData.GUID)
-                    console.log(this.txtPopQteUnitFactor.value)
-                    console.log(tmpCustomer)
-                    console.log(tmpDepot)
-                    console.log(priceType)
 
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
-                    console.log(tmpPrice)
                     if(this.docObj.dt()[0].DOC_TYPE == 42 || this.docObj.dt()[0].DOC_TYPE == 22)
                     {
                         tmpPrice = this.msgQuantity.tmpData.COST_PRICE
@@ -1261,10 +1254,6 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_NAME"} dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />)
                                 tmpArr.push(<Column key={"OUTPUT_CODE"} dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />)
-                                tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100}
-                                cellRender={(data) => {
-                                    return data.value == 2 ? '✓' : 'X';
-                                }} />)
                                 tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
                                 return tmpArr
                             }
@@ -1276,10 +1265,13 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
                                 tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)
-                                tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
-                                cellRender={(data) => {
-                                    return data.value == 2 ? '✓' : 'X';
-                                }} />)
+                                if(this.docType==62)
+                                {
+                                    tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
+                                    cellRender={(data) => {
+                                        return data.value == 2 ? '✓' : 'X';
+                                    }} />)
+                                }
                                 tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
                                 return tmpArr
                             }

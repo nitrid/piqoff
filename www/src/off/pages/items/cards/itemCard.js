@@ -47,8 +47,9 @@ export default class itemCard extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
         this.itemsObj = new itemsCls();
-        this.itemsPriceLogObj = new itemLogPriceCls();    
+        this.itemsPriceLogObj = new itemLogPriceCls();  
         this.salesPriceLogObj = new datatable()
+
         this.salesPriceLogObj.selectCmd =
         {
             query : "SELECT *,CONVERT(NVARCHAR, CDATE ,104) +'-'+CONVERT(NVARCHAR, CDATE ,108) AS DATE FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC ",
@@ -2791,6 +2792,7 @@ export default class itemCard extends React.PureComponent
                                                     tmpEmpty.PRICE_TTC = this.txtPopPriTTC.value
                                                     tmpEmpty.PRICE_HT = this.txtPopPriHT.value
                                                     tmpEmpty.QUANTITY = this.txtPopPriQuantity.value
+                                                    tmpEmpty.LIST_VAT_TYPE = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})[0].VAT_TYPE
 
                                                     this.itemsObj.itemPrice.addEmpty(tmpEmpty); 
                                                     this.popPrice.hide();

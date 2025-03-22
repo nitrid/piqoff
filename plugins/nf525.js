@@ -1770,10 +1770,10 @@ class nf525
                 tmpMailText = err.toString()
             }
             
-            if(tmpMailText == '')
-            {
-                tmpMailText = 'NF525 Anomali Success'
-            }
+            // if(tmpMailText == '')
+            // {
+            //     tmpMailText = 'NF525 Anomali Success'
+            // }
 
             if(tmpMailText != '')
             {
@@ -1790,7 +1790,7 @@ class nf525
                     {
                         sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr,recep@piqsoft.fr",
                         subject : "Mail sistemi çalışmıyor - " + tmpCompanyDt.result.recordset[0].NAME,
-                        text : "Mail sistemi çalışmıyor",
+                        text : "Mail sistemi çalışmıyor" + tmpMailText,
                         mailGuid:"A7386C3E-4973-4D94-BEFE-D6CA932AAF5D"
                     }
                    await this.core.plugins._piqService.mailSend(tmpControlData)

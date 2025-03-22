@@ -182,7 +182,7 @@ const irs_02_005 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        msg: "Vergiyi Sıfırlamak istediğinize emin misiniz !"
     },
     msgDiscountPrice:
     {

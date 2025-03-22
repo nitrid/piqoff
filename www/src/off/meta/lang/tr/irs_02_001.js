@@ -422,7 +422,7 @@ const irs_02_001 =
     },
     msgPriceDateUpdate :
     {
-        msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+        msg : "Değişmeyen fiyatların tarihlerini güncellemek ister misiniz? ",
         btn01 : "Evet",
         btn02 : "Hayır",
         title : "Dikkat"

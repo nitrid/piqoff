@@ -110,6 +110,14 @@ export default class Login extends React.PureComponent
             }
             else
             {
+                if(this.cmbModule.value == 'off')
+                {
+                    App.instance.setState({page:'dashboardOff.js',pageId:'dashOff'})
+                }
+                else
+                {
+                    App.instance.setState({page:'dashboard.js',pageId:'dash'})
+                }
                 App.instance.setState({logined:true});
             }
         }
@@ -182,6 +190,21 @@ export default class Login extends React.PureComponent
                                     i18n.changeLanguage(args.value)
                                     locale(args.value)
                                     window.location.reload()
+                                }).bind(this)}
+                                />
+                            </div>
+                        </div>
+                        <div className="dx-field">
+                            <div className="dx-field-label">{this.lang.t("txtModule")}</div>
+                            <div className="dx-field-value">
+                                <NdSelectBox simple={true} parent={this} id="cmbModule" height='fit-content'
+                                displayExpr="text"                       
+                                valueExpr="id"
+                                value= {localStorage.getItem('module') == null ? 'pos' : localStorage.getItem('module')}
+                                data={{source:[{id:"pos",text:"POS"},{id:"off",text:"OFF"}]}}
+                                onValueChanged={(async(args)=>
+                                {
+                                    localStorage.setItem('module',args.value)
                                 }).bind(this)}
                                 />
                             </div>

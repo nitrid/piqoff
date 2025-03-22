@@ -11,6 +11,7 @@ import NdSelectBox from '../../core/react/devex/selectbox'
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
 import NdButton from '../../core/react/devex/button.js';
 import NdNumberBox from '../../core/react/devex/numberbox.js'
+import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NbLabel from "../../core/react/bootstrap/label.js";
 export default class NbItemPopUp extends NbBase
 {
@@ -135,13 +136,33 @@ export default class NbItemPopUp extends NbBase
                         <div className='col-12' align={"right"}>
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",}}
-                                    onClick={()=>
+                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",}}
+                                    onClick={async ()=>
                                     {
-                                        this.popCard.hide();
-                                    }}>
+                                        if(this.txtPrice.value == 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemPrice',showTitle:true,title:this.t("msgItemPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemPrice.btn01"),location:'after'},
+                                                        {id:"btn02",caption:this.t("msgItemPrice.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemPrice.msg")}</div>)
+                                                }
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                    {
+                                                        this.popCard.hide();
+                                                    }
+                                                
+                                            }
+                                            else
+                                            {
+                                                this.popCard.hide();
+                                            }
+                                        
+                                        }}>
                                         <i className="fa-solid fa-xmark fa-1x"></i>
-                                    </NbButton>
+                                    </NbButton>
                                 </Item>
                             </Toolbar>
                         </div>

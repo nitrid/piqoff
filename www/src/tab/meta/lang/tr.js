@@ -52,6 +52,20 @@ export const langTr =
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
         popFactNonSolde : "Ödenmemiş Fatura",
+        msgPriceZeroUnit : 
+        {
+            title : "Dikkat",
+            msg : "Fiyat 0, lutfen kontrol ediniz!",
+            btn01 : "Devam et",
+            btn02 : "Vazgeç"
+        },
+        msgInvalidPrice : "Fiyat 0 olamaz, lutfen kontrol ediniz",
+        msgItemPrice : {
+            title : "Dikkat",
+            msg : "Fiyat 0 olamaz, yine de devam etmek istiyor musunuz!",
+            btn01 : "Devam et", 
+            btn02 : "Vazgeç"
+        },
         popCart:
         {
             txtCustomer: "Müşteri",

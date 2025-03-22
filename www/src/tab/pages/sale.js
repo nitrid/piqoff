@@ -276,7 +276,7 @@ export default class Sale extends React.PureComponent
             for (let i = 0; i < tmpItems.result.recordset.length; i++) 
             {
                 let tmpItemObj = tmpItems.result.recordset[i]
-                tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,0,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                 this.itemView.items.push(tmpItemObj)
             }
             this.itemView.items = this.itemView.items
@@ -518,12 +518,15 @@ export default class Sale extends React.PureComponent
     }
     async updateLine()
     {
+        // LINE_NO'ya göre sırala
+        this.docLines.sort((a, b) => a.LINE_NO - b.LINE_NO);
+
+        // Sıralı listeyi güncelle
         for (let i = 0; i < this.docLines.length; i++) 
         {
-            let tmpDocOrders = this.docLines[i]; 
-            tmpDocOrders.LINE_NO = i + 1    
-            
-            this.docLines[i] = tmpDocOrders
+            let tmpDocOrders = this.docLines[i];
+            tmpDocOrders.LINE_NO = i + 1;
+            this.docLines[i] = tmpDocOrders;
         }
     }  
     async checkRow()
@@ -1322,7 +1325,32 @@ export default class Sale extends React.PureComponent
                                                         <Column dataField="LINE_NO" caption={"Line No"} width={70} dataType={'number'} defaultSortOrder="asc" visible={false}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("grdSale.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                                         <Column dataField="QUANTITY" caption={this.t("grdSale.clmQuantity")} width={70} dataType={'number'} />
-                                                        <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                                        <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'}
+                                                        cellRender={(e) => {
+                                                            return (
+                                                                <div style={{
+                                                                    color: e.value <= 0 ? '#FF0000' : 'inherit',
+                                                                }}>
+                                                                    {e.text}
+                                                                </div>
+                                                            )
+                                                        }}
+                                                        validationRules={[
+                                                            {
+                                                                type: 'required',
+                                                                message: this.t("msgRequired")
+                                                            },
+                                                            {
+                                                                type: 'numeric',
+                                                                message: this.t("msgInvalidChar")
+                                                            },
+                                                            {
+                                                                type: 'range',
+                                                                min: 0.01,
+                                                                message: this.t("msgInvalidPrice")
+                                                            }
+                                                        ]}
+                                                        format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                                         <Column caption={this.t("grdSale.clmPriceAfterDiscount")} width={90} allowEditing={true} calculateCellValue={(rowData) => {
                                                             return (rowData.PRICE - (rowData.DISCOUNT / rowData.QUANTITY)).toFixed(2);
                                                         }} format={{ style: "currency", currency: "EUR", precision: 2 }} />
@@ -1795,7 +1823,7 @@ export default class Sale extends React.PureComponent
                                                     let tmpConfObj =
                                                     {
                                                         id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                        button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgVatDelete.btn02"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
                                                     }
                                                     let pResult = await dialog(tmpConfObj);

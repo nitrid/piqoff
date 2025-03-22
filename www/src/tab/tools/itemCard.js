@@ -177,6 +177,21 @@ export default class NbItemCard extends NbBase
                                                 return
                                             }
                                         }
+                                        if(this.data.PRICE == 0 && this.data.QUANTITY == 0)
+                                            {
+                                                let confObj = 
+                                                {
+                                                    id:'msgPriceZeroUnit',showTitle:true,title:this.t("msgPriceZeroUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgPriceZeroUnit.btn01"),location:'after'},
+                                                            {id:"btn02",caption:this.t("msgPriceZeroUnit.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgPriceZeroUnit.msg")}</div>)
+                                                }
+                                                let pResult = await dialog(confObj);  
+                                                if(pResult == 'btn02')
+                                                {
+                                                    return
+                                                }
+                                            }
                                         this["txtQuantity" + this.props.id].value = Number(this["txtQuantity" + this.props.id].value) + 1 
                                         this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
                                         this._onValueChange(this.props.data)
