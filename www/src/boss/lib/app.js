@@ -68,10 +68,13 @@ export default class App extends React.PureComponent
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
+           
             page:'dashboard.js',
             pageId: 'dash'
         }
 
+        console.log(localStorage.getItem('module')),
+        console.log(this)
         if(window.origin.substring(0,4) == 'http')
         {
             this.device = false

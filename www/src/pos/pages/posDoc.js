@@ -624,7 +624,7 @@ export default class posDoc extends React.PureComponent
         {
             query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
-                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
+                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 2 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
             value : [this.core.auth.data.CODE],
             local : 
@@ -656,17 +656,21 @@ export default class posDoc extends React.PureComponent
         await this.getPromoDb()
         //************************************************** */        
         this.loadingPay.current.instance.hide()
-        for (let i = 0; i < this.parkDt.length; i++) 
-        {            
-            if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == null || this.parkDt[i].DESCRIPTION == '')
-            {         
-                this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
-                this.cheqDt.selectCmd.local.values = [this.parkDt[i].GUID]
-                await this.cheqDt.refresh();  
-                await this.getDoc(this.parkDt[i].GUID)                 
-                return
-            }
-        }             
+        let tmpLastSaleQuery = 
+        {
+            query : "SELECT TOP 1 * FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 0 AND LUSER = @LUSER ORDER BY LDATE DESC",
+            param : ['LUSER:string|25'],
+            value : [this.core.auth.data.CODE]
+        }
+        let tmpLastSaleResult = await this.core.sql.execute(tmpLastSaleQuery)
+        if(tmpLastSaleResult.result?.recordset?.length > 0)
+        {
+            this.cheqDt.selectCmd.value = [tmpLastSaleResult.result.recordset[0].GUID] 
+            this.cheqDt.selectCmd.local.values = [tmpLastSaleResult.result.recordset[0].GUID]
+            await this.cheqDt.refresh();  
+            await this.getDoc(tmpLastSaleResult.result.recordset[0].GUID)                 
+            return
+        }
     }
     async deviceEntry()
     {
@@ -711,7 +715,8 @@ export default class posDoc extends React.PureComponent
                 return
             }
             this.posObj.dt()[0].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device')
-            this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),            
+            this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"), 
+            this.posObj.dt()[0].STATUS = 0
             //PROMOSYON GETİR.
             await this.getPromoDb()
             this.promoApply()
@@ -2600,6 +2605,7 @@ export default class posDoc extends React.PureComponent
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = pDesc
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DATA = pData
             }
+            this.posObj.dt()[0].STATUS = 2
             await this.posObj.save()
             resolve()
         });
