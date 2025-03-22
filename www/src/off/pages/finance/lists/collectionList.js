@@ -445,7 +445,6 @@ export default class collectionList extends React.PureComponent
                                                                 REF  AS FACT_REF,
                                                                 REF_NO AS FACT_REF_NO,
                                                                 PAY_TYPE AS FACT_PAY_TYPE,
-                                                                PAY_TYPE_NAME AS FACT_PAY_TYPE_NAME,
                                                                 OUTPUT_CODE AS CUSTOMER_CODE,
                                                                 OUTPUT_NAME AS CUSTOMER_NAME,
                                                                 ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT,

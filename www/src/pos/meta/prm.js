@@ -41,6 +41,7 @@ export const prm =
             '020NNNNMMMCCF',
             '27NNNNKKKGGGMMMMCCXXXXXX',
             '26NNNNKKKKKKMMMMCCXXXXXX',
+            '26NNNXXXXXXXXXKKKGGGMMMMCC'
         ],
         SPECIAL : "",
         PAGE : "pos",
