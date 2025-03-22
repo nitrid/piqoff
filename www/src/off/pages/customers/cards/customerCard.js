@@ -756,9 +756,6 @@ export default class CustomerCard extends React.PureComponent
                                         maxLength={100}
                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                     >
-                                        <Validator>
-                                            <EmailRule message={this.lang.t("mailIsInvalid")}/>
-                                        </Validator>
                                     </NdTextBox>
                                 </Item>
                                 {/* txtWeb */}
