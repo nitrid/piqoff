@@ -390,17 +390,28 @@ function getBalanceCounter(pTicketNo,pCode)
     return new Promise(async resolve => 
     {
         let tmpDt = new datatable(); 
+
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND (CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE OR TICKET_DATE = '19700101') ORDER BY TICKET_DATE DESC",
+            query : `SELECT *,ISNULL((SELECT VALUE FROM PARAM WHERE APP = 'POID' AND USERS = SCALE_CODE AND ID = 'SaleType'),0) AS SALE_TYPE 
+                    FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND 
+                    (CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE OR TICKET_DATE = '19700101') 
+                    ORDER BY TICKET_DATE,LDATE DESC`,
             param : ['TICKET_NO:int','TICKET_DATE:datetime'],
             value: [Number(pTicketNo),new Date(moment().subtract(3,'days').format('YYYY-MM-DD'))]
         }
-        await tmpDt.refresh();   
+        await tmpDt.refresh();
 
         if(tmpDt.length > 0)
         {
-            resolve(tmpDt.where({STATUS:false}))
+            if(tmpDt[0].SALE_TYPE == 0)
+            {
+                resolve(tmpDt.where({STATUS:false})[0])
+            }
+            else
+            {
+                resolve(tmpDt.where({STATUS:false}))
+            }   
         }
         else
         {
@@ -423,6 +434,6 @@ function getBalanceCounter(pTicketNo,pCode)
             {
                 resolve(tmpDt)
             }
-        }
-    })
+        }
+    })
 }
