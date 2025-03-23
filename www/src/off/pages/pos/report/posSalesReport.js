@@ -25,7 +25,6 @@ export default class posSalesReport extends React.PureComponent
     constructor(props)
     {
         super(props)
-        this.btnGetDetail = this.btnGetDetail.bind(this)
         
         this.core = App.instance.core;
     }
