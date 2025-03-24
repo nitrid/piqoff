@@ -409,7 +409,7 @@ function getBalanceCounter(pTicketNo,pCode)
         {
             if(tmpDt[0].SALE_TYPE == 0)
             {
-                resolve(tmpDt.where({STATUS:false}))
+                resolve(tmpDt.where({STATUS:false})[0])
             }
             else
             {
