@@ -17,6 +17,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Export,Item,Form as grdFrom} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -197,6 +198,7 @@ export default class taxSugar extends React.PureComponent
                                         this.minValue.value = 0
                                         this.maxValue.value = 0
                                         this.price.value = 0
+                                        this.dtDate.value =  moment(new Date()).format("YYYY-MM-DD - HH:mm")
                                         this.popTaxSugar.show()
                                     }}/>
                                 </Item>
@@ -206,7 +208,7 @@ export default class taxSugar extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
@@ -226,6 +228,7 @@ export default class taxSugar extends React.PureComponent
                                                 <Item dataField="MIN_VALUE" format={"##0.00"}/>
                                                 <Item dataField="MAX_VALUE" format={"##0.00"}/>
                                                 <Item dataField="PRICE" format={"##0.00"}/>
+                                                <Item dataField="DATE" format={"DD/MM/YYYY"}/>
                                             </Item>
                                             </grdFrom>
                                             </Popup>
@@ -233,19 +236,20 @@ export default class taxSugar extends React.PureComponent
                                         <Export fileName={this.lang.t("menuOff.stk_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CUSER_NAME" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={300} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
+                                        <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={200} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
                                             <RangeRule min={0.01} message={this.t("validation.clmMinValue")} /><RequiredRule/>
                                         </Column>
-                                        <Column dataField="MAX_VALUE" caption={this.t("grdTaxSugar.clmMaxvalue")} width={300} dataType={'number'} format={"#,##0.00 '(100ML/GR)'"}>
+                                        <Column dataField="MAX_VALUE" caption={this.t("grdTaxSugar.clmMaxvalue")} width={200} dataType={'number'} format={"#,##0.00 '(100ML/GR)'"}>
                                             <RangeRule min={0.01} message={this.t("validation.clmMaxvalue")} /><RequiredRule/>
                                         </Column>
-                                        <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={300}  format={"#,##0.00 " + Number.money.sign + "'(100ML/GR)'"}>
+                                        <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={200}  format={"#,##0.00 " + Number.money.sign + "'(100ML/GR)'"}>
                                             <RangeRule min={0.01} message={this.t("validation.clmPrice")} /><RequiredRule/>
                                         </Column>
+                                        <Column dataField="DATE" caption={this.t("grdTaxSugar.clmDate")} width={200} dataType={'date'}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
-                               {/* TaxSugar PopUp */}
+                        {/* TaxSugar PopUp */}
                         <div>
                         <NdPopUp parent={this} id={"popTaxSugar"} 
                         visible={false}
@@ -301,6 +305,13 @@ export default class taxSugar extends React.PureComponent
                                 </div>
                             </Item>
                             <Item>
+                                <Label text={this.t("popTaxSugar.date")} alignment="right" />
+                                <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
+                                    onApply={async()=>{
+                                    }}
+                                />
+                            </Item>
+                            <Item>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popTaxSugar.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -313,6 +324,9 @@ export default class taxSugar extends React.PureComponent
                                                 tmpDocItems.MIN_VALUE = this.minValue.value
                                                 tmpDocItems.MAX_VALUE = this.maxValue.value
                                                 tmpDocItems.PRICE =this.price.value
+                                                tmpDocItems.START_DATE = this.dtDate.startDate.format("YYYY-MM-DD")
+                                                tmpDocItems.END_DATE = this.dtDate.endDate.format("YYYY-MM-DD")
+
                                                 this.taxSugarObj.addEmpty(tmpDocItems)
                                                 this.popTaxSugar.hide();  
                                             }

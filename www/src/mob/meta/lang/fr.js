@@ -118,6 +118,7 @@ export const langFr =
         stk_06 : "Imprimer étiquette",
         stk_07 : "Etiquette spéciale",
         stk_08 : "Retour des Produits",
+        stk_09 : "Sortie Perte",
         dep_01 : "Transfert",
         dep_02 : "Commande dépôt",
         dep_03 : "Accepter marchandise",
@@ -378,6 +379,43 @@ export const langFr =
             clmInputName : "Nom du dépôt",
             clmInputCode : "Code dépôt",
         },
+    },
+
+    stk_09 : // "Fire Cikisi"
+    {
+        lblRef : "Ligne-colonne:",
+        lblDepot : "Dépôt :",
+        lblDate : "Date :",
+        lblDepotQuantity : "Quantité dépôt :",
+        lblQuantity : "Quantité :",
+        lblUnit : "Unité :",
+        lblAdd : "Ajouter",
+        lblOutput : "Nom du dépôt",
+    
+            grdOutwasItems :
+            {
+                clmItemName : "Nom",
+                clmQuantity :  "Quantité",
+                clmDescription : "Description",
+            },
+            popDoc :
+            {
+                title : "Choix du document",
+                clmRef :  "Référence",
+                clmRefNo : "Numéro de référence",
+                clmDate : "Date",
+                clmInputName : "Nom dépôt",
+                clmInputCode : "Code dépôt",    
+            },      
+            msgAlert :
+            {
+                btn01 : "D'accord",
+                title : "Attention",
+                msgNotSave : "Echec de l'enregistrement",
+                msgBarcodeNotFound : "Code-barre inconnu!",
+                msgBarcodeCheck : "Veuillez-lire le code-barre!",
+
+            },
     },
     sip_01 : // "Commande de vente"
     {

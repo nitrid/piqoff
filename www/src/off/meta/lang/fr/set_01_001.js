@@ -1,5 +1,5 @@
 // "Tax Sugar"
-const set_01_002 = 
+const set_01_001 = 
 {
     pg_Docs : 
     {
@@ -22,7 +22,8 @@ const set_01_002 =
         clmCreateDate: "Date d'Enregistrement",
         clmMinValue : "Min. Valeur Dans(100ML/GR)", 
         clmMaxvalue : "Max. Valeur Sucre Dans(100ML/GR)",
-        clmPrice : "Prix ​​Multiplicateur"
+        clmPrice : "Prix ​​Multiplicateur",
+        clmDate : "Plage de dates"
     },
     popTaxSugar : 
     {
@@ -31,6 +32,7 @@ const set_01_002 =
         minValue : "Min. Valeur Sucre Dans(100ML/GR)",
         maxValue : "Max. Valeur Sucre Dans(100ML/GR)",
         price : "Prix ​​Multiplicateur",
+        date : "Plage de dates",
     },
     msgSave:
     {
@@ -62,4 +64,4 @@ const set_01_002 =
         clmPrice: "Le prix ne peut pas être inférieur à zéro !",
     },
 }
-export default set_01_002
+export default set_01_001

@@ -2,6 +2,8 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
+import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
+import { datatable } from '../../../../core/core.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -33,6 +35,7 @@ export default class rebateInvoice extends DocBase
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.deptCreditMatchingObj = new deptCreditMatchingCls()
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -588,6 +591,16 @@ export default class rebateInvoice extends DocBase
         }
         super.getRebate(tmpQuery)
     }
+    async getDocCustomerRecord(guid)
+    {
+        let query = {
+            query: "SELECT GUID,AMOUNT FROM DOC_CUSTOMER WHERE DOC_GUID = @GUID",
+            param: ['GUID:string|50'],
+            value: [guid]
+        };
+        let result = await this.core.sql.execute(query);
+        return result.result.recordset[0];
+    }   
     async multiItemAdd()
     {
         let tmpMissCodes = []
@@ -772,6 +785,35 @@ export default class rebateInvoice extends DocBase
 
                                                 if((await this.docObj.save()) == 0)
                                                 {
+                                                    if(this.docObj.docItems.dt()[0].REBATE_DOC_GUID != '00000000-0000-0000-0000-000000000000' && this.docObj.docItems.dt()[0].REBATE_DOC_GUID !=undefined)
+                                                    {
+                                                        let tmpFacGuid = await this.getDocCustomerRecord(this.docObj.docItems.dt()[0].REBATE_DOC_GUID)
+                                                        let iadeTotal = this.docObj.docItems.dt().sum("TOTAL", 2)
+                                                        let matchData = new datatable()
+
+                                                        // iade fatura için
+                                                        matchData.push({
+                                                            LDATE: moment(new Date()),
+                                                            TYPE: 1,  
+                                                            DOC_DATE: this.docObj.dt()[0].DOC_DATE,
+                                                            CUSTOMER_GUID: this.docObj.docCustomer.dt()[0].OUTPUT,
+                                                            DOC: tmpFacGuid.GUID,
+                                                            REMAINDER: tmpFacGuid.AMOUNT
+                                                        })
+                                                        
+                                                        // Orijinal fatura için
+                                                        matchData.push({
+                                                            LDATE: moment(new Date()),
+                                                            TYPE: 0,  
+                                                            DOC_DATE: this.docObj.dt()[0].DOC_DATE,
+                                                            CUSTOMER_GUID: this.docObj.docCustomer.dt()[0].OUTPUT,
+                                                            DOC:  this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                                                            REMAINDER: iadeTotal * -1  
+                                                        })
+                                                        await this.deptCreditMatchingObj.matching(matchData)
+                                                        this.deptCreditMatchingObj.save()
+                                                    }
+
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});

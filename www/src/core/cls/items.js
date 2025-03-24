@@ -1585,7 +1585,7 @@ export class editItemCls
 
         this.ds.add(tmpDt);
 
-        this.ds.get('ITEM_EDIT').noColumnEdit = ['NET_MARGIN','NET_MARGIN_RATE','GROSS_MARGIN','GROSS_MARGIN_RATE']
+        this.ds.get('ITEM_EDIT').noColumnEdit = ['NET_MARGIN','NET_MARGIN_RATE','GROSS_MARGIN','GROSS_MARGIN_RATE','MARGIN','MARGIN_RATE']
     }
     //#endregion
     dt()

@@ -466,7 +466,6 @@ class pricerApi
 
             for (let i = 0; i < tmpResult.length; i++) 
             {
-              
                 await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
             }
         }
@@ -477,7 +476,7 @@ class pricerApi
                 query : "SELECT CASE APP_TYPE WHEN 5 THEN APP_AMOUNT " + 
                 " WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE,COND_ITEM_GUID AS ITEM, " +
                 " START_DATE,FINISH_DATE+1 AS FINISH_DATE " + 
-                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND GUID = @GUID AND COND_QUANTITY <= 1 AND START_DATE <= CONVERT(nvarchar,dbo.GETDATE(),112) AND FINISH_DATE >= CONVERT(nvarchar,dbo.GETDATE(),112) AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
+                " FROM PROMO_COND_APP_VW_01  WHERE  APP_TYPE IN(5,0) AND GUID = @GUID AND COND_QUANTITY <= 1 AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }
@@ -486,10 +485,16 @@ class pricerApi
 
             for (let i = 0; i < tmpResult.length; i++) 
             {
-                await this.itemPromoUpdate(tmpResult[i].ITEM,tmpResult[i].PRICE)
+                if (new Date(tmpResult[i].START_DATE) <= new Date() && new Date(tmpResult[i].FINISH_DATE) >= new Date())
+                {
+                    await this.itemPromoUpdate(tmpResult[i].ITEM, tmpResult[i].PRICE);
+                }
+                else
+                {
+                    await this.itemUpdate(tmpResult[i].ITEM);
+                }
             }
         }
-
     }
     async itemPromoUpdate(pGuid,pPrice)
     {

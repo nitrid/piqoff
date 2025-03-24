@@ -215,7 +215,7 @@ export class bankCls
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_SAFE_DELETE] " + 
+            query : "EXEC [dbo].[PRD_BANK_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ",

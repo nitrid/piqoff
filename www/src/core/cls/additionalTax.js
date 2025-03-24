@@ -140,6 +140,8 @@ export class taxSugarCls
             MAX_VALUE : 0,
             RATE : 0,
             PRICE : 0,
+            START_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            END_DATE : moment(new Date()).format("YYYY-MM-DD"),
             STATUS : 0,
 
         }

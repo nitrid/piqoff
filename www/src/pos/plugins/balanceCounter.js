@@ -297,8 +297,10 @@ posDoc.prototype.getItem = async function(pCode)
 
                         this.saleAdd(tmpItemsDt[0])
 
+                        console.log(this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         {
+                            console.log(tmpBalanceDt[0].STATUS)
                             if(typeof tmpBalanceDt[0].STATUS == 'undefined')
                             {
                                 //BALANCE COUNTER STATUS INSERT İŞLEMİ
@@ -369,6 +371,7 @@ function getBarPattern(pBarcode)
     pBarcode = pBarcode.toString().trim()
     let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
     
+    console.log(pBarcode)
     if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
     {            
         return
@@ -393,7 +396,7 @@ function getBalanceCounter(pTicketNo,pCode)
 
         tmpDt.selectCmd = 
         {
-            query : `SELECT *,ISNULL((SELECT VALUE FROM PARAM WHERE APP = 'POID' AND USERS = SCALE_CODE AND ID = 'SaleType'),0) AS SALE_TYPE 
+            query : `SELECT TOP 1  *,ISNULL((SELECT VALUE FROM PARAM WHERE APP = 'POID' AND USERS = SCALE_CODE AND ID = 'SaleType'),0) AS SALE_TYPE 
                     FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND 
                     (CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE OR TICKET_DATE = '19700101') 
                     ORDER BY TICKET_DATE,LDATE DESC`,
@@ -406,12 +409,12 @@ function getBalanceCounter(pTicketNo,pCode)
         {
             if(tmpDt[0].SALE_TYPE == 0)
             {
-                resolve(tmpDt.where({STATUS:false})[0])
+                resolve(tmpDt.where({STATUS:false}))
             }
             else
             {
                 resolve(tmpDt.where({STATUS:false}))
-            }
+            }   
         }
         else
         {
@@ -434,6 +437,6 @@ function getBalanceCounter(pTicketNo,pCode)
             {
                 resolve(tmpDt)
             }
-        }
-    })
+        }
+    })
 }
