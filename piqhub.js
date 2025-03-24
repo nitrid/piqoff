@@ -174,9 +174,35 @@ export default class piqhubApi
                 {
                     fs.unlinkSync(publicZipPath);
                 }
-
+            
                 const publicZip = new AdmZip();
-                publicZip.addLocalFolder(path.join(__dirname, 'www', 'public'), 'public');
+                const publicDir = path.join(__dirname, 'www', 'public');
+                
+                function addFilesRecursively(dir, zip, baseDir, pathPrefix) 
+                {
+                    const files = fs.readdirSync(dir);
+                    
+                    for (const file of files) 
+                    {
+                        const filePath = path.join(dir, file);
+                        const stat = fs.statSync(filePath);
+                        
+                        const relativePath = path.relative(baseDir, filePath).replace(/\\/g, '/');
+                        const zipPath = pathPrefix + '/' + relativePath;
+                        
+                        if (stat.isDirectory()) 
+                        {
+                            zip.addFile(zipPath + '/', Buffer.alloc(0));
+                            addFilesRecursively(filePath, zip, baseDir, pathPrefix);
+                        } 
+                        else 
+                        {
+                            zip.addFile(zipPath, fs.readFileSync(filePath));
+                        }
+                    }
+                }
+                
+                addFilesRecursively(publicDir, publicZip, publicDir, 'public');
                 publicZip.writeZip(publicZipPath);
             }
             
