@@ -396,7 +396,7 @@ function getBalanceCounter(pTicketNo,pCode)
 
         tmpDt.selectCmd = 
         {
-            query : `SELECT TOP 1  *,ISNULL((SELECT VALUE FROM PARAM WHERE APP = 'POID' AND USERS = SCALE_CODE AND ID = 'SaleType'),0) AS SALE_TYPE 
+            query : `SELECT *,ISNULL((SELECT VALUE FROM PARAM WHERE APP = 'POID' AND USERS = SCALE_CODE AND ID = 'SaleType'),0) AS SALE_TYPE 
                     FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND 
                     (CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE OR TICKET_DATE = '19700101') 
                     ORDER BY TICKET_DATE,LDATE DESC`,
@@ -409,7 +409,9 @@ function getBalanceCounter(pTicketNo,pCode)
         {
             if(tmpDt[0].SALE_TYPE == 0)
             {
-                resolve(tmpDt.where({STATUS:false}))
+                let tmpData = new datatable();
+                tmpData.import(tmpDt.where({STATUS:false})[0])
+                resolve(tmpData)
             }
             else
             {
