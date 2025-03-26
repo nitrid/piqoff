@@ -9452,7 +9452,21 @@ export default class posDoc extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        if(typeof this.customerObj.customerAdress.dt()[0] != 'undefined')
+                                        {
+                                            this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        }
+                                        else
+                                        {
+                                           this.customerObj.customerAdress.addEmpty()
+                                           this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                           this.customerObj.customerAdress.dt()[0].TYPE = 0
+                                           this.customerObj.customerAdress.dt()[0].ADRESS  = this.txtPopCustomerAddress.value
+                                           this.customerObj.customerAdress.dt()[0].COUNTRY = this.txtPopCustomerCountry.value
+                                           this.customerObj.customerAdress.dt()[0].CITY = this.txtPopCustomerCity.value
+                                           this.customerObj.customerAdress.dt()[0].ZIPCODE = this.txtPopCustomerZipCode.value
+                                        }
+                                        if(typeof this.customerObj.customerOffical.dt()[0] != 'undefined')
                                         this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
                                         if(this.txtPopCustomerFirmName.value != '')
                                         {
