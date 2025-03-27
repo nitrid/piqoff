@@ -73,8 +73,6 @@ export default class App extends React.PureComponent
             pageId: 'dash'
         }
 
-        console.log(localStorage.getItem('module')),
-        console.log(this)
         if(window.origin.substring(0,4) == 'http')
         {
             this.device = false
