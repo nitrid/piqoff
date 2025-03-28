@@ -335,6 +335,13 @@ export const langTr =
         msg : "Girmiş olduğunuz puan satış tutarından daha büyük olamaz !",
         btn01 : "Tamam"
     },
+    msgLastSaleRetour:
+    {
+        title : "Dikkat",
+        msg : "İade almak istediğinizden eminmisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+    },
     popLastSaleList : 
     {
         title : "Son Satış Listesi",

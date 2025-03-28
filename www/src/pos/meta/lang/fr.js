@@ -339,6 +339,13 @@ export const langFr =
         msg : " Le nombre de points saisi ne peut être supérieur au nombre de points présent sur la carte ! ",
         btn01 : "OK"
     },
+    msgLastSaleRetour:
+    {
+        title : "Attention",
+        msg : "Voulez-vous vraiment retourner cette vente ?",
+        btn01 : "Oui",
+        btn02 : "Non",
+    },
     popLastSaleList : 
     {
         title : " Dernière liste de vente ",

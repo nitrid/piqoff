@@ -7222,10 +7222,19 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnLastSaleRetour"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            let tmpLastPos = new datatable();
-                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                            console.log(tmpLastPos[0].GUID)
-                                            this.ticketCheckRetour(tmpLastPos[0].GUID)
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgLastSaleRetour',showTitle:true,title:this.lang.t("msgLastSaleRetour.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgLastSaleRetour.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLastSaleRetour.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLastSaleRetour.msg")}</div>)
+                                            }
+                                            if((await dialog(tmpConfObj)) == 'btn01')
+                                            {
+                                                let tmpLastPos = new datatable();
+                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                                console.log(tmpLastPos[0].GUID)
+                                                this.ticketCheckRetour(tmpLastPos[0].GUID)
+                                            }
                                         }}>
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
                                         </NbButton>
