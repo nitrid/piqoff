@@ -426,7 +426,7 @@ export default class purchaseInvList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '14'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '114'"},sql:this.core.sql}}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
