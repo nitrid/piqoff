@@ -8,6 +8,7 @@ import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import NdCheckBox from '../../core/react/devex/checkbox.js';
 import NdPopUp from '../../core/react/devex/popup.js';
+import NbButton from '../../core/react/bootstrap/button.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
@@ -49,13 +50,15 @@ export default class Login extends React.PureComponent
             kullanici: '',
             sifre: '',
             alert: ''
-        }  
+        }
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
 
         this.onLoginClick = this.onLoginClick.bind(this)
         this.getUserList = this.getUserList.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
+        this.firmArray = []
+       
     }
     async componentDidMount()
     {
@@ -67,6 +70,27 @@ export default class Login extends React.PureComponent
            this.state.sifre = localStorage.userPwd
            this.Kullanici.value = localStorage.userName 
            this.Sifre.value = localStorage.userPwd
+        }
+        App.instance.device ? this.txtFirm.value = localStorage.host : this.txtFirm.value = window.origin
+        if(typeof localStorage.firmList != 'undefined')
+        {
+            this.firmArray = JSON.parse(localStorage.firmList)
+        }
+        else if(typeof localStorage.host != 'undefined')
+        {
+            this.firmArray.push({ADRESS:  localStorage.host})
+        }
+        else
+        {
+            if(App.instance.device)
+            {
+                let tmpList = JSON.parse(localStorage.firmList)
+                this.firmArray.push(tmpList)
+            }
+            else
+            {
+                this.firmArray.push( {ADRESS:  window.origin})
+            }
         }
         this.Kullanici.focus()
     }
@@ -133,7 +157,6 @@ export default class Login extends React.PureComponent
         tmpDt.import(tmpData)
         tmpDt = tmpDt.where({USER_APP : {"LIKE" : "BOSS"}})
         await this.pg_users.setData(tmpDt)
-        
         this.pg_users.show()
         this.pg_users.onClick = (data) =>
         {
@@ -145,6 +168,22 @@ export default class Login extends React.PureComponent
     closePage()
     {
         window.close()
+    }
+    onSaveFirm()
+    {
+       if(typeof localStorage.firmList != 'undefined' )
+       {
+            let tmpFirmList = JSON.parse(localStorage.firmList)
+            tmpFirmList.push({ADRESS: this.txtNewAdress.value})
+            localStorage.firmList = JSON.stringify(tmpFirmList)
+       }
+       else
+       {
+            localStorage.firmList = JSON.stringify([{ADRESS: this.txtNewAdress.value}])
+       }
+       localStorage.setItem('firmList',localStorage.firmList)
+       localStorage.setItem('host',this.txtNewAdress.value)
+       window.location.reload()
     }
     render()
     {
@@ -174,6 +213,35 @@ export default class Login extends React.PureComponent
                                 <Button icon="preferences" visible={App.instance.device}
                                 onClick={()=>window.location="../boss/appUpdate.html"}
                                 />
+                            </div>
+                        </div>
+                        <div className="dx-field"  style={{visibility:App.instance.device ? 'visible' : 'hidden'}}>
+                            <div className="dx-field-label">{this.lang.t("txtFirmSelect")}</div>
+                            <div className="dx-field-value">
+                                <NdTextBox id="txtFirm" parent={this} simple={true} showClearButton={true} height='fit-content'  readOnly={true} 
+                                  button=
+                                  {
+                                      [
+                                          {
+                                              id:'01',
+                                              icon:'more',
+                                              onClick:async()=>
+                                              {
+                                                let tmpDt = new datatable()
+                                                console.log(this.firmArray)
+                                                tmpDt.import(this.firmArray)
+                                                await this.pg_Firm.setData(tmpDt)
+                                                this.pg_Firm.show()
+                                                this.pg_Firm.onClick = (data) =>
+                                                {
+                                                    this.txtFirm.value = data[0].ADRESS
+                                                    localStorage.setItem('host',data[0].ADRESS)
+                                                    window.location.reload()
+                                                }
+                                              }
+                                          },
+                                      ]
+                                  }/>
                             </div>
                         </div>
                         <div className="dx-field">
@@ -283,6 +351,65 @@ export default class Login extends React.PureComponent
                             <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
                             <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
                         </NdPopGrid>
+                        <NdPopGrid id={"pg_Firm"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'100%'}
+                        height={'100%'}
+                        selection={{mode:"single"}}
+                        title={this.lang.t("firmListTitle")}
+                        onRowRemoved={async (e)=>
+                        {
+                            this.firmArray = []
+                            for(let i = 0; i < this.pg_Firm.grid.data.datatable.length; i++)
+                            {
+                                this.firmArray.push({ADRESS:  this.pg_Firm.grid.data.datatable[i].ADRESS})
+                            }
+                            localStorage.setItem('firmList',JSON.stringify(this.firmArray))
+                        }}
+                        button=
+                        {
+                            [
+                                {
+                                    id:'tst',
+                                    icon:'plus',
+                                    onClick:()=>
+                                    {
+                                        this.popAddFirm.show()
+                                    }
+                                }
+                            ]
+                        }
+                        >
+                            <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={true}/>
+                            <Column dataField="ADRESS" caption="SERVER" width={150} defaultSortOrder="asc"/>
+                        </NdPopGrid>
+                        
+                        <NdPopUp id={"popAddFirm"} parent={this}  fullscreen={false} centered={true}
+                           container={"#root"} 
+                           width={"300"}
+                           height={"200"}
+                           position={{of:"#root"}}>
+                            <div  className='row p-1'>
+                                <NdTextBox id="txtNewAdress" parent={this}  showClearButton={true} height='fit-content' 
+                                placeholder={this.lang.t("txtNewAdress")}
+                                />
+                            </div>
+                            <div className="row p-1">
+                                    <div className='col-12'>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={(() =>
+                                            {
+                                                this.onSaveFirm()
+                                                this.popAddFirm.hide()
+                                            }).bind(this)
+                                        }>{this.lang.t("btnAdd")}
+                                        </NbButton>
+                                    </div>
+                                </div>
+                        </NdPopUp>
                    </div>
                 </div>
                 <div className="p-2"></div>
