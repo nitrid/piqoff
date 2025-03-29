@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls,quickDescCls } from '../../../core/cls/doc.js';
+import {itemExpDateCls} from '../../../core/cls/items.js'
 import moment from 'moment';
 import NbButton from '../../../core/react/bootstrap/button';
 import NbLabel from '../../../core/react/bootstrap/label';
@@ -26,7 +27,7 @@ import tr from '../../meta/lang/devexpress/tr.js';
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 
-export default class outageDoc extends React.PureComponent
+export default class expdateOperations extends React.PureComponent
 {
     constructor(props)
     {
@@ -35,23 +36,15 @@ export default class outageDoc extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:2,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
-        this.qDescObj = new quickDescCls();
-        this.quantityControl = false
-        this.itemDt = new datatable();
-        this.unitDt = new datatable();      
-        this.orderDt = new datatable();
+        this.expObj = new itemExpDateCls();
+        this.itemDt = new datatable();    
         
         this.itemDt.selectCmd = 
         {
             query : "SELECT *,(SELECT [dbo].[FN_DEPOT_QUANTITY](GUID, @DEPOT_GUID,GETDATE())) AS DEPOT_QUANTITY FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')",
             param : ['CODE:string|25','DEPOT_GUID:string|50'],
         }
-        this.unitDt.selectCmd = 
-        {
-            query : "SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC",
-            param : ['ITEM_GUID:string|50'],
-        }
-
+   
         this.alertContent = 
         {
             id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
@@ -78,44 +71,38 @@ export default class outageDoc extends React.PureComponent
     {
         {
             this.docObj.clearAll()
-            this.qDescObj.clearAll()
+            this.expObj.clearAll()
+
             
             this.dtDocDate.value = moment(new Date())
     
             
             await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
-            let tmpDoc = {...this.docObj.empty}
+            let tmpExpDate = {...this.expObj.empty}
 
 
-            tmpDoc.TYPE = 1
-            tmpDoc.DOC_TYPE = 1
-            tmpDoc.REBATE = 0
-            tmpDoc.REF = this.user.CODE
-            tmpDoc.OUTPUT = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
-            tmpDoc.INPUT = "00000000-0000-0000-0000-000000000000"
-            this.docObj.addEmpty(tmpDoc);
-
+            this.txtRef.value = this.user.CODE
+            this.cmbDepot.value = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'cmbDepot'}).getValue().value
+            this.dtDocDate.value = moment(new Date())
+            this.lblExpDate.value = moment(new Date())
             this.txtRef.readOnly = false
             this.txtRefNo.readOnly = false
             this.cmbDepot.readOnly = false
             this.dtDocDate.readOnly = false    
             this.clearEntry();
     
-            this.txtRef.props.onChange(tmpDoc.REF)
-            await this.grdOutwasItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
-            await this.cmbUnit.dataRefresh({source : this.unitDt})
+            this.txtRef.props.onChange(tmpExpDate.REF)
+            await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
+
+            
         }
     }
     clearEntry()
     {
         this.itemDt.clear();
-        this.unitDt.clear();
-        this.orderDt.clear();
-
-        this.orderDt.push({UNIT:"",FACTOR:0,QUANTITY:0,PRICE:0,AMOUNT:0,DISCOUNT:0,DISCOUNT_RATE:0,VAT:0,SUM_AMOUNT:0})
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
-        this.cmbUnit.setData([])
+        this.lblQuantity.value = 0
 
     }
 
@@ -125,27 +112,17 @@ export default class outageDoc extends React.PureComponent
         {
             this.clearEntry();
             
-            this.itemDt.selectCmd.value = [pCode,this.docObj.dt()[0].OUTPUT]
+            this.itemDt.selectCmd.value = [pCode,this.cmbDepot.value]
             await this.itemDt.refresh();  
             
             if(this.itemDt.length > 0)
             {
                 this.lblItemName.value = this.itemDt[0].NAME
                 this.lblDepotQuantity.value = this.itemDt[0].DEPOT_QUANTITY
+                this.lblQuantity.value = 0
+                this.txtBarcode.value = "" 
+                this.lblQuantity.focus();
 
-                this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
-                await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
-
-                if(this.unitDt.length > 0)
-                {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
-                    this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onValueChanged()
-                }
-
-                this.txtBarcode.value = ""
-                this.txtQuantity.focus();
             }
             else
             {                               
@@ -154,39 +131,18 @@ export default class outageDoc extends React.PureComponent
                 await dialog(this.alertContent);
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
+
             }
             resolve();
         });
     }
-    async checkRow()
-    {
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        }
-    }
-    async deleteAll()
-    {
-        this.docObj.dt('DOC').removeAt(0)
-        await this.docObj.dt('DOC').delete();
-        this.init()
-        this.pageView.activePage('Main')
-    }
     async onClickBarcodeShortcut()
     {
-        if(this.docObj.dt()[0].OUTPUT == "")
-        {
-            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgInDepot")}</div>)
-            await dialog(this.alertContent);
-            return
-        }
         this.pageView.activePage('Entry')
     }
     async onClickProcessShortcut()
     {
-        if(this.docObj.dt("DOC_ITEMS").length == 0)
+        if(this.expObj.dt('ITEM_EXPDATE').length == 0)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgProcess")}</div>)
             await dialog(this.alertContent);
@@ -203,28 +159,18 @@ export default class outageDoc extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
-        if(this.txtQuantity.value == "" || this.txtQuantity.value == 0 || this.txtQuantity.value > 15000000)
-        {
-            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
-            await dialog(this.alertContent);
-            return
-        }
-
         let prmRowMerge = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'rowMerge'}).getValue().value
-
         if(prmRowMerge > 0)
         {     
             let tmpFnMergeRow = async (i) =>
             {
-                let tmpQuantity = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
-                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + tmpQuantity
                 this.clearEntry()
                 await this.save()
             }       
 
-            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+            for (let i = 0; i < this.expObj.dt().length; i++) 
             {
-                if(this.docObj.docItems.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
+                if(this.expObj.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
                 {
                     if(prmRowMerge == 2)
                     {
@@ -255,33 +201,22 @@ export default class outageDoc extends React.PureComponent
             }
         }
         
-        let tmpDocItems = {...this.docObj.docItems.empty}
+        let tmpDocItems = {...this.expObj.empty}
 
-        tmpDocItems.REF = this.docObj.dt()[0].REF
-        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.REF = this.txtRef.value
+        tmpDocItems.REF_NO = this.txtRefNo.value
+        tmpDocItems.DOC_DATE = this.dtDocDate.value
+        tmpDocItems.DEPOT = this.cmbDepot.value
         tmpDocItems.ITEM_NAME = this.itemDt[0].NAME
         tmpDocItems.ITEM_CODE = this.itemDt[0].CODE
-        tmpDocItems.ITEM = this.itemDt[0].GUID
-        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-        tmpDocItems.UNIT = this.orderDt[0].UNIT
-        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-        tmpDocItems.DISCOUNT = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_1 = this.orderDt[0].DISCOUNT
-        tmpDocItems.DISCOUNT_RATE = this.orderDt[0].DISCOUNT_RATE
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
-        tmpDocItems.VAT_RATE = this.itemDt[0].VAT
-        tmpDocItems.PRICE = this.orderDt[0].PRICE
-        tmpDocItems.VAT = this.orderDt[0].VAT
-        tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
-        tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
-        tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
+        tmpDocItems.ITEM_GUID = this.itemDt[0].GUID
+        tmpDocItems.QUANTITY = this.lblQuantity.value
+        tmpDocItems.ITEM_CODE = this.itemDt[0].CODE
+        tmpDocItems.ITEM_NAME = this.itemDt[0].NAME
+        tmpDocItems.EXP_DATE = this.lblExpDate.value
 
-        this.docObj.docItems.addEmpty(tmpDocItems)
+
+        this.expObj.addEmpty(tmpDocItems)
         this.clearEntry()
         await this.save()
         this.txtBarcode.focus();
@@ -290,9 +225,9 @@ export default class outageDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            if(this.docObj.dt().length > 0)
+            if(this.expObj.dt().length > 0)
             {
-                this.docObj.dt()[0].DESCRIPTION = this.docObj.docItems.dt().DESCRIPTION
+                this.expObj.dt()[0].DESCRIPTION 
             }
             
             let tmpConfObj1 =
@@ -301,7 +236,7 @@ export default class outageDoc extends React.PureComponent
                 button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
             }
             
-            if((await this.docObj.save()) == 0)
+            if((await this.expObj.save()) == 0)
             {                                                    
                
             }
@@ -313,37 +248,13 @@ export default class outageDoc extends React.PureComponent
             resolve()
         })
     }
-    async calcEntry() {
-        // Vérifie si l'une des propriétés a une valeur différente de zéro
-        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 ) {
-            
-            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
-            let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-     
-            // Récupère la limite de quantité depuis les paramètres système
-            let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
-    
-            // Vérifie si la quantité temporaire dépasse la limite définie
-            if (tmpQuantity > prmLimitQuantity) {
-                // Affiche un message d'alerte et limite la valeur de txtQuantity à la limite définie
-                this.alertContent.content = (
-                    <div style={{ textAlign: "center", fontSize: "20px" }}>
-                        {this.t("msgAlert.msgLimitQuantityCheck")}
-                    </div>
-                );
-                await dialog(this.alertContent);
-                this.txtQuantity.value = prmLimitQuantity;
-                return; // Sort de la fonction si la quantité est limitée
-            }
-        }
-    }
 
     render()
     {
         return(
             <div>
                 <div>
-                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_09")} content=
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_10")} content=
                     {[
                         {
                             name : 'Main',isBack : false,isTitle : true,
@@ -357,17 +268,6 @@ export default class outageDoc extends React.PureComponent
                                         this.init()
                                     }
                                 },
-                                {
-                                    icon : "fa-trash",
-                                    text : this.lang.t("btnDocDelete"),
-                                    onClick : ()=>
-                                    {
-                                        if(this.docObj.dt().length > 0)
-                                        {
-                                            this.deleteAll();
-                                        }
-                                    }
-                                }
                             ]
                         },
                         {
@@ -402,7 +302,7 @@ export default class outageDoc extends React.PureComponent
                                         <div className='col-9'>
                                             <div className='row'>
                                                 <div className='col-4'>
-                                                <NdTextBox id="txtRef" parent={this} simple={true} readOnly={false} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                                <NdTextBox id="txtRef" parent={this} simple={true} readOnly={false} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                                     onChange={(async(e)=>
                                                     {
                                                         try 
@@ -500,20 +400,16 @@ export default class outageDoc extends React.PureComponent
                                     </div>
                                     {/* SORTIE DEPOT */}
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblOutput")}</div>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot")}</div>
                                         <div className='col-9'>
                                             <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                            dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                            dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DEPOT"}}  
                                             displayExpr="NAME"                       
                                             valueExpr="GUID"
                                             value=""
                                             searchEnabled={true}
                                             notRefresh = {true}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    this.checkRow()
-                                                }).bind(this)}
-                                            data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                            //data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                             param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                             >
@@ -667,47 +563,34 @@ export default class outageDoc extends React.PureComponent
                                                     <NbLabel id="lblDepotQuantity" parent={this} value={0}/>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className='row pb-2'>
-                                            <div className='col-8 d-flex align-items-center justify-content-end'>
-                                                <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblUnit")}</label>                                            
-                                            </div>
-                                            <div className='col-4'>
-                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                                dt={{data:this.orderDt,field:"UNIT"}}
-                                                onValueChanged={(e)=>
-                                                {
-                                                    if(e.value != null && e.value != "")
+                                            <div className='col-6'>
+                                                <div style={{fontSize:'14px',fontWeight:'bold'}}>
+                                                    <label className='text-purple-light'>{this.t("lblQuantity")}</label>
+                                                </div>
+                                                    <NdNumberBox id="lblQuantity" parent={this} simple={true} maxLength={32}
+                                                    onValueChanged={(async()=>
                                                     {
-                                                        let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                        if(tmpFactor.length > 0)
-                                                        {
-                                                            this.txtFactor.value = tmpFactor[0].FACTOR
-                                                            this.txtFactor.props.onValueChanged()
-                                                        }
-                                                    }
-                                                }}/>
-                                            </div>
+
+                                                    }).bind(this)}
+                                                    onEnterKey={this.addItem.bind(this)}/>
+                                                </div>
                                         </div>
                                         <div className='row pb-2'>
-                                            <div className='col-3 d-flex align-items-center justify-content-end'>
-                                                <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblQuantity")}</label>                                            
+                                            <div className='col-6'>
                                             </div>
-                                            <div className='col-4'>
-                                                <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
-                                                onEnterKey={this.addItem.bind(this)}/>
-                                            </div>
-                                            <div className='col-1 d-flex align-items-center justify-content-center'>
-                                                <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
-                                            </div>
-                                            <div className='col-4'>
-                                                <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32}
-                                                onValueChanged=
-                                                {
-                                                    this.calcEntry.bind(this)
-                                                } 
-                                                dt={{data:this.orderDt,field:"QUANTITY"}}
-                                                onEnterKey={this.addItem.bind(this)}/>
+                                            <div className='col-6'>
+                                                <div style={{fontSize:'14px',fontWeight:'bold'}}>
+                                                        <label className='text-purple-light'>{this.t("lblExpDate")}</label>
+                                                        <NdDatePicker simple={true}  parent={this} id={"lblExpDate"}
+                                                        onValueChanged={(async()=>
+                                                        {
+
+                                                        }).bind(this)}
+                                                        dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"EXP_DATE"}}
+                                                        onEnterKey={this.addItem.bind(this)}
+                                                        >
+                                                        </NdDatePicker>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className='row pb-2'>
@@ -725,7 +608,7 @@ export default class outageDoc extends React.PureComponent
                                     <div className='col-12'>
                                         <div className='row pb-2'>
                                             <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdOutwasItems"} 
+                                                <NdGrid parent={this} id={"grdExpDate"} 
                                                 showBorders={true} 
                                                 columnsAutoWidth={true} 
                                                 allowColumnReordering={true} 
@@ -739,9 +622,11 @@ export default class outageDoc extends React.PureComponent
                                                 }}
                                                 onRowRemoved={async (e)=>
                                                 {
-                                                    if(this.docObj.docItems.dt().length == 0)
+                                                    if(this.expObj.dt().length == 0)
                                                     {
-                                                        this.deleteAll()
+                                                        await this.save()
+                                                        this.init()
+                                                        this.pageView.activePage('Main')
                                                     }
                                                     else
                                                     {
@@ -760,9 +645,11 @@ export default class outageDoc extends React.PureComponent
                                                     <Paging defaultPageSize={10} />
                                                     {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                                    <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={300} />
-                                                    <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
-                                                    <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} dataType={'string'} width={650} />
+                                                    <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmItemName")} width={300} />
+                                                    <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmItemCode")} width={250}/>
+                                                    <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} dataType={'number'} width={150}/>
+                                                    <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmExpDate")} dataType={'date'} width={250} />
+                                                    <Column dataField="DESCRIPTION" caption={this.t("grdExpDate.clmDescription")} width={350}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
