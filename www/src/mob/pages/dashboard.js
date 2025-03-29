@@ -12,7 +12,15 @@ export default class Dashboard extends React.PureComponent
     {
         return(
             <ScrollView>
-            <div className='row px-3'>{this.lang.t("comingSoon")}</div>
+                <div style={{display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100vh',
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            fontSize: '24px'}}>
+                    {this.lang.t("comingSoon")}
+                </div>
             </ScrollView>
         )
     }

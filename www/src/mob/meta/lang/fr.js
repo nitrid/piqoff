@@ -11,7 +11,7 @@ export const langFr =
     serverConnection : "Etablissement de la connexion avec le serveur",
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
-    comingSoon : "Bientôt actif... ", 
+    comingSoon : "Bienvenue sur votre tableau de bord. Suivez vos stocks en toute simplicité.", 
     btnBarcodeEntry: "Entrée Produit",   
     btnProcessLines: "Traiter les lignes",   
     btnOrderSelect : "Sélection",
@@ -119,6 +119,7 @@ export const langFr =
         stk_07 : "Etiquette spéciale",
         stk_08 : "Retour des Produits",
         stk_09 : "Sortie Perte",
+        stk_10 : "Entrée DLC",
         dep_01 : "Transfert",
         dep_02 : "Commande dépôt",
         dep_03 : "Accepter marchandise",
@@ -414,6 +415,48 @@ export const langFr =
                 msgNotSave : "Echec de l'enregistrement",
                 msgBarcodeNotFound : "Code-barre inconnu!",
                 msgBarcodeCheck : "Veuillez-lire le code-barre!",
+                msgProcess : "Aucun produit saisi actuellement!",
+
+            },
+    },
+
+    stk_10   : // "Entrée DLC"
+    {
+        lblRef : "Ligne-colonne:",
+        lblDepot : "Dépôt :",
+        lblDate : "Date :",
+        lblDepotQuantity : "Quantité dépôt :",
+        lblQuantity : "Quantité :",
+        lblAdd : "Ajouter",
+        lblOutput : "Nom du dépôt",
+        lblExpDate : "Entrée DLC",
+    
+            grdExpDate :
+            {
+                clmItemName : "Nom",
+                clmItemCode : "Code",
+                clmBarcode : "Barkod",
+                clmQuantity :  "Quantité",
+                clmDescription : "Description",
+                clmExpDate : "DLC"
+            },
+            popDoc :
+            {
+                title : "Choix du document",
+                clmRef :  "Référence",
+                clmRefNo : "Numéro de référence",
+                clmDate : "Date",
+                clmInputName : "Nom dépôt",
+                clmInputCode : "Code dépôt",    
+            },      
+            msgAlert :
+            {
+                btn01 : "D'accord",
+                title : "Attention",
+                msgNotSave : "Echec de l'enregistrement",
+                msgBarcodeNotFound : "Code-barre inconnu!",
+                msgBarcodeCheck : "Veuillez-lire le code-barre!",
+                msgProcess : "Aucun produit saisi actuellement!",
 
             },
     },

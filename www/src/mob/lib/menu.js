@@ -72,7 +72,13 @@ export const menu = (e) =>
                     text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
                     icon : "fa-arrow-right-arrow-left",
                     path : "items/rebateTransfer.js",
-                }
+                },
+                {
+                    id: 'stk_10',
+                    text : e.t('menu.stk_10'), //'Son Kullanma Tarihi İşlemleri'
+                    icon : "fa-solid fa-calendar-days",
+                    path : "items/expdateOperations.js",
+                },
             ]
         },
         //Depo
