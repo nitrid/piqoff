@@ -2938,6 +2938,8 @@ export default class posDoc extends React.PureComponent
     }
     async ticketCheckRetour(pGuid)
     {
+        console.log(pGuid+ '1111')
+        this.loadingPay.current.instance.show()
         if(pGuid != "")
         {
             let tmpDt = new datatable();
@@ -2948,6 +2950,8 @@ export default class posDoc extends React.PureComponent
                 value : [pGuid] 
             }
             await tmpDt.refresh(); 
+            this.popLastSaleList.hide()
+
             if(tmpDt.length > 0)
             {
                 for (let i = 0; i < tmpDt.length; i++) 
@@ -3009,9 +3013,9 @@ export default class posDoc extends React.PureComponent
                     
                     await this.calcGrandTotal();
                 }
-                this.popLastSaleList.hide()
             }
         }        
+        this.loadingPay.current.instance.hide()
     }
     async ticketCheck(pTicket)
     {
@@ -7232,7 +7236,6 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpLastPos = new datatable();
                                                 tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                console.log(tmpLastPos[0].GUID)
                                                 this.ticketCheckRetour(tmpLastPos[0].GUID)
                                             }
                                         }}>
