@@ -344,6 +344,12 @@ export default class posDoc extends React.PureComponent
     async componentDidMount()
     {
         this.init();
+        document.addEventListener('deviceready', ()=>
+        {
+            console.log(window.location.origin);
+            let tmpData = {localPath:window.location.origin}
+            window.SunmiPlugin.showOnSecondaryDisplay(JSON.stringify(tmpData));
+        }, false);
     }
     toggleKeyboardVisibility()
     {

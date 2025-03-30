@@ -25,14 +25,10 @@ posLcdCls.prototype.print = async function(pData)
         // let vendorId = 1659;
         // let productId = 9123;
         console.log(vendorId, productId)
-        console.log(1453)
         window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
         {
-            console.log(1454)
-            console.log(permissionMessage);
             window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
             {
-                console.log(1455)
                 window.SerialUSBPlugin.write('\x0c');
                 window.SerialUSBPlugin.write(pData.text);
                 setTimeout(() => 
@@ -59,7 +55,12 @@ posDeviceCls.prototype.escPrinter = async function(pData)
             let vendorId = 0;
             let productId = 0;
 
-            if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT.indexOf('|') > -1)
+            if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT == "D3 MINI")
+            {
+                vendorId = -1;
+                productId = -1;
+            }
+            else if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT.indexOf('|') > -1)
             {
                 vendorId = this.dt()[0].PRINTER_PORT.split('|')[0];
                 productId = this.dt()[0].PRINTER_PORT.split('|')[1];
@@ -71,65 +72,119 @@ posDeviceCls.prototype.escPrinter = async function(pData)
                 return
             }
 
-            window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+            if(vendorId == -1)
             {
-                window.SerialUSBPlugin.open(vendorId, productId, async function(connectMessage) 
+                let tmpArr = [];
+                for (let i = 0; i < pData.length; i++) 
                 {
-                    let tmpArr = [];
-                    for (let i = 0; i < pData.length; i++) 
+                    let tmpObj = pData[i]
+                    if(typeof pData[i] == 'function')
                     {
-                        let tmpObj = pData[i]
-                        if(typeof pData[i] == 'function')
-                        {
-                            tmpObj = pData[i]()
-                        }
-                        if(Array.isArray(tmpObj))
-                        {
-                            tmpArr.push(...tmpObj)
-                        }
-                        else if(typeof tmpObj == 'object')
-                        {
-                            tmpArr.push(tmpObj)
-                        }
+                        tmpObj = pData[i]()
                     }
-                    
-                    for (let i = 0; i < tmpArr.length; i++) 
-                    {   
-                        if(typeof tmpArr[i].barcode != 'undefined')
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                
+                for (let i = 0; i < tmpArr.length; i++) 
+                {   
+                    if(typeof tmpArr[i].barcode != 'undefined')
+                    {
+                        if(typeof tmpArr[i].align != 'undefined')
                         {
-                            if(typeof tmpArr[i].align != 'undefined')
-                            {
-                                tmpArr[i].options.align = tmpArr[i].align    
-                            }
-                            window.SerialUSBPlugin.printBarcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options)
+                            tmpArr[i].options.align = tmpArr[i].align    
                         }
-                        else if(typeof tmpArr[i].logo != 'undefined')
+                        window.SunmiPlugin.printBarcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options)
+                    }
+                    else if(typeof tmpArr[i].logo != 'undefined')
+                    {
+                        await window.SunmiPlugin.printImage(tmpArr[i].logo, 's8')
+                    }
+                    else    
+                    {
+                        if(typeof tmpArr[i].style == 'undefined')
                         {
-                            await window.SerialUSBPlugin.printImage(tmpArr[i].logo, 's8')
+                            tmpArr[i].style = "normal";
                         }
-                        else    
+                        if(typeof tmpArr[i].size == 'undefined')
                         {
-                            if(typeof tmpArr[i].style == 'undefined')
-                            {
-                                tmpArr[i].style = "normal";
-                            }
-                            if(typeof tmpArr[i].size == 'undefined')
-                            {
-                                tmpArr[i].size = [0,0]
-                            }
-    
-                            window.SerialUSBPlugin.print(tmpArr[i]);
-                        }                        
-                    }                      
-                    window.SerialUSBPlugin.cut();
-                    window.SerialUSBPlugin.close();
-                    resolve();
-                });
-            },function(permissionError) 
-            {
+                            tmpArr[i].size = [0,0]
+                        }
+
+                        window.SunmiPlugin.print(tmpArr[i]);
+                    }                        
+                }                      
+                window.SunmiPlugin.cut();
                 resolve();
-                console.error(permissionError);
-            });
+            }
+            else
+            {
+                window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+                {
+                    window.SerialUSBPlugin.open(vendorId, productId, async function(connectMessage) 
+                    {
+                        let tmpArr = [];
+                        for (let i = 0; i < pData.length; i++) 
+                        {
+                            let tmpObj = pData[i]
+                            if(typeof pData[i] == 'function')
+                            {
+                                tmpObj = pData[i]()
+                            }
+                            if(Array.isArray(tmpObj))
+                            {
+                                tmpArr.push(...tmpObj)
+                            }
+                            else if(typeof tmpObj == 'object')
+                            {
+                                tmpArr.push(tmpObj)
+                            }
+                        }
+                        
+                        for (let i = 0; i < tmpArr.length; i++) 
+                        {   
+                            if(typeof tmpArr[i].barcode != 'undefined')
+                            {
+                                if(typeof tmpArr[i].align != 'undefined')
+                                {
+                                    tmpArr[i].options.align = tmpArr[i].align    
+                                }
+                                window.SerialUSBPlugin.printBarcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options)
+                            }
+                            else if(typeof tmpArr[i].logo != 'undefined')
+                            {
+                                await window.SerialUSBPlugin.printImage(tmpArr[i].logo, 's8')
+                            }
+                            else    
+                            {
+                                if(typeof tmpArr[i].style == 'undefined')
+                                {
+                                    tmpArr[i].style = "normal";
+                                }
+                                if(typeof tmpArr[i].size == 'undefined')
+                                {
+                                    tmpArr[i].size = [0,0]
+                                }
+        
+                                window.SerialUSBPlugin.print(tmpArr[i]);
+                            }                        
+                        }                      
+                        window.SerialUSBPlugin.cut();
+                        window.SerialUSBPlugin.close();
+                        resolve();
+                    });
+                },function(permissionError) 
+                {
+                    resolve();
+                    console.error(permissionError);
+                });
+            }
         }
         else
         {

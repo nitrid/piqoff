@@ -364,6 +364,7 @@ export default class App extends React.PureComponent
         
         if(lcd)
         {
+            console.log("lcd");
             return <CustomerInfoScreen/>
         }
         if(itemInfo)

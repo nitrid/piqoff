@@ -6,6 +6,10 @@
         <!--FOR ELECTRON JS-->
         <script>
             if (typeof module === 'object') {window.module = module; module = undefined;}
+            document.addEventListener('deviceready', function() 
+            {
+                window.KeyboardPlugin.disableKeyboard();
+            }, false);
         </script>
     </head>
     <body>
