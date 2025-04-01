@@ -81,7 +81,7 @@ export default class docSalesReport extends React.PureComponent
                                     "SELECT  " +
                                     "PAY.DOC_DATE AS DOC_DATE,  " +
                                     "'PAYMENT' AS TITLE,  " +
-                                    "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,0,PAY_TYPE)) AND LANG = 'TR')  AS TYPE,  " +
+                                    "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,0,PAY_TYPE)) AND LANG = @LANG)  AS TYPE,  " +
                                     "0 AS VAT_RATE,  " +
                                     "SUM((AMOUNT)) AS AMOUNT  " +
                                     "FROM DOC_CUSTOMER_VW_01 AS PAY  " +
