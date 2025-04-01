@@ -760,7 +760,7 @@ export default class salesDisList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '12'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '112'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
