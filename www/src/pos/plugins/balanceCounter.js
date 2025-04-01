@@ -407,10 +407,16 @@ function getBalanceCounter(pTicketNo,pCode)
 
         if(tmpDt.length > 0)
         {
+            console.log(tmpDt[0].SALE_TYPE)
             if(tmpDt[0].SALE_TYPE == 0)
             {
                 let tmpData = new datatable();
-                tmpData.import(tmpDt.where({STATUS:false})[0])
+                if(typeof tmpDt.where({STATUS:false})[0] != 'undefined')
+                {
+                    tmpData.push(tmpDt.where({STATUS:false})[0])
+                }
+                console.log(tmpData)
+                console.log(tmpDt.where({STATUS:false}))
                 resolve(tmpData)
             }
             else
