@@ -86,4 +86,22 @@ export const langFr =
         }
        
     },
+    dashboardOff:
+    {
+        dailySalesTotal : "Montant Ventes",
+        dailySalesCount : "Total Factures",     
+        salesAvg: "Moyenne Factures",
+        dailyOrderTotal : "Montant Commandes",
+        dailyOrderCount : "Total Commandes",
+        dailyRebateTotal : "Montant Remboursements",
+        dailyRebateCount : "Total Remboursements",
+        orderAvg : "Moyenne Commandes",
+        purchaseTotal : "Total D'Achat",
+        purchasePrice : "Qte Prix d'Achat Changé", 
+        salePrice : "Qte Prix de Vente Changé",
+        purchasePriceDown : "Qte Prix d'Achat Diminué",
+        salePriceDown : "Qte Prix de Vente Diminué",
+        purchasePriceUp : "Qte Prix d'Achat Augmenté",
+        salePriceUp : "Qte Prix de Vente Augmenté",
+    }
 }
