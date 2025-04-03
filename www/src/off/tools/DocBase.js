@@ -2102,7 +2102,7 @@ export default class DocBase extends React.PureComponent
                                                         value : [this.docDetailObj.dt()[i].ITEM]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(typeof tmpData.result.recordset.length != 'undefined')
+                                                    if(typeof tmpData.result.recordset.length != 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.docDetailObj.dt()[i].VAT_RATE = tmpData.result.recordset[0].VAT
                                                     }

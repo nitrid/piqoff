@@ -21,6 +21,11 @@ export const langTr =
     dtYear : "Bu Yıl",
     dtLastYear : "Geçen Yıl",
     chkRememberMe : "Beni Hatırla", 
+    btnAdd : "Ekle",
+    txtNewAdress : "Lütfen sunucu adresini giriniz",
+    txtModule : "Modül Seçimi",
+    txtFirmSelect : "Firma Seçimi",
+    firmListTitle : "Firma Listesi",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -30,6 +35,7 @@ export const langTr =
     menu:
     {
         dash : "Dashboard",
+        dashOff : "Dashboard Off",
     },
     login:
     {
@@ -39,8 +45,8 @@ export const langTr =
     },
     dashboard: 
     {
-        dailySalesTotal : "Günlük Satış Tutarı",
-        dailySalesCount : "Günlük Fiş Adedi",     
+        dailySalesTotal : "Satış Tutarı",
+        dailySalesCount : "Fiş Adedi",     
         salesAvg: "Sepet Ortalaması",
         monthlySalesCount: "Aylık Fiş Adedi",
         bestItemGroup: "En Çok Satan Ürün Grubu",
@@ -82,4 +88,22 @@ export const langTr =
         }
         
     },
+    dashboardOff:
+    {
+        dailySalesTotal : "Satış Tutarı",
+        dailySalesCount : "Fatura Adedi",     
+        salesAvg: "Fatura Ortalaması",
+        dailyOrderTotal : "Sipariş Tutarı",
+        dailyOrderCount : "Sipariş Adedi",
+        dailyRebateTotal : "İade Tutarı",
+        dailyRebateCount : "İade Adedi",
+        orderAvg : "Sipariş Ortalaması",
+        purchaseTotal : "Toplam Alış Tutarı",
+        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
+        salePrice : "Satış Fiyatı Değişen Ürün Adeti",
+        purchasePriceDown : "Alış Fiyatı Düşen Ürün Adeti",
+        salePriceDown : "Satış Fiyatı Düşen Ürün Adeti",
+        purchasePriceUp : "Alış Fiyatı Artan Ürün Adeti",
+        salePriceUp : "Satış Fiyatı Artan Ürün Adeti",
+    }
 }

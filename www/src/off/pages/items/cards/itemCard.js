@@ -677,7 +677,7 @@ export default class itemCard extends React.PureComponent
                 {
                     let tmpQuery = 
                     {
-                        query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= @VALUE AND MAX_VALUE >= @VALUE AND TYPE =0 ",
+                        query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= @VALUE AND MAX_VALUE >= @VALUE AND TYPE =0 ORDER BY END_DATE DESC ",
                         param : ['VALUE:float'],
                         value : [this.txtTaxSugar.value]
                     }

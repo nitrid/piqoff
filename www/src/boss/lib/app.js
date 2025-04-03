@@ -39,6 +39,7 @@ export default class App extends React.PureComponent
         locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;
+        this.serverTimeout 
 
         this.style =
         {
@@ -66,15 +67,18 @@ export default class App extends React.PureComponent
             {
                 type : 0,
                 headers : 'Warning',
-                title : 'Sunucu ile bağlantı kuruluyor.',
+                title :  this.lang.t('serverConnection'),
             },
            
             page:'dashboard.js',
             pageId: 'dash'
         }
 
-        console.log(localStorage.getItem('module')),
-        console.log(this)
+        if(localStorage.getItem('module') == 'off')
+        {
+            this.state.page = 'dashboardOff.js'
+            this.state.pageId = 'dashOff'
+        }
         if(window.origin.substring(0,4) == 'http')
         {
             this.device = false
@@ -168,6 +172,9 @@ export default class App extends React.PureComponent
             //SPLASH EKRANI
             if(splash.type == 0)
             {
+                this.serverTimeout = setTimeout(() => {
+                    window.location="../boss/appUpdate.html"
+                }, 6000);
                 //BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
                 return(
                     <div style={this.style.splash_body}>
@@ -184,6 +191,10 @@ export default class App extends React.PureComponent
                     </div>
                 )                
             }            
+        }
+        else
+        {
+            clearTimeout(this.serverTimeout)
         }
         if(!logined)
         {

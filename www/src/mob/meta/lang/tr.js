@@ -11,7 +11,7 @@ export const langTr =
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
-    comingSoon : "Yakında Aktif Olacak... ",
+    comingSoon : "Kontrol panelinize hoş geldiniz. Stok takibinizi kolayca yönetin.",
     btnBarcodeEntry: "Barkod Giriş",
     btnOrderSelect :" Sipariş Seçimi",
     btnProcessLines: "İşlem Satırları",
@@ -119,6 +119,7 @@ export const langTr =
         stk_07 : "Özel Etiket Basımı",
         stk_08 : "İade Ürünü Toplama",
         stk_09 : "Fire Cikisi",
+        stk_10 : "SKT İşlemleri",
         dep_01 : "Depolar Arası Sevk",
         dep_02 : "Depo Siparişi",
         dep_03 : "Depo Mal Kabul",
@@ -381,7 +382,7 @@ export const langTr =
             clmInputCode : "Depo Kodu",
         },
     },
-    stk_09 : // "Fire Cikisi"
+    stk_10 : // "SKT İşlemleri"
             {
                 lblRef : "Seri - Sıra :",
                 lblDepot : "Depo :",
@@ -391,12 +392,17 @@ export const langTr =
                 lblUnit : "Birim :",
                 lblAdd : "Ekle",
                 lblOutput : "Depo",
+                lblExpDate : "SKT Girişi",
             
-            grdOutwasItems :
+            grdExpDate :
             {
                 clmItemName : "Adı",
+                clmItemCode : "Kod",
+                clmBarcode : "Barkod",
                 clmQuantity :  "Miktar",
                 clmDescription : "Açıklama",
+                clmExpDate : "SKT"
+
             },
             popDoc :
             {
@@ -414,8 +420,45 @@ export const langTr =
                 msgNotSave : "Kayıt İşlemi Başarısız",
                 msgBarcodeNotFound : "Barkod bulunamadı !",
                 msgBarcodeCheck : "Lütfen barkod okutunuz !",
+                msgProcess : "Henüz girilmiş bir ürün yok !",
             },
         },
+        stk_09 : // "Fire Cikisi"
+        {
+            lblRef : "Seri - Sıra :",
+            lblDepot : "Depo :",
+            lblDate : "Tarih :",
+            lblDepotQuantity : "Depo Miktar :",
+            lblQuantity : "Miktar :",
+            lblUnit : "Birim :",
+            lblAdd : "Ekle",
+            lblOutput : "Depo",
+        
+        grdOutwasItems :
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+            clmDescription : "Açıklama",
+        },
+        popDoc :
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmInputName : "Depo Adı",
+            clmInputCode : "Depo Kodu",
+        },
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+        },
+    },
             
     sip_01 : // "Satış Siparişi"
     {

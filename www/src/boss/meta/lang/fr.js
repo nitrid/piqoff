@@ -21,6 +21,11 @@ export const langFr =
     dtYear : "Année Courante",
     dtLastYear : "Année Dernière",
     chkRememberMe : "Souviens-toi de moi", // BAK
+    btnAdd : "Ajouter",
+    txtNewAdress : "Veuillez entrer l'adresse du serveur",
+    txtModule : "Choix du module",
+    txtFirmSelect : "Choix de l'entreprise",
+    firmListTitle : "Liste des entreprises",
     msgAnotherUserAlert: 
     {
         title : "Attention",

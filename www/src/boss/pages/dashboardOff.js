@@ -12,31 +12,26 @@ import NdGrid,{Column,Editing,Paging,Scrolling}  from '../../core/react/devex/gr
 import NbLabel from '../../core/react/bootstrap/label.js';
 
 
-export default class DashboardOff extends React.PureComponent
+export default class dashboardOff extends React.PureComponent
 {
   constructor(props)
   {
     super(props)
     this.core = App.instance.core;
-    this.state = { dailySalesTotal : 0, salesAvg: 0, dailyCountTotal: 0, monthlyCountTotal: 0,dailyPriceChange:0,dailyRowDelete:0,dailyFullDelete :0,dailyRebateTicket:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0,AllItemGroups:0 };
-    this.t = App.instance.lang.getFixedT(null ,null ,"DashboardOff")
+    this.state = { dailySalesTotal : 0, salesAvg: 0, dailySalesCount: 0, dailyOrderTotal: 0,orderAvg:0,dailyOrderCount:0,dailyRebateCount:0,dailyRebateTotal:0,dailyCustomerTicket:0,dailyUseLoyalty:0, bestItemGroup: [],balanceTicketCreated:0,AllItemGroups:0 };
+    this.t = App.instance.lang.getFixedT(null ,null ,"dashboardOff")
     this.date = moment(new Date()).format("YYYY-MM-DD")
     this.companyName = ''
     this.query = 
     {
+      dailyOrderTotal : { query : "SELECT SUM(TOTAL) AS DAILY_ORDER_TOTAL FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
+      orderAvg : { query : "SELECT AVG(TOTAL) AS ORDER_AVG FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
+      dailyOrderCount : { query : "SELECT COUNT(*) AS DAILY_ORDER_COUNT FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
       dailySalesTotal : { query : "SELECT SUM(TOTAL) AS DAILY_SALES_TOTAL FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       salesAvg : { query : "SELECT AVG(TOTAL) AS SALES_AVG FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       dailySalesCount : { query : "SELECT COUNT(*) AS DAILY_SALES_COUNT FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      bestItemGroup : { query : "SELECT TOP 5  ROUND(SUM(TOTAL),2) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME ORDER BY SUM(TOTAL) DESC", param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      dailyPriceChange : { query : "SELECT COUNT(*) AS DAILY_PRICE_CHANGE FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },    
-      dailyRowDelete : { query : "SELECT COUNT(*) AS DAILY_ROW_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'ROW DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      dailyFullDelete : { query : "SELECT COUNT(*) AS DAILY_FULL_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      dailyRebateTicket : { query : "SELECT COUNT(*) AS DAILY_REBATE_COUNT FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      dailyRebateTotal : { query : "SELECT SUM(TOTAL) AS DAILY_REBATE_TOTAL FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
-      dailyCustomerTicket : { query : "SELECT COUNT(*) AS DAILY_CUSTOMER_COUNT FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
-      dailyUseLoyalty : { query : "SELECT SUM(LOYALTY) AS DAILY_LOYALTY FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      useDiscount : { query : "SELECT SUM(DISCOUNT) AS USE_DISCOUNT FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      useDiscountTicket : { query : "SELECT COUNT(*) AS USE_DISCOUNT_TICKET FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND DISCOUNT <> 0 AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
+      dailyRebateTotal : { query : "SELECT SUM(TOTAL) AS DAILY_REBATE_TOTAL FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
+      dailyRebateCount : { query : "SELECT COUNT(*) AS DAILY_REBATE_COUNT FROM DOC_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       purchaseTotal : { query : "SELECT SUM(AMOUNT) AS PURCHASE_TOTAL FROM DOC_CUSTOMER_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 AND DOC_TYPE = 20 and REBATE = 0" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       purchasePrice : { query : "SELECT COUNT(*) AS PURCHASE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePrice : { query : "SELECT COUNT(*) AS SALE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
@@ -44,8 +39,6 @@ export default class DashboardOff extends React.PureComponent
       purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },  
-      balanceTicketCreated : { query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED FROM BALANCE_COUNTER WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      AllItemGroups : { query : "SELECT COUNT(DISTINCT ITEM_GRP_NAME) AS TOTAL_ITEM_GROUPS FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME IS NOT NULL",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
     }
   }
   async componentDidMount()
@@ -55,11 +48,7 @@ export default class DashboardOff extends React.PureComponent
   async init()
   {
     this.dtDate.value = moment(new Date()).format("YYYY-MM-DD")
-    this.getSalesTotal();
-    this.getSalesCount();
-    this.getBestItemGroup();
     this.getExtra()
-    this.getAllItemGroups()
     let tmpQuery = 
     {
         query : " SELECT TOP 1 * FROM COMPANY_VW_01",
@@ -71,61 +60,16 @@ export default class DashboardOff extends React.PureComponent
         this.companyName = tmpResult[0].NAME
     }
   }
-  async getBestItemGroup()
-  {
-    const { result: { recordset: bestItemGroup } } = await this.core.sql.execute(this.query.bestItemGroup);
-
-    if (bestItemGroup.length > 0) 
-    {
-      this.setState({ bestItemGroup: bestItemGroup });
-    }
-  }
-  async getAllItemGroups()
-  {
-    const { result: { recordset: AllItemGroups } } = await this.core.sql.execute(this.query.AllItemGroups);
-    if (AllItemGroups.length > 0) 
-    {
-      this.setState({ AllItemGroups: AllItemGroups[0].TOTAL_ITEM_GROUPS });
-    }
-  }
-  async getSalesTotal()
-  {
-    const { result: { recordset: dailySalesRecordset } } = await this.core.sql.execute(this.query.dailySalesTotal);
-    const { result: { recordset: salesAvg } } = await this.core.sql.execute(this.query.salesAvg);
-
-    if(dailySalesRecordset.length > 0) 
-    {
-      const { DAILY_SALES_TOTAL } = dailySalesRecordset[0];
-      this.setState({ dailySalesTotal: DAILY_SALES_TOTAL });
-    }
-
-    if(salesAvg.length > 0) 
-    {
-      const { SALES_AVG } = salesAvg[0];
-      this.setState({ salesAvg: SALES_AVG });
-    }
-  }
-  async getSalesCount()
-  {
-    const { result: { recordset: dailyCountRecordset } } = await this.core.sql.execute(this.query.dailySalesCount);
-
-    if(dailyCountRecordset.length > 0) 
-    {
-      const { DAILY_SALES_COUNT } = dailyCountRecordset[0];
-      this.setState({ dailyCountTotal: DAILY_SALES_COUNT });
-    }
-  }
   async getExtra()
   {
-    const { result: { recordset: dailyPriceRecordset } } = await this.core.sql.execute(this.query.dailyPriceChange);
-    const { result: { recordset: dailyRowDeleteRecordset } } = await this.core.sql.execute(this.query.dailyRowDelete);
-    const { result: { recordset: dailyFullDeleteRecordset } } = await this.core.sql.execute(this.query.dailyFullDelete);
-    const { result: { recordset: dailyRebateTicketRecordset } } = await this.core.sql.execute(this.query.dailyRebateTicket);
+    const { result: { recordset: dailyOrderTotalRecordset } } = await this.core.sql.execute(this.query.dailyOrderTotal);
+    const { result: { recordset: orderAvgRecordset } } = await this.core.sql.execute(this.query.orderAvg);
+    const { result: { recordset: dailyOrderCountRecordset } } = await this.core.sql.execute(this.query.dailyOrderCount);
+    const { result: { recordset: dailySalesTotalRecordset } } = await this.core.sql.execute(this.query.dailySalesTotal);
+    const { result: { recordset: salesAvgRecordset } } = await this.core.sql.execute(this.query.salesAvg);
+    const { result: { recordset: dailySalesCountRecordset } } = await this.core.sql.execute(this.query.dailySalesCount);
     const { result: { recordset: dailyRebateTotalRecordset } } = await this.core.sql.execute(this.query.dailyRebateTotal);
-    const { result: { recordset: dailyCustomerTicketRecordset } } = await this.core.sql.execute(this.query.dailyCustomerTicket);
-    const { result: { recordset: dailyUseLoyaltyRecordset } } = await this.core.sql.execute(this.query.dailyUseLoyalty);
-    const { result: { recordset: useDiscountRecordset } } = await this.core.sql.execute(this.query.useDiscount);
-    const { result: { recordset: useDiscountTicketRecordset } } = await this.core.sql.execute(this.query.useDiscountTicket);
+    const { result: { recordset: dailyRebateCountRecordset } } = await this.core.sql.execute(this.query.dailyRebateCount);
     const { result: { recordset: purchaseTotalRecordset } } = await this.core.sql.execute(this.query.purchaseTotal);
     const { result: { recordset: purchasePriceRecordset } } = await this.core.sql.execute(this.query.purchasePrice);
     const { result: { recordset: salePriceRecordset } } = await this.core.sql.execute(this.query.salePrice);
@@ -133,7 +77,6 @@ export default class DashboardOff extends React.PureComponent
     const { result: { recordset: purchasePriceUpRecordset } } = await this.core.sql.execute(this.query.purchasePriceUp);
     const { result: { recordset: salePriceDownRecordset } } = await this.core.sql.execute(this.query.salePriceDown);
     const { result: { recordset: salePriceUpRecordset } } = await this.core.sql.execute(this.query.salePriceUp);
-    const { result: { recordset: balanceTicketCreatedRecordset } } = await this.core.sql.execute(this.query.balanceTicketCreated);
 
     
 
@@ -141,56 +84,47 @@ export default class DashboardOff extends React.PureComponent
 
 
   
-    if(dailyPriceRecordset.length > 0) 
-    {
-      const { DAILY_PRICE_CHANGE } = dailyPriceRecordset[0];
-      this.setState({ dailyPriceChange: DAILY_PRICE_CHANGE });
-    }
 
-    if(dailyRowDeleteRecordset.length > 0) 
-    {
-      const { DAILY_ROW_DELETE } = dailyRowDeleteRecordset[0];
-      this.setState({ dailyRowDelete: DAILY_ROW_DELETE});
-    }
 
-    if(dailyFullDeleteRecordset.length > 0) 
+    if(dailyOrderTotalRecordset.length > 0) 
     {
-      const { DAILY_FULL_DELETE } = dailyFullDeleteRecordset[0];
-      this.setState({ dailyFullDelete: DAILY_FULL_DELETE });
+      const { DAILY_ORDER_TOTAL } = dailyOrderTotalRecordset[0];
+      this.setState({ dailyOrderTotal: DAILY_ORDER_TOTAL });
     }
-
-    if(dailyRebateTicketRecordset.length > 0) 
+    if(orderAvgRecordset.length > 0) 
     {
-      const { DAILY_REBATE_COUNT } = dailyRebateTicketRecordset[0];
-      this.setState({ dailyRebateTicket: DAILY_REBATE_COUNT});
+      const { ORDER_AVG } = orderAvgRecordset[0];
+      this.setState({ orderAvg: ORDER_AVG });
     }
-
+    if(dailyOrderCountRecordset.length > 0) 
+    {
+      const { DAILY_ORDER_COUNT } = dailyOrderCountRecordset[0];
+      this.setState({ dailyOrderCount: DAILY_ORDER_COUNT });
+    }
+    if(dailySalesTotalRecordset.length > 0) 
+    {
+      const { DAILY_SALES_TOTAL } = dailySalesTotalRecordset[0];
+      this.setState({ dailySalesTotal: DAILY_SALES_TOTAL });
+    }
+    if(salesAvgRecordset.length > 0) 
+    {
+      const { SALES_AVG } = salesAvgRecordset[0];
+      this.setState({ salesAvg: SALES_AVG });
+    }
+    if(dailySalesCountRecordset.length > 0) 
+    {
+      const { DAILY_SALES_COUNT } = dailySalesCountRecordset[0];
+      this.setState({ dailySalesCount: DAILY_SALES_COUNT });
+    }
     if(dailyRebateTotalRecordset.length > 0) 
     {
       const { DAILY_REBATE_TOTAL } = dailyRebateTotalRecordset[0];
       this.setState({ dailyRebateTotal: DAILY_REBATE_TOTAL });
     }
-
-    if(dailyCustomerTicketRecordset.length > 0) 
+    if(dailyRebateCountRecordset.length > 0) 
     {
-      const { DAILY_CUSTOMER_COUNT } = dailyCustomerTicketRecordset[0];
-      this.setState({ dailyCustomerTicket: DAILY_CUSTOMER_COUNT});
-    }
-
-    if(dailyUseLoyaltyRecordset.length > 0) 
-    {
-      const { DAILY_LOYALTY } = dailyUseLoyaltyRecordset[0];
-      this.setState({ dailyUseLoyalty: DAILY_LOYALTY});
-    }
-    if(useDiscountRecordset.length > 0) 
-    {
-      const { USE_DISCOUNT } = useDiscountRecordset[0];
-      this.setState({ useDiscount: USE_DISCOUNT});
-    }
-    if(useDiscountTicketRecordset.length > 0) 
-    {
-      const { USE_DISCOUNT_TICKET } = useDiscountTicketRecordset[0];
-      this.setState({ useDiscountTicket: USE_DISCOUNT_TICKET});
+      const { DAILY_REBATE_COUNT } = dailyRebateCountRecordset[0];
+      this.setState({ dailyRebateCount: DAILY_REBATE_COUNT });
     }
     if(purchaseTotalRecordset.length > 0) 
     {
@@ -227,11 +161,6 @@ export default class DashboardOff extends React.PureComponent
       const { SALE_PRICE_UP } = salePriceUpRecordset[0];
       this.setState({ salePriceUp: SALE_PRICE_UP});
     }
-    if(balanceTicketCreatedRecordset.length > 0) 
-    {
-      const { BALANCE_TICKET_CREATED } = balanceTicketCreatedRecordset[0];
-      this.setState({ balanceTicketCreated: BALANCE_TICKET_CREATED});
-    }
   }
   onClick()
   {
@@ -255,16 +184,11 @@ export default class DashboardOff extends React.PureComponent
                 this.query.dailySalesTotal.value = [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.salesAvg.value = [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.dailySalesCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.bestItemGroup.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyPriceChange.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyRowDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyFullDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyRebateTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyOrderCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.orderAvg.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyRebateCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                this.query.dailyOrderTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.dailyRebateTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyCustomerTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.dailyUseLoyalty.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.useDiscount.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.useDiscountTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.purchaseTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.purchasePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.salePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
@@ -273,16 +197,45 @@ export default class DashboardOff extends React.PureComponent
                 this.query.salePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
                 this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.balanceTicketCreated.value =  [this.dtDate.startDate,this.dtDate.endDate]
-                this.query.AllItemGroups.value =  [this.dtDate.startDate,this.dtDate.endDate]
 
-                
-                this.getSalesTotal();
-                this.getSalesCount();
-                this.getBestItemGroup();
-                this.getAllItemGroups()
                 this.getExtra()
               }).bind(this)}/>
+          </div>
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("dailyOrderTotal")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.dailyOrderTotal ? parseFloat(this.state.dailyOrderTotal) : 0)} type={'currency'} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("dailyOrderCount")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.dailyOrderCount ? parseFloat(this.state.dailyOrderCount) : 0)}  type={'number'} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("orderAvg")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.orderAvg ? parseFloat(this.state.orderAvg) : 0)}  type={'currency'} />
+                </div>
+              </div>
+            </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
             <div className="card text-white bg-primary" style={{ width: "100%", textAlign: "center" }}>
@@ -291,89 +244,19 @@ export default class DashboardOff extends React.PureComponent
                   <h5 className="card-title">{this.t("dailySalesTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={this.state.dailySalesTotal ? parseFloat(this.state.dailySalesTotal) : 0} type={'currency'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                    let tmpVatSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 GROUP BY VAT_RATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                    await this.popSalesTotal.show()
-                    this.dtTimeFirst.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
-                    this.dtTimeLast.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
-                    await this.grdSalesTotal.dataRefresh(tmpSource)
-                    await this.grdSalesVatRate.dataRefresh(tmpVatSource)
-                  }).bind(this)}/>
+                  <AnimatedText value={this.state.dailySalesTotal ? parseFloat(this.state.dailySalesTotal) : 0} type={'currency'} />
                 </div>
               </div>
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-success" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white bg-primary" style={{ width: "100%", textAlign:"center" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailySalesCount")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyCountTotal ? parseFloat(this.state.dailyCountTotal) : 0)} type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                    let tmpVatSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                    await this.popSalesTotal.show()
-                    this.dtTimeFirst.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
-                    this.dtTimeLast.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
-                    await this.grdSalesTotal.dataRefresh(tmpSource)
-                    await this.grdSalesVatRate.dataRefresh(tmpVatSource)
-                  }).bind(this)}/>
+                  <AnimatedText value={parseFloat(this.state.dailySalesCount ? parseFloat(this.state.dailySalesCount) : 0)} type={'number'}/>
                 </div>
               </div>
             </div>
@@ -391,321 +274,28 @@ export default class DashboardOff extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white" style={{ width: "100%", textAlign:"center" ,backgroundColor:"#9d3948"}}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyPriceChange")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyPriceChange ? parseFloat(this.state.dailyPriceChange) : 0)} type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID)  AS NAME,(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE "  + 
-                                "FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                   
-                    await this.popPriceDesc.show()
-                    await this.grdPriceDesc.dataRefresh(tmpSource)
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center" ,backgroundColor:"#972b54"}}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyRowDelete")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyRowDelete ? parseFloat(this.state.dailyRowDelete) : 0)} type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT *,(SELECT NAME FROM ITEMS WHERE GUID = (SELECT ITEM FROM POS_SALE WHERE GUID = POS_EXTRA_VW_01.LINE_GUID)) AS NAME FROM POS_EXTRA_VW_01 WHERE TAG = 'ROW DELETE' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                   
-                    await this.popLineDelete.show()
-                    await this.grdLineDelete.dataRefresh(tmpSource)
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white" style={{ width: "100%", textAlign:"center" ,backgroundColor:"#9d397a"}}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyFullDelete")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyFullDelete ? parseFloat(this.state.dailyFullDelete) : 0)} type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : "SELECT *,(SELECT TOTAL FROM POS WHERE GUID = POS_EXTRA_VW_01.POS_GUID) AS TOTAL FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                   
-                    await this.popPosDelete.show()
-                    await this.grdPosDelete.dataRefresh(tmpSource)
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white" style={{ width: "100%", textAlign:"center",backgroundColor:"#e84393" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyRebateTicket")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyRebateTicket ? parseFloat(this.state.dailyRebateTicket) : 0)} type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT * FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 ",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                  
-                    await this.popRebateTicket.show()
-                    await this.grdRebateTicket.dataRefresh(tmpSource)
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
             <div className="card text-white" style={{ width: "100%", textAlign:"center",backgroundColor:"#e84393" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyRebateTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyRebateTotal ? parseFloat(this.state.dailyRebateTotal) : 0)}  type={'currency'}  onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                        source : 
-                        {
-                            groupBy : this.groupList,
-                            select : 
-                            {
-                                query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 GROUP BY PAY_TYPE_NAME",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                            },
-                            sql : this.core.sql
-                        }
-                    }
-                  
-                    await this.popRebateTotal.show()
-                    await this.grdRebateTotal.dataRefresh(tmpSource)
-                  }).bind(this)}/>
+                  <AnimatedText value={parseFloat(this.state.dailyRebateTotal ? parseFloat(this.state.dailyRebateTotal) : 0)}  type={'currency'}/>
                 </div>
               </div>
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
+            <div className="card text-white" style={{ width: "100%", textAlign:"center",backgroundColor:"#e84393" }}>
               <div className="card-body">
                 <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyCustomerTicket")}</h5>
+                  <h5 className="card-title">{this.t("dailyRebateCount")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyCustomerTicket ? parseFloat(this.state.dailyCustomerTicket) : 0)} type={'number'} />
+                  <AnimatedText value={parseFloat(this.state.dailyRebateCount ? parseFloat(this.state.dailyRebateCount) : 0)} type={'number'}  />
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("dailyUseLoyalty")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyUseLoyalty ? parseFloat(this.state.dailyUseLoyalty) : 0)}  type={'currency'} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#791158" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("useDiscountTicket")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.useDiscountTicket ? parseFloat(this.state.useDiscountTicket) : 0)}  type={'number'} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#791158" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("useDiscount")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.useDiscount ? parseFloat(this.state.useDiscount) : 0)}  type={'currency'} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#56487b" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("balanceTicketCreated")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.balanceTicketCreated ? parseFloat(this.state.balanceTicketCreated) : 0)}  type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                      source : 
-                      {
-                        groupBy : this.groupList,
-                        select : 
-                        {
-                          query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED, " +
-                                  "ISNULL(SUM(CASE WHEN STATUS = 1 THEN 1 ELSE 0 END),0) AS BALANCE_TICKET_CHECKED " +  
-                                  "FROM BALANCE_COUNTER " + 
-                                  "WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",
-                          param : ['FISRT_DATE:date','LAST_DATE:date'],
-                          value : [this.dtDate.startDate,this.dtDate.endDate]
-                        },
-                        sql : this.core.sql
-                      }
-                    }
-                    let tmpQuery = 
-                    {
-                        query : "SELECT ROUND(SUM(QUANTITY * PRICE),2) AS CREATED_AMOUNT,ROUND(ISNULL(SUM(CASE WHEN STATUS = 1 THEN (QUANTITY * PRICE) ELSE 0 END),0),2) AS CHECKED_AMOUNT " +
-                                "FROM BALANCE_COUNTER " + 
-                                "WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",
-                                param : ['FISRT_DATE:date','LAST_DATE:date'],
-                                value : [this.dtDate.startDate,this.dtDate.endDate]
-                    }
-                    let tmpAmountData = await this.core.sql.execute(tmpQuery) 
-                 
-                    await this.popBalanceTicket.show()
-                    await this.grdBalanceTicket.dataRefresh(tmpSource)
-                    if(tmpAmountData.result.recordset.length > 0)
-                    {
-                        this.lblTicketCreatedAmount.value = this.t("ticketCreatedAmount") + ': ' + Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT).currency()
-                        this.lblTicketCheckedAmount.value = this.t("ticketCheckedAmount") + ': ' +  Number(tmpAmountData.result.recordset[0].CHECKED_AMOUNT).currency()
-                        this.lblTicketDifferance.value = this.t("ticketDifferance") + ': ' + Number(Number(tmpAmountData.result.recordset[0].CREATED_AMOUNT) -  Number(tmpAmountData.result.recordset[0].CHECKED_AMOUNT)).currency()
-                    }
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#56487b" }}>
-              <div className="card-body">
-                <div className="text-center">
-                  <h5 className="card-title">{this.t("popAllItemGroups")}</h5>
-                </div>
-                <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.AllItemGroups ? parseFloat(this.state.AllItemGroups) : 0)}  type={'number'} onClicks={(async()=>
-                  {
-                    let tmpSource =
-                    {
-                      source : 
-                      {
-                        groupBy : this.groupList,
-                        select : 
-                        {
-                          query : "SELECT ROUND(SUM(TOTAL),2) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME ORDER BY SUM(TOTAL) DESC",
-                          param : ['FISRT_DATE:date','LAST_DATE:date'],
-                          value : [this.dtDate.startDate,this.dtDate.endDate]
-                        },
-                        sql : this.core.sql
-                      }
-                    }
-                    await this.popAllItemGroups.show()
-                    await this.grdAllItemGroups.dataRefresh(tmpSource)
-                  }).bind(this)}/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="row py-1 px-3">
-          <div className="col-12">
-            <PieChart
-              id="pie"
-              type="doughnut"
-              title={this.t("bestItemGroup")}
-              palette="Material"
-              dataSource={this.state.bestItemGroup}
-              animation={{
-                easing: 'easeOutCubic',
-                duration: 1500, 
-              }}
-            >
-            <Series argumentField="ITEM_GRP_NAME" valueField="QUANTITY">
-              <SmallValuesGrouping mode="topN" topCount={5} />
-              <Label
-                visible={true}
-                format="fixedPoint"
-                customizeText={(arg)=>
-                  {
-                    if( arg.valueText  !=0)  
-                    return arg.valueText +"€" + " (" + arg.percentText + ")";  
-                    else  
-                     return arg.valueText+"€";  
-                  }}
-              >
-              <Connector visible={true} width={1} />
-              </Label>
-            </Series>
-              <Legend horizontalAlignment="center" verticalAlignment="bottom" percent={true}/>
-            </PieChart>
           </div>
         </div>
         <div className="row py-1 px-3">

@@ -2938,6 +2938,8 @@ export default class posDoc extends React.PureComponent
     }
     async ticketCheckRetour(pGuid)
     {
+        console.log(pGuid+ '1111')
+        this.loadingPay.current.instance.show()
         if(pGuid != "")
         {
             let tmpDt = new datatable();
@@ -2948,6 +2950,8 @@ export default class posDoc extends React.PureComponent
                 value : [pGuid] 
             }
             await tmpDt.refresh(); 
+            this.popLastSaleList.hide()
+
             if(tmpDt.length > 0)
             {
                 for (let i = 0; i < tmpDt.length; i++) 
@@ -3009,9 +3013,9 @@ export default class posDoc extends React.PureComponent
                     
                     await this.calcGrandTotal();
                 }
-                this.popLastSaleList.hide()
             }
         }        
+        this.loadingPay.current.instance.hide()
     }
     async ticketCheck(pTicket)
     {
@@ -7222,10 +7226,18 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnLastSaleRetour"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            let tmpLastPos = new datatable();
-                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                            console.log(tmpLastPos[0].GUID)
-                                            this.ticketCheckRetour(tmpLastPos[0].GUID)
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgLastSaleRetour',showTitle:true,title:this.lang.t("msgLastSaleRetour.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgLastSaleRetour.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLastSaleRetour.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLastSaleRetour.msg")}</div>)
+                                            }
+                                            if((await dialog(tmpConfObj)) == 'btn01')
+                                            {
+                                                let tmpLastPos = new datatable();
+                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                                this.ticketCheckRetour(tmpLastPos[0].GUID)
+                                            }
                                         }}>
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
                                         </NbButton>
@@ -9687,7 +9699,21 @@ export default class posDoc extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        if(typeof this.customerObj.customerAdress.dt()[0] != 'undefined')
+                                        {
+                                            this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        }
+                                        else
+                                        {
+                                           this.customerObj.customerAdress.addEmpty()
+                                           this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                           this.customerObj.customerAdress.dt()[0].TYPE = 0
+                                           this.customerObj.customerAdress.dt()[0].ADRESS  = this.txtPopCustomerAddress.value
+                                           this.customerObj.customerAdress.dt()[0].COUNTRY = this.txtPopCustomerCountry.value
+                                           this.customerObj.customerAdress.dt()[0].CITY = this.txtPopCustomerCity.value
+                                           this.customerObj.customerAdress.dt()[0].ZIPCODE = this.txtPopCustomerZipCode.value
+                                        }
+                                        if(typeof this.customerObj.customerOffical.dt()[0] != 'undefined')
                                         this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
                                         if(this.txtPopCustomerFirmName.value != '')
                                         {
