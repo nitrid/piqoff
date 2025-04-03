@@ -58,6 +58,63 @@ export default class customerInfoScreen extends React.PureComponent
                 }
             });
         }
+        else
+        {
+            window.addEventListener('message', (event) => 
+            {
+                try 
+                {
+                    if(event.data == "")
+                    {
+                        return;
+                    }
+
+                    let parsedData;
+                    if (typeof event.data === 'string') 
+                    {
+                        try 
+                        {
+                            let cleanJson = event.data.replace(/[\r\n]+/g, "\\n");
+                            parsedData = JSON.parse(cleanJson);
+                        } 
+                        catch (e) 
+                        {
+                            parsedData = eval("(" + event.data + ")");
+                        }
+                    } else {
+                        parsedData = event.data;
+                    }
+
+                    if(typeof parsedData.data != "undefined") 
+                    {
+                        this.txtCustomer.value = parsedData.data.posObj[0].CUSTOMER_NAME.toString().substring(0,45);
+                        this.txtPoint.value = parsedData.data.posObj[0].CUSTOMER_POINT;
+                        this.totalGrand.value = parsedData.data.grandTotal;
+
+                        this.grdList.dataRefresh({source:parsedData.data.posSaleObj});
+                    }
+                    else if(typeof parsedData.digit != "undefined") 
+                    {
+                        if(!this.state.digit) 
+                        {
+                            this.setState({digit:true});
+                        }
+
+                        this.lcd.writeString({string:parsedData.digit, offset:0});
+                        
+                        setTimeout(() => 
+                        {
+                            this.lcd.clearScreen();
+                            this.setState({digit:false});
+                        }, 1500);
+                    }
+                } 
+                catch(e) 
+                {
+                    console.error("Mesaj işleme hatası:", e);
+                }
+            }, false);
+        }
         this.lcd = new LCD(
         {
             elem: document.getElementById("lcd-container"),

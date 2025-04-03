@@ -8,7 +8,11 @@
             if (typeof module === 'object') {window.module = module; module = undefined;}
             document.addEventListener('deviceready', function() 
             {
-                window.KeyboardPlugin.disableKeyboard();
+                try
+                {
+                    window.KeyboardPlugin.disableKeyboard();
+                }
+                catch(e){}
             }, false);
         </script>
     </head>

@@ -116,7 +116,7 @@ export default class App extends React.PureComponent
                 }
             }
         ];
-
+        
         if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
         {
             var body = document.getElementsByTagName('body')[0];
@@ -132,7 +132,6 @@ export default class App extends React.PureComponent
         }
         else
         {
-            
             this.device = false
             this.init();
         }
@@ -246,7 +245,7 @@ export default class App extends React.PureComponent
             this.setState({vtadi: e.value});
         } 
     }
-    electronSend(pData)
+    secondScreenSend(pData)
     {
         if (/android/i.test(navigator.userAgent || navigator.vendor || window.opera) == false) 
         {
@@ -264,18 +263,41 @@ export default class App extends React.PureComponent
             }
             //********************************************************************************************************** */
         }
+        else
+        {
+            //SUNMI CİHAZLARIN 2. EKRANINI GÖSTERİLİYOR.
+            return new Promise(async resolve => 
+            {
+                try
+                {
+                    let tmpData = {...pData}
+                    tmpData.localPath = "file:///data/user/0/com.piq.piqpos/files/piqpos/public/pos/index.html"
+                    window.SunmiPlugin.showOnSecondaryDisplay(JSON.stringify(tmpData));
+                }
+                catch(e)
+                {
+                    console.log(e)
+                }
+                resolve(pData)
+            })
+            //********************************************************************************************************** */
+        }
     }
     async componentDidMount()
     {
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.get('lcd') != null)
         {
+            if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
+            {
+                this.init();
+            }
             this.setState({lcd:true})
         }
         else
         {
             //DEVICE ID VE DİĞER PARAMETRELER ELECTRONJS ÜZERİNDEKİ CONFIG DEN GETIRILIYOR.
-            let tmpData = await this.electronSend({tag:"arguments"})
+            let tmpData = await this.secondScreenSend({tag:"arguments"})
             if(typeof tmpData != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data.deviceId != 'undefined')
             {
                 localStorage.setItem('device',tmpData.data.deviceId)
@@ -364,7 +386,6 @@ export default class App extends React.PureComponent
         
         if(lcd)
         {
-            console.log("lcd");
             return <CustomerInfoScreen/>
         }
         if(itemInfo)
