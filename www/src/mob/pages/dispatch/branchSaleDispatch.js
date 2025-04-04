@@ -44,7 +44,7 @@ export default class salesDispatch extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT TOP 1 COST_PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID AS PRICE",
+            query : "SELECT TOP 1 COST_PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID",
             param : ['GUID:string|50'],
         }
 
@@ -152,15 +152,15 @@ export default class salesDispatch extends React.PureComponent
             resolve();
         });
     }
-    getPrice(pGuid,pQuantity,pCustomer)
+    getPrice(pGuid)
     {
         return new Promise(async resolve => 
         {
-            this.priceDt.selectCmd.value = [pGuid,pQuantity,(pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer)]
+            this.priceDt.selectCmd.value = [pGuid]
             await this.priceDt.refresh()
             if(this.priceDt.length > 0)
             {
-                resolve(this.priceDt[0].PRICE)
+                resolve(this.priceDt[0].COST_PRICE)
             }
             resolve(0)
         });
@@ -191,7 +191,7 @@ export default class salesDispatch extends React.PureComponent
             // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
             if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
                 this.txtPrice.value = Number(
-                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                    (await this.getPrice(this.itemDt[0].GUID))
                 ).round(2);
             }
     
@@ -289,7 +289,6 @@ export default class salesDispatch extends React.PureComponent
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
 
-        console.log(tmpDocItems)
         this.docObj.docItems.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -898,7 +897,6 @@ export default class salesDispatch extends React.PureComponent
                                             {
                                                 
                                                 this.calcEntry(false)
-                                                console.log(this.popDiscount)
                                                 this.popDiscount.hide()
                                             }).bind(this)
                                         }>{this.t("lblAdd")}
@@ -958,7 +956,7 @@ export default class salesDispatch extends React.PureComponent
                                                 if(typeof e.data.QUANTITY != 'undefined')
                                                 {
                                                     e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].INPUT))).round(2)
+                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM))).round(2)
                                                     await this.save()
                                                 }
                                                 if(typeof e.data.PRICE != 'undefined')
