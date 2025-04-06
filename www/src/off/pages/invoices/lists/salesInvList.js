@@ -333,7 +333,7 @@ export default class salesInvList extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="detailslayout" parent={this} icon="print" type="default"
+                                    <NdButton id="detailslayout" parent={this} icon="detailslayout" type="default"
                                     onClick={async()=>
                                     {
                                         let tmpQuery = 
@@ -344,7 +344,7 @@ export default class salesInvList extends React.PureComponent
                                                     "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                                                     " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                                             param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25',],
-                                            value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,'115']
+                                            value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,'115']
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery)
                                         App.instance.setState({isExecute:true})
