@@ -271,7 +271,7 @@ export default class App extends React.PureComponent
                 try
                 {
                     let tmpData = {...pData}
-                    tmpData.localPath = "file:///data/user/0/com.piq.piqpos/files/piqpos/public/pos/index.html"
+                    tmpData.localPath = "file:///data/user/0/com.piq.piqpos/files/piqpos/public/pos/index.html?lcd=true"
                     window.SunmiPlugin.showOnSecondaryDisplay(JSON.stringify(tmpData));
                 }
                 catch(e)

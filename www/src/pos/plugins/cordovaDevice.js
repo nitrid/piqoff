@@ -4,7 +4,62 @@ import {posDeviceCls} from "../../core/cls/pos.js";
 const orgLcdPrint = posLcdCls.prototype.print
 const orgEscPrinter = posDeviceCls.prototype.escPrinter
 const orgMettlerScaleSend = posScaleCls.prototype.mettlerScaleSend
+const orgCaseOpen = posDeviceCls.prototype.caseOpen
 
+posDeviceCls.prototype.caseOpen = async function()
+{
+    return new Promise((resolve) => 
+    {
+        if(window.SerialUSBPlugin)
+        {
+            let vendorId = 0;
+            let productId = 0;
+
+            if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT == "D3 MINI")
+            {
+                vendorId = -1;
+                productId = -1;
+            }
+            else if(this.dt()[0].PRINTER_PORT != null && typeof this.dt()[0].PRINTER_PORT != 'undefined' && this.dt()[0].PRINTER_PORT.indexOf('|') > -1)
+            {
+                vendorId = this.dt()[0].PRINTER_PORT.split('|')[0];
+                productId = this.dt()[0].PRINTER_PORT.split('|')[1];
+            }
+            else
+            {
+                console.error('vendorId - productId is invalid');
+                resolve();
+                return
+            }
+            if(vendorId == -1)
+            {
+                window.SunmiPlugin.cashDrawOpen();
+                resolve();
+            }
+            else
+            {
+                window.SerialUSBPlugin.requestPermission(vendorId, productId, function(permissionMessage) 
+                {
+                    window.SerialUSBPlugin.open(vendorId, productId, function(connectMessage) 
+                    {
+                        window.SerialUSBPlugin.write('\x0c');
+                        window.SerialUSBPlugin.write(pData.text);
+                        window.SerialUSBPlugin.close();
+                        resolve();
+                    });
+                }, function(permissionError) 
+                {
+                    console.error(permissionError);
+                    resolve();
+                });
+            }
+        }
+        else
+        {
+            resolve(orgCaseOpen.call(this))
+        }
+    });
+}
 posLcdCls.prototype.print = async function(pData)
 {
     if(window.SerialUSBPlugin)
