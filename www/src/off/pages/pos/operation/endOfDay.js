@@ -661,33 +661,60 @@ export default class endOfDay extends React.PureComponent
 
         this.docObj.dt()[0].AMOUNT = Number(this.txtAdvance.value + this.txtCash.value).round(2)
         this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
-        await this.docObj.save()
-        let tmpConfObj =
+        console.log(this.docObj.dt()[0])
+        console.log(this.docObj.docCustomer.dt())
+
+        let tmpSave = await this.docObj.save()
+        console.log(tmpSave)
+        if(tmpSave == 0)
         {
-            id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
-        }
-        
-        let pResult = await dialog(tmpConfObj);
-        
-        if(pResult == 'btn01')
-        { 
-            this.reactWizardRef.current.setState(
+            let tmpConfObj =
             {
-                currentStep: 0,
-                nextButton: true,
-                previousButton: false,
-                finishButton: false,
-                width: "16.666666666666668%",
-            })
-            this.txtCash.value = 0
-            this.txtCreditCard.value = 0
-            this.txtRestorant.value = 0
-            this.txtTicketCard.value = 0
-            this.txtCheck.value = 0
-            this.cmbSafe.value = ''
+                id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
         }
+        else
+        {
+            let tmpConfObj =
+            {
+                id:'msgError',showTitle:true,title:this.t("msgError.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgError.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgError.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+        }
+        
+       
+        this.reactWizardRef.current.setState(
+        {
+            currentStep: 0,
+            nextButton: true,
+            previousButton: false,
+            finishButton: false,
+            width: "16.666666666666668%",
+        })
+        this.txtCash.value = 0
+        this.txtCreditCard.value = 0
+        this.txtRestorant.value = 0
+        this.txtTicketCard.value = 0
+        this.txtCheck.value = 0
+        this.cmbSafe.value = ''
+        this.txtAmountCash1.value = 0
+        this.txtAmountCash2.value = 0
+        this.txtAmountCash3.value = 0
+        this.txtAmountCash4.value = 0
+        this.txtAmountCash5.value = 0
+        this.txtAmountCashTotal.value = 0
+        this.txtAmountCreditCard1.value = 0
+        this.txtAmountCreditCard2.value = 0
+        this.txtAmountCreditCard3.value = 0
+        this.txtAmountCreditCard4.value = 0
+        this.txtAmountCreditCard5.value = 0
+        this.txtAmountCreditCardTotal.value = 0
+        this.txtAdvance.value = 0
     }
 
     async saveTotalCash()
