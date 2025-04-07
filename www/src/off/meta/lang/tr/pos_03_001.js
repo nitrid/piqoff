@@ -72,6 +72,12 @@ const pos_03_001 =
         btn01: "Tamam",
         msg: "Gün Sonu Kayıt Edildi.."
     },
+    msgError :
+    {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Gün Sonu Kayıt Edilemedi.."
+    },
     advanceMsg1 : "Lütfen Avans Tutarınızın",
     advanceMsg2 : "Olduğundan Emin Olunuz",
     grdSaleTicketItems :

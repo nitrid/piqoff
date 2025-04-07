@@ -42,7 +42,8 @@ export default class Login extends React.PureComponent
         {
             kullanici: '',
             sifre: '',
-            alert: ''
+            alert: '',
+            isDbSelect: false
         }  
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
@@ -54,25 +55,32 @@ export default class Login extends React.PureComponent
         this.getUserList = this.getUserList.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
         this.setUser = this.setUser.bind(this)
-
-        try 
-        {
-            this.dbConfig = require('../../config.js').default.databases;
-        } 
-        catch (error) 
-        {
-            this.dbConfig = [];
-        }
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.Kullanici.focus()
-        if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
+        // DATABASE SEÇİMİ İÇİN YAPILDI
+        try
         {
-            this.txtDbSelect.value = this.dbConfig[0].CODE
-            this.core.sql.selectedDb = this.txtDbSelect.value
+            const response = await fetch('/config.js');
+            const configText = await response.text();
+            let pluginsConf = eval('(' + configText.replace('export default','').replace(/;$/, '') + ')');
+            this.dbConfig = pluginsConf.databases;
+
+            if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
+            {
+                this.setState({isDbSelect: true})
+                this.txtDbSelect.value = this.dbConfig[0].CODE
+                this.core.sql.selectedDb = this.txtDbSelect.value
+            }
         }
+        catch (error) 
+        {
+            this.dbConfig = [];
+            this.setState({isDbSelect: false})
+        }
+        //*************************************** */
     }
     textValueChanged(e) 
     {      
@@ -269,7 +277,7 @@ export default class Login extends React.PureComponent
     }
     dbSelectedView()
     {
-        if(typeof this.dbConfig != 'undefined' && this.dbConfig.length > 0)
+        if(this.state.isDbSelect)
         {
             return(
                 <div className="dx-field">

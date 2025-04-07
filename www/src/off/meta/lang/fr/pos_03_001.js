@@ -72,6 +72,12 @@ const pos_03_001 =
         btn01: "OK",
         msg: "La clôture de la journée a été enregistrée." 
     },
+    msgError :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "La clôture de la journée n'a pas été enregistrée."
+    },
     advanceMsg1 : "Soyez sûr que le fond de caisse est de",
     advanceMsg2 : "Etre sûr!!!",
     grdSaleTicketItems :
