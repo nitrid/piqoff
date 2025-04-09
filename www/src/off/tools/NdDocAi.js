@@ -33,7 +33,7 @@ export default class NdDocAi extends Base
     getValue(pData,pType)
     {
         let tmpValue = undefined
-        if(typeof pData != 'undefined')
+        if(typeof pData != 'undefined' && pType != 'price')
         {
             if(typeof pData.content != 'undefined')
             {
@@ -53,6 +53,17 @@ export default class NdDocAi extends Base
                 console.log(pData)
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
+        }
+        else if(pType == 'price')
+        {
+            if(typeof pData.value != 'undefined')
+            {
+                tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
+            }
+            else if(typeof pData.content != 'undefined')
+            {
+                tmpValue = pType == 'string' ? pData.content : this.parseNumber(pData.content)
+            }
         }
         return tmpValue
     }
@@ -188,9 +199,11 @@ export default class NdDocAi extends Base
                 {
                     pData.Item[i].Quantity = this.getValue(pData.Item[i].Quantity)
                 }
+                console.log(pData.Item[i].UnitPrice)
+                console.log(Number(this.getValue(pData.Item[i].UnitPrice)).round(5))
                 
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
-                pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice) == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice)).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
+                pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice,'price') == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice,'price')).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
                 pData.Item[i].DiscountRate = typeof this.getValue(pData.Item[i].DiscountRate,'string') == 'undefined' ? 0 : this.getValue(pData.Item[i].DiscountRate,'string')
                 if(typeof pData.Item[i].DiscountRate == 'string')
@@ -513,7 +526,7 @@ export default class NdDocAi extends Base
                                     <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={true} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                     <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} allowEditing={false} width={120} allowHeaderFiltering={false}/>
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
-                                    <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.Unit}}/>
+                                    <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'}/>
                                     <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                     <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
                                     <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
