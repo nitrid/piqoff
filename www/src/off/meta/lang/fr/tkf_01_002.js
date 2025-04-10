@@ -15,7 +15,7 @@ const tkf_01_002 =
         clmTypeName : "Type",
         clmGenusName : "Genre"
     },
-    grdSlsOrdList: 
+    grdSlsOfrList: 
     {
         clmRef: "Référence",
         clmRefNo: "Ligne",

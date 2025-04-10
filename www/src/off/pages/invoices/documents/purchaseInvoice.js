@@ -750,19 +750,21 @@ export default class purchaseInvoice extends DocBase
                         }
                         
                         if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
-                        {
+                        {   
                             let tmpConfObj =
                             {
                                 id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
                                 button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg") + " " + pData.NAME}</div>)
                             }
                             await dialog(tmpConfObj);
                             resolve()
                             return
-                        }
+                        } 
+                        this.msgCustomerNotFound.setTitle(pData.NAME)
                         await this.msgCustomerNotFound.show().then(async (e) =>
                         {
+
                             if(e == 'btn01' && this.checkCustomer.value == true)
                             {
                                 this.customerControl = false
@@ -2165,7 +2167,7 @@ export default class purchaseInvoice extends DocBase
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.msgQuantity.tmpData = tmpData.result.recordset[0]
+                                            this.msgQuantity.tmpData = tmpData.result.recordset[0]  
                                             await this.msgQuantity.show()
                                             await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                             this.txtBarcode.focus()

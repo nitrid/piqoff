@@ -715,6 +715,7 @@ export default class purchaseDispatch extends DocBase
                         return 
                     }
                     App.instance.setState({isExecute:false})
+                    this.msgCustomerNotFound.setTitle(pData.NAME)
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
                         if(e == 'btn01' && this.checkCustomer.value == true)

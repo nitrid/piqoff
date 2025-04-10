@@ -168,7 +168,7 @@ export default class DocBase extends React.PureComponent
             tmpDoc.REBATE = this.rebate
             tmpDoc.TRANSPORT_TYPE = this.sysParam.filter({ID:'DocTrasportType',USERS:this.user.CODE}).getValue()
 
-            this.docObj.addEmpty(tmpDoc);       
+            this.docObj.addEmpty(tmpDoc);  
             
             this.msgNewPrice.onShowed = async ()=>
             {
@@ -187,6 +187,7 @@ export default class DocBase extends React.PureComponent
                 this.txtPopQteUnitQuantity.value = 1
                 this.txtPopQuantity.value = 1
                 this.txtPopQuantity.focus()
+                this.msgQuantity.setTitle(this.msgQuantity.tmpData.NAME)
                 
                 let tmpUnitDt = new datatable()
                 tmpUnitDt.selectCmd = 
@@ -1083,6 +1084,7 @@ export default class DocBase extends React.PureComponent
             {
                 if(this.combineControl == true)
                 {
+                    this.msgCombineItem.setTitle(tmpMergeDt[0].ITEM_NAME)
                     let tmpBtnResult = await this.msgCombineItem.show();
                     if(tmpBtnResult == 'btn01')
                     {

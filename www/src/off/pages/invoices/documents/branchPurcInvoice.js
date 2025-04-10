@@ -563,13 +563,15 @@ export default class branchSaleInvoice extends DocBase
                         {
                             id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
                             button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg") + " " + pData.NAME}</div>)
                         }
                         await dialog(tmpConfObj);
                         resolve()
                         App.instance.setState({isExecute:false})
                         return
                     }
+
+                    this.msgCustomerNotFound.setTitle(pData.NAME)
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
                         if(e == 'btn01' && this.checkCustomer.value == true)

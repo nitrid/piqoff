@@ -115,7 +115,7 @@ export default class branchSaleDispatch extends DocBase
                 {
                     id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
                     button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg") }</div>)
                 }
                 await dialog(tmpConfObj);
                 return

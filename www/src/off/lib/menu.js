@@ -484,8 +484,8 @@ export const menu = (e) =>
                             [
                                 {
                                     id: 'tkf_01_001',
-                                    text: e.t('menuOff.tkf_01_001'),//'Alış tkfariş Listesi',
-                                    path: 'offers/lists/purchaseOrdList'
+                                    text: e.t('menuOff.tkf_01_001'),//'Alış teklif Listesi',
+                                    path: 'offers/lists/purchaseOfrList'
                                 },
                             ]
                         },
@@ -769,7 +769,7 @@ export const menu = (e) =>
                                 {
                                     id: 'tkf_01_002',
                                     text: e.t('menuOff.tkf_01_002'),//'Satış teklif Listesi',
-                                    path: 'offers/lists/salesOrdList'
+                                    path: 'offers/lists/salesOfrList'
                                 },
                             ]
                         },
