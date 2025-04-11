@@ -19,7 +19,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
-export default class rebateDispatch extends DocBase
+export default class rebatePurcDispatch extends DocBase
 {
     constructor(props)
     {
@@ -408,8 +408,10 @@ export default class rebateDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            console.log('pData iade irs 1 ',pData)
+            
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-            if(pData.ITEM_TYPE == 0)
+            if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)

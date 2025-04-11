@@ -1080,8 +1080,10 @@ export default class DocBase extends React.PureComponent
         return new Promise(async resolve =>
         {
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
+            console.log('tmpMergeDt',tmpMergeDt)
             if(tmpMergeDt.length > 0)
             {
+                console.log(this.combineControl)
                 if(this.combineControl == true)
                 {
                     this.msgCombineItem.setTitle(tmpMergeDt[0].ITEM_NAME)

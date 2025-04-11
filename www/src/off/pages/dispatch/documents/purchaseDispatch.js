@@ -620,8 +620,9 @@ export default class purchaseDispatch extends DocBase
             }
             console.log(2)
 
+            console.log('pData',pData.ITEM_TYPE)
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-            if(pData.ITEM_TYPE == 0)
+            if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
@@ -638,7 +639,7 @@ export default class purchaseDispatch extends DocBase
                         tmpMergDt[0].VAT_RATE = 0
                     }
                     
-            console.log(3)
+                console.log(3)
 
                     tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                     tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
@@ -837,6 +838,7 @@ export default class purchaseDispatch extends DocBase
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        console.log('this.multiItemData',this.multiItemData)
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =

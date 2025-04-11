@@ -545,8 +545,9 @@ export default class rebateDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            console.log('pData iade irs2',pData.ITEM_TYPE)
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-            if(pData.ITEM_TYPE == 0)
+            if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)

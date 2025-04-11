@@ -19,7 +19,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
-export default class branchSaleDispatch extends DocBase
+export default class branchPurcDispatch extends DocBase
 {
     constructor(props)
     {
@@ -634,8 +634,9 @@ export default class branchSaleDispatch extends DocBase
             {
                 pQuantity = 1
             }
+            console.log('pData branch irs 2',pData)
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-            if(pData.ITEM_TYPE == 0)
+            if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
