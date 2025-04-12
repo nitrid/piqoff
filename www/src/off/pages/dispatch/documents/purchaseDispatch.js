@@ -312,7 +312,7 @@ export default class purchaseDispatch extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
@@ -752,7 +752,7 @@ export default class purchaseDispatch extends DocBase
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
                     this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((tmpCheckData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(2) * pQuantity)
-                    this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmptmpCheckDataData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+                    this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpCheckData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
                     this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
                     this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                     this.calculateTotal()
@@ -776,9 +776,9 @@ export default class purchaseDispatch extends DocBase
                 }
                 else if(tmpDiscRate != 0)
                 {
-                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(pPrice  * pQuantity).rateInc(tmpDiscRate,4)
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
-                    this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = Number(pPrice  * pQuantity).rateInc(tmpDiscRate,4)
                 }
                 else
                 {
@@ -793,9 +793,9 @@ export default class purchaseDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
-            if(tmpData.result.recordset.length > 0)
+            if(tmpCheckData.result.recordset.length > 0)
             {
-                this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
+                this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpCheckData.result.recordset[0].PRICE
                 this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
             }
             if(this.docObj.dt()[0].VAT_ZERO == 1)

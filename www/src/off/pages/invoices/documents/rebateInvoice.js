@@ -330,7 +330,7 @@ export default class rebateInvoice extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
@@ -557,15 +557,16 @@ export default class rebateInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            let tmpCheckQuery = 
+            {
+                query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
             if(pData.ITEM_TYPE == 0)
             {
-                let tmpCheckQuery = 
-                {
-                    query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
-                    param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-                }
-                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+
                 if(this.customerControl == true)
                 {
                     if(tmpCheckData.result.recordset.length == 0)

@@ -295,7 +295,7 @@ export default class purchaseInvoice extends DocBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],ITEMS_VW_01.VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 INNER JOIN ITEMS_VW_01 ON CUSTOMER_VW_01.GUID = ITEMS_VW_01.CUSTOMER WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
@@ -709,15 +709,15 @@ export default class purchaseInvoice extends DocBase
                     pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
                 }
             }
+            let tmpCheckQuery = 
+            {
+                query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
             if(pData.ITEM_TYPE == 0)
             {
-                let tmpCheckQuery = 
-                {
-                    query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
-                    param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-                }
-                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
                 if(this.customerControl == true)
                 {
                     if(tmpCheckData.result.recordset.length == 0)
@@ -908,6 +908,7 @@ export default class purchaseInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+            console.log('tmpCheckData.result.recordset', tmpCheckData.result.recordset)
             if(tmpCheckData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpCheckData.result.recordset[0].PRICE

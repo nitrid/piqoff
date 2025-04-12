@@ -194,7 +194,7 @@ export default class priceDifferenceInvoice extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,ITEMS_VW_01.UNIT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
