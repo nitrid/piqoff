@@ -344,6 +344,16 @@ export default class collectionList extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
+                                {
+                                    id: 'fns_02_002',
+                                    text: this.t('menu'),
+                                    path: 'finance/documents/collection.js',
+                                    pagePrm:{GUID:e.data.GUID,REF:e.data.REF,REF_NO:e.data.REF_NO}
+                                })
+                            }}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}

@@ -50,7 +50,13 @@ export default class collection extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            setTimeout(() => {
+                this.getDoc(this.pagePrm.GUID,'',0)
+            }, 1000);
+        }
     }
     
     async init()
