@@ -238,10 +238,7 @@ export default class priceDiffDemand extends DocBase
                     {
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            this.customerControl = true
-                            this.customerClear = false
-                            this.combineControl = true
-                            this.combineNew = false
+                            this.checkboxReset()
                             
                             this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
@@ -270,10 +267,7 @@ export default class priceDiffDemand extends DocBase
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {   
-                            this.customerControl = true
-                            this.customerClear = false
-                            this.combineControl = true
-                            this.combineNew = false
+                            this.checkboxReset()
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                         }
                         else
@@ -298,10 +292,7 @@ export default class priceDiffDemand extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    this.customerControl = true
-                                    this.customerClear = false
-                                    this.combineControl = true
-                                    this.combineNew = false
+                                    this.checkboxReset()
                                     
                                     this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
@@ -1428,10 +1419,7 @@ export default class priceDiffDemand extends DocBase
 
                                                     if(data.length > 0)
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
     
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -1479,10 +1467,7 @@ export default class priceDiffDemand extends DocBase
                                     {
                                         this.pg_txtItemsCode.onClick = async(data) =>
                                         {
-                                            this.customerControl = true
-                                            this.customerClear = false
-                                            this.combineControl = true
-                                            this.combineNew = false
+                                            this.checkboxReset()
                                             if(data.length > 0)
                                             {
                                                 if(data.length == 1)
@@ -1535,10 +1520,7 @@ export default class priceDiffDemand extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -1553,10 +1535,7 @@ export default class priceDiffDemand extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
@@ -1591,10 +1570,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 this.pg_service.onClick = async(data) =>
                                                 {
-                                                    this.customerControl = true
-                                                    this.customerClear = false
-                                                    this.combineControl = true
-                                                    this.combineNew = false
+                                                    this.checkboxReset()
                                                     
                                                     this.grid.devGrid.beginUpdate()
                                                     for (let i = 0; i < data.length; i++) 
@@ -1610,10 +1586,7 @@ export default class priceDiffDemand extends DocBase
                                         
                                         this.pg_service.onClick = async(data) =>
                                         {
-                                            this.customerControl = true
-                                            this.customerClear = false
-                                            this.combineControl = true
-                                            this.combineNew = false
+                                            this.checkboxReset()
                                             
                                             this.grid.devGrid.beginUpdate()
                                             for (let i = 0; i < data.length; i++) 

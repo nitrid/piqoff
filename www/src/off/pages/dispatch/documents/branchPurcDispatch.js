@@ -359,8 +359,7 @@ export default class branchPurcDispatch extends DocBase
     }
     async multiItemSave()
     {
-        this.combineControl = true
-        this.combineNew = false
+        this.checkboxReset()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
@@ -381,8 +380,7 @@ export default class branchPurcDispatch extends DocBase
                         {
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
-                                this.combineControl = true
-                                this.combineNew = false
+                                this.checkboxReset()
                                 this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
                                 {
@@ -410,8 +408,7 @@ export default class branchPurcDispatch extends DocBase
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
                             {
-                                this.combineControl = true
-                                this.combineNew = false
+                                this.checkboxReset()
                                 await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
@@ -437,8 +434,7 @@ export default class branchPurcDispatch extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    this.combineControl = true
-                                    this.combineNew = false
+                                    this.checkboxReset()
                                     this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
@@ -634,7 +630,6 @@ export default class branchPurcDispatch extends DocBase
             {
                 pQuantity = 1
             }
-            console.log('pData branch irs 2',pData)
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
@@ -1626,8 +1621,7 @@ export default class branchPurcDispatch extends DocBase
                                                     {
                                                         this.txtBarcode.value = ''
 
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
@@ -1672,8 +1666,7 @@ export default class branchPurcDispatch extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
@@ -1713,8 +1706,7 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
@@ -1729,8 +1721,7 @@ export default class branchPurcDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {

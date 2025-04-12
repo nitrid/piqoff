@@ -389,17 +389,9 @@ export default class purchaseInvoice extends DocBase
                     {
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            this.customerControl = true
-                            this.customerClear = false
-                            this.combineControl = true
-                            this.combineNew = false
-                            
-                            this.grid.devGrid.beginUpdate()
-                            for (let i = 0; i < data.length; i++) 
-                            {
-                                await this.addItem(data[i],e.rowIndex)
-                            }
-                            this.grid.devGrid.endUpdate()
+                            this.checkboxReset()
+                            await this.addItem(data[0],e.rowIndex)
+                          
                         }
                         this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -421,10 +413,7 @@ export default class purchaseInvoice extends DocBase
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {   
-                            this.customerControl = true
-                            this.customerClear = false
-                            this.combineControl = true
-                            this.combineNew = false
+                            this.checkboxReset()
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                         }
                         else
@@ -450,17 +439,8 @@ export default class purchaseInvoice extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    this.customerControl = true
-                                    this.customerClear = false
-                                    this.combineControl = true
-                                    this.combineNew = false
-                                    
-                                    this.grid.devGrid.beginUpdate()
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
-                                    this.grid.devGrid.endUpdate()
+                                    this.checkboxReset()
+                                    await this.addItem(data[0],e.rowIndex)
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -731,15 +711,15 @@ export default class purchaseInvoice extends DocBase
             }
             if(pData.ITEM_TYPE == 0)
             {
+                let tmpCheckQuery = 
+                {
+                    query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                    param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+                }
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
                 if(this.customerControl == true)
                 {
-                    let tmpCheckQuery = 
-                    {
-                        query :"SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
-                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-                    }
-                    let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
                     if(tmpCheckData.result.recordset.length == 0)
                     {   
                         let tmpCustomerBtn = ''
@@ -764,7 +744,6 @@ export default class purchaseInvoice extends DocBase
                         this.msgCustomerNotFound.setTitle(pData.NAME)
                         await this.msgCustomerNotFound.show().then(async (e) =>
                         {
-
                             if(e == 'btn01' && this.checkCustomer.value == true)
                             {
                                 this.customerControl = false
@@ -833,6 +812,10 @@ export default class purchaseInvoice extends DocBase
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 pIndex = this.docObj.docItems.dt().length - 1
             }
+            else
+            {
+                pIndex = this.docObj.docItems.dt().length - pIndex -1
+            }   
 
             let tmpGrpQuery = 
             {
@@ -873,25 +856,18 @@ export default class purchaseInvoice extends DocBase
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
 
-            let tmpQuery = 
-            {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
-                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
             if(typeof pPrice == 'undefined')
             {
-                if(tmpData.result.recordset.length > 0)
+                if(tmpCheckData.result.recordset.length > 0)
                 {
-                    this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
+                    this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(4))
+                    this.docObj.docItems.dt()[pIndex].DISCOUNT = Number(tmpCheckData.result.recordset[0].PRICE  * pQuantity).rateInc(tmpDiscRate,4)
                     this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = tmpDiscRate
-                    this.docObj.docItems.dt()[pIndex].VAT = Number(((tmpData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).round(6)
-                    this.docObj.docItems.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
-                    this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                    this.docObj.docItems.dt()[pIndex].VAT = Number(((tmpCheckData.result.recordset[0].PRICE * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).round(6)
+                    this.docObj.docItems.dt()[pIndex].AMOUNT = Number(tmpCheckData.result.recordset[0].PRICE  * pQuantity).round(2)
+                    this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpCheckData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
-                    this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) * this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
+                    this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(4)) * this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                     this.calculateTotal()
                 }
                 else
@@ -932,9 +908,9 @@ export default class purchaseInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
-            if(tmpData.result.recordset.length > 0)
+            if(tmpCheckData.result.recordset.length > 0)
             {
-                this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
+                this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpCheckData.result.recordset[0].PRICE
                 this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
             }
             if(this.docObj.dt()[0].VAT_ZERO == 1)
@@ -1153,11 +1129,7 @@ export default class purchaseInvoice extends DocBase
     }
     async multiItemSave()
     {
-        this.customerControl = true
-        this.customerClear = false
-        this.combineControl = true
-        this.combineNew = false
-
+        this.checkboxReset()
         this.grid.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
@@ -2122,10 +2094,7 @@ export default class purchaseInvoice extends DocBase
 
                                                         if(data.length > 0)
                                                         {
-                                                            this.customerControl = true
-                                                            this.customerClear = false
-                                                            this.combineControl = true
-                                                            this.combineNew = false
+                                                            this.checkboxReset()
         
                                                             this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
@@ -2176,10 +2145,7 @@ export default class purchaseInvoice extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 if(data.length > 0)
                                                 {
                                                     if(data.length == 1)
@@ -2243,10 +2209,7 @@ export default class purchaseInvoice extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -2261,10 +2224,7 @@ export default class purchaseInvoice extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
@@ -2299,10 +2259,7 @@ export default class purchaseInvoice extends DocBase
                                                 {
                                                     this.pg_service.onClick = async(data) =>
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -2318,11 +2275,7 @@ export default class purchaseInvoice extends DocBase
                                            
                                             this.pg_service.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
-                                                
+                                                this.checkboxReset()
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++)
                                                 {
