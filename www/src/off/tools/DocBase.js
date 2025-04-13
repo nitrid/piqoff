@@ -494,12 +494,26 @@ export default class DocBase extends React.PureComponent
             this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
         }
         // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
+        let TmpDepot = this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT
         await this.discObj.loadDocDisc(
         {
-            DEPOT : this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT, 
+            DEPOT : TmpDepot == '' ? '00000000-0000-0000-0000-000000000000' : TmpDepot, 
             START_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"), 
             FINISH_DATE : moment(this.docObj.dt()[0].DOC_DATE).format("YYYY-MM-DD"),
         })
+    }
+    async checkboxReset()
+    {
+        if(typeof this.customerControl != 'undefined')
+        {
+            this.customerControl = true
+            this.customerClear = false
+        }
+        if(typeof this.combineControl != 'undefined')
+        {
+            this.combineControl = true
+            this.combineNew = false 
+        }
     }
     async calculateTotal()
     {
@@ -1080,7 +1094,6 @@ export default class DocBase extends React.PureComponent
         return new Promise(async resolve =>
         {
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
-            console.log('tmpMergeDt',tmpMergeDt)
             if(tmpMergeDt.length > 0)
             {
                 console.log(this.combineControl)

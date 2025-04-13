@@ -19,8 +19,6 @@ const pos_03_001 =
     txtCreditCard : "CB",
     txtCheck : "Chèque",
     txtRestorant : "T. Restaurant",
-    txtTicketCard : "Ticket Carte",
-    ticketCard : "Ticket Carte",
     txtReal : "Ok",
     payTransfer : "Transfert des Sommes", 
     validPriceFloat : "Fond de Caisse doit être Supérieur à 0", 
@@ -118,6 +116,9 @@ const pos_03_001 =
     txtAmountCreditCard3 : "Valeur du CB 3",
     txtAmountCreditCard4 : "Valeur du CB 4",
     txtAmountCreditCard5 : "Valeur du CB 5",
+    txtAmountTicketCard1 : "Valeur du Ticket Carte 1",
+    txtAmountTicketCard2 : "Valeur du Ticket Carte 2",
+    txtAmountTicketCard3 : "Valeur du Ticket Carte 3",
     txtAmountCreditCardTotal : "Total CB",
     popTotalCreditCard :
     {

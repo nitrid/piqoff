@@ -154,12 +154,10 @@ export default class rebatePurcDispatch extends DocBase
                 {
                     if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        this.combineControl = true
-                        this.combineNew = false
+                        this.checkboxReset()
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            this.combineControl = true
-                            this.combineNew = false
+                            this.checkboxReset()
 
                             this.grid.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
@@ -181,15 +179,14 @@ export default class rebatePurcDispatch extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {
-                            this.combineControl = true
-                            this.combineNew = false
+                            this.checkboxReset()
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                         }
                         else
@@ -215,8 +212,7 @@ export default class rebatePurcDispatch extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    this.combineControl = true
-                                    this.combineNew = false
+                                    this.checkboxReset()
 
                                     this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
@@ -1200,10 +1196,7 @@ export default class rebatePurcDispatch extends DocBase
                                                         this.txtBarcode.setState({value:""})
                                                         if(data.length > 0)
                                                         {
-                                                            this.customerControl = true
-                                                            this.customerClear = false
-                                                            this.combineControl = true
-                                                            this.combineNew = false
+                                                            this.checkboxReset()
         
                                                             this.grid.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
@@ -1251,10 +1244,7 @@ export default class rebatePurcDispatch extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
 
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
@@ -1295,10 +1285,7 @@ export default class rebatePurcDispatch extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
 
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -1314,10 +1301,7 @@ export default class rebatePurcDispatch extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
 
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
