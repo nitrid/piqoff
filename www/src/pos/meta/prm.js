@@ -64,7 +64,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"UseTicketRestLoyalty",
-        VALUE : 0, //0: Kullanamaz. 1: Kullanılır Puan İşlemez. 2: Kullanılır 
+        VALUE : 1, //0: Kullanamaz. 1: Kullanılır Puan İşlemez. 2: Kullanılır 
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

@@ -4737,7 +4737,6 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.customerName.value != '')
                                             {
-                                                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -5463,7 +5462,7 @@ export default class posDoc extends React.PureComponent
                                                         let tmpConfObj =
                                                         {
                                                             id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
+                                                            button:[{id:"btn01",caption:this.lang.t("F.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                         }
                                                         await dialog(tmpConfObj);
