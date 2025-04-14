@@ -5443,7 +5443,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnGetCustomerLy"} id={"btnGetCustomerLy"} parent={this} data-grid={{x:30,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnGetCustomerLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"5px"}}
+                                    <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%",fontSize:"10px",padding:"3px"}}
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnGetCustomer")} 
                                     onClick={async ()=>
                                     {          
@@ -5475,7 +5475,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }
                                     }}>
-                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "2.1.6rem"}} />
+                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
