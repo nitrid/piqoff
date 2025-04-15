@@ -696,11 +696,10 @@ export default class purchaseDispatch extends DocBase
             if(this.customerControl == true)
             {
             console.log(7)
-
                 let tmpCheckQuery = 
                 {
                     query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:string|50'],
                     value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
                 }
                 let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
@@ -761,7 +760,7 @@ export default class purchaseDispatch extends DocBase
             let tmpQuery = 
             {
                 query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:string|50'],
                 value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
