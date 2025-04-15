@@ -5475,7 +5475,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }
                                     }}>
-                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "2.1.6rem"}} />
+                                        <i className="text-white fa-solid fa-circle-user" style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
                             </NdLayoutItem>
@@ -5755,7 +5755,7 @@ export default class posDoc extends React.PureComponent
                                                                 this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
                                                             }
                                                         }}>
-                                                        {this.lang.t("lineDelete")}
+                                                        <span style={{fontSize: '0.8em'}}>{this.lang.t("lineDelete")}</span>
                                                         </NbButton>
                                                     </div>
                                                 </div>
@@ -5786,7 +5786,7 @@ export default class posDoc extends React.PureComponent
                                                                 await this.grdTRDetail.dataRefresh({source:tmpDt});
                                                             }
                                                         }}>
-                                                            {this.lang.t("trDeatil")}
+                                                            <span style={{fontSize: '0.8em'}}>{this.lang.t("trDeatil")}</span>
                                                         </NbButton>
                                                     </div>                                                    
                                                 </div>
@@ -5795,7 +5795,7 @@ export default class posDoc extends React.PureComponent
                                                     <div className="col-12 ps-0 py-1">
                                                         <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
                                                         onClick={()=>{this.popTotal.hide()}}>
-                                                            {this.lang.t("cancel")}
+                                                            <span style={{fontSize: '0.7em'}}>{this.lang.t("cancel")}</span>
                                                         </NbButton>
                                                     </div>
                                                 </div>
