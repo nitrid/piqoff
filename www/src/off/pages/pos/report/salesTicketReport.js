@@ -285,7 +285,15 @@ export default class salesOrdList extends React.PureComponent
             dataprm : ['CUSER','GUID','POS_GUID']
         }
         await this.lastPosPayDt.refresh()
-        await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+        let tmpPayData = new datatable();
+        tmpPayData.selectCmd = 
+        {
+            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT  WHERE POS = @POS_GUID ORDER BY DELETED ASC",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        await tmpPayData.refresh()
+        await this.grdSaleTicketPays.dataRefresh({source:tmpPayData});
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
         this.popDetail.show()
@@ -917,16 +925,26 @@ export default class salesOrdList extends React.PureComponent
                             </div>
                             <div className="col-3 ps-0">
                             <NdGrid id="grdSaleTicketPays" parent={this} 
-                                selection={{mode:"multiple"}} 
+                                selection={{mode:"single"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.data && e.data.DELETED !== undefined)
+                                    {
+                                        if(e.data.DELETED == "1")
+                                        {
+                                            e.rowElement.style.backgroundColor = "red";
+                                        }
+                                    }
+                                }}
                                 onRowClick={async(e)=>
                                     {
-                                        if(this.lastPosPayDt.length > 0)
+                                        if(this.lastPosPayDt.length > 0 && e.data.DELETED == "0")
                                         {
                                             this.rbtnTotalPayType.value = 0
                                             this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
@@ -944,7 +962,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
+                                    <Column dataField="TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>
                             </div>
@@ -1244,6 +1262,7 @@ export default class salesOrdList extends React.PureComponent
                                                 this.extraObj.dt()[0].DESCRIPTION = this.txtPayChangeDesc.value
                                                 
                                                 this.extraObj.save()
+                                                this.btnGetDetail(this.lastPosPayDt[0].POS_GUID)
                                             }}>
                                                 <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                             </NbButton>
