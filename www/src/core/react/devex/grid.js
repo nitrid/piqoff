@@ -47,6 +47,7 @@ export default class NdGrid extends Base
         this._onKeyDown = this._onKeyDown.bind(this); 
         this._onReady = this._onReady.bind(this);
         this._onExporting = this._onExporting.bind(this)
+        this._onToolbarPreparing = this._onToolbarPreparing.bind(this)
     }
     //#region Private
     _onInitialized(e) 
@@ -239,6 +240,13 @@ export default class NdGrid extends Base
             this.props.onExporting(e);
         }
     }
+    _onToolbarPreparing(e)
+    {
+        if(typeof this.props.onToolbarPreparing != 'undefined')
+        {
+            this.props.onToolbarPreparing(e);
+        }
+    }
     //#endregion
     componentDidUpdate()
     {
@@ -342,6 +350,7 @@ export default class NdGrid extends Base
                 onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                 onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                 onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
+                onToolbarPreparing={this._onToolbarPreparing}
                 filterRow={this.state.filterRow}
                 headerFilter={this.state.headerFilter}
                 selection={this.state.selection}

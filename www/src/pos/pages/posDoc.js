@@ -1590,7 +1590,7 @@ export default class posDoc extends React.PureComponent
                             this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code).space(10,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
-                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
                         }
                         else
                         {
@@ -1599,7 +1599,7 @@ export default class posDoc extends React.PureComponent
                             ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
-                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
                         }
 
                         this.scaleTimeout = setTimeout(() => 
@@ -1608,7 +1608,7 @@ export default class posDoc extends React.PureComponent
                             ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
 
                             this.posLcd.print({blink:0,text:tmpLcdStr})
-                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
                         }, 3000);
                     }, 100);                    
                 }
@@ -1629,7 +1629,7 @@ export default class posDoc extends React.PureComponent
             })
             //**********************************************/
             //MÜŞTERİ BİLGİ EKRANINA VERİ GÖNDERİMİ.
-            App.instance.electronSend(
+            App.instance.secondScreenSend(
             {
                 tag : "lcd",
                 data :
@@ -2661,7 +2661,7 @@ export default class posDoc extends React.PureComponent
                 ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + Number.money.code).space(20,"s")
 
                 this.posLcd.print({blink : 0,text : tmpLcdStr})
-                App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
                 resolve()
             }
             else
@@ -4427,7 +4427,7 @@ export default class posDoc extends React.PureComponent
 
                                         let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                         this.posLcd.print({blink:0,text:tmpLcdStr})
-                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
 
                                         this.rbtnPayType.value = 0                                                                       
                                         this.popTotal.show();
@@ -4480,7 +4480,7 @@ export default class posDoc extends React.PureComponent
                                         
                                             let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                             this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                                            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
     
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
@@ -4573,7 +4573,7 @@ export default class posDoc extends React.PureComponent
                                         
                                         let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                         this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
 
                                         this.popCashPay.show();
                                         this.txtPopCashPay.newStart = true;
@@ -4609,7 +4609,7 @@ export default class posDoc extends React.PureComponent
                                         
                                         let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                         this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
 
                                         let tmpExchangeRate = 1
                                         let tmpTotalGrand = this.posObj.dt()[0].TOTAL
@@ -4657,7 +4657,7 @@ export default class posDoc extends React.PureComponent
                                         
                                         let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
                                         this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
 
                                         let tmpTotalGrand = this.posObj.dt()[0].TOTAL
                                         let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))                                        
@@ -4737,7 +4737,6 @@ export default class posDoc extends React.PureComponent
                                         {
                                             if(this.customerName.value != '')
                                             {
-                                                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -5443,7 +5442,7 @@ export default class posDoc extends React.PureComponent
                             <NdLayoutItem key={"btnGetCustomerLy"} id={"btnGetCustomerLy"} parent={this} data-grid={{x:30,y:106,h:16,w:5,minH:16,maxH:32,minW:3,maxW:10}} 
                             access={this.acsObj.filter({ELEMENT:'btnGetCustomerLy',USERS:this.user.CODE})}>
                                 <div>
-                                    <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"5px"}}
+                                    <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block"} style={{height:"100%",width:"100%",fontSize:"10px",padding:"3px"}}
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnGetCustomer")} 
                                     onClick={async ()=>
                                     {          
@@ -5463,7 +5462,7 @@ export default class posDoc extends React.PureComponent
                                                         let tmpConfObj =
                                                         {
                                                             id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
+                                                            button:[{id:"btn01",caption:this.lang.t("F.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                         }
                                                         await dialog(tmpConfObj);
@@ -8795,17 +8794,38 @@ export default class posDoc extends React.PureComponent
                                         {
                                             id:'01',
                                             icon:'more',
-                                            visible:this.core.util.isAndroid(),
+                                            visible:true,
                                             onClick:async()=>
                                             {
-                                                let tmpDevice = await this.posDevice.deviceList()
-                                                await this.popDeviceList.show()
-                                                await this.popDeviceList.setData(tmpDevice)
-                                                this.popDeviceList.onClick = (data) =>
+                                                if(this.core.util.isAndroid())
                                                 {
-                                                    if(data.length > 0)
+                                                    let tmpDevice = await this.posDevice.deviceList()
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
                                                     {
-                                                        this.txtPopSettingsLcd.value = data[0].vendorId + "|" + data[0].productId
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsLcd.value = data[0].vendorId + "|" + data[0].productId
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {name:"COM1"},{name:"COM2"},{name:"COM3"},{name:"COM4"},
+                                                        {name:"COM5"},{name:"COM6"},{name:"COM7"},{name:"COM8"},
+                                                        {name:"COM9"}
+                                                    ]
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsLcd.value = data[0].name
+                                                        }
                                                     }
                                                 }
                                             }
@@ -8833,17 +8853,39 @@ export default class posDoc extends React.PureComponent
                                         {
                                             id:'01',
                                             icon:'more',
-                                            visible:this.core.util.isAndroid(),
+                                            visible:true,
                                             onClick:async()=>
                                             {
-                                                let tmpDevice = await this.posDevice.deviceList()
-                                                await this.popDeviceList.show()
-                                                await this.popDeviceList.setData(tmpDevice)
-                                                this.popDeviceList.onClick = (data) =>
+                                                if(this.core.util.isAndroid())
                                                 {
-                                                    if(data.length > 0)
+                                                    let tmpDevice = await this.posDevice.deviceList()
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
                                                     {
-                                                        this.txtPopSettingsScale.value = data[0].vendorId + "|" + data[0].productId
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsScale.value = data[0].vendorId + "|" + data[0].productId
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {name:"COM1"},{name:"COM2"},{name:"COM3"},{name:"COM4"},
+                                                        {name:"COM5"},{name:"COM6"},{name:"COM7"},{name:"COM8"},
+                                                        {name:"COM9"}
+                                                    ]
+
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsScale.value = data[0].name
+                                                        }
                                                     }
                                                 }
                                             }
@@ -8864,6 +8906,63 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.payCardPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:true,
+                                            onClick:async()=>
+                                            {
+                                                console.log(this.core.util.isAndroid())
+                                                if(this.core.util.isAndroid())
+                                                {
+                                                    let tmpDevice = await this.posDevice.deviceList()
+                                                    tmpDevice.push(
+                                                        {manufacturerName:"192.168.1.1:8888"},
+                                                        {manufacturerName:"192.168.1.1:8888|LRC"}
+                                                    )
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            if(typeof data[0].vendorId == 'undefined' || data[0].vendorId == null || data[0].vendorId == "")
+                                                            {
+                                                                this.txtPopSettingsPayCard.value = data[0].manufacturerName
+                                                            }
+                                                            else
+                                                            {
+                                                                this.txtPopSettingsPayCard.value = data[0].vendorId + "|" + data[0].productId
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {name:"COM1"},{name:"COM2"},{name:"COM3"},{name:"COM4"},
+                                                        {name:"COM5"},{name:"COM6"},{name:"COM7"},{name:"COM8"},
+                                                        {name:"COM9"},{name:"USB"},{name:"192.168.1.1:8888"},
+                                                        {name:"192.168.1.1:8888|LRC"}
+                                                    ]
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsPayCard.value = data[0].name
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8878,6 +8977,56 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.printDesing")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:true,
+                                            onClick:async()=>
+                                            {
+                                                if(this.core.util.isAndroid())
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {manufacturerName:"print.js"},
+                                                        {manufacturerName:"print-metapace.js"},
+                                                        {manufacturerName:"print-d3mini.js"}
+                                                    ]
+
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsPrint.value = data[0].manufacturerName
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {name:"print.js"},
+                                                        {name:"print-metapace.js"},
+                                                        {name:"print-d3mini.js"}
+                                                    ]
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsPrint.value = data[0].name
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8892,6 +9041,52 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popSettings.scannerPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsScanner"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            visible:true,
+                                            onClick:async()=>
+                                            {
+                                                if(this.core.util.isAndroid())
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {manufacturerName:"USB"}
+                                                    ]
+
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsScanner.value = data[0].manufacturerName
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = 
+                                                    [
+                                                        {name:"USB"}
+                                                    ]
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsScanner.value = data[0].name
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                                 onValueChanging={(e)=>
                                 {
                                     this.keyPopSettings.setCaretPosition(e.length)
@@ -8912,17 +9107,38 @@ export default class posDoc extends React.PureComponent
                                         {
                                             id:'01',
                                             icon:'more',
-                                            visible:this.core.util.isAndroid(),
+                                            visible:true,
                                             onClick:async()=>
                                             {
-                                                let tmpDevice = await this.posDevice.deviceList()
-                                                await this.popDeviceList.show()
-                                                await this.popDeviceList.setData(tmpDevice)
-                                                this.popDeviceList.onClick = (data) =>
+                                                if(this.core.util.isAndroid())
                                                 {
-                                                    if(data.length > 0)
+                                                    let tmpDevice = await this.posDevice.deviceList()
+                                                    tmpDevice.push({manufacturerName:"D3 MINI"},{manufacturerName:"TCP:192.168.1.1"})
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
                                                     {
-                                                        this.txtPopSettingsPrinter.value = data[0].vendorId + "|" + data[0].productId
+                                                        if(typeof data[0].vendorId == 'undefined' || data[0].vendorId == null || data[0].vendorId == "")
+                                                        {
+                                                            this.txtPopSettingsPrinter.value = data[0].manufacturerName
+                                                        }
+                                                        else
+                                                        {
+                                                            this.txtPopSettingsPrinter.value = data[0].vendorId + "|" + data[0].productId
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpDevice = [{name:"USB"},{name:"D3 MINI"},{name:"TCP:192.168.1.1"}]
+                                                    await this.popDeviceList.show()
+                                                    await this.popDeviceList.setData(tmpDevice)
+                                                    this.popDeviceList.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPopSettingsPrinter.value = data[0].name
+                                                        }
                                                     }
                                                 }
                                             }
@@ -8996,11 +9212,29 @@ export default class posDoc extends React.PureComponent
                     title={this.lang.t("popDeviceList.title")} 
                     deferRendering={true}
                     >
-                        <Column dataField="manufacturerName" caption={this.lang.t("popDeviceList.clmManufacture")} width={250}/>
-                        <Column dataField="productName" caption={this.lang.t("popDeviceList.clmProductName")} width={400}/>
-                        <Column dataField="productId" caption={this.lang.t("popDeviceList.clmProductId")} width={100}/>
-                        <Column dataField="vendorId" caption={this.lang.t("popDeviceList.clmVendorId")} width={100}/>
-                        <Column dataField="serialNumber" caption={this.lang.t("popDeviceList.clmSerialNo")} width={100}/>
+                        {(()=>
+                        {
+                            if(this.core.util.isAndroid())
+                            {
+                                return(
+                                    <>
+                                    <Column dataField="manufacturerName" caption={this.lang.t("popDeviceList.clmManufacture")} width={250}/>
+                                    <Column dataField="productName" caption={this.lang.t("popDeviceList.clmProductName")} width={400}/>
+                                    <Column dataField="productId" caption={this.lang.t("popDeviceList.clmProductId")} width={100}/>
+                                    <Column dataField="vendorId" caption={this.lang.t("popDeviceList.clmVendorId")} width={100}/>
+                                    <Column dataField="serialNumber" caption={this.lang.t("popDeviceList.clmSerialNo")} width={100}/>
+                                    </>
+                                )
+                            }
+                            else
+                            {
+                                return(
+                                    <>
+                                        <Column dataField="name" caption={this.lang.t("popDeviceList.clmName")}/>
+                                    </>
+                                )
+                            }
+                        })()}
                     </NdPopGrid>
                 </div>
                 {/* Grid List Popup */}

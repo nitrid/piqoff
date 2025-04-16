@@ -11,6 +11,8 @@ export default class NbKeyboard extends NbBase
         this.state.layoutName = typeof this.props.layoutName == 'undefined' ?  "default" : this.props.layoutName
         this.state.inputName = this.props.inputName
         this.state.inputs = {}
+        this.state.position = {top: 0}
+        this.state.visible = false
         
         this.keyPattern = 
         {
@@ -18,35 +20,35 @@ export default class NbKeyboard extends NbBase
             {
                 shift: 
                 [
-                "q w e r t y u i o p ü . :",
-                "a s d f g h j k l ş - , /",
-                "z x c v b n m ö ç * _ % {shift}",
-                "{numbers} {space} {backspace} @"
+                    "q w e r t y u i o p ü . :",
+                    "a s d f g h j k l ş - , /",
+                    "z x c v b n m ö ç * _ % {shift}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 default: 
                 [
-                "Q W E R T Y U I O P Ü . :",
-                "A S D F G H J K L Ş - , /",
-                "Z X C V B N M Ö Ç * _ % {shift}",
-                "{numbers} {space} {backspace} @"
+                    "Q W E R T Y U I O P Ü . :",
+                    "A S D F G H J K L Ş - , /",
+                    "Z X C V B N M Ö Ç * _ % {shift}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 mail: 
                 [
-                "q w e r t y u i o p ü . :",
-                "a s d f g h j k l ş - , /",
-                "z x c v b n m ö ç * _ % {capslock}",
-                "{numbers} {space} {backspace} @",
-                "hotmail gmail outlook .com",
-                "icloud orange yahoo .fr"
+                    "q w e r t y u i o p ü . :",
+                    "a s d f g h j k l ş - , /",
+                    "z x c v b n m ö ç * _ % {capslock}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
+                    "hotmail gmail outlook .com",
+                    "icloud orange yahoo .fr"
                 ],
                 mailShift: 
                 [
-                "Q W E R T Y U I O P Ü . :",
-                "A S D F G H J K L Ş - , /",
-                "Z X C V B N M Ö Ç * _ % {capslock}",
-                "{numbers} {space} {backspace} @",
-                "hotmail gmail outlook .com",
-                "icloud orange yahoo .fr"
+                    "Q W E R T Y U I O P Ü . :",
+                    "A S D F G H J K L Ş - , /",
+                    "Z X C V B N M Ö Ç * _ % {capslock}",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
+                    "hotmail gmail outlook .com",
+                    "icloud orange yahoo .fr"
                 ],
                 numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"],
                 numberSimple: ["1 2 3", "4 5 6", "7 8 9", ", 0 {backspace}"]
@@ -58,21 +60,21 @@ export default class NbKeyboard extends NbBase
                     "a z e r t y u i o p % *",
                     "q s d f g h j k l m - |",
                     "w x c v b n , : . _ {shift}",
-                    "{numbers} {space} {backspace} @"
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 default: 
                 [
                     "A Z E R T Y U I O P % *",
                     "Q S D F G H J K L M - |",
                     "W X C V B N , : . _ {shift}",
-                    "{numbers} {space} {backspace} @"
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : "")
                 ],
                 mail: 
                 [
                     "a z e r t y u i o p % *",
                     "q s d f g h j k l m - |",
                     "w x c v b n , : . _ {capslock}",
-                    "{numbers} {space} {backspace} @",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
                     "hotmail gmail outlook .com",
                     "icloud orange yahoo .fr"
                 ],
@@ -81,7 +83,7 @@ export default class NbKeyboard extends NbBase
                     "A Z E R T Y U I O P % *",
                     "Q S D F G H J K L M - |",
                     "W X C V B N , : . _ {capslock}",
-                    "{numbers} {space} {backspace} @",
+                    "{numbers} {space} {backspace} @" + (this.props.enter ? " {enter}" : ""),
                     "hotmail gmail outlook .com",
                     "icloud orange yahoo .fr"
                 ],
@@ -133,12 +135,50 @@ export default class NbKeyboard extends NbBase
     {
         this.keyboard.setCaretPosition(e)
     }
+    show(inputId)
+    {
+        if(this.props.autoPosition)
+        {
+            const element = document.getElementById(inputId);
+            if(element)
+            {
+                const rect = element.getBoundingClientRect();
+                this.setState({
+                    visible: true,
+                    position: {top: rect.bottom + window.scrollY}
+                });
+            }
+        }
+        else
+        {
+            this.setState({visible: true});
+        }
+    }
+    hide()
+    {
+        this.setState({visible: false});
+    }
     render()
     {
+        if(this.props.autoPosition && !this.state.visible)
+        {
+            return null;
+        }
+
         return(
-            <div>
+            <div style={this.props.autoPosition ? {
+                position: 'absolute',
+                top: this.state.position.top + 'px',
+                left: '0px',
+                zIndex: 2000,
+                backgroundColor: '#fff',
+                boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
+                padding: '10px',
+                width: '100%'
+                } : {}}>
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
+                newLineOnEnter={this.props.newLineOnEnter}
                 onChangeAll={(inputs) =>
                 {
                     this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
@@ -148,31 +188,22 @@ export default class NbKeyboard extends NbBase
                 {
                     if (button === "{shift}" || button === "{lock}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "default" ? "shift" : "default"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "default" ? "shift" : "default"});
                     }
                     if (button === "{capslock}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "mail" ? "mailShift" : "mail"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "mail" ? "mailShift" : "mail"});
                     }
                     if (button === "{numbers}" || button === "{abc}") 
                     {
-                        this.setState(
-                        {
-                            layoutName: this.state.layoutName === "numbers" ? this.props.layoutName : "numbers"
-                        });
+                        this.setState({layoutName: this.state.layoutName === "numbers" ? this.props.layoutName : "numbers"});
                     }
                 }}
                 layoutName={this.state.layoutName}
                 layout={this.state.keyboard}
                 display={{
                     "{numbers}": "123",
-                    "{ent}": "return",
+                    "{enter}": "↵",
                     "{escape}": "esc ⎋",
                     "{tab}": "tab ⇥",
                     "{backspace}": "⌫",

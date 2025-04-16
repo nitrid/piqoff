@@ -15,7 +15,7 @@
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <script src="./lib/bootstrap.bundle.min.js"></script>
 
-        <title>Piqapp | Powered by Piqsoft</title>  
+        <title>piqpos | Powered by Piqsoft</title> 
     </head>
 
     <body>
@@ -38,13 +38,6 @@
                         <div class="row mb-2">
                             <div class="col-12">
                                 <input type="text" class="form-control" name="host" id="host" placeholder="Host">
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-12">
-                                <select class="form-control" name="app" id="app">
-                                    <option value="pos">Pos</option>
-                                </select>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -71,14 +64,15 @@
                 {
                     this.bindEvents();
                     document.getElementById('host').value = localStorage.getItem("host");
-                    document.getElementById('app').value = localStorage.getItem("app");
                 },
-                bindEvents: function() {
+                bindEvents: function() 
+                {
                     document.addEventListener('deviceready', this.onDeviceReady, false);
                 },
                 onDeviceReady: function() 
                 {
                     app.receivedEvent('deviceready');
+                    window.KeyboardPlugin.enableKeyboard();
                 },
                 receivedEvent: function(id) 
                 {
@@ -110,12 +104,12 @@
                         progressBar.style.width = progress.progress + '%';
                     }
                 },
-                sync: function(Host,App,Callback)
+                sync: function(Host,Callback)
                 {        
                     var TmpHost = Host;
                     var url = "http://" + TmpHost + "/public.zip";
 
-                    var sync = ContentSync.sync({ src: url, id: 'piqapp', copyCordovaAssets: true });
+                    var sync = ContentSync.sync({ src: url, id: 'piqpos', copyCordovaAssets: true });
 
                     var setProgress = this.setProgress; 
                     
@@ -126,7 +120,7 @@
 
                     sync.on('complete', function(data) 
                     { 
-                        window.resolveLocalFileSystemURL("file://" + data.localPath + "/public/" + App + "/index.html", 
+                        window.resolveLocalFileSystemURL("file://" + data.localPath + "/public/pos/index.html", 
                         function(fileEntry)
                         {              
                             if(device.platform === 'iOS')
@@ -138,7 +132,6 @@
                                 window.location = fileEntry.nativeURL;                                
                             }
                             localStorage.setItem("path",data.localPath);
-                            localStorage.setItem("app",App);
                         },
                         function()
                         {
@@ -168,7 +161,7 @@
             app.initialize();
             function BtnKaydet()
             {
-                app.sync(document.getElementById('host').value,document.getElementById('app').value,function(status)
+                app.sync(document.getElementById('host').value,function(status)
                 {
                     if(!status)
                     {
@@ -177,7 +170,6 @@
                     else
                     {
                         localStorage.setItem("host",document.getElementById('host').value)
-                        localStorage.setItem("app",document.getElementById('app').value)
                     }
                 });
             }

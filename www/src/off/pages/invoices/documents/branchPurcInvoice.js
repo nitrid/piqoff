@@ -291,8 +291,7 @@ export default class branchSaleInvoice extends DocBase
                         { 
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
-                                this.combineControl = true
-                                this.combineNew = false
+                                this.checkboxReset()
 
                                 this.grid.devGrid.beginUpdate()
                                 for (let i = 0; i < data.length; i++) 
@@ -314,15 +313,14 @@ export default class branchSaleInvoice extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
                             {
-                                this.combineControl = true
-                                this.combineNew = false
+                                this.checkboxReset()
                                 await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
@@ -348,8 +346,7 @@ export default class branchSaleInvoice extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    this.combineControl = true
-                                    this.combineNew = false
+                                    this.checkboxReset()
                                     this.grid.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
@@ -563,13 +560,15 @@ export default class branchSaleInvoice extends DocBase
                         {
                             id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
                             button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg") + " " + pData.NAME}</div>)
                         }
                         await dialog(tmpConfObj);
                         resolve()
                         App.instance.setState({isExecute:false})
                         return
                     }
+
+                    this.msgCustomerNotFound.setTitle(pData.NAME)
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
                         if(e == 'btn01' && this.checkCustomer.value == true)
@@ -840,8 +839,7 @@ export default class branchSaleInvoice extends DocBase
     }
     async multiItemSave()
     {
-        this.combineControl = true
-        this.combineNew = false
+        this.checkboxReset()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
@@ -1720,10 +1718,7 @@ export default class branchSaleInvoice extends DocBase
                                                     {
                                                         this.txtBarcode.value = ''
 
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
     
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
@@ -1768,10 +1763,7 @@ export default class branchSaleInvoice extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 if(data.length == 1)
                                                 {
                                                     this.msgQuantity.tmpData = data[0]
@@ -1831,8 +1823,7 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
@@ -1847,8 +1838,7 @@ export default class branchSaleInvoice extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
 
                                                 this.grid.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
@@ -1883,10 +1873,7 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     this.pg_service.onClick = async(data) =>
                                                     {
-                                                        this.customerControl = true
-                                                        this.customerClear = false
-                                                        this.combineControl = true
-                                                        this.combineNew = false
+                                                        this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
@@ -1900,10 +1887,7 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             this.pg_service.onClick = async(data) =>
                                             {
-                                                this.customerControl = true
-                                                this.customerClear = false
-                                                this.combineControl = true
-                                                this.combineNew = false
+                                                this.checkboxReset()
                                                 this.grid.devGrid.beginUpdate()
 
                                                 for (let i = 0; i < data.length; i++) 

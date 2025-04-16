@@ -34,7 +34,7 @@ export default class NdTextArea extends Base
     render()
     {
         return(
-            <TextArea
+            <TextArea id={this.props.id}
             height={this.state.height}
             value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()}
             valueChangeEvent={"keyup"}

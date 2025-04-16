@@ -8,14 +8,14 @@ import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class salesOrdList extends React.PureComponent
+export default class purchaseOfrList extends React.PureComponent
 {
     constructor(props)
     {
@@ -23,21 +23,21 @@ export default class salesOrdList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
+            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "REF",NAME : this.t("grdSlsOrdList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsOrdList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOrdList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsOrdList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsOrdList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsOrdList.clmTotal")},
+            {CODE : "REF",NAME : this.t("grdPurcOfrList.clmRef")},
+            {CODE : "REF_NO",NAME : this.t("grdPurcOfrList.clmRefNo")},
+            {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcOfrList.clmOutputCode")},                                   
+            {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcOfrList.clmOutputName")},
+            {CODE : "INPUT_NAME",NAME : this.t("grdPurcOfrList.clmInputName")},
+            {CODE : "DOC_DATE",NAME : this.t("grdPurcOfrList.clmDate")},
+            {CODE : "AMOUNT",NAME : this.t("grdPurcOfrList.clmAmount")},
+            {CODE : "VAT",NAME : this.t("grdPurcOfrList.clmVat")},
+            {CODE : "TOTAL",NAME : this.t("grdPurcOfrList.clmTotal")},
         ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
@@ -55,6 +55,11 @@ export default class salesOrdList extends React.PureComponent
         this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
+        this.grdPurcOfrList.devGrid.clearFilter('header')
+        this.grdPurcOfrList.devGrid.clearSorting()
+        this.grdPurcOfrList.devGrid.clearFilter('row')
+
+
     }
     _columnListBox(e)
     {
@@ -71,9 +76,9 @@ export default class salesOrdList extends React.PureComponent
                 {
                     this.groupList.push('REF_NO')
                 }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
+                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
                 {
-                    this.groupList.push('INPUT_NAME')
+                    this.groupList.push('OUTPUT_NAME')
                 }
                 if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
@@ -84,15 +89,15 @@ export default class salesOrdList extends React.PureComponent
                     this.groupList.push('TOTAL')
                 }
                 
-                for (let i = 0; i < this.grdSlsOrdList.devGrid.columnCount(); i++) 
+                for (let i = 0; i < this.grdPurcOfrList.devGrid.columnCount(); i++) 
                 {
-                    if(typeof e.value.find(x => x == this.grdSlsOrdList.devGrid.columnOption(i).name) == 'undefined')
+                    if(typeof e.value.find(x => x == this.grdPurcOfrList.devGrid.columnOption(i).name) == 'undefined')
                     {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',false)
+                        this.grdPurcOfrList.devGrid.columnOption(i,'visible',false)
                     }
                     else
                     {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',true)
+                        this.grdPurcOfrList.devGrid.columnOption(i,'visible',true)
                     }
                 }
 
@@ -129,18 +134,19 @@ export default class salesOrdList extends React.PureComponent
                 select : 
                 {
                     query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
+                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
-                    param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                            " AND TYPE = 0 AND DOC_TYPE = 61 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
                 sql : this.core.sql
             }
         }
         App.instance.setState({isExecute:true})
-        await this.grdSlsOrdList.dataRefresh(tmpSource)
+        await this.grdPurcOfrList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
+
     }
     render()
     {
@@ -162,9 +168,9 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'tkf_02_002',
-                                                text: this.t('menu'),
-                                                path: 'offers/documents/salesOffer.js',
+                                                id: 'sip_02_001',
+                                                text: this.t('menu.sip_02_001'),
+                                                path: 'orders/documents/purchaseOrder.js',
                                             })
                                         }
                                     }    
@@ -203,7 +209,7 @@ export default class salesOrdList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} showClearButton={true}
                                     >
                                     </NdDatePicker>
                                 </Item>
@@ -219,21 +225,21 @@ export default class salesOrdList extends React.PureComponent
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 onEnterKey={(async()=>
-                                    {
-                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.show()
-                                        this.pg_txtCustomerCode.onClick = (data) =>
-                                        { 
+                                {
+                                    await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                    this.pg_txtCustomerCode.show()
+                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                    { 
+                                        if(data.length > 0)
+                                        {
                                             if(data.length > 0)
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                    this.txtCustomerCode.CODE = data[0].CODE
-                                                }
+                                                this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                this.txtCustomerCode.CODE = data[0].CODE
                                             }
                                         }
-                                    }).bind(this)}
+                                    }
+                                }).bind(this)}
                                 button=
                                 {
                                     [
@@ -323,7 +329,7 @@ export default class salesOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdSlsOrdList" parent={this} 
+                            <NdGrid id="grdPurcOfrList" parent={this} 
                             selection={{mode:"multiple"}} 
                             height={600}
                             showBorders={true}
@@ -336,9 +342,9 @@ export default class salesOrdList extends React.PureComponent
                             {
                                 App.instance.menuClick(
                                 {
-                                    id: 'tkf_02_002',
+                                    id: 'sip_02_001',
                                     text: this.t('menu'),
-                                    path: 'offers/documents/salesOffer.js',
+                                    path: 'orders/documents/purchaseOrder.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
@@ -346,16 +352,16 @@ export default class salesOrdList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={true} width={100}/> 
-                                <Column dataField="INPUT_CODE" caption={this.t("grdSlsOrdList.clmInputCode")} visible={false}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdSlsOrdList.clmOutputName")} visible={false}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
+                                <Export fileName={this.lang.t("menuOff.sip_01_001")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="REF" caption={this.t("grdPurcOfrList.clmRef")} visible={true} width={200}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdPurcOfrList.clmRefNo")} visible={true} width={100}/> 
+                                <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcOfrList.clmOutputCode")} visible={false}/> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdPurcOfrList.clmOutputName")} visible={true}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdPurcOfrList.clmInputName")} visible={false}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdPurcOfrList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdPurcOfrList.clmAmount")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="VAT" caption={this.t("grdPurcOfrList.clmVat")} visible={false} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                <Column dataField="TOTAL" caption={this.t("grdPurcOfrList.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>              
                             </NdGrid>
                         </div>
                     </div>

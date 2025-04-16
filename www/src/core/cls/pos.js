@@ -1175,7 +1175,14 @@ export class posDeviceCls
             this.escpos.Serial = global.require('escpos-serialport');
             this.escpos.Screen = global.require('escpos-screen');
             this.escpos.USB = global.require('escpos-usb');
-            this.escpos.Network = global.require('escpos-network');
+            try
+            {
+                this.escpos.Network = global.require('escpos-network');
+            }
+            catch(err)
+            {
+                this.escpos.Network = null
+            }
             this.path = global.require('path')
             this.serialport = global.require('serialport');
             this.net = global.require('net')
@@ -1424,7 +1431,13 @@ export class posDeviceCls
                     return
                 }
                 let device = undefined;
-                if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+                if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT.startsWith('TCP:'))
+                {
+                    const ip = this.dt()[0].PRINTER_PORT.split(':')[1];
+                    const port = 9100;
+                    device = new this.escpos.Network(ip, port);
+                }
+                else if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
                 {
                     device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
                 }

@@ -58,6 +58,8 @@ export default class salesInvList extends React.PureComponent
     {
         this.txtCustomerCode.CODE = '';
         this._btnGetClick()
+        this.grdSlsIvcList.rowFilter = []
+
     }
     _columnListBox(e)
     {
@@ -518,7 +520,7 @@ export default class salesInvList extends React.PureComponent
                             height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
+                            headerFilter={{visible:false}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}

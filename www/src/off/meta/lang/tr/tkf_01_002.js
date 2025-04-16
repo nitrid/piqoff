@@ -15,7 +15,7 @@ const tkf_01_002 =
         clmTypeName : "TİPİ",
         clmGenusName : "CİNSİ"
     },
-    grdSlsOrdList: 
+    grdSlsOfrList: 
     {
         clmRef: "Seri",
         clmRefNo: "Sıra",

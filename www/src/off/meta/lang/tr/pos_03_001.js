@@ -19,8 +19,6 @@ const pos_03_001 =
     txtCreditCard : "Kredi Kartı",
     txtCheck : "Çek",
     txtRestorant : "Tike Restorant",
-    txtTicketCard : "Tike Kart",
-    ticketCard : "Tike Kart",
     txtReal : "Doğru",
     payTransfer : "Tutarları Aktar",
     validPriceFloat : "Avans 0'dan büyük olmalıdır",
@@ -118,6 +116,9 @@ const pos_03_001 =
     txtAmountCreditCard3 : "Kredi Kartı Değeri 3",
     txtAmountCreditCard4 : "Kredi Kartı Değeri 4",
     txtAmountCreditCard5 : "Kredi Kartı Değeri 5",
+    txtAmountTicketCard1 : "Tike Kartı Değeri 1",
+    txtAmountTicketCard2 : "Tike Kartı Değeri 2",
+    txtAmountTicketCard3 : "Tike Kartı Değeri 3",
     txtAmountCreditCardTotal : "Kredi Kartı Toplam",
     popTotalCreditCard :
     {

@@ -176,7 +176,6 @@ export default class customerPointReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                              
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -346,12 +345,12 @@ export default class customerPointReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                      <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 {/* Ara Toplam-Stok Ekle */}
                                 <EmptyItem colSpan={3}/>
-                                <Item  >
+                                <Item>
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
                                     maxLength={32}

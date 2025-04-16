@@ -36,6 +36,14 @@ export const langTr =
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtMount : "Bu Ay",
+    dtLastMount : "Geçen Ay",
+    dtYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl",
     msgDeviceChange : 
     {
         title : "Dikkat",
@@ -1050,5 +1058,5 @@ export const langTr =
         title : "Ödeme Tipi",
         btn01 : "Kredi Kartı",
         btn02 : "Ticket Kartı",
-    }
+    }    
 }

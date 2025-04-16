@@ -52,6 +52,9 @@ export default class salesOrdList extends React.PureComponent
         this.txtCustomerCode.CODE = ''
         this._btnGetClick()
         this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
+        this.grdSlsOrdList.devGrid.clearFilter('header')
+        this.grdSlsOrdList.devGrid.clearSorting()
+        this.grdSlsOrdList.devGrid.clearFilter('row')
     }
     async _btnGetClick()
     {
@@ -533,8 +536,8 @@ export default class salesOrdList extends React.PureComponent
                                     pagePrm:{GUID:e.data.GUID}
                                 })
                             }}
-                            >   
-                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrdList"}/>                                
+                            >  
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrdList"}/>                                  
                                 <ColumnChooser enabled={true} />  
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}

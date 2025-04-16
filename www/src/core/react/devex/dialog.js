@@ -79,6 +79,15 @@ export default class NdDialog extends Base
         this.isShowed = false;
         this["dia_" + this.props.id].setState({show:false})
     }
+    setTitle(pVal)
+    {
+        
+        this.setState({title: pVal});
+        this["dia_" + this.props.id].setState({
+            showTitle: true,
+            title: pVal
+        });
+    }   
     _buttonView(props)
     {
         if(typeof props != 'undefined')

@@ -391,6 +391,7 @@ export default class PrinterCard extends React.PureComponent
                                     showBorders={true} 
                                     columnsAutoWidth={true}
                                     allowColumnResizing={true}
+                                    selection={{mode:'multiple'}}
                                     height={'600'} 
                                     width={'100%'}
                                     dbApply={false}
