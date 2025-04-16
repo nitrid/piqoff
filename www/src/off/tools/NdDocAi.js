@@ -54,7 +54,7 @@ export default class NdDocAi extends Base
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
         }
-        else if(pType == 'price')
+        else if(typeof pData != 'undefined' && pType == 'price')
         {
             if(typeof pData.value != 'undefined')
             {
@@ -528,7 +528,7 @@ export default class NdDocAi extends Base
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
                                     <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'}/>
                                     <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   editCellRender={this._cellRoleRender} width={70} allowHeaderFiltering={false}/>
+                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   width={70} allowHeaderFiltering={false}/>
                                     <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                 </NdGrid>
                             </div>
