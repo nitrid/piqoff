@@ -2593,7 +2593,7 @@ export default class posDoc extends React.PureComponent
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
             {
-
+                this.posObj.dt()[0].STATUS = 2
                 tmpDt[0].DESCRIPTION = pDesc
             }
             else
@@ -2605,7 +2605,6 @@ export default class posDoc extends React.PureComponent
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = pDesc
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DATA = pData
             }
-            this.posObj.dt()[0].STATUS = 2
             await this.posObj.save()
             resolve()
         });
