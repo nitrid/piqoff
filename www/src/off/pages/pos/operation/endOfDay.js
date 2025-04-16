@@ -246,7 +246,9 @@ export default class endOfDay extends React.PureComponent
             this.setState({Cash:tmpCashValue})
         }
 
-        if(((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) + (this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).toFixed(2)) ==  (this.txtCreditCard.value).toFixed(2))
+        console.log(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))
+        console.log(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT'))
+        if((Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2)) ==  Number(this.txtCreditCard.value).round(2))
         {
             this.color.card = "green"
             this.DebitCard = this.t("txtReal")
@@ -254,7 +256,8 @@ export default class endOfDay extends React.PureComponent
         }
         else 
         {
-            let tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))).toFixed(2)
+            console.log(((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) + (this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).toFixed(2)))
+            let tmpDebit = Number(this.txtCreditCard.value - (Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2))).round(2)
             let tmpDebitValue
             if(tmpDebit > 0)
             {
