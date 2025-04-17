@@ -268,8 +268,7 @@ export default class itemOutageReport extends React.PureComponent
                                 <Summary>
                                     <TotalItem
                                     column="QUANTITY"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    summaryType="sum"/>
                                     <TotalItem
                                     column="TOTAL_COST"
                                     summaryType="sum"
