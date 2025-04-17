@@ -99,80 +99,134 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        let tmpSource =
+        if(this.chkDeletedTicket.value == false || this.chkDeletedTicket.value == undefined)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query :  "SELECT "  +
-                    " MAX(ITEM_CODE) AS ITEM_CODE,  "  +
-                    " MAX(ITEM_NAME) AS ITEM_NAME,  "  +
-                    " MAX(TIME) AS TIME,  "  +
-                    " MAX(DATE) AS DATE,  "  +
-                    " MAX(DEVICE) AS DEVICE,  "  +
-                    " MAX(USERS) AS USERS, "  +
-                    " SUBSTRING(CONVERT(NVARCHAR(50),SALE_POS_GUID),20,25) AS POS_ID, "  +
-                    " SALE_POS_GUID AS POS_GUID, " +
-                    " MAX(SALE_TYPE) AS SALE_TYPE,  "  +
-                    " COUNT(PAYMENT_TYPE) AS PAY_COUNT,  "  +
-                    " MAX(CUSTOMER) AS CUSTOMER,  "  +
-                    " MAX(DISCOUNT) AS DISCOUNT,  "  +
-                    " MAX(LOYALTY) AS LOYALTY,  "  +
-                    " MAX(HT) AS HT,  "  +
-                    " MAX(TVA) AS TVA,  "  +
-                    " MAX(TTC) AS TTC,  "  +
-                    " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                    " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
-                    " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
-                    " MAX(FACT_REF) AS FACT_REF, "+
-                    " MAX(PAYMENT) AS PAYMENT,  "  +
-                    " MAX(REF) AS REF " +
-                    " FROM (  "  +
-                    " SELECT  "  +
-                    " SALE.POS_GUID AS SALE_POS_GUID, "  +
-                    " PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
-                    " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
-                    " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " MAX(SALE.CDATE) AS DATE,   "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
-                    " MAX(SALE.DEVICE) AS DEVICE,  "  +
-                    " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
-                    " SALE.TYPE AS SALE_TYPE,  "  +
-                    " PAYMENT.TYPE AS PAYMENT_TYPE,  "  +
-                    " PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
-                    " MAX(SALE.CUSTOMER_CODE) AS CUSTOMER,  "  +
-                    " MAX(SALE.GRAND_DISCOUNT) DISCOUNT,  "  +
-                    " MAX(SALE.GRAND_LOYALTY) LOYALTY,  "  +
-                    " MAX(SALE.GRAND_AMOUNT) HT, "  +
-                    " MAX(SALE.GRAND_VAT) TVA, "  +
-                    " MAX(SALE.GRAND_TOTAL) TTC,  "  +
-                    " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                    " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
-                    " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF," +
-                    " ISNULL((SELECT TOP 1 REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS REF," +
-                    " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
-                    " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
-                    " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
-                    " PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1  "  +
-                    " WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND   "  +
-                    " ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
-                    " ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND  "  +
-                    " ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND "  +
-                    " ((ITEM_CODE = @ITEM_CODE OR SALE.INPUT =  @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
-                    " ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1 AND SALE.DEVICE <> '9999' "  +
-                    " GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP  "  +
-                    " GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ORDER BY DATE,TIME",
-                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50','FIRST_AMOUNT:float','LAST_AMOUNT:float'],
-                    value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.cmbPayType.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1,this.numFirstTicketAmount.value,this.numLastTicketAmount.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query :  "SELECT "  +
+                        " MAX(ITEM_CODE) AS ITEM_CODE,  "  +
+                        " MAX(ITEM_NAME) AS ITEM_NAME,  "  +
+                        " MAX(TIME) AS TIME,  "  +
+                        " MAX(DATE) AS DATE,  "  +
+                        " MAX(DEVICE) AS DEVICE,  "  +
+                        " MAX(USERS) AS USERS, "  +
+                        " SUBSTRING(CONVERT(NVARCHAR(50),SALE_POS_GUID),20,25) AS POS_ID, "  +
+                        " SALE_POS_GUID AS POS_GUID, " +
+                        " MAX(SALE_TYPE) AS SALE_TYPE,  "  +
+                        " COUNT(PAYMENT_TYPE) AS PAY_COUNT,  "  +
+                        " MAX(CUSTOMER) AS CUSTOMER,  "  +
+                        " MAX(DISCOUNT) AS DISCOUNT,  "  +
+                        " MAX(LOYALTY) AS LOYALTY,  "  +
+                        " MAX(HT) AS HT,  "  +
+                        " MAX(TVA) AS TVA,  "  +
+                        " MAX(TTC) AS TTC,  "  +
+                        " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
+                        " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
+                        " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
+                        " MAX(FACT_REF) AS FACT_REF, "+
+                        " MAX(PAYMENT) AS PAYMENT,  "  +
+                        " MAX(REF) AS REF " +
+                        " FROM (  "  +
+                        " SELECT  "  +
+                        " SALE.POS_GUID AS SALE_POS_GUID, "  +
+                        " PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
+                        " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
+                        " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
+                        " MAX(SALE.CDATE) AS DATE,   "  +
+                        " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
+                        " MAX(SALE.DEVICE) AS DEVICE,  "  +
+                        " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
+                        " SALE.TYPE AS SALE_TYPE,  "  +
+                        " PAYMENT.TYPE AS PAYMENT_TYPE,  "  +
+                        " PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
+                        " MAX(SALE.CUSTOMER_CODE) AS CUSTOMER,  "  +
+                        " MAX(SALE.GRAND_DISCOUNT) DISCOUNT,  "  +
+                        " MAX(SALE.GRAND_LOYALTY) LOYALTY,  "  +
+                        " MAX(SALE.GRAND_AMOUNT) HT, "  +
+                        " MAX(SALE.GRAND_VAT) TVA, "  +
+                        " MAX(SALE.GRAND_TOTAL) TTC,  "  +
+                        " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
+                        " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
+                        " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF," +
+                        " ISNULL((SELECT TOP 1 REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS REF," +
+                        " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
+                        " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
+                        " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
+                        " PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1  "  +
+                        " WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND   "  +
+                        " ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
+                        " ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND  "  +
+                        " ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND "  +
+                        " ((ITEM_CODE = @ITEM_CODE OR SALE.INPUT =  @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
+                        " ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1 AND SALE.DEVICE <> '9999' "  +
+                        " GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP  "  +
+                        " GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ORDER BY DATE,TIME",
+                        param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50','FIRST_AMOUNT:float','LAST_AMOUNT:float'],
+                        value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.cmbPayType.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1,this.numFirstTicketAmount.value,this.numLastTicketAmount.value]
+                    },
+                    sql : this.core.sql
+                }
             }
+            App.instance.setState({isExecute:true})
+            await this.grdSaleTicketReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
-        App.instance.setState({isExecute:true})
-        await this.grdSaleTicketReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        else
+        {
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT " +
+                        " ITEM_CODE, " +
+                        " ITEM_NAME, " +
+                        " CONVERT(NVARCHAR,CDATE,108) AS TIME, " +
+                        " CDATE AS DATE, " +
+                        " DEVICE, " +
+                        " ISNULL((SELECT NAME FROM USERS WHERE CODE = LUSER),'') AS USERS, " +
+                        " SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS POS_ID, " +
+                        " POS_GUID, " +
+                        " TYPE AS SALE_TYPE, " +
+                        " 1 AS PAY_COUNT, " +
+                        " CUSTOMER_CODE AS CUSTOMER, " +
+                        " GRAND_DISCOUNT AS DISCOUNT, " +
+                        " GRAND_LOYALTY AS LOYALTY, " +
+                        " GRAND_AMOUNT AS HT, " +
+                        " GRAND_VAT AS TVA, " +
+                        " GRAND_TOTAL AS TTC, " +
+                        " CUSTOMER_NAME, " +
+                        " 0 AS PAYMENT_TYPE, " +
+                        " '' AS CUSTOMER_MAIL, " +
+                        " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS FACT_REF, " +
+                        " 0 AS PAYMENT, " +
+                        " ISNULL((SELECT TOP 1 REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS REF " +
+                        " FROM POS_SALE_VW_02 " +
+                        " WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                        " AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " +
+                        " AND ((DEVICE = @DEVICE) OR (@DEVICE = '')) " +
+                        " AND ((ITEM_CODE = @ITEM_CODE OR INPUT = @ITEM_CODE) OR (@ITEM_CODE = '')) " +
+                        " AND ((SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) " +
+                        " AND ((LUSER = @LUSER) OR (@LUSER = '')) " +
+                        " AND DEVICE <> '9999' " +
+                        " ORDER BY DATE, TIME",
+                        param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50'],
+                        value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdSaleTicketReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
+        }
     }
     async btnGetDetail(pGuid)
     {
@@ -231,7 +285,15 @@ export default class salesOrdList extends React.PureComponent
             dataprm : ['CUSER','GUID','POS_GUID']
         }
         await this.lastPosPayDt.refresh()
-        await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+        let tmpPayData = new datatable();
+        tmpPayData.selectCmd = 
+        {
+            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT  WHERE POS = @POS_GUID ORDER BY DELETED ASC",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        await tmpPayData.refresh()
+        await this.grdSaleTicketPays.dataRefresh({source:tmpPayData});
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
         this.popDetail.show()
@@ -759,6 +821,13 @@ export default class salesOrdList extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}/>
                                 </Item>
+                                {/* chkDeletedTicket */}
+                                <Item>
+                                    <Label text={this.t("chkDeletedTicket")} alignment="right" />
+                                    <NdCheckBox id="chkDeletedTicket" parent={this} defaultValue={false}
+                                    param={this.param.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -856,16 +925,26 @@ export default class salesOrdList extends React.PureComponent
                             </div>
                             <div className="col-3 ps-0">
                             <NdGrid id="grdSaleTicketPays" parent={this} 
-                                selection={{mode:"multiple"}} 
+                                selection={{mode:"single"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.data && e.data.DELETED !== undefined)
+                                    {
+                                        if(e.data.DELETED == "1")
+                                        {
+                                            e.rowElement.style.backgroundColor = "red";
+                                        }
+                                    }
+                                }}
                                 onRowClick={async(e)=>
                                     {
-                                        if(this.lastPosPayDt.length > 0)
+                                        if(this.lastPosPayDt.length > 0 && e.data.DELETED == "0")
                                         {
                                             this.rbtnTotalPayType.value = 0
                                             this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
@@ -883,7 +962,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
+                                    <Column dataField="TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>
                             </div>
@@ -1183,6 +1262,7 @@ export default class salesOrdList extends React.PureComponent
                                                 this.extraObj.dt()[0].DESCRIPTION = this.txtPayChangeDesc.value
                                                 
                                                 this.extraObj.save()
+                                                this.btnGetDetail(this.lastPosPayDt[0].POS_GUID)
                                             }}>
                                                 <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                             </NbButton>

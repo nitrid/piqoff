@@ -247,8 +247,8 @@ export default class itemGroupCard extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={3} id="frmMainGrp">
-                                 {/* txtCode */}
-                                 <Item>
+                                {/* txtCode */}
+                                <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.mainGrpObj.dt('ITEM_GROUP'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -339,8 +339,8 @@ export default class itemGroupCard extends React.PureComponent
                                     </NdTextBox>
                                 </Item>
                                 <EmptyItem />
-                                 {/* chkActive */}
-                                 <Item>
+                                {/* chkActive */}
+                                <Item>
                                     <Label text={this.t("chkActive")} alignment="right" />
                                     <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.mainGrpObj.dt('ITEM_GROUP'),field:"STATUS"}}
                                     param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}

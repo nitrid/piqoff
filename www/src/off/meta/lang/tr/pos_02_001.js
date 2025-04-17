@@ -14,6 +14,7 @@ const pos_02_001 =
     cmbUser :"Kulanıcı",
     txtItem :"Ürün Kodu",
     ckhDoublePay : "Birden Fazla Ödeme",
+    chkDeletedTicket : "Silinen Fişleri Göster",
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",

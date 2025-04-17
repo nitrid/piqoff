@@ -372,6 +372,43 @@ export const acs =
             }
         }
     },
+    //btnSystem
+    {
+        TYPE : 2,
+        ID :"btnSystem",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnSystem",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Sistem",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Dialog",field:"dialog",id:"popBtnSystemDialog",display:"type",
+                        form : 
+                        {
+                            width:"400",
+                            height:"180",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"type",id:"popBtnSystemType"},
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
     //txtBarcodeLy
     {
         TYPE : 2,

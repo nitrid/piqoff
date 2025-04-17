@@ -15,6 +15,7 @@ const pos_02_001 =
     cmbUser :"Utilisateur",
     txtItem :"Référence Produit",
     ckhDoublePay : "Paiement multiple",
+    chkDeletedTicket : "Afficher les tickets supprimés",
     pg_txtCustomerCode : 
     {
         title : "Choix Client",

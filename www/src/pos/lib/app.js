@@ -15,10 +15,7 @@ import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
-import TextBox from 'devextreme-react/text-box';
-import Button from 'devextreme-react/button';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
@@ -76,7 +73,8 @@ export default class App extends React.PureComponent
             transProgress : "",
             msgTransfer : "",
             licenced : false,
-            licenceMsg : ''
+            licenceMsg : '',
+            page:''
         }
         this.toolbarItems = 
         [
@@ -118,7 +116,7 @@ export default class App extends React.PureComponent
                 }
             }
         ];
-
+        
         if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
         {
             var body = document.getElementsByTagName('body')[0];
@@ -134,7 +132,6 @@ export default class App extends React.PureComponent
         }
         else
         {
-            
             this.device = false
             this.init();
         }
@@ -241,13 +238,6 @@ export default class App extends React.PureComponent
             App.instance.setState({logined:false,splash:false});
         }
     }
-    menuClick(data)
-    {
-        if(typeof data.path != 'undefined')
-        {
-            Panel.instance.addPage(data);
-        }
-    }
     textValueChanged(e) 
     {      
         if(e.element.id == 'VtAdi')
@@ -255,7 +245,7 @@ export default class App extends React.PureComponent
             this.setState({vtadi: e.value});
         } 
     }
-    electronSend(pData)
+    secondScreenSend(pData)
     {
         if (/android/i.test(navigator.userAgent || navigator.vendor || window.opera) == false) 
         {
@@ -273,18 +263,41 @@ export default class App extends React.PureComponent
             }
             //********************************************************************************************************** */
         }
+        else
+        {
+            //SUNMI CİHAZLARIN 2. EKRANINI GÖSTERİLİYOR.
+            return new Promise(async resolve => 
+            {
+                try
+                {
+                    let tmpData = {...pData}
+                    tmpData.localPath = "file:///data/user/0/com.piq.piqpos/files/piqpos/public/pos/index.html?lcd=true"
+                    window.SunmiPlugin.showOnSecondaryDisplay(JSON.stringify(tmpData));
+                }
+                catch(e)
+                {
+                    console.log(e)
+                }
+                resolve(pData)
+            })
+            //********************************************************************************************************** */
+        }
     }
     async componentDidMount()
     {
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.get('lcd') != null)
         {
+            if(/android/i.test(navigator.userAgent || navigator.vendor || window.opera))
+            {
+                this.init();
+            }
             this.setState({lcd:true})
         }
         else
         {
             //DEVICE ID VE DİĞER PARAMETRELER ELECTRONJS ÜZERİNDEKİ CONFIG DEN GETIRILIYOR.
-            let tmpData = await this.electronSend({tag:"arguments"})
+            let tmpData = await this.secondScreenSend({tag:"arguments"})
             if(typeof tmpData != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data.deviceId != 'undefined')
             {
                 localStorage.setItem('device',tmpData.data.deviceId)
@@ -344,9 +357,13 @@ export default class App extends React.PureComponent
             resolve()
         })
     }
+    setPage(pPage)
+    {
+        this.setState({page:pPage})
+    }
     render() 
     {
-        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer } = this.state;
+        const { logined,splash,lcd,itemInfo,transferPanel,transProgress,msgTransfer,page } = this.state;
 
         if(this.state.licenced)
         {

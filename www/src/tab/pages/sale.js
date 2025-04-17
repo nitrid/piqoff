@@ -832,6 +832,16 @@ export default class Sale extends React.PureComponent
     }
     async priceListChange()
     {
+        for (let i = 0; i < this.docLines.length; i++) 
+        {
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docLines[i].VAT_RATE = 0
+                this.docLines[i].VAT = 0
+            }
+        }
+        this._calculateTotal()
+        
         let tmpConfObj1 =
         {
             id:'msgPriceListChange',showTitle:true,title:this.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1595,7 +1605,6 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
                                                 this.docObj.dt()[0].VAT_ZERO = this.grdCustomer.getSelectedData()[0].VAT_ZERO
-                                                console.log(this.grdCustomer.getSelectedData()[0].VAT_ZERO)
                                                 this.balance.clear()
                                                 this.balance.selectCmd.value = [this.docObj.dt()[0].INPUT]
                                                 await this.balance.refresh()

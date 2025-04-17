@@ -19,7 +19,7 @@ const tkf_01_001 =
     {
         sip_02_001: "Proposition d'achat",
     },
-    grdPurcOrdList: 
+    grdPurcOfrList: 
     {
         clmRef: "Référence",
         clmRefNo: "Ligne",

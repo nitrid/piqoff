@@ -1,9 +1,9 @@
 import React from 'react';
 import Base from './base.js';
-import PivotGrid,{FieldChooser,Export} from 'devextreme-react/pivot-grid';
+import PivotGrid,{FieldChooser,Export,StateStoring} from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
-export {FieldChooser,Export}
+export {FieldChooser,Export,StateStoring}
 export default class NdPivot extends Base
 {
     constructor(props)

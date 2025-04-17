@@ -1,19 +1,58 @@
 import App from '../lib/app.js';
 
 const orgInit = App.prototype.init
-
+function cordovaConfigRead()
+{
+  return new Promise((resolve) => 
+  {
+    document.addEventListener('deviceready', function() 
+    {
+      window.resolveLocalFileSystemURL("file://" + localStorage.getItem("path") + "/public/config.js", 
+      function(fileEntry) 
+      {        
+        fileEntry.file(function(file) 
+        {
+          var reader = new FileReader();
+          reader.onloadend = function() 
+          {
+            resolve(this.result)
+          };
+          reader.readAsText(file);
+        }, 
+        function(error) 
+        {
+          console.error("Dosya okuma hatası:", error);
+          resolve('');
+        });
+      }, 
+      function(error) 
+      {
+        console.log('Dosya mevcut değil veya erişim hatası:', error);
+        resolve('');
+      });
+    })
+  })
+}
 App.prototype.init = async function()
 {
   orgInit.call(this);
   
   let plugins = [];
   let pluginsConf;
+  let response;
+  let configText;
+  let configPath;
 
   try 
   {
-    let configPath;
-    if(typeof App.instance.electron?.ipcRenderer != 'undefined') 
+    if(typeof window.cordova !== 'undefined') 
     {
+      console.log("Cordova ortamında çalışıyor");
+      configText = await cordovaConfigRead();
+    }
+    else if(typeof App.instance.electron?.ipcRenderer != 'undefined') 
+    {
+      console.log("Electron ortamında çalışıyor");
       configPath = 'file://' + process.cwd() + '/public/config.js';
       const fs = window.require('fs');
       
@@ -32,17 +71,23 @@ App.prototype.init = async function()
           console.error('Error reading config.json:', err);
         }
       }
+
+      response = await fetch(configPath);
+      configText = await response.text();
     } 
     else 
     {
+      console.log("Web ortamında çalışıyor");
       configPath = '/config.js';
+
+      response = await fetch(configPath);
+      configText = await response.text();
     }
-    const response = await fetch(configPath);
-    const configText = await response.text();
     pluginsConf = eval('(' + configText.replace('export default','').replace(/;$/, '') + ')');
   } 
   catch (error) 
   {
+    console.log("Hata:", error);
     pluginsConf = { plugins: {} };
   }
 
