@@ -38,7 +38,8 @@ const stk_03_001 =
         clmCustomerPrice : "T.Fiyatı",
         clmOrgin : "Menşei",
         clmPriceSaleVatExt : "Vergisiz Fiyat",
-        clmFMargin : "Marj %"
+        clmFMargin : "Marj %",
+        clmLdate : "Güncelleme Tarihi"
     },
 }
 
