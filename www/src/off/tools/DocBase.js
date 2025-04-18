@@ -1859,7 +1859,7 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
                                 tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
                                 tmpArr.push(<Column key={"MULTICODE"} dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>)
-                                tmpArr.push(<Column key={"PURC_PRICE"} dataField="PURC_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
+                                tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
                                 return tmpArr
                             }
                             else
