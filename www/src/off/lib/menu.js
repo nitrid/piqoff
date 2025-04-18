@@ -160,11 +160,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.stk_03_001'),//'Stok Listesi',
                             path: 'items/lists/itemList'
                         },
-                        // {
-                        //     id: 'stk_03_002',
-                        //     text: e.t('menuOff.stk_03_002'),//'Fiyat Listesi',
-                        //     path: 'items/lists/priceList'
-                        // },
+                        {
+                            id: 'stk_03_002',
+                            text: e.t('menuOff.stk_03_002'),//'Fiyat Listesi',
+                            path: 'items/lists/priceList'
+                        },
                         // {
                         //     id: 'stk_03_003',
                         //     text: e.t('menuOff.stk_03_003'),//'Barkod Listesi',

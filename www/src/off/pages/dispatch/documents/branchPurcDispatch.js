@@ -1937,6 +1937,7 @@ export default class branchPurcDispatch extends DocBase
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} width={105} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="ORDER_REF" caption={this.t("grdSlsDispatch.clmOrder")} width={110}  allowEditing={false}/>
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdSlsDispatch.clmInvoiceRef")} width={110} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsDispatch.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu

@@ -1,22 +1,19 @@
 //"Fiyat Listesi" 
 const stk_03_002 = 
 {
-    cmbCustomer : "Müşteri",
-    txtItemName : "Ürün Adı",
-    cmbMainGrp : "Ürün Grubu",
-    btnCheck : "Aktif",
+    cmbPricingList : "Fiyat Listesi",
+    txtTotalCount : "Toplam",
     btnGet :"Getir",
-    grdListe : 
+    grdPriceListe : 
     {
-        clmCode: "Kodu",
-        clmName : "Adı",
-        clmMainGrp : "Ürün Grubu",
-        clmPrice : "Fiyat",
-        clmCustomer : "Müşteri",
+        clmListNo: "Liste",
+        clmListName : "Liste Adı",
+        clmItemCode : "Ürün Kodu",
+        clmItemName : "Ürün Adı",
+        clmMainGrpName : "Ürün Grubu",
         clmQuantity : "Adet",
-        clmChange : "Değişim Tarihi",
-        clmStartDate : "Vergi",
-        clmFinishDate : "Orgin",
+        clmPriceHt : "Fiyat HT",
+        clmPriceTtc : "Fiyat TTC",
     },
 }
 

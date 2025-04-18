@@ -22,6 +22,7 @@ const irs_02_003 =
     txtUnitQuantity : "Quantité unitaire",  
     txtTotalQuantity : "Quantité totale",  
     txtUnitPrice : "Prix unitaire",
+    txtDocNo : "Numéro de document",
     btnView : "Aperçu", 
     btnMailsend : "Envoyer E-Mail", 
     placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -99,6 +100,7 @@ const irs_02_003 =
         clmSubQuantity : "Qtt. Unitaire",
         clmSubPrice : "Prix Unitaire",
         clmSubFactor : "Coefficient",
+        clmInvoiceRef : "Numéro de facture",
     },
     popDiscount : 
     {

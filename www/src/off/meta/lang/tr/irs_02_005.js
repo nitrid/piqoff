@@ -115,6 +115,7 @@ const irs_02_005 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmInvoiceRef : "Fatura No",
     },
     popDiscount : 
     {

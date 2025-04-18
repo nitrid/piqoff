@@ -38,7 +38,8 @@ const stk_03_001 =
         clmCustomerPrice: "K.Preis",
         clmOrgin: "Herkunft",
         clmPriceSaleVatExt: "Preis ohne MwSt.",
-        clmFMargin : "Marge %"
+        clmFMargin : "Marge %",
+        clmLdate : "Aktualisierungsdatum"
     },
 }
 export default stk_03_001

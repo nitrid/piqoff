@@ -102,6 +102,7 @@ const irs_02_001 =
         clmSubFactor : "Coefficient",
         clmDiffPrice : "Différence",
         clmCustomerPrice : "Prix F.",
+        clmInvoiceRef : "Numéro de facture",
     },
     popDiscount : 
     {

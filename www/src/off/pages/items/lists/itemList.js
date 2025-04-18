@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Editing,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -31,30 +31,11 @@ export default class itemList extends React.PureComponent
         
         this.core = App.instance.core;
         this.columnListData = 
-        [
-            {CODE : "NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "SNAME",NAME : this.t("grdListe.clmSname")},
-            {CODE : "MAIN_GRP_NAME",NAME : this.t("grdListe.clmMainGrp")},                        
-            {CODE : "UNIT_NAME",NAME :  this.t("grdListe.clmUnit")},
-            {CODE : "CODE",NAME :  this.t("grdListe.clmCode")},
-            {CODE : "BARCODE",NAME :  this.t("grdListe.clmBarcode")},
-            {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
-            {CODE : "CUSTOMER_NAME",NAME :  this.t("grdListe.clmCustomer")},
-            {CODE : "CUSTOMER_PRICE",NAME :  this.t("grdListe.clmCustomerPrice")},
-            {CODE : "ORGINS_NAME",NAME :  this.t("grdListe.clmOrgin")},
-            {CODE : "PRICE_SALE",NAME :  this.t("grdListe.clmPriceSale")},
-            {CODE : "COST_PRICE",NAME :  this.t("grdListe.clmCostPrice")},
-            {CODE : "MARGIN",NAME :  this.t("grdListe.clmMargin")},
-            {CODE : "NETMARGIN",NAME :  this.t("grdListe.clmNetMargin")},
-            {CODE : "FMARGIN",NAME :  this.t("grdListe.clmFMargin")},
-            {CODE : "VAT",NAME :  this.t("grdListe.clmVat")},  
-            {CODE : "MIN_PRICE",NAME :  this.t("grdListe.clmMinPrice")},
-            {CODE : "MAX_PRICE",NAME :  this.t("grdListe.clmMaxPrice")},
-            {CODE : "STATUS",NAME :  this.t("grdListe.clmStatus")},
-        ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     async grossMargin()
     {
@@ -133,6 +114,17 @@ export default class itemList extends React.PureComponent
             >
             </NdListBox>
         )
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async _btnGetirClick()
     {
@@ -596,14 +588,7 @@ export default class itemList extends React.PureComponent
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                        <div className="col-3">                            
                         </div>
                         <div className="col-2">
                             <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
@@ -698,18 +683,22 @@ export default class itemList extends React.PureComponent
                                     })
                             }}
                             >                                    
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menuOff.stk_03_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc" /> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
+                                <Column dataField="LDATE" caption={this.t("grdListe.clmLdate")} dataType="datetime" format={"dd/MM/yyyy"} visible={true} width={140}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
-                                <Column dataField="PRICE_SALE_VAT_EXT" caption={this.t("grdListe.clmPriceSaleVatExt")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="PRICE_SALE_VAT_EXT" caption={this.t("grdListe.clmPriceSaleVatExt")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={80}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={80}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
