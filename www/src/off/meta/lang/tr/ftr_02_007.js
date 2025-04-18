@@ -74,7 +74,8 @@ const ftr_02_007 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
-        clmPrice : "SATIŞ FİYATI"
+        clmPrice : "SATIŞ FİYATI",
+        clmMulticode : "TEDARİKÇİ KODU"
     },
     pg_dispatchGrid : 
     {
