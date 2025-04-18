@@ -150,6 +150,10 @@ export default class priceDifferenceInvoice extends DocBase
         App.instance.setState({isExecute:true})
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
+        for(let i = 0; i < this.docObj.docItems.dt().length; i++)
+        {
+            this.docObj.docItems.dt()[i].PURC_PRICE = this.docObj.docItems.dt()[i].CUSTOMER_PRICE + this.docObj.docItems.dt()[i].PRICE
+        }
 
     }
     calculateTotal()

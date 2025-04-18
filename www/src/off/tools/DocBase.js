@@ -325,6 +325,11 @@ export default class DocBase extends React.PureComponent
                 this.docLocked = false
                 this.frmDocItems.option('disabled',false)
             }
+            for(let i = 0; i < this.docDetailObj.dt().length; i++)
+            {
+                this.docDetailObj.dt()[i].PURC_PRICE = this.docDetailObj.dt()[i].CUSTOMER_PRICE + this.docDetailObj.dt()[i].PRICE
+                this.docDetailObj.dt()[i].DIFF_PRICE = this.docDetailObj.dt()[i].PRICE - this.docDetailObj.dt()[i].CUSTOMER_PRICE
+            }
             resolve()
         })
     }

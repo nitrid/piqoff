@@ -94,7 +94,7 @@ export default class App extends React.PureComponent
     init()
     {
         this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
-        this.core.appInfo = appInfo
+        this.core.appInfo = appInfo;
 
         if(!App.instance)
         {
@@ -102,16 +102,25 @@ export default class App extends React.PureComponent
         }
 
         this.core.socket.on('connect',async () => 
-        {            
-            //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'MOB')))
-            {
-                App.instance.setState({logined:true,connected:true});
-            }
-            else
-            {
-                App.instance.setState({logined:false,connected:true});
-            }
+        {         
+             // Sunucudan güncel versiyon bilgisini al
+                this.core.socket.emit('get-version',{},(tmpVersion) =>
+                {
+                   if( this.device && tmpVersion.success && tmpVersion.version != this.core.appInfo.version)
+                   {
+                        window.location="../mob/appUpdate.html"
+                   }
+                })  
+                // Versiyon kontrolünden sonra normal login işlemlerine devam et
+                if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'MOB')))
+                {
+                    App.instance.setState({logined:true,connected:true});
+                }
+                else
+                {
+                    App.instance.setState({logined:false,connected:true});
+                } 
+         
         })
         this.core.socket.on('general',async(e)=>
         {
