@@ -332,6 +332,8 @@ export class docItemsCls
             DEPOT_QUANTITY : 0,
             ITEM_BARCODE : '',
             ORIGIN : '',
+            INVOICE_REF : '',
+
         }
 
         this._initDs();

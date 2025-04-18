@@ -1485,6 +1485,7 @@ export default class rebatePurcDispatch extends DocBase
                                             <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={70} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdRebtDispatch.clmInvoiceRef")} width={100} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                         </NdGrid>
                                         <ContextMenu

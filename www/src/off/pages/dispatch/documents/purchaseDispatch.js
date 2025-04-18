@@ -2241,7 +2241,8 @@ export default class purchaseDispatch extends DocBase
                                             <Column dataField="VAT_RATE" caption={this.t("grdPurcDispatch.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdPurcDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdPurcDispatch.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                                            <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={110}  allowEditing={false}/>
+                                            <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={110}  allowEditing={false}/>²
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdPurcDispatch.clmInvoiceRef")} width={110} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdPurcDispatch.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu

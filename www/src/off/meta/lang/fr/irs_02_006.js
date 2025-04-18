@@ -37,7 +37,9 @@ const irs_02_006 =
         clmRefNo : "Numéro",
         clmInputName : "Nom Magasin",
         clmInputCode  : "Code Magasin",
-        clmTotal : "Total TTC"
+        clmTotal : "Total TTC",
+        clmOutputName : "Nom Magasin",
+        clmOutputCode : "Code Magasin"
     },
     pg_txtItemsCode : 
     {
@@ -83,6 +85,7 @@ const irs_02_006 =
         clmSubQuantity : "Quantité unitaire", 
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient", 
+        clmInvoiceRef : "Numéro de facture",
     },
     popDiscount : 
     {

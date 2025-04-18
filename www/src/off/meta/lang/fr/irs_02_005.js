@@ -117,6 +117,7 @@ const irs_02_005 =
         clmSubQuantity : "Qtt. Unitaire",
         clmSubPrice : "Prix Unitaire",
         clmSubFactor : "Coefficient",
+        clmInvoiceRef : "Numéro de facture",
     },
     popDiscount : 
     {

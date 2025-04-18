@@ -1794,6 +1794,7 @@ export default class rebateDispatch extends DocBase
                                         <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                        <Column dataField="INVOICE_REF" caption={this.t("grdRebtDispatch.clmInvoiceRef")} width={110} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu

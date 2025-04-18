@@ -102,6 +102,7 @@ const irs_02_001 =
         clmSubFactor : "Katsayı",
         clmDiffPrice : "Fark",
         clmCustomerPrice : "T.Fiyat",
+        clmInvoiceRef : "Fatura No",
     },
     popDiscount : 
     {

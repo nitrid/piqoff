@@ -37,7 +37,9 @@ const irs_02_006 =
         clmRefNo : "SIRA",
         clmInputName : "CARİ ADI",
         clmInputCode  : "CARİ KODU",
-        clmTotal : "KDVLİ TOPLAM"
+        clmTotal : "KDVLİ TOPLAM",
+        clmOutputName : "ÇIKIŞ ADI",
+        clmOutputCode : "ÇIKIŞ KODU"
     },
     pg_txtCustomerCode : 
     {
@@ -77,6 +79,7 @@ const irs_02_006 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmInvoiceRef : "Fatura No",
     },
     popDiscount : 
     {

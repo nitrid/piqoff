@@ -21,6 +21,7 @@ const irs_02_003 =
     txtUnitFactor : "Birim Katsayısı",
     txtUnitQuantity : "Birim Miktarı",
     txtTotalQuantity : "Toplam Miktar",
+    txtDocNo : "Belge No",
     btnView : "Görüntüle",
     btnMailsend : "Mail Gönder",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -94,6 +95,7 @@ const irs_02_003 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmInvoiceRef : "Fatura No",
     },
     popDiscount : 
     {
