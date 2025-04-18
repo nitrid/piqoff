@@ -1469,6 +1469,14 @@ export class posDeviceCls
         let tmpPayCardPort = ''
         let tmpPayCardProtocol = ''
 
+        if(this.dt()[0].PAY_CARD_PORT == '')
+        {
+            return new Promise(async (resolve) =>
+            {
+                resolve({tag:"response",msg:JSON.stringify({transaction_result:0})})
+            })
+        }
+            
         if(this.dt()[0].PAY_CARD_PORT.split('|').length > 0)
         {
             tmpPayCardPort = this.dt()[0].PAY_CARD_PORT.split('|')[0]
