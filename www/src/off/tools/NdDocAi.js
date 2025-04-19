@@ -56,13 +56,20 @@ export default class NdDocAi extends Base
         }
         else if(typeof pData != 'undefined' && pType == 'price')
         {
-            if(typeof pData.value != 'undefined')
-            {
-                tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
-            }
-            else if(typeof pData.content != 'undefined')
+            console.log(pData)
+            if(typeof pData.content != 'undefined')
             {
                 tmpValue = pType == 'string' ? pData.content : this.parseNumber(pData.content)
+                console.log(tmpValue)
+                if(typeof tmpValue == 'string' && tmpValue.includes(':'))
+                {
+                    console.log(45455)
+                    tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
+                }
+            }
+            else if(typeof pData.value != 'undefined')
+            {
+                tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
             }
         }
         return tmpValue
