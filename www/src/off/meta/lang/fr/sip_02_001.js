@@ -41,6 +41,12 @@ const sip_02_001 =
         msgSuccess: "L'envoi du courrier a réussi !",
         msgFailed: "L'envoi du courrier a échoué !"
     },
+    msgDuplicateItems : 
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Attention! Le document contient des lignes avec le même code de produit:\n"
+    },
     popMailSend :
     {
         title :"Envoyer un e-mail",

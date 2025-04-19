@@ -110,6 +110,14 @@ export default class App extends React.PureComponent
 
         this.core.socket.on('connect',async () => 
         {            
+            // Sunucudan güncel versiyon bilgisini al
+            this.core.socket.emit('get-version',{},(tmpVersion) =>
+            {
+                if( this.device && tmpVersion.success && tmpVersion.version != this.core.appInfo.version)
+                {
+                    window.location="../tab/appUpdate.html"
+                }
+            })  
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'TAB')))
             {

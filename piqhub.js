@@ -10,6 +10,10 @@ import { fileURLToPath } from 'url';
 import unzipper from 'unzipper';
 import { exec, spawn } from 'child_process';
 
+// Zip-plugin için gerekli import
+import JSZip from 'jszip';
+import { writeFile, readFile } from 'fs/promises';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -170,15 +174,18 @@ export default class piqhubApi
             {
                 const publicZipPath = path.join(__dirname, 'www', 'public', 'public.zip');
                 
+                // Eğer public.zip varsa sil
                 if (fs.existsSync(publicZipPath)) 
                 {
                     fs.unlinkSync(publicZipPath);
                 }
             
-                const publicZip = new AdmZip();
+                // Yeni JSZip nesnesi oluştur
+                const zip = new JSZip();
                 const publicDir = path.join(__dirname, 'www', 'public');
                 
-                function addFilesRecursively(dir, zip, baseDir, pathPrefix) 
+                // Recursive dosya ekleme fonksiyonu
+                async function addFilesRecursively(dir, zipInstance, baseDir, pathPrefix) 
                 {
                     const files = fs.readdirSync(dir);
                     
@@ -192,18 +199,42 @@ export default class piqhubApi
                         
                         if (stat.isDirectory()) 
                         {
-                            zip.addFile(zipPath + '/', Buffer.alloc(0));
-                            addFilesRecursively(filePath, zip, baseDir, pathPrefix);
+                            // Klasör ise
+                            zipInstance.folder(zipPath);
+                            await addFilesRecursively(filePath, zipInstance, baseDir, pathPrefix);
                         } 
                         else 
                         {
-                            zip.addFile(zipPath, fs.readFileSync(filePath));
+                            // Dosya ise
+                            const content = await readFile(filePath);
+                            zipInstance.file(zipPath, content);
                         }
                     }
                 }
                 
-                addFilesRecursively(publicDir, publicZip, publicDir, 'public');
-                publicZip.writeZip(publicZipPath);
+                try 
+                {
+                    // Dosyaları zip'e ekle
+                    await addFilesRecursively(publicDir, zip, publicDir, 'public');
+                    
+                    // Zip dosyasını oluştur
+                    const zipContent = await zip.generateAsync({
+                        type: 'nodebuffer',
+                        compression: 'DEFLATE',
+                        compressionOptions: {
+                            level: 9
+                        }
+                    });
+                    
+                    // Zip dosyasını kaydet
+                    await writeFile(publicZipPath, zipContent);
+                    
+                    console.log('public.zip başarıyla oluşturuldu');
+                }
+                catch (error) 
+                {
+                    console.error('Zip oluşturma hatası:', error);
+                }
             }
             
             return true;
@@ -370,6 +401,29 @@ export default class piqhubApi
             ).map(({id, username, sha, role, app}) => ({id, username, sha, role, app}));
 
             this.socketHub.emit('piqhub-set-info', {macid: this.macId, userList: tmpClients});
+        });
+        // Socket event handler
+        pSocket.on('get-version', async (data, pCallback) => 
+        {
+            console.log('get-version')
+            try 
+            {
+                // package.json'dan güncel versiyon bilgisini al
+                const packageJson = JSON.parse(fs.readFileSync(this.root_path + './package.json', 'utf8'));
+                
+                pCallback({
+                    success: true,
+                    version: packageJson.version
+                });
+            } 
+            catch (error) 
+            {
+                console.error('Versiyon bilgisi alma hatası:', error);
+                pCallback({
+                    success: false,
+                    error: error.message
+                });
+            }
         });
     }
     ioEvents()

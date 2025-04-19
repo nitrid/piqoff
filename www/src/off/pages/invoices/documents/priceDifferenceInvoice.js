@@ -284,6 +284,10 @@ export default class priceDifferenceInvoice extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+        for(let i = 0; i < this.docObj.docItems.dt().length; i++)
+        {
+            this.docObj.docItems.dt()[i].PURC_PRICE = this.docObj.docItems.dt()[i].CUSTOMER_PRICE + this.docObj.docItems.dt()[i].PRICE
+        }
     }
     calculateTotal()
     {

@@ -24,6 +24,12 @@ const stk_04_006 =
         btn01: "Tamam",
         msg: "Lütfen Tedarikçi Seçiniz !"
     },
+    msgVat :
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Vergi Oranı Eksik Ürün! KOD : "
+    },
     popExcel :
     {
         title : "Excel",

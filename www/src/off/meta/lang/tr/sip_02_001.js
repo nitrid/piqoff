@@ -40,6 +40,12 @@ const sip_02_001 =
         msgSuccess: "Mail gönderimi başarılı !",
         msgFailed: "Mail gönderimi başarısız !"
     },
+    msgDuplicateItems : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Dikkat! Sipariş listesinde aynı ürün koduna sahip birden fazla ürün bulunmaktadır:\n"
+    },
     popMailSend : 
     {
         title :"E-Mail Gönder",

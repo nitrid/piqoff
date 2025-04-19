@@ -297,13 +297,52 @@ export default class DocBase extends React.PureComponent
             resolve()
         })
     }
+    async searchSameItems() {
+        let itemCodes = [];
+        let duplicateItems = [];
+        
+        if(this.docObj.docOrders.dt().length > 0)
+        {
+            for(let i = 0; i < this.docObj.docOrders.dt().length; i++)
+            {
+                let itemCode = this.docObj.docOrders.dt()[i].ITEM_CODE;
+                
+                if(itemCodes.includes(itemCode))
+                {
+                    if(!duplicateItems.includes(itemCode))
+                    {
+                        duplicateItems.push(itemCode);
+                    }
+                }
+                else
+                {
+                    itemCodes.push(itemCode);
+                }
+            }
+            
+            if(duplicateItems.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+        }
+        
+        return [];
+    }
     async getDoc(pGuid,pRef,pRefno)
     {
         return new Promise(async resolve =>
         {
             this.docObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
-
+            
+            this.searchSameItems()
             if(this.docObj.dt().length == 0)
             {
                 resolve()
@@ -324,6 +363,11 @@ export default class DocBase extends React.PureComponent
             {
                 this.docLocked = false
                 this.frmDocItems.option('disabled',false)
+            }
+            for(let i = 0; i < this.docDetailObj.dt().length; i++)
+            {
+                this.docDetailObj.dt()[i].PURC_PRICE = this.docDetailObj.dt()[i].CUSTOMER_PRICE + this.docDetailObj.dt()[i].PRICE
+                this.docDetailObj.dt()[i].DIFF_PRICE = this.docDetailObj.dt()[i].PRICE - this.docDetailObj.dt()[i].CUSTOMER_PRICE
             }
             resolve()
         })
