@@ -4,6 +4,17 @@ const stk_03_002 =
     cmbPricingList : "Liste prix",
     txtTotalCount : "Total",
     btnGet :"Rechercher",
+    chkCatalog : "Catalogue",
+    btnView : "Voir",
+    btnMailsend : "Envoyer un mail",
+    placeMailHtmlEditor : "Contenu du mail",
+    popDesign : 
+    {
+        title : "Choisissez le design de l'étiquette",
+        design : "Design",
+        lang : "Langue",
+
+    },
     grdPriceListe : 
     {
         clmListNo: "Liste",
@@ -15,5 +26,12 @@ const stk_03_002 =
         clmPriceHt : "Prix HT",
         clmPriceTtc : "Prix TTC",
     },
+    popMailSend:{
+        title : "Envoyer un mail",
+        cmbMailAddress : "Adresse mail",
+        txtMailSubject : "Sujet du mail",
+        txtSendMail : "Envoyer un mail",
+        btnSend : "Envoyer un mail",
+    }
 }
 export default stk_03_002

@@ -4,6 +4,10 @@ const stk_03_002 =
     cmbPricingList : "Fiyat Listesi",
     txtTotalCount : "Toplam",
     btnGet :"Getir",
+    chkCatalog : "Katalog",
+    btnView : "Görüntüle",
+    btnMailsend : "Mail Gönder",
+    placeMailHtmlEditor : "Mail İçeriği",
     grdPriceListe : 
     {
         clmListNo: "Liste",
@@ -15,6 +19,21 @@ const stk_03_002 =
         clmPriceHt : "Fiyat HT",
         clmPriceTtc : "Fiyat TTC",
     },
+    popDesign : 
+    {
+        title : "Etiket Tasarımı Seçiniz",
+        design : "Tasarım",
+        lang : "Dil",
+
+    },
+    popMailSend:{
+        title : "Mail Gönder",
+        cmbMailAddress : "Mail Adresi",
+        txtMailSubject : "Mail Konusu",
+        txtSendMail : "Mail Gönder",
+        btnSend : "Mail Gönder",
+        
+    }
 }
 
 export default stk_03_002

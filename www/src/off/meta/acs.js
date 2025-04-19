@@ -151,6 +151,16 @@ export const acs =
         ELEMENT : "chkActiveLy",
         APP : "OFF",
     },
+    //chkCatalogLy
+    {
+        TYPE : 2,
+        ID :"chkCatalogLy",
+        VALUE : {visible:true,editable:true,position:{x:7,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkCatalogLy",
+        APP : "OFF",
+    },
     //chkCaseWeighedLy
     {
         TYPE : 2,

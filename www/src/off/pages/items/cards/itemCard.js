@@ -1632,7 +1632,7 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={7}>
+                            <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={8}>
                                 {/* chkActive */}
                                 <NdLayoutItem key={"chkActiveLy"} id={"chkActiveLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkActiveLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1716,6 +1716,18 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-2 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkFavori" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"FAVORI"}}
                                             param={this.param.filter({ELEMENT:'chkFavori',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                </NdLayoutItem>
+                                {/* chkCatalog */}
+                                <NdLayoutItem key={"chkCatalogLy"} id={"chkCatalogLy"} parent={this} data-grid={{x:7,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkCatalogLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{"Catalog" + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
+                                            <NdCheckBox id="chkCatalog" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"CATALOG"}}
+                                            param={this.param.filter({ELEMENT:'chkCatalog',USERS:this.user.CODE})}/>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
