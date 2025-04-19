@@ -499,7 +499,24 @@ export default class excelItemImport extends React.PureComponent
                                                 const worksheet = workbook.Sheets[sheetName];
                                                 const json = xlsx.utils.sheet_to_json(worksheet);
                                                 this.popExcel.hide()
-                                                this.excelAdd(json)
+                                                for(let i = 0; i < json.length; i++)
+                                                {
+                                                    if(json[i].VAT == undefined)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgVat',showTitle:true,title:this.t("msgVat.title"),showCloseButton:false,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgVat.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVat.msg") + " " + json[i].CODE}</div>)
+                                                        }
+                                                        dialog(tmpConfObj);
+                                                        return
+                                                    }
+                                                    else
+                                                    {
+                                                      this.excelAdd(json)
+                                                    }
+                                                }
                                             };
                                             reader.readAsArrayBuffer(e.target.files[0]);
                                         }

@@ -47,5 +47,11 @@ const stk_04_006 =
         btn01: "OK",
         msg: "Choix Fournisseur !!"
     },
+    msgVat :
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Taux de TVA manquant ! CODE : "
+    },
 }
 export default stk_04_006
