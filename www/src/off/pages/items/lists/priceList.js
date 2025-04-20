@@ -114,13 +114,13 @@ export default class priceList extends React.PureComponent
                                         }
                                     }    
                                 } />
-                                <Item location="after" locateInMenu="auto">
+                                {/* <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {   
                                         this.popDesign.show() 
                                     }}/>
-                                </Item>
+                                </Item> */}
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
