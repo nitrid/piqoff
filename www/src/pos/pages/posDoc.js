@@ -2593,8 +2593,11 @@ export default class posDoc extends React.PureComponent
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
             {
-                this.posObj.dt()[0].STATUS = 2
                 tmpDt[0].DESCRIPTION = pDesc
+            }
+            if(pTag == 'PARK DESC')
+            {
+                this.posObj.dt()[0].STATUS = 2
             }
             else
             {

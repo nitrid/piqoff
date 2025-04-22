@@ -459,6 +459,10 @@ export function print()
                      tmpType = "VIREMENT"
                 else if(data.pospay[i].PAY_TYPE == 7)
                     tmpType = "PRLV"
+                else if(data.pospay[i].PAY_TYPE == 8)
+                    tmpType = "FRANC"
+                else if(data.pospay[i].PAY_TYPE == 9)
+                    tmpType = "CB T.Resto"
 
                 tmpArr.push(
                 {
