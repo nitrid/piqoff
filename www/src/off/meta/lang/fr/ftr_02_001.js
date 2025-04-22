@@ -120,7 +120,7 @@ const ftr_02_001 =
         clmPrice : "Prix ",
         clmTotal : "Total" ,
         clmDate : "Date",
-        clmDate : "Numéro de Document",
+        clmDocNo : "Numéro de Document",
         
     },
     grdPurcInv: 
