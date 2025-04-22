@@ -59,14 +59,23 @@ export default class priceList extends React.PureComponent
             App.instance.alert(this.lang.t("msgWarning"),"error")
             return;
         }
-        let tmpQuery = `
-        SELECT ITEM_PRICE_VW_01.* 
-        FROM ITEM_PRICE_VW_01 
-        WHERE ITEM_PRICE_VW_01.LIST_NO = @LIST_NO 
-        AND ITEM_PRICE_VW_01.CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' 
-        AND ITEM_PRICE_VW_01.TYPE = 0 AND ITEM_PRICE_VW_01.CATALOG = @CATALOG
-        `;
-
+        let tmpQuery = '';
+        if(this.chkCatalog.value == false)
+        {
+            tmpQuery = `
+            SELECT * FROM ITEM_PRICE_VW_01 WHERE LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0
+            `;
+        }
+        else
+        {
+            tmpQuery = `
+            SELECT ITEM_PRICE_VW_01.* 
+            FROM ITEM_PRICE_VW_01 
+            WHERE ITEM_PRICE_VW_01.LIST_NO = @LIST_NO 
+            AND ITEM_PRICE_VW_01.CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' 
+            AND ITEM_PRICE_VW_01.TYPE = 0 AND ITEM_PRICE_VW_01.CATALOG = @CATALOG
+            `;
+        }
         
         let tmpSource = 
         {
@@ -114,13 +123,13 @@ export default class priceList extends React.PureComponent
                                         }
                                     }    
                                 } />
-                                {/* <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {   
                                         this.popDesign.show() 
                                     }}/>
-                                </Item> */}
+                                </Item> 
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -308,8 +317,6 @@ export default class priceList extends React.PureComponent
                                                             { 
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
