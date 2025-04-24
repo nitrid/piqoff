@@ -92,12 +92,34 @@ export default class posItemsList extends React.PureComponent
     async getItems()
     {
         this.itemListDt.clear()
-        this.itemListDt.selectCmd = 
+        console.log(this.cmbMainGrply.value)
+
+        let query = "SELECT * FROM ITEMS_VW_01 WHERE 1=1";
+        let param = [];
+        let value = [];
+        
+        // URUN ARAMASI VAR MI KONTROLÜ
+        if(this.txtItemSearch.value && this.txtItemSearch.value !== '')
         {
-            query:`SELECT * FROM ITEMS_VW_01 WHERE CODE LIKE @VAL +'%' OR NAME LIKE @VAL +'%' OR @VAL = ''`,
-            param:['VAL:string|25'],
-            value:[this.txtItemSearch.value.replaceAll("*", "%")]
+            query += " AND (CODE LIKE @VAL +'%' OR NAME LIKE @VAL +'%' OR @VAL = '')";
+            param.push('VAL:string|25');
+            value.push(this.txtItemSearch.value.replaceAll("*", "%"));
         }
+        
+        //ANA GRUP VAR MI KONTROLÜ
+        if(this.cmbMainGrply.value && this.cmbMainGrply.value !== '')
+        {
+            query += " AND MAIN_GUID = @MAIN_GUID";
+            param.push('MAIN_GUID:string|36');
+            value.push(this.cmbMainGrply.value);
+        }
+        
+        this.itemListDt.selectCmd = {
+            query: query,
+            param: param,
+            value: value
+        }
+        
         await this.itemListDt.refresh()
     }
     async onItemRendered(e)
@@ -293,7 +315,7 @@ export default class posItemsList extends React.PureComponent
                 </div>
                 <div style={{flex:1,padding:'0.5rem',overflowY:'auto'}}>
                     <div className="row pt-2">
-                        <div className="col-10">
+                        <div className="col-6">
                             <NdTextBox id="txtItemSearch" 
                                 parent={this} 
                                 simple={true} 
@@ -321,6 +343,17 @@ export default class posItemsList extends React.PureComponent
                                     },
                                 ]}>     
                             </NdTextBox>
+                        </div>
+                        <div className="col-4">
+                            <NdSelectBox parent={this} id="cmbMainGrply" height='fit-content' simple={true}
+                                displayExpr="NAME"                       
+                                valueExpr="GUID"
+                                value=""
+                                placeholder={this.lang.t("posItemsList.cmbMainGrpPlaceholder")}
+                                searchEnabled={true} 
+                                showClearButton={true}
+                                data={{source:{select:{query:"SELECT GUID, NAME FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                            />
                         </div>
                         <div className="col-2">
                             <NbButton id={"btnItemSearch"} parent={this} className="form-group btn btn-primary btn-block" 

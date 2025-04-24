@@ -59,8 +59,18 @@ export default class NbPosPopGrid extends NbBase
     }
     async clear()
     {
-        this["txt" + this.props.id].value = ""
-        await this["grd" + this.props.id].dataRefresh({source:[]})
+        console.log("this.props.selectAll", this["txt" + this.props.id])
+
+        if(this["txt" + this.props.id] !== undefined)
+        {
+            this["txt" + this.props.id].value = ''
+        }
+
+        if(this["grd" + this.props.id] !== undefined)
+        {
+            await this["grd" + this.props.id].dataRefresh({source:[]})
+        }
+
     }
     render()
     {

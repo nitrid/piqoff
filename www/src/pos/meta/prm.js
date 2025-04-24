@@ -79,6 +79,24 @@ export const prm =
             DATA :[{CODE:0,NAME:"Kullanılmaz"},{CODE:1,NAME:"Kullanılır Puan İşlemez"},{CODE:2,NAME:"Kullanılır"}]
         }
     },
+    {
+        TYPE : 0,
+        ID :"cmbMainGrply",
+        VALUE : "",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ana Grup",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+        }
+    },
+
     //Ticket Rest. Kullanım Süresi
     {
         TYPE : 0,

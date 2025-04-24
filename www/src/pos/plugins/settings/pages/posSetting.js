@@ -71,7 +71,7 @@ export default class posSetting extends React.PureComponent
                     <NbButton id={"btnExit"} parent={this} className="form-group btn btn-danger btn-block" 
                     style={{height:"80px",width:"100%"}}
                     onClick={() => App.instance.setPage('')}>
-                        <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>Çıkış</span>
+                        <span style={{fontSize: "18px", fontWeight: "bold", color: "#ffffff"}}>{this.lang.t("posSettings.btnExit")}</span>
                     </NbButton>
                 </div>
             </React.Fragment>

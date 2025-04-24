@@ -8,6 +8,7 @@ const lang =
         posTicketEndDescription : "Fiş Sonu Açıklama",
         posGroupSaleReport : "Grup Bazlı Satış Raporu",
         posCompanyInfo : "Firma Bilgileri",
+        btnExit : "Çıkış",
     },
     posItemsList :
     {
@@ -416,6 +417,14 @@ const lang =
             btn01 : "Tamam",
             msg : "Lütfen gerekli alanları doldurunuz !",
         }
-    }
+    },
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtMount : "Bu Ay",
+    dtLastMount : "Geçen Ay",
+    dtYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl"
 }
 export default lang

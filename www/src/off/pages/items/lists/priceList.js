@@ -123,13 +123,16 @@ export default class priceList extends React.PureComponent
                                         }
                                     }    
                                 } />
-                                <Item location="after" locateInMenu="auto">
+                         
+                                <Item location="after" locateInMenu="auto"> 
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async ()=>
                                     {   
                                         this.popDesign.show() 
                                     }}/>
+
                                 </Item> 
+                    
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -297,12 +300,13 @@ export default class priceList extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
+                                
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,(SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN) AS PATH," + 
-                                                        "(SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM_GUID = ITEM_PRICE_VW_01.ITEM_GUID AND TYPE = 0) AS IMAGE FROM ITEM_PRICE_VW_01 WHERE  LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND CATALOG = @CATALOG" ,
-                                                        param:  ['LIST_NO:int','CATALOG:int','DESIGN:string|25'],
-                                                        value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
+                                                    "(SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM_PRICE_VW_01.ITEM_GUID AND TYPE = 0) AS IMAGE FROM ITEM_PRICE_VW_01 WHERE  LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND (CATALOG = @CATALOG OR @CATALOG = 0)" ,
+                                                    param:  ['LIST_NO:int','CATALOG:int','DESIGN:string|25'],
+                                                    value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 

@@ -8,6 +8,8 @@ const lang =
         posTicketEndDescription : "Description de Fin de Ticket",
         posGroupSaleReport : "Rapport de Vente par Groupe",
         posCompanyInfo : "Informations sur l'Entreprise",
+        btnExit : "Sortie",
+
     },
     posItemsList :
     {
@@ -416,6 +418,15 @@ const lang =
             btn01 : "OK",
             msg : "Veuillez remplir les champs requis !",
         }
-    }
+    },
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Cette Semaine",
+    dtLastWeek : "Semaine Dernière",
+    dtMount : "Ce Mois",
+    dtLastMount : "Mois Dernier",
+    dtYear : "Cette Année",
+    dtLastYear : "Année Dernière",
+    
 }
 export default lang

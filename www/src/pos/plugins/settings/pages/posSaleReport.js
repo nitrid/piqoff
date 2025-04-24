@@ -351,7 +351,7 @@ export default class posSaleReport extends React.PureComponent
                                 }}
                                 >
                                     <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={"pvtSaleReport"}/>
-                                    <Export fileName={"Report"} enabled={true} allowExportSelectedData={true} />
+                                    <Export fileName={"Rapor"} enabled={true} allowExportSelectedData={false} />
                                     <FieldChooser enabled={true} height={400} />
                                 </NdPivot>
                             </div>
