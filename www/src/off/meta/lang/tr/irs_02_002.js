@@ -438,6 +438,15 @@ const irs_02_002 =
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
     },
+    pg_offersGrid : 
+    {
+        clmCode : "Kodu",
+        clmName : "Adı",
+        clmPrice : "Fiyat",
+        clmQuantity : "Miktar",
+        clmTotal : "Toplam",
+        clmReferans : "Referans",
+    },
 }
 
 export default irs_02_002

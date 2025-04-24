@@ -431,6 +431,15 @@ const irs_02_002 =
         btn01: "OK", //BAK
         msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
     },
+    pg_offersGrid : 
+    {
+        clmCode : "Code",
+        clmName : "Nom",
+        clmPrice : "Prix",
+        clmQuantity : "Quantité",
+        clmTotal : "Total",
+        clmReferans : "Référence",
+    },
 
     btnSave: "Enregistrer",
 
