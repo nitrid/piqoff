@@ -254,11 +254,11 @@ export default class collection extends React.PureComponent
                 tmpCheck.SAFE =  this.cmbCashSafe.value
                 this.docObj.checkCls.addEmpty(tmpCheck)
             }
-            else if (pType == 2)
+            else
             {
                 tmpDocCustomer.INPUT = this.cmbCashSafe.value
                 tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpDocCustomer.PAY_TYPE = 2
+                tmpDocCustomer.PAY_TYPE = pType
                 tmpDocCustomer.AMOUNT = pAmount
                 tmpDocCustomer.DESCRIPTION = this.cashDescription.value
             }
