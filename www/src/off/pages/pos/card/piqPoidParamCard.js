@@ -208,6 +208,22 @@ export default class piqPoidDeviceCard extends React.PureComponent
                     CAPTION : {tr:"Etiket Birleştir",fr:"Fusionner les étiquettes"}
                 }
             },
+            // Terazide Gözükücek Ana Grup
+            {
+                TYPE : 0,
+                ID :"MainGrp",
+                VALUE : "",
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "text",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Terazide Gözükücek Ana Grup",fr:"Groupe principal à afficher sur la balance"}
+                }
+            },
         ]
     }
     async componentDidMount()
