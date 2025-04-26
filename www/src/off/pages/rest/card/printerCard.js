@@ -142,6 +142,50 @@ export default class PrinterCard extends React.PureComponent
             }
         });
     }
+    async searchSameItems(data) {
+        let duplicateItems = [];
+        
+        if(this.printerObj.dt('REST_PRINT_ITEM').length > 0)
+        {
+            for(let i = 0; i < this.printerObj.dt('REST_PRINT_ITEM').length; i++)
+            {
+                if(this.printerObj.dt('REST_PRINT_ITEM')[i].ITEM == data[0].GUID)
+                {
+                    duplicateItems.push(data[0].NAME);
+                }
+                
+            }
+            
+            if(duplicateItems.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+            else
+            {
+            if(data.length > 0)
+                {
+                    let tmpEmpty = 
+                    {
+                        CUSER : this.user.CODE,
+                        LUSER : this.user.CODE,
+                        ITEM : data[0].GUID,
+                        PRINTER : this.printerObj.dt()[0].GUID,
+                        ITEM_NAME : data[0].NAME
+                    }
+                    this.printerObj.dt('REST_PRINT_ITEM').push(tmpEmpty)
+                }
+            }
+        }
+        
+        return [];
+    }
     render()
     {
         return(
@@ -391,6 +435,8 @@ export default class PrinterCard extends React.PureComponent
                                     showBorders={true} 
                                     columnsAutoWidth={true}
                                     allowColumnResizing={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
                                     selection={{mode:'multiple'}}
                                     height={'600'} 
                                     width={'100%'}
@@ -423,19 +469,7 @@ export default class PrinterCard extends React.PureComponent
                                         this.pgProduct.show()
                                         this.pgProduct.onClick = (data) =>
                                         {
-                                            if(data.length > 0)
-                                            {
-                                                let tmpEmpty = 
-                                                {
-                                                    CUSER : this.user.CODE,
-                                                    LUSER : this.user.CODE,
-                                                    ITEM : data[0].GUID,
-                                                    PRINTER : this.printerObj.dt()[0].GUID,
-                                                    ITEM_NAME : data[0].NAME
-                                                }
-
-                                                this.printerObj.dt('REST_PRINT_ITEM').push(tmpEmpty)
-                                            }
+                                            this.searchSameItems(data)
                                         }
                                     }}/>
                                     <Button icon="minus" 

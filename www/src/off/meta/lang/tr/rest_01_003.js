@@ -47,6 +47,12 @@ const rest_01_003 =
         btn02: "Tamam",
         msg : "Girmiş olduğunuz yazıcı kodu sistem de kayıtlı !"
     },
+    msgDuplicateItems : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Bu ürün zaten yazıcıya kayıtlı !"
+    },
     grdList : 
     {
         ITEM_NAME : "Ürün Adı"

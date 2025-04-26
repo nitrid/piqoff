@@ -45,6 +45,12 @@ const rest_01_002 =
         btn02: "Tamam",
         msg : "Girmiş olduğunuz özellik kodu sistem de kayıtlı !"
     },
+    msgDuplicateItems : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Bu ürün özelliklere kayıtlı !"
+    },
     grdList : 
     {
         ITEM_NAME : "Ürün Adı"
