@@ -57,7 +57,8 @@ export default class transferCls
                         MAIN_GRP TEXT,
                         MAIN_GRP_NAME TEXT,
                         BARCODE TEXT,
-                        FAVORI INTEGER);`
+                        FAVORI INTEGER,
+                        SUB_FACTOR REAL);`
             },
             //ITEM_PRICE_VW_02
             {
@@ -97,16 +98,16 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,MAIN_GRP,MAIN_GRP_NAME,BARCODE,FAVORI FROM ITEMS_TAB_VW_01 WHERE STATUS = 1`,
+                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,MAIN_GRP,MAIN_GRP_NAME,BARCODE,FAVORI,SUB_FACTOR FROM ITEMS_TAB_VW_01 WHERE STATUS = 1`,
                 },
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO ITEMS_TAB_VW_01 (GUID, CODE, NAME, VAT, PRICE, IMAGE, UNIT, UNIT_NAME, UNIT_FACTOR, MAIN_GRP, MAIN_GRP_NAME,BARCODE,FAVORI) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    query : `INSERT OR REPLACE INTO ITEMS_TAB_VW_01 (GUID, CODE, NAME, VAT, PRICE, IMAGE, UNIT, UNIT_NAME, UNIT_FACTOR, MAIN_GRP, MAIN_GRP_NAME,BARCODE,FAVORI,SUB_FACTOR) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values :[{GUID : {map:'GUID'},CODE : {map:'CODE'},NAME : {map:'NAME'},VAT : {map:'VAT'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'},
                             UNIT : {map:'UNIT'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MAIN_GRP : {map:'MAIN_GRP'},
-                            MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},BARCODE : {map:'BARCODE'},FAVORI : {map:'FAVORI'}},]
+                            MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},BARCODE : {map:'BARCODE'},FAVORI : {map:'FAVORI'},SUB_FACTOR : {map:'SUB_FACTOR'}}]
                 },
             },
             //ITEM_PRICE_VW_02

@@ -182,12 +182,12 @@ export default class Sale extends React.PureComponent
         //CORDOVA YADA ELECTRON İSE SQLLİTE LOCALDB KULLANILIYOR.
         if(this.core.local.platform != '')
         {
-            
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,SUB_FACTOR " +
+                        "FROM ITEMS_TAB_VW_01 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%')) OR (BARCODE = ?)) AND " +
-                        "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                        "((MAIN_GRP = ?) OR (? = ''))  GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,SUB_FACTOR ORDER BY "+ this.orderGroup.value +" LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }            
             let tmpBuf = await this.core.local.select(tmpQuery) 
@@ -210,9 +210,10 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,SUB_FACTOR " +
+                        "FROM ITEMS_TAB_VW_01 " +
                         "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%')) OR (BARCODE = @VAL)) AND " +
-                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,FAVORI ORDER BY " + this.orderGroup.value,
+                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,FAVORI,SUB_FACTOR ORDER BY " + this.orderGroup.value,
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
                 value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
                 buffer : true
@@ -247,9 +248,9 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_TAB_VW_01 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,SUB_FACTOR FROM ITEMS_TAB_VW_01 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))  OR (BARCODE = ?)) AND " +
-                        "((MAIN_GRP = ?) OR (? = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                        "((MAIN_GRP = ?) OR (? = '')) GROUP BY GUID,CODE,NAME,VAT,ROUND(PRICE,3),IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,SUB_FACTOR ORDER BY " + this.orderGroup.value + " LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
             }
             
@@ -915,7 +916,7 @@ export default class Sale extends React.PureComponent
                             {
                                 this.getItems()
                             }).bind(this)}
-                            data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")}]}}
+                            data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")},{ID:"SUB_FACTOR ASC",VALUE:this.t("orderGroup.Kilogram")}]}}
                             />
                         </div>
                         <div className="col-4" align="center" style={{paddingTop:'5px'}}>

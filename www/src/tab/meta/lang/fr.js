@@ -296,6 +296,7 @@ export const langFr =
             Name: "NOM",
             Code: "CODE",
             Favori: "FAVORIS",
+            Kilogram: "KG"
         },
         msgWrongUnit:
         {

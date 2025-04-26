@@ -174,6 +174,12 @@ const sip_02_003 =
         btn02: "Abandonner",
         msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
     },
+    msgDuplicateItems : 
+    {
+        title: "Attention",
+        btn01: "D'accord",
+        msg: "Attention! Le document contient des lignes avec le même code de produit:\n"
+    },
     msgDiscountPrice:
     {
         title: "Attention",
