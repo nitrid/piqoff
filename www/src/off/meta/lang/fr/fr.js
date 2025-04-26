@@ -501,6 +501,7 @@ export const langFr =
         slsRpt_01_007 : "Rapport factures retours",   
         slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         slsRpt_01_009: "Rapport de facturation des ventes ouvertes",
+        slsRpt_01_010: "Rapport de Vieillissement des Factures de Vente",
         slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
         slsRpt_01_012: "Rapport sur le profit des produits",
         slsRpt_01_013: "Rapport sur le profit des clients",
