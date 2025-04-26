@@ -329,14 +329,14 @@ export const langFr =
         saleList_01: "Liste Groupée de Documents",
         piqx : "PiqX",
         piqx_01 : "Factures", //BAK
-        piqx_01_001 : "Factures d'achat reçues", //BAK
-        piqx_01_002 : "Facture d'achat de interne reçue",
-        piqx_01_003 : "Factures de différence de prix reçues",
-        piqx_01_004 : "Factures de retour reçues",
+        piqx_01_001 : "Piqx Factures d'achat reçues", //BAK
+        piqx_01_002 : "Piqx Facture d'achat de interne reçue",
+        piqx_01_003 : "Piqx Factures de différence de prix reçues",
+        piqx_01_004 : "Piqx Factures de retour reçues",
         piqx_02 : "Bons de livraison", //BAK
-        piqx_02_001 : "Bons de livraison d'achat reçus",
-        piqx_02_002 : "Bons de livraison interne reçus",
-        piqx_02_003 : "Bons de retour",
+        piqx_02_001 : "Piqx Bons de livraison d'achat reçus",
+        piqx_02_002 : "Piqx Bons de livraison interne reçus",
+        piqx_02_003 : "Piqx Bons de retour",
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",

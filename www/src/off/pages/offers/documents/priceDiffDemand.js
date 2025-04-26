@@ -95,7 +95,7 @@ export default class priceDiffDemand extends DocBase
                            
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
-                    if(tmpData.result.recordset[i].DIFF_PRICE != 0.00 )
+                    if(parseFloat(tmpData.result.recordset[i].PRICE - tmpData.result.recordset[i].CUSTOMER_PRICE).toFixed(3) != 0.00 )
                     {
                         let tmpDocDemand = {...this.docObj.docDemand.empty}
                         tmpDocDemand.DOC_TYPE =  this.docObj.dt()[0].DOC_TYPE
@@ -114,17 +114,16 @@ export default class priceDiffDemand extends DocBase
                         tmpDocDemand.QUANTITY = tmpData.result.recordset[i].QUANTITY
                         tmpDocDemand.UNIT = tmpData.result.recordset[i].UNIT
                         tmpDocDemand.LINE_NO = this.docObj.docDemand.dt().max("LINE_NO") + 1
-                        tmpDocDemand.PRICE = tmpData.result.recordset[i].DIFF_PRICE
+                        tmpDocDemand.PRICE = parseFloat(tmpData.result.recordset[i].PRICE - tmpData.result.recordset[i].CUSTOMER_PRICE).toFixed(3)
                         tmpDocDemand.INVOICED_PRICE = tmpData.result.recordset[i].PRICE
                         tmpDocDemand.PRICE_AGREED = tmpData.result.recordset[i].CUSTOMER_PRICE
                         tmpDocDemand.TOTALHT = Number((parseFloat((tmpDocDemand.PRICE * tmpDocDemand.QUANTITY).toFixed(3)) - (parseFloat(tmpDocDemand.DISCOUNT)))).round(2)
                         tmpDocDemand.VAT = parseFloat(((((tmpDocDemand.TOTALHT) - (parseFloat(tmpDocDemand.DOC_DISCOUNT))) * (tmpDocDemand.VAT_RATE) / 100))).round(6);
                         tmpDocDemand.AMOUNT = parseFloat((tmpDocDemand.PRICE * tmpDocDemand.QUANTITY).toFixed(3)).round(2)
                         tmpDocDemand.TOTAL = Number(((tmpDocDemand.TOTALHT - tmpDocDemand.DOC_DISCOUNT) + tmpDocDemand.VAT)).round(2)
-                        tmpDocDemand.DISCOUNT_1 = tmpData.result.recordset[i].DISCOUNT_1
-                        tmpDocDemand.DISCOUNT_2 = tmpData.result.recordset[i].DISCOUNT_2
-                        tmpDocDemand.DISCOUNT_3 = tmpData.result.recordset[i].DISCOUNT_3
-                        tmpDocDemand.DISCOUNT = tmpData.result.recordset[i].DISCOUNT
+                        tmpDocDemand.DISCOUNT_1 =     e.data.DISCOUNT_1 = Number(tmpDocDemand.AMOUNT).rateInc(tmpData.result.recordset[i].DISCOUNT_RATE,4) 
+                        tmpDocDemand.DISCOUNT = tmpDocDemand.DISCOUNT_1
+                        tmpDocDemand.DISCOUNT_RATE = tmpData.result.recordset[i].DISCOUNT_RATE
                         tmpDocDemand.CONNECT_DOC_DATE = tmpData.result.recordset[i].DOC_DATE,
                         tmpDocDemand.CONNECT_REF = tmpData.result.recordset[i].REF + '-' + tmpData.result.recordset[i].REF_NO
                         tmpDocDemand.INVOICE_DOC_GUID = pGuid,

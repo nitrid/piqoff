@@ -23,6 +23,7 @@ export const langFr =
     chkRememberMe : "Souviens-toi de moi", // BAK
     btnAdd : "Ajouter",
     txtNewAdress : "Veuillez entrer l'adresse du serveur",
+    txtNewName : "Veuillez entrer le nom de l'entreprise",
     txtModule : "Choix du module",
     txtFirmSelect : "Choix de l'entreprise",
     firmListTitle : "Liste des entreprises",
