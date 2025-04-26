@@ -71,14 +71,14 @@ export default class Login extends React.PureComponent
            this.Kullanici.value = localStorage.userName 
            this.Sifre.value = localStorage.userPwd
         }
-        App.instance.device ? this.txtFirm.value = localStorage.host : this.txtFirm.value = window.origin
+        App.instance.device ? this.txtFirm.value = localStorage.hostname : this.txtFirm.value = window.origin
         if(typeof localStorage.firmList != 'undefined')
         {
             this.firmArray = JSON.parse(localStorage.firmList)
         }
         else if(typeof localStorage.host != 'undefined')
         {
-            this.firmArray.push({ADRESS:  localStorage.host})
+            this.firmArray.push({ADRESS:  localStorage.host,NAME:localStorage.host})
         }
         else
         {
@@ -89,7 +89,7 @@ export default class Login extends React.PureComponent
             }
             else
             {
-                this.firmArray.push( {ADRESS:  window.origin})
+                this.firmArray.push( {ADRESS:  window.origin,NAME:window.origin})
             }
         }
         this.Kullanici.focus()
@@ -174,15 +174,16 @@ export default class Login extends React.PureComponent
        if(typeof localStorage.firmList != 'undefined' )
        {
             let tmpFirmList = JSON.parse(localStorage.firmList)
-            tmpFirmList.push({ADRESS: this.txtNewAdress.value})
+            tmpFirmList.push({ADRESS: this.txtNewAdress.value,NAME:this.txtNewName.value})
             localStorage.firmList = JSON.stringify(tmpFirmList)
        }
        else
        {
-            localStorage.firmList = JSON.stringify([{ADRESS: this.txtNewAdress.value}])
+            localStorage.firmList = JSON.stringify([{ADRESS: this.txtNewAdress.value,NAME:this.txtNewName.value}])
        }
        localStorage.setItem('firmList',localStorage.firmList)
        localStorage.setItem('host',this.txtNewAdress.value)
+       localStorage.setItem('hostname',this.txtNewName.value)
        window.location.reload()
     }
     render()
@@ -228,14 +229,14 @@ export default class Login extends React.PureComponent
                                               onClick:async()=>
                                               {
                                                 let tmpDt = new datatable()
-                                                console.log(this.firmArray)
                                                 tmpDt.import(this.firmArray)
                                                 await this.pg_Firm.setData(tmpDt)
                                                 this.pg_Firm.show()
                                                 this.pg_Firm.onClick = (data) =>
                                                 {
-                                                    this.txtFirm.value = data[0].ADRESS
+                                                    this.txtFirm.value = data[0].NAME
                                                     localStorage.setItem('host',data[0].ADRESS)
+                                                    localStorage.setItem('hostname',data[0].NAME)
                                                     window.location.reload()
                                                 }
                                               }
@@ -365,7 +366,7 @@ export default class Login extends React.PureComponent
                             this.firmArray = []
                             for(let i = 0; i < this.pg_Firm.grid.data.datatable.length; i++)
                             {
-                                this.firmArray.push({ADRESS:  this.pg_Firm.grid.data.datatable[i].ADRESS})
+                                this.firmArray.push({ADRESS:  this.pg_Firm.grid.data.datatable[i].ADRESS,NAME:this.pg_Firm.grid.data.datatable[i].NAME})
                             }
                             localStorage.setItem('firmList',JSON.stringify(this.firmArray))
                         }}
@@ -385,6 +386,7 @@ export default class Login extends React.PureComponent
                         >
                             <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={true}/>
                             <Column dataField="ADRESS" caption="SERVER" width={150} defaultSortOrder="asc"/>
+                            <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc"/>
                         </NdPopGrid>
                         
                         <NdPopUp id={"popAddFirm"} parent={this}  fullscreen={false} centered={true}
@@ -395,6 +397,9 @@ export default class Login extends React.PureComponent
                             <div  className='row p-1'>
                                 <NdTextBox id="txtNewAdress" parent={this}  showClearButton={true} height='fit-content' 
                                 placeholder={this.lang.t("txtNewAdress")}
+                                />
+                                <NdTextBox id="txtNewName" parent={this}  showClearButton={true} height='fit-content' 
+                                placeholder={this.lang.t("txtNewName")}
                                 />
                             </div>
                             <div className="row p-1">

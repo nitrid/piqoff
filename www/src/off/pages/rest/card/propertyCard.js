@@ -154,6 +154,51 @@ export default class PropertyCard extends React.PureComponent
             }
         });
     }
+    async searchSameItems(data) {
+        let duplicateItems = [];
+        
+        if(this.propertyObj.dt('REST_ITEM_PROPERTY').length > 0)
+        {
+            for(let i = 0; i < this.propertyObj.dt('REST_ITEM_PROPERTY').length; i++)
+            {
+                if(this.propertyObj.dt('REST_ITEM_PROPERTY')[i].ITEM == data[0].GUID)
+                {
+                    duplicateItems.push(data[0].NAME);
+                }
+                
+            }
+            
+            if(duplicateItems.length > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+            else
+            {
+            if(data.length > 0)
+                {
+                    let tmpEmpty = 
+                    {
+                        CUSER : this.user.CODE,
+                        LUSER : this.user.CODE,
+                        ITEM : data[0].GUID,
+                        PROPERTY : this.propertyObj.dt()[0].GUID,
+                        ITEM_NAME : data[0].NAME
+                    }
+
+                    this.propertyObj.dt('REST_ITEM_PROPERTY').push(tmpEmpty)
+                }
+            }
+        }
+        
+        return [];
+    }
     render()
     {
         return(
@@ -389,6 +434,8 @@ export default class PropertyCard extends React.PureComponent
                                             showBorders={true} 
                                             columnsAutoWidth={true}
                                             allowColumnResizing={true}
+                                            filterRow={{visible:true}} 
+                                            headerFilter={{visible:true}}
                                             selection={{mode:'multiple'}}
                                             height={'600'} 
                                             width={'100%'}
@@ -425,19 +472,7 @@ export default class PropertyCard extends React.PureComponent
                                                 this.pgProduct.show()
                                                 this.pgProduct.onClick = (data) =>
                                                 {
-                                                    if(data.length > 0)
-                                                    {
-                                                        let tmpEmpty = 
-                                                        {
-                                                            CUSER : this.user.CODE,
-                                                            LUSER : this.user.CODE,
-                                                            ITEM : data[0].GUID,
-                                                            PROPERTY : this.propertyObj.dt()[0].GUID,
-                                                            ITEM_NAME : data[0].NAME
-                                                        }
-
-                                                        this.propertyObj.dt('REST_ITEM_PROPERTY').push(tmpEmpty)
-                                                    }
+                                                    this.searchSameItems(data)
                                                 }
                                             }}/>
                                             <Button icon="minus" 
@@ -461,6 +496,8 @@ export default class PropertyCard extends React.PureComponent
                                                     showBorders={true} 
                                                     columnsAutoWidth={true}
                                                     allowColumnResizing={true}
+                                                    filterRow={{visible:true}} 
+                                                    headerFilter={{visible:true}}
                                                     height={'600'} 
                                                     width={'100%'}
                                                     dbApply={false}

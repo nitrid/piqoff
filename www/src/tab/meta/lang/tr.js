@@ -298,6 +298,7 @@ export const langTr =
             Name: "İSİM",
             Code: "KOD",
             Favori: "FAVORİ",
+            Kilogram: "KG"
         },
         msgWrongUnit:
         {

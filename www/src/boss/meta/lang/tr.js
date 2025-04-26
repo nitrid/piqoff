@@ -23,6 +23,7 @@ export const langTr =
     chkRememberMe : "Beni Hatırla", 
     btnAdd : "Ekle",
     txtNewAdress : "Lütfen sunucu adresini giriniz",
+    txtNewName : "Lütfen firma adını giriniz",
     txtModule : "Modül Seçimi",
     txtFirmSelect : "Firma Seçimi",
     firmListTitle : "Firma Listesi",

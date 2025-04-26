@@ -45,6 +45,12 @@ const rest_01_002 =
         btn02: "OK",
         msg: "Le code de caractéristique que vous avez saisi est déjà enregistré dans le système !"
     },
+    msgDuplicateItems: 
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Cet article est déjà enregistré dans les caractéristiques !"
+    },
     grdList: 
     {
         ITEM_NAME: "Nom du produit"

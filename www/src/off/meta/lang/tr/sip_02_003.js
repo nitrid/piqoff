@@ -378,6 +378,12 @@ const sip_02_003 =
         btn01: "Evrağa Git",
         msg: "Evrak Bulundu"
     },
+    msgDuplicateItems : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Dikkat! Sipariş listesinde aynı ürün koduna sahip birden fazla ürün bulunmaktadır:\n"
+    },
     popMailSend : 
     {
         title :"E-Mail Gönder",

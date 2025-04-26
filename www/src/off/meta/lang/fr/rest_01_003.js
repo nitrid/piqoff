@@ -47,6 +47,12 @@ const rest_01_003 =
         btn02: "OK",
         msg: "Le code de l'imprimante que vous avez saisi est déjà enregistré dans le système !"
     },
+    msgDuplicateItems: 
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Cet article est déjà enregistré dans l'imprimante !"
+    },
     grdList: 
     {
         ITEM_NAME: "Nom du produit"
