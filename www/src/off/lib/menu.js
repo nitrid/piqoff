@@ -1044,7 +1044,7 @@ export const menu = (e) =>
                         },
                         {
                             id: 'slsRpt_01_010',
-                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            text: e.t('menuOff.slsRpt_01_010'),//'Satış Faturası Yaşlandırma Raporu',
                             path: 'customers/report/saleInvoiceAgingReport'
                         },
                         {

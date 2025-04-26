@@ -204,6 +204,7 @@ export default class outageDoc extends React.PureComponent
     }
     async _getDispatch()
     {
+        this.pg_dispatchGrid.show()
         let tmpQuery = 
         {
             query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN(40)",
@@ -213,7 +214,6 @@ export default class outageDoc extends React.PureComponent
         {   
             await this.pg_dispatchGrid.setData(tmpData.result.recordset)
         }
-        this.pg_dispatchGrid.show()
         this.pg_dispatchGrid.onClick = async(data) =>
         {
             for (let i = 0; i < data.length; i++) 

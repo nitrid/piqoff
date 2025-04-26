@@ -524,6 +524,7 @@ export default class rebatePurcDispatch extends DocBase
     }
     async _getRebate()
     {
+        await this.pg_RebateGrid.show()
         let tmpQuery = 
         {
             query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
@@ -570,7 +571,7 @@ export default class rebatePurcDispatch extends DocBase
             this.docObj.docItems.dt().emit('onRefresh')
             this.calculateTotal()
         }
-        await this.pg_RebateGrid.show()
+       
     }
     render()
     {

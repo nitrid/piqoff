@@ -347,6 +347,7 @@ export default class priceDifferenceInvoice extends DocBase
     }
     async _getContract()
     {
+        this.pg_contractGrid.show()
         let tmpQuery = 
         {
             query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND TYPE = 0 AND DOC_TYPE = 20 ORDER BY DOC_DATE DESC",
@@ -430,7 +431,6 @@ export default class priceDifferenceInvoice extends DocBase
             }
             this.calculateTotal()
         }
-        this.pg_contractGrid.show()
     }
     async _getPayment()
     {

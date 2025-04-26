@@ -501,6 +501,7 @@ export const langTr =
         slsRpt_01_007 : "İade Faturaları Raporu",
         slsRpt_01_008 : "Ürün Detaylı Satış Raporu",
         slsRpt_01_009 : "Açık Satış Fatura Raporu",
+        slsRpt_01_010 : "Satış Faturası Yaşlandırma Raporu",
         slsRpt_01_011 : "Eksik Gönderilen Siparişler Raporu",
         slsRpt_01_012 : "Ürün Bazlı Satış Raporu",
         slsRpt_01_013 : "Müşteri Bazlı Satış Raporu",
