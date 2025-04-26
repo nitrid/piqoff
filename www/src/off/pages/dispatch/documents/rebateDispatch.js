@@ -48,6 +48,7 @@ export default class rebateDispatch extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+
        if(typeof this.pagePrm != 'undefined')
         {
             if(typeof this.pagePrm.GUID != 'undefined')
@@ -718,6 +719,7 @@ export default class rebateDispatch extends DocBase
     }
     async _getRebate()
     {
+        await this.pg_RebateGrid.show()
         let tmpQuery = 
         {
             query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,dbo.GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
@@ -725,6 +727,7 @@ export default class rebateDispatch extends DocBase
             value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_RebateGrid.setData(tmpData.result.recordset)
@@ -764,7 +767,6 @@ export default class rebateDispatch extends DocBase
             this.docObj.docItems.dt().emit('onRefresh')
             this.calculateTotal()
         }
-        await this.pg_RebateGrid.show()
     }
     render()
     {
