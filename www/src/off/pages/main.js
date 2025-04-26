@@ -1,7 +1,6 @@
 import React from 'react';
 import App from '../lib/app.js';
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
@@ -29,13 +28,42 @@ export default class mainPage extends React.PureComponent
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        this.tmpLastMenu = []
+        this.state = {
+            tmpLastMenu:[]
+        }
+        
+        // Ana ekranda gösterilecek menü öğelerini tanımla
+        this.menuItems = [
+            { id: 'stk_01_001', icon: 'fa-solid fa-box-open', color: '#28a745', path:'items/cards/itemCard' },
+            { id: 'stk_03_001', icon: 'fa-solid fa-list', color: '#28a745', path:'items/lists/itemList' },
+            { id: 'cri_01_001', icon: 'fa-solid fa-user-plus', color: '#28a745', path:'customers/cards/customerCard' },
+            { id: 'cri_02_001', icon: 'fa-solid fa-users', color: '#28a745', path:'customers/lists/customerList' },
+            { id: 'tkf_02_002', icon: 'fa-solid fa-clipboard-list', color: '#ffc107', path:'offers/documents/salesOffer' },
+            { id: 'irs_02_001', icon: 'fa-solid fa-truck-loading', color: '#6f42c1', path:'dispatch/documents/purchaseDispatch' },
+            { id: 'irs_02_003', icon: 'fa-solid fa-exchange-alt', color: '#fd7e14', path:'dispatch/documents/rebatePurcDispatch' },
+            { id: 'ftr_02_001', icon: 'fa-solid fa-file-invoice', color: '#20c997', path:'invoices/documents/purchaseInvoice' },
+            { id: 'irs_02_002', icon: 'fa-solid fa-shipping-fast', color: '#fd7e14', path:'dispatch/documents/salesDispatch' },
+            { id: 'ftr_02_002', icon: 'fa-solid fa-receipt', color: '#6c757d', path:'invoices/documents/salesInvoice' },
+            { id: 'piqx_02_001', icon: 'fa-solid fa-file-import', color: '#343a40', path:'piqx/invoices/piqXPurcFactList'},
+            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' },
+        ];
     }
     componentDidMount()
     {
-        this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.init(this.pagePrm)
+        }
+
     }
-    async init()
+    async init(pMenu)
     {
+        
+        await this.mergeMenu(pMenu,this.menuItems)
+        setTimeout(() => {
+            this.setState({tmpLastMenu:this.tmpLastMenu})
+        }, 500);
         // let tmpQuery = 
         // {
         //     query : "SELECT * FROM " +
@@ -66,13 +94,76 @@ export default class mainPage extends React.PureComponent
            
         // }
     }
+    async mergeMenu(tmpMenu,tmpMenuData)
+    {
+        return new Promise(async resolve => 
+        {
+            tmpMenu.forEach(async function (element,index,object)
+            {
+                let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
+                if(typeof tmpMerge != 'undefined' )
+                {
+                    for (let i = 0; i < tmpMenu.length; i++) 
+                    {
+                        if(tmpMenu[i].id == tmpMerge.id && typeof tmpMenu[i].visible != 'undefined' && tmpMenu[i].visible == true)
+                        {
+                            console.log(tmpMenu[i])
+                            this.tmpLastMenu.push(tmpMerge)
+                        }
+                        else if(tmpMenu[i].id == tmpMerge.id && typeof tmpMenu[i].visible == 'undefined')
+                        {
+                            this.tmpLastMenu.push(tmpMerge)
+                        }
+                    }
+                }
+                if(typeof element.items != 'undefined')
+                {
+                    await this.mergeMenu(element.items,tmpMenuData)
+                }
+            }.bind(this));
+            
+            resolve(this.tmpLastMenu)
+        });
+    }
+
     render()
     {
         return(
             <div>
-                <ScrollView>
-                </ScrollView>
-            </div>
+            <div className='row pt-3' style={{paddingBottom:"20px"}}>
+                {this.state.tmpLastMenu.map((function(object, i)
+                {
+                    return (
+                        <div className="col-3 mb-4" key={object.id}>
+                            <div className="card text-center shadow-sm" 
+                                style={{
+                                    cursor:'pointer', 
+                                    height:'180px', 
+                                    borderRadius:'10px', 
+                                    background:'#f8f9fa', 
+                                    border:'1px solid #dee2e6'
+                                }} 
+                                onClick={() => {
+                                    App.instance.menuClick({
+                                        id: object.id,
+                                        text: this.lang.t(`menuOff.${object.id}`),
+                                        path: object.path,
+                                    })
+                                }}>
+                                <div className="card-body d-flex flex-column justify-content-center">
+                                    <i className={object.icon + " mb-3"} 
+                                        style={{fontSize:'50px', color:object.color}}></i>
+                                    <h5 className="card-title" 
+                                        style={{fontSize:'16px', fontWeight:'600'}}>
+                                        {this.lang.t(`menuOff.${object.id}`)}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        )
+                }).bind(this))}                
+            </div>    
+        </div>
         )
     }
 }
