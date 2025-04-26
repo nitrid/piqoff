@@ -24,9 +24,9 @@ const slsRpt_01_011 =
         clmInputName : "Nom Client",
         clmDate: "Date",
         clmVat : "TVA",
-        clmQuantıty : "Quantité",
-        clmCompQuantıty : "Livré",
-        clmPendQuantıty :"Sera livré",
+        clmQuantity : "Quantité",
+        clmCompQuantity : "Livré",
+        clmPendQuantity :"Sera livré",
         clmItemName :"Nom du produit",
         clmLivre : "Livré"
     },

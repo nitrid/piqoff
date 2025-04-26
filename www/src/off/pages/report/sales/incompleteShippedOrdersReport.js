@@ -7,7 +7,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button,Paging,Pager,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -16,6 +16,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import Button from 'devextreme-react/button.js';
 
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -41,9 +42,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
             {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
             {CODE : "ITEM_NAME",NAME : this.t("grdSlsOrdList.clmItemName")},
             {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
-            {CODE : "QUANTITY",NAME : this.t("grdSlsOrdList.clmQuantıty")},
-            {CODE : "COMP_QUANTITY",NAME : this.t("grdSlsOrdList.clmCompQuantıty")},
-            {CODE : "PEND_QUANTITY",NAME : this.t("grdSlsOrdList.clmPendQuantıty")},
+            {CODE : "QUANTITY",NAME : this.t("grdSlsOrdList.clmQuantity")},
+            {CODE : "COMP_QUANTITY",NAME : this.t("grdSlsOrdList.clmCompQuantity")},
+            {CODE : "PEND_QUANTITY",NAME : this.t("grdSlsOrdList.clmPendQuantity")},
         ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
@@ -204,7 +205,6 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
             {
                 tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
             }
-
             tmpDocCls.addEmpty(tmpDoc);     
             
             let tmpLineQuery = 
@@ -486,6 +486,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                         <div className="col-3">
                             
                         </div>
+                        <div className="col-3"> 
+                        </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
@@ -512,9 +514,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 <Column dataField="INPUT_NAME" caption={this.t("grdSlsOrdList.clmInputName")} visible={true}/>                                
                                 <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrdList.clmItemName")} visible={true}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdSlsOrdList.clmDate")} visible={true} width={200} dataType="datetime" format={"dd/MM/yyyy"}/>
-                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrdList.clmQuantıty")} visible={true} width={100} /> 
-                                <Column dataField="COMP_QUANTITY" caption={this.t("grdSlsOrdList.clmCompQuantıty")} visible={true} width={100} /> 
-                                <Column dataField="PEND_QUANTITY" caption={this.t("grdSlsOrdList.clmPendQuantıty")} visible={true} width={125} />              
+                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrdList.clmQuantity")} visible={true} width={100} /> 
+                                <Column dataField="COMP_QUANTITY" caption={this.t("grdSlsOrdList.clmCompQuantity")} visible={true} width={100} /> 
+                                <Column dataField="PEND_QUANTITY" caption={this.t("grdSlsOrdList.clmPendQuantity")} visible={true} width={125} />              
                                 <Column type="buttons" width={70}>
                                     <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
                                 </Column>
