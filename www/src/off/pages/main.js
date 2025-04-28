@@ -73,7 +73,7 @@ export default class mainPage extends React.PureComponent
 
         if(pMenu.length == 0)
         {
-            this.setState({tmpLastMenu:this.menuItems})
+            this.setState({tmpLastMenu:this.menuItems.slice(0,4)})
         }
         else
         {
