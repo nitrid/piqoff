@@ -92,12 +92,11 @@ export default class Navigation extends React.PureComponent
         {
             this.setState({loading:false})
         })
-        console.log(tmpMenu)
         App.instance.menuClick(
         {
             text: "PiqSoft",
             path: 'main.js',
-            pagePrm:tmpMenu
+            pagePrm:tmpFavMenuData
         })
         let tmpQuery = 
         {

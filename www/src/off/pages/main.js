@@ -30,8 +30,18 @@ export default class mainPage extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.tmpLastMenu = []
         this.state = {
-            tmpLastMenu:[]
+            tmpLastMenu:[],
+            iconIndex: 0
         }
+        
+        // 5 farklı yıldız temalı icon
+        this.favoriteIcons = [
+            { icon: 'fa-solid fa-star', color: '#FFD700' }, 
+            { icon: 'fa-solid fa-star', color: '#FFA500' },    
+            { icon: 'fa-solid fa-star', color: '#FF4500' },      
+            { icon: 'fa-solid fa-star', color: '#9370DB' },     
+            { icon: 'fa-solid fa-star', color: '#1E90FF' }   
+        ];
         
         // Ana ekranda gösterilecek menü öğelerini tanımla
         this.menuItems = [
@@ -46,8 +56,9 @@ export default class mainPage extends React.PureComponent
             { id: 'irs_02_002', icon: 'fa-solid fa-shipping-fast', color: '#fd7e14', path:'dispatch/documents/salesDispatch' },
             { id: 'ftr_02_002', icon: 'fa-solid fa-receipt', color: '#6c757d', path:'invoices/documents/salesInvoice' },
             { id: 'piqx_02_001', icon: 'fa-solid fa-file-import', color: '#343a40', path:'piqx/invoices/piqXPurcFactList'},
-            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' },
+            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' }
         ];
+
     }
     componentDidMount()
     {
@@ -59,11 +70,19 @@ export default class mainPage extends React.PureComponent
     }
     async init(pMenu)
     {
-        
-        await this.mergeMenu(pMenu,this.menuItems)
-        setTimeout(() => {
-            this.setState({tmpLastMenu:this.tmpLastMenu})
-        }, 500);
+
+        if(pMenu.length == 0)
+        {
+            this.setState({tmpLastMenu:this.menuItems})
+        }
+        else
+        {
+            await this.mergeMenu(pMenu,this.menuItems)
+            setTimeout(() => {
+                this.setState({tmpLastMenu:this.tmpLastMenu})
+            }, 500);
+        }
+      
         // let tmpQuery = 
         // {
         //     query : "SELECT * FROM " +
@@ -94,8 +113,15 @@ export default class mainPage extends React.PureComponent
            
         // }
     }
+    getNextFavoriteIcon() {
+        const currentIndex = this.state.iconIndex;
+        const nextIndex = (currentIndex + 1) % this.favoriteIcons.length;
+        this.setState({ iconIndex: nextIndex });
+        return this.favoriteIcons[currentIndex];
+    }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
+        console.log("tmpMenu",tmpMenu)
         return new Promise(async resolve => 
         {
             tmpMenu.forEach(async function (element,index,object)
@@ -103,22 +129,18 @@ export default class mainPage extends React.PureComponent
                 let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
                 if(typeof tmpMerge != 'undefined' )
                 {
-                    for (let i = 0; i < tmpMenu.length; i++) 
-                    {
-                        if(tmpMenu[i].id == tmpMerge.id && typeof tmpMenu[i].visible != 'undefined' && tmpMenu[i].visible == true)
-                        {
-                            console.log(tmpMenu[i])
-                            this.tmpLastMenu.push(tmpMerge)
-                        }
-                        else if(tmpMenu[i].id == tmpMerge.id && typeof tmpMenu[i].visible == 'undefined')
-                        {
-                            this.tmpLastMenu.push(tmpMerge)
-                        }
-                    }
+                    this.tmpLastMenu.push(tmpMerge)
                 }
-                if(typeof element.items != 'undefined')
+                else
                 {
-                    await this.mergeMenu(element.items,tmpMenuData)
+                    const nextIcon = this.getNextFavoriteIcon();
+                    let tmpNewMerge = {
+                        id: element.id,
+                        icon: nextIcon.icon,
+                        color: nextIcon.color,
+                        path: element.path
+                    }
+                    this.tmpLastMenu.push(tmpNewMerge)
                 }
             }.bind(this));
             
@@ -129,41 +151,43 @@ export default class mainPage extends React.PureComponent
     render()
     {
         return(
-            <div>
-            <div className='row pt-3' style={{paddingBottom:"20px"}}>
-                {this.state.tmpLastMenu.map((function(object, i)
-                {
-                    return (
-                        <div className="col-3 mb-4" key={object.id}>
-                            <div className="card text-center shadow-sm" 
-                                style={{
-                                    cursor:'pointer', 
-                                    height:'180px', 
-                                    borderRadius:'10px', 
-                                    background:'#f8f9fa', 
-                                    border:'1px solid #dee2e6'
-                                }} 
-                                onClick={() => {
-                                    App.instance.menuClick({
-                                        id: object.id,
-                                        text: this.lang.t(`menuOff.${object.id}`),
-                                        path: object.path,
-                                    })
-                                }}>
-                                <div className="card-body d-flex flex-column justify-content-center">
-                                    <i className={object.icon + " mb-3"} 
-                                        style={{fontSize:'50px', color:object.color}}></i>
-                                    <h5 className="card-title" 
-                                        style={{fontSize:'16px', fontWeight:'600'}}>
-                                        {this.lang.t(`menuOff.${object.id}`)}
-                                    </h5>
+            <ScrollView>
+                <div>
+                    <div className='row pt-3' style={{paddingBottom:"20px"}}>
+                        {this.state.tmpLastMenu.map((function(object, i)
+                        {
+                            return (
+                                <div className="col-3 mb-4" key={object.id}>
+                                    <div className="card text-center shadow-sm" 
+                                        style={{
+                                            cursor:'pointer', 
+                                            height:'180px', 
+                                            borderRadius:'10px', 
+                                            background:'#f8f9fa', 
+                                            border:'1px solid #dee2e6'
+                                        }} 
+                                        onClick={() => {
+                                            App.instance.menuClick({
+                                                id: object.id,
+                                                text: this.lang.t(`menuOff.${object.id}`),
+                                                path: object.path,
+                                            })
+                                        }}>
+                                        <div className="card-body d-flex flex-column justify-content-center">
+                                            <i className={object.icon + " mb-3"} 
+                                                style={{fontSize:'50px', color:object.color}}></i>
+                                            <h5 className="card-title" 
+                                                style={{fontSize:'16px', fontWeight:'600'}}>
+                                                {this.lang.t(`menuOff.${object.id}`)}
+                                            </h5>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        )
-                }).bind(this))}                
-            </div>    
-        </div>
+                                )
+                    }).bind(this))}                
+                </div>    
+            </div>
+        </ScrollView>
         )
     }
 }
