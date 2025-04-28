@@ -577,7 +577,7 @@ export default class salesInvList extends React.PureComponent
                                     await this.cmbDesignList.dataRefresh(tmpSource)
                                 }
                             }}
-                        deferRendering={true}
+                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
