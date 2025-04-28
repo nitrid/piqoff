@@ -1931,6 +1931,11 @@ export default class purchaseInvoice extends DocBase
                                                     await this.pg_adress.show()
                                                     await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRefno.value = "";
+                                                }
                                             }
                                         }
                                     }).bind(this)}
@@ -1995,6 +2000,11 @@ export default class purchaseInvoice extends DocBase
                                                                 }
                                                                 await this.pg_adress.show()
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                            }
+                                                            let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                            if(tmpResult == 3)
+                                                            {
+                                                                this.txtRefno.value = "";
                                                             }
                                                         }
                                                     }

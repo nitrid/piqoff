@@ -176,6 +176,32 @@ export default class NbKeyboard extends NbBase
                 padding: '10px',
                 width: '100%'
                 } : {}}>
+                
+                {/* Kapat butonu sadece closeButton props'u true ise göster */}
+                {this.props.closeButton &&
+                    <div style={{textAlign: "right", marginBottom: "5px"}}>
+                        <button 
+                            onClick={() => this.hide()} 
+                            className="nb-keyboard-close-btn"
+                            style={{
+                                background: "#ff0000",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "4px",
+                                padding: "6px 18px",
+                                cursor: "pointer",
+                                fontWeight: "900",
+                                fontSize: "1.4rem",
+                                boxShadow: "0 2px 6px rgba(0,0,0,0.10)"
+                            }}
+                            aria-label="Kapat"
+                            title="Kapat"
+                        >
+                            <span className="nb-keyboard-x">✖</span>
+                        </button>
+                    </div>
+                }
+
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
                 newLineOnEnter={this.props.newLineOnEnter}
