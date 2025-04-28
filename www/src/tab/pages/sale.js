@@ -884,10 +884,11 @@ export default class Sale extends React.PureComponent
                 showIndicator={true}
                 shading={true}
                 showPane={true}
+                style={{backgroundColor:'#154c79'}}
                 />
-                <div style={{height:'50px',backgroundColor:'#f5f6fa',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
-                    <div className="row">
-                        <div className="col-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
+                <div style={{height:'50px',backgroundColor:'#bae7ea',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6', zIndex: 1000}}>
+                    <div className="row flex-wrap" style={{flexDirection:window.innerWidth < 768 ? 'column' : 'row'}}>
+                        <div className="col-12 col-md-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
                             onClick={async()=>
                             {
@@ -908,8 +909,8 @@ export default class Sale extends React.PureComponent
                             </NbButton>
                         </div>
                         
-                        <div className="col-2" align="left" style={{paddingTop:'5px'}}>
-                        <   NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' style={{width:'100px'}} 
+                        <div className="col-12 col-md-2" align="left" style={{paddingTop:'5px',margin:'0 5px'}}>
+                            <NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
                             onValueChanged={(async(e)=>
@@ -919,7 +920,7 @@ export default class Sale extends React.PureComponent
                             data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")},{ID:"SUB_FACTOR ASC",VALUE:this.t("orderGroup.Kilogram")}]}}
                             />
                         </div>
-                        <div className="col-4" align="center" style={{paddingTop:'5px'}}>
+                        <div className="col-12 col-md-3" align="center" style={{paddingTop:'5px',margin:'0 5px'}}>
                             <NdTextBox id={"txtSearch"} parent={this} simple={true} placeholder={"Search"}  onChange={this.getItems}
                              button={
                             [
@@ -935,8 +936,8 @@ export default class Sale extends React.PureComponent
                             ]}
                             />
                         </div>
-                        <div className="col-4" align="right" style={{paddingRight:'25px',paddingTop:'5px'}}>
-                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' style={{width:'250px'}} 
+                        <div className="col-12 col-md-3" align="right" style={{paddingTop:'5px',margin:'0 5px'}}>
+                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="CODE"
                             value= ""
@@ -950,8 +951,8 @@ export default class Sale extends React.PureComponent
                         </div>
                     </div>
                 </div>               
-                <div style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
-                    <ScrollView showScrollbar={'never'} useNative={false}>
+                <div style={{marginTop:'150px',paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
+                    <ScrollView showScrollbar={'never'} useNative={false} style= {{maxHeight: 'calc(100vh - 315px)'}}>
                         {/* Müşteri title alanı */}
                         <div className="col-12" style={{paddingLeft:'20px',paddingTop:'5px',marginBottom:'5px',textAlign:'center'}}>
                             <h4 style={{color:'#2c3e50',margin:0}}>
@@ -965,7 +966,7 @@ export default class Sale extends React.PureComponent
                         </div>
                         <div className='row'>                            
                             <div className='col-5 offset-5' style={{paddingBottom:"100px"}}>
-                                <NbButton className="form-group btn btn-primary btn-block"
+                                <NbButton className="form-group btn btn-primary btn-block" style={{backgroundColor:'#154c79'}}
                                 onClick={()=>
                                 {
                                     this.loadMore()
@@ -1149,7 +1150,7 @@ export default class Sale extends React.PureComponent
                                                     </NbButton>                                                    
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
-                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{backgroundColor:'#f1424a',height:"40px",width:"40px"}}
                                                     onClick={()=>
                                                     {
                                                         this.popCart.hide();
@@ -2559,7 +2560,7 @@ export default class Sale extends React.PureComponent
                                     <div className='col-12' align={"right"}>
                                         <Toolbar>
                                             <Item location="after" locateInMenu="auto">
-                                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{backgroundColor:'#f1424a',height:"40px",width:"40px"}}
                                                 onClick={()=>
                                                 {
                                                     this.popPrintView.hide();

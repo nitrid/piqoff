@@ -46,7 +46,7 @@ export default class App extends React.PureComponent
         {
             splash_body : 
             {
-                backgroundColor : '#ecf0f1',                
+                backgroundColor : '#154c79',                
                 height: '100%',
             },
             splash_box :
@@ -238,7 +238,7 @@ export default class App extends React.PureComponent
         }
         return tmpMenu.map(button => (
             <div className='col-4' style={{paddingTop:"30px"}} key={button.id}>
-                <NbButton className="form-group btn btn-block" style={{ height: "100%", width: "100%", backgroundColor: '#0d6efd' }} onClick={button.onClick}>
+                <NbButton className="form-group btn btn-block" style={{ height: "100%", width: "100%", backgroundColor: '#154c79' }} onClick={button.onClick}>
                     <div className='row py-2'>
                         <div className='col-12'>
                             <i className={`fa-solid ${button.icon} fa-4x`} style={{ color: '#ecf0f1' }}></i>
@@ -327,9 +327,9 @@ export default class App extends React.PureComponent
 
         return (
             <div style={{height:'90%'}}>
-                <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
+                <div className="top-bar row shadow" style={{backgroundColor: "#154c79",height:"65px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
-                    <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                    <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%",backgroundColor:'#154c79'}}
                         onClick={()=>
                         {
                             if(!this.popMenu.state.show)
@@ -358,7 +358,7 @@ export default class App extends React.PureComponent
                             <div className='row' style={{paddingTop:"30px"}}>
                                 {/* DASHBOARD */}
                                 <div className='col-12'>
-                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#154c79'}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()

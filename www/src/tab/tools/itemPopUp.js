@@ -136,7 +136,7 @@ export default class NbItemPopUp extends NbBase
                         <div className='col-12' align={"right"}>
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",}}
+                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"50px",backgroundColor:'#f1424a'}}
                                     onClick={async ()=>
                                     {
                                         if(this.txtPrice.value == 0)
@@ -161,7 +161,7 @@ export default class NbItemPopUp extends NbBase
                                             }
                                         
                                         }}>
-                                        <i className="fa-solid fa-xmark fa-1x"></i>
+                                        <i className="fa-solid fa-xmark fa-1x" style={{color:'#f3f3f3'}}></i>
                                     </NbButton>
                                 </Item>
                             </Toolbar>

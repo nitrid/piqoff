@@ -178,15 +178,19 @@ export default class extract extends React.PureComponent
                             ]}
                             />
                         </div>
-                        <div className="col-3" align="left" style={{paddingTop:'5px'}}>
+                        <div className="col-6" align="left" style={{paddingTop:'5px'}}>
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
                         </div>
-                        <div className="col-3" align="left" style={{paddingLeft:'4px',paddingTop:'5px'}}>
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                        <div className='row'>
+                            <div className="col-6" align="left" style={{paddingRight:'4px',paddingTop:'5px'}}>
+                            </div>
+                            <div className="col-6" align="left" style={{paddingRight:'4px',paddingTop:'5px'}}>
+                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div style={{paddingTop:"65px"}}>
+                <div style={{paddingTop:"65px", marginTop:"65px"}}>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 

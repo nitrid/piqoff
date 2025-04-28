@@ -18,6 +18,17 @@ export const langTr =
     btnCancel : "Vazgeç",
     msgInvalidUser : "Kullanıcı adı veya şifre hatalı !",
     chkRememberMe : "Beni Hatırla",
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtThisMonth : "Bu Ay",
+    dtLastMonth : "Geçen Ay",
+    dtThisYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl",
+    dtMount : "Ay",
+    dtLastMount : "Ay Önce",
+    dtYear : "Yıl",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -369,6 +380,16 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Ürün Seçiniz..!"
+        },
+        msgItemNameRequired :
+        {
+            title : "Dikkat",
+            msg : "Lütfen bir ürün seçiniz"
+        },
+        msgItemListNameRequired :
+        {
+            title : "Dikkat",
+            msg : "Lütfen bir fiyat listesi seçiniz"
         },
     },
     dashboard: 

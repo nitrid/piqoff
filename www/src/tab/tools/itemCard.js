@@ -80,7 +80,7 @@ export default class NbItemCard extends NbBase
     render()
     {
         return(
-            <div className="card shadow-sm">
+            <div className="card shadow-m" style={{border:'1px solid #7f8fa6'}}>
                 <img src={this.state.image} className="card-img-top" height={'150px'} 
                 onClick={()=>
                 {
@@ -88,10 +88,10 @@ export default class NbItemCard extends NbBase
                 }}/>
                 <div className="card-body">
                     <div className='row pb-1'>
-                        <div className='col-6'>
+                        <div className='col-12'>
                             <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                         </div>
-                        <div className='col-6'>
+                        <div className='col-12'>
                             <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="GUID"

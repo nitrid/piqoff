@@ -17,6 +17,17 @@ export const langFr =
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
     chkRememberMe : "Je me souviens de moi",
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Cette semaine",
+    dtLastWeek : "Semaine dernière",
+    dtThisMonth : "Ce mois",
+    dtLastMonth : "Mois dernier",
+    dtThisYear : "Cette année",
+    dtLastYear : "Année dernière",
+    dtMount : "Mois",
+    dtLastMount : "Mois dernier",
+    dtYear : "Année",
     menu:
     {
         dashboard : "Tableau de bord",
@@ -307,8 +318,8 @@ export const langFr =
     },
     extract :
     {
-        txtCustomerCode : "Choissiez un client s'il vous plaît", 
-        btnGet :"Apportez", 
+        txtCustomerCode : "Veuillez choisir un client", 
+        btnGet :"Rechercher", 
         grdListe : 
         {
             clmDocDate: "Date",   
@@ -367,6 +378,16 @@ export const langFr =
             title: "Attention", 
             btn01: "D'accord", 
             msg: "Veuillez choisir un produit"
+        },
+        msgItemListNameRequired :
+        {
+            title : "Attention",
+            msg : "Veuillez sélectionner une liste de prix"
+        },
+        msgItemNameRequired :
+        {
+            title : "Attention",
+            msg : "Veuillez sélectionner un produit"
         },
     },
     dashboard: 
@@ -708,7 +729,7 @@ export const langFr =
     openInvoiceList :
     {
         txtCustomerCode : "Veuillez sélectionner un client",
-        btnGet :"Obtenir",
+        btnGet :"Rechercher",
         grdListe : 
         {
             clmDocDate: "Date",
