@@ -319,8 +319,15 @@ export default class posItemsList extends React.PureComponent
                             <NdTextBox id="txtItemSearch" 
                                 parent={this} 
                                 simple={true} 
-                                placeholder={this.lang.t("posItemsList.txtItemSearchPholder")}
+                                placeholder={this.lang.t("posItemsList.txtItesssmSearchPholder")}
                                 selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtItemSearch')
+                                    this.keyboardRef.inputName = "txtItemSearch"
+                                    this.keyboardRef.setInput(this.txtItemSearch.value)
+                                }}
+
                                 button=
                                 {[
                                     {
@@ -457,6 +464,12 @@ export default class posItemsList extends React.PureComponent
                                     <div className="col-8 p-0">
                                         <NdTextBox id="popTxtRef" parent={this} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} simple={true}
                                         selectAll={false}
+                                        onFocusIn={()=>
+                                        {
+                                            this.keyboardRef.show('popTxtRef')
+                                            this.keyboardRef.inputName = "popTxtRef"
+                                            this.keyboardRef.setInput(this.popTxtRef.value)
+                                        }}
                                         button=
                                         {
                                             [
@@ -531,6 +544,12 @@ export default class posItemsList extends React.PureComponent
                                     <div className="col-8 p-0">
                                         <NdTextBox id="popTxtName" parent={this} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}} 
                                         simple={true} upper={true} selectAll={false}
+                                        onFocusIn={()=>
+                                            {
+                                                this.keyboardRef.show('popTxtName')
+                                                this.keyboardRef.inputName = "popTxtName"
+                                                this.keyboardRef.setInput(this.popTxtName.value)
+                                            }}
                                         button=
                                         {[
                                             {
@@ -1003,6 +1022,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.txtPopPriQuantity")} alignment="right" />
                                 <NdTextBox id={"txtPopPriQuantity"} parent={this} simple={true} selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtPopPriQuantity')
+                                    this.keyboardRef.inputName = "txtPopPriQuantity"
+                                    this.keyboardRef.setInput(this.txtPopPriQuantity.value)
+                                }}
                                 button=
                                 {[
                                     {
@@ -1030,6 +1055,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popPrice.txtPopPriPrice")} alignment="right" />
                                 <NdTextBox id={"txtPopPriPrice"} parent={this} simple={true} selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtPopPriPrice')
+                                    this.keyboardRef.inputName = "txtPopPriPrice"
+                                    this.keyboardRef.setInput(this.txtPopPriPrice.value)
+                                }}
                                 button=
                                 {[
                                     {
@@ -1213,6 +1244,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popUnit.txtPopUnitFactor")} alignment="right" />
                                 <NdTextBox id={"txtPopUnitFactor"} parent={this} simple={true} selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtPopUnitFactor')
+                                    this.keyboardRef.inputName = "txtPopUnitFactor"
+                                    this.keyboardRef.setInput(this.txtPopUnitFactor.value)
+                                }}
                                 button=
                                 {[
                                     {
@@ -1328,6 +1365,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popBarcode.txtPopBarcode")} alignment="right" />
                                 <NdTextBox id={"txtPopBarcode"} parent={this} simple={true} selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtPopBarcode')
+                                    this.keyboardRef.inputName = "txtPopBarcode"
+                                    this.keyboardRef.setInput(this.txtPopBarcode.value)
+                                }}
                                 onValueChanged={(e)=>
                                 {
                                     if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
@@ -1480,6 +1523,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.txtAddItemGrpCode")} alignment="right" />
                                 <NdTextBox simple={true} parent={this} id="txtAddItemGrpCode" selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtAddItemGrpCode')
+                                    this.keyboardRef.inputName = "txtAddItemGrpCode"
+                                    this.keyboardRef.setInput(this.txtAddItemGrpCode.value)
+                                }}
                                 button=
                                 {[
                                     {
@@ -1505,6 +1554,12 @@ export default class posItemsList extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.txtAddItemGrpName")} alignment="right" />
                                 <NdTextBox simple={true} parent={this} id="txtAddItemGrpName" selectAll={false}
+                                onFocusIn={()=>
+                                {
+                                    this.keyboardRef.show('txtAddItemGrpName')
+                                    this.keyboardRef.inputName = "txtAddItemGrpName"
+                                    this.keyboardRef.setInput(this.txtAddItemGrpName.value)
+                                }}
                                 button=
                                 {[
                                     {
@@ -1593,7 +1648,7 @@ export default class posItemsList extends React.PureComponent
                     </NdPopUp>
                 </div>
                 <div>
-                    <NbKeyboard id={"keyboardRef"} parent={this} autoPosition={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
+                    <NbKeyboard id={"keyboardRef"} closeButton={true} parent={this} autoPosition={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
                 </div>
             </div>
         )
