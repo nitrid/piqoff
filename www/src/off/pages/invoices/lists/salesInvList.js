@@ -562,22 +562,7 @@ export default class salesInvList extends React.PureComponent
                         width={'500'}
                         height={'180'}
                         position={{of:'#root'}}
-                        onShowing={async()=>
-                            {
-                                let tmpLength = this.grdSlsIvcList.getSelectedData().length;
-                                this.setState({tmpLength: tmpLength});                            
-                                if(tmpLength <= 1)
-                                {
-                                    let tmpSource ={source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}
-                                    await this.cmbDesignList.dataRefresh(tmpSource)
-                                }
-                                else
-                                {
-                                    let tmpSource = {source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"},sql:this.core.sql}}
-                                    await this.cmbDesignList.dataRefresh(tmpSource)
-                                }
-                            }}
-                        deferRendering={false}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -587,6 +572,9 @@ export default class salesInvList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
