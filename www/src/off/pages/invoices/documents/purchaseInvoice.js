@@ -1812,7 +1812,7 @@ export default class purchaseInvoice extends DocBase
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
-                                                    this.txtRefno.value = "";
+                                                    this.txtRefno.value = 0;
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
@@ -1931,10 +1931,13 @@ export default class purchaseInvoice extends DocBase
                                                     await this.pg_adress.show()
                                                     await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                if(tmpResult == 3)
+                                                if(this.txtRefno.value != 0)
                                                 {
-                                                    this.txtRefno.value = "";
+                                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                    if(tmpResult == 3)
+                                                    {
+                                                        this.txtRefno.value = 0;
+                                                    }
                                                 }
                                             }
                                         }
@@ -2001,10 +2004,13 @@ export default class purchaseInvoice extends DocBase
                                                                 await this.pg_adress.show()
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
-                                                            let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                            if(tmpResult == 3)
+                                                            if(this.txtRefno.value != 0)
                                                             {
-                                                                this.txtRefno.value = "";
+                                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                                if(tmpResult == 3)
+                                                                {
+                                                                    this.txtRefno.value = 0;
+                                                                }
                                                             }
                                                         }
                                                     }
