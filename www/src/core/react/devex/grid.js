@@ -21,6 +21,52 @@ export default class NdGrid extends Base
         this.state.paging = typeof props.paging == 'undefined' ? {} : props.paging
         this.state.pager = typeof props.pager == 'undefined' ? {} : props.pager
         
+        // Özel CSS stilleri
+        this.gridStyles = {
+            container: {
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                borderRadius: '8px',
+                border: '1px solid #dee2e6',
+                backgroundColor: '#ffffff',
+                margin: '10px 0',
+                padding: '5px'
+            },
+            header: {
+                backgroundColor: '#f8f9fa',
+                color: '#212529',
+                fontWeight: '600',
+                fontSize: '14px',
+                borderBottom: '2px solid #dee2e6',
+                padding: '12px 8px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+            },
+            row: {
+                borderBottom: '1px solid #e9ecef',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                    backgroundColor: '#f8f9fa'
+                }
+            },
+            rowHover: {
+                backgroundColor: '#f8f9fa',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            },
+            selectedRow: {
+                backgroundColor: '#e3f2fd',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            },
+            cell: {
+                padding: '12px 8px',
+                fontSize: '14px',
+                color: '#495057',
+                borderRight: '1px solid #e9ecef',
+                '&:last-child': {
+                    borderRight: 'none'
+                }
+            }
+        };
+        
         this._onInitialized = this._onInitialized.bind(this);
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
         this._onInitNewRow = this._onInitNewRow.bind(this);
@@ -165,6 +211,47 @@ export default class NdGrid extends Base
     }
     _onCellPrepared(e)
     {
+        if (!e.cellElement || !e.cellElement.style) return;
+
+        if (e.rowType === 'header') {
+            const styles = {
+                backgroundColor: this.gridStyles.header.backgroundColor,
+                color: this.gridStyles.header.color,
+                fontWeight: this.gridStyles.header.fontWeight,
+                fontSize: this.gridStyles.header.fontSize,
+                borderBottom: this.gridStyles.header.borderBottom,
+                padding: this.gridStyles.header.padding,
+                textTransform: this.gridStyles.header.textTransform,
+                letterSpacing: this.gridStyles.header.letterSpacing
+            };
+
+            for (const [key, value] of Object.entries(styles)) {
+                if (value) {
+                    e.cellElement.style[key] = value;
+                }
+            }
+        }
+        
+        if (e.rowType === 'data') {
+            const styles = {
+                padding: this.gridStyles.cell.padding,
+                fontSize: this.gridStyles.cell.fontSize,
+                color: this.gridStyles.cell.color,
+                borderRight: this.gridStyles.cell.borderRight
+            };
+
+            for (const [key, value] of Object.entries(styles)) {
+                if (value) {
+                    e.cellElement.style[key] = value;
+                }
+            }
+
+            // Son hücre için sağ kenarlığı kaldır
+            if (e.column && e.column.isLast) {
+                e.cellElement.style.borderRight = 'none';
+            }
+        }
+        
         if(typeof this.props.onCellPrepared != 'undefined')
         {
             this.props.onCellPrepared(e);
@@ -221,6 +308,7 @@ export default class NdGrid extends Base
     }
     _onRowPrepared(e)
     {
+      
         if(typeof this.props.onRowPrepared != 'undefined')
         {
             this.props.onRowPrepared(e);
@@ -279,6 +367,24 @@ export default class NdGrid extends Base
     }
     async componentDidMount() 
     {        
+        // Grid container stillerini uygula
+        if (this.devGrid && this.devGrid.element && this.devGrid.element.style) {
+            const styles = {
+                boxShadow: this.gridStyles.container.boxShadow,
+                borderRadius: this.gridStyles.container.borderRadius,
+                border: this.gridStyles.container.border,
+                backgroundColor: this.gridStyles.container.backgroundColor,
+                margin: this.gridStyles.container.margin,
+                padding: this.gridStyles.container.padding
+            };
+
+            for (const [key, value] of Object.entries(styles)) {
+                if (value) {
+                    this.devGrid.element.style[key] = value;
+                }
+            }
+        }
+        
         // KOLON ÜZERİNDEKİ YETKİLENDİRME DEĞERLERİNİN SET EDİLİYOR. 
         let tmpColmnAcs = null;
         if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue() != 'undefined' && typeof this.props.access.getValue().columns != 'undefined')

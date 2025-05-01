@@ -1588,7 +1588,7 @@ export default class Sale extends React.PureComponent
                                     </div>
                                     <div className='row' style={{paddingTop:"10px"}}>
                                         <div className='col-6'>
-                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor: '#154c79'}}
                                             onClick={()=>
                                             {
                                                 this._customerSearch()
@@ -1597,7 +1597,7 @@ export default class Sale extends React.PureComponent
                                             </NbButton>
                                         </div>
                                         <div className='col-6'>
-                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor: '#154c79'}}
                                             onClick={(async()=>
                                             {
                                                 console.log(111)
