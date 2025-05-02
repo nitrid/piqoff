@@ -122,6 +122,17 @@ export default class posItemsList extends React.PureComponent
         
         await this.itemListDt.refresh()
     }
+    async getGrpList()
+    {
+        let tmpGrpListDt = new datatable();
+        tmpGrpListDt.selectCmd = 
+        {
+            query : "SELECT CODE,NAME FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"
+        }
+
+        await tmpGrpListDt.refresh();
+        await this.grdGrpList.dataRefresh({source:tmpGrpListDt});
+    }
     async onItemRendered(e)
     {
         if(e.itemData.title == this.lang.t("posItemsList.popItemEdit.tabTitlePrice") && typeof this.grdPrice != 'undefined')
@@ -319,7 +330,7 @@ export default class posItemsList extends React.PureComponent
                             <NdTextBox id="txtItemSearch" 
                                 parent={this} 
                                 simple={true} 
-                                placeholder={this.lang.t("posItemsList.txtItesssmSearchPholder")}
+                                placeholder={this.lang.t("posItemsList.txtItemSearchPholder")}
                                 selectAll={false}
                                 onFocusIn={()=>
                                 {
@@ -1548,6 +1559,16 @@ export default class posItemsList extends React.PureComponent
                                                 this.keyboardRef.setInput(this.txtAddItemGrpCode.value)
                                             }
                                         }
+                                    },
+                                    {
+                                        id:'02',
+                                        icon:'fa-solid fa-arrow-up-right-from-square',
+                                        onClick:async()=>
+                                        {
+                                            this.grpListPopup.show();
+                                            await this.getGrpList();
+                                            this.keyboardRef.hide()
+                                        }
                                     }
                                 ]}/>
                             </Item>
@@ -1646,6 +1667,83 @@ export default class posItemsList extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
+                    {/* Grp List Popup */}
+                    <div>
+                        <NdPopUp id="grpListPopup" parent={this}
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.title")}
+                        container={"#root"}
+                        width={"800"}
+                        height={"600"}
+                        position={{of:"#root"}}
+                        >
+                            <Form colCount={1} height={'fit-content'} id={"frmGrpList"}>
+                                <Item>
+                                    <NdGrid parent={this} id={"grdGrpList"} 
+                                    height={'500px'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode: 'single'}}
+                                    onRowDblClick={async(e)=>
+                                    {
+                                        this.txtAddItemGrpCode.value = e.data.CODE
+                                        this.txtAddItemGrpName.value = e.data.NAME
+                                        this.grpListPopup.hide()
+                                    }}
+                                    onToolbarPreparing={(e)=>
+                                    {
+                                        e.toolbarOptions.items.unshift(
+                                        {
+                                            location: 'after',
+                                            widget: 'dxButton',
+                                            options: 
+                                            {
+                                                icon: 'trash',
+                                                onClick: async () => 
+                                                {
+                                                    let tmpData = this.grdGrpList.getSelectedData();
+                                                    if(tmpData.length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgGrpDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.btn02"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.msg")}</div>)
+                                                        }
+
+                                                        let pResult = await dialog(tmpConfObj);
+
+                                                        if(pResult == 'btn01')
+                                                        {
+                                                            let tmpQuery = 
+                                                            {
+                                                                query : "UPDATE ITEM_GROUP SET STATUS = 0 WHERE CODE = @CODE",
+                                                                param : ['CODE:string|25'],
+                                                                value : [tmpData[0].CODE]
+                                                            }
+                                                            await this.core.sql.execute(tmpQuery)
+                                                            await this.getGrpList()
+                                                        }
+                                                        else if(pResult == 'btn02')
+                                                        {
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }}
+                                    >
+                                        <Paging defaultPageSize={10} />
+                                        <Column dataField="CODE" caption={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.grdGrpList.clmCode")} width={150}/>
+                                        <Column dataField="NAME" caption={this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.grdGrpList.clmName")}/>
+                                    </NdGrid>
+                                </Item>
+                            </Form> 
+                        </NdPopUp>
+                    </div>  
                 </div>
                 <div>
                     <NbKeyboard id={"keyboardRef"} closeButton={true} parent={this} autoPosition={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>

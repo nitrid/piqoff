@@ -239,6 +239,22 @@ const lang =
                     title : "Attention",
                     btn01 : "OK",
                     msg : "Ce code existe déjà !"
+                },
+                grpListPopup :
+                {
+                    msgGrpDelete :
+                    {
+                        title : "Attention",
+                        btn02 : "Non",
+                        btn01 : "Supprimer",
+                        msg : "Êtes-vous sûr de vouloir supprimer l'enregistrement ?"
+                    },
+                    title : "Liste des Groupes de Produits",
+                    grdGrpList :
+                    {
+                        clmCode : "Code",
+                        clmName : "Nom",
+                    }
                 }
             }
         }

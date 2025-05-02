@@ -238,6 +238,22 @@ const lang =
                     title : "Dikkat",
                     btn01 : "Tamam",
                     msg : "Bu kod zaten mevcut !"
+                },
+                grpListPopup :
+                {
+                    msgGrpDelete :
+                    {
+                        title : "Dikkat",
+                        btn02 : "Vazgeç",
+                        btn01 : "Sil",
+                        msg : "Bu ürün grubunu silmek istediğinize emin misiniz ?"
+                    },
+                    title : "Ürün Grubu Listesi",
+                    grdGrpList :
+                    {
+                        clmCode : "Kodu",
+                        clmName : "Adı",
+                    }
                 }
             }
         }
