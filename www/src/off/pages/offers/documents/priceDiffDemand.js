@@ -121,7 +121,7 @@ export default class priceDiffDemand extends DocBase
                         tmpDocDemand.VAT = parseFloat(((((tmpDocDemand.TOTALHT) - (parseFloat(tmpDocDemand.DOC_DISCOUNT))) * (tmpDocDemand.VAT_RATE) / 100))).round(6);
                         tmpDocDemand.AMOUNT = parseFloat((tmpDocDemand.PRICE * tmpDocDemand.QUANTITY).toFixed(3)).round(2)
                         tmpDocDemand.TOTAL = Number(((tmpDocDemand.TOTALHT - tmpDocDemand.DOC_DISCOUNT) + tmpDocDemand.VAT)).round(2)
-                        tmpDocDemand.DISCOUNT_1 =     e.data.DISCOUNT_1 = Number(tmpDocDemand.AMOUNT).rateInc(tmpData.result.recordset[i].DISCOUNT_RATE,4) 
+                        tmpDocDemand.DISCOUNT_1  = Number(tmpDocDemand.AMOUNT).rateInc(tmpData.result.recordset[i].DISCOUNT_RATE,4) 
                         tmpDocDemand.DISCOUNT = tmpDocDemand.DISCOUNT_1
                         tmpDocDemand.DISCOUNT_RATE = tmpData.result.recordset[i].DISCOUNT_RATE
                         tmpDocDemand.CONNECT_DOC_DATE = tmpData.result.recordset[i].DOC_DATE,
