@@ -2369,6 +2369,15 @@ export default class posDoc extends React.PureComponent
                         this.msgCardPayment.hide()
                         return                    
                     }
+                    else //Başarısız veya İptal
+                    {
+                        this.msgCardPayment.hide()
+                        return
+                    }
+                }
+                else
+                {
+                    return
                 }
             }
 
