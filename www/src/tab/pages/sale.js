@@ -443,7 +443,6 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.PRICE = e.PRICE
         tmpDocOrders.AMOUNT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
         tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
-        console.log(this.docObj.dt()[0].VAT_ZERO)
         if(this.docObj.dt()[0].VAT_ZERO == 1)
         {
             tmpDocOrders.VAT_RATE = 0
@@ -886,9 +885,9 @@ export default class Sale extends React.PureComponent
                 showPane={true}
                 style={{backgroundColor:'#154c79'}}
                 />
-                <div style={{height:'50px',backgroundColor:'#bae7ea',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6', zIndex: 1000}}>
-                    <div className="row flex-wrap" style={{flexDirection:window.innerWidth < 768 ? 'column' : 'row'}}>
-                        <div className="col-12 col-md-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#f5f6fa',paddingLeft:'20px',paddingTop:'5px'}}>
+                <div style={{height:'50px',backgroundColor:'#bae7ea',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
+                    <div className="row" style={{display:'flex', flexWrap:'wrap'}}>
+                        <div className="col-12 col-md-1" align="left" style={{height:'45px',width:'100px',backgroundColor:'#2ecc71',paddingLeft:'20px',paddingTop:'5px'}}>
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
                             onClick={async()=>
                             {
@@ -909,7 +908,7 @@ export default class Sale extends React.PureComponent
                             </NbButton>
                         </div>
                         
-                        <div className="col-12 col-md-2" align="left" style={{paddingTop:'5px',margin:'0 5px'}}>
+                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-2"} align="left" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
                             <NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
@@ -920,7 +919,7 @@ export default class Sale extends React.PureComponent
                             data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")},{ID:"SUB_FACTOR ASC",VALUE:this.t("orderGroup.Kilogram")}]}}
                             />
                         </div>
-                        <div className="col-12 col-md-3" align="center" style={{paddingTop:'5px',margin:'0 5px'}}>
+                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-3"} align="center" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
                             <NdTextBox id={"txtSearch"} parent={this} simple={true} placeholder={"Search"}  onChange={this.getItems}
                              button={
                             [
@@ -936,7 +935,7 @@ export default class Sale extends React.PureComponent
                             ]}
                             />
                         </div>
-                        <div className="col-12 col-md-3" align="right" style={{paddingTop:'5px',margin:'0 5px'}}>
+                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-3"} align="right" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
                             <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="CODE"
@@ -951,8 +950,8 @@ export default class Sale extends React.PureComponent
                         </div>
                     </div>
                 </div>               
-                <div style={{marginTop:'150px',paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
-                    <ScrollView showScrollbar={'never'} useNative={false} style= {{maxHeight: 'calc(100vh - 315px)'}}>
+                <div style={{marginTop: window.innerWidth < 768 ? '175px' : '75px', paddingLeft:"15px", paddingRight:"15px", paddingTop:"15px"}}>
+                    <ScrollView showScrollbar={'never'} useNative={false} style= {{maxHeight: 'calc(100vh - 100px)'}}>
                         {/* Müşteri title alanı */}
                         <div className="col-12" style={{paddingLeft:'20px',paddingTop:'5px',marginBottom:'5px',textAlign:'center'}}>
                             <h4 style={{color:'#2c3e50',margin:0}}>

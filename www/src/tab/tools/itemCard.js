@@ -43,7 +43,6 @@ export default class NbItemCard extends NbBase
     }
     _onValueChange(e)
     {
-        console.log(e)
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
