@@ -759,6 +759,13 @@ export const langTr =
     },
     openInvoiceList :
     {
+        popDetail :
+        {
+            title : "Fatura Detayı",
+            clmDocDate : "Tarih",
+            clmTypeName : "Adı",
+            
+        },
         txtCustomerCode : "Lütfen Müşteri Seçiniz",
         btnGet :"Getir",
         grdListe : 

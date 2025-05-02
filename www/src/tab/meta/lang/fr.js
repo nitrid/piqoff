@@ -104,7 +104,7 @@ export const langFr =
         {
             title : "Choix du client",
             btn01 : "Recherche",
-            btn02 : "Choisir",
+            btn02 : "Sélectionner",
             clmCode : "Code",
             clmName : "Nom",
             clmAdress : "Adresse"
@@ -172,7 +172,7 @@ export const langFr =
         {
             title : "Choix du document", 
             btn01 : "Apportez les documents", 
-            btn02 : "Choisir" 
+            btn02 : "Sélectionner" 
         },
         cmbDocType : 
         {
@@ -335,7 +335,7 @@ export const langFr =
         {
             title : "Choix du client", 
             btn01 : "Rechercher", 
-            btn02 : "Choisir",  
+            btn02 : "Sélectionner",  
             clmCode : "Code",  
             clmName : "Nom"  
         },
@@ -369,7 +369,7 @@ export const langFr =
         {
             title : "Choix du client",  
             btn01 : "Rechercher",  
-            btn02 : "Choisir", 
+            btn02 : "Sélectionner", 
             clmCode : "Code",  
             clmName : "Nom" 
         },
@@ -490,7 +490,7 @@ export const langFr =
         {
             title : "Sélection du client",
             btn01 : "Rechercher",
-            btn02 : "Choisir",
+            btn02 : "Sélectionner",
             clmCode : "Code",
             clmName : "Nom", 
         },
@@ -728,6 +728,13 @@ export const langFr =
     },
     openInvoiceList :
     {
+        popDetail :
+        {
+            title : "Détails de la facture",
+            clmDocDate : "Date",
+            clmTypeName : "Nom",
+            
+        },
         txtCustomerCode : "Veuillez sélectionner un client",
         btnGet :"Rechercher",
         grdListe : 
@@ -744,7 +751,7 @@ export const langFr =
         popCustomer:
         {
             title : "Sélection de client",
-            btn01 : "Chercher",
+            btn01 : "Rechercher",
             btn02 : "Sélectionner",
             clmCode : "CODE",
             clmName : "NOM"

@@ -880,7 +880,7 @@ export default class extract extends React.PureComponent
                                         <h2 className='text-danger'>{this.t('popCustomer.title')}</h2>
                                     </div>
                                     <div className='col-2' align={"right"}>
-                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",backgroundColor:"#154c79", color: 'white'}}
                                         onClick={()=>
                                         {
                                             this.popCustomer.hide();
@@ -900,7 +900,7 @@ export default class extract extends React.PureComponent
                                 </div>
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-6'>
-                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79", color: 'white'}}
                                         onClick={()=>
                                         {
                                             this._customerSearch()
@@ -909,7 +909,7 @@ export default class extract extends React.PureComponent
                                         </NbButton>
                                     </div>
                                     <div className='col-6'>
-                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79", color: 'white'}}
                                         onClick={(async()=>
                                         {
                                             this.docObj.dt()[0].OUTPUT = this.grdCustomer.getSelectedData()[0].GUID

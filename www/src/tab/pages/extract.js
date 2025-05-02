@@ -160,37 +160,62 @@ export default class extract extends React.PureComponent
                 shading={true}
                 showPane={true}
                 />
-                <div style={{height:'50px',backgroundColor:'#f5f6fa',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
-                    <div className="row">
-                        <div className="col-6" align="center" style={{paddingRight:'4px', paddingTop:'5px'}}>
-                            <NdTextBox id={"txtCustomerCode"} parent={this} simple={true} placeholder={this.t("txtCustomerCode")} readOnly={true}
-                             button={
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    location:'after',
-                                    onClick:async()=>
+                <div style={{
+                    height:'auto',
+                    backgroundColor:'#f5f6fa',
+                    top:'65px',
+                    position:'sticky',
+                    borderBottom:'1px solid #7f8fa6',
+                    padding:'15px 0',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}>
+                    <div className="row" style={{margin:'0'}}>
+                        <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
+                            <div style={{marginBottom:'10px'}}>
+                                <NdTextBox id={"txtCustomerCode"} parent={this} simple={true} placeholder={this.t("txtCustomerCode")} readOnly={true}
+                                button={
+                                [
                                     {
-                                        this.popCustomer.show()
-                                    }
-                                }                                                    
-                            ]}
-                            />
-                        </div>
-                        <div className="col-6" align="left" style={{paddingTop:'5px'}}>
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
-                        </div>
-                        <div className='row'>
-                            <div className="col-6" align="left" style={{paddingRight:'4px',paddingTop:'5px'}}>
+                                        id:'01',
+                                        icon:'more',
+                                        location:'after',
+                                        onClick:async()=>
+                                        {
+                                            this.popCustomer.show()
+                                        }
+                                    }                                                    
+                                ]}
+                                />
                             </div>
-                            <div className="col-6" align="left" style={{paddingRight:'4px',paddingTop:'5px'}}>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                        </div>
+                        <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
+                            <div style={{marginBottom:'10px'}}>
+                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
+                        </div>
+                        <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
+                            <div style={{marginBottom:'10px'}}>
+                                <NdButton 
+                                    text={this.t("btnGet")} 
+                                    type="success" 
+                                    width="100%" 
+                                    onClick={this._btnGetirClick}
+                                    style={{
+                                        maxWidth: '200px',
+                                        height: '40px',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                        marginLeft: 'auto',
+                                        marginRight: '0'
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style={{paddingTop:"65px", marginTop:"65px"}}>
+                <div style={{paddingTop:"20px", marginTop:"20px"}}>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
@@ -262,7 +287,7 @@ export default class extract extends React.PureComponent
                                         <h2 className='text-danger'>{this.t('popCustomer.title')}</h2>
                                     </div>
                                     <div className='col-2' align={"right"}>
-                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",backgroundColor:"#154c79", color: 'white'}}
                                         onClick={()=>
                                         {
                                             this.popCustomer.hide();
@@ -282,7 +307,7 @@ export default class extract extends React.PureComponent
                                 </div>
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-6'>
-                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79"}}
                                         onClick={()=>
                                         {
                                             this._customerSearch()
@@ -291,7 +316,7 @@ export default class extract extends React.PureComponent
                                         </NbButton>
                                     </div>
                                     <div className='col-6'>
-                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                        <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79"}}
                                         onClick={(async()=>
                                         {
                                             this.txtCustomerCode.GUID = this.grdCustomer.getSelectedData()[0].GUID
