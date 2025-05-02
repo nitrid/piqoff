@@ -326,10 +326,10 @@ export default class App extends React.PureComponent
         const Page = this.loadPage()
 
         return (
-            <div style={{height:'90%'}}>
+            <div style={{height: window.innerWidth < 768 ? '70%' : '90%'}}>
                 <div className="top-bar row shadow" style={{backgroundColor: "#154c79",height:"65px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
-                    <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%",backgroundColor:'#154c79'}}
+                    <NbButton className="form-group btn btn-primary btn-block" style={{backgroundColor:'#154c79'}}
                         onClick={()=>
                         {
                             if(!this.popMenu.state.show)
