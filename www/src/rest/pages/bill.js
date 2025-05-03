@@ -1262,12 +1262,12 @@ export default class bill extends React.PureComponent
                             </div>
                             <div className="row">
                                 <div className="col-12">                                    
-                                    <NdTextBox id="txtServiceTable" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:2px solid #079992;"}}/>
+                                    <NdTextBox id="txtServiceTable" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:2px solid #154c79;"}}/>
                                 </div>
                             </div>
                             <div className="row pt-2">
                                 <div className="col-6">                                    
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#154c79",border:"solid 2px",paddingTop:'5px'}}
                                     onClick={async()=>
                                     {
                                         if(this.txtServiceTable.value != '')
@@ -1350,7 +1350,7 @@ export default class bill extends React.PureComponent
                                     </NbButton>
                                 </div>
                                 <div className="col-6">                                    
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#154c79",border:"solid 2px",paddingTop:'5px'}}
                                     onClick={()=>
                                     {
                                         this.popChangeTable.hide();

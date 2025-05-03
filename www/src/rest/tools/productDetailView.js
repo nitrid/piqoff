@@ -107,9 +107,38 @@ export default class NbProductDetailView extends NbBase
                 tmpProp.push(
                     <div key={i} className="row pt-2">
                         <div className="col-12">
-                            <div style={{width:"100%",border:"solid 2px #079992",borderRadius:"5px"}}>
-                                <div style={{backgroundColor:'#079992',height:"30px",display:'flex',justifyContent:'center',alignItems:'center'}}>
-                                    <div style={{fontSize:"18px",color:"white",fontWeight:"bold",padding:'5px',overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2,textAlign:"center"}}>
+                            <div style={{
+                                width:"100%",
+                                border:"solid 2px #154c79",
+                                borderRadius:"8px",
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.2)'
+                                }
+                            }}>
+                                <div style={{
+                                    backgroundColor:'#154c79',
+                                    height:"30px",
+                                    display:'flex',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    borderTopLeftRadius:'8px',
+                                    borderTopRightRadius:'8px'
+                                }}>
+                                    <div style={{
+                                        fontSize:"18px",
+                                        color:"white",
+                                        fontWeight:"bold",
+                                        padding:'5px',
+                                        overflow:'hidden',
+                                        textOverflow:'ellipsis',
+                                        display: '-webkit-box',
+                                        WebkitBoxOrient:'vertical',
+                                        WebkitLineClamp: 2,
+                                        textAlign:"center"
+                                    }}>
                                         {this.state.prop[i].NAME}
                                     </div>                                            
                                 </div>
@@ -132,11 +161,35 @@ export default class NbProductDetailView extends NbBase
     {
         return(
             <div>
-                <div style={{display:'flex',position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                <div style={{
+                    display:'flex',
+                    position:'fixed',
+                    left:'0px',
+                    right:'0px',
+                    paddingLeft:'15px',
+                    paddingRight:'15px',
+                    zIndex:'1500',
+                    backgroundColor:'white',
+                    boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                }}>
                     <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
                     </div>
                     <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                        <NbButton className="form-group btn btn-block" style={{
+                            height:"46px",
+                            width:"100%",
+                            color:"#154c79",
+                            border:"none",
+                            paddingTop:'5px',
+                            backgroundColor:"rgba(21,76,121,0.1)",
+                            borderRadius:"8px",
+                            transition:'all 0.3s ease',
+                            '&:hover': {
+                                backgroundColor:'rgba(21,76,121,0.2)',
+                                transform:'translateY(-2px)',
+                                boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                            }
+                        }}
                         onClick={()=>
                         {
                             this._onCloseClick();
@@ -148,22 +201,95 @@ export default class NbProductDetailView extends NbBase
                 <div style={{position:'relative',top:'60px'}}>
                     <div className="row pt-2">
                         <div className="col-12">
-                            <div style={{width:"100%",height:"25vh",overflow:"hidden",display:"flex",justifyContent:"center",alignItems:"center",border:"solid 2px #079992",padding:"5px",borderRadius:"5px",borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}}>
-                                <img style={{width:"100%",height:"auto",maxHeight:"100%"}} src={typeof this.state.data.IMAGE == 'undefined' ? '' : this.state.data.IMAGE} />
+                            <div style={{
+                                width:"100%",
+                                height:"25vh",
+                                overflow:"hidden",
+                                display:"flex",
+                                justifyContent:"center",
+                                alignItems:"center",
+                                border:"solid 2px #154c79",
+                                padding:"5px",
+                                borderRadius:"8px",
+                                borderBottomLeftRadius:'0px',
+                                borderBottomRightRadius:'0px',
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.2)'
+                                }
+                            }}>
+                                <img style={{width:"100%",height:"auto",maxHeight:"100%",objectFit:"cover"}} src={typeof this.state.data.IMAGE == 'undefined' ? '' : this.state.data.IMAGE} />
                             </div>
-                            <div style={{backgroundColor:'#079992',height:"50px",display:'flex',justifyContent:'center',alignItems:'center'}}>
-                                <div style={{fontSize:"14px",color:"white",fontWeight:"bold",padding:'5px',overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2,textAlign:"center"}}>
+                            <div style={{
+                                backgroundColor:'#154c79',
+                                height:"50px",
+                                display:'flex',
+                                justifyContent:'center',
+                                alignItems:'center',
+                                borderTopLeftRadius:'0px',
+                                borderTopRightRadius:'0px',
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                            }}>
+                                <div style={{
+                                    fontSize:"14px",
+                                    color:"white",
+                                    fontWeight:"bold",
+                                    padding:'5px',
+                                    overflow:'hidden',
+                                    textOverflow:'ellipsis',
+                                    display: '-webkit-box',
+                                    WebkitBoxOrient:'vertical',
+                                    WebkitLineClamp: 2,
+                                    textAlign:"center"
+                                }}>
                                     {typeof this.state.data.ITEM_NAME == 'undefined' ? '' : this.state.data.ITEM_NAME}
                                 </div>                                            
                             </div>
-                            <div style={{backgroundColor:'#079992',height:"30px",display:'flex',justifyContent:'right',alignItems:'center',paddingRight:'20px'}}>
-                                <div style={{fontSize:"20px",color:"#eb2f06",fontWeight:"bold",padding:'5px',overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2,textAlign:"center"}}>
+                            <div style={{
+                                backgroundColor:'#154c79',
+                                height:"30px",
+                                display:'flex',
+                                justifyContent:'right',
+                                alignItems:'center',
+                                paddingRight:'20px',
+                                borderBottomLeftRadius:'8px',
+                                borderBottomRightRadius:'8px',
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                            }}>
+                                <div style={{
+                                    fontSize:"20px",
+                                    color:"#FF6B6B",
+                                    fontWeight:"bold",
+                                    padding:'5px',
+                                    overflow:'hidden',
+                                    textOverflow:'ellipsis',
+                                    display: '-webkit-box',
+                                    WebkitBoxOrient:'vertical',
+                                    WebkitLineClamp: 2,
+                                    textAlign:"center"
+                                }}>
                                     {typeof this.state.data.PRICE == 'undefined' ? '' : this.state.data.PRICE + '€'}
                                 </div>                                            
                             </div>
-                            <div style={{display:'flex'}}>
+                            <div style={{display:'flex',marginTop:'10px'}}>
                                 <div style={{flex:0.3333}}>
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"white",color:"#079992",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomRightRadius:'0px',borderTop:'none'}}
+                                    <NbButton className="form-group btn btn-block" style={{
+                                        height:"46px",
+                                        width:"100%",
+                                        backgroundColor:"white",
+                                        color:"#154c79",
+                                        border:"solid 2px #154c79",
+                                        paddingTop:'5px',
+                                        borderRadius:"8px",
+                                        transition:'all 0.3s ease',
+                                        '&:hover': {
+                                            backgroundColor:'rgba(21,76,121,0.1)',
+                                            transform:'translateY(-2px)',
+                                            boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                        }
+                                    }}
                                     onClick={()=>
                                     {
                                         if(this.items.QUANTITY < 1)
@@ -175,11 +301,38 @@ export default class NbProductDetailView extends NbBase
                                         <i className="fa-solid fa-plus fa-2x"></i>
                                     </NbButton>
                                 </div>
-                                <div style={{flex:0.3333,height:"46px",width:"100%",color:"#079992",borderBottom:"solid 2px",paddingTop:'5px'}}>
-                                    <h2 style={{textAlign:"center",color:"#FF6B6B"}}>{typeof this.state.data.QUANTITY == 'undefined' ? '' : this.state.data.QUANTITY}</h2>
+                                <div style={{
+                                    flex:0.3333,
+                                    height:"46px",
+                                    width:"100%",
+                                    color:"#154c79",
+                                    border:"solid 2px #154c79",
+                                    paddingTop:'5px',
+                                    borderRadius:"8px",
+                                    display:'flex',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    backgroundColor:'rgba(21,76,121,0.05)',
+                                    boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                                }}>
+                                    <h2 style={{textAlign:"center",color:"#FF6B6B",margin:'0'}}>{typeof this.state.data.QUANTITY == 'undefined' ? '' : this.state.data.QUANTITY}</h2>
                                 </div>
                                 <div style={{flex:0.3333}}>
-                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"white",color:"#079992",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomLeftRadius:'0px',borderTop:'none'}}
+                                    <NbButton className="form-group btn btn-block" style={{
+                                        height:"46px",
+                                        width:"100%",
+                                        backgroundColor:"white",
+                                        color:"#154c79",
+                                        border:"solid 2px #154c79",
+                                        paddingTop:'5px',
+                                        borderRadius:"8px",
+                                        transition:'all 0.3s ease',
+                                        '&:hover': {
+                                            backgroundColor:'rgba(21,76,121,0.1)',
+                                            transform:'translateY(-2px)',
+                                            boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                        }
+                                    }}
                                     onClick={()=>
                                     {
                                         if(this.items.QUANTITY > 0)
@@ -197,9 +350,38 @@ export default class NbProductDetailView extends NbBase
                     {this.buildProp()}
                     <div className="row pt-2">
                         <div className="col-12">
-                            <div style={{width:"100%",border:"solid 2px #079992",borderRadius:"5px"}}>
-                                <div style={{backgroundColor:'#079992',height:"30px",display:'flex',justifyContent:'center',alignItems:'center'}}>
-                                    <div style={{fontSize:"18px",color:"white",fontWeight:"bold",padding:'5px',overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2,textAlign:"center"}}>
+                            <div style={{
+                                width:"100%",
+                                border:"solid 2px #154c79",
+                                borderRadius:"8px",
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.2)'
+                                }
+                            }}>
+                                <div style={{
+                                    backgroundColor:'#154c79',
+                                    height:"30px",
+                                    display:'flex',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    borderTopLeftRadius:'8px',
+                                    borderTopRightRadius:'8px'
+                                }}>
+                                    <div style={{
+                                        fontSize:"18px",
+                                        color:"white",
+                                        fontWeight:"bold",
+                                        padding:'5px',
+                                        overflow:'hidden',
+                                        textOverflow:'ellipsis',
+                                        display: '-webkit-box',
+                                        WebkitBoxOrient:'vertical',
+                                        WebkitLineClamp: 2,
+                                        textAlign:"center"
+                                    }}>
                                         {"Not"}
                                     </div>                                            
                                 </div>
@@ -213,7 +395,20 @@ export default class NbProductDetailView extends NbBase
                     </div>
                     <div className="row py-2">
                         <div className="col-12">
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:'none'}}
+                            <NbButton className="form-group btn btn-block" style={{
+                                height:"46px",
+                                width:"100%",
+                                backgroundColor:"#154c79",
+                                color:"white",
+                                border:'none',
+                                borderRadius:"8px",
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor:'#1a5c8f',
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                }
+                            }}
                             onClick={()=>
                             {
                                 this.popSpecialNote.show()
@@ -225,11 +420,35 @@ export default class NbProductDetailView extends NbBase
                 </div>
                 <div>
                     <NbPopUp id={"popSpecialNote"} parent={this} title={""} fullscreen={true} style={{paddingLeft:'5px'}}>
-                        <div style={{display:'flex',position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                        <div style={{
+                            display:'flex',
+                            position:'fixed',
+                            left:'0px',
+                            right:'0px',
+                            paddingLeft:'15px',
+                            paddingRight:'15px',
+                            zIndex:'1500',
+                            backgroundColor:'white',
+                            boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                        }}>
                             <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
                             </div>
                             <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                <NbButton className="form-group btn btn-block" style={{
+                                    height:"46px",
+                                    width:"100%",
+                                    color:"#154c79",
+                                    border:"solid 2px #154c79",
+                                    paddingTop:'5px',
+                                    backgroundColor:'rgba(21,76,121,0.05)',
+                                    borderRadius:"8px",
+                                    transition:'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor:'rgba(21,76,121,0.1)',
+                                        transform:'translateY(-2px)',
+                                        boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                    }
+                                }}
                                 onClick={()=>
                                 {
                                     this.popSpecialNote.hide();
@@ -248,7 +467,20 @@ export default class NbProductDetailView extends NbBase
                                 {
                                     tmpBtn.push(
                                         <div key={i} className="col-xs-6 col-sm-4 col-md-3 col-lg-2 pt-2">
-                                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:'none'}}
+                                            <NbButton className="form-group btn btn-block" style={{
+                                                height:"46px",
+                                                width:"100%",
+                                                backgroundColor:"#154c79",
+                                                color:"white",
+                                                border:'none',
+                                                borderRadius:"8px",
+                                                transition:'all 0.3s ease',
+                                                '&:hover': {
+                                                    backgroundColor:'#1a5c8f',
+                                                    transform:'translateY(-2px)',
+                                                    boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                                }
+                                            }}
                                             onClick={()=>
                                             {
                                                 if(this.txtNote.value != '')

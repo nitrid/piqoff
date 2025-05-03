@@ -81,14 +81,54 @@ export default class NbAddProductView extends NbBase
         {
             tmpTable.push(
                 <div key={i} className="col-6 col-xs-6 col-sm-4 col-md-3 col-lg-2 pb-2">
-                    <div style={{backgroundColor:'#079992',height:"40px",borderTopRightRadius:"5px",
-                    borderTopLeftRadius:"5px",display:'flex',justifyContent:'center',alignItems:'center'}}>
-                        <div style={{fontSize:"14px",color:"white",fontWeight:"bold",padding:'5px',overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2}}>
+                    <div style={{
+                        backgroundColor:'#154c79',
+                        height:"40px",
+                        borderTopRightRadius:"8px",
+                        borderTopLeftRadius:"8px",
+                        display:'flex',
+                        justifyContent:'center',
+                        alignItems:'center',
+                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                        transition:'all 0.3s ease',
+                        '&:hover': {
+                            transform:'translateY(-2px)',
+                            boxShadow:'0 4px 6px rgba(0,0,0,0.2)'
+                        }
+                    }}>
+                        <div style={{
+                            fontSize:"14px",
+                            color:"white",
+                            fontWeight:"bold",
+                            padding:'5px',
+                            overflow:'hidden',
+                            textOverflow:'ellipsis',
+                            display: '-webkit-box',
+                            WebkitBoxOrient:'vertical',
+                            WebkitLineClamp: 2
+                        }}>
                             {this.state.data[i].ITEM_NAME}
                         </div>                                            
                     </div>
-                    <NbButton className="form-group btn btn-success btn-block" 
-                    style={{height:"110px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative",borderRadius:"0px",border:'solid 2px #079992',backgroundImage:"url(" + this.state.data[i].IMAGE + ")"}}
+                    <NbButton className="form-group btn btn-block" 
+                    style={{
+                        height:"110px",
+                        width:"100%",
+                        fontSize:"14px",
+                        backgroundSize:"100% 100%",
+                        padding:"0px",
+                        position:"relative",
+                        borderRadius:"0px",
+                        border:'solid 2px #154c79',
+                        backgroundImage:"url(" + this.state.data[i].IMAGE + ")",
+                        backgroundColor:'rgba(21,76,121,0.05)',
+                        transition:'all 0.3s ease',
+                        '&:hover': {
+                            transform:'translateY(-2px)',
+                            boxShadow:'0 4px 6px rgba(0,0,0,0.2)',
+                            backgroundColor:'rgba(21,76,121,0.1)'
+                        }
+                    }}
                     onClick={()=>
                     {
                         this._onClick(i)
@@ -96,7 +136,23 @@ export default class NbAddProductView extends NbBase
                     </NbButton>
                     <div style={{display:'flex'}}>
                         <div style={{flex:0.3333}}>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomRightRadius:'0px',borderTop:'none'}}
+                            <NbButton className="form-group btn btn-block" style={{
+                                height:"46px",
+                                width:"100%",
+                                backgroundColor:"#154c79",
+                                color:"white",
+                                border:"solid 2px #154c79",
+                                paddingTop:'5px',
+                                borderTopLeftRadius:'0px',
+                                borderTopRightRadius:'0px',
+                                borderBottomRightRadius:'0px',
+                                borderTop:'none',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor:'rgba(21,76,121,0.9)',
+                                    transform:'translateY(-2px)'
+                                }
+                            }}
                             onClick={()=>
                             {
                                 this.items[i].QUANTITY = this.props.parent.isMultiQtyGrp(this.items[i].SUB_CODE) ? this.items[i].QUANTITY + 1 : 1
@@ -106,11 +162,38 @@ export default class NbAddProductView extends NbBase
                                 <i className="fa-solid fa-plus fa-2x"></i>
                             </NbButton>
                         </div>
-                        <div style={{flex:0.3333,height:"46px",width:"100%",color:"#079992",borderBottom:"solid 2px",paddingTop:'5px'}}>
+                        <div style={{
+                            flex:0.3333,
+                            height:"46px",
+                            width:"100%",
+                            color:"#154c79",
+                            borderBottom:"solid 2px #154c79",
+                            paddingTop:'5px',
+                            backgroundColor:'rgba(21,76,121,0.05)',
+                            display:'flex',
+                            alignItems:'center',
+                            justifyContent:'center'
+                        }}>
                             <h2 style={{textAlign:"center",color:"#FF6B6B"}}><NbLabel id={"quantity" + i} parent={this} value={this.items[i].QUANTITY}/></h2>
                         </div>
                         <div style={{flex:0.3333}}>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"46px",width:"100%",backgroundColor:"#079992",color:"white",border:"solid 2px #079992",paddingTop:'5px',borderTopLeftRadius:'0px',borderTopRightRadius:'0px',borderBottomLeftRadius:'0px',borderTop:'none'}}
+                            <NbButton className="form-group btn btn-block" style={{
+                                height:"46px",
+                                width:"100%",
+                                backgroundColor:"#154c79",
+                                color:"white",
+                                border:"solid 2px #154c79",
+                                paddingTop:'5px',
+                                borderTopLeftRadius:'0px',
+                                borderTopRightRadius:'0px',
+                                borderBottomLeftRadius:'0px',
+                                borderTop:'none',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor:'rgba(21,76,121,0.9)',
+                                    transform:'translateY(-2px)'
+                                }
+                            }}
                             onClick={()=>
                             {
                                 if(this.items[i].QUANTITY > 0)
@@ -136,7 +219,20 @@ export default class NbAddProductView extends NbBase
         {
             tmpGrp.push(
                 <div key={i} className="col-4 col-xs-4 col-sm-4 col-md-3 col-lg-2 pb-2">
-                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"60px",width:'100%',color:"#079992",border:"solid 2px",padding:'5px'}}
+                    <NbButton className="form-group btn btn-block" style={{
+                        height:"60px",
+                        width:'100%',
+                        color:"#154c79",
+                        border:"solid 2px #154c79",
+                        padding:'5px',
+                        backgroundColor:'rgba(21,76,121,0.05)',
+                        transition:'all 0.3s ease',
+                        '&:hover': {
+                            backgroundColor:'rgba(21,76,121,0.1)',
+                            transform:'translateY(-2px)',
+                            boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                        }
+                    }}
                     onClick={async()=>
                     {
                         this.setState({page:'items'},async()=>
@@ -151,7 +247,15 @@ export default class NbAddProductView extends NbBase
                             this.updateState()
                         })
                     }}>
-                        <h6 style={{overflow:'hidden',textOverflow:'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 2}}>{this.grpItem[i].NAME}</h6>
+                        <h6 style={{
+                            overflow:'hidden',
+                            textOverflow:'ellipsis',
+                            display: '-webkit-box',
+                            WebkitBoxOrient:'vertical',
+                            WebkitLineClamp: 2,
+                            color:'#154c79',
+                            fontWeight:'bold'
+                        }}>{this.grpItem[i].NAME}</h6>
                     </NbButton>
                 </div>
             )
@@ -163,10 +267,32 @@ export default class NbAddProductView extends NbBase
         return(
             <div>
                 <div style={{display:(this.state.page == 'group' ? 'block' : 'none')}}>
-                    <div style={{position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                    <div style={{
+                        position:'fixed',
+                        left:'0px',
+                        right:'0px',
+                        paddingLeft:'15px',
+                        paddingRight:'15px',
+                        zIndex:'1500',
+                        backgroundColor:'white',
+                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                    }}>
                         <div className="row pt-2">
                             <div className="col-12">
-                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                <NbButton className="form-group btn btn-block" style={{
+                                    height:"50px",
+                                    width:"100%",
+                                    color:"#154c79",
+                                    border:"solid 2px #154c79",
+                                    paddingTop:'5px',
+                                    backgroundColor:'rgba(21,76,121,0.05)',
+                                    transition:'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor:'rgba(21,76,121,0.1)',
+                                        transform:'translateY(-2px)',
+                                        boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                    }
+                                }}
                                 onClick={()=>
                                 {
                                     this.setState({page:'items'})
@@ -183,21 +309,45 @@ export default class NbAddProductView extends NbBase
                     </div>
                 </div>
                 <div style={{display:(this.state.page == 'items' ? 'block' : 'none')}}>
-                    <div style={{position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                    <div style={{
+                        position:'fixed',
+                        left:'0px',
+                        right:'0px',
+                        paddingLeft:'15px',
+                        paddingRight:'15px',
+                        zIndex:'1500',
+                        backgroundColor:'white',
+                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                    }}>
                         <div className="row pt-2">
                             <div className="col-12">
-                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                <NbButton className="form-group btn btn-block" style={{
+                                    height:"50px",
+                                    width:"100%",
+                                    color:"#154c79",
+                                    border:"solid 2px #154c79",
+                                    paddingTop:'5px',
+                                    backgroundColor:'rgba(21,76,121,0.05)',
+                                    transition:'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor:'rgba(21,76,121,0.1)',
+                                        transform:'translateY(-2px)',
+                                        boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                    }
+                                }}
                                 onClick={()=>
                                 {
                                     this.setState({page:'group'})
                                 }}>
-                                    <h4 className="m-0">{this.props.parent.lang.t("btnMenu") + " / "}<NbLabel id={"lblGroup"} parent={this} value={""}/></h4>
+                                    <h4 className="m-0" style={{color:'#154c79'}}>{this.props.parent.lang.t("btnMenu") + " / "}<NbLabel id={"lblGroup"} parent={this} value={""}/></h4>
                                 </NbButton>
                             </div>
                         </div>
                         <div className="row">
                             <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                                <NdTextBox id="txtSearch" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:2px solid #079992;"}}
+                                <NdTextBox id="txtSearch" parent={this} simple={true} elementAttr={{
+                                    style:"font-size:15pt;font-weight:bold;border:2px solid #154c79;background-color:rgba(21,76,121,0.05);"
+                                }}
                                 onValueChanged={(e)=>
                                 {
                                     this.items = this.fullItems.where({ITEM_NAME: {'LIKE' : e.value}})
@@ -234,7 +384,22 @@ export default class NbAddProductView extends NbBase
                                 }}/>
                             </div>
                             <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px'}}>
-                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",paddingTop:'5px'}}
+                                <NbButton className="form-group btn btn-block" 
+                                style={{
+                                    height:"50px",
+                                    width:"100%",
+                                    color:"#154c79",
+                                    border:"solid 2px #154c79",
+                                    paddingTop:'5px',
+                                    marginLeft:'10px',
+                                    backgroundColor:'rgba(21,76,121,0.05)',
+                                    transition:'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor:'rgba(21,76,121,0.1)',
+                                        transform:'translateY(-2px)',
+                                        boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                    }
+                                }}
                                 onClick={()=>
                                 {
                                     this._onCloseClick();

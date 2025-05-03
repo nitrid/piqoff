@@ -84,62 +84,137 @@ export default class NbServiceView extends NbBase
         for (let i = 0; i < this.state.data.length; i++) 
         {
             tmpTable.push(
-                <div key={i} className='row' style={{ display: 'flex' }}>
-                    <div style={{flex:1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px'}}>
-                        <div className="card" style={{height:'100px',width:'100%',border:'solid 2px #079992',borderRight:'none',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
+                <div key={i} className='row' style={{ display: 'flex', marginBottom: '20px' }}>
+                    <div style={{flex:1}}>
+                        <div className="card" style={{
+                            height:'120px',
+                            width:'100%',
+                            border:'solid 2px #154c79',
+                            borderRight:'none',
+                            borderTopRightRadius:'0px',
+                            borderBottomRightRadius:'0px',
+                            backgroundColor:'rgba(21,76,121,0.05)',
+                            boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                            transition:'all 0.3s ease',
+                            '&:hover': {
+                                transform:'translateY(-2px)',
+                                boxShadow:'0 4px 6px rgba(0,0,0,0.2)',
+                                backgroundColor:'rgba(21,76,121,0.1)'
+                            }
+                        }}
                         onClick={()=>
                         {
                             this._onClick(i)
                         }}>
-                            <div className="card-body" style={{padding:'5px',display:'flex',alignItems:'center'}}>
-                                <h3 className="card-title text-center" style={{color:'#079992'}}>{"SERVICE - " + this.state.data[i].REF}</h3>
-                                <p className="fs-3 fw-bold position-absolute" style={{bottom:'10px',right:'10px',marginBottom:'0px',color:'#079992'}}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                            <div className="card-body" style={{padding:'12px',display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
+                                <div style={{display:'flex',alignItems:'center'}}>
+                                    <h3 className="card-title text-center" style={{
+                                        color:'#154c79',
+                                        fontSize:'22px',
+                                        fontWeight:'bold',
+                                        margin:'0',
+                                        flex:1
+                                    }}>{"SERVICE - " + this.state.data[i].REF}</h3>
+                                    <p className="fs-3 fw-bold" style={{
+                                        marginBottom:'0px',
+                                        color:'#154c79',
+                                        fontSize:'20px',
+                                        fontWeight:'bold'
+                                    }}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                </div>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    gap: '10px',
+                                    paddingTop: '10px'
+                                }}>
+                                    <NbButton className="form-group btn btn-block" 
+                                    style={{
+                                        height:"35px",
+                                        width:"35px",
+                                        color:"#154c79",
+                                        border:"solid 2px #154c79",
+                                        borderRadius:'50%',
+                                        backgroundColor:'rgba(21,76,121,0.05)',
+                                        transition:'all 0.3s ease',
+                                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                        '&:hover': {
+                                            backgroundColor:'rgba(21,76,121,0.15)',
+                                            transform:'translateY(-2px) rotate(15deg)',
+                                            boxShadow:'0 4px 8px rgba(0,0,0,0.2)'
+                                        },
+                                        '&:active': {
+                                            transform:'scale(0.95)'
+                                        }
+                                    }}
+                                    onClick={()=>
+                                    {
+                                        this._onChangeClick(i)
+                                    }}>
+                                        <i className="fa-solid fa-arrows-rotate fa-1x" style={{filter:'drop-shadow(1px 1px 1px rgba(0,0,0,0.2))'}}></i>
+                                    </NbButton>
+                                    <NbButton className="form-group btn btn-block" 
+                                    style={{
+                                        height:"35px",
+                                        width:"35px",
+                                        color:"#e74c3c",
+                                        border:"solid 2px #154c79",
+                                        borderRadius:'50%',
+                                        backgroundColor:'rgba(231,76,60,0.05)',
+                                        transition:'all 0.3s ease',
+                                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                        '&:hover': {
+                                            backgroundColor:'rgba(231,76,60,0.15)',
+                                            transform:'translateY(-2px)',
+                                            boxShadow:'0 4px 8px rgba(0,0,0,0.2)'
+                                        },
+                                        '&:active': {
+                                            transform:'scale(0.95)'
+                                        }
+                                    }}
+                                    onClick={()=>
+                                    {
+                                        this._onDeleteClick(i)
+                                    }}>
+                                        <i className="fa-solid fa-trash fa-1x" style={{filter:'drop-shadow(1px 1px 1px rgba(0,0,0,0.2))'}}></i>
+                                    </NbButton>
+                                    <NbButton className="form-group btn btn-block" 
+                                    style={{
+                                        height:"35px",
+                                        width:"35px",
+                                        color:"#154c79",
+                                        border:"solid 2px #154c79",
+                                        borderRadius:'50%',
+                                        backgroundColor:'rgba(21,76,121,0.05)',
+                                        transition:'all 0.3s ease',
+                                        boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                        '&:hover': {
+                                            backgroundColor:'rgba(21,76,121,0.15)',
+                                            transform:'translateY(-2px)',
+                                            boxShadow:'0 4px 8px rgba(0,0,0,0.2)'
+                                        },
+                                        '&:active': {
+                                            transform:'scale(0.95)'
+                                        }
+                                    }}
+                                    onClick={(e)=>
+                                    {
+                                        this._onSaveClick(i)
+                                    }}>
+                                        {(()=>
+                                        {
+                                            if(this.state.data[i].DELIVERED > 0)
+                                            {
+                                                return <i className="fa-solid fa-bell-concierge fa-1x" style={{color:'#FF6B6B', textShadow:'0px 0px 5px rgba(255,107,107,0.5)', animation:'pulse 1.5s infinite'}}></i>
+                                            }
+                                            else
+                                            {
+                                                return <i className="fa-solid fa-bell-concierge fa-1x" style={{color:'#154c79', filter:'drop-shadow(0px 1px 2px rgba(21,76,121,0.3))'}}></i>
+                                            }
+                                        })()}
+                                    </NbButton>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
-                        <div>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" 
-                            style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',
-                            borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px',borderTopRightRadius:'0px',borderRight:'none',
-                            transaction:'none'}}
-                            onClick={()=>
-                            {
-                                this._onSaveClick(i)
-                            }}>
-                                {(()=>
-                                {
-                                    if(this.state.data[i].DELIVERED > 0)
-                                    {
-                                        return <i className="fa-solid fa-bell-concierge fa-2x" style={{color:'#ff6b81'}}></i>
-                                    }
-                                    else
-                                    {
-                                        return <i className="fa-solid fa-bell-concierge fa-2x" style={{color:'#079992'}}></i>
-                                    }
-                                })()}
-                                
-                            </NbButton>
-                        </div>
-                    </div>
-                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px',paddingLeft:'0px'}}>
-                        <div>
-                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}}
-                        onClick={()=>
-                        {
-                            this._onChangeClick(i)
-                        }}>
-                            <i className="fa-solid fa-arrows-rotate fa-1x"></i>
-                        </NbButton>
-                        </div>
-                        <div>
-                        <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"50px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px',borderTopRightRadius:'0px',borderTop:'none'}}
-                        onClick={()=>
-                        {
-                            this._onDeleteClick(i)
-                        }}>
-                            <i className="fa-solid fa-trash fa-1x"></i>
-                        </NbButton>
                         </div>
                     </div>
                 </div>
@@ -151,15 +226,42 @@ export default class NbServiceView extends NbBase
     {
         return(
             <div>
-                <div style={{position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
+                <div style={{
+                    position:'fixed',
+                    left:'0px',
+                    right:'0px',
+                    paddingLeft:'15px',
+                    paddingRight:'15px',
+                    zIndex:'1500',
+                    backgroundColor:'white',
+                    boxShadow:'0 2px 4px rgba(0,0,0,0.1)'
+                }}>
                     <div className='row pt-2'>
                         <div className='col-12'>
-                            <h3 className="text-center" style={{color:'#079992'}}>{this.state.title}</h3>
+                            <h3 className="text-center" style={{
+                                color:'#154c79',
+                                fontSize:'24px',
+                                fontWeight:'bold',
+                                marginBottom:'10px'
+                            }}>{this.state.title}</h3>
                         </div>
                     </div>
                     <div className="row" style={{ display: 'flex' }}>
                         <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"60px",width:'100%',color:"#079992",border:"solid 2px"}}
+                            <NbButton className="form-group btn btn-block" style={{
+                                height:"60px",
+                                width:'100%',
+                                color:"#154c79",
+                                border:"solid 2px #154c79",
+                                borderRadius:'8px',
+                                backgroundColor:'rgba(21,76,121,0.05)',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor:'rgba(21,76,121,0.1)',
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                }
+                            }}
                             onClick={async()=>
                             {
                                 this._onAddClick()
@@ -168,7 +270,20 @@ export default class NbServiceView extends NbBase
                             </NbButton>
                         </div>
                         <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"60px",width:"100%",color:"#079992",border:"solid 2px"}}
+                            <NbButton className="form-group btn btn-block" style={{
+                                height:"60px",
+                                width:"100%",
+                                color:"#154c79",
+                                border:"solid 2px #154c79",
+                                borderRadius:'8px',
+                                backgroundColor:'rgba(21,76,121,0.05)',
+                                transition:'all 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor:'rgba(21,76,121,0.1)',
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 6px rgba(0,0,0,0.1)'
+                                }
+                            }}
                             onClick={()=>
                             {
                                 this._onCloseClick()

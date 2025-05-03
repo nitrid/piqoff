@@ -62,7 +62,23 @@ export default class NbServiceMView extends NbBase
             tmpTable.push(
                 <div key={i} className='row' style={{ display: 'flex' }}>
                     <div style={{flex:1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px'}}>
-                        <div className="card" style={{height:'100px',width:'100%',border:'solid 2px #079992',borderRight:'none',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
+                        <div className="card" 
+                            style={{
+                            height:'120px',
+                            width:'100%',
+                            border:'solid 2px #154c79',
+                            borderRight:'none',
+                            borderTopRightRadius:'0px',
+                            borderBottomRightRadius:'0px',
+                            backgroundColor:'rgba(21,76,121,0.05)',
+                            boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                            transition:'all 0.3s ease',
+                            '&:hover': {
+                                transform:'translateY(-2px)',
+                                boxShadow:'0 4px 6px rgba(0,0,0,0.2)',
+                                backgroundColor:'rgba(21,76,121,0.1)'
+                            }
+                        }}
                         onClick={()=>
                         {
                             this._onClick(i)
@@ -79,16 +95,32 @@ export default class NbServiceMView extends NbBase
                                 }
                             })()}
                             <div className="card-body" style={{padding:'5px',display:'flex',alignItems:'center'}}>
-                                <h3 className="card-title text-center" style={{color:'#079992'}}>{"SERVICE - " + this.state.data[i].REF}</h3>
-                                <p className="fs-3 fw-bold position-absolute" style={{bottom:'10px',right:'10px',marginBottom:'0px',color:'#079992'}}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
+                                <h3 className="card-title text-center" style={{color:'#154c79',fontSize:'22px',fontWeight:'bold',margin:'0',flex:1}}>{"SERVICE - " + this.state.data[i].REF}</h3>
+                                <p className="fs-3 fw-bold position-absolute" style={{marginBottom:'0px',color:'#154c79',fontSize:'20px',fontWeight:'bold'}}>{this.state.data[i].ORDER_COUNT == 0 ? '' : this.state.data[i].ORDER_COMPLATE_COUNT + ' / ' + this.state.data[i].ORDER_COUNT}</p>
                             </div>
                         </div>
                     </div>
-                    <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px'}}>
+                    <div style={{display: 'flex',justifyContent: 'flex-end',gap: '10px',paddingTop: '10px'}}>
                         <div>
                             <NbButton className="form-group btn btn-block btn-outline-dark" 
-                            style={{height:"100px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',
-                            borderBottomLeftRadius:'0px',borderBottomRightRadius:'5px',borderTopRightRadius:'5px',transaction:'none'}}
+                              style={{
+                                height:"35px",
+                                width:"35px",
+                                color:"#154c79",
+                                border:"solid 2px #154c79",
+                                borderRadius:'50%',
+                                backgroundColor:'rgba(21,76,121,0.05)',
+                                transition:'all 0.3s ease',
+                                boxShadow:'0 2px 4px rgba(0,0,0,0.1)',
+                                '&:hover': {
+                                    backgroundColor:'rgba(21,76,121,0.15)',
+                                    transform:'translateY(-2px)',
+                                    boxShadow:'0 4px 8px rgba(0,0,0,0.2)'
+                                },
+                                '&:active': {
+                                    transform:'scale(0.95)'
+                                }
+                            }}
                             onClick={()=>
                             {
                                 this._onSaveClick(i)

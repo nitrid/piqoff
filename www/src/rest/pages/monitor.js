@@ -190,13 +190,18 @@ export default class monitor extends React.PureComponent
         return(
             <div style={{paddingLeft:"10px",paddingRight:"10px",paddingTop:"75px"}}>
                 <ScrollView showScrollbar={'never'} useNative={false}>
-                    <div style={{display:(this.state.isLoading ? 'block' : 'none'),position:'relative',top:"7%",width:'100%',height:'100%',backgroundColor:'#ecf0f1'}}>
+                    <div style={{display:(this.state.isLoading ? 'block' : 'none'),position:'relative',top:"7%",width:'100%',height:'100%',backgroundColor:'#154c79'}}>
                         <div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}>
                             <LoadIndicator height={40} width={40} />
                         </div>
                     </div>
                     <div className='row'>
                         <NbTableMView parent={this} id="tableView" 
+                        style={{
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                            borderRadius: '8px'
+                        }}
                         onClick={async(e)=>
                         {
                             await this.popTableDetail.show()
@@ -210,8 +215,17 @@ export default class monitor extends React.PureComponent
                     </div>
                     {/* TABLE DETAIL */}
                     <div>
-                        <NbPopUp id={"popTableDetail"} parent={this} title={""} fullscreen={true}>
+                        <NbPopUp id={"popTableDetail"} parent={this} title={""} fullscreen={true} style={{
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                            borderRadius: '8px'
+                        }}>
                             <NbServiceMView parent={this} id="serviceView" 
+                            style={{
+                                backgroundColor: 'rgba(255,255,255,0.95)',
+                                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                                borderRadius: '8px'
+                            }}
                             onClick={async(e)=>
                             {
                                 this.restOrderObj.clearAll()
@@ -331,8 +345,18 @@ export default class monitor extends React.PureComponent
                     </div>
                     {/* SERVICE DETAIL */}
                     <div>
-                        <NbPopUp id={"popServiceDetail"} parent={this} title={""} fullscreen={true} style={{paddingLeft:'5px'}}>
+                        <NbPopUp id={"popServiceDetail"} parent={this} title={""} fullscreen={true} style={{
+                            paddingLeft:'5px',
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                            borderRadius: '8px'
+                        }}>
                             <NbServiceMDetailView parent={this} id="serviceDetailView" 
+                            style={{
+                                backgroundColor: 'rgba(255,255,255,0.95)',
+                                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                                borderRadius: '8px'
+                            }}
                             onDoubleClick={async(e)=>
                             {
                                 if(this.serviceDetailView.items[e].STATUS == 1)

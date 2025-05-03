@@ -7,7 +7,7 @@
 }
 .main-toolbar
 {
-    background-color: #079992;
+    background-color: #154c79;
     padding: 5px 10px;
     border-bottom: 1px solid #bdc3c7
 }
@@ -131,18 +131,18 @@
 }
 .btn-primary
 {
-    background-color: #079992;
-    border-color: #079992;
+    background-color: #154c79;
+    border-color: #154c79;
 }
 .btn-primary:active, .btn-primary.active 
 {
-    background-color: #079992 !important;
-    border-color: #079992 !important;
+    background-color: #154c79 !important;
+    border-color: #154c79 !important;
 }
 .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus 
 {
-    background-color: #058079 !important;
-    border-color: #058079 !important;
+    background-color: #154c79 !important;
+    border-color: #154c79 !important;
 }
 .btn-check:active+.btn-outline-dark:focus, .btn-check:checked+.btn-outline-dark:focus, .btn-outline-dark.active:focus, .btn-outline-dark.dropdown-toggle.show:focus, .btn-outline-dark:active:focus 
 {
@@ -157,12 +157,12 @@
 .form-switch
 {
     font-size: 22px;
-    color:#079992
+    color:#154c79
 }
 .form-check-input:checked 
 {
-    background-color: #079992;
-    border-color: #079992;
+    background-color: #154c79;
+    border-color: #154c79;
 }
 .login-button .dx-button-text
 {

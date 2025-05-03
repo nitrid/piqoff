@@ -136,138 +136,137 @@ export default class NbServiceMDetailView extends NbBase
                 tmpPropStr = ""
                 let tmpProp = JSON.parse(this.state.data[i].PROPERTY)
                 
-                for (let i = 0; i < tmpProp.length; i++) 
+                for (let j = 0; j < tmpProp.length; j++)
                 {
-                    if(tmpProp[i].VALUE)
+                    if(tmpProp[j].VALUE)
                     {
-                        tmpPropStr += tmpProp[i].TITLE + ", "
+                        tmpPropStr += tmpProp[j].TITLE + ", "
                     }                    
                 }
                 tmpPropStr = tmpPropStr.substring(0,tmpPropStr.length-2)
             }
 
-            tmpTable.push(
-                <div key={i} className='row' style={{ display: 'flex',height:'65px'}}>
-                    <div style={{flex:1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px'}}>
-                        <div className="card" style={{height:'65px',width:'100%',border:'solid 2px #079992',borderRight:'none',borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
-                        onClick={()=>
-                        {
-                            if (this.clickTimeout) 
-                            {
-                                clearTimeout(this.clickTimeout);
-                                this.clickTimeout = null;
-                                this._onDoubleClick(i)
-                            }
-                            else 
-                            {
-                                this.clickTimeout = setTimeout(async() => 
-                                {
-                                    if(this.items[i].STATUS == 2)
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgOrderDisable',showTitle:true,title:this.lang.t("msgOrderDisable.title"),showCloseButton:true,width:'80%',height:'180px',
-                                            button:[{id:"btn01",caption:this.lang.t("msgOrderDisable.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOrderDisable.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj)
-                                        return
-                                    }
+            let itemCardStyle = {
+                height: 'auto',
+                minHeight: '65px',
+                width: '100%',
+                borderRadius: '10px',
+                border: 'solid 1px #154c79',
+                backgroundColor: 'rgba(21, 76, 121, 0.08)',
+                marginBottom: '10px',
+                padding: '8px 12px',
+                cursor: 'pointer',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.2s ease-out'
+            };
 
-                                    this._onClick(i)
-                                    this.clickTimeout = null;
-                                }, 300);
-                            }
-                        }}
-                        >
-                            {(()=>
+            let completedOverlayStyle = {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(5, 128, 121, 0.1)',
+                color: '#058079',
+                zIndex: 1
+            };
+
+            let waitingIndicatorStyle = {
+                position: 'absolute',
+                top: '8px',
+                right: '8px',
+                fontSize: '14px',
+                color: this.state.data[i].WAIT_STATUS == 0 ? '#ff6b81' : this.state.data[i].WAIT_STATUS == 1 ? '#f6b93b' : '#079992'
+            };
+
+            tmpTable.push(
+                <div key={i} className='row' 
+                    onClick={(e)=>
+                    {                        
+                        if (this.clickTimeout) 
+                        {
+                            clearTimeout(this.clickTimeout);
+                            this.clickTimeout = null;
+                            this._onDoubleClick(i)
+                        }
+                        else 
+                        {
+                            this.clickTimeout = setTimeout(async() => 
                             {
-                                if(this.state.data[i].STATUS == 2 || this.state.data[i].STATUS == 3)
+                                if(this.items[i].STATUS == 2)
                                 {
-                                    return <i className="fa-solid fa-check fa-6x" style={{height:'30px',position:'absolute',left:'35%',color:'rgb(5 128 121 / 65%)'}}></i>
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgOrderDisable',showTitle:true,title:this.lang.t("msgOrderDisable.title"),showCloseButton:true,width:'80%',height:'180px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgOrderDisable.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOrderDisable.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj)
+                                    return
                                 }
-                                else
-                                {
-                                    return null
-                                }
-                            })()}
-                            <div className="card-body" style={{padding:'5px',alignContent:'center'}}>
+                                this._onClick(i)
+                                this.clickTimeout = null;
+                            }, 300);
+                        }
+                    }}
+                    style={{paddingLeft: '15px', paddingRight: '15px'}}
+                    >
+                    <div className="card" style={itemCardStyle}>
+                        <div style={{ position: 'relative', zIndex: 0 }}> 
+                            <div className="row">
+                                <div className="col-12">
+                                    <h6 style={{
+                                        margin: '0 0 4px 0', 
+                                        fontSize: '16px', 
+                                        fontWeight: 'bold',
+                                        color: '#154c79',
+                                        paddingRight: '20px'
+                                    }}>
+                                        {this.state.data[i].ITEM_NAME}
+                                    </h6>
+                                </div>
+                            </div>
+                            {tmpPropStr !== "" && (
                                 <div className="row">
                                     <div className="col-12">
-                                        <h6 style={{margin:'0px',overflow: 'hidden',textOverflow: 'ellipsis',
-                                        display: '-webkit-box',WebkitBoxOrient:'vertical',WebkitLineClamp: 4}}>
-                                        {this.state.data[i].ITEM_NAME}
+                                        <h6 style={{
+                                            margin: '0 0 4px 0', 
+                                            fontSize: '13px', 
+                                            color: '#1e6091',
+                                            fontStyle: 'italic'
+                                            }}>
+                                            {tmpPropStr}
                                         </h6>
                                     </div>
                                 </div>
-                                {(()=>
-                                {
-                                    if(tmpPropStr != "")
-                                    {
-                                        return (
-                                            <div className="row">
-                                                <div className="col-12">
-                                                    <h6 style={{margin:'0px',overflow: 'hidden',textOverflow: 'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',
-                                                    WebkitLineClamp: 2,fontSize:'14px',color:'blue'}}>
-                                                        {tmpPropStr}
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                })()}
-                                {(()=>
-                                {
-                                    if(this.state.data[i].DESCRIPTION != "")
-                                    {
-                                        return (
-                                            <div className="row">
-                                                <div className="col-12">
-                                                    <h6 style={{margin:'0px',overflow: 'hidden',textOverflow: 'ellipsis',display: '-webkit-box',WebkitBoxOrient:'vertical',
-                                                    WebkitLineClamp: 2,fontSize:'14px',color:'red'}}>
-                                                        {this.state.data[i].DESCRIPTION}
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                })()}
-                            </div>
+                            )}
+                            {this.state.data[i].DESCRIPTION !== "" && (
+                                <div className="row">
+                                    <div className="col-12">
+                                        <h6 style={{
+                                            margin:'0', 
+                                            fontSize:'13px', 
+                                            color:'#d9534f'
+                                        }}>
+                                            {this.state.data[i].DESCRIPTION}
+                                        </h6>
+                                    </div>
+                                </div>
+                            )}
                         </div>
+                        {(this.state.data[i].WAITING == 1 && this.state.data[i].WAIT_STATUS > 0) &&
+                            <i className="fa-solid fa-clock-rotate-left" style={waitingIndicatorStyle}></i>
+                        }
+                        {(this.state.data[i].STATUS == 2 || this.state.data[i].STATUS == 3) && (
+                            <div style={completedOverlayStyle}>
+                                <i className="fa-solid fa-check fa-3x"></i> 
+                            </div>
+                        )}
                     </div>
-                    {(()=>
-                    {
-                        console.log(this.state.data[i].WAITING )
-                        if(this.state.data[i].WAITING == 1 && this.state.data[i].WAIT_STATUS > 0)
-                        {
-                            return (
-                                <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px',}}>
-                                    <div>
-                                        <div style={{height:"65px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',
-                                        borderBottomLeftRadius:'0px',borderBottomRightRadius:'5px',borderTopRightRadius:'5px',alignContent:'center',textAlign:'center'}}>
-                                            <i className="fa-solid fa-clock-rotate-left fa-2x" 
-                                            style={
-                                            {
-                                                color:(this.state.data[i].WAIT_STATUS == 0 ? '#ff6b81' : this.state.data[i].WAIT_STATUS == 1 ? '#f6b93b' : '#079992')
-                                            }}></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                        else
-                        {
-                            return(
-                                <div style={{flex:0.1,paddingTop:'10px',paddingRight:'0px',paddingBottom:'10px',paddingLeft:'0px',}}>
-                                    <div>
-                                        <div style={{height:"65px",width:"100%",color:"#079992",border:"solid 2px",borderTopLeftRadius:'0px',padding:'5px',borderLeft:'none',
-                                        borderBottomLeftRadius:'0px',borderBottomRightRadius:'5px',borderTopRightRadius:'5px',alignContent:'center',textAlign:'center'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    })()}
                 </div>
             )
         }
@@ -275,33 +274,82 @@ export default class NbServiceMDetailView extends NbBase
     }
     render()
     {
+        const headerStyle = {
+            position:'fixed',
+            left:'0px',
+            right:'0px',
+            top: 0,
+            padding: '10px 15px',
+            zIndex:'1500',
+            backgroundColor:'#f8f9fa',
+            borderBottom: '1px solid #dee2e6'
+        };
+
+        const titleStyle = {
+            color:'#154c79',
+            fontWeight: 'bold',
+            margin: 0
+        };
+
+        const personSectionStyle = {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
+
+        const personIconStyle = {
+            fontSize:'24px', 
+            color:'#154c79',
+            marginBottom: '4px' 
+        };
+
+        const personCountStyle = {
+            color:"#FF6B6B", 
+            margin: 0,
+            fontSize: '22px',
+            fontWeight: 'bold'
+        };
+
+        const closeButtonStyle = {
+            height:"100%",
+            width:"100%",
+            color:"#154c79",
+            border:"none",
+            backgroundColor:'rgba(21, 76, 121, 0.1)',
+            borderRadius:'8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition:'all 0.2s ease',
+            boxShadow: '0 1px 2px rgba(21, 76, 121, 0.2)',
+            '&:hover': {
+                backgroundColor:'rgba(21, 76, 121, 0.2)',
+                transform:'translateY(-1px) scale(1.05)',
+                boxShadow: '0 2px 4px rgba(21, 76, 121, 0.3)'
+            }
+        }
+
         return(
             <div>
-                <div style={{position:'fixed',left:'0px',right:'0px',paddingLeft:'15px',paddingRight:'15px',zIndex:'1500',backgroundColor:'white'}}>
-                    <div className='row pt-2'>
-                        <div className='col-12'>
-                            <h3 className="text-center" style={{color:'#079992'}}>{this.state.title}</h3>
+                <div style={headerStyle}>
+                    <div className='row align-items-center'>
+                        <div className='col-8'>
+                            <h3 className="text-left" style={titleStyle}>{this.state.title}</h3>
                         </div>
-                    </div>
-                    <div className="row" style={{ display: 'flex' }}>
-                        <div style={{flex:1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                            <div className="text-center">
-                                <i className="fa-solid fa-users" style={{fontSize:'26px',color:'#079992'}}></i>
-                                <h2 style={{color:"#FF6B6B"}}><NbLabel id="lblPerson" parent={this} value={"1"}/></h2>
-                            </div>
+                        <div className='col-3 text-center' style={personSectionStyle}>
+                            <i className="fa-solid fa-users" style={personIconStyle}></i>
+                            <h2 style={personCountStyle}><NbLabel id="lblPerson" parent={this} value={"1"}/></h2>
                         </div>
-                        <div style={{flex:0.1,paddingTop:'10px',paddingRight:'5px',paddingBottom:'10px'}}>
-                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"60px",width:"100%",color:"#079992",border:"solid 2px"}}
-                            onClick={()=>
-                            {
-                                this._onCloseClick()
-                            }}>
-                                <i className="fa-solid fa-circle-xmark fa-2x"></i>
+                        <div className='col-1' style={{padding: '0 5px 0 0'}}> 
+                            <NbButton className="form-group btn btn-block" style={closeButtonStyle}
+                            onClick={()=> { this._onCloseClick() }}>
+                                <i className="fa-solid fa-circle-xmark fa-lg"></i> 
                             </NbButton>
                         </div>
                     </div>
                 </div>
-                <div style={{position:'relative',top:'130px'}}>
+                <div style={{paddingTop:'90px', paddingBottom: '10px'}}> 
                     {this.buildItem()}
                 </div>
             </div>

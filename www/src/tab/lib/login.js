@@ -34,7 +34,9 @@ export default class Login extends React.PureComponent
                 top : '50%',
                 width : '350px',
                 height : 'fit-content',
-                backgroundColor : '#f8f9fa',  
+                backgroundColor : 'rgba(255,255,255,0.95)',  
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                borderRadius: '8px'
             }
         }  
         this.state = 
@@ -150,11 +152,11 @@ export default class Login extends React.PureComponent
         return (
             <div style={this.style.body}>
                 <div className="card" style={this.style.login_box}>
-                   <div className="card-header">Login</div>
+                   <div className="card-header" style={{backgroundColor:'#154c79',color:'white',borderRadius:'8px 8px 0 0'}}>Login</div>
                    <div className="card-body">
                         <div className="row">
                             <div className="col-12">
-                                <h6 className="text-center" style={{color:'#ff7675'}}>{this.state.alert}</h6>
+                                <h6 className="text-center" style={{color:'#FF6B6B'}}>{this.state.alert}</h6>
                             </div>
                         </div>
                         <div className="row">
@@ -233,6 +235,7 @@ export default class Login extends React.PureComponent
                                     type="default"
                                     stylingMode="contained"
                                     onClick={this.onLoginClick}
+                                    style={{backgroundColor:'#154c79',color:'white'}}
                                     />
                                 </div>
                             </div>
@@ -245,6 +248,7 @@ export default class Login extends React.PureComponent
                                     type="danger"
                                     stylingMode="contained"
                                     onClick={this.closePage}
+                                    style={{backgroundColor:'#FF6B6B',color:'white'}}
                                     />
                                 </div>
                             </div>
