@@ -441,6 +441,7 @@ const irs_02_002 =
     pg_offersGrid : 
     {
         clmCode : "Kodu",
+        title : "Teklifler",
         clmName : "Adı",
         clmPrice : "Fiyat",
         clmQuantity : "Miktar",

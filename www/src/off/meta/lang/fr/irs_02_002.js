@@ -434,6 +434,7 @@ const irs_02_002 =
     pg_offersGrid : 
     {
         clmCode : "Code",
+        title : "Propositions",
         clmName : "Nom",
         clmPrice : "Prix",
         clmQuantity : "Quantité",
