@@ -577,6 +577,21 @@ export const prm =
             CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
+    //#sansTVAAuto
+    {
+        TYPE : 0,
+        ID :"sansTVAAuto",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "TVA Sıfır Belirleme"
+        }
+    },
     //#endregion
     //#region Stok Tanıtım
     //txtRef

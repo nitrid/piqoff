@@ -33,12 +33,10 @@ export default class CustomerCard extends React.PureComponent
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
-        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
 
         this._onItemRendered = this._onItemRendered.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this.typeChange = this.typeChange.bind(this)
-        
     }
     async componentDidMount()
     {
@@ -1280,7 +1278,11 @@ export default class CustomerCard extends React.PureComponent
                                                     {/* chkVatZero */}
                                                     <Item>
                                                         <Label text={this.t("chkVatZero")} alignment="right" />
-                                                        <NdCheckBox id="chkVatZero" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                        <NdCheckBox id="chkVatZero" parent={this} value={false} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}}
+                                                        onValueChanged={(e) => {
+                                                            // Değer manuel olarak değiştirildiğinde veriyi güncelle
+                                                            this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = e.value;
+                                                        }}></NdCheckBox>
                                                     </Item>
                                                </Form>
                                             </div>
@@ -1642,6 +1644,30 @@ export default class CustomerCard extends React.PureComponent
                                                 this.customerObj.customerAdress.addEmpty(tmpEmpty);    
                                                 this.popAdress.hide(); 
                                                 
+                                                // Adres eklendikten/güncellendikten sonra Sans TVA (VAT_ZERO) kontrolü
+                                                setTimeout(async () => {
+                                                    if(this.sysParam.filter({ID:'sansTVAAuto'}).getValue()) {
+                                                        let tmpQuery = {
+                                                            query: "SELECT TOP 1 COUNTRY FROM COMPANY",
+                                                            param: [],
+                                                            value: []
+                                                        }
+                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery);
+
+                                                        // Ülke şirket ülkesinden farklı ise ve sans_tva_auto parametresi true ise
+                                                        if(this.cmbPopCountry.value !== tmpData.result.recordset[0].COUNTRY ) 
+                                                            {
+                                                            this.chkVatZero.value = true;
+                                                            this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            this.chkVatZero.value = false;
+                                                            this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = false;
+                                                        }
+                                                    }
+                                                }, 100);
                                             }}/>
                                         </div>
                                         <div className='col-6'>
