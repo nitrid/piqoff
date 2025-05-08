@@ -65,6 +65,7 @@ export class docCls
         this.docOffers = new docOffersCls();
         this.docDemand = new docDemandCls();
         this.transportInfermotion = new transportInfermotionCls();
+        this.pCustomer = null
         this._initDs();
     }
     // #region Private
@@ -1822,6 +1823,7 @@ export class deptCreditMatchingCls
     }
     async showPopUp(pCustomer)
     {
+        this.pCustomer = pCustomer
         this.popUpList = new datatable()
         let tmpJsx = 
         (
@@ -1842,7 +1844,8 @@ export class deptCreditMatchingCls
                             onApply={()=>
                             {
                                 gridRefresh()
-                            }}/>
+                            }}
+                            />
                         </div>
                         <div className="col-2">
                             <NdCheckBox id="chkPopDeptCreditList" parent={this} text={this.lang.t("popDeptCreditList.chkPopDeptCreditList")} value={false}
@@ -1862,7 +1865,6 @@ export class deptCreditMatchingCls
                                 {
                                     this.popDeptCreditList.hide()
                                     this.popDeptCreditList.onClick(this.grdPopDeptCreditList.getSelectedData())
-                                    console.log(this.grdPopDeptCreditList.getSelectedData())
                                 }
                             }}
                             />
@@ -1938,7 +1940,7 @@ export class deptCreditMatchingCls
                         "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND TYPE IN (0,1) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE {0} " + 
                         "ORDER BY DOC_DATE ASC,LDATE ASC",
                 param : ['CUSTOMER_GUID:string|50','LANG:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                value : [pCustomer,this.lang.language.toUpperCase(),this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
+                value : [this.pCustomer,this.lang.language.toUpperCase(),this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
             }
             
             if(this.chkPopDeptCreditList.value == false)
