@@ -512,11 +512,9 @@ export default class excelItemImport extends React.PureComponent
                                                         dialog(tmpConfObj);
                                                         return
                                                     }
-                                                    else
-                                                    {
-                                                      this.excelAdd(json)
-                                                    }
+                                                   
                                                 }
+                                                this.excelAdd(json)
                                             };
                                             reader.readAsArrayBuffer(e.target.files[0]);
                                         }
