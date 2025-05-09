@@ -1035,8 +1035,8 @@ export default class collection extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async (e)=>
-                                            {       
+                                            onClick={async ()=>
+                                            {   
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
                                                 this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
                                             }}/>
