@@ -1256,6 +1256,11 @@ export const menu = (e) =>
                             id: 'fns_04_004',
                             text: e.t('menuOff.fns_04_004'),//'Cari Fatura ve ödeme raporu',
                             path: 'finance/report/InvoicesAndCollectionReport'
+                        },
+                        {
+                            id: 'fns_04_005',
+                            text: e.t('menuOff.fns_04_005'),//'Tahsilat Raporu',
+                            path: 'finance/report/collectionReport'
                         }
                     ]   
                 }
