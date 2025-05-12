@@ -553,7 +553,7 @@ export const langFr =
     pg_ordersGrid : //BAK
     {
         title : "Sélection de la commande",  
-        clmReferans : "Réf.-Réf no:",  
+        clmReferans : "Réf. Réf No",  
         clmCode : "Code",  
         clmName : "Nom",  
         clmQuantity : "Quantité",  

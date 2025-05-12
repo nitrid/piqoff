@@ -1,7 +1,7 @@
 // "Şube Alış Faturası"
 const ftr_02_008 =
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot: "Réserve",
     txtCustomerCode : "Code du fournisseur",
     txtCustomerName : "Nom fournisseur",

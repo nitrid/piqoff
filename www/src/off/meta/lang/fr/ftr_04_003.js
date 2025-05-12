@@ -1,7 +1,7 @@
 // "Proforma Alış Faturası"
 const ftr_04_003 =
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot: "Réserve",
     txtCustomerCode : "Code du fournisseur",
     txtCustomerName : "Nom fournisseur",
@@ -515,7 +515,7 @@ const ftr_04_003 =
     pg_offersGrid : 
     {  
         title : "Choix Proposition",   
-        clmReferans : "Réf.-Réf no:",  
+        clmReferans : "Réf. Réf No",  
         clmCode : "Code",  
         clmName : "Nom",  
         clmQuantity : "Quantité",  

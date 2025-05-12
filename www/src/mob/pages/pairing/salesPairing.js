@@ -486,9 +486,9 @@ export default class salesPairing extends React.PureComponent
             }
             let tmpQuery = 
             {
-                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
-                param : ['GUID:string|50'],
-                value : [pGuid]
+                query :"SELECT *,(SELECT ISNULL(MAX(DOC.REF_NO) + 1,1) FROM DOC WHERE DOC.TYPE = 1 AND DOC.DOC_TYPE = 40 AND REF = @REF) AS NEW_REF_NO  FROM DOC_VW_01 WHERE GUID = @GUID ",
+                param : ['GUID:string|50','REF:string|25'],
+                value : [pGuid,this.txtRef.value]
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -499,7 +499,6 @@ export default class salesPairing extends React.PureComponent
                 this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
                 this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
-                this.docObj.dt()[0].REF = tmpData.result.recordset[0].REF
                 this.docObj.dt()[0].VAT_ZERO = tmpData.result.recordset[0].VAT_ZERO
                 this.orderGuid = tmpData.result.recordset[0].GUID
                 this.txtRefNo.value = tmpData.result.recordset[0].NEW_REF_NO
@@ -512,7 +511,10 @@ export default class salesPairing extends React.PureComponent
             this.docObj.dt()[0].INPUT_CODE = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
             this.docObj.dt()[0].INPUT_NAME = this.grdOrderList.getSelectedData()[0].CUSTOMER_NAME
             this.docObj.dt()[0].INPUT = this.grdOrderList.getSelectedData()[0].CUSTOMER
-            this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'refForCustomerCode'}).getValue())
+            {
+                this.docObj.dt()[0].REF = this.grdOrderList.getSelectedData()[0].CUSTOMER_CODE
+            }
             this.docObj.dt()[0].VAT_ZERO = this.grdOrderList.getSelectedData()[0].VAT_ZERO
             this.orderGuid = this.grdOrderList.getSelectedData()[0].DOC_GUID
             let tmpQuery = 
@@ -684,6 +686,7 @@ export default class salesPairing extends React.PureComponent
 
                                                             let tmpData = await this.core.sql.execute(tmpQuery) 
 
+                                                            console.log(tmpData.result.recordset)
                                                             if(tmpData.result.recordset.length > 0)
                                                             {
                                                                 this.txtRefNo.value = tmpData.result.recordset[0].REF_NO

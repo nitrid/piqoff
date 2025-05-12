@@ -1,7 +1,7 @@
 // İade Ürünü Toplama
 const stk_02_005 = 
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot1: "Sortie Dépôt",
     cmbDepot2: "Retour Dépôt",
     dtDocDate : "Date",

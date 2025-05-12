@@ -1,7 +1,7 @@
 // Sayım Evrakı
 const stk_02_001 = 
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot: "Dépôt inventaire",
     dtDocDate : "Date",
     txtBarcode : "Ajouter Code Barre",

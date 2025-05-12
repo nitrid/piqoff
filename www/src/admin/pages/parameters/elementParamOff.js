@@ -39,12 +39,14 @@ export default class elementParamOff extends React.PureComponent
         let tmpDt = new datatable()
         tmpDt.import(this.prmData.filter({TYPE:2}).meta)
         tmpDt = tmpDt.groupBy('PAGE')
+        console.log(tmpDt)
 
         let tmpMenu = []
         for (let i = 0; i < tmpDt.length; i++) 
         {
             tmpMenu.push({CODE:tmpDt[i].PAGE,NAME:tmpDt[i].VIEW.PAGE_NAME})            
         }
+        console.log("tmpMenu",tmpMenu)
         await this.cmbDoc.dataRefresh({source:tmpMenu});
     }
     buildItem()

@@ -1,7 +1,7 @@
 // "Ürün Giriş Çıkış Operasyonu"
 const stk_04_005 =
 {
-    txtRef : "Réf.-Réf no:",
+    txtRef : "Réf. Réf No",
     cmbDepot: "Sortie Dépot",
     dtDocDate : "Date",
     txtBarcode : "Ajouter Code Barre",

@@ -294,6 +294,12 @@ export default class DocBase extends React.PureComponent
                     }
                 }
             }
+            if(typeof this.txtRef != 'undefined' && typeof this.txtRef.props.onChange != 'undefined')
+            {
+                setTimeout(() => {
+                    this.txtRef.props.onChange()
+                }, 1000);
+            }
             resolve()
         })
     }
