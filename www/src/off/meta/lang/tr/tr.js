@@ -505,6 +505,7 @@ export const langTr =
         slsRpt_01_011 : "Eksik Gönderilen Siparişler Raporu",
         slsRpt_01_012 : "Ürün Bazlı Satış Raporu",
         slsRpt_01_013 : "Müşteri Bazlı Satış Raporu",
+        slsRpt_01_014 : "Deb Satış Detay Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",

@@ -27,7 +27,7 @@ export default class Dashboard extends React.PureComponent
       dailySalesTotal : { query : "SELECT SUM(TOTAL) AS DAILY_SALES_TOTAL FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       salesAvg : { query : "SELECT AVG(TOTAL) AS SALES_AVG FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       dailySalesCount : { query : "SELECT COUNT(*) AS DAILY_SALES_COUNT FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      bestItemGroup : { query : "SELECT TOP 5  ROUND(SUM(TOTAL),2) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME ORDER BY SUM(TOTAL) DESC", param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
+      bestItemGroup : { query : "SELECT TOP 5  ROUND(SUM(TOTAL),2) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 GROUP BY ITEM_GRP_NAME ORDER BY SUM(TOTAL) DESC", param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
       dailyPriceChange : { query : "SELECT COUNT(*) AS DAILY_PRICE_CHANGE FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },    
       dailyRowDelete : { query : "SELECT COUNT(*) AS DAILY_ROW_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'ROW DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       dailyFullDelete : { query : "SELECT COUNT(*) AS DAILY_FULL_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
@@ -45,7 +45,7 @@ export default class Dashboard extends React.PureComponent
       salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },  
       balanceTicketCreated : { query : "SELECT COUNT(*) AS BALANCE_TICKET_CREATED FROM BALANCE_COUNTER WHERE CONVERT(NVARCHAR(10),TICKET_DATE,23) >= @FISRT_DATE AND CONVERT(NVARCHAR(10),TICKET_DATE,23) <= @LAST_DATE",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      AllItemGroups : { query : "SELECT COUNT(DISTINCT ITEM_GRP_NAME) AS TOTAL_ITEM_GROUPS FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME IS NOT NULL",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
+      AllItemGroups : { query : "SELECT COUNT(DISTINCT ITEM_GRP_NAME) AS TOTAL_ITEM_GROUPS FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0 AND ITEM_GRP_NAME IS NOT NULL",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
     }
   }
   async componentDidMount()
@@ -243,9 +243,9 @@ export default class Dashboard extends React.PureComponent
       <ScrollView>
         <div className="row py-1 px-3">
         <div className="col-sm-12 col-md-6 p-1">
-          <div className="text-center">
+          <div className="text-center" onClick={()=>App.instance.firmChange(1)} onDoubleClick={()=>App.instance.firmChange(2)}>
                   <h5 className="card-title">{this.companyName}</h5>
-                </div>
+            </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}

@@ -17,6 +17,7 @@ export default class NbItemCard extends NbBase
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
             price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
             unitPrice : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(2),
+            unitName : typeof this.props.unitName == 'undefined' ? '' : this.props.unitName
         }
         
         this.data = this.props.data
@@ -58,6 +59,10 @@ export default class NbItemCard extends NbBase
     setDocItem()
     {
         let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+        if(typeof this.cmbUnit.data.datatable.where({'TYPE':0})[0] != 'undefined')
+        {
+            this.setState({unitName : this.cmbUnit.data.datatable.where({'TYPE':0})[0].NAME})
+        }
         if(tmpDt.length > 0)
         {
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
@@ -88,7 +93,7 @@ export default class NbItemCard extends NbBase
                 <div className="card-body">
                     <div className='row pb-1'>
                         <div className='col-12'>
-                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
+                            <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{(this.state.price).toFixed(2)}€</h5>
                         </div>
                         <div className='col-12'>
                             <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
@@ -121,7 +126,7 @@ export default class NbItemCard extends NbBase
                             />
                         </div>
                         <div className='col-12'>
-                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.unitPrice}€ / Unité</h6>
+                            <h6 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{(this.state.unitPrice).toFixed(2)}€ / {this.state.unitName}</h6>
                         </div>
                     </div>
                     <div className='row pb-1'>

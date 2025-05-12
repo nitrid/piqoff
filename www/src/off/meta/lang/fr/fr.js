@@ -505,6 +505,7 @@ export const langFr =
         slsRpt_01_011: "Rapport sur les commandes expédiées incomplètes",
         slsRpt_01_012: "Rapport sur le profit des produits",
         slsRpt_01_013: "Rapport sur le profit des clients",
+        slsRpt_01_014: "Deb vente detail",
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 

@@ -1061,6 +1061,11 @@ export const menu = (e) =>
                             id: 'slsRpt_01_013',
                             text: e.t('menuOff.slsRpt_01_013'),//'Müşteri Karlılık Raporu',
                             path: 'report/sales/customerProfitReport'
+                        },
+                        {
+                            id: 'slsRpt_01_014',
+                            text: e.t('menuOff.slsRpt_01_014'),//'Deb Satış Detay Raporu',
+                            path: 'report/sales/debSalesDetailReport'
                         }
 
                     ]

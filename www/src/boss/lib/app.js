@@ -40,6 +40,7 @@ export default class App extends React.PureComponent
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;
         this.serverTimeout 
+        this.FirmTimeout
 
         this.style =
         {
@@ -143,6 +144,32 @@ export default class App extends React.PureComponent
                 this.setState({licenced:true,connected:false,logined:false,licenceMsg:e.data});                
             }
         })
+    }
+    async firmChange(type)
+    {
+       if(type == 2)
+       {
+           let tmpList = JSON.parse(localStorage.firmList);
+           let currentHost = localStorage.getItem('host');
+           
+           // Mevcut host'u listede bul
+           for(let i = 0; i < tmpList.length; i++) {
+               if(tmpList[i].ADRESS === currentHost) {
+                   // Eğer son eleman değilse, bir sonraki adresi al
+                   if(i < tmpList.length - 1) {
+                       localStorage.setItem('host', tmpList[i + 1].ADRESS);
+                       localStorage.setItem('hostname', tmpList[i + 1].NAME);
+                       window.location.reload();
+                   } else {
+                       // Son elemandaysa, listenin başına dön
+                       localStorage.setItem('host', tmpList[0].ADRESS);
+                       localStorage.setItem('hostname', tmpList[0].NAME);
+                       window.location.reload();
+                   }
+                   break;
+               }
+           }
+       }
     }
     render() 
     {
