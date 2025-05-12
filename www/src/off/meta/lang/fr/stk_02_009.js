@@ -1,7 +1,7 @@
 // Ürün Çıkış Fişi
 const stk_02_009 = 
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbOutDepot: "Sortie Dépot",
     dtDocDate : "Date",
     txtBarcode : "Ajouter Code Barre",

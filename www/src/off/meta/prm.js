@@ -1969,7 +1969,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "F"
         },
         SPECIAL : "",
         PAGE : "ftr_02_002",
@@ -2141,7 +2141,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "F"
         },
         SPECIAL : "",
         PAGE : "ftr_02_009",
@@ -2273,7 +2273,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "F"
         },
         SPECIAL : "",
         PAGE : "ftr_02_005",
@@ -2441,7 +2441,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "F"
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",
@@ -2764,7 +2764,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : ""
+            value : "F"
         },
         SPECIAL : "",
         PAGE : "ftr_04_002",
@@ -3177,6 +3177,24 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Satış İrsaliye",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : "BL"
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Irsaliyesi",
+            CAPTION : "Seri"
         }
     },
     //cmbDepot

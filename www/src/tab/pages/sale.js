@@ -981,6 +981,7 @@ export default class Sale extends React.PureComponent
                                     <div className='row' style={{paddingTop:"10px"}}>
                                         <div className='col-12' align={"right"}>
                                             <Toolbar>
+                                                
                                                 <Item location="after" locateInMenu="auto">
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
                                                     onClick={async()=>
@@ -2334,10 +2335,8 @@ export default class Sale extends React.PureComponent
                                                                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                                 value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                             }
-                                                        }
-                                                        this.setState({isExecute:true})                                                        
-                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
-                                                        this.setState({isExecute:false})                                                        
+                                                        }                                                       
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                                                                               
                                                         //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                         {
@@ -2599,8 +2598,8 @@ export default class Sale extends React.PureComponent
                             showTitle={true}
                             title={this.t("popFactNonSolde")}
                             container={"#root"} 
-                            width={'500'}
-                            height={'550'}
+                            width={'600'}
+                            height={'650'}
                             position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
@@ -2614,15 +2613,62 @@ export default class Sale extends React.PureComponent
                                         height={'100%'} 
                                         width={'100%'}
                                         dbApply={false}
+                                        onRowDblClick={async(e)=>
+                                            {
+                                                this.setState({isExecute:true})
+                                                
+                                                let tmpQuery = 
+                                                {
+                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                    value:  [e.data.DOC_GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                                                }
+                                                this.setState({isExecute:true})                                                        
+                                                let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                this.setState({isExecute:false})
+                                                this.popFactNonSolde.hide(); 
+                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                    {
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {     
+                                                            let base64ToUint8Array = (base64)=>
+                                                            {
+                                                                let raw = atob(base64);
+                                                                let uint8Array = new Uint8Array(raw.length);
+                                                                for (let i = 0; i < raw.length; i++) 
+                                                                {
+                                                                    uint8Array[i] = raw.charCodeAt(i);
+                                                                }
+                                                                return uint8Array;
+                                                            }
+
+                                                            this.popPrintView.show()
+
+                                                            document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                            let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                            let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                            pdfViewerFrame.onload = (async function() 
+                                                            {
+                                                                await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                if(App.instance.core.local.platform == 'cordova')
+                                                                {
+                                                                    this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                }
+                                                            }).bind(this)
+                                                            pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                        }
+                                                    });
+                                            }}
                                         onRowRemoved={async (e)=>{
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                            <Column dataField="DOC_DATE" caption={this.t("grdFactNonSolde.clmDocDate")} width={100} defaultSortOrder="asc" dataType="date"  />
-                                            <Column dataField="DOC_REF_NO" caption={this.t("grdFactNonSolde.clmRefNo")} width={100} />
-                                            <Column dataField="REMAINDER" caption={this.t("grdFactNonSolde.clmRemainder")} width={300} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="DOC_DATE" caption={this.t("grdFactNonSolde.clmDocDate")} defaultSortOrder="asc" dataType="date"  />
+                                            <Column dataField="DOC_REF_NO" caption={this.t("grdFactNonSolde.clmRefNo")}  />
+                                            <Column dataField="REMAINDER" caption={this.t("grdFactNonSolde.clmRemainder")} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         </NdGrid>
                                     </Item>
                                 </Form>

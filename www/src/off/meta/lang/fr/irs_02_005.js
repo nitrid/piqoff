@@ -2,7 +2,7 @@
 const irs_02_005 = 
 {
     getRebate : "Cherche dépôt retour",
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     validDesign : "Veuillez sélectionner le design.",  
     cmbDepot: "Réserve",
     txtCustomerCode : "Code du Client",

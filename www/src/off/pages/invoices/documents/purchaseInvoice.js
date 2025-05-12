@@ -1754,10 +1754,7 @@ export default class purchaseInvoice extends DocBase
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                                <Validator validationGroup={"frmDoc"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRef")} />
-                                                </Validator>  
+                                            > 
                                             </NdTextBox>
                                         </div>
                                         <div className="col-6 ps-0">

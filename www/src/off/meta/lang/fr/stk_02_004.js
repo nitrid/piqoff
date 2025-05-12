@@ -1,7 +1,7 @@
 // Etiket Bas
 const stk_02_004 = 
 {
-    txtRefRefno : "Réf.-Réf no",
+    txtRefRefno : "Réf. Réf No",
     design : "Design" ,
     txtPage : "Page" ,
     txtFreeLabel : "Champ Vide" ,

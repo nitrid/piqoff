@@ -1,7 +1,7 @@
 // Kayıp Ürün Çıkışı
 const stk_02_003 = 
 {
-    txtRefRefno : "Réf.-Réf no",
+    txtRefRefno : "Réf. Réf No",
     cmbOutDepot: "Sortie Dépôt",
     dtDocDate : "Date",
     txtBarcode : "Ajouter Code Barre",

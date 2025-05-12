@@ -1,7 +1,7 @@
 // "Proforma Fiyat Farkı Faturası"
 const ftr_04_001 =
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot: "Dépot",
     txtCustomerCode : "Code du fournisseur",
     txtCustomerName : "Nom fournisseur",

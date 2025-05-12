@@ -1,7 +1,7 @@
 //"Toplu Tahsilat Girişi"
 const fns_05_001 =
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No:",
     validRef :"Saisir Réf ",
     cmbCashSafe : "Caisse Espèce",
     excelAdd : "Inscription à partir d'Excel",

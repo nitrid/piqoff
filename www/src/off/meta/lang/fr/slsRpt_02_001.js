@@ -15,7 +15,7 @@ const slsRpt_02_001 =
         clmTotalHt : "Prix HT",   
         clmVat : "TVA",    
         clmTotal : "Total",    
-        clmRef : "Réf.-Réf no", 
+        clmRef : "Réf. Réf No", 
     },
 }
 export default slsRpt_02_001

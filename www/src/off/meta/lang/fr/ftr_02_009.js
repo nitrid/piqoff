@@ -1,7 +1,7 @@
 // "Fire ALış Faturası"
 const  ftr_02_009 =
 {
-    txtRefRefno : "Réf.-Réf no:",
+    txtRefRefno : "Réf. Réf No",
     cmbDepot: "Réserve",
     txtCustomerCode : "Code du Client",
     txtCustomerName : "Nom Client",
@@ -389,7 +389,7 @@ const  ftr_02_009 =
     pg_proformaGrid : 
     {
         title : "Sélection Proforma",   
-        clmReferans : "Réf.-Réf No:",   
+        clmReferans : "Réf. Réf No",   
         clmCode : "Code",   
         clmName : "Nom",   
         clmQuantity : "Quantité",   

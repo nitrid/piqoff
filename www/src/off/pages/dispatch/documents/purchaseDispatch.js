@@ -1520,9 +1520,6 @@ export default class purchaseDispatch extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPurcDispatch"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRef")} />
-                                                </Validator>  
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">

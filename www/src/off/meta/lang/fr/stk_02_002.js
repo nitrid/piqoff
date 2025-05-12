@@ -1,7 +1,7 @@
 // Depo/Mağaza Arası Sevk
 const stk_02_002 = 
 {
-    txtRefRefno : "Réf.-Réf no",
+    txtRefRefno : "Réf. Réf No",
     validRef : "Ligne-Colonne Ne Peut Pas Être Laissée Vide",
     cmbOutDepot: "Sortie Dépôt",
     cmbInDepot: "Entrée Dépot",
