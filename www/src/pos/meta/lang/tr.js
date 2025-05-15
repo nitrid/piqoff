@@ -216,6 +216,13 @@ export const langTr =
         btn02 : "Hayır",
         infoTotal : "Satış tutarı 1000 €'den büyük, Devam etmek istiyor musunuz?"
     },
+    msgSaleTicket:
+    {
+        title : "Bilgi",
+        btn01 : "Evet",
+        btn02 : "Hayır",
+        infoTotal : "Ticket Kart Rest. tutarı 25 €'den büyük, Devam etmek istiyor musunuz?"
+    },
     msgTicketForNotCustomer: 
     {
         title : "Uyarı",

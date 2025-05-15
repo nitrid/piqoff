@@ -98,89 +98,89 @@ export default class collectionReport extends React.PureComponent
                                     </NdDatePicker>
                                 </Item>
                                 <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                onEnterKey={(async()=>
+                                    onEnterKey={(async()=>
                                     {
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.show()
                                         this.pg_txtCustomerCode.onClick = (data) =>
                                         { 
                                             if(data.length > 0)
+                                        { 
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                this.txtCustomerCode.setState({value:data[0].TITLE})
                                                     this.txtCustomerCode.CODE = data[0].CODE
                                                 }
                                             }
                                         }
                                     }).bind(this)}
-                                button=
-                                {
-                                    [
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtCustomerCode.show()
+                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                        this.txtCustomerCode.CODE = data[0].CODE
+                                                    }
+                                                }
+                                                }
+                                            },
+                                        ]
+                                    }
+                                    >
+                                    </NdTextBox>
+                                    {/*CARI SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    button=
+                                    {
                                         {
                                             id:'01',
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                this.pg_txtCustomerCode.show()
-                                                this.pg_txtCustomerCode.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                        this.txtCustomerCode.CODE = data[0].CODE
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    ]
-                                }
-                                >
-                                </NdTextBox>
-                                {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtCustomerCode.title")} //
-                                search={true}
-                                data = 
-                                {{
-                                    source:
-                                    {
-                                        select:
-                                        {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
-                                    }
-                                }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
                                             console.log(11)
                                         }
+                                        }
                                     }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                     
-                                </NdPopGrid>
-                                </Item> 
+                                    </NdPopGrid>
+                                </Item>
                             </Form>
                         </div>
                     </div>

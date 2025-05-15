@@ -1433,6 +1433,12 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_003'),
                             path: 'pos/report/posSalesReport'
                         },
+                        //Kullanici bazli Pos Satış Raporu
+                        {
+                            id: 'pos_02_020',
+                            text: e.t('menuOff.pos_02_020'),
+                            path: 'pos/report/userBasedPosSalesReport'
+                        },
                         //Pos Satış Detay Raporu
                         {
                             id: 'pos_02_004',

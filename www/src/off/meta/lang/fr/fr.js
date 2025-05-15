@@ -402,6 +402,7 @@ export const langFr =
         pos_02_017 : "Rapport de ventes par intervalle horaire",
         pos_02_018 : "Rapport des Remises",
         pos_02_019 : "Rapport de ventes par groupe de produits par mois",
+        pos_02_020 : "Rapport de ventes par utilisateur",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",

@@ -1567,6 +1567,7 @@ export default class posDoc extends React.PureComponent
                 
                 this.txtPopTotal.value = tmpPayRest
                 this.txtPopCardPay.value = tmpPayRest
+                this.txtPopCardTicketPay.value = tmpPayRest
                 this.txtPopCashPay.value = tmpPayRest
                 
                 this.payChange.value = tmpPayChange
@@ -2303,11 +2304,14 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
                     this.txtPopCardPay.newStart = true;
                     this.txtPopCardPay.focus()
+                    this.txtPopCardTicketPay.newStart = true;
+                    this.txtPopCardTicketPay.focus()
                     return
                 }
 
                 this.popCardPay.hide()
                 this.popCardTicketPay.hide()
+
                 let tmpPayCard = await this.payCard(pAmount)
 
                 if(typeof tmpPayCard != 'undefined')
@@ -5994,8 +5998,26 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopCardTicketPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {
+                                    if (this.txtPopCardTicketPay.value > 25)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSaleTicketInfo',showTitle:true,title:this.lang.t("msgSaleTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgSaleTicket.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgSaleTicket.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaleTicket.infoTotal")}</div>)
+                                        }
+                                        let tmpConfResult = await dialog(tmpConfObj);
+                                        if(tmpConfResult == 'btn01')
+                                        {
+                                            this.payAdd(9,25)
+                                        }
+                                        else
+                                        {
+                                            return
+                                        }
+                                    }
                                     this.payAdd(9,this.txtPopCardTicketPay.value)
                                     let tmpTotalGrand = this.posObj.dt()[0].TOTAL
                                     let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))

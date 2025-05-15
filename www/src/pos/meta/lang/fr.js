@@ -212,6 +212,13 @@ export const langFr =
         btn02 : "Non",
         infoTotal : "Le montant de la vente est supérieur à 1000 €, voulez-vous continuer ?"
     },
+    msgSaleTicket:
+    {
+        title : "Information",
+        btn01 : "Oui",
+        btn02 : "Non",
+        infoTotal : "Le montant du Ticket Restaurant est supérieur à 25 €, voulez-vous continuer ?"
+    },
     msgTicketForNotCustomer: 
     {
         title : "Attention",

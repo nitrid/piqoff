@@ -3,7 +3,7 @@ const pos_01_003 =
 {
     cmbFirm : "Nom de l'entreprise",
     btnSave :"Enregistrer",
-    txtDescriptionPlaceHolder : "Açıklamalarınızı satır satır ekleyebilirsiniz..", // BAK
+    txtDescriptionPlaceHolder : "Vous pouvez ajouter vos descriptions ligne par ligne..",
     msgSaveResult:
     {
         title: "Attention",
