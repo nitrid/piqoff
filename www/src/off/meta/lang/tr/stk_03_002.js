@@ -33,6 +33,13 @@ const stk_03_002 =
         txtSendMail : "Mail Gönder",
         btnSend : "Mail Gönder",
         
+    },
+    msgMailSendResult :
+    {
+        title : "Mail Gönder Sonucu",
+        msgSuccess : "Mail başarıyla gönderildi",
+        msgFailed : "Mail gönderimi sırasında bir hata oluştu",
+        btn01 : "Tamam",
     }
 }
 

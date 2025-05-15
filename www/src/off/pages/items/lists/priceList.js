@@ -304,14 +304,14 @@ export default class priceList extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,(SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN) AS PATH," + 
-                                                    "(SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM_PRICE_VW_01.ITEM_GUID AND TYPE = 0) AS IMAGE FROM ITEM_PRICE_VW_01 WHERE  LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND (CATALOG = @CATALOG OR @CATALOG = 0)" ,
-                                                    param:  ['LIST_NO:int','CATALOG:int','DESIGN:string|25'],
-                                                    value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
+                                                        "(SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM_PRICE_VW_01.ITEM_GUID AND TYPE = 0) AS IMAGE FROM ITEM_PRICE_VW_01 WHERE  LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND (CATALOG = @CATALOG OR @CATALOG = 0)" ,
+                                                        param:  ['LIST_NO:int','CATALOG:int','DESIGN:string|25'],
+                                                        value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    console.log('tmpData',tmpData)
+                                                    console.log("tmpDatXXXXXa",tmpData)
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -340,6 +340,7 @@ export default class priceList extends React.PureComponent
                                                         value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log("tmpData",tmpData)
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -415,62 +416,71 @@ export default class priceList extends React.PureComponent
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
                                             validationGroup={"frmMailsend"  + this.tabIndex}
                                             onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    let tmpQuery = 
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                    }
-                                                    App.instance.setState({isExecute:true})
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-                                                    {
-                                                        console.log(pResult)
+                                                        
+                                                        let tmpLines = []
                                                         App.instance.setState({isExecute:true})
-                                                        let tmpAttach = pResult.split('|')[1]
-                                                        let tmpHtml = this.htmlEditor.value
-                                                        if(this.htmlEditor.value.length == 0)
+                                                        let tmpQuery = 
                                                         {
-                                                            tmpHtml = ''
+                                                            query: "SELECT *,(SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN) AS PATH," + 
+                                                            "(SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM_PRICE_VW_01.ITEM_GUID AND TYPE = 0) AS IMAGE FROM ITEM_PRICE_VW_01 WHERE  LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND (CATALOG = @CATALOG OR @CATALOG = 0)" ,
+                                                            param:  ['LIST_NO:int','CATALOG:int','DESIGN:string|25'],
+                                                            value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                         }
-                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        console.log("tmpData2",tmpData)
+                                                        for (let x = 0; x < tmpData.result.recordset.length; x++) 
                                                         {
+                                                            tmpLines.push(tmpData.result.recordset[x])
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"commande "+ this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
-                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
                                                         {
-                                                            App.instance.setState({isExecute:false})
-                                                            let tmpConfObj1 =
-                                                            {
-                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
-                                                            }
-                                                            
-                                                            if((pResult1) == 0)
-                                                            {  
-                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                                await dialog(tmpConfObj1);
-                                                                this.htmlEditor.value = '',
-                                                                this.txtMailSubject.value = '',
-                                                                this.txtSendMail.value = ''
-                                                                this.popMailSend.hide();  
-
-                                                            }
-                                                            else
-                                                            {
-                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
-                                                                await dialog(tmpConfObj1);
-                                                                this.popMailSend.hide(); 
-                                                            }
+                                                          
+                                                                let tmpAttach = pResult.split('|')[1]
+                                                                let tmpHtml = this.htmlEditor.value
+                                                                if(this.htmlEditor.value.length == 0)
+                                                                {
+                                                                    tmpHtml = ''
+                                                                }
+                                                                if(pResult.split('|')[0] != 'ERR')
+                                                                {
+                                                                }
+                                                                let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"Rapport Facture"+".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+                                                                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                                {
+                                                                    App.instance.setState({isExecute:false})
+                                                                    let tmpConfObj1 =
+                                                                    {
+                                                                        id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                        button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                                    }
+                                                                    
+                                                                    if((pResult1) == 0)
+                                                                    {  
+                                                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                        await dialog(tmpConfObj1);
+                                                                        this.htmlEditor.value = '',
+                                                                        this.txtMailSubject.value = '',
+                                                                        this.txtSendMail.value = ''
+                                                                        this.popMailSend.hide();  
+        
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                        await dialog(tmpConfObj1);
+                                                                        this.popMailSend.hide(); 
+                                                                    }
+                                                                });
                                                         });
-                                                    });
-                                                }
-                                                    
-                                            }}/>
+                                                        App.instance.setState({isExecute:false})
+                                                      
+                                                    }
+                                                        
+                                                }}/>
+                                               
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}

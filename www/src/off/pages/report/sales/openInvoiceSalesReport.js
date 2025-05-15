@@ -11,7 +11,7 @@ import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -51,6 +51,19 @@ export default class openInvoiceSalesReport extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
 
     async componentDidMount()
@@ -128,6 +141,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
             </NdListBox>
         )
     }
+   
     async _btnGetirClick()
     {
         if(this.txtCustomerCode.value == '')
@@ -361,13 +375,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+
                         </div>
                         <div className="col-3">
                       
@@ -403,9 +411,12 @@ export default class openInvoiceSalesReport extends React.PureComponent
                             }}
                             loadPanel={{enabled:true}}
                             >
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDate")} visible={true} dataType="date" width={100}
                                 editorOptions={{value:null}}
@@ -480,7 +491,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailSend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

@@ -32,6 +32,13 @@ const stk_03_002 =
         txtMailSubject : "Sujet du mail",
         txtSendMail : "Envoyer un mail",
         btnSend : "Envoyer un mail",
+    },
+    msgMailSendResult :
+    {
+        title : "Résultat de l'envoi du mail",
+        msgSuccess : "Le mail a été envoyé avec succès",
+        msgFailed : "Une erreur est survenue lors de l'envoi du mail",
+        btn01 : "OK",
     }
 }
 export default stk_03_002

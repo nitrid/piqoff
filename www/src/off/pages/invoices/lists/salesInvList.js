@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -46,6 +46,19 @@ export default class salesInvList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
+    }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsIvcList',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsIvcList',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     componentDidMount()
     {
@@ -246,8 +259,6 @@ export default class salesInvList extends React.PureComponent
             // Ana satır
           
         }
-
-        console.log(content)
         // ANSI formatında dosya oluştur
         let encoder = new TextEncoder('windows-1252');
         let ansiContent = encoder.encode(content);
@@ -495,13 +506,6 @@ export default class salesInvList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             
@@ -535,10 +539,13 @@ export default class salesInvList extends React.PureComponent
                                 })
                             }}
                             >                            
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                               <Export fileName={this.lang.t("menuOff.ftr_01_002")} enabled={true} allowExportSelectedData={true} />
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsIvcList"}/>
+                                <ColumnChooser enabled={true} />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                <Export fileName={this.lang.t("menuOff.ftr_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsIvcList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsIvcList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="INPUT_CODE" caption={this.t("grdSlsIvcList.clmInputCode")} visible={false}/> 

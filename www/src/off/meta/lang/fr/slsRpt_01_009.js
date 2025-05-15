@@ -3,6 +3,8 @@ const slsRpt_01_009 =
     menu : "Facture de vente",
     btnGet: "Rechercher",
     txtCustomerCode : "Client", 
+    btnMailSend : "Envoyer un mail",
+    placeMailHtmlEditor : "Contenu du mail",
     grdListe : 
     {
         clmDate : "Date",
@@ -22,5 +24,27 @@ const slsRpt_01_009 =
         clmTypeName : "TYPE",
         clmGenusName : "GENRE"
     },
+    popMailSend :
+    {
+        title : "Envoyer un mail",
+        cmbMailAddress : "Adresse mail",
+        txtMailSubject : "Sujet du mail",
+        txtSendMail : "Envoyer un mail",
+        btnSend : "Envoyer un mail",
+    },
+    msgMailSendResult :
+    {
+        title : "Résultat de l'envoi du mail",
+        msgSuccess : "Le mail a été envoyé avec succès",
+        msgFailed : "Une erreur est survenue lors de l'envoi du mail",
+        btn01 : "OK",
+    },
+    popDesign :
+    {
+        title : "Sélection du design de l'étiquette",
+        design : "Design",
+        btnMailSend : "Envoyer un mail",
+    },
+
 }
 export default slsRpt_01_009
