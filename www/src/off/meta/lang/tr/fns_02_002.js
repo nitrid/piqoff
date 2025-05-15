@@ -67,7 +67,8 @@ const fns_02_002 =
         clmDescription : "Açıklama",
         clmInvoice : "Ödenen Fatura",
         clmFacDate : "Fatura Tarihi ",
-        clmDocDate : "Tarih"
+        clmDocDate : "Tarih",
+        clmMatchedDoc : "Ödemeyle Eşleşen Fatura"
     },
     msgDocValid:
     {

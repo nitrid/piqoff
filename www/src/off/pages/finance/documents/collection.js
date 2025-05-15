@@ -46,6 +46,7 @@ export default class collection extends React.PureComponent
         this._btnCloseInvoice = this._btnCloseInvoice.bind(this)
 
         this.docLocked = false;        
+
     }
     async componentDidMount()
     {
@@ -63,7 +64,6 @@ export default class collection extends React.PureComponent
     {
         this.docObj.clearAll()
         this.deptCreditMatchingObj.clearAll()
-
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
@@ -125,6 +125,7 @@ export default class collection extends React.PureComponent
         
         this.frmCollection.option('disabled',false)
         await this.grdDocPayments.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+        
         if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
         {
             this.numCash.readOnly = true
@@ -140,7 +141,7 @@ export default class collection extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID})
-
+        
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -847,7 +848,6 @@ export default class collection extends React.PureComponent
                                             this._btnCloseInvoice(e.data.GUID)
                                         }}
                                         onRowUpdating={async(e)=>{      
-                                            
                                             if(this.deptCreditMatchingObj.popUpList.length > 0)
                                             {
                                                 e.cancel = true
@@ -889,7 +889,23 @@ export default class collection extends React.PureComponent
                                                     }
                                                     
                                                     return
-                                                }}/>     
+                                                }}/>
+                                            <Column caption={this.t("grdDocPayments.clmMatchedDoc")} 
+                                                cellRender={(e) => 
+                                                {
+                                                    if(this.deptCreditMatchingObj.popUpList.length > 0)
+                                                    {
+                                                        let matchedDoc = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
+
+                                                        if (!e.data.MATCHED_DOC) {
+                                                            e.data.MATCHED_DOC = matchedDoc;
+                                                        }
+                                                        
+                                                        return e.data.MATCHED_DOC;
+                                                    }
+                                                    return "";
+                                                }}
+                                                allowEditing={false}/>
                                         </NdGrid>
                                         <ContextMenu
                                         dataSource={this.rightItems}

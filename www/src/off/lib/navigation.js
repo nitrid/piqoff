@@ -48,11 +48,6 @@ export default class Navigation extends React.PureComponent
             }
         }
         let tmpM = menu(App.instance.lang)
-        //SADECE ADMİNDE GÖKZÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
-        if(this.core.auth.data.ROLE != 'Administrator')
-        {
-            tmpM[6].items[2] = {}
-        }  
 
         this.selectItem = this.selectItem.bind(this);
         this.onTreeViewItemContextMenu = this.onTreeViewItemContextMenu.bind(this)

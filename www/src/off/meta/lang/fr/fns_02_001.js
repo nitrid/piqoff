@@ -1,7 +1,7 @@
 // Ödeme
 const fns_02_001 =
 {
-    txtRefRefno : "Réf.-Réf. No:",
+    txtRefRefno : "Réf.-Réf. No",
     menu  : "Paiement",
     cmbDepot: "Dépôt",
     cmbCashSafe : "Sélectionner Coffre",

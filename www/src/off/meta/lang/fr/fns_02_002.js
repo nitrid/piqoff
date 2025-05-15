@@ -1,7 +1,7 @@
 // Tahsilat
 const fns_02_002 = 
 {
-    txtRefRefno : "Réf.-Réf. No:",
+    txtRefRefno : "Réf.-Réf. No",
     menu : "Réglement",
     cmbDepot: "Dépôt",
     cmbCashSafe : "Sélectionner Coffre",
@@ -57,7 +57,8 @@ const fns_02_002 =
         clmDescription : "Motif",
         clmInvoice : "Facture payée",
         clmFacDate : "Date de facture ",
-        clmDocDate : "Date"
+        clmDocDate : "Date",
+        clmMatchedDoc : "Facture liée"
     },
     msgDocValid:
     {

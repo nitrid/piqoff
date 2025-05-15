@@ -1,15 +1,15 @@
 // "Tahsilat Listesi"
 const fns_01_002 =
 {
-    txtCustomerCode : "Fournisseur",
+    txtCustomerCode : "Client",
     txtTotal : "Total",
     validDesign : "Veuillez choisir le design",
     menu : "Encaissement",
     pg_txtCustomerCode : 
     {
-        title : "Choix Fournisseur",
+        title : "Choix Client",
         clmCode :  "Code Client",
-        clmTitle : "Nom Fournisseur",
+        clmTitle : "Nom Client",
         clmTypeName : "Type",
         clmGenusName : "Genre"
     },
@@ -19,10 +19,10 @@ const fns_01_002 =
     grdColList: 
     {
         clmRef: "Référence",
-        clmRefNo: "Ligne",
+        clmRefNo: "Réf.No",
         clmPrice: "Prix ",
         clmOutputCode : "Sélection Document",
-        clmOutputName : "Nom fournisseur",
+        clmOutputName : "Nom Client",
         clmDate: "Date",
         clmTotal : "Total" ,
         clmInputName :"Caisse/Banque",

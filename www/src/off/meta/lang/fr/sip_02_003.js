@@ -339,7 +339,7 @@ const sip_02_003 =
     pg_offersGrid : 
     {
         title : "Sélection d'offres",  
-        clmReferans : "Réf.-Réf. No:",  
+        clmReferans : "Réf.-Réf. No",  
         clmCode : "Code",  
         clmName : "Nom",  
         clmQuantity : "Quantité",  
