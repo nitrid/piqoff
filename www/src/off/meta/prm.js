@@ -48,7 +48,7 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Seri  İçin Cari Kodu Kullan"
+            CAPTION : "Seri İçin Cari Kodu Kullan"
         }
     },
     //Seri Numarası Rastgele Oluştursun
@@ -463,6 +463,22 @@ export const prm =
                 height:"400",
                 textHeight:"260"
             }
+        }
+    },
+    //Sabit Birim icin Koli Kullan
+    {
+        TYPE : 0,
+        ID :"fixedUnitForColis",
+        VALUE :false,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim icin Colis Kullan"
         }
     },
     //Terazi Fiyat Çarpanı

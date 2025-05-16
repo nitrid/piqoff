@@ -413,7 +413,7 @@ export default class salesOrder extends DocBase
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -454,8 +454,8 @@ export default class salesOrder extends DocBase
     
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),1) AS SUB_FACTOR, " +
-                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+                query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50','ID:string|20'],
                 value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
@@ -466,6 +466,11 @@ export default class salesOrder extends DocBase
                 this.docObj.docOrders.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docOrders.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docOrders.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+                if(this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+                {
+                    this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
+                    pQuantity = this.docObj.docOrders.dt()[pIndex].QUANTITY
+                }           
             }
     
             this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -1720,7 +1725,7 @@ export default class salesOrder extends DocBase
                                             <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={240} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOrder.clmBarcode")} width={100} allowEditing={false}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true ? false : true}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOrder.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOrder.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>

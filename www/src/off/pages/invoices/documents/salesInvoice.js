@@ -58,7 +58,6 @@ export default class salesInvoice extends DocBase
 
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm)
             setTimeout(() => {
                 this.getDoc(this.pagePrm.GUID,'',0)
             }, 1000);
@@ -493,7 +492,7 @@ export default class salesInvoice extends DocBase
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -539,12 +538,18 @@ export default class salesInvoice extends DocBase
                 value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            console.log("tmpGrpData.result.recordset[0], ",tmpGrpData.result.recordset[0])
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
                 this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+                if(this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+                {
+                    this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                    pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+                }
             }
             if(typeof pData.ITEM_TYPE == 'undefined')
             {
@@ -1994,7 +1999,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true ? false : true}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>

@@ -585,34 +585,30 @@ export default class salesDispatch extends DocBase
                 }
             }        
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-            if(pData.ITEM_TYPE == 0)
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
-                let tmpMergDt = await this.mergeItem(pData.CODE)
-                if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
-                    tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                    tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                    if(this.docObj.dt()[0].VAT_ZERO != 1)
-                    {
-                        tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-                    }
-                    else
-                    {
-                        tmpMergDt[0].VAT = 0
-                        tmpMergDt[0].VAT_RATE = 0
-                    }
-                    
-                    tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-                    tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-                    tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-                    this.calculateTotal()
-                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-                    //*****************************************/
-                    App.instance.setState({isExecute:false})
-                    resolve()
-                    return
+                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
                 }
+                else
+                {
+                    tmpMergDt[0].VAT = 0
+                    tmpMergDt[0].VAT_RATE = 0
+                }
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
+                App.instance.setState({isExecute:false})
+                resolve()
+                return
             }
             //******************************************************************************************************************/
             if(pIndex == null)
@@ -635,31 +631,39 @@ export default class salesDispatch extends DocBase
     
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-                param : ['GUID:string|50'],
-                value : [pData.GUID]
+                query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+                param : ['GUID:string|50','ID:string|20'],
+                value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            console.log("tmpGrpData.result.recordset[0], ",tmpGrpData.result.recordset[0])
+            console.log("pQuantity, ",pQuantity)
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
                 this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+                if(this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+                {
+                    this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                    pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+                }
             }
-            let tmpTypeQuery = 
+            if(typeof pData.ITEM_TYPE == 'undefined')
             {
-                query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
-                param : ['GUID:string|50'],
-                value : [pData.GUID]
-            }
-    
-            let tmpType = await this.core.sql.execute(tmpTypeQuery) 
-    
-            if(tmpType.result.recordset.length > 0)
-            {
-                pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                let tmpTypeQuery = 
+                {
+                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.GUID]
+                }
+                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                if(tmpType.result.recordset.length > 0)
+                {
+                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                }
             }
                         
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -672,7 +676,7 @@ export default class salesDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
-            this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
     
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
@@ -1818,7 +1822,7 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
-                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                            e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
@@ -1842,7 +1846,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         if(typeof e.data.PRICE != 'undefined')
                                         {
-                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.SUB_PRICE != 'undefined')
                                         {
@@ -1946,7 +1950,7 @@ export default class salesDispatch extends DocBase
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={240} />
                                         <Column dataField="ORIGIN" caption={this.t("grdSlsDispatch.clmOrigin")} width={60} allowEditing={true} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={100} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true ? false : true}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
