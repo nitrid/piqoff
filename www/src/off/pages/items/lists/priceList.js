@@ -311,7 +311,6 @@ export default class priceList extends React.PureComponent
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
-                                                    console.log("tmpDatXXXXXa",tmpData)
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -340,7 +339,6 @@ export default class priceList extends React.PureComponent
                                                         value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log("tmpData",tmpData)
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -430,7 +428,6 @@ export default class priceList extends React.PureComponent
                                                             value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                         }
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        console.log("tmpData2",tmpData)
                                                         for (let x = 0; x < tmpData.result.recordset.length; x++) 
                                                         {
                                                             tmpLines.push(tmpData.result.recordset[x])
