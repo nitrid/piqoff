@@ -618,7 +618,7 @@ export default class posItemsList extends React.PureComponent
                                     </div>
                                     <div className="col-4 p-0">
                                         <NdNumberBox id="popTxtUnderUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                        showSpinButtons={true} step={0.1} format={"##0.000"}
+                                        showSpinButtons={true} step={0.05} format={"##0.000"}
                                         dt={{id:"popTxtUnderUnit",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}/>
                                     </div>
                                 </div>
