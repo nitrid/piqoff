@@ -586,7 +586,7 @@ export class docCustomerCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
-                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000'))",
+                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE",
             param : ['DOC_GUID:string|50','DOC_TYPE:int','REF:string|25','REF_NO:int','INVOICE_GUID:string|50']
         }
         tmpDt.insertCmd = 

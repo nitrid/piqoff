@@ -142,6 +142,37 @@ export default class collection extends React.PureComponent
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID})
         
+        // Ödemelerle eşleşen fatura bilgilerini al
+        let tmpQuery = 
+        {
+            query : "SELECT " +
+                    "(SELECT REF FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF, " +
+                    "(SELECT REF_NO FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF_NO, " +
+                    "DC.GUID " +
+                    "FROM DOC_CUSTOMER AS DC " +
+                    "WHERE DC.DOC_GUID = @DOC_GUID",
+            param : ['DOC_GUID:string|50'],
+            value : [pGuid]
+        }
+        
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        
+        // Eşleşen belge bilgilerini inceliyoruz
+        if(tmpData.result.recordset.length > 0)
+        {
+            for(let i = 0; i < this.docObj.docCustomer.dt().length; i++)
+            {
+                let paymentRow = this.docObj.docCustomer.dt()[i];
+                let matchingDoc = tmpData.result.recordset.find(item => item.GUID === paymentRow.GUID);
+                
+                if(matchingDoc)
+                {
+                    // Satıra MATCHED_DOC özelliğini ekle
+                    paymentRow.MATCHED_DOC = matchingDoc.DOC_REF + "-" + matchingDoc.DOC_REF_NO;
+                }
+            }
+        }
+        
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -281,6 +312,11 @@ export default class collection extends React.PureComponent
                     }
                 )
                 await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
+                if(this.deptCreditMatchingObj.popUpList.length > 0 )
+                {
+                    let payingRow = this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1];
+                    payingRow.MATCHED_DOC = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
+                }
             }
             /******************************************************************************/
 
@@ -299,6 +335,11 @@ export default class collection extends React.PureComponent
                     }
                 )
                 await this.payPlanMatchingObj.matching(tmpPayDCPaidDt)
+                if(this.payPlanMatchingObj.popUpList.length > 0 && this.payPlanMatchingObj.popUpList[0].REF && this.payPlanMatchingObj.popUpList[0].REF_NO)
+                {
+                    let payingRow = this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1];
+                    payingRow.MATCHED_DOC = this.payPlanMatchingObj.popUpList[0].REF + "-" + this.payPlanMatchingObj.popUpList[0].REF_NO;
+                }
             }
             /******************************************************************************/
             this._calculateTotal()
@@ -903,6 +944,10 @@ export default class collection extends React.PureComponent
                                                         
                                                         return e.data.MATCHED_DOC;
                                                     }
+                                                    if(e.data.MATCHED_DOC) {
+                                                        return e.data.MATCHED_DOC;
+                                                    }
+                                                    
                                                     return "";
                                                 }}
                                                 allowEditing={false}/>
