@@ -1281,7 +1281,14 @@ export default class CustomerCard extends React.PureComponent
                                                         <NdCheckBox id="chkVatZero" parent={this} value={false} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}}
                                                         onValueChanged={(e) => {
                                                             // Değer manuel olarak değiştirildiğinde veriyi güncelle
-                                                            this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = e.value;
+                                                            if(this.sysParam.filter({ID:'sansTVAAuto'}).getValue() == true && this.cmbPopCountry.value !== 'FR')
+                                                            {
+                                                                this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                this.customerObj.dt('CUSTOMERS')[0].VAT_ZERO = e.value;
+                                                            }
                                                         }}></NdCheckBox>
                                                     </Item>
                                                </Form>
