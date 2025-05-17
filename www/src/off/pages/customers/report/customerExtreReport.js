@@ -369,6 +369,7 @@ export default class customerExtreReport extends React.PureComponent
                             loadPanel={{enabled:true}}
                             onRowDblClick={async(e)=>
                             {
+                                console.log("e.data",e.data)
                                 if(e.data.DOC_GUID != '00000000-0000-0000-0000-000000000000')
                                 {
                                     if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)    
@@ -406,6 +407,15 @@ export default class customerExtreReport extends React.PureComponent
                                             path: 'invoices/documents/rebateInvoice.js',
                                             pagePrm:{GUID:e.data.DOC_GUID}
                                         });
+                                    }
+                                    else if(e.data.TYPE == 0 && e.data.DOC_TYPE == 200 && e.data.REBATE == 0)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'fns_02_002',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'finance/documents/collection.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        }); 
                                     }
                                 }
                                
