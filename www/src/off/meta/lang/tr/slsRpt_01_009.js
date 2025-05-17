@@ -15,7 +15,8 @@ const slsRpt_01_009 =
         clmRefNo: "Sıra",
         clmRemainder : "Kalan",
         clmTotal : "Toplam",
-        clmRef : "Seri-Sıra"
+        clmRef : "Seri",
+        clmPaid : "Ödenen",
     },
     pg_txtCustomerCode : 
     {

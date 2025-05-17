@@ -26,6 +26,8 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import NdCollectionGrid, { groupCollection } from '../../../../core/react/devex/collectiongrid.js';
+import NdOpenInvoiceReport from '../../../../core/react/devex/openinvoicereport.js';
 
 export default class openInvoiceSalesReport extends React.PureComponent
 {
@@ -53,6 +55,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
         this._columnListBox = this._columnListBox.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.groupOpenInvoices = this.groupOpenInvoices.bind(this)
     }
     loadState() 
     {
@@ -159,8 +162,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                            "FROM ( " +
                            "SELECT " +
                            "TYPE, " +
-                           "DOC_DATE, " +
                            "DOC_TYPE, " +
+                           "DOC_DATE, " +
                            "INPUT_CODE, " +
                            "INPUT_NAME, " +
                            "DOC_REF, " +
@@ -181,41 +184,54 @@ export default class openInvoiceSalesReport extends React.PureComponent
             }
         }
 
-        await this.grdListe.dataRefresh(tmpSource)
-      
+        let tmpData = await this.core.sql.execute(tmpSource.source.select);
+        if(tmpData.result.recordset.length > 0) {
+            // NdOpenInvoiceReport bileşeni kendi içinde veriyi müşteri bazında grupluyor
+            this.openInvoiceGrid.setDataSource(tmpData.result.recordset);
+        } else {
+            this.openInvoiceGrid.setDataSource([]);
+        }
     }
 
-    async InvPrint()
-    {
-        let tmpLines = []
-        App.instance.setState({isExecute:true})
-        for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
-        {
-            let tmpQuery = 
-            {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value:  [this.grdListe.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
+    groupOpenInvoices(rows) {
+        let map = new Map();
+
+        for (let row of rows) {
+            let key = row.INPUT_NAME;
+            
+            if (!map.has(key)) {
+                map.set(key, {
+                    INVOICE_KEY: key, 
+                    INPUT_NAME: row.INPUT_NAME,
+                    REMAINDER: 0,
+                    DOC_TOTAL: 0,
+                    INVOICE_COUNT: 0,  
+                    INVOICES: []
+                });
             }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            for (let x = 0; x < tmpData.result.recordset.length; x++) 
-            {
-                tmpLines.push(tmpData.result.recordset[x])
-            }
+
+            let invoice = {
+                DOC_DATE: row.DOC_DATE,
+                DOC_GUID: row.DOC_GUID,
+                DOC_REF: row.DOC_REF,
+                DOC_REF_NO: row.DOC_REF_NO,
+                REMAINDER: row.REMAINDER,
+                DOC_TOTAL: row.DOC_TOTAL,
+                TYPE: row.TYPE,
+                DOC_TYPE: row.DOC_TYPE,
+                INPUT_NAME: row.INPUT_NAME
+            };
+
+            map.get(key).INVOICES.push(invoice);
+            
+            // Toplamları hesapla ve fatura sayısını artır
+            map.get(key).REMAINDER += Number(row.REMAINDER || 0);
+            map.get(key).DOC_TOTAL += Number(row.DOC_TOTAL || 0);
+            map.get(key).INVOICE_COUNT += 1;
         }
-       
-        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
-        {
-            if(pResult.split('|')[0] != 'ERR')
-            {
-                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                mywindow.onload = function() 
-                { 
-                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                } 
-            }
-        });
-        App.instance.setState({isExecute:false})
+
+        let result = Array.from(map.values());
+        return result;
     }
 
     render(){
@@ -226,13 +242,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                        onClick={async()=>
-                                        {
-                                            this.popDesign.show()
-                                        }}/>
-                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -389,288 +398,19 @@ export default class openInvoiceSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdListe" parent={this} 
-                            selection={{mode:"multiple"}} 
-                            showBorders={true}
-                            filterRow={{visible:false}} 
-                            headerFilter={{visible:false}}
-                            height={'690'} 
-                            width={'100%'}
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            allowColumnResizing={true}
-                            onRowDblClick={async(e)=>
-                            {
-                                App.instance.menuClick(
-                                {
-                                    id: 'ftr_02_002',
-                                    text: this.t('menu'),
-                                    path: 'invoices/documents/salesInvoice.js',
-                                    pagePrm:{GUID:e.data.DOC_GUID}
-                                })
-                            }}
-                            loadPanel={{enabled:true}}
-                            >
-                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
-                                <ColumnChooser enabled={true} />
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                <Scrolling mode="standart" />
-                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDate")} visible={true} dataType="date" width={100}
-                                editorOptions={{value:null}}
-                                cellRender={(e) => 
-                                {
-                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                    {
-                                        return e.text
-                                    }
-                                    
-                                    return
-                                }}/>
-                                <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmCode")} width={120} visible={true}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="DOC_REF" caption={this.t("grdListe.clmRef")} visible={true}/> 
-                                <Column dataField="DOC_REF_NO" caption={this.t("grdListe.clmRefNo")} width={120} visible={true}/> 
-                                <Column dataField="REMAINDER" caption={this.t("grdListe.clmRemainder")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
-                                <Column dataField="DOC_TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
-                                <Summary>
-                                    <TotalItem
-                                    column="REMAINDER"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                        
-                                       <TotalItem
-                                    column="DOC_TOTAL"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-
-                                </Summary> 
-                            </NdGrid>
+                            <NdOpenInvoiceReport
+                                id="openInvoiceGrid"
+                                parent={this}
+                                height={'650px'}
+                                currency="EUR"
+                                allowFiltering={true}
+                                allowSorting={true}
+                                allowExporting={true}
+                                showGroupPanel={false}
+                                onReady={(grid) => this.openInvoiceGrid = grid}
+                            />
                         </div>
-                    </div>
-                    <div>
-                        <NdPopUp parent={this} id={"popDesign"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDesign.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'180'}
-                        position={{of:'#root'}}
-                        deferRendering={true}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                    displayExpr="DESIGN_NAME"                       
-                                    valueExpr="TAG"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                this.InvPrint()
-                                                this.popDesign.hide();  
-
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnMailSend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {    
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    let tmpLines = []       
-                                                    for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
-                                                        {
-                                                            let tmpQuery = 
-                                                            {
-                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                value:  [this.grdListe.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
-                                                            }
-                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                            for (let x = 0; x < tmpData.result.recordset.length; x++) 
-                                                            {
-                                                                tmpLines.push(tmpData.result.recordset[x])
-                                                            }
-                                                        }
-                                                    if(tmpLines.length > 0)
-                                                    {
-                                                        await this.popMailSend.show()
-                                                        this.txtSendMail.value = tmpLines[0].EMAIL
-                                                    }
-                                                    else
-                                                    {
-                                                        this.popMailSend.show()
-                                                    }
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                    <div>
-                        <NdPopUp parent={this} id={"popMailSend"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popMailSend.title")}
-                        container={"#root"} 
-                        width={'600'}
-                        height={'600'}
-                        position={{of:'#root'}}
-                        deferRendering={true}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
-                                    displayExpr="MAIL_ADDRESS"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
-                                    >
-                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validMail")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
-                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                    maxLength={128}
-                                    >
-                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validMail")} />
-                                        </Validator> 
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
-                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={128}
-                                    >
-                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validMail")} />
-                                        </Validator> 
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
-                                    </NdHtmlEditor>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
-                                            validationGroup={"frmMailsend"  + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    
-                                                    let tmpLines = []
-                                                    App.instance.setState({isExecute:true})
-                                                    for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
-                                                    {
-                                                        let tmpQuery = 
-                                                        {
-                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                            value:  [this.grdListe.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
-                                                        }
-                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        for (let x = 0; x < tmpData.result.recordset.length; x++) 
-                                                        {
-                                                            tmpLines.push(tmpData.result.recordset[x])
-                                                        }
-                                                    }
-                                                
-                                                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
-                                                    {
-                                                      
-                                                            let tmpAttach = pResult.split('|')[1]
-                                                            let tmpHtml = this.htmlEditor.value
-                                                            if(this.htmlEditor.value.length == 0)
-                                                            {
-                                                                tmpHtml = ''
-                                                            }
-                                                            if(pResult.split('|')[0] != 'ERR')
-                                                            {
-                                                            }
-                                                            let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"Rapport Facture"+".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
-                                                            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
-                                                            {
-                                                                App.instance.setState({isExecute:false})
-                                                                let tmpConfObj1 =
-                                                                {
-                                                                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
-                                                                }
-                                                                
-                                                                if((pResult1) == 0)
-                                                                {  
-                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                                    await dialog(tmpConfObj1);
-                                                                    this.htmlEditor.value = '',
-                                                                    this.txtMailSubject.value = '',
-                                                                    this.txtSendMail.value = ''
-                                                                    this.popMailSend.hide();  
-    
-                                                                }
-                                                                else
-                                                                {
-                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
-                                                                    await dialog(tmpConfObj1);
-                                                                    this.popMailSend.hide(); 
-                                                                }
-                                                            });
-                                                    });
-                                                    App.instance.setState({isExecute:false})
-                                                  
-                                                }
-                                                    
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popMailSend.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>                
+                    </div>          
                 </ScrollView>
             </div>
         )

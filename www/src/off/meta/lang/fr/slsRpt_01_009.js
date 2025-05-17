@@ -14,7 +14,8 @@ const slsRpt_01_009 =
         clmRefNo: "Numéro de référence",
         clmRemainder : "Restant",
         clmTotal : "Total",
-        clmRef : "Série-Numéro"
+        clmRef : "Série",
+        clmPaid : "Payé",
     },
     pg_txtCustomerCode : 
     {

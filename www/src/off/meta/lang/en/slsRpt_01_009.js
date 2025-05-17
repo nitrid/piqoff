@@ -15,7 +15,8 @@ const slsRpt_01_009 =
         clmRefNo: "Sequence",
         clmRemainder : "Remainder",
         clmTotal : "Total",
-        clmRef : "Series-Sequence"
+        clmRef : "Series",
+        clmPaid : "Paid",
     },
     pg_txtCustomerCode : 
     {
