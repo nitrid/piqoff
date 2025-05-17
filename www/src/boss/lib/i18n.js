@@ -13,6 +13,10 @@ i18n.init(
         fr: 
         {
             translation: langFr
+        },
+        en: 
+        {
+            translation: langEn
         }
     },
 });

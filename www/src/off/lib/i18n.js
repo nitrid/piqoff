@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import {langTr} from '../meta/lang/tr/tr.js'
 import {langFr} from '../meta/lang/fr/fr.js'
 import {langDe} from '../meta/lang/de/de.js'
-
+import {langEn} from '../meta/lang/en/en.js'
 async function loadLocaleResources(language, page) 
 {
     try
@@ -27,6 +27,10 @@ i18n.init(
         de: 
         {
             translation: langDe
+        },
+        en: 
+        {
+            translation: langEn
         }
     },
 });

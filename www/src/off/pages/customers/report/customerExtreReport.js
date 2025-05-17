@@ -431,8 +431,14 @@ export default class customerExtreReport extends React.PureComponent
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={100}/> 
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} width={100}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
-                                <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
-                                <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
+                                <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} 
+                                cellRender={(e) => {
+                                    return e.value ? e.text : ' ';
+                                }}/> 
+                                <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}
+                                cellRender={(e) => {
+                                    return e.value ? e.text : ' ';
+                                }}/> 
                                 <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/>
                                 <Summary>
                                     <TotalItem
