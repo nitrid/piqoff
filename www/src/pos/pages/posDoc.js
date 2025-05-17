@@ -668,7 +668,7 @@ export default class posDoc extends React.PureComponent
             this.cheqDt.selectCmd.value = [tmpLastSaleResult.result.recordset[0].GUID] 
             this.cheqDt.selectCmd.local.values = [tmpLastSaleResult.result.recordset[0].GUID]
             await this.cheqDt.refresh();  
-            await this.getDoc(tmpLastSaleResult.result.recordset[0].GUID)                 
+            await this.getDoc(tmpLastSaleResult.result.recordset[0].GUID)     
             return
         }
     }
@@ -717,6 +717,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.dt()[0].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device')
             this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"), 
             this.posObj.dt()[0].STATUS = 0
+            this.posObj.dt()[0].CUSER = this.core.auth.data.CODE
             //PROMOSYON GETİR.
             await this.getPromoDb()
             this.promoApply()
