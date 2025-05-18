@@ -153,7 +153,7 @@ export default class NdOpenInvoiceReport extends Base {
           if (e.rowType === 'data' && e.data && e.data.DOC_GUID) {
             if (e.data.REBATE == 1) {
               App.instance.menuClick({
-                id: 'ftr_02_002',
+                id: 'ftr_02_003',
                 text: this.t("menu"),
                 path: 'invoices/documents/rebatePurcInvoice.js',
                 pagePrm: { GUID: e.data.DOC_GUID }
