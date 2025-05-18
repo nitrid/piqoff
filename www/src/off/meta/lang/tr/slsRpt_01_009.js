@@ -6,6 +6,7 @@ const slsRpt_01_009 =
     txtCustomerCode : "Müşteri", 
     btnMailSend : "Mail Gönder",
     placeMailHtmlEditor : "Mail İçeriği",
+    btnSendMail : "Mail Gönder",
     grdListe : 
     {
         clmDate : "Tarih",

@@ -53,6 +53,13 @@ export default class NdOpenInvoiceReport extends Base {
         font-weight: bold !important;
         font-size: 12px !important;
         padding: 8px 0 !important;
+        text-align: left !important;
+        margin-left: 0 !important;
+      }
+      
+      /* Grup başlığı hücresinin kendisi */
+      .dx-datagrid-group-row td {
+        padding-left: 0 !important;
       }
       
       /* Grup başlığı genişletildiğinde sonraki grup başlığı için boşluk */
@@ -81,10 +88,23 @@ export default class NdOpenInvoiceReport extends Base {
       }
     `;
     document.head.appendChild(style);
+    
+    // DataGrid referansı için
+    this.devGrid = null;
+
+    // Seçili satırları saklamak için
+    this.selectedRows = [];
   }
 
   setDataSource(data) {
     this.setState({ dataSource: data });
+  }
+
+  getSelectedData() {
+    if (this.devGrid && this.devGrid.instance) {
+      return this.devGrid.instance.getSelectedRowsData();
+    }
+    return [];
   }
 
   render() {
@@ -171,6 +191,11 @@ export default class NdOpenInvoiceReport extends Base {
         grouping={{
           autoExpandAll: false
         }}
+        selection={{
+          mode: 'multiple',
+          showCheckBoxesMode: 'always'
+        }}
+        ref={(ref) => { this.devGrid = ref; }}
       >
         <Sorting mode="multiple" />
         <FilterRow visible={true} />
@@ -182,13 +207,14 @@ export default class NdOpenInvoiceReport extends Base {
           dataField="DISPLAY_NAME" 
           caption={this.t("grdListe.clmCustomer")} 
           groupIndex={0}
+          alignment="left"
           groupCellTemplate={(cellElement, cellInfo) => {
             let groupName = cellInfo.text;
             let count = groupCounts[groupName];
             
-            // Özel HTML oluştur
+            // Özel HTML oluştur - sola yapışık stil
             let html = `
-              <div style="color: #003366; font-weight: bold; font-size: 12px; background-color: #e6e6e6; padding: 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="color: #003366; font-weight: bold; font-size: 12px; background-color: #e6e6e6; padding: 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; margin-left: 0;">
                 ${groupName} (${this.t('grdListe.clmCount')}: ${count})
               </div>
             `;
