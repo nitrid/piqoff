@@ -17,6 +17,11 @@ const slsRpt_01_009 =
         clmTotal : "Total",
         clmRef : "Series",
         clmPaid : "Paid",
+        clmRebate : "Invoice Type",
+        clmCount : "Invoice Count",
+        clmNormal : "Open Invoice",
+        clmRebateFact : "Rebate",
+        clmCustomer : "Customer",
     },
     pg_txtCustomerCode : 
     {

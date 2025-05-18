@@ -141,6 +141,31 @@ const  ftr_02_002 =
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient", 
     },
+    grdRebtInv: 
+    {
+        clmItemCode: "Code",
+        clmItemName: "Nom",
+        clmPrice: "Prix ",
+        clmQuantity : "Quantité",
+        clmDiscount : "Remise",
+        clmDiscountRate : "Remise %",
+        clmVat : "TVA",
+        clmAmount : "Total" ,
+        clmTotal : "Total Général",
+        clmTotalHt : "Total HT",
+        clmDispatch : "No Bon de Livraison",
+        clmCreateDate: "Date d'Enregistrement",
+        clmMargin :"Marge",
+        clmDescription :"Motif",
+        clmCuser :"Utilisateur",
+        clmMulticode : "FRN.Code",    
+        clmBarcode : "Code-barres",    
+        clmVatRate :"TVA %",
+        clmSubQuantity : "Qtt. Unitaire",
+        clmSubPrice : "Prix Unitaire",
+        clmSubFactor : "Coefficient",  
+
+    },
     grdInvoicePayment: 
     {
         clmInputName: "Caisse",

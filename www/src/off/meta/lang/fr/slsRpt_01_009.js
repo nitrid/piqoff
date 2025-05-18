@@ -11,11 +11,16 @@ const slsRpt_01_009 =
         clmCode: "Code",
         clmName : "Nom",           
         clmAmount : "Montant",
-        clmRefNo: "Numéro de référence",
+        clmRefNo: "Nu. de référence",
         clmRemainder : "Restant",
         clmTotal : "Total",
-        clmRef : "Série",
+        clmRef : "Référence",
         clmPaid : "Payé",
+        clmRebate : "Facture Ouverte/Retour",
+        clmCount : "Nombre de factures",
+        clmNormal : "Facture Ouverte",
+        clmRebateFact : "Retour",
+        clmCustomer : "Client",
     },
     pg_txtCustomerCode : 
     {

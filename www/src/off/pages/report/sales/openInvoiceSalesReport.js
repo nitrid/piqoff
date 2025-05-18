@@ -1,32 +1,16 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
-
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdCollectionGrid, { groupCollection } from '../../../../core/react/devex/collectiongrid.js';
 import NdOpenInvoiceReport from '../../../../core/react/devex/openinvoicereport.js';
 
 export default class openInvoiceSalesReport extends React.PureComponent
@@ -36,7 +20,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
         super(props)
         this.state = 
         {
-            columnListValue : ['DOC_DATE','INPUT_CODE','INPUT_NAME','DOC_REF','DOC_REF_NO','REMAINDER','DOC_TOTAL']
+            columnListValue : ['DOC_DATE','INPUT_CODE','INPUT_NAME','DOC_REF','DOC_REF_NO','REMAINDER','DOC_TOTAL','REBATE']
         }
         
         this.core = App.instance.core;
@@ -49,6 +33,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
             {CODE : "DOC_REF_NO",NAME : this.t("grdListe.clmRefNo")},
             {CODE : "REMAINDER",NAME : this.t("grdListe.clmRemainder")},
             {CODE : "DOC_TOTAL",NAME : this.t("grdListe.clmTotal")},
+            {CODE : "REBATE",NAME : this.t("grdListe.clmRebate")},
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -110,6 +95,10 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 {
                     this.groupList.push('DOC_TOTAL')
                 }
+                if(typeof e.value.find(x => x == 'REBATE') != 'undefined')
+                {
+                    this.groupList.push('REBATE')
+                }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
                 {
@@ -147,49 +136,121 @@ export default class openInvoiceSalesReport extends React.PureComponent
    
     async _btnGetirClick()
     {
-        if(this.txtCustomerCode.value == '')
-        {
-            this.txtCustomerCode.CODE = ''
-        }
-        let tmpSource =
-        {
-            source : 
+        try {
+            if(this.txtCustomerCode.value == '')
             {
-                groupBy : this.groupList,
-                select: 
+                this.txtCustomerCode.GUID = ''
+                let tmpSource =
                 {
-                    query: "SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER " + 
-                           "FROM ( " +
-                           "SELECT " +
-                           "TYPE, " +
-                           "DOC_TYPE, " +
-                           "DOC_DATE, " +
-                           "INPUT_CODE, " +
-                           "INPUT_NAME, " +
-                           "DOC_REF, " +
-                           "DOC_REF_NO, " +
-                           "DOC_GUID ," +
-                           "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  // Faturanın toplamı
-                           "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + // Ödeme ve iadelerin toplamı
-                           " FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                           " WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
-                           " AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                           " GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID " +
-                           ") AS TMP " +
-                           "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
-                    param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
-                },
-                sql : this.core.sql
+                    source : 
+                    {
+                        groupBy : this.groupList,
+                        select: 
+                        {
+                            query: "SELECT *, " +
+                                   "CASE WHEN REBATE = 0 THEN ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) " +
+                                   "     ELSE ROUND((PAYING_AMOUNT - DOC_TOTAL), 2) END AS REMAINDER " + 
+                                   "FROM ( " +
+                                   "SELECT " +
+                                   "TYPE, " +
+                                   "DOC_TYPE, " +
+                                   "DOC_DATE, " +
+                                   "INPUT_CODE, " +
+                                   "CASE WHEN TYPE = 1 AND REBATE = 0 THEN INPUT_NAME ELSE OUTPUT_NAME END AS INPUT_NAME, " +
+                                   "DOC_REF, " +
+                                   "DOC_REF_NO, " +
+                                   "DOC_GUID ," +
+                                   "REBATE, " +
+                                   "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  
+                                   "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + 
+                                   " FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                                   " WHERE ((TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0) OR (TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 1)) " +
+                                   " AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                   " GROUP BY DOC_TYPE, TYPE, DOC_DATE, " +
+                                   "CASE WHEN TYPE = 1 AND REBATE = 0 THEN INPUT_NAME ELSE OUTPUT_NAME END, " +
+                                   "DOC_REF_NO, DOC_REF, INPUT_CODE, DOC_GUID, REBATE " +
+                                   ") AS TMP " +
+                                   "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",
+                            param : ['FIRST_DATE:date','LAST_DATE:date'],
+                            value : [this.dtDate.startDate,this.dtDate.endDate],
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                
+                let tmpData = await this.core.sql.execute(tmpSource.source.select);
+                console.log("Sorgu sonucu:", tmpData);
+                
+                if(tmpData && tmpData.result && tmpData.result.recordset && tmpData.result.recordset.length > 0) {
+                    this.openInvoiceGrid.setDataSource(tmpData.result.recordset);
+                } else {
+                    this.openInvoiceGrid.setDataSource([]);
+                }
+                return;
             }
-        }
-
-        let tmpData = await this.core.sql.execute(tmpSource.source.select);
-        if(tmpData.result.recordset.length > 0) {
-            // NdOpenInvoiceReport bileşeni kendi içinde veriyi müşteri bazında grupluyor
-            this.openInvoiceGrid.setDataSource(tmpData.result.recordset);
-        } else {
+            
+            console.log('this.txtCustomerCode.GUID', this.txtCustomerCode.GUID)
+            
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select: 
+                    {
+                        query: "SELECT *, " +
+                               "CASE WHEN REBATE = 0 THEN ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) " +
+                               "     ELSE ROUND((PAYING_AMOUNT - DOC_TOTAL), 2) END AS REMAINDER " + 
+                               "FROM ( " +
+                               "SELECT " +
+                               "TYPE, " +
+                               "DOC_TYPE, " +
+                               "DOC_DATE, " +
+                               "INPUT_CODE, " +
+                               "CASE WHEN TYPE = 1 AND REBATE = 0 THEN INPUT_NAME ELSE OUTPUT_NAME END AS INPUT_NAME, " +
+                               "DOC_REF, " +
+                               "DOC_REF_NO, " +
+                               "DOC_GUID ," +
+                               "REBATE, " +
+                               "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  
+                               "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + 
+                               " FROM DEPT_CREDIT_MATCHING_VW_03 " +
+                               " WHERE ((TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND INPUT = @INPUT) " +
+                               "     OR (TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 1 AND OUTPUT = @INPUT)) " +
+                               " AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                               " GROUP BY DOC_TYPE, TYPE, DOC_DATE, " +
+                               "CASE WHEN TYPE = 1 AND REBATE = 0 THEN INPUT_NAME ELSE OUTPUT_NAME END, " +
+                               "DOC_REF_NO, DOC_REF, INPUT_CODE, DOC_GUID, REBATE " +
+                               ") AS TMP " +
+                               "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",
+                        param : ['FIRST_DATE:date','LAST_DATE:date','INPUT:string|36'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.GUID],
+                    },
+                    sql : this.core.sql
+                }
+            }
+            
+            let tmpData = await this.core.sql.execute(tmpSource.source.select);
+            console.log("Sorgu sonucu:", tmpData);
+            
+            if(tmpData && tmpData.result && tmpData.result.recordset && tmpData.result.recordset.length > 0) {
+                this.openInvoiceGrid.setDataSource(tmpData.result.recordset);
+            } else {
+                this.openInvoiceGrid.setDataSource([]);
+            }
+        } catch (error) {
+            console.error("Sorgu hatası:", error);
             this.openInvoiceGrid.setDataSource([]);
+            await dialog({
+                id: 'msgError',
+                showTitle: true,
+                title: this.t("msgError.title"),
+                showCloseButton: true,
+                width: '500px',
+                height: '200px',
+                button: [{id: "btn01", caption: this.t("msgError.btn01"), location: 'after'}],
+                content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgError.msg") + ": " + error.message}</div>)
+            });
         }
     }
 
@@ -197,12 +258,18 @@ export default class openInvoiceSalesReport extends React.PureComponent
         let map = new Map();
 
         for (let row of rows) {
-            let key = row.INPUT_NAME;
+            // Normal satışlar için INPUT_NAME, iadeler için OUTPUT_NAME kullan
+            let key = (row.TYPE == 1 && row.REBATE == 0) ? row.INPUT_NAME : row.OUTPUT_NAME;
+            
+            // Eğer key undefined ise, diğer alanı kullan
+            if (!key) {
+                key = (row.TYPE == 1 && row.REBATE == 0) ? row.OUTPUT_NAME : row.INPUT_NAME;
+            }
             
             if (!map.has(key)) {
                 map.set(key, {
                     INVOICE_KEY: key, 
-                    INPUT_NAME: row.INPUT_NAME,
+                    INPUT_NAME: key, // Burada artık key kullanıyoruz
                     REMAINDER: 0,
                     DOC_TOTAL: 0,
                     INVOICE_COUNT: 0,  
@@ -219,14 +286,23 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 DOC_TOTAL: row.DOC_TOTAL,
                 TYPE: row.TYPE,
                 DOC_TYPE: row.DOC_TYPE,
-                INPUT_NAME: row.INPUT_NAME
+                INPUT_NAME: (row.TYPE == 1 && row.REBATE == 0) ? row.INPUT_NAME : row.OUTPUT_NAME,
+                OUTPUT_NAME: row.OUTPUT_NAME,
+                REBATE: row.REBATE
             };
 
             map.get(key).INVOICES.push(invoice);
             
             // Toplamları hesapla ve fatura sayısını artır
-            map.get(key).REMAINDER += Number(row.REMAINDER || 0);
-            map.get(key).DOC_TOTAL += Number(row.DOC_TOTAL || 0);
+            if (row.REBATE == 0) {
+                // Normal fatura
+                map.get(key).REMAINDER += Number(row.REMAINDER || 0);
+                map.get(key).DOC_TOTAL += Number(row.DOC_TOTAL || 0);
+            } else {
+                // İade faturası
+                map.get(key).REMAINDER -= Number(row.REMAINDER || 0);
+                map.get(key).DOC_TOTAL -= Number(row.DOC_TOTAL || 0);
+            }
             map.get(key).INVOICE_COUNT += 1;
         }
 
@@ -291,7 +367,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             if(data.length > 0)
                                             {
                                                 this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                this.txtCustomerCode.CODE = data[0].CODE
+                                                this.txtCustomerCode.GUID = data[0].GUID
                                             }
                                         }
                                     }).bind(this)}
@@ -328,7 +404,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                 onClick:()=>
                                                 {
                                                     this.txtCustomerCode.setState({value:''})
-                                                    this.txtCustomerCode.CODE =''
+                                                    this.txtCustomerCode.GUID ='00000000-0000-0000-0000-000000000000'
                                                 }
                                             },
                                         ]

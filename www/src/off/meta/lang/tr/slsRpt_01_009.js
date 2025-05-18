@@ -17,6 +17,12 @@ const slsRpt_01_009 =
         clmTotal : "Toplam",
         clmRef : "Seri",
         clmPaid : "Ödenen",
+        clmRebate : "Fatura Tipi",
+        clmAll : "Tümü",
+        clmNormal : "Açık Fatura",
+        clmRebateFact : "İade",
+        clmCustomer : "Müşteri",
+        clmCount : "Fatura Sayısı",
     },
     pg_txtCustomerCode : 
     {
