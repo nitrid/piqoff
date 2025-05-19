@@ -5,7 +5,7 @@ const slsRpt_01_009 =
     txtCustomerCode : "Client", 
     btnMailSend : "Envoyer un mail",
     placeMailHtmlEditor : "Contenu du mail",
-    btnSendMail : "Envoyer un mail",
+    btnMailSend : "Envoyer un mail",
     grdListe : 
     {
         clmDate : "Date",

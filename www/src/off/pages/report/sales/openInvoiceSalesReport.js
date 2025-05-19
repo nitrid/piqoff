@@ -593,7 +593,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailSend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")
@@ -616,11 +616,17 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                     if(tmpLines.length > 0)
                                                     {
                                                         await this.popMailSend.show()
-                                                        this.txtSendMail.value = tmpLines[0].EMAIL
-                                                    }
-                                                    else
-                                                    {
-                                                        this.popMailSend.show()
+                                                        let tmpQuery = 
+                                                        {
+                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            param:  ['GUID:string|50'],
+                                                            value:  [tmpLines[0].INPUT]
+                                                        }
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {
+                                                            this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                        }
                                                     }
                                                 }
                                             }}/>
