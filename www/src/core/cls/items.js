@@ -3092,3 +3092,142 @@ export class itemLangCls
         });
     }
 }
+export class itemPartiLotCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LOT_CODE : '',
+            SKT :moment(new Date()).format("YYYY-MM-DD"),
+            PRDCT_DATE :moment(new Date()).format("YYYY-MM-DD"),
+            ITEM_NAME : '',  
+            ITEM : '00000000-0000-0000-0000-000000000000',  
+            ITEM_CODE : '',
+            MAIN_GRP : '',
+            MAIN_GRP_NAME : '',
+            SUB_GRP : '',
+            ORGINS : '',
+            ORGINS_NAME : '',
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_PARTI_LOT');     
+        tmpDt.selectCmd = 
+        {
+            query :"SELECT * FROM [dbo].[ITEM_PARTI_LOT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))  "+ 
+            " AND ((LOT_CODE =  @LOT_CODE) OR (@LOT_CODE = ''))",
+            param : ['GUID:string|50','LOT_CODE:string|15']
+        }  
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PARTI_LOT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@LOT_CODE = @PLOT_CODE, " + 
+                    "@SKT = @PSKT, " + 
+                    "@PRDCT_DATE = @PPRDCT_DATE" ,
+            param : ['PGUID:string|50','PCUSER:string|25','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date','PITEM:string|50'],
+            dataprm : ['GUID','CUSER','ITEM','LOT_CODE','SKT','PRDCT_DATE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PARTI_LOT_UPDATE] " + 
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@ITEM = @PITEM, " + 
+            "@LOT_CODE = @PLOT_CODE, " + 
+            "@SKT = @PSKT, " + 
+            "@PRDCT_DATE = @PPRDCT_DATE" ,
+            param : ['PGUID:string|50','PCUSER:string|25','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date','PITEM:string|50'],
+            dataprm : ['GUID','CUSER','ITEM','LOT_CODE','SKT','PRDCT_DATE']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PARTI_LOT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ",
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_PARTI_LOT') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_PARTI_LOT').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                LOT_CODE : ''
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.LOT_CODE = typeof arguments[0].LOT_CODE == 'undefined' ? '' : arguments[0].LOT_CODE;
+            }
+            this.ds.get('ITEM_PARTI_LOT').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('ITEM_PARTI_LOT').refresh();
+            resolve(this.ds.get('ITEM_PARTI_LOT'));    
+        });
+    }
+}

@@ -221,6 +221,16 @@ export const acs =
         ELEMENT : "txtCostPriceLy",
         APP : "OFF",
     },
+    //chkPartyLotLy
+    {
+        TYPE : 2,
+        ID :"chkPartyLotLy",
+        VALUE : {visible:true,editable:true,position:{x:8,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkPartyLotLy",
+        APP : "OFF",
+    },
     //txtTotalExtraCostLy
     {
         TYPE : 2,

@@ -17,6 +17,7 @@ const stk_01_001 =
     chkLineMerged: "Line Merged",
     chkTicketRest: "Ticket Rest.",
     chkInterfel : "Interfel",
+    chkPartyLot : "Lot Number",
     txtCostPrice: "Cost Price",
     txtSalePrice : "Sale Price",
     txtMinSalePrice: "Min. Sale Price",

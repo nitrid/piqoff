@@ -93,6 +93,11 @@ export const menu = (e) =>
                             id: 'stk_01_016',
                             text: e.t('menuOff.stk_01_016'),//'Ürün Recete Tanımları',
                             path: 'items/cards/productRecipeCard'
+                        },
+                        {
+                            id: 'stk_01_017',
+                            text: e.t('menuOff.stk_01_017'),//'Ürün Recete Tanımları',
+                            path: 'items/cards/partiLotCard'
                         }
                     ]
                 },
