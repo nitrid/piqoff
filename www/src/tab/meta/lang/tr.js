@@ -29,6 +29,8 @@ export const langTr =
     dtMount : "Ay",
     dtLastMount : "Ay Önce",
     dtYear : "Yıl",
+    dtFirstDate : "İlk Tarih",
+    dtLastDate : "Son Tarih",
     menu:
     {
         dashboard : "DASHBOARD",
@@ -59,10 +61,34 @@ export const langTr =
     },
     sale:  // "Satış"
     {
+        popCustomerExtreReport : "Müşteri Ekstresi",
+        btnGet : "Getir",
         loadMore : "Daha Fazla Göster",
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
         popFactNonSolde : "Ödenmemiş Fatura",
+        popCustomerExtre : 
+        {
+            title : "Müşteri Ekstresi",
+            customerExtreReport : "Müşteri Ekstresi",
+            btnGet : "Getir",
+        },
+        grdCustomerExtreReport : 
+        {
+            clmDocDate : "Tarih",
+            clmTypeName : "Adı",
+            clmRef : "Seri",
+            clmRefNo : "Sıra",
+            clmDebit : "Borç",
+            clmReceive : "Alacak",
+            clmBalance : "Bakiye",
+        },
+        msgNotCustomer : 
+        {
+            title : "Dikkat",
+            msg : "Lütfen bir müşteri seçiniz..!",
+            btn01 : "Tamam",
+        },
         msgPriceZeroUnit : 
         {
             title : "Dikkat",

@@ -523,6 +523,23 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                     // Seçilen satırları sakla
                                     this.selectedRows = e.selectedRowsData;
                                 }}
+                                onRowDblClick={async (e) => {
+                                      if (e.data.REBATE == 1) {
+                                        App.instance.menuClick({
+                                          id: 'ftr_02_003',
+                                          text: this.t("menu"),
+                                          path: 'invoices/documents/rebatePurcInvoice.js',
+                                          pagePrm: { GUID: e.data.DOC_GUID }
+                                        });
+                                      } else {
+                                        App.instance.menuClick({
+                                          id: 'ftr_02_002',
+                                          text: this.t("menu"),
+                                          path: 'invoices/documents/salesInvoice.js',
+                                          pagePrm: { GUID: e.data.DOC_GUID }
+                                        });
+                                      }
+                                  }}
                             />
                         </div>
                     </div>

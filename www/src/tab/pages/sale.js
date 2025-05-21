@@ -16,14 +16,13 @@ import NbPopUp from '../../core/react/bootstrap/popup';
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Summary,TotalItem,Export,ColumnChooser,StateStoring} from '../../core/react/devex/grid.js';
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdPopUp  from '../../core/react/devex/popup.js';
 import NdButton   from '../../core/react/devex/button.js';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NbItemView from '../tools/itemView.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
-
 import { docCls,docOrdersCls, docCustomerCls,docExtraCls }from '../../core/cls/doc.js';
 import { datatable } from '../../core/core.js';
 
@@ -41,12 +40,90 @@ export default class Sale extends React.PureComponent
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
         this.balance = new datatable();
+        this.customerExtreReportDt = new datatable();
+        this.txtFactureNonSoldeDt = new datatable();
+
+        this.state = 
+        {
+            columnListValue : ['DOC_DATE','TYPE_NAME','REF','REF_NO','DEBIT','RECEIVE','BALANCE']
+        }
+        
+        this.core = App.instance.core;
+        this.columnListData = 
+        [
+            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},                                   
+            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmTypeName")},
+            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
+            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
+            {CODE : "DEBIT",NAME : this.t("grdListe.clmDebit")},
+            {CODE : "RECEIVE",NAME : this.t("grdListe.clmReceive")},
+            {CODE : "BALANCE",NAME : this.t("grdListe.clmBalance")},
+        ]
+        this.groupList = [];
+
 
         this.balance.selectCmd = 
         {
             query : "SELECT ROUND(BALANCE,2) AS FACT_NON_SOLDE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @ACCOUNT_GUID",
             param : ['ACCOUNT_GUID:string|50'],
         }
+        this.customerExtreReportDt.selectCmd = 
+        {
+            query:  `SELECT
+                    CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,
+                    '' AS REF,
+                    0 AS REF_NO,
+                    '00000000-0000-0000-0000-000000000000' AS DOC_GUID,
+                    0 AS TYPE,
+                    0 AS DOC_TYPE,
+                    0 AS REBATE,
+                    0 AS PAY_TYPE,
+                    '' AS TYPE_NAME,
+                    CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,
+                    CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,
+                    (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE
+                    UNION ALL
+                    SELECT
+                    DOC_DATE,
+                    REF,
+                    REF_NO,
+                    DOC_GUID,
+                    TYPE,
+                    DOC_TYPE,
+                    REBATE,
+                    PAY_TYPE,
+                    (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,
+                    CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,
+                    CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE, 
+                    CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE 
+                    FROM DOC_CUSTOMER_VW_01
+                    WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)
+                    AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  ORDER BY DOC_DATE ASC`,
+            param: ['CUSTOMER:string|50', 'LANG:string|10', 'FIRST_DATE:date', 'LAST_DATE:date']
+        }
+        this.txtFactureNonSoldeDt.selectCmd = 
+        {
+            query: `SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER  
+                    FROM ( 
+                    SELECT 
+                    TYPE, 
+                    DOC_DATE, 
+                    DOC_TYPE, 
+                    INPUT_CODE, 
+                    INPUT_NAME, 
+                    DOC_REF, 
+                    DOC_REF_NO, 
+                    DOC_GUID, 
+                    MAX(DOC_TOTAL) AS DOC_TOTAL, 
+                    SUM(PAYING_AMOUNT) AS PAYING_AMOUNT
+                    FROM DEPT_CREDIT_MATCHING_VW_03 
+                    WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) 
+                    GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID 
+                    ) AS TMP 
+                    WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0`,  
+                param : ['INPUT_CODE:string|50'],
+        }
+
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -71,6 +148,7 @@ export default class Sale extends React.PureComponent
         this._customerSearch = this._customerSearch.bind(this)
         this.onValueChange = this.onValueChange.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this._btnGetirClick = this._btnGetirClick.bind(this)
         this.getItems = this.getItems.bind(this)
 
         this.docLocked = false;
@@ -86,12 +164,18 @@ export default class Sale extends React.PureComponent
         this.extraObj.clearAll()
         let tmpDoc = {...this.docObj.empty}
         this.docObj.addEmpty(tmpDoc);
-        this.docLines.clear()        
+        this.docLines.clear()
+        this.customerExtreReportDt.clear()
+        this.txtFactureNonSoldeDt.clear()
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
         this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
-      
+        this.dtFirstDate.value = moment(new Date());
+        this.dtLastDate.value = moment(new Date());
+
+        this.grdCustomerExtreReport.dataRefresh({source:this.customerExtreReportDt})
+        this.grdFactNonSolde.dataRefresh({source:this.txtFactureNonSoldeDt})
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
         this.docObj.dt()[0].PRICE_LIST_NO = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
@@ -130,24 +214,12 @@ export default class Sale extends React.PureComponent
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'MOST_SALES') != 'undefined')
                 {
-                    //this.mostSale = true
                     this.getItems()
                 }
                 else
                 {
-                    //this.mostSale = false
                     this.getItems()
                 }
-                // if(typeof e.value.find(x => x == 'PROMO_PRODUCT') != 'undefined')
-                // {
-                //     this.promoProduct = true
-                //     this.getItems()
-                // }
-                // else
-                // {
-                //     this.promoProduct = false
-                //     this.getItems()
-                // }
 
                 this.setState(
                 {
@@ -872,6 +944,24 @@ export default class Sale extends React.PureComponent
             this._calculateTotal()
         }
     }
+    async _btnGetirClick()
+    {
+        if(this.docObj.dt()[0].INPUT  != '')
+        {
+            this.customerExtreReportDt.selectCmd.value = [this.docObj.dt()[0].INPUT, localStorage.getItem('lang'), this.dtFirstDate.value, this.dtLastDate.value]
+            await this.customerExtreReportDt.refresh()
+        }
+        else 
+        {
+            let tmpConfObj =
+            {
+                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+        }
+    }
     render()
     {
         return(
@@ -891,6 +981,9 @@ export default class Sale extends React.PureComponent
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
                             onClick={async()=>
                             {
+                                this.docObj.dt()[0].INPUT = "";
+                                this.docObj.dt()[0].INPUT_NAME = "";
+                                this.docObj.dt()[0].INPUT_CODE = "";
                                 for (let i = 0; i < this.docLines.length; i++) 
                                 {
                                     this.docLines[i].DISCOUNT_RATE =  Number(this.docLines[i].QUANTITY * this.docLines[i].PRICE).rate2Num(this.docLines[i].DISCOUNT,3)
@@ -960,7 +1053,10 @@ export default class Sale extends React.PureComponent
                         </div> 
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()} listPriceLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'listPriceLock'}).getValue()} />
+                                <NbItemView id="itemView" parent={this} dt={this.docLines}  onValueChange={this.onValueChange} 
+                                            defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value} 
+                                            unitLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'unitLock'}).getValue()} 
+                                            listPriceLock={this.sysParam.filter({TYPE:0,USERS:this.user.CODE,ID:'listPriceLock'}).getValue()} />
                             </div>
                         </div>
                         <div className='row'>                            
@@ -1391,34 +1487,10 @@ export default class Sale extends React.PureComponent
                                                                                   icon:'more',
                                                                                   onClick:async ()  =>
                                                                                   {
-                                                                                        let tmpQuery = 
-                                                                                        {
-                                                                                            query: "SELECT *, ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) AS REMAINDER " + 
-                                                                                                    "FROM ( " +
-                                                                                                    "SELECT " +
-                                                                                                    "TYPE, " +
-                                                                                                    "DOC_DATE, " +
-                                                                                                    "DOC_TYPE, " +
-                                                                                                    "INPUT_CODE, " +
-                                                                                                    "INPUT_NAME, " +
-                                                                                                    "DOC_REF, " +
-                                                                                                    "DOC_REF_NO, " +
-                                                                                                    "DOC_GUID ," +
-                                                                                                    "MAX(DOC_TOTAL) AS DOC_TOTAL, " +  // Faturanın toplamı
-                                                                                                    "SUM(PAYING_AMOUNT) AS PAYING_AMOUNT  " + // Ödeme ve iadelerin toplamı
-                                                                                                    " FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                                                                                                    " WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) " +
-                                                                                                    " GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID " +
-                                                                                                    ") AS TMP " +
-                                                                                                    "WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0",  // Ödenmemiş bakiye kontrolü
-                                                                                                param : ['INPUT_CODE:string|50'],
-                                                                                                value : [this.docObj.dt()[0].INPUT_CODE],
-                                                                                        }
-                                                                                        let tmpFactNonSoldeData = await this.core.sql.execute(tmpQuery) 
-                                                                                        if(tmpFactNonSoldeData.result.recordset.length > 0)
                                                                                         {   
+                                                                                            this.txtFactureNonSoldeDt.selectCmd.value = [this.docObj.dt()[0].INPUT_CODE]
+                                                                                            await this.txtFactureNonSoldeDt.refresh()
                                                                                             await this.popFactNonSolde.show()
-                                                                                            await this.grdFactNonSolde.dataRefresh({source:tmpFactNonSoldeData.result.recordset})
                                                                                         }                                                                       
                                                                                   }
                                                                               },
@@ -1430,7 +1502,15 @@ export default class Sale extends React.PureComponent
                                                                     <Label text={this.t("popCart.txtAmount")} alignment="right" />
                                                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}/>
                                                                 </Item>
-                                                                <EmptyItem/>
+                                                                <Item>
+                                                                    <NbButton className="form-group btn btn-primary btn-block" style={{backgroundColor:'#154c79',width:'100%'}}
+                                                                            onClick={()=>
+                                                                            {
+                                                                                this.popCustomerExtreReport.show()
+                                                                            }}>
+                                                                            <i className="">{this.t("popCustomerExtre.customerExtreReport")}</i>
+                                                                    </NbButton>
+                                                                </Item>
                                                                 <Item>
                                                                     <Label text={this.t("popCart.txtDiscount")} alignment="right" />
                                                                     <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
@@ -2605,7 +2685,7 @@ export default class Sale extends React.PureComponent
                                 <Form colCount={1} height={'fit-content'}>
                                 <Item >
 
-                                <NdGrid parent={this} id={"grdFactNonSolde"} 
+                                <NdGrid parent={this} id={"grdFactNonSolde"}    
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -2669,6 +2749,125 @@ export default class Sale extends React.PureComponent
                                             <Column dataField="DOC_DATE" caption={this.t("grdFactNonSolde.clmDocDate")} defaultSortOrder="asc" dataType="date"  />
                                             <Column dataField="DOC_REF_NO" caption={this.t("grdFactNonSolde.clmRefNo")}  />
                                             <Column dataField="REMAINDER" caption={this.t("grdFactNonSolde.clmRemainder")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        </NdGrid>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                            <NdPopUp parent={this} id={"popCustomerExtreReport" } 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popCustomerExtreReport")}
+                            container={"#root"} 
+                            width={'600'}
+                            height={'650'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"} pickerType={"rollers"} />
+                                    </Item>
+                                    <Item>
+                                        <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"} />
+                                    </Item>
+                                    <Item>
+                                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick} stylingMode="contained" ></NdButton>
+                                    </Item>
+                                    <Item >
+                                        <NdGrid id="grdCustomerExtreReport" parent={this} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'100%'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        clearOnRefresh={true}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            this.setState({isExecute:true})
+                                            
+                                            let tmpQuery = 
+                                            {
+                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                value:  [e.data.DOC_GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                                            }
+                                            this.setState({isExecute:true})                                                        
+                                            let tmpData = await this.core.sql.execute(tmpQuery)  
+                                            
+                                            this.setState({isExecute:false})
+                                            this.popCustomerExtreReport.hide(); 
+                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                            {
+                                                if(pResult.split('|')[0] != 'ERR')
+                                                {     
+                                                    let base64ToUint8Array = (base64)=>
+                                                    {
+                                                        let raw = atob(base64);
+                                                        let uint8Array = new Uint8Array(raw.length);
+                                                        for (let i = 0; i < raw.length; i++) 
+                                                        {
+                                                            uint8Array[i] = raw.charCodeAt(i);
+                                                        }
+                                                        return uint8Array;
+                                                    }
+
+                                                    this.popPrintView.show()
+
+                                                    document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                    let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                    let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                    pdfViewerFrame.onload = (async function() 
+                                                    {
+                                                        await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                        if(App.instance.core.local.platform == 'cordova')
+                                                        {
+                                                            this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                        }
+                                                    }).bind(this)
+                                                    pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                }
+                                            });
+                                        }}
+                                        >
+                                            <Paging defaultPageSize={20} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                            <Column dataField="DOC_DATE" caption={this.t("grdCustomerExtreReport.clmDocDate")} visible={true} dataType="date" 
+                                            editorOptions={{value:null}}
+                                            cellRender={(e) => 
+                                            {
+                                                if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                {
+                                                    return e.text
+                                                }
+                                                
+                                                return
+                                            }}/>
+                                            <Column dataField="TYPE_NAME" caption={this.t("grdCustomerExtreReport.clmTypeName")} visible={true}/> 
+                                            <Column dataField="REF" caption={this.t("grdCustomerExtreReport.clmRef")} visible={true}/> 
+                                            <Column dataField="REF_NO" caption={this.t("grdCustomerExtreReport.clmRefNo")} visible={true}/> 
+                                            <Column dataField="DEBIT" caption={this.t("grdCustomerExtreReport.clmDebit")}  visible={true}
+                                            cellRender={(e) => {
+                                                return e.value ? e.text : ' ';
+                                            }}/> 
+                                            <Column dataField="RECEIVE" caption={this.t("grdCustomerExtreReport.clmReceive")} visible={true} 
+                                            cellRender={(e) => {
+                                                return e.value ? e.text : ' ';
+                                            }}/> 
+                                            <Column dataField="BALANCE" caption={this.t("grdCustomerExtreReport.clmBalance")} visible={true}/>
+                                            <Summary>
+                                                <TotalItem
+                                                column="DEBIT"
+                                                summaryType="sum" />
+                                                <TotalItem
+                                                column="RECEIVE"
+                                                summaryType="sum" />
+                                            </Summary> 
                                         </NdGrid>
                                     </Item>
                                 </Form>

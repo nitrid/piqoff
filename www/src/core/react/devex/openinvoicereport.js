@@ -13,6 +13,8 @@ export default class NdOpenInvoiceReport extends Base {
       height: props.height || '600px',
       groupBy: props.groupBy
     };
+    this._onRowClick = this._onRowClick.bind(this);
+    this._onRowDblClick = this._onRowDblClick.bind(this);  
 
     // CSS stillerini ekle
     let style = document.createElement('style');
@@ -106,6 +108,20 @@ export default class NdOpenInvoiceReport extends Base {
     }
     return [];
   }
+  _onRowClick(e)
+  {
+      if(typeof this.props.onRowClick != 'undefined')
+      {
+          this.props.onRowClick(e);
+      }
+  }
+  _onRowDblClick(e)
+  {
+      if(typeof this.props.onRowDblClick != 'undefined')
+      {
+          this.props.onRowDblClick(e);
+      }
+  }
 
   render() {
     let processedData = this.state.dataSource.map(item => {
@@ -169,25 +185,8 @@ export default class NdOpenInvoiceReport extends Base {
         columnAutoWidth={true}
         rowAlternationEnabled={true}
         height={this.state.height}
-        onRowDblClick={(e) => {
-          if (e.rowType === 'data' && e.data && e.data.DOC_GUID) {
-            if (e.data.REBATE == 1) {
-              App.instance.menuClick({
-                id: 'ftr_02_003',
-                text: this.t("menu"),
-                path: 'invoices/documents/rebatePurcInvoice.js',
-                pagePrm: { GUID: e.data.DOC_GUID }
-              });
-            } else {
-              App.instance.menuClick({
-                id: 'ftr_02_002',
-                text: this.t("menu"),
-                path: 'invoices/documents/salesInvoice.js',
-                pagePrm: { GUID: e.data.DOC_GUID }
-              });
-            }
-          }
-        }}
+        onRowClick={this._onRowClick}
+        onRowDblClick={this._onRowDblClick}
         grouping={{
           autoExpandAll: false
         }}

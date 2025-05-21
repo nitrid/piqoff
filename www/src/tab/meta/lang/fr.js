@@ -18,6 +18,7 @@ export const langFr =
     msgInvalidUser : "Nom d'utilisateur ou mot de passe incorrect !",
     chkRememberMe : "Je me souviens de moi",
     dtToday : "Aujourd'hui",
+    btnGet : "Rechercher",
     tdLastDay : "Hier",
     dtThisWeek : "Cette semaine",
     dtLastWeek : "Semaine dernière",
@@ -28,6 +29,9 @@ export const langFr =
     dtMount : "Mois",
     dtLastMount : "Mois dernier",
     dtYear : "Année",
+    dtFirstDate : "Premier Date",
+    dtLastDate : "Dernier Date",
+
     menu:
     {
         dashboard : "Tableau de bord",
@@ -57,7 +61,10 @@ export const langFr =
         btnNo : "Non",
     },
     sale:  // "Vente"
+    
     {
+        popCustomerExtreReport : "Extrait client",
+        btnGet : "Rechercher",
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
         popFactNonSolde : "Facture non solde",  
@@ -315,6 +322,28 @@ export const langFr =
             btn01: "OK",
             msg: "La quantité doit être en Colis !"
         },
+        popCustomerExtre : 
+        {
+            title : "Extrait client",
+            customerExtreReport : "Extrait du client",
+            btnGet : "Rechercher",
+        },
+        grdCustomerExtreReport : 
+        {
+            clmDocDate : "Date",
+            clmTypeName : "Nom",
+            clmRef : "Référence du document",
+            clmRefNo : "Numéro du document",
+            clmDebit : "Débit",
+            clmReceive : "Crédit",
+            clmBalance : "Solde",
+        },
+        msgNotCustomer : 
+        {
+            title : "Attention",
+            msg : "Veuillez sélectionner un client..!",
+            btn01 : "D'accord",
+        }
     },
     extract :
     {
@@ -770,6 +799,6 @@ export const langFr =
             clmPrice : "Prix",
             clmTotal : "Total",
         },
-    },
+    }
 
 }
