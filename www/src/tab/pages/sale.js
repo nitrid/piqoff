@@ -173,6 +173,7 @@ export default class Sale extends React.PureComponent
         this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
         this.dtFirstDate.value = moment(new Date());
         this.dtLastDate.value = moment(new Date());
+        this.cmbDesignList.value = ''
 
         this.grdCustomerExtreReport.dataRefresh({source:this.customerExtreReportDt})
         this.grdFactNonSolde.dataRefresh({source:this.txtFactureNonSoldeDt})
@@ -1680,7 +1681,6 @@ export default class Sale extends React.PureComponent
                                             <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor: '#154c79'}}
                                             onClick={(async()=>
                                             {
-                                                console.log(111)
                                                 this.docObj.dt()[0].INPUT = this.grdCustomer.getSelectedData()[0].GUID
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
@@ -2352,7 +2352,7 @@ export default class Sale extends React.PureComponent
                                         onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                        // data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                        //data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                         param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         >
@@ -2382,84 +2382,77 @@ export default class Sale extends React.PureComponent
                                         <div className='row'>
                                             <div className='col-6'>
                                                 <NdButton text={this.t("popDesign.btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
-                                                onClick={async (e)=>
-                                                {       
-                                                    if(e.validationGroup.validate().status == "valid")
-                                                    {
-                                                        this.setState({isExecute:true})
-                                                        let tmpQuery = {}
-                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
+                                                    onClick={async (e)=>
+                                                    {       
+                                                        if(e.validationGroup.validate().status == "valid")
                                                         {
-                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                            let tmpExtra = {...this.extraObj.empty}
-                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                            tmpExtra.DESCRIPTION = ''
-                                                            tmpExtra.TAG = 'PRINT'
-                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                            this.extraObj.addEmpty(tmpExtra);
-                                                            await this.extraObj.save()
+                                                            this.setState({isExecute:true})
+                                                            let tmpQuery = {}
+                                                            if(this.docObj.dt()[0].DOC_TYPE == 20)
+                                                            {
+                                                                let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                                let tmpExtra = {...this.extraObj.empty}
+                                                                tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                                tmpExtra.DESCRIPTION = ''
+                                                                tmpExtra.TAG = 'PRINT'
+                                                                tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                                tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                                this.extraObj.addEmpty(tmpExtra);
+                                                                await this.extraObj.save()
 
-                                                            tmpQuery = 
-                                                            {
-                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
-                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            tmpQuery = 
-                                                            {
-                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
-                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                            }
-                                                        }                                                       
-                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                                                                               
-                                                        //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
-                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
-                                                        {
-                                                            if(pResult.split('|')[0] != 'ERR')
-                                                            {     
-                                                                let base64ToUint8Array = (base64)=>
+                                                                tmpQuery = 
                                                                 {
-                                                                    let raw = atob(base64);
-                                                                    let uint8Array = new Uint8Array(raw.length);
-                                                                    for (let i = 0; i < raw.length; i++) 
-                                                                    {
-                                                                        uint8Array[i] = raw.charCodeAt(i);
-                                                                    }
-                                                                    return uint8Array;
+                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
+                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                                 }
-
-                                                                this.popPrintView.show()
-
-                                                                document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
-                                                                let pdfViewerFrame = document.getElementById("pdfFrame");
-                                                                let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
-
-                                                                pdfViewerFrame.onload = (async function() 
-                                                                {
-                                                                    await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
-                                                                    if(App.instance.core.local.platform == 'cordova')
-                                                                    {
-                                                                        this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
-                                                                    }
-                                                                }).bind(this)
-                                                                pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
                                                             }
-                                                        });
-                                                        this.popDesign.hide();  
-                                                    }
-                                                }}/>
-                                            </div>
-                                            <div className='col-6'>
-                                                <NdButton text={this.t("popDesign.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                                onClick={()=>
-                                                {
-                                                    this.popDesign.hide();  
-                                                }}/>
+                                                            else
+                                                            {
+                                                                tmpQuery = 
+                                                                {
+                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                }
+                                                            }                                                       
+                                                            let tmpData = await this.core.sql.execute(tmpQuery)                                                                                                               
+                                                            //console.log(tmpData.result.recordset) // BAK
+                                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                            {
+                                                                if(pResult.split('|')[0] != 'ERR')
+                                                                {     
+                                                                    let base64ToUint8Array = (base64)=>
+                                                                    {
+                                                                        let raw = atob(base64);
+                                                                        let uint8Array = new Uint8Array(raw.length);
+                                                                        for (let i = 0; i < raw.length; i++) 
+                                                                        {
+                                                                            uint8Array[i] = raw.charCodeAt(i);
+                                                                        }
+                                                                        return uint8Array;
+                                                                    }
+
+                                                                    this.popPrintView.show()
+
+                                                                    document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                                    let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                                    let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                                    pdfViewerFrame.onload = (async function() 
+                                                                    {
+                                                                        await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                        if(App.instance.core.local.platform == 'cordova')
+                                                                        {
+                                                                            this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                        }
+                                                                    }).bind(this)
+                                                                    pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                                }
+                                                            });
+                                                            this.popDesign.hide();  
+                                                        }
+                                                    }}/>
                                             </div>
                                         </div>
                                         <div className='row py-2'>
@@ -2470,6 +2463,8 @@ export default class Sale extends React.PureComponent
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     await this.popMailSend.show()
+                                                    await this.popFactNonSolde.hide()
+                                                    
                                                     let tmpQuery = 
                                                     {
                                                         query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
@@ -2478,14 +2473,21 @@ export default class Sale extends React.PureComponent
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.popDesign.hide();  
+                                                    { 
+                                                        this.popDesign.hide()
                                                         this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
                                                     }
                                                 }
                                             }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popDesign.hide();  
+                                                }}/>
+                                            </div>
                                         </div>
-                                    </div>
                                     </Item>
                                 </Form>
                             </NdPopUp>
@@ -2545,41 +2547,43 @@ export default class Sale extends React.PureComponent
                                                     if(e.validationGroup.validate().status == "valid")
                                                     {
                                                         this.setState({isExecute:true})
-                                                        let tmpQuery = {}
-                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
-                                                        {
-                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                            let tmpExtra = {...this.extraObj.empty}
-                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                            tmpExtra.DESCRIPTION = ''
-                                                            tmpExtra.TAG = 'PRINT'
-                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                            this.extraObj.addEmpty(tmpExtra);
-                                                            await this.extraObj.save()
-
-                                                            tmpQuery = 
+                                                        let tmpLines = []
+                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                        let tmpExtra = {...this.extraObj.empty}
+                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                        tmpExtra.DESCRIPTION = ''
+                                                        tmpExtra.TAG = 'PRINT'
+                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                        this.extraObj.addEmpty(tmpExtra);
+                                                        await this.extraObj.save()    
+                                                        for (let i = 0; i < this.grdFactNonSolde.getSelectedData().length; i++) 
                                                             {
-                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
-                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                let tmpQuery = 
+                                                                {
+                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                    value:  [this.grdFactNonSolde.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
+                                                                }
+                                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                                for (let x = 0; x < tmpData.result.recordset.length; x++) 
+                                                                {
+                                                                    tmpLines.push(tmpData.result.recordset[x])
+                                                                }
                                                             }
-                                                        }
-                                                        else
+                                                        if(tmpLines.length > 0)
                                                         {
-                                                            tmpQuery = 
+                                                            await this.popMailSend.show()
+                                                            let tmpQuery = 
                                                             {
-                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
-                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                                param:  ['GUID:string|50'],
+                                                                value:  [tmpLines[0].INPUT]
                                                             }
+                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
                                                         }
-                                                        
-                                                        this.setState({isExecute:true})                                                        
-                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
-                                                        this.setState({isExecute:false})                                                        
                                                         //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
-                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' +  tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) => 
                                                         {
                                                             this.setState({isExecute:true}) 
                                                             let tmpAttach = pResult.split('|')[1]
@@ -2682,10 +2686,23 @@ export default class Sale extends React.PureComponent
                             height={'650'}
                             position={{of:'#root'}}
                             >
-                                <Form colCount={1} height={'fit-content'}>
+                                <Form colCount={1} height={'fit-content'}>                                
+                                <Item>
+                                        <NdButton text={this.t("btnMailSend")} type="danger" width="100%" stylingMode="contained"
+                                                  onClick={async ()=>{
+                                                        let tmpQuery = 
+                                                        {   
+                                                            query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"
+                                                        }
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
+                                                        this.popDesign.show()
+                                                  }}  
+                                        ></NdButton>
+                                    </Item>
                                 <Item >
-
                                 <NdGrid parent={this} id={"grdFactNonSolde"}    
+                                        selection= {{mode : 'multiple'}} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -2701,7 +2718,7 @@ export default class Sale extends React.PureComponent
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                    value:  [e.data.DOC_GUID,'33',localStorage.getItem('lang').toUpperCase()]
+                                                    value:  [e.data.DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
                                                 }
                                                 this.setState({isExecute:true})                                                        
                                                 let tmpData = await this.core.sql.execute(tmpQuery)                                                         
@@ -2771,7 +2788,7 @@ export default class Sale extends React.PureComponent
                                         <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"} />
                                     </Item>
                                     <Item>
-                                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick} stylingMode="contained" ></NdButton>
+                                        <NdButton text={this.t("btnGet")} type="success" width="50%" onClick={this._btnGetirClick} stylingMode="contained" ></NdButton>
                                     </Item>
                                     <Item >
                                         <NdGrid id="grdCustomerExtreReport" parent={this} 
