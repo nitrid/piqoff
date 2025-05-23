@@ -3208,7 +3208,26 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ZIPCODE" caption={this.t("pg_transportSelect.clmZipCode")} width={150} />
                         <Column dataField="COUNTRY" caption={this.t("pg_transportSelect.clmCountry")} width={150} />
                     </NdPopGrid>
-                </div>            
+                </div>
+                <div>
+                    {/*PARTI LOT SECIMI POPUP */}
+                    <NdPopGrid id={"pg_partiLot"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_partiLot.title")} 
+                        search={true}
+                        deferRendering={true}
+                        showCloseButton={this.sysParam.filter({ID:'sansPartiLot',USERS:this.user.CODE}).getValue()}
+                        >
+                            <Column dataField="LOT_CODE" caption={this.lang.t("pg_partiLot.clmLotCode")} width={150} />
+                            {/* <Column dataField="QUANTITY" caption={this.lang.t("pg_partiLot.clmQuantity")} width={300} defaultSortOrder="asc" /> */}
+                            <Column dataField="SKT" caption={this.lang.t("pg_partiLot.clmSkt")} width={300} dataType={"date"} format={"dd/MM/yyyy"} defaultSortOrder="asc" />
+                    </NdPopGrid>
+                </div>           
             </div>
         )
     }

@@ -47,6 +47,22 @@ export default class barcodeCard extends React.PureComponent
         this.txtItemName.setState({value:''})
         this.txtBarcode.setState({value:''})
 
+        this.pg_txtPartiLot.on('showing',()=>
+            {
+                this.pg_txtPartiLot.setSource(
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE  UPPER(LOT_CODE) LIKE UPPER(@VAL) AND  ITEM = '" + this.itemBarcodeObj.dt()[0].ITEM_GUID + "'",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                })
+            })
+
     }
     async checkBarcode(pCode)
     {
@@ -72,6 +88,7 @@ export default class barcodeCard extends React.PureComponent
                     }
                     
                     await dialog(tmpConfObj);
+                    this.itemBarcodeObj.clearAll();
                     let tmpEmpty = {...this.itemBarcodeObj.empty};
                     tmpEmpty.BARCODE = ""
                     tmpEmpty.ITEM_GUID = tmpData.result.recordset[0].ITEM_GUID
@@ -238,6 +255,7 @@ export default class barcodeCard extends React.PureComponent
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            this.itemBarcodeObj.clearAll();
                                                             let tmpEmpty = {...this.itemBarcodeObj.empty};
                                                             tmpEmpty.BARCODE = this.txtBarcode.value
                                                             tmpEmpty.TYPE = this.cmbPopBarType.value
@@ -294,7 +312,6 @@ export default class barcodeCard extends React.PureComponent
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
                                    />
                                 </Item>
-                                
                                  {/* txtBarcode */}
                                  <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
@@ -375,6 +392,59 @@ export default class barcodeCard extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("pg_txtBarcode.clmItemCode")} width={650} defaultSortOrder="asc" />
                                         <Column dataField="ITEM_NAME" caption={this.t("pg_txtBarcode.clmItemName")} width={650} defaultSortOrder="asc" />
                                         
+                                    </NdPopGrid>
+                                </Item> 
+                                <EmptyItem/>
+                                {/* txtPartiLot */}
+                                <Item>                                    
+                                    <Label text={this.t("txtPartiLot")} alignment="right" />
+                                    <NdTextBox id="txtPartiLot" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"LOT_CODE"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtPartiLot.onClick = async(data) =>
+                                                    {
+                                                        this.txtPartiLot.value = data[0].LOT_CODE
+                                                        this.itemBarcodeObj.dt()[0].LOT_CODE = data[0].LOT_CODE
+                                                        this.itemBarcodeObj.dt()[0].PARTILOT_GUID = data[0].GUID
+                                                    }
+                                                    this.pg_txtPartiLot.setVal(this.txtPartiLot.value)
+                                                }
+                                            }
+                                        ]
+                                    }   
+                                    onEnterKey={()=>
+                                    {
+                                        this.pg_txtPartiLot.onClick = async(data) =>
+                                        {
+                                            this.txtPartiLot.value = data[0].LOT_CODE
+                                            this.itemBarcodeObj.dt()[0].LOT_CODE = data[0].LOT_CODE
+                                            this.itemBarcodeObj.dt()[0].PARTILOT_GUID = data[0].GUID
+                                        }
+                                        this.pg_txtPartiLot.setVal(this.txtPartiLot.value)
+                                    }}                          
+                                    >     
+                                    </NdTextBox>      
+                                    {/* PARTILOT SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtPartiLot"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_partiLot.title")} 
+                                    search={true}
+                                    deferRendering={true}
+                                        >
+                                            <Column dataField="LOT_CODE" caption={this.t("pg_partiLot.clmLotCode")} width={150} />
+                                            <Column dataField="SKT" caption={this.t("pg_partiLot.clmSkt")} width={300} dataType={"date" } defaultSortOrder="asc" /> 
                                     </NdPopGrid>
                                 </Item> 
                                 <EmptyItem/>

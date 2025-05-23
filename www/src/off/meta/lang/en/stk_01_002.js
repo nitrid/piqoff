@@ -11,6 +11,13 @@ const stk_01_002 =
     SubUnit : "This Barcode Will Be Defined as the Sub Unit",
     txtUnitTypeName :"Description",
     barcodePlace : "Please enter the barcode you want to add for the selected product..",
+    txtPartiLot : "Parti Lot Number",
+    pg_partiLot:
+    {
+        title: "Parti Lot Selection",
+        clmLotCode: "LOT CODE",
+        clmSkt: "EXP"
+    },
     pg_txtItem:
     {
         title: "Product Selection",

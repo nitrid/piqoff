@@ -36,5 +36,6 @@ const stk_01_017 =
         msgSuccess : "Enregistrement réussi",
         msgError : "Erreur lors de l'enregistrement",
     },
+    validCode: "Ce champ ne peut pas être vide",
 }
 export default stk_01_017

@@ -12,7 +12,7 @@ const stk_01_001 =
     cmbUnderUnit: "Alt Birim",
     txtItemName: "Ürün Adı",
     txtShortName: "Kısa Adı",
-    chkPartyLot : "Parti Lot",
+    chkPartiLot : "Parti Lot",
     chkActive: "Aktif",
     chkCaseWeighed: "Kasada Tartılsın",
     chkLineMerged: "Satış da Satırları Ayır",

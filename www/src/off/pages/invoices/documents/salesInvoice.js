@@ -150,9 +150,10 @@ export default class salesInvoice extends DocBase
                     {
                         select:
                         {   
-                            query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                            query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,ITEMS_VW_01.VAT,BARCODE,PARTILOT_GUID,LOT_CODE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
                                     "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_01.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                             param : ['BARCODE:string|50'],
                         },
                         sql:this.core.sql
@@ -451,7 +452,8 @@ export default class salesInvoice extends DocBase
         }
     }
     addItem(pData,pIndex,pQuantity,pPrice)
-    {
+    {   
+        console.log(pData)
         return new Promise(async resolve => 
         {
             this.txtRef.readOnly = true
@@ -532,13 +534,12 @@ export default class salesInvoice extends DocBase
             
             let tmpGrpQuery = 
             {
-                query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                query : "SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
                         "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50','ID:string|20'],
                 value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-            console.log("tmpGrpData.result.recordset[0], ",tmpGrpData.result.recordset[0])
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -617,6 +618,34 @@ export default class salesInvoice extends DocBase
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
+            }
+            if(typeof pData.PARTILOT_GUID != 'undefined')
+            {
+                this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
+                this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
+            }
+
+            if (tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                let tmpSource =
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                }
+                this.pg_partiLot.setSource(tmpSource)
+                this.pg_partiLot.onClick = async(data) =>
+                {
+                    this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
+                    this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
+                }
+                this.pg_partiLot.show()
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -1000,8 +1029,8 @@ export default class salesInvoice extends DocBase
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj);
                                                 }
                                             }
                                         }                              
@@ -1239,53 +1268,51 @@ export default class salesInvoice extends DocBase
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
+                                        
                                             if(data.length > 0)
                                             {
-                                                if(data.length > 0)
+                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
-                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
+                                                this.docObj.dt()[0].INPUT = data[0].GUID
+                                                this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
+                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
+                                                this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
+                                                this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+                                                this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                {
+                                                    this.txtRef.value = data[0].CODE
+                                                    this.docObj.docCustomer.dt()[0].REF = data[0].CODE
+                                                }
+                                                if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [ data[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {
+                                                    this.pg_adress.onClick = async(pdata) =>
                                                     {
-                                                        this.frmDocItems.option('disabled',false)
-                                                    }
-                                                    this.docObj.dt()[0].INPUT = data[0].GUID
-                                                    this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
-                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                    this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
-                                                    this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
-                                                    this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
-                                                    this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
-                                                    this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
-                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                    {
-                                                        this.txtRef.value = data[0].CODE
-                                                        this.docObj.docCustomer.dt()[0].REF = data[0].CODE
-                                                    }
-                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                    {
-                                                        this.frmDocItems.option('disabled',false)
-                                                    }
-                                                    let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpAdressData.result.recordset.length > 1)
-                                                    {
-                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        if(pdata.length > 0)
                                                         {
-                                                            if(pdata.length > 0)
-                                                            {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                                this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
-                                                            }
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                            this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                         }
-                                                        await this.pg_adress.show()
-                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                     }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
                                             }
                                         }
@@ -1511,7 +1538,9 @@ export default class salesInvoice extends DocBase
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                            query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE 
+                                                     FROM ITEMS_BARCODE_MULTICODE_VW_01 
+                                                     WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)) ORDER BY PARTILOT_GUID ASC` ,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
@@ -1972,9 +2001,6 @@ export default class salesInvoice extends DocBase
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                             e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
-
-                                           
-                                            console.log(e.key.DISCOUNT_RATE)
                                             this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>
@@ -2013,6 +2039,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false}/>
+                                            <Column dataField="LOT_CODE" caption={this.t("grdSlsInv.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu
@@ -2280,7 +2307,6 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                                                    console.log('{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}')
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',async(pResult) =>
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')

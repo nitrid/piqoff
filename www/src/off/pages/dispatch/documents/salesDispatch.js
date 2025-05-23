@@ -114,9 +114,9 @@ export default class salesDispatch extends DocBase
                 source:
                 {
                     select:
-                    {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                    {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_01.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -631,14 +631,12 @@ export default class salesDispatch extends DocBase
     
             let tmpGrpQuery = 
             {
-                query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                query : "SELECT ORGINS,UNIT_SHORT,PARTILOT, ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
                         "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50','ID:string|20'],
                 value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-            console.log("tmpGrpData.result.recordset[0], ",tmpGrpData.result.recordset[0])
-            console.log("pQuantity, ",pQuantity)
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -729,6 +727,33 @@ export default class salesDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
+            if(typeof pData.PARTILOT_GUID != 'undefined')
+            {
+                this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
+                this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
+            }
+            if (tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+                {
+                    let tmpSource =
+                    {
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }
+                    this.pg_partiLot.setSource(tmpSource)
+                    this.pg_partiLot.onClick = async(data) =>
+                    {
+                        this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
+                        this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
+                    }
+                    this.pg_partiLot.show()
+                }
             //BAĞLI ÜRÜN İÇİN YAPILDI ******************
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
@@ -1512,10 +1537,6 @@ export default class salesDispatch extends DocBase
                                                 icon:"fa-solid fa-barcode",
                                                 onClick:async(e)=>
                                                 {
-                                                    if(this.txtBarcode.value == '')
-                                                    {
-                                                        return
-                                                    }
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
                                                         let tmpConfObj =
@@ -1532,7 +1553,7 @@ export default class salesDispatch extends DocBase
 
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
-                                                        this.txtBarcode.value = ''
+                                                        this.txtBarcode.setState({value:""})
                                                         await this.core.util.waitUntil(100)
 
                                                         if(data.length > 0)
@@ -1554,10 +1575,6 @@ export default class salesDispatch extends DocBase
                                     }
                                     onEnterKey={(async(e)=>
                                     {
-                                        if(this.txtBarcode.value == '')
-                                        {
-                                            return
-                                        }
                                         if(this.cmbDepot.value == '')
                                         {
                                             let tmpConfObj =
@@ -1573,7 +1590,9 @@ export default class salesDispatch extends DocBase
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                            query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE 
+                                                     FROM ITEMS_BARCODE_MULTICODE_VW_01 
+                                                     WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)) ORDER BY PARTILOT_GUID ASC` ,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
@@ -1582,25 +1601,35 @@ export default class salesDispatch extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
+                                            await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
                                                 {
-
-                                                    this.msgQuantity.tmpData = data[i]
-                                                    await this.msgQuantity.show()
-                                                    await this.addItem(data[i],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
-                                                };
-                                                this.grid.devGrid.endUpdate()
-                                            }
+                                                    this.checkboxReset()
+    
+                                                    if(data.length > 0)
+                                                    {
+                                                        if(data.length == 1)
+                                                        {
+                                                            this.msgQuantity.tmpData = data[0]
+                                                            await this.msgQuantity.show();
+                                                            await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
+                                                            this.txtBarcode.focus()
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            this.grid.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                await this.addItem(data[i],null)
+                                                            }
+                                                            this.grid.devGrid.endUpdate()
+                                                        }
+                                                    }
+                                                }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
                                         this.txtBarcode.value = ''
@@ -1965,6 +1994,7 @@ export default class salesDispatch extends DocBase
                                         <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="ORDER_REF" caption={this.t("grdSlsDispatch.clmOrder")} width={100}  allowEditing={false}/>
                                         <Column dataField="INVOICE_REF" caption={this.t("grdSlsDispatch.clmInvoiceRef")} width={100} />
+                                        <Column dataField="LOT_CODE" caption={this.t("grdSlsDispatch.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsDispatch.clmDescription")} width={100} />
 
                                     </NdGrid>

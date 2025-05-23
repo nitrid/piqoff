@@ -11,6 +11,13 @@ const stk_01_002 =
     SubUnit : "Code barre saisie au contenu principal",
     txtUnitTypeName :"Motif",
     barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", 
+    txtPartiLot : "Numero de lot",
+    pg_partiLot:
+    {
+        title: "Sélection Lot",
+        clmLotCode: "Numero de lot",
+        clmSkt: "DLC"
+    },
     pg_txtItem:
     {
         title: "Sélection Produit",

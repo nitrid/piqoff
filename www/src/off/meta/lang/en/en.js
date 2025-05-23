@@ -642,5 +642,11 @@ export const langEn =
         title : "Attention",
         msg : "The amount you entered cannot be greater than the total invoice amount!",
         btn01 : "Ok"
+    },
+    pg_partiLot : 
+    {
+        title : "Parti Lot Selection",
+        clmLotCode : "Lot Code",
+        clmSkt : "EXP",
     }
 }

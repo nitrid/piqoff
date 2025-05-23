@@ -161,6 +161,13 @@ const  ftr_02_002 =
         clmSubQuantity : "Untereinheit",
         clmSubPrice : "Untereinheitspreis",
         clmSubFactor : "Faktor",
+        clmPartiLot : "Chargennummer",
+    },
+    pg_partiLot : 
+    {
+        title : "Chargenauswahl",
+        clmLotCode : "Chargennummer",
+        clmSkt : "DLC",
     },
     grdInvoicePayment: 
     {

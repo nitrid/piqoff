@@ -42,6 +42,7 @@ const stk_01_017 =
         msgSuccess : "Kaydetme işlemi başarıyla tamamlandı",
         msgError : "Kaydetme işlemi sırasında bir hata oluştu",
     },
+    validCode: "Bu alanı boş geçemezsiniz",
 
 }
 export default stk_01_017

@@ -598,5 +598,11 @@ export const langDe =
         title : "Achtung",
         msg : "Der eingegebene Betrag kann nicht größer sein als der Gesamtbetrag des Kassenbelegs!",
         btn01 : "OK"
+    },
+    pg_partiLot : 
+    {
+        title : "Parti Lot Auswahl",
+        clmLotCode : "Parti Kodu",
+        clmSkt : "MHD",
     }
 }

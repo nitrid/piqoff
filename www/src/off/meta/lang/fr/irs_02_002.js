@@ -36,6 +36,14 @@ const irs_02_002 =
     btnMailsend : "Envoyer un courriel",
     validMail : "Veuillez ne pas laisser ce champ vide.",
     placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+    pg_partiLot :
+    {
+        title : "Sélection Parti Lot",
+        clmPartiLot : "Numéro Lot",
+        clmLotCode : "Code Lot",
+        clmExpDate : "Date Expiration",
+        
+    },
     isMsgSave :
     {
         title: "Attention",
@@ -107,6 +115,7 @@ const irs_02_002 =
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient", 
         clmInvoiceRef : "Numéro de facture",
+        clmPartiLot : "Numéro Lot",
     },
     popDiscount : 
     {

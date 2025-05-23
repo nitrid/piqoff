@@ -139,7 +139,14 @@ const  ftr_02_002 =
         clmOrigin : "Origine",
         clmSubQuantity : "Quantité unitaire",  
         clmSubPrice : "Prix unitaire", 
-        clmSubFactor : "Coefficient", 
+        clmSubFactor : "Coefficient",
+        clmPartiLot : "Numéro de lot",
+    },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Numéro de lot",
+        clmSkt : "DLC",
     },
     grdRebtInv: 
     {
