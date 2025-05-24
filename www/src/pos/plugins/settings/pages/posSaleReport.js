@@ -5,8 +5,11 @@ import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import ExcelJS from 'exceljs';
 
-import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdPopUp from '../../../../core/react/devex/popup.js';
+import NdTextBox, {Validator,RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export,StateStoring} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -94,6 +97,26 @@ export default class posSaleReport extends React.PureComponent
             }
         });
     }
+    async exportReport(pData)
+    {     
+        let tmpData = pData
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Rapor');
+        
+        if (tmpData && tmpData.length > 0) {
+            const headers = Object.keys(tmpData[0]);
+            worksheet.addRow(headers);
+            
+            tmpData.forEach(row => {
+                worksheet.addRow(Object.values(row));
+            });
+        }
+        
+        const buffer = await workbook.xlsx.writeBuffer();
+        const base64 = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+        
+        this.exportBase64 = base64;
+    }
     render()
     {
         return (
@@ -110,7 +133,19 @@ export default class posSaleReport extends React.PureComponent
                                         icon: 'print',
                                         onClick: async()=>
                                         {
-                                            this.printReport()
+                                            this.printReport();
+                                        }
+                                    }
+                                }/>
+                                <Item location="after" locateInMenu="auto" widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'mail',
+                                        onClick: async()=>
+                                        {
+                                            this.popMailSend.show();
                                         }
                                     }
                                 }/>
@@ -223,6 +258,7 @@ export default class posSaleReport extends React.PureComponent
                                     if(tmpData.result.recordset.length > 0)
                                     {
                                         this.pvtData.setDataSource(tmpData.result.recordset)
+                                        this.exportReport(tmpData.result.recordset);
                                     }
                                     else
                                     {
@@ -356,6 +392,108 @@ export default class posSaleReport extends React.PureComponent
                                 </NdPivot>
                             </div>
                         </div>
+                        {/* Mail Send PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popMailSend"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.lang.t("popMailSend.title")}
+                            container={"#root"} 
+                            width={'600'}
+                            height={'600'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.lang.t("popMailSend.txtMailSubject")} alignment="right" />
+                                        <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.lang.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.lang.t("popMailSend.txtSendMail")} alignment="right" />
+                                        <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                        maxLength={128}
+                                        >
+                                            <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                                <RequiredRule message={this.lang.t("validMail")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </Item>
+                                    <Item>
+                                        <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.lang.t("placeMailHtmlEditor")}/>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.lang.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                                validationGroup={"frmMailsend"  + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    let tmpHtml = this.htmlEditor.value
+                                                    if(this.htmlEditor.value.length == 0)
+                                                    {
+                                                        tmpHtml = ''
+                                                    }
+                                                    
+                                                    let tmpMailData = {
+                                                        html: tmpHtml,
+                                                        subject: this.txtMailSubject.value,
+                                                        sendMail: this.txtSendMail.value,
+                                                        attachName: "Rapor.xlsx",
+                                                        attachData: this.exportBase64,
+                                                        text: ""
+                                                    }
+                                                    
+                                                    this.core.socket.emit('mailer', tmpMailData, async(pResult1) => 
+                                                    {
+                                                        App.instance.setState({isExecute:false})
+                                                        let tmpConfObj1 =
+                                                        {
+                                                            id:'msgMailSendResult',
+                                                            showTitle:true,
+                                                            title:this.lang.t("msgMailSendResult.title"),
+                                                            showCloseButton:true,
+                                                            width:'500px',
+                                                            height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgMailSendResult.btn01"),location:'after'}],
+                                                        }
+                                                        
+                                                        if((pResult1) == 0)
+                                                        {  
+                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("msgMailSendResult.msgSuccess")}</div>)
+                                                            await dialog(tmpConfObj1);
+                                                            this.htmlEditor.value = '',
+                                                            this.txtMailSubject.value = '',
+                                                            this.txtSendMail.value = ''
+                                                            this.popMailSend.hide();  
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgMailSendResult.msgFailed")}</div>)
+                                                            await dialog(tmpConfObj1);
+                                                            this.popMailSend.hide(); 
+                                                        }
+                                                    });
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popMailSend.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>   
                     </div>
                 </ScrollView>
             </div>
