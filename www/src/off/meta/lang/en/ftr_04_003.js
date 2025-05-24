@@ -135,6 +135,12 @@ const ftr_04_003 =
         clmCustomerPrice : "Customer Price",
         clmDescription :"Description",
         clmCuser :"User",
+        clmPartiLot :"Lot Number",
+    },
+    pg_partiLot :
+    {
+        title : "Parti Lot Selection",
+        clmPartiLot :"Lot Number",
     },
     grdInvoicePayment: 
     {

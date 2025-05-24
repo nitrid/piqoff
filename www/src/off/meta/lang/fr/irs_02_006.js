@@ -62,6 +62,9 @@ const irs_02_006 =
         title : "Sélectionner Produit",
         clmCode :  "Référence Produit",
         clmName : "Nom Produit",
+        clmPrice : "Prix de Vente",
+        clmPartiLot : "Numéro de lot",
+
     },
     grdSlsDispatch: 
     {

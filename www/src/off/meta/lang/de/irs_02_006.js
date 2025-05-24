@@ -51,6 +51,8 @@ const irs_02_006 =
         title: "Artikelauswahl",
         clmCode: "ArtikelNUMMER",
         clmName: "ArtikelNAME",
+        clmPrice: "Preis",
+        clmPartiLot : "Losnummer",
     },
     grdSlsDispatch: 
     {

@@ -236,9 +236,9 @@ export default class branchSaleInvoice extends DocBase
                 source:
                 {
                     select:
-                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                    {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.VAT,ITEMS_VW_01.UNIT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_01.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -643,7 +643,7 @@ export default class branchSaleInvoice extends DocBase
             
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+                query :"SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
                  "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
@@ -716,6 +716,34 @@ export default class branchSaleInvoice extends DocBase
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
+            }
+            if(typeof pData.PARTILOT_GUID != 'undefined')
+            {
+                this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
+                this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
+            }
+    
+            if (tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                let tmpSource =
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                }
+                this.pg_partiLot.setSource(tmpSource)
+                this.pg_partiLot.onClick = async(data) =>
+                {
+                    this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
+                    this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
+                }
+                this.pg_partiLot.show()
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -1710,20 +1738,23 @@ export default class branchSaleInvoice extends DocBase
                                                         return
                                                     }
                                                   
-                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     this.pg_txtBarcode.onClick = async(data) =>
-                                                    {
-                                                        this.txtBarcode.value = ''
-
-                                                        this.checkboxReset()
-    
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.addItem(data[i],null)
+                                                        this.txtBarcode.setState({value:""})
+                                                        await this.core.util.waitUntil(100)
+
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.checkboxReset()
+                                                            this.grid.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                await this.addItem(data[i],null)
+                                                            }
+                                                            this.grid.devGrid.endUpdate()
                                                         }
-                                                        this.grid.devGrid.endUpdate()
                                                     }
+                                                    this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
                                             }
                                         ]
@@ -1744,7 +1775,7 @@ export default class branchSaleInvoice extends DocBase
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query : "SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                        {   query : "SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE  FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
@@ -2051,6 +2082,7 @@ export default class branchSaleInvoice extends DocBase
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={110} allowEditing={false}/>
+                                            <Column dataField="LOT_CODE" caption={this.t("grdSlsInv.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu

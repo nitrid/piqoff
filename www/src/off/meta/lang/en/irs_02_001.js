@@ -103,6 +103,12 @@ const irs_02_001 =
         clmDiffPrice : "Difference",
         clmCustomerPrice : "Customer Price",
         clmInvoiceRef : "Invoice No",
+        clmPartiLot : "Lot Number",
+    },
+    pg_partiLot : 
+    {
+        title : "Lot Selection",
+        clmLotCode : "Lot Number",
     },
     popDiscount : 
     {

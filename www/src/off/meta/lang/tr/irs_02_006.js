@@ -54,7 +54,8 @@ const irs_02_006 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
-        clmPrice : "SATIŞ FIYATI"
+        clmPrice : "SATIŞ FIYATI",
+        clmPartiLot : "LOT NUMARASI"
     },
     grdSlsDispatch: 
     {
