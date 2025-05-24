@@ -149,6 +149,7 @@ const promo_01_001 =
         btn01: "OK",
         msg: "Please enter the quantity or amount!",
     },
+    chkLoyalty: "Loyalty",
 }
 
 export default promo_01_001

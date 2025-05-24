@@ -149,6 +149,7 @@ const promo_01_001 =
         btn01: "Tamam",
         msg: "Lütfen Adet veya Tutar Giriniz !",
     },
+    chkLoyalty: "Müşteri Kartı",
 }
 
 export default promo_01_001

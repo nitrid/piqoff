@@ -359,6 +359,7 @@ export const langEn =
         fns_04_002 : "Customer Balance Report",
         fns_04_004 : "Customer Invoice and Payment Report",
         fns_04_005 : "Collection Report",
+        fns_04_006 : "Installment Collection Report",
         fns_05 : "Operations",
         fns_05_001 : "Bulk Collection Entry",
         fns_05_002 : "Bulk Payment Entry",

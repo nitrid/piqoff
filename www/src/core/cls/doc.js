@@ -224,7 +224,7 @@ export class docCls
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
-                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' || arguments[0].REF_NO == 0 ? -1 : arguments[0].REF_NO;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' || arguments[0].REF_NO == -1 ? -1 : arguments[0].REF_NO;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
                 tmpPrm.PAYMENT_DOC_GUID = typeof arguments[0].PAYMENT_DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYMENT_DOC_GUID;

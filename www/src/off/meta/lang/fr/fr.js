@@ -359,6 +359,7 @@ export const langFr =
         fns_04_003 : "Rapport sur les relevés de caisse",
         fns_04_004 : "Rapport sur les mouvements de compte",
         fns_04_005 : "Rapport sur les encaissements",
+        fns_04_006 : "Rapport sur les tranches d'encaissement",
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 

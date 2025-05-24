@@ -1271,6 +1271,11 @@ export const menu = (e) =>
                             id: 'fns_04_005',
                             text: e.t('menuOff.fns_04_005'),//'Tahsilat Raporu',
                             path: 'finance/report/collectionReport'
+                        },
+                        {
+                            id: 'fns_04_006',
+                            text: e.t('menuOff.fns_04_006'),//'Tahsilat Raporu',
+                            path: 'finance/report/installmentReport'
                         }
                     ]   
                 }
