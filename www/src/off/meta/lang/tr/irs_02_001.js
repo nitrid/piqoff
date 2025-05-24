@@ -103,6 +103,12 @@ const irs_02_001 =
         clmDiffPrice : "Fark",
         clmCustomerPrice : "T.Fiyat",
         clmInvoiceRef : "Fatura No",
+        clmPartiLot : "Lot No",
+    },
+    pg_partiLot : 
+    {
+        title : "Lot Seçimi",
+        clmLotCode : "Lot No",
     },
     popDiscount : 
     {

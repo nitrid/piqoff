@@ -148,7 +148,13 @@ const ftr_02_001 =
         clmOrigin : "Origine",
         clmSubQuantity : "Quantité unitaire",  
         clmSubPrice : "Prix unitaire",  
-        clmSubFactor : "Coefficient"
+        clmSubFactor : "Coefficient",
+        clmPartiLot :"Numéro de Lot",
+    },
+    pg_partiLot :
+    {
+        title : "Sélection Parti Lot",
+        clmPartiLot :"Numéro de Lot",
     },
     grdInvoicePayment: 
     {

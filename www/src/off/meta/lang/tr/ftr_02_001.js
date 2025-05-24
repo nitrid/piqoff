@@ -145,6 +145,12 @@ const ftr_02_001 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmPartiLot :"Parti Lot",
+    },
+    pg_partiLot :
+    {
+        title : "Parti Lot Seçimi",
+        clmPartiLot :"Parti Lot",
     },
     grdInvoicePayment: 
     {

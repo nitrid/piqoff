@@ -135,6 +135,12 @@ const ftr_04_003 =
         clmCustomerPrice : "T.Fiyat",
         clmDescription :"Açıklama",
         clmCuser :"Kullanıcı",
+        clmPartiLot :"Parti Lot",
+    },
+    pg_partiLot :
+    {
+        title : "Parti Lot Seçimi",
+        clmPartiLot :"Parti Lot",
     },
     grdInvoicePayment: 
     {

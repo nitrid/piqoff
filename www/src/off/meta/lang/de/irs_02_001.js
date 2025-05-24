@@ -100,7 +100,12 @@ const irs_02_001 =
         clmSubPrice: "Untereinheitspreis",
         clmSubFactor: "Faktor",
         clmDiffPrice: "Preisdifferenz",
-        clmCustomerPrice: "Kundenpreis"
+        clmCustomerPrice: "Kundenpreis",
+        clmPartiLot : "Chargennummer",
+    },
+    pg_partiLot : 
+    {
+        title : "Chargenauswahl",
     },
     popDiscount: 
     {
