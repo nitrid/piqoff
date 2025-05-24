@@ -116,6 +116,11 @@ const irs_02_005 =
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
         clmInvoiceRef : "Invoice No",
+        clmPartiLot : "Lot Number",
+    },
+    pg_partiLot : 
+    {
+        title : "Selection of Lot Number",
     },
     popDiscount : 
     {

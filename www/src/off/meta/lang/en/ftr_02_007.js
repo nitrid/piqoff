@@ -51,6 +51,12 @@ const ftr_02_007 =
     validDesign : "Please select the design.",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description in your mail.",
+    pg_partiLot : 
+    {
+        title : "Lot Code Selection",
+        clmLotCode : "Lot Code",
+        clmSkt : "EXP",
+    },
     pg_Docs : 
     {
         title : "Document Selection",
@@ -125,6 +131,7 @@ const ftr_02_007 =
         clmSubQuantity : "Sub Quantity",
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
+        clmPartiLot : "Lot Number",
     },
     grdInvoicePayment: 
     {

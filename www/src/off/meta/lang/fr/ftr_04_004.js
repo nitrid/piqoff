@@ -130,6 +130,13 @@ const ftr_04_004 =
         clmSubQuantity : "Qtt. Unitaire",
         clmSubPrice : "Prix Unitaire",
         clmSubFactor : "Coefficient",
+        clmPartiLot : "Numéro de lot",
+    },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Numéro de lot",
+        clmSkt : "SKT",
     },
     grdInvoicePayment: 
     {

@@ -51,7 +51,13 @@ const ftr_02_007 =
     btnMailsend : "Envoyer un e-mail",
     validDesign : "Veuillez sélectionner un design.",
     validMail : "Veuillez ne pas laisser vide.",
-    placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",        
+    placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",  
+    pg_partiLot : 
+    {
+        title : "Sélection Parti Lot",
+        clmLotCode : "Lot Code",
+        clmSkt : "DLC",
+    },
     pg_Docs : 
     {
         title : "Sélection Document",
@@ -126,6 +132,7 @@ const ftr_02_007 =
         clmSubQuantity : "Qtt. Unitaire",
         clmSubPrice : "Prix Unitaire",
         clmSubFactor : "Coefficient",
+        clmPartiLot : "Numéro de lot",
     },
     grdInvoicePayment: 
     {

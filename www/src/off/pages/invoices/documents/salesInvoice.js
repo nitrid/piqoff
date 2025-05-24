@@ -453,7 +453,6 @@ export default class salesInvoice extends DocBase
     }
     addItem(pData,pIndex,pQuantity,pPrice)
     {   
-        console.log(pData)
         return new Promise(async resolve => 
         {
             this.txtRef.readOnly = true
@@ -1540,7 +1539,7 @@ export default class salesInvoice extends DocBase
                                         {   
                                             query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE 
                                                      FROM ITEMS_BARCODE_MULTICODE_VW_01 
-                                                     WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)) ORDER BY PARTILOT_GUID ASC` ,
+                                                     WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)) ORDER BY PARTILOT_GUID ASC`,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }

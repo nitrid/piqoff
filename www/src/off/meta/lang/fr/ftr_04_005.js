@@ -127,6 +127,12 @@ const ftr_04_005 =
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient", 
     },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Numéro de lot",
+        clmSkt : "DLC",
+    },
     grdInvoicePayment: 
     {
         clmInputName: "Caisse",

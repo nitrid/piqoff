@@ -131,6 +131,11 @@ const  ftr_02_009 =
         clmSubQuantity : "Sub Quantity",
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
+        clmPartiLot : "Lot Number",
+    },
+    pg_partiLot : 
+    {
+        title : "Selection of Lot Number",
     },
     grdInvoicePayment: 
     {

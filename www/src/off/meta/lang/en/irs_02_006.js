@@ -80,6 +80,11 @@ const irs_02_006 =
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
         clmInvoiceRef : "Fatura No",
+        clmPartiLot : "Lot Number",
+    },
+    pg_partiLot : 
+    {
+        title : "Selection of Lot Number",
     },
     popDiscount : 
     {

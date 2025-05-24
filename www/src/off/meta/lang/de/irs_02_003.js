@@ -92,6 +92,11 @@ const irs_02_003 =
         clmSubQuantity : "Untereinheit",
         clmSubPrice : "Untereinheitspreis",
         clmSubFactor : "Faktor",
+        clmPartiLot : "Losnummer",
+    },
+    pg_partiLot : 
+    {
+        title : "Chargennummer",
     },
     popDiscount : 
     {

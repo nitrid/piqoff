@@ -124,6 +124,7 @@ const  ftr_02_009 =
         clmTotalHt : "Total HT",
         clmDispatch : "No Bon de Livraison",
         clmDateDispatch : "Date",
+        clmPartiLot : "Numéro de lot",
         clmCreateDate: "Date d'Enregistrement",
         clmMargin :"Marge",
         clmDescription :"Motif",
@@ -134,6 +135,12 @@ const  ftr_02_009 =
         clmSubQuantity : "Qtt. Unitaire",
         clmSubPrice : "Prix Unitaire",
         clmSubFactor : "Coefficient",
+    },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Numéro de lot",
+        clmSkt : "SKT",
     },
     grdInvoicePayment: 
     {

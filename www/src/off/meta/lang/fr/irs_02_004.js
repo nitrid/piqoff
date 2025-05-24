@@ -103,6 +103,13 @@ const irs_02_004 =
         clmSubPrice : "Prix unitaire",  
         clmSubFactor : "Coefficient",
         clmInvoiceRef : "Numéro de facture",
+        clmPartiLot : "Numéro de lot",
+    },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Numéro de lot",
+        clmSkt : "SKT",
     },
     popDiscount : 
     {

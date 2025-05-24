@@ -51,6 +51,12 @@ const ftr_02_007 =
     validDesign : "Lütfen Dizayn seçiniz.",
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+    pg_partiLot : 
+    {
+        title : "Parti Lot Seçimi",
+        clmLotCode : "Lot Kodu",
+        clmSkt : "SKT",
+    },
     pg_Docs : 
     {
         title : "Evrak Seçimi",
@@ -125,6 +131,7 @@ const ftr_02_007 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmPartiLot : "Lot No",
     },
     grdInvoicePayment: 
     {
