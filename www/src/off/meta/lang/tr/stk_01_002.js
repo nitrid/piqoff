@@ -11,6 +11,13 @@ const stk_01_002 =
     SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
     txtUnitTypeName :"Açıklama",
     barcodePlace : "Seçilen Ürün için Eklemek İstediğiniz Barkodu Giriniz..",
+    txtPartiLot : "Parti Lot Numarası",
+    pg_partiLot:
+    {
+        title: "Parti Lot Seçimi",
+        clmLotCode: "Parti Lot Numarası",
+        clmSkt: "Son Kullanma Tarihi"
+    },
     pg_txtItem:
     {
         title: "Ürün Seçim",

@@ -17,7 +17,7 @@ const stk_01_001 =
     chkLineMerged: "Détacher les Lignes à la Caisse",
     chkTicketRest: "Ticket Rest.",
     chkInterfel : "Interfel",
-    chkPartyLot : "Lot Party",
+    chkPartiLot : "Lot Party",
     txtCostPrice: "Prix de Revient",
     txtSalePrice : "Prix Vente",
     txtMinSalePrice: "Prix Vente Min.",

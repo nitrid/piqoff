@@ -1731,17 +1731,6 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </NdLayoutItem>
-                                <NdLayoutItem key={"chkPartyLotLy"} id={"chkPartyLotLy"} parent={this} data-grid={{x:8,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkPartyLotLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkPartyLot") + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
-                                            <NdCheckBox id="chkPartyLot" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"PARTY_LOT"}}
-                                            param={this.param.filter({ELEMENT:'chkPartyLot',USERS:this.user.CODE})}/>
-                                        </div>
-                                    </div>
-                                </NdLayoutItem>
                             </NdLayout>
                         </div>
                     </div>
@@ -2408,6 +2397,13 @@ export default class itemCard extends React.PureComponent
                                                         <Column dataField="CODE" caption={this.t("pg_customsCode.clmCode")} width={'20%'} />
                                                         <Column dataField="NAME" caption={this.t("pg_customsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                     </NdPopGrid>
+                                                </Item>
+                                                <EmptyItem/>
+                                                {/* chkPartiLot */}
+                                                <Item>
+                                                        <Label text ={this.t("chkPartiLot")} alignment="right"/>
+                                                        <NdCheckBox id="chkPartiLot" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"PARTILOT"}}
+                                                        param={this.param.filter({ELEMENT:'chkPartiLot',USERS:this.user.CODE})}/>
                                                 </Item>
                                             </Form>
                                         </div>

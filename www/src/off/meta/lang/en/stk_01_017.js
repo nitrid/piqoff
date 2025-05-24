@@ -36,5 +36,6 @@ const stk_01_017 =
         msgSuccess : "Saved successfully",
         msgError : "Error during save",
     },
+    validCode: "This field cannot be empty",
 }
 export default stk_01_017

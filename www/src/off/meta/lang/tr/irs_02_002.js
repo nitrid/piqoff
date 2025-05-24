@@ -36,6 +36,16 @@ const irs_02_002 =
     btnMailsend : "Mail Gönder",
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+    clmPartiLot : "Parti Lot",
+    pg_partiLot :
+    {
+        title : "Parti Lot Seçimi",
+        clmPartiLot : "Parti Lot",
+        clmLotCode : "Lot Kodu",
+        clmExpDate : "Son Kullanma Tarihi",
+        clmExpDate : "Son Kullanma Tarihi",
+        
+    },
     isMsgSave :
     {  
         title: "Dikkat",

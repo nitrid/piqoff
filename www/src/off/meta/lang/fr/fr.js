@@ -640,4 +640,10 @@ export const langFr =
         msg : "Le montant saisi ne peut être supérieur au montant total du ticket de caisse ! " ,
         btn01 : "OK"
     },
+    pg_partiLot : 
+    {
+        title : "Sélection de lot",
+        clmLotCode : "Lot Code",
+        clmSkt : "DLC",
+    }
 }

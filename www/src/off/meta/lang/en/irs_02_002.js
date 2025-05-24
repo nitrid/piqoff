@@ -36,6 +36,13 @@ const irs_02_002 =
     btnMailsend : "Send Mail",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description in your mail.",
+    pg_partiLot :
+    {
+        title : "Parti Lot Selection",
+        clmPartiLot : "Parti Lot",
+        clmLotCode : "Lot Code",
+        clmExpDate : "Expiration Date",
+    },
     isMsgSave :
     {  
         title: "Attention",
@@ -107,6 +114,7 @@ const irs_02_002 =
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
         clmInvoiceRef : "Invoice No",
+        clmPartiLot : "Lot Number",
     },
     popDiscount : 
     {

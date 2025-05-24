@@ -173,6 +173,7 @@ export default class itemPartiLotCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(this.itemPartiLotObj.dt())
                                                 if((await this.itemPartiLotObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -348,8 +349,6 @@ export default class itemPartiLotCard extends React.PureComponent
                                                     if(data.length > 0)
                                                     {
                                                         await this.itemPartiLotObj.load({GUID:data[0].GUID});
-                                                        this.txtPartiLotCode.GUID = data[0].GUID
-                                                        this.txtPartiLotCode.value = data[0].LOT_CODE
                                                     }
                                                 }
                                                         
@@ -365,8 +364,6 @@ export default class itemPartiLotCard extends React.PureComponent
                                                 if(data.length > 0)
                                                 {
                                                     await this.itemPartiLotObj.load({GUID:data[0].GUID});
-                                                    this.txtPartiLotCode.GUID = data[0].GUID
-                                                    this.txtPartiLotCode.value = data[0].LOT_CODE
                                                 }
                                             }
                                         }).bind(this)}

@@ -643,5 +643,11 @@ export const langTr =
         title : "Dikkat",
         msg : "Girdiğiniz miktar toplam fiş tutarından büyük olamaz !",
         btn01 : "Tamam"
+    },
+    pg_partiLot : 
+    {
+        title : "Parti Lot Seçimi",
+        clmLotCode : "Parti Kodu",
+        clmSkt : "SKT",
     }
 }

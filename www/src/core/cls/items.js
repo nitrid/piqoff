@@ -40,7 +40,8 @@ export class itemsCls
             GENRE : '',
             PIQPOID : false,
             FAVORI : false, 
-            CATALOG : false
+            CATALOG : false,
+            PARTILOT : false
         }
 
         this.itemLang = new itemLangCls()
@@ -99,13 +100,14 @@ export class itemsCls
                     "@GENRE = @PGENRE, " +
                     "@PIQPOID = @PPIQPOID, "  +
                     "@FAVORI = @PFAVORI, " +
-                    "@CATALOG = @PCATALOG " ,
+                    "@CATALOG = @PCATALOG, " +
+                    "@PARTILOT = @PPARTILOT " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
-                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit'],
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit','PPARTILOT:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG','PARTILOT'],
             local : 
             {
                 type : "insert",
@@ -134,7 +136,8 @@ export class itemsCls
                         WEIGHING : {map:'WEIGHING'},
                         SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
                         TICKET_REST : {map:'TICKET_REST'},
-                        CATALOG : {map:'CATALOG'}
+                        CATALOG : {map:'CATALOG'},
+                        PARTILOT : {map:'PARTILOT'}
                     }
                 ]
             }
@@ -170,13 +173,14 @@ export class itemsCls
                     "@GENRE = @PGENRE, " +
                     "@PIQPOID = @PPIQPOID, "  +
                     "@FAVORI = @PFAVORI, " +
-                    "@CATALOG = @PCATALOG " ,
+                    "@CATALOG = @PCATALOG, " +
+                    "@PARTILOT = @PPARTILOT " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
-                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit'],
+                     'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit','PPARTILOT:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG','PARTILOT'],
             local : 
             {
                 type : "update",
@@ -203,7 +207,8 @@ export class itemsCls
                     WEIGHING : {map:'WEIGHING'},
                     SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
                     TICKET_REST : {map:'TICKET_REST'},
-                    CATALOG : {map:'CATALOG'}
+                    CATALOG : {map:'CATALOG'},
+                    PARTILOT : {map:'PARTILOT'}
                 },
                 where : {GUID : {map:'GUID'}}
             }
@@ -801,7 +806,9 @@ export class itemBarcodeCls
             UNIT_TYPE : 0,
             UNIT_NAME : 'UNIT',
             UNIT_FACTOR : '0',
-            UNIT_SYMBOL : ''
+            UNIT_SYMBOL : '',
+            PARTILOT_GUID : '00000000-0000-0000-0000-000000000000',
+            LOT_CODE : '',
         }
 
         this._initDs();
@@ -826,9 +833,10 @@ export class itemBarcodeCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM = @PITEM, " + 
                     "@BARCODE = @PBARCODE, " + 
-                    "@UNIT = @PUNIT ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID']
+                    "@UNIT = @PUNIT, " +
+                    "@PARTILOT = @PPARTILOT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50','PPARTILOT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID', 'PARTILOT_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -838,9 +846,10 @@ export class itemBarcodeCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM = @PITEM, " + 
                     "@BARCODE = @PBARCODE, " + 
-                    "@UNIT = @PUNIT ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID']
+                    "@UNIT = @PUNIT, " +
+                    "@PARTILOT = @PPARTILOT " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50','PPARTILOT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID', 'PARTILOT_GUID']
         } 
         tmpDt.deleteCmd = 
         {
@@ -3139,7 +3148,7 @@ export class itemPartiLotCls
                     "@LOT_CODE = @PLOT_CODE, " + 
                     "@SKT = @PSKT, " + 
                     "@PRDCT_DATE = @PPRDCT_DATE" ,
-            param : ['PGUID:string|50','PCUSER:string|25','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date','PITEM:string|50'],
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date'],
             dataprm : ['GUID','CUSER','ITEM','LOT_CODE','SKT','PRDCT_DATE']
         } 
         tmpDt.updateCmd = 
@@ -3151,7 +3160,7 @@ export class itemPartiLotCls
             "@LOT_CODE = @PLOT_CODE, " + 
             "@SKT = @PSKT, " + 
             "@PRDCT_DATE = @PPRDCT_DATE" ,
-            param : ['PGUID:string|50','PCUSER:string|25','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date','PITEM:string|50'],
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PLOT_CODE:string|50','PSKT:date','PPRDCT_DATE:date'],
             dataprm : ['GUID','CUSER','ITEM','LOT_CODE','SKT','PRDCT_DATE']
         } 
         tmpDt.deleteCmd = 

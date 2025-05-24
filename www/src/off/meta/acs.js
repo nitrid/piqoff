@@ -221,14 +221,14 @@ export const acs =
         ELEMENT : "txtCostPriceLy",
         APP : "OFF",
     },
-    //chkPartyLotLy
+    //chkPartiLotLy
     {
         TYPE : 2,
-        ID :"chkPartyLotLy",
+        ID :"chkPartiLotLy",
         VALUE : {visible:true,editable:true,position:{x:8,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkPartyLotLy",
+        ELEMENT : "chkPartiLotLy",
         APP : "OFF",
     },
     //txtTotalExtraCostLy

@@ -38,6 +38,14 @@ const irs_02_002 =
     btnSave : "Speichern",
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+    clmPartiLot : "Chargennummer",
+    pg_partiLot :
+    {
+        title : "Parti Lot Auswahl",
+        clmPartiLot : "Parti Lot",
+        clmLotCode : "Lot Code",
+        clmExpDate : "Ablaufdatum",
+    },
     isMsgSave :
     {
         title: "Achtung",

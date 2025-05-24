@@ -17,6 +17,8 @@ const stk_01_001 =
     chkLineMerged: "Verkauf mit getrennten Positionen",
     chkTicketRest: "Ticket-Rest.",
     chkInterfel : "Interfel",
+    chkCatalog : "Katalog",
+    chkPartiLot : "Parti/Lot",
     txtCostPrice: "Einkaufspreis",
     txtSalePrice : "Verkaufspreis",
     txtMinSalePrice: "Min. Verkaufspreis",
@@ -54,6 +56,7 @@ const stk_01_001 =
     underUnitName: "Untereinheit",
     chkDayAnalysis: "Täglich",
     chkMountAnalysis: "Monatlich",
+
     txtUnitFactor: "Einheitsfaktor",
     cmbAnlysType: "Typ",
     txtCustoms : "Zollcode", 

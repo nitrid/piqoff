@@ -545,6 +545,36 @@ export const prm =
             CAPTION : "Maliyet Fiyatı Elle Girişi Kilitle"
         }
     },
+    //#sansTVAAuto
+    {
+        TYPE : 0,
+        ID :"sansTVAAuto",
+        VALUE : true,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Otomatik Vergisiz Satış İşaretle"
+        }
+    },
+    //#sansPartiLot
+    {
+        TYPE : 0,
+        ID :"sansPartiLot",
+        VALUE : false,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+            {
+                TYPE : "checkbox",
+                PAGE_NAME : "Sistem",
+                CAPTION : "Parti Lot olmadan satış yap"
+            }
+    },
     //autoMailSend
     {
         TYPE : 0,
@@ -593,21 +623,8 @@ export const prm =
             CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
-    //#sansTVAAuto
-    {
-        TYPE : 0,
-        ID :"sansTVAAuto",
-        VALUE : true,
-        SPECIAL : "",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "checkbox",
-            PAGE_NAME : "Sistem",
-            CAPTION : "TVA Sıfır Belirleme"
-        }
-    },
+
+
     //#endregion
     //#region Stok Tanıtım
     //txtRef
