@@ -133,5 +133,6 @@ const promo_01_001 =
         btn01: "OK",
         msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits in Ihrer Liste!",
     },
+    chkLoyalty: "Treuepunkte",
 }
 export default promo_01_001

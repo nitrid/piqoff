@@ -1401,6 +1401,10 @@ export default class promotionCard extends React.PureComponent
                                             dt={{data:this.promo.dt(),field:"CUSTOMER_NAME"}}
                                             />     
                                         </Item>
+                                        <Item>
+                                            <Label text={this.t("chkLoyalty")} alignment="right" />
+                                            <NdCheckBox id="chkLoyalty" parent={this} simple={true} value={false} dt={{data:this.promo.dt(),field:"LOYALTY"}}/>
+                                        </Item>
                                     </GroupItem>
                                 </GroupItem>
                                 <GroupItem colSpan={3}>

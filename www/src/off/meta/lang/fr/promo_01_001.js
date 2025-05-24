@@ -7,7 +7,7 @@ const promo_01_001 =
     dtFinishDate: "Date Fin",
     cmbDepot: "Réserve",
     txtCustomerCode: "Sélectionner Client",
-    txtCustomerName: "Nom fournisseur",
+    txtCustomerName: "Nom Client",
     cmbPrmType: "Type de Promotion",
     txtPrmItem:  "Produit",
     btnPrmItem: "Rechercher", 
@@ -149,5 +149,6 @@ const promo_01_001 =
         btn01: "OK",   
         msg: "Veluillez saisir la quantité ou le montant !",   
     },
+    chkLoyalty: "Loyalty",
 }
 export default promo_01_001

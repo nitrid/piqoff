@@ -3292,6 +3292,7 @@ export default class posDoc extends React.PureComponent
     {
         let isCond = (pGuid)=>
         {
+            console.log(this.promoObj.cond.dt())
             let tmpWithal = this.promoObj.cond.dt().where({PROMO : pGuid}).groupBy('WITHAL')
             let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
             let tmpResult = new datatable()
@@ -3389,6 +3390,11 @@ export default class posDoc extends React.PureComponent
         
         this.promoObj.dt('PROMO').forEach(promoItem => 
         {
+            console.log(promoItem)
+            if(typeof promoItem.LOYALTY != 'undefined' && promoItem.LOYALTY == true && this.posObj.dt()[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                return
+            }
             let tmpIsCond = isCond(promoItem.GUID)
             if(tmpIsCond.result)
             {

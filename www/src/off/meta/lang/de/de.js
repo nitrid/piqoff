@@ -336,6 +336,8 @@ export const langDe =
         fns_04_002: "Kontosaldo-Bericht",
         fns_04_003 : "Kassenbereicht", 
         fns_04_004 : "Abgleichsbericht über Schulden und Guthaben",
+        fns_04_005 : "Ekstrebericht",
+        fns_04_006 : "Tilgabenbericht",
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",

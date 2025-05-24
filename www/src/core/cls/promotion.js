@@ -26,6 +26,7 @@ export class promoCls
             DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
             DEPOT_CODE : '',
             DEPOT_NAME : '',
+            LOYALTY : 0,
             STATUS : 1
         }
 
@@ -64,10 +65,11 @@ export class promoCls
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@DEPOT = @PDEPOT, " + 
+                    "@LOYALTY = @PLOYALTY, " + 
                     "@STATUS = @PSTATUS " , 
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PCUSTOMER:string|50','PDEPOT:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','STATUS']
+                     'PCUSTOMER:string|50','PDEPOT:string|50','PLOYALTY:bit','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','LOYALTY','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -80,10 +82,11 @@ export class promoCls
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@DEPOT = @PDEPOT, " + 
-                    "@STATUS = @PSTATUS ", 
+                    "@LOYALTY = @PLOYALTY, " + 
+                    "@STATUS = @PSTATUS " , 
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
-                    'PCUSTOMER:string|50','PDEPOT:string|50','PSTATUS:bit'],
-            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','STATUS']
+                     'PCUSTOMER:string|50','PDEPOT:string|50','PLOYALTY:bit','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER_GUID','DEPOT_GUID','LOYALTY','STATUS']
         } 
         tmpDt.deleteCmd = 
         {
