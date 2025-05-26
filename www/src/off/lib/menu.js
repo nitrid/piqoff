@@ -1164,7 +1164,13 @@ export const menu = (e) =>
                             id: 'fns_02_003',
                             text: e.t('menuOff.fns_02_003'),//'Taksitli Ödeme',
                             path: 'finance/documents/payPlan'
+                        },
+                        {
+                            id: 'fns_02_004',
+                            text: e.t('menuOff.fns_02_004'),//'Masraf',
+                            path: 'finance/documents/costEntry'
                         }
+
                     ]
                 },
                 {

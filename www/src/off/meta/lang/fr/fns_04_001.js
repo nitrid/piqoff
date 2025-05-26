@@ -13,6 +13,8 @@ const fns_04_001 =
         clmRef : "Référence",   
         clmRefNo : "Ligne",  
         clmCode : "Code",
+        clmDescription : "Description",
+        clmTypeName : "Type",
     },
 
 }

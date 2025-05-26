@@ -12,6 +12,8 @@ const fns_04_001 =
         clmDocDate : "Tarih", 
         clmRef : "Seri",
         clmRefNo : "Sıra", 
+        clmDescription : "Açıklama",
+        clmTypeName : "Tip",
     },
 }
 

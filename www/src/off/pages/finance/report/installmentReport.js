@@ -36,7 +36,6 @@ export default class installmentReport extends React.PureComponent
     }
     async _btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
@@ -51,9 +50,7 @@ export default class installmentReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
