@@ -349,6 +349,7 @@ export const langTr =
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
         fns_02_003 : "Taksitlendirme",
+        fns_02_004 : "Masraf Çıkış Fişi",
         fns_03 : "Kasa - Banka İşlemieri",
         fns_03_001 : "Kasa Tanıtım",
         fns_03_002 : "Banka Tanıtım",

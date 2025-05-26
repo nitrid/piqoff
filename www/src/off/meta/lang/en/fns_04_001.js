@@ -12,6 +12,8 @@ const fns_04_001 =
         clmDocDate : "Date", 
         clmRef : "Series",
         clmRefNo : "Sequence", 
+        clmDescription : "Description",
+        clmTypeName : "Type",
     },
 }
 

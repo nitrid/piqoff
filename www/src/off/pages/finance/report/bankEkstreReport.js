@@ -23,97 +23,16 @@ export default class bankEkstreReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['INPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','DOC_AMOUNT']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "INPUT_NAME",NAME : this.t("grdListe.clmInputName")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
-            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
-            {CODE : "DOC_AMOUNT",NAME : this.t("grdListe.clmAmount")},
-        ]
-      
+
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
     }
     componentDidMount()
     {
         setTimeout(async () => 
         {
         }, 1000);
-    }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }                
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'DOC_AMOUNT') != 'undefined')
-                {
-                    this.groupList.push('DOC_AMOUNT')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
     }
     async _btnGetirClick()
     {
@@ -125,9 +44,11 @@ export default class bankEkstreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @BANK) OR (OUTPUT  = @BANK)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date','BANK:string|50'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbBank.value]
+                    query : "SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT " + 
+                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                    " FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @BANK) OR (OUTPUT  = @BANK)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    param : ['FIRST_DATE:date','LAST_DATE:date','BANK:string|50','LANG:string|50'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbBank.value,this.lang.t("lang")]
                 },
                 sql : this.core.sql
             }
@@ -246,11 +167,13 @@ export default class bankEkstreReport extends React.PureComponent
                                     
                                     return
                                 }}/>
+                                <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} width={120} visible={true}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} width={120} visible={true}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={120} visible={true}/> 
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={90} visible={true}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={90} visible={true}/> 
                                 <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
+                                <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")} width={100} visible={true}/> 
                                 <Summary>
                                     <TotalItem
                                     column="DOC_AMOUNT"

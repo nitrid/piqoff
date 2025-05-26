@@ -12,6 +12,8 @@ const fns_04_001 =
         clmDocDate : "Datum",    
         clmRef : "Serie",   
         clmRefNo : "Reihe",    
+        clmDescription : "Beschreibung",
+        clmTypeName : "Typ",
     },
 }
 export default fns_04_001
