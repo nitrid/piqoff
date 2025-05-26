@@ -142,7 +142,7 @@ export default class posSaleReport extends React.PureComponent
                                 {
                                     {
                                         type: 'default',
-                                        icon: 'mail',
+                                        icon: 'email',
                                         onClick: async()=>
                                         {
                                             this.popMailSend.show();

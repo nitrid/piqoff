@@ -265,6 +265,21 @@ const lang =
         txtTotalTicket : "Nombre Total de Tickets",
         txtTicketAvg : "Montant Moyen du Ticket",
     },
+    popMailSend : 
+    {
+        title : "Envoyer un E-Mail",
+        txtMailSubject : "Sujet",
+        txtSendMail : "Adresse E-Mail",
+        btnSend : "Envoyer",
+    },
+    msgMailSendResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Mail envoyé avec succès !",
+        msgFailed: "Mail envoyé avec échec !"
+    },
+    placeMailHtmlEditor : "Veuillez entrer le contenu du mail ici",
     posCustomerPointReport :
     {
         txtCustomerCode : "Code Client",

@@ -264,6 +264,22 @@ const lang =
         txtTotalTicket : "Toplam Fiş Adedi",
         txtTicketAvg : "Ortalama Fiş Tutarı",
     },
+    popMailSend : 
+    {
+        title :"E-Mail Gönder",
+        txtMailSubject : "E-Mail Başlığı",
+        txtSendMail : "E-Mail Adresi",
+        btnSend : "Gönder",
+        cmbMailAddress : "Gönderilecek E-Mail Adresi"
+    },
+    msgMailSendResult:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Mail gönderimi başarılı !",
+        msgFailed: "Mail gönderimi başarısız !"
+    },
+    placeMailHtmlEditor : "Mail içeriğini buraya yazınız",
     posCustomerPointReport :
     {
         txtCustomerCode : "Müşteri Kodu",
