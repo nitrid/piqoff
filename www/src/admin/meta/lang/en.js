@@ -67,6 +67,7 @@ export const langEn =
         stk_05_002: "Changed Purchase Price Report",
         stk_05_003: "Counting Inventory Report",
         stk_05_004: "Lost Product Report",
+        stk_05_006: "Product Movement Report",
         cri: "Customer",
         cri_01: "Definitions",
         cri_02: "Lists",

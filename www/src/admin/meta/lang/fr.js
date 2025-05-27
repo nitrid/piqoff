@@ -67,6 +67,7 @@ export const langFr =
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
         stk_05_004 : "Rapport sur les pertes", 
+        stk_05_006 : "Rapport sur Mouvement des produits",
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",

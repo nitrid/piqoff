@@ -233,6 +233,7 @@ export const langDe =
         stk_05_003: "Bestandszählungsbericht",
         stk_05_004 : "Liste der fehlenden Produkte", 
         stk_05_005: "Bestandsbewegungsbericht",
+        stk_05_006: "Artikelbewegungsbericht",
         cri: "Kunden",
         cri_01: "Vorgänge",
         cri_02: "Listen",

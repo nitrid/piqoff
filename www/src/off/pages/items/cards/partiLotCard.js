@@ -394,7 +394,7 @@ export default class itemPartiLotCard extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true} parent={this} id={"dtFirst"} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"SKT"}}
+                                    <NdDatePicker simple={true} parent={this} id={"dtFirst"} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"PRDCT_DATE"}}
                                     >
                                     </NdDatePicker>
                                 </Item>
@@ -404,7 +404,7 @@ export default class itemPartiLotCard extends React.PureComponent
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true} parent={this} id={"dtLast"} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"PRDCT_DATE"}}
+                                    <NdDatePicker simple={true} parent={this} id={"dtLast"} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"SKT"}}
                                     >
                                     </NdDatePicker>
                                 </Item>

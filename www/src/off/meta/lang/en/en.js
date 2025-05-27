@@ -242,6 +242,7 @@ export const langEn =
         stk_05_003: "Sayım Envanter Raporu",
         stk_05_004: "Lost Product Report",
         stk_05_005: "Stock Movement Report",
+        stk_05_006: "Product Movement Report",
         cri: "Customer",
         cri_01: "Definitions",
         cri_02: "Lists",
