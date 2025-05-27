@@ -44,11 +44,11 @@ export default class bankEkstreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT " + 
+                    query : "SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT, " + 
                     "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME " + 
                     " FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @BANK) OR (OUTPUT  = @BANK)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','BANK:string|50','LANG:string|50'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbBank.value,this.lang.t("lang")]
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbBank.value,localStorage.getItem('lang')]
                 },
                 sql : this.core.sql
             }
@@ -120,13 +120,7 @@ export default class bankEkstreReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                           
                         </div>
                         <div className="col-3">
                       
@@ -172,7 +166,7 @@ export default class bankEkstreReport extends React.PureComponent
                                 <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={120} visible={true}/> 
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={90} visible={true}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={90} visible={true}/> 
-                                <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
+                                <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmAmount")} width={100} visible={true}/> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")} width={100} visible={true}/> 
                                 <Summary>
                                     <TotalItem
