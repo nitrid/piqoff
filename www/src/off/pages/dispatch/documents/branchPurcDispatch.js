@@ -50,7 +50,7 @@ export default class branchPurcDispatch extends DocBase
             {
                 setTimeout(() => 
                 {
-                    this.getDoc(this.pagePrm.GUID,'',0)
+                    this.getDoc(this.pagePrm.GUID,'',-1)
                 }, 1000);
             }
             else if(typeof this.pagePrm.piqx != 'undefined')

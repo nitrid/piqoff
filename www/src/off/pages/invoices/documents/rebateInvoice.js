@@ -54,7 +54,7 @@ export default class rebateInvoice extends DocBase
             if(typeof this.pagePrm.GUID != 'undefined')
             {
                 setTimeout(() => {
-                    this.getDoc(this.pagePrm.GUID,'',0)
+                    this.getDoc(this.pagePrm.GUID,'',-1)
                 }, 1000);
             }
             else if(typeof this.pagePrm.piqx != 'undefined')

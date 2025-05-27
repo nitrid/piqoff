@@ -42,7 +42,7 @@ export default class salesOffer extends DocBase
         if(typeof this.pagePrm != 'undefined')
         {
             setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',0)
+                this.getDoc(this.pagePrm.GUID,'',-1)
             }, 1000);
         }
     }
