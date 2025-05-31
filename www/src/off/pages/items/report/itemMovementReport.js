@@ -64,8 +64,6 @@ export default class itemMovementReport extends React.PureComponent
     {
         App.instance.setState({isExecute:true})
         await this.itemsObj.load({CODE:pCode});
-        console.log('this.itemsObj.dt()[0]',this.itemsObj.dt()[0])
-
         this.txtRef.value = this.itemsObj.dt()[0].CODE
         this.txtRef.GUID = this.itemsObj.dt()[0].GUID
         //this.docObj.docItems.dt()[0].ITEM = this.itemsObj.dt()[0].GUID
@@ -91,7 +89,6 @@ export default class itemMovementReport extends React.PureComponent
         this.pg_partiLot.setSource(tmpSource)
         this.pg_partiLot.onClick = async(data) =>
             {
-                console.log('data',data)
                 this.txtPartiLot.value = data[0].LOT_CODE
             }
         App.instance.setState({isExecute:false})
@@ -207,7 +204,6 @@ export default class itemMovementReport extends React.PureComponent
                                                 this.pg_txtRef.show()
                                                 this.pg_txtRef.onClick = async(data) =>
                                                 {
-                                                    console.log("data",data)
                                                     if(data.length > 0)
                                                         {
                                                             this.getItem(data[0].CODE)
@@ -275,9 +271,6 @@ export default class itemMovementReport extends React.PureComponent
                                                 onClick:()=>
                                                 {
                                                     this.pg_partiLot.show()
-                                                    console.log('this.itemsObj.dt()[0].PARTILOT',this.itemsObj.dt()[0].PARTILOT)
-                                                    console.log('this.itemsObj.dt()[0].CODE',this.itemsObj.dt()[0].GUID)
-                                                   
                                                     this.findPartiLot(this.itemsObj.dt()[0].GUID)
 
                                                 }

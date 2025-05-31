@@ -397,6 +397,12 @@ const sip_02_002 =
         btn01: "Tamam",
         msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
     },
+    msgDuplicateItems:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Ürünler evrakta birden fazla mevcut!"
+    }
 }
 
 export default sip_02_002

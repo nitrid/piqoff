@@ -818,6 +818,7 @@ export const langFr =
         lblSumAmount : "Montant total:",
         lblGenAmount : "Total:",
         lblAdd: "Ajouter",
+        lblBarcode : "Veuillez scanner le code-barres !",
         msgAlert :
         {
             btn01 : "D'accord",
@@ -833,6 +834,7 @@ export const langFr =
             msgRowNotUpdate : "Le montant ne peut pas être modifié car cette ligne figure sur la facture!",
             msgDiscount : "La remise ne peut pas être supérieure au montant!",
             msgNotSave : "Echec de l'enregistrement",
+            
         },
         grdList : 
         {
@@ -843,7 +845,8 @@ export const langFr =
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
             clmVat : "TVA",
-            clmTotal : "Total"
+            clmTotal : "Total",
+            clmLotCode : "Code lot"
         },
         popDoc : 
         {
@@ -854,6 +857,11 @@ export const langFr =
             clmOutputName : "Nom actuel",
             clmOutputCode : "Code actuel",
         },
+        pg_partiLot : {
+            title : "Choix du lot",
+            clmLotCode : "Code lot",
+            clmSkt : "DLC",
+        }
     },
     irs_02 : // "Bon de vente"
     {
@@ -874,6 +882,7 @@ export const langFr =
         lblSumAmount : "Montant total:",
         lblGenAmount : "Total:",
         lblAdd: "Ajouter",
+        lblBarcode : "Veuillez scanner le code-barres !",
         msgAlert :
         {
             btn01 : "D'accord",
@@ -899,7 +908,8 @@ export const langFr =
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
             clmVat : "TVA",
-            clmTotal : "Total"
+            clmTotal : "Total",
+            clmLotCode : "Code lot",
         },
         popDoc : 
         {
@@ -910,6 +920,11 @@ export const langFr =
             clmInputName : "Nom actuel",
             clmInputCode : "Code actuel",
         },
+        pg_partiLot : {
+            title : "Choix du lot",
+            clmLotCode : "Code lot",
+            clmSkt : "DLC",
+        }
     },
     irs_03 : // "Bon de vente"
     {
@@ -930,6 +945,7 @@ export const langFr =
         lblSumAmount : "Montant total:",
         lblGenAmount : "Total:",
         lblAdd: "Ajouter",
+        lblBarcode : "Veuillez scanner le code-barres !",
         msgAlert :
         {
             btn01 : "D'accord",
@@ -955,7 +971,8 @@ export const langFr =
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
             clmVat : "TVA",
-            clmTotal : "Total"
+            clmTotal : "Total",
+            clmLotCode : "Code lot",
         },
         popDoc : 
         {
@@ -966,6 +983,11 @@ export const langFr =
             clmInputName : "Nom actuel",
             clmInputCode : "Code actuel",
         },
+        pg_partiLot : {
+            title : "Choix du lot",
+            clmLotCode : "Code lot",
+            clmSkt : "DLC",
+        }
     },
     irs_04 : // "Bon de retour"
     {
@@ -986,6 +1008,7 @@ export const langFr =
         lblSumAmount : "Montant total:",
         lblGenAmount : "Total:",
         lblAdd: "Ajouter",
+        lblBarcode : "Veuillez scanner le code-barres !",
         msgAlert :
         {
             btn01 : "D'accord",
@@ -1011,7 +1034,8 @@ export const langFr =
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
             clmVat : "TVA",
-            clmTotal : "Total"
+            clmTotal : "Total",
+            clmLotCode : "Code lot",
         },
         popDoc : 
         {
@@ -1022,6 +1046,11 @@ export const langFr =
             clmInputName : "Nom actuel",
             clmInputCode : "Code actuel",
         },
+        pg_partiLot : {
+            title : "Choix du lot",
+            clmLotCode : "Code lot",
+            clmSkt : "DLC",
+        }
     },
     kar_01: // "Appariement de Commande"
     {
@@ -1042,6 +1071,7 @@ export const langFr =
         lblSumAmount: "Montant Total :",
         lblGenAmount: "Total Général :",
         lblAdd: "Ajouter",
+
         msgAlert: 
         {
             btn01: "D'accord",
@@ -1076,7 +1106,8 @@ export const langFr =
             clmVat: "TVA",
             clmTotal: "Montant",
             clmItemName: "Nom du Produit",
-            clmQuantity: "Quantité"
+            clmQuantity: "Quantité",
+            clmLotCode: "Code Lot"
         },
         popDoc: 
         {
@@ -1091,6 +1122,11 @@ export const langFr =
         {
             clmItemName: "Nom",
             clmQuantity: "Quantité en Attente",
+        },
+        pg_partiLot : {
+            title : "Choix du lot",
+            clmLotCode : "Code lot",
+            clmSkt : "DLC",
         },
         lblPendQuantity: "Quantité en Attente",
         lblTotalQuantity: "Quantité Totale",

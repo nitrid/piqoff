@@ -45,6 +45,9 @@ export default class salesPairing extends React.PureComponent
             "ITEMS.STATUS AS STATUS,   "  +
             "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
             "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
+            "ITEMS.LOT_CODE AS LOT_CODE,   "  +
+            "ITEMS.PARTILOT AS PARTILOT,   "  +
+            "ITEMS.PARTILOT_GUID AS PARTILOT_GUID,   "  +
             "ORDERS.UNIT AS UNIT_GUID, " +
             "(BARCODE) AS BARCODE,   "  +
             "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
@@ -63,7 +66,7 @@ export default class salesPairing extends React.PureComponent
             "ORDERS.VAT_RATE AS VAT_RATE   "  +
             "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
             "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM AND ORDERS.CLOSED = 0  "  +
-            "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
+            "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '') ORDER BY LOT_CODE ASC",
             param : ['DOC_GUID:string|50','CODE:string|50'],
         }
         this.unitDt.selectCmd = 
@@ -78,7 +81,7 @@ export default class salesPairing extends React.PureComponent
         }
         this.orderDetailDt.selectCmd = 
         {
-            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,PEND_QUANTITY/UNIT_FACTOR AS PEND_QUANTITY,LINE_NO FROM  " +
+            query : "SELECT GUID,ITEM_NAME,ITEM_CODE,UNIT_NAME,(PEND_QUANTITY/UNIT_FACTOR) AS PEND_QUANTITY, LINE_NO AS LINE_NO FROM  " +
                     "(SELECT GUID,  " +
                     "ITEM_NAME,  " +
                     "ITEM_CODE,  " +
@@ -86,7 +89,7 @@ export default class salesPairing extends React.PureComponent
                     "CASE WHEN '" + this.sysParam.filter({ID:'onlyApprovedPairing',USERS:this.user.CODE}).getValue()?.value +   "' = 'true' THEN (APPROVED_QUANTITY - COMP_QUANTITY) ELSE (QUANTITY - COMP_QUANTITY) END AS PEND_QUANTITY ,  " +
                     "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.GUID = DOC_ORDERS_VW_01.UNIT),1) AS UNIT_FACTOR , " +
                     "ISNULL((SELECT SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.GUID = DOC_ORDERS_VW_01.UNIT),'U') AS UNIT_NAME " +
-                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP ORDER BY LINE_NO ASC",
+                    "FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED = 0) AS TMP  ORDER BY LINE_NO ASC",
             param : ['DOC_GUID:string|50'],
         }
 
@@ -215,7 +218,6 @@ export default class salesPairing extends React.PureComponent
                    
                     this.txtFactor.props.onValueChanged()
                 }
-
                 this.txtPendQuantity.value = this.itemDt[0].PEND_QUANTITY / this.txtFactor.value
                 this.txtBarcode.value = ""
                 this.txtQuantity.focus();
@@ -232,6 +234,10 @@ export default class salesPairing extends React.PureComponent
         });
     }
     async calcEntry() {
+        if(this.itemDt.length == 0)
+        {
+            return
+        }
         // Vérifie si l'une des propriétés a une valeur différente de zéro
         if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0) 
         {
@@ -353,22 +359,69 @@ export default class salesPairing extends React.PureComponent
         tmpDocItems.TOTAL = tmpDocItems.TOTALHT + tmpDocItems.VAT
         tmpDocItems.ORDER_LINE_GUID = this.itemDt[0].ORDER_LINE_GUID
         tmpDocItems.ORDER_DOC_GUID = this.itemDt[0].ORDER_DOC_GUID
+        tmpDocItems.PARTILOT_GUID = this.itemDt[0].PARTILOT_GUID
+        tmpDocItems.LOT_CODE = this.itemDt[0].LOT_CODE
+        if(this.itemDt[0].PARTILOT == 1)
+        {
+            if(tmpDocItems.PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                let tmpSource =
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + tmpDocItems.ITEM + "'",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                }
+                await this.pg_partiLot.setSource(tmpSource)
+                this.pg_partiLot.onClick = async(data) =>
+                {
+                    tmpDocItems.PARTILOT_GUID = data[0].GUID  
+                    tmpDocItems.LOT_CODE = data[0].LOT_CODE
+                    this.docObj.docItems.addEmpty(tmpDocItems)
+                    this.orderDetailDt.clear();
+                    this.orderDetailDt.selectCmd.value = [this.orderGuid]
+                    await this.orderDetailDt.refresh();  
+                    await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
+                    this.clearEntry()
+            
+                    await this.save()
+                }
+                await this.pg_partiLot.show()
+            }
+            else
+            {
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                this.orderDetailDt.clear();
+                this.orderDetailDt.selectCmd.value = [this.orderGuid]
+                await this.orderDetailDt.refresh();  
+                await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
+                this.clearEntry()
+        
+                await this.save()
+            }
+        }
+        else
+        {
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            this.orderDetailDt.clear();
+            this.orderDetailDt.selectCmd.value = [this.orderGuid]
+            await this.orderDetailDt.refresh();  
+            await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
+            this.clearEntry()
+            await this.save()
+        }
 
-        this.docObj.docItems.addEmpty(tmpDocItems)
-
-        this.orderDetailDt.clear();
-        this.orderDetailDt.selectCmd.value = [this.orderGuid]
-        await this.orderDetailDt.refresh();  
-        await this.grdOrderDetail.dataRefresh({source:this.orderDetailDt});
-        this.clearEntry()
-
-        await this.save()
+      
     }
     async save()
     {
         return new Promise(async resolve => 
         {
-            console.log(this.docObj.docItems.dt())
             if(this.docObj.dt().length > 0)
             {
                 let tmpVat = 0
@@ -396,7 +449,6 @@ export default class salesPairing extends React.PureComponent
             
             if((await this.docObj.save()) == 0)
             {                                                    
-               
             }
             else
             {
@@ -463,10 +515,8 @@ export default class salesPairing extends React.PureComponent
         }
         if(typeof pGuid != 'undefined')
         {
-            console.log(pGuid)
             if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'GetOldDispatch'}).getValue())
             {
-                console.log(111)
                 let tmpQuery = 
                 {
                     query :"SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
@@ -474,15 +524,13 @@ export default class salesPairing extends React.PureComponent
                     value : [pGuid]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                console.log(tmpData)
                 if(tmpData.result.recordset.length > 0)
                 {
-                    await this.getDoc(tmpData.result.recordset[0].DOC_TO,'',0)
+                    await this.getDoc(tmpData.result.recordset[0].DOC_TO,'',-1)
                     this.orderGuid = pGuid
                     this.onClickBarcodeShortcut()
                     return
                 }
-                console.log(2222)
             }
             let tmpQuery = 
             {
@@ -494,7 +542,6 @@ export default class salesPairing extends React.PureComponent
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {
-                console.log(tmpData.result.recordset[0])
                 this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT,
                 this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
@@ -521,7 +568,7 @@ export default class salesPairing extends React.PureComponent
             {
                 query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
                 param : ['REF:string|25'],
-                value : [this.txtRef.value]
+                value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -536,7 +583,6 @@ export default class salesPairing extends React.PureComponent
     }
     async getOrderName()
     {
-        console.log(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue())
         if(this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'showOrderLine'}).getValue() == true)
         {
             this.orderDetailDt.selectCmd.value = [this.orderGuid]
@@ -685,8 +731,6 @@ export default class salesPairing extends React.PureComponent
                                                             }
 
                                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-
-                                                            console.log(tmpData.result.recordset)
                                                             if(tmpData.result.recordset.length > 0)
                                                             {
                                                                 this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
@@ -694,7 +738,7 @@ export default class salesPairing extends React.PureComponent
                                                         }
                                                         catch (error) 
                                                         {
-                                                            console.log("Hata oluştu: ", error);
+                                                            console.log("Error: ", error);
                                                         }
                                                         
                                                     }).bind(this)}
@@ -992,7 +1036,9 @@ export default class salesPairing extends React.PureComponent
                                                 {
                                                     select:
                                                     {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                        query : `SELECT GUID,CODE,NAME,STATUS,(SELECT TOP 1 BARCODE FROM ITEM_BARCODE_VW_01 WHERE 
+                                                                 ITEM_BARCODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND STATUS=1 ) AS BARCODE FROM 
+                                                                 ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                         param : ['VAL:string|50']
                                                     },
                                                     sql:this.core.sql
@@ -1001,6 +1047,34 @@ export default class salesPairing extends React.PureComponent
                                             >
                                                 <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
                                                 <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
+                                            </NdPopGrid>
+                                            {/* PARTILOT SEÇİM POPUP */}
+                                            <NdPopGrid id={"pg_partiLot"} parent={this} container={"#root"} 
+                                                visible={false}
+                                                position={{of:'#root'}} 
+                                                showTitle={true} 
+                                                showBorders={true}
+                                                width={'90%'}
+                                                height={'90%'}
+                                                title={this.t("pg_partiLot.title")} 
+                                                selection={{mode:"single"}}
+                                                search={true}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'tst',
+                                                            icon:'more',
+                                                            onClick:()=>
+                                                            {
+
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                                >
+                                                <Column dataField="LOT_CODE" caption={this.t("pg_partiLot.clmLotCode")} width={'20%'} />
+                                                <Column dataField="SKT" caption={this.t("pg_partiLot.clmSkt")} width={'50%'} dataType="date" format={"dd/MM/yyyy"} defaultSortOrder="asc" />
                                             </NdPopGrid>
                                         </div>
                                     </div>
@@ -1192,6 +1266,7 @@ export default class salesPairing extends React.PureComponent
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                                 <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                                <Column dataField="LOT_CODE" caption={this.t("grdList.clmLotCode")} width={150} />
                                                 <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
                                                 <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
                                                 <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
@@ -1232,9 +1307,6 @@ export default class salesPairing extends React.PureComponent
                                                         icon:'more',
                                                         onClick:()  =>
                                                         {
-                                                            console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                            console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                            console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                             if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                             {
                                                                 this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)

@@ -818,6 +818,13 @@ export const langTr =
         lblSumAmount : "Toplam Tutar :",
         lblGenAmount : "Genel Toplam :",
         lblAdd: "Ekle",
+        lblBarcode : "Lutfen Barkod Okutunuz",
+
+        pg_partiLot : {
+            title : "Lot Seçimi",
+            clmLotCode : "Lot Kodu",
+            clmSkt : "SKT",
+        },
         msgAlert :
         {
             btn01 : "Tamam",
@@ -843,7 +850,8 @@ export const langTr =
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLotCode : "Lot Kodu"
         },
         popDoc : 
         {
@@ -874,6 +882,7 @@ export const langTr =
         lblSumAmount : "Toplam Tutar :",
         lblGenAmount : "Genel Toplam :",
         lblAdd: "Ekle",
+        lblBarcode : "Lutfen Barkod Okutunuz",
         msgAlert :
         {
             btn01 : "Tamam",
@@ -899,7 +908,8 @@ export const langTr =
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLotCode : "Lot Kodu",
         },
         popDoc : 
         {
@@ -910,6 +920,11 @@ export const langTr =
             clmInputName : "Cari Adı",
             clmInputCode : "Cari Kodu",
         },
+        pg_partiLot : {
+            title : "Lot Seçimi",
+            clmLotCode : "Lot Kodu",
+            clmSkt : "SKT",
+        }
     },
     irs_03 : // "Satış İrsaliyesi"
     {
@@ -930,6 +945,7 @@ export const langTr =
         lblSumAmount : "Toplam Tutar :",
         lblGenAmount : "Genel Toplam :",
         lblAdd: "Ekle",
+        lblBarcode : "Lutfen Barkod Okutunuz",
         msgAlert :
         {
             btn01 : "Tamam",
@@ -955,7 +971,8 @@ export const langTr =
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLotCode : "Lot Kodu"
         },
         popDoc : 
         {
@@ -966,6 +983,11 @@ export const langTr =
             clmInputName : "Cari Adı",
             clmInputCode : "Cari Kodu",
         },
+        pg_partiLot : {
+            title : "Lot Seçimi",
+            clmLotCode : "Lot Kodu",
+            clmSkt : "SKT",
+        }
     },
     irs_04 : // "İade İrsaliyesi"
     {
@@ -986,6 +1008,7 @@ export const langTr =
         lblSumAmount : "Toplam Tutar :",
         lblGenAmount : "Genel Toplam :",
         lblAdd: "Ekle",
+        lblBarcode : "Lutfen Barkod Okutunuz",
         msgAlert :
         {
             btn01 : "Tamam",
@@ -1011,7 +1034,8 @@ export const langTr =
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLotCode : "Lot Kodu"
         },
         popDoc : 
         {
@@ -1022,6 +1046,11 @@ export const langTr =
             clmInputName : "Cari Adı",
             clmInputCode : "Cari Kodu",
         },
+        pg_partiLot : {
+            title : "Lot Seçimi",
+            clmLotCode : "Lot Kodu",
+            clmSkt : "SKT",
+        }
     },
     kar_01 : // "Sipariş Eşleştirme"
     {
@@ -1076,7 +1105,8 @@ export const langTr =
             clmVat : "Kdv",
             clmTotal : "Tutar",
             clmItemName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Miktar",
+            clmLotCode : "Lot Kodu"
         },
         popDoc : 
         {
@@ -1091,6 +1121,11 @@ export const langTr =
         {
             clmItemName : "Adı",
             clmQuantity :  "Bekleyen Miktar",
+        },
+        pg_partiLot : {
+            title : "Lot Seçimi",
+            clmLotCode : "Lot Kodu",
+            clmSkt : "SKT",
         },
         lblPendQuantity : "Bekleyen Miktar",
         lblTotalQuantity : "Toplam Miktar",

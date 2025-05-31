@@ -400,5 +400,11 @@ const sip_02_002 =
         btn01: "OK", //BAK
         msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
     },
+    msgDuplicateItems:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Produits déjà présent dans le document plusieurs fois!"
+    }
 }
 export default sip_02_002

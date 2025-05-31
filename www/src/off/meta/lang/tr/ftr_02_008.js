@@ -94,6 +94,8 @@ const ftr_02_008 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
+        clmPrice : "FİYAT",
+        clmMulticode :"FRN.KODU",
     },
     pg_dispatchGrid : 
     {

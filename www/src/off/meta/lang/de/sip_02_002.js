@@ -391,5 +391,11 @@ const sip_02_002 =
         btn01: "OK", 
         msg: "Nach Hinzufügen von Artikel kann Kunde nicht geändert werden" 
     },
+    msgDuplicateItems:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Produkte bereits mehrfach im Dokument enthalten!"
+    }
 }
 export default sip_02_002

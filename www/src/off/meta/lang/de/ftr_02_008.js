@@ -93,6 +93,8 @@ const ftr_02_008 =
       title: "Artikelauswahl",
       clmCode: "ARTIKELNUMMER",
       clmName: "ARTIKELNAME",
+      clmPrice: "PREIS",
+      clmMulticode :"LIEFERANTENNUMMER",
     },
     pg_dispatchGrid: 
     {

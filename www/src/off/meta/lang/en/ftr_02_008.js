@@ -94,6 +94,8 @@ const ftr_02_008 =
         title : "Product Selection",
         clmCode :  "PRODUCT CODE",
         clmName : "PRODUCT NAME",
+        clmPrice : "PRICE",
+        clmMulticode :"SUPPLIER CODE",
     },
     pg_dispatchGrid : 
     {

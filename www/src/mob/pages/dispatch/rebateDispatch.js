@@ -34,7 +34,7 @@ export default class rebateDispatch extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER_GUID)) OR (@CODE = '')",
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER_GUID)) OR (@CODE = '') ORDER BY LOT_CODE ASC",
             param : ['CODE:string|25','CUSTOMER_GUID:string|50'],
         }
         this.unitDt.selectCmd = 
@@ -317,8 +317,43 @@ export default class rebateDispatch extends React.PureComponent
         tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
+        tmpDocItems.PARTILOT_GUID = this.itemDt[0].PARTILOT_GUID
+        tmpDocItems.LOT_CODE = this.itemDt[0].LOT_CODE
+        if(this.itemDt[0].PARTILOT == 1)
+        {
 
-        this.docObj.docItems.addEmpty(tmpDocItems)
+            if(tmpDocItems.PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                let tmpSource =
+                {
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + tmpDocItems.ITEM + "'",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                }
+                await this.pg_partiLot.setSource(tmpSource)
+                this.pg_partiLot.onClick = (data) =>
+                {
+                    tmpDocItems.PARTILOT_GUID = data[0].GUID  
+                    tmpDocItems.LOT_CODE = data[0].LOT_CODE
+                    this.docObj.docItems.addEmpty(tmpDocItems)
+                }
+                await this.pg_partiLot.show()
+            }
+            else
+            {
+                this.docObj.docItems.addEmpty(tmpDocItems)
+            }
+        }
+        else
+        {
+            this.docObj.docItems.addEmpty(tmpDocItems)
+        }
         this.clearEntry()
 
         await this.save()
@@ -479,7 +514,7 @@ export default class rebateDispatch extends React.PureComponent
                                                         }
                                                         catch (error) 
                                                         {
-                                                            console.log("Hata oluştu: ", error);
+                                                            console.log("Error: ", error);
                                                         }
                                                         
                                                     }).bind(this)}
@@ -678,6 +713,7 @@ export default class rebateDispatch extends React.PureComponent
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                            placeholder={this.t("lblBarcode")}
                                             onKeyUp={(async(e)=>
                                             {
                                                 if(e.event.key == 'Enter')
@@ -752,7 +788,7 @@ export default class rebateDispatch extends React.PureComponent
                                                 {
                                                     select:
                                                     {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                        query : "SELECT GUID,CODE,NAME,STATUS,(SELECT TOP 1 BARCODE FROM ITEM_BARCODE_VW_01 WHERE ITEM_BARCODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND STATUS=1 ) AS BARCODE FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                                                         param : ['VAL:string|50']
                                                     },
                                                     sql:this.core.sql
@@ -760,7 +796,36 @@ export default class rebateDispatch extends React.PureComponent
                                             }}
                                             >
                                                 <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
+                                                <Column dataField="BARCODE" caption={this.lang.t("popItem.clmBarcode")} width={100} />
                                                 <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
+                                            </NdPopGrid>
+                                            {/* PARTILOT SEÇİM POPUP */}
+                                            <NdPopGrid id={"pg_partiLot"} parent={this} container={"#root"} 
+                                                visible={false}
+                                                position={{of:'#root'}} 
+                                                showTitle={true} 
+                                                showBorders={true}
+                                                width={'90%'}
+                                                height={'90%'}
+                                                title={this.t("pg_partiLot.title")} 
+                                                selection={{mode:"single"}}
+                                                search={true}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'tst',
+                                                            icon:'more',
+                                                            onClick:()=>
+                                                            {
+
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                                >
+                                                <Column dataField="LOT_CODE" caption={this.t("pg_partiLot.clmLotCode")} width={'20%'} />
+                                                <Column dataField="SKT" caption={this.t("pg_partiLot.clmSkt")} width={'50%'} dataType="date" format={"dd/MM/yyyy"} defaultSortOrder="asc" />
                                             </NdPopGrid>
                                         </div>
                                     </div>
@@ -786,6 +851,7 @@ export default class rebateDispatch extends React.PureComponent
                                         <div className='col-4'>
                                             <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
                                              dt={{data:this.orderDt,field:"UNIT"}}
+
                                             onValueChanged={(e)=>
                                             {
                                                 if(e.value != null && e.value != "")
@@ -1023,6 +1089,7 @@ export default class rebateDispatch extends React.PureComponent
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                                 <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                                <Column dataField="LOT_CODE" caption={this.t("grdList.clmLotCode")} width={150} />     
                                                 <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
                                                 <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
                                                 <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
