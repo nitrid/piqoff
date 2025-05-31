@@ -14,7 +14,8 @@ const stk_05_001 =
         clmCostPrice : "Kaufpreis", 
         clmTotalCost : "Bestandswert", 
         clmSalePrice : "Verkaufspreis", 
-        clmTotalPrice : "Gesamter Verkaufswert" 
+        clmTotalPrice : "Gesamter Verkaufswert",
+        clmUnitSymbol : "Einheit"
     },
     txtTotalQuantity : "Gesamtmenge",
     txtTotalCost : "Bestandswert",

@@ -74,6 +74,7 @@ export default class itemMovementReport extends React.PureComponent
     {
         App.instance.setState({isExecute:true})
 
+
         let tmpSource =
             {
                 source:
@@ -270,8 +271,15 @@ export default class itemMovementReport extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                    this.pg_partiLot.show()
-                                                    this.findPartiLot(this.itemsObj.dt()[0].GUID)
+                                                    if(this.itemsObj.dt().length == 0)
+                                                    {
+                                                        return
+                                                    }
+                                                    else 
+                                                    {
+                                                        this.pg_partiLot.show()
+                                                        this.findPartiLot(this.itemsObj.dt()[0].GUID)
+                                                    }
 
                                                 }
                                             },

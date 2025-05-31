@@ -14,7 +14,8 @@ const stk_05_001 =
         clmCostPrice : "Prix d'achat",    
         clmTotalCost : "Valeur prix d'achat",    
         clmSalePrice : "Prix de vente",    
-        clmTotalPrice : "Montant total des ventes"  
+        clmTotalPrice : "Montant total des ventes" ,
+        clmUnitSymbol : "Unité"
     },
     txtTotalQuantity : "Total Quantité",
     txtTotalCost : "Montant de l'inventaire",
