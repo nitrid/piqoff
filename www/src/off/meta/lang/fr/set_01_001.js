@@ -1,6 +1,12 @@
 // "Tax Sugar"
 const set_01_001 = 
 {
+    msgError : 
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "La plage de dates est incorrecte ! Veuillez saisir la plage de dates avec le format suivant : 1970-01-01 / 1970-12-31"
+    },
     pg_Docs : 
     {
         title : "Sélection Document",

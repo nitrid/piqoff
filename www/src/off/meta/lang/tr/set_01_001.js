@@ -1,6 +1,12 @@
 // "Şeker Vergisi"
 const set_01_001 = 
 {
+    msgError : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Tarih aralığı hatalı ! Lütfen tarih aralığını '/' ile ayırarak giriniz. Örnek : 1970-01-01 / 1970-12-31"
+    },
     pg_Docs : 
     {
         title : "Belge Seçimi",

@@ -213,6 +213,24 @@ export default class taxSugar extends React.PureComponent
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
                                        e.key.CDATE_FORMAT =  moment(new Date()).format("YYYY-MM-DD - HH:mm:ss")
+                                    if(e.key.DATE)
+                                    {
+                                        let dates = e.key.DATE.split('/');
+                                        if(dates.length === 2) {
+                                            e.key.START_DATE = moment(dates[0].trim()).format("YYYY-MM-DD");
+                                            e.key.END_DATE = moment(dates[1].trim()).format("YYYY-MM-DD");
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgError',showTitle:true,title:this.t("msgError.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgError.btn01"),location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgError.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }
                                     }}
                                     onRowRemoved={(e)=>{
 
@@ -222,7 +240,7 @@ export default class taxSugar extends React.PureComponent
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="popup" allowUpdating={true} allowDeleting={true} confirmDelete={false}>
-                                            <Popup title={this.t("popTaxSugar.title")} showTitle={true} width={700} height={400} >
+                                            <Popup title={this.t("popTaxSugar.title")} showTitle={true} width={900} height={400} >
                                             <grdFrom>
                                             <Item itemType="group" colCount={2}>
                                                 <Item dataField="MIN_VALUE" format={"##0.00"}/>
@@ -245,7 +263,7 @@ export default class taxSugar extends React.PureComponent
                                         <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={200}  format={"#,##0.00 " + Number.money.sign + "'(100ML/GR)'"}>
                                             <RangeRule min={0.01} message={this.t("validation.clmPrice")} /><RequiredRule/>
                                         </Column>
-                                        <Column dataField="DATE" caption={this.t("grdTaxSugar.clmDate")} width={200} dataType={'date'}/>
+                                        <Column dataField="DATE" caption={this.t("grdTaxSugar.clmDate")} width={200} />
                                     </NdGrid>
                                 </Item>
                             </Form>
