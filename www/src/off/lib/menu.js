@@ -271,6 +271,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_006'),//'',
                             path: 'items/report/itemMovementReport'
                         },
+                        {
+                            id: 'stk_05_007',
+                            text : e.t('menuOff.stk_05_007'),//'',
+                            path: 'items/report/partiLotQuantityReport'
+                        },
                     ]
                 }
             ]

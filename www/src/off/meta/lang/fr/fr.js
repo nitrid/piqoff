@@ -244,6 +244,7 @@ export const langFr =
         stk_05_004 : "Rapport sur les pertes", 
         stk_05_005: "Rapport de mouvement de stock",
         stk_05_006: "Rapport de mouvement des produits",
+        stk_05_007: "Rapport de quantité de lot",
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",

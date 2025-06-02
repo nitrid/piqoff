@@ -243,6 +243,7 @@ export const langTr =
         stk_05_004: "Kayıp Ürün Raporu",
         stk_05_005: "Stok Hareket Raporu",
         stk_05_006: "Ürün Hareket Raporu",
+        stk_05_007: "Lot Numarası Miktar Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",

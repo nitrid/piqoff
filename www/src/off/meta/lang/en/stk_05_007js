@@ -1,0 +1,34 @@
+// "Ürün Hareket Raporu"
+const stk_05_007 =
+{
+    txtRef : "Product Code",
+    cmbDepot : "Depot",
+    chkZeroQuantity : "Zero Quantity",
+    btnGet :"Get",
+    grdListe: 
+    {
+        clmName: "Name",
+        clmCode: "Code",
+        clmSkt: "Expiration Date",
+        clmQuantity : "Quantity",
+        clmLotCode : "Lot Number",
+        clmDepoQuantity: "Depot Quantity",
+    },
+    pg_txtRef:
+    {
+        title: "Product Selection",
+        clmCode: "CODE",
+        clmName: "NAME", 
+        clmBarcode: "BARCODE", 
+        clmStatus : "STATUS"
+    },
+    cancel : "Cancel",
+    msgItemSelect:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Please select the product !"
+    },
+}
+
+export default stk_05_006

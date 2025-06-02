@@ -7,7 +7,7 @@ import Form, { EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import {itemsCls} from '../../../../core/cls/items.js'
 import {docCls} from '../../../../core/cls/doc.js'
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -41,7 +41,8 @@ export default class itemMovementReport extends React.PureComponent
         this.itemsObj = new itemsCls()
 
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
-
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
 
         this.tabIndex = props.data.tabkey
     }
@@ -70,6 +71,17 @@ export default class itemMovementReport extends React.PureComponent
         App.instance.setState({isExecute:false})
 
     }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsInvState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
     async findPartiLot(pGuid)
     {
         App.instance.setState({isExecute:true})
@@ -97,7 +109,6 @@ export default class itemMovementReport extends React.PureComponent
    
     async _btnGetClick()
     {
-        console.log('this.txtRef.GUID ',this.txtRef.GUID )
         
         if(this.txtRef.GUID == '00000000-0000-0000-0000-000000000000')
         {
@@ -111,8 +122,6 @@ export default class itemMovementReport extends React.PureComponent
             await dialog(tmpConfObj);
             return
         }
-        console.log('this.txtPartiLot.value',this.txtPartiLot.value)
-        console.log('this.txtRef.GUID',this.txtRef.GUID)
         let tmpSource =
         {
             source : 
@@ -129,7 +138,6 @@ export default class itemMovementReport extends React.PureComponent
         }
         App.instance.setState({isExecute:true})
         await this.grdItemMovementReport.dataRefresh(tmpSource)
-        console.log('this.grdItemMovementReport.dt()',this.grdItemMovementReport)
         App.instance.setState({isExecute:false})
 
 
@@ -189,7 +197,6 @@ export default class itemMovementReport extends React.PureComponent
                                                         this.pg_txtRef.show()
                                                         this.pg_txtRef.onClick = (data) =>
                                                         {
-                                                            console.log('data',data)
                                                             if(data.length > 0)
                                                             {
                                                                 this.getItem(data[0].CODE)
@@ -255,7 +262,7 @@ export default class itemMovementReport extends React.PureComponent
                                             <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
                                             <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
                                             <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
-                                    </NdPopGrid>
+                                        </NdPopGrid>
                                 </Item>
                                 <EmptyItem colSpan={2}/>
                                 {/* txtPartiLot */}
@@ -356,9 +363,12 @@ export default class itemMovementReport extends React.PureComponent
                                 {
                                 }}
                             >                            
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                <ColumnChooser enabled={true} />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menuOff.stk_05_006")} enabled={true} allowExportSelectedData={true} />                                
                                 <Column dataField="LUSER" caption={this.t("grdItemMovementReport.clmLuser")} visible={true} width={80}/> 
                                 <Column dataField="LDATE" caption={this.t("grdItemMovementReport.clmLdate")} visible={true} width={150}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
@@ -366,8 +376,8 @@ export default class itemMovementReport extends React.PureComponent
                                 <Column dataField="REF" caption={this.t("grdItemMovementReport.clmRef")} visible={true} width={150}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdItemMovementReport.clmRefNo")} visible={true}  width={70}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdItemMovementReport.clmDocDate")} visible={true}  width={100} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                               <Column dataField="ITEM_NAME" caption={this.t("grdItemMovementReport.clmItemName")} visible={true}  width={150}/> 
-                               <Column dataField="QUANTITY" caption={this.t("grdItemMovementReport.clmQuantity")} visible={true}  width={100}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdItemMovementReport.clmItemName")} visible={true}  width={150}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdItemMovementReport.clmQuantity")} visible={true}  width={100}/> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdItemMovementReport.clmInputName")} visible={true}  width={150}/> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdItemMovementReport.clmOutputName")} visible={true}  width={150}/> 
                                
