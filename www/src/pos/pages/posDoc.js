@@ -6926,7 +6926,7 @@ export default class posDoc extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
+                                        if(Number(tmpDt.sum('TOTAL')) < Number(tmpResult))
                                         {
                                             let tmpConfObj =
                                             {
