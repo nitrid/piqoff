@@ -98,7 +98,7 @@ export default class branchSaleInvoice extends DocBase
                 this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                 this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
             }
-        }, 1000);
+        }, 500);
 
         this.pg_txtItemsCode.on('showing',()=>
         {
