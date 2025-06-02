@@ -443,26 +443,7 @@ export function print()
             for (let i = 0; i < data.pospay.length; i++) 
             {
                 let tmpType = "";
-                if(data.pospay[i].PAY_TYPE == 0)
-                    tmpType = "Espece"
-                else if (data.pospay[i].PAY_TYPE == 1)
-                    tmpType = "CB"
-                else if(data.pospay[i].PAY_TYPE == 2)
-                    tmpType = "Cheque"
-                else if(data.pospay[i].PAY_TYPE == 3)
-                    tmpType = "CHEQue"
-                else if(data.pospay[i].PAY_TYPE == 4)
-                    tmpType = "BON D'AVOIR"
-                else if(data.pospay[i].PAY_TYPE == 5)
-                    tmpType = "AVOIR"
-                else if(data.pospay[i].PAY_TYPE == 6)
-                     tmpType = "VIREMENT"
-                else if(data.pospay[i].PAY_TYPE == 7)
-                    tmpType = "PRLV"
-                else if(data.pospay[i].PAY_TYPE == 8)
-                    tmpType = "FRANC"
-                else if(data.pospay[i].PAY_TYPE == 9)
-                    tmpType = "CB T.Resto"
+                    tmpType = data.pospay[i].PAY_TYPE_NAME
 
                 tmpArr.push(
                 {
