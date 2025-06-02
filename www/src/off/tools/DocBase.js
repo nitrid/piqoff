@@ -712,7 +712,8 @@ export default class DocBase extends React.PureComponent
         }
 
         this.pg_dispatchGrid.onClick = async(data) =>
-        {
+        {   
+            this.grid.devGrid.beginUpdate()
             App.instance.setState({isExecute:true})
             for (let i = 0; i < data.length; i++) 
             {
@@ -776,7 +777,7 @@ export default class DocBase extends React.PureComponent
                 await this.core.util.waitUntil(100)
                 this.docDetailObj.dt()[this.docDetailObj.dt().length - 1].stat = 'edit'
             }
-            
+            this.grid.devGrid.endUpdate()
             this.docDetailObj.dt().emit('onRefresh')
             this.calculateTotal()
             App.instance.setState({isExecute:false})
@@ -804,8 +805,8 @@ export default class DocBase extends React.PureComponent
 
         this.pg_ordersGrid.onClick = async(data) =>
         {
-            console.log(data)
             App.instance.setState({isExecute:true})
+            this.grid.devGrid.beginUpdate()
             for (let i = 0; i < data.length; i++) 
             {
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -860,6 +861,7 @@ export default class DocBase extends React.PureComponent
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
             }
+            this.grid.devGrid.endUpdate()
             this.calculateTotal()
             App.instance.setState({isExecute:false})
         }

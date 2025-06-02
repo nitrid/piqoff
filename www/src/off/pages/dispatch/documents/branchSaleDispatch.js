@@ -1520,7 +1520,6 @@ export default class branchSaleDispatch extends DocBase
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    sorting={false}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
