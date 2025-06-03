@@ -809,7 +809,7 @@ export default class purchaseDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
             }
 
-            if (tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            if (typeof tmpGrpData.result.recordset[0] != 'undefined' && tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
             {
                 let tmpSource =
                 {
