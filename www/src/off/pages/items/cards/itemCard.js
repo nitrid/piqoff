@@ -41,7 +41,8 @@ export default class itemCard extends React.PureComponent
             isItemGrpForOrginsValid : false,
             isItemGrpForMinMaxAccess : false,
             isTaxSugar : false,
-            isPromotion : false
+            isPromotion : false,
+            isTaxSugarControlActive : this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE}).getValue().value
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -622,6 +623,17 @@ export default class itemCard extends React.PureComponent
     }
     async taxSugarValidCheck()
     {
+        console.log(this.state.isTaxSugarControlActive)
+        if (!this.state.isTaxSugarControlActive) 
+        {
+            this.setState({isTaxSugar: false});
+            this.txtTaxSugar.readOnly = true;
+            if(typeof this.itemsObj.itemMultiCode.dt()[0] != 'undefined')
+            {
+                this.txtTaxSugar.value = 0
+            }
+            return;
+        }
         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
         if((typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined') && (typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
         {
@@ -1102,6 +1114,7 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].INTERFEL = tmpItem.INTERFEL
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
                                         this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
+                                        this.itemsObj.dt()[0].TAX_SUGAR = tmpItem.TAX_SUGAR 
                                         let tmpUnit = new unitCls();
                                         await tmpUnit.load()
                                         
@@ -1534,8 +1547,10 @@ export default class itemCard extends React.PureComponent
                                             {
                                                 this.taxSugarCalculate()
                                             }}>
-                                                <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
-                                                    <RangeRule min={4.001} message={this.t("validTaxSucre")} />
+                                                <Validator validationGroup={
+                                                    (this.state.isTaxSugarControlActive && this.state.isTaxSugar) ? "frmItems" + this.tabIndex : ''
+                                                }>
+                                                    <RangeRule min={0.9999} message={this.t("validTaxSucre")} />
                                                 </Validator>
                                             </NdNumberBox>
                                         </div>
@@ -1683,15 +1698,23 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </NdLayoutItem>
-                                {/* chkInterfelLy */}
-                                <NdLayoutItem key={"chkInterfelLy"} id={"chkInterfelLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkInterfelLy',USERS:this.user.CODE})}>
+                                {/* chkTaxSugarControlLy */}
+                                <NdLayoutItem key={"chkTaxSugarControlLy"} id={"chkTaxSugarControlLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}}>
                                     <div className="row pe-3">
                                         <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkInterfel") + " :"}</label>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTaxSugarControl") + " :"}</label>
                                         </div>
                                         <div className="col-2 p-0 d-flex align-items-center">
-                                            <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
-                                            param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}/>
+                                            <NdCheckBox id="chkTaxSugarControl" parent={this}  
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"TAX_SUGAR"}}
+                                            onValueChanged={(e) => 
+                                            {
+                                                this.setState({ isTaxSugarControlActive: e.value }, () => 
+                                                {
+                                                    this.taxSugarValidCheck();
+                                                });
+                                            }}
+                                            param={this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE})}/>
                                         </div>
                                     </div>
                                 </NdLayoutItem>

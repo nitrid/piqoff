@@ -59,6 +59,7 @@ const stk_01_001 =
     cmbAnlysType : "Type", 
     txtCustoms : "Code de la douane", 
     txtGenus : "Type de produit",
+    chkTaxSugarControl : "Taxe Sucre",
     cmbAnlysTypeData : 
     {
         pos: "Pos", 
