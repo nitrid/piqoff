@@ -21,6 +21,19 @@ export const langFr =
     btnLineDisc: "Remise de ligne",       
     chkRememberMe : "Souviens-toi de moi", 
     btnMailsend : "Mail Gönder", // BAK
+    popPartilot:
+    {
+        title: "Définition du lot de produit",
+        lblPartilot : "Lot de produit",
+        lblPartilotSKT : "DLC",
+    },
+    msgPartilotCheck:
+    {
+        title: "Attention",
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Le lot de produit n'est pas précisé. Voulez-vous l'ajouter ?"
+    },
     msgPassiveItem:
     {
         title: "Attention",

@@ -21,6 +21,19 @@ export const langTr =
     btnLineDisc: "Satır İndirim",
     chkRememberMe : "Beni Hatırla", // BAK
     btnMailsend : "Mail Gönder",
+    msgPartilotCheck:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Iptal",
+        msg: "Ürünün lot kodu belirtilmemiş. Eklemek istiyor musunuz ?"
+    },
+    popPartilot:
+    {
+        title: "Ürün Lot Tanımlama",
+        lblPartilot : "Ürün Lot Kodu",
+        lblPartilotSKT : "Ürün Lot SKT",
+    },
     msgPassiveItem:
     {
         title: "Dikkat",

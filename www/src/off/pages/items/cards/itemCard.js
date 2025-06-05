@@ -1893,7 +1893,7 @@ export default class itemCard extends React.PureComponent
                                                 if(typeof e.newData.PRICE != 'undefined')
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                    if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE)
+                                                    if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE && e.newData.PRICE != 0)
                                                     {
                                                         e.cancel = true;
                                                         e.component.cancelEditData()  
