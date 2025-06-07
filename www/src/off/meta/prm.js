@@ -1207,6 +1207,25 @@ export const prm =
             CAPTION : "İnterfel."
         }
     },
+    //chkTaxSugarControl
+    {
+        TYPE : 2,
+        ID :"chkTaxSugarControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkTaxSugarControl",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Şeker Vergisi Kontrolü"
+        }
+    },
     //txtCostPrice
     {
         TYPE : 2,

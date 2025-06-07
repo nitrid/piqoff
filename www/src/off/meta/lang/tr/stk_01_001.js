@@ -59,6 +59,7 @@ const stk_01_001 =
     cmbAnlysType : "Tip",
     txtCustoms : "Gümrük Kodu",
     txtGenus : "Ürün Cinsi",
+    chkTaxSugarControl : "Şeker Vergisi",
     cmbAnlysTypeData : 
     {
         pos: "Pos",

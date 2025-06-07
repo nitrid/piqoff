@@ -2,7 +2,7 @@ import React from 'react';
 import App from '../../lib/app';
 import {datatable} from '../../../core/core.js'
 import {docCls,docExtraCls} from '../../../core/cls/doc.js'
-
+import { itemRelatedCls, itemPartiLotCls } from '../../../core/cls/items.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../../core/react/bootstrap/button';
 import NdTextBox from '../../../core/react/devex/textbox';
@@ -27,6 +27,7 @@ export default class purchaseDispatch extends React.PureComponent
         this.core = App.instance.core;
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
+        this.itemPartiLotObj = new itemPartiLotCls();
         this.itemDt = new datatable();
         this.unitDt = new datatable();
         this.priceDt = new datatable();        
@@ -60,7 +61,7 @@ export default class purchaseDispatch extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
-        
+        this.itemPartiLotObj.clearAll();
         this.dtDocDate.value = moment(new Date())
 
         await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
@@ -295,6 +296,7 @@ export default class purchaseDispatch extends React.PureComponent
         }
         
         let tmpDocItems = {...this.docObj.docItems.empty}
+        let tmpItemPartiLot = {...this.itemPartiLotObj.empty}
 
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
@@ -321,6 +323,8 @@ export default class purchaseDispatch extends React.PureComponent
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
         tmpDocItems.PARTILOT_GUID = this.itemDt[0].PARTILOT_GUID
         tmpDocItems.LOT_CODE = this.itemDt[0].LOT_CODE
+        tmpItemPartiLot.ITEM = this.itemDt[0].GUID
+
         if(this.itemDt[0].PARTILOT == 1)
         {
 
@@ -354,10 +358,28 @@ export default class purchaseDispatch extends React.PureComponent
         }
         else
         {
-            this.docObj.docItems.addEmpty(tmpDocItems)
+            let tmpConfObj = 
+            {
+                id:'msgPartilotCheck',showTitle:true,title:this.lang.t("msgPartilotCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgPartilotCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPartilotCheck.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPartilotCheck.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {    
+                this.itemPartiLotObj.addEmpty(tmpItemPartiLot)
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                await this.popPartilot.show()
+
+            }
+            else
+            {
+                this.docObj.docItems.addEmpty(tmpDocItems)
+            }
+            
+
         }
         this.clearEntry()
-
         await this.save()
     }
     async save()
@@ -399,6 +421,13 @@ export default class purchaseDispatch extends React.PureComponent
             }
             resolve()
         })
+    }
+    async partilotCheck(pLOT_CODE,pSKT)
+    {   
+        this.itemPartiLotObj.dt()[0].LOT_CODE = pLOT_CODE
+        this.itemPartiLotObj.dt()[0].SKT = pSKT 
+        await this.itemPartiLotObj.save()
+        this.docObj.docItems.dt()[0].LOT_CODE = pLOT_CODE
     }
     async deleteAll()
     {
@@ -732,8 +761,6 @@ export default class purchaseDispatch extends React.PureComponent
                                             placeholder={this.t("lblBarcode")}
                                             onKeyUp={(async(e)=>
                                             {
-                                                console.log('e',e)
-                                                console.log('this.txtBarcode.value',this.txtBarcode.value)
                                                 if(e.event.key == 'Enter')
                                                 {
                                                     await this.getItem(this.txtBarcode.value)
@@ -1409,7 +1436,52 @@ export default class purchaseDispatch extends React.PureComponent
                                 </div>
                             </NdPopUp> 
                         </PageContent>
+                        
                     </PageView>
+                </div>
+                <div>
+                    <NdPopUp parent={this} id={"popPartilot"} 
+                        visible={false}                        
+                        showCloseButton={false}
+                        showTitle={true}
+                        title={this.lang.t("popPartilot.title")}
+                        container={"#root"} 
+                        width={"300"}
+                        height={"240"}
+                        position={{of:"#root"}}
+                        >
+                        <div className='row p-1'>
+                            <div className='col-4 d-flex align-items-center justify-content-end'>
+                                <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popPartilot.lblPartilot")}</label>                                            
+                            </div>
+                            <div className='col-8'>
+                                <NdTextBox id="txtPartilot" parent={this} simple={true} maxLength={32} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"LOT_CODE"}}/>
+                            </div>
+                        </div>
+                        <div className='row p-1'>
+                            <div className='col-4 d-flex align-items-center justify-content-end'>
+                                <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popPartilot.lblPartilotSKT")}</label>                                            
+                            </div>
+                            <div className='col-8'>
+                                <NdDatePicker simple={true} parent={this} id={"dtPartilot"} dt={{data:this.itemPartiLotObj.dt('ITEM_PARTI_LOT'),field:"SKT"}}
+                                >
+                                </NdDatePicker>
+                            </div>
+                        </div>
+                        <div className="row p-1">
+                            <div className='col-12'>
+                                <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                    onClick={(async() =>
+                                    {
+                                        await this.partilotCheck(this.txtPartilot.value,this.dtPartilot.value)
+                                        await this.popPartilot.hide()
+
+                                    }).bind(this)
+                                }>{this.t("lblAdd")}
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
                 </div>
             </div>
         )
