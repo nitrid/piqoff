@@ -34,7 +34,9 @@ const AnimatedText = ({ value, type,onClicks }) => {
   };
   const onclick = () =>
   {
-    onClicks()
+    if (typeof onClicks === 'function') {
+      onClicks();
+    }
   }
   return (
     <animated.div style={fadeIn}>
