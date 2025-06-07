@@ -351,6 +351,7 @@ export const langEn =
         fns_02_001 : "Payment",
         fns_02_002 : "Collection",
         fns_02_003 : "Installment Payment",
+        fns_02_004 : "Expense Exit",
         fns_03 : "Cash - Bank Transactions",
         fns_03_001 : "Cash Introduction",
         fns_03_002 : "Bank Introduction",

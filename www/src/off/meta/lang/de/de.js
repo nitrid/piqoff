@@ -329,6 +329,8 @@ export const langDe =
         fns_02: "Dokumente",
         fns_02_001: "Zahlung",
         fns_02_002: "Einzug",
+        fns_02_003: "Taksitzahlung",
+        fns_02_004: "Ausgabebeleg",
         fns_03: "Kassen- und Banktransaktionen",
         fns_03_001: "Kassenpräsentation",
         fns_03_002: "Bankpräsentation",

@@ -1,114 +1,114 @@
-// "Masraf",
+// "Masraf Çıkış Fişi   ",
 const fns_02_004 = 
 {
-    txtRefRefno : "ref-Sıra",
-    cmbOutAccount: "Bank",
-    cmbInAccount: "Giriş Hesabı",
-    dtDocDate : "Tarih",
-    txtAmount : "Tutar",
-    txtTotal : "Genel Toplam",
-    description :"Açıklama",
-    amount : "Tutar",
-    cmbSafe : "Çıkış Hesabı",
-    cmbSafe2 : "Giriş Hesabı",
-    btnSafeToSafe : "Masraf Girişi",
-    cmbBank : "Hesap",
+    txtRefRefno : "Réf.-Réf no:",
+    cmbOutAccount:  "Compte Entrant",
+    cmbInAccount:  "Compte Entrant",
+    dtDocDate : "Date",
+    txtAmount : "Total" ,
+    txtTotal : "Total Général",
+    description :"Motif",
+    amount : "Total" ,
+    validSafe:"Selectionnez un compte",
+    cmbSafe :  "Compte Entrant",
+    cmbSafe2 :  "Compte Entrant",
+    btnSafeToSafe :  "Ajouter une dépense",
+    cmbBank : "Banque",
     pg_Docs : 
     {
-        title : "Evrak Seçimi",
-        clmDate : "TARIH",
-        clmRef : "SERİ",
-        clmRefNo : "SIRA",
-       clmDate : "TARİH",
-       clmTotal : "KDVLİ TOPLAM"
+        title : "Sélection Document",
+        clmDate : "Date",
+        clmRef : "Référence",
+        clmRefNo : "Réf No",
+        clmDate : "Date",
+        clmTotal : "Total TTC"
     },
     grdDocCostEntry: 
     {
-        clmCreateDate: "Kayıt Tarihi",
-        clmAmount : "Tutar",
-        clmInputName : "Giriş Hesabı",
-        clmOutputName : "Çıkış Hesabı",
-        clmDescription : "Açıklama"
+        clmCreateDate: "Date d'Enregistrement",
+        clmAmount : "Total" ,
+        clmInputName :  "Compte Entrant",
+        clmOutputName :  "Compte Sortant",
+        clmDescription : "Motif"
     },
     msgDocValid:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Veuillez saisir les en-tête avant l'achèvement !"
     },
     msgSave:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Abandonner",
+        msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
     },
     msgSaveResult:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msgSuccess: "Kayıt işleminiz başarılı !",
-        msgFailed: "Kayıt işleminiz başarısız !"
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistré avec succès !",
+        msgFailed: "Enregistrement échoué !"
     },
     msgSaveValid:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Lütfen gerekli alanları doldurunuz !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Veuillez saisir les zones nécessaires !"
     },
     msgDelete:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Abandonner",
+        msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
     },
     msgLocked:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Document Enregistré et Vérouillé !"
     },
     msgPasswordSucces:
     {
-        title: "Başarılı",
-        btn01: "Tamam",
-        msg: "Evrakın Kilidi Açıldı !",
+        title: "Succès",
+        btn01: "OK",
+        msg: "Document Déverouillé !",
     },
     msgPasswordWrong:
     {
-        title: "Başarısız",
-        btn01: "Tamam",
-        msg: "Şifreniz Hatalı !"
+        title: "Echec",
+        btn01: "OK",
+        msg: "Mot de Passe Erroné"
     },
     msgGetLocked:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
     },
     msgDblAccount:
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Giriş Ve Çıkış Hesapları Aynı Olamaz !"
+        title: "Attention",
+        btn01: "OK",
+        msg: "Les comptes d'entrées et de sorties ne peuvent pas être identiques !"
     },
     popCostEntry: 
     {
-        title: "Masraf Girişi",
-        btnApprove : "Ekle",
+        title:  "Ajouter une dépense",
+        btnApprove : "Ajouter",
     },
     
-    validRef : "Seri Boş Geçilemez",
-    validRefNo : "Sıra Boş Geçilemez",
-    validAccount : "Hesap Seçmelisiniz",
-    validDocDate : "Tarih Seçmelisiniz",
+    validRef : "Saisir Réf ",
+    validRefNo : "Saisir Réf No ",
+    validAccount : "Sélectionner un Compte ",
+    validDocDate : "Sélectionner Date" ,
 }
-
 export default fns_02_004

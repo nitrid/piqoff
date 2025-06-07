@@ -14,10 +14,6 @@ i18n.init(
         {
             translation: langFr
         },
-        en: 
-        {
-            translation: langEn
-        }
     },
 });
 
