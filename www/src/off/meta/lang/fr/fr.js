@@ -351,6 +351,7 @@ export const langFr =
         fns_02_001 : "Paiement",
         fns_02_002 : "Encaissement",
         fns_02_003 : "Échelonnement",
+        fns_02_004 : "Bon de sortie de frais",
         fns_03 : "Mouvement caisse-banque",
         fns_03_001 : "Choix caisse",
         fns_03_002 : "Sélection banque",
