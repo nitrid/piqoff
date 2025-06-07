@@ -623,7 +623,6 @@ export default class itemCard extends React.PureComponent
     }
     async taxSugarValidCheck()
     {
-        console.log(this.state.isTaxSugarControlActive)
         if (!this.state.isTaxSugarControlActive) 
         {
             this.setState({isTaxSugar: false});
