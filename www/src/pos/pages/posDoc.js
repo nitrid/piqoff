@@ -2944,7 +2944,6 @@ export default class posDoc extends React.PureComponent
     }
     async ticketCheckRetour(pGuid)
     {
-        console.log(pGuid+ '1111')
         this.loadingPay.current.instance.show()
         if(pGuid != "")
         {
@@ -3033,19 +3032,43 @@ export default class posDoc extends React.PureComponent
                 //query : "SELECT *,ISNULL((SELECT TOP 1 TICKET FROM POS_VW_01 WHERE TICKET = @GUID),'') AS REBATE_TICKET FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID",
                 query : `SELECT 
                         ITEM_CODE AS ITEM_CODE,
-                        SUM(QUANTITY) AS QUANTITY 
+                        SUM(QUANTITY) AS QUANTITY,
+                        PRICE AS PRICE,
+                        TOTAL AS TOTAL,
+                        FAMOUNT AS FAMOUNT,
+                        AMOUNT AS AMOUNT,
+                        DISCOUNT AS DISCOUNT,
+                        LOYALTY AS LOYALTY,
+                        VAT AS VAT,
+                        PROMO_TYPE AS PROMO_TYPE
                         FROM 
                         (SELECT 
                         ITEM_CODE,
-                        QUANTITY 
+                        QUANTITY,
+                        PRICE,
+                        TOTAL,
+                        FAMOUNT,
+                        AMOUNT,
+                        DISCOUNT,
+                        LOYALTY,
+                        VAT,
+                        PROMO_TYPE
                         FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID  
                         UNION ALL 
                         SELECT 
                         ITEM_CODE,
-                        QUANTITY * -1 
+                        QUANTITY ,
+                        PRICE,
+                        TOTAL ,
+                        FAMOUNT,
+                        AMOUNT,
+                        DISCOUNT,
+                        LOYALTY,
+                        VAT,
+                        PROMO_TYPE
                         FROM POS_SALE_VW_01 WHERE POS_GUID IN (SELECT GUID FROM POS_VW_01 WHERE TICKET = @GUID)
                         ) AS TMP 
-                        GROUP BY ITEM_CODE`,
+                        GROUP BY ITEM_CODE,PRICE,TOTAL,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT,PROMO_TYPE`,
                 param : ['GUID:string|50'], 
                 value : [pTicket] 
             }
@@ -3085,8 +3108,20 @@ export default class posDoc extends React.PureComponent
                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                 {
                     let tmpItem = tmpDt.where({ITEM_CODE:this.posObj.posSale.dt()[i].ITEM_CODE})
+                        
                     if(tmpItem.length > 0 && this.posObj.posSale.dt()[i].QUANTITY <= tmpItem[0].QUANTITY)
                     {
+                        console.log(tmpItem)
+                        this.posObj.posSale.dt()[i].PRICE = tmpItem[0].PRICE
+                        this.posObj.posSale.dt()[i].TOTAL = ((tmpItem[0].TOTAL / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
+                        this.posObj.posSale.dt()[i].FAMOUNT = ((tmpItem[0].FAMOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY)
+                        this.posObj.posSale.dt()[i].AMOUNT = ((tmpItem[0].AMOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
+                        this.posObj.posSale.dt()[i].DISCOUNT = ((tmpItem[0].DISCOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
+                        this.posObj.posSale.dt()[i].LOYALTY = ((tmpItem[0].LOYALTY / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
+                        this.posObj.posSale.dt()[i].VAT = ((tmpItem[0].VAT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY)  
+                        this.posObj.posSale.dt()[i].PROMO_TYPE = tmpItem[0].PROMO_TYPE
+                        await this.calcGrandTotal();
+
                         this.msgItemReturnTicket.hide()
                         this.popItemReturnDesc.show()
                         return
