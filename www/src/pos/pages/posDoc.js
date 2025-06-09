@@ -3113,12 +3113,14 @@ export default class posDoc extends React.PureComponent
                     {
                         console.log(tmpItem)
                         this.posObj.posSale.dt()[i].PRICE = tmpItem[0].PRICE
-                        this.posObj.posSale.dt()[i].TOTAL = ((tmpItem[0].TOTAL / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
-                        this.posObj.posSale.dt()[i].FAMOUNT = ((tmpItem[0].FAMOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY)
-                        this.posObj.posSale.dt()[i].AMOUNT = ((tmpItem[0].AMOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
                         this.posObj.posSale.dt()[i].DISCOUNT = ((tmpItem[0].DISCOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
-                        this.posObj.posSale.dt()[i].LOYALTY = ((tmpItem[0].LOYALTY / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
-                        this.posObj.posSale.dt()[i].VAT = ((tmpItem[0].VAT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY)  
+                        let tmpCalc = this.calcSaleTotal(tmpItem[0].PRICE,this.posObj.posSale.dt()[i].QUANTITY,this.posObj.posSale.dt()[i].DISCOUNT,0,tmpItem[0].VAT)
+
+                        this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
+                        this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
+                        this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
+                        this.posObj.posSale.dt()[i].LOYALTY = 0
+                        this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
                         this.posObj.posSale.dt()[i].PROMO_TYPE = tmpItem[0].PROMO_TYPE
                         await this.calcGrandTotal();
 
