@@ -113,22 +113,6 @@ export default class taxSucreReport extends React.PureComponent
     }
     async _btnGetirClick()
     {
-        let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
-        console.log(tmpData.length)
-        let tmpQueryValue = ''
-        for(let i = 0; i < tmpData.length; i++)
-        {
-            console.log(tmpData[i])
-            if(i == 0)
-            {
-                tmpQueryValue = "'" + tmpData[i] + "'"
-            }
-            else
-            {
-                tmpQueryValue = tmpQueryValue + ",'" + tmpData[i] +"'"
-            }
-        }
-        console.log(tmpQueryValue)
         let tmpSource =
         {
             source : 
@@ -150,12 +134,12 @@ export default class taxSucreReport extends React.PureComponent
                     "ITEM FROM  DOC_ITEMS_VW_01 AS DOC_ITEMS  " +
                     "WHERE TYPE = 0 AND DOC_TYPE IN(20,40) AND  REBATE = 0  AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
                     "((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE DOC_ITEMS.DOC_DATE>= START_DATE AND DOC_ITEMS.DOC_DATE<= END_DATE  AND MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM )))  IS NOT NULL AND " +
-                    "(SELECT TOP 1 MAIN_GUID FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS.ITEM)   " +
-                    "IN("+tmpQueryValue+")  AND  " +
+                    "(SELECT TOP 1 TAX_SUGAR FROM ITEMS_SHOP WHERE ITEMS_GRP.ITEM = DOC_ITEMS.ITEM) = 1   " +
+                    " AND  " +
                     "(SELECT TOP 1 TAX_SUCRE FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS.OUTPUT ) = 1  " +
                     "GROUP BY ITEM,REF,REF_NO,DOC_DATE,OUTPUT_CODE,OUTPUT_NAME HAVING ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) <> 0",
-                    param : ['FIRST_DATE:date','LAST_DATE:date','GROUPS:string|250'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate,tmpQueryValue]
+                    param : ['FIRST_DATE:date','LAST_DATE:date'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }

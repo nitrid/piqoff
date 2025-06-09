@@ -42,7 +42,6 @@ export default class itemCard extends React.PureComponent
             isItemGrpForMinMaxAccess : false,
             isTaxSugar : false,
             isPromotion : false,
-            isTaxSugarControlActive : this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE}).getValue().value
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -243,6 +242,8 @@ export default class itemCard extends React.PureComponent
         
         this.setState({isPromotion:false})     
         this.txtCostPrice.readOnly = this.sysParam.filter({ID:'costPriceReadOnly',USERS:this.user.CODE}).getValue()
+        this.chkTaxSugarControl.value = this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE}).getValue().value
+        this.setState({isTaxSugar:this.chkTaxSugarControl.value})
     }
     async getItem(pCode)
     {
@@ -623,18 +624,18 @@ export default class itemCard extends React.PureComponent
     }
     async taxSugarValidCheck()
     {
-        if (!this.state.isTaxSugarControlActive) 
+        if (!this.chkTaxSugarControl.value) 
         {
             this.setState({isTaxSugar: false});
             this.txtTaxSugar.readOnly = true;
-            if(typeof this.itemsObj.itemMultiCode.dt()[0] != 'undefined')
-            {
-                this.txtTaxSugar.value = 0
-            }
             return;
         }
-        let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
-        if((typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined') && (typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
+        else
+        {
+            this.setState({isTaxSugar: true});
+            this.txtTaxSugar.readOnly = false;
+        }
+        if((typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined'))
         {
             
             for (let i = 0; i < this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length; i++) 
@@ -651,29 +652,17 @@ export default class itemCard extends React.PureComponent
                     if(tmpData.result.recordset[0].TAX_SUCRE == 1)
                     {
                         this.setState({isTaxSugar:true})
-                        this.txtTaxSugar.readOnly = false
                         this.taxSugarCalculate()
                         return
                     }
                 }
-            }
-            this.setState({isTaxSugar:false})
-            this.txtTaxSugar.readOnly = true
-        }
-        else
-        {
-            this.setState({isTaxSugar:false})
-            this.txtTaxSugar.readOnly = true
-            if(typeof this.itemsObj.itemMultiCode.dt()[0] != 'undefined')
-            {
-                this.txtTaxSugar.value = 0
             }
         }
         this.taxSugarCalculate()
     }
     async taxSugarCalculate()
     {
-        if(typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined')
+        if(typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined' && this.state.isTaxSugar)
         {
             let tmpCheckQuery = 
             {
@@ -957,6 +946,7 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmItems" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(this.state.isTaxSugar)
                                         this.core.util.writeLog("Kaydet butonuna basıldı. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME)
                                         if(e.validationGroup.validate().status == "valid")
                                         {                                            
@@ -1547,7 +1537,7 @@ export default class itemCard extends React.PureComponent
                                                 this.taxSugarCalculate()
                                             }}>
                                                 <Validator validationGroup={
-                                                    (this.state.isTaxSugarControlActive && this.state.isTaxSugar) ? "frmItems" + this.tabIndex : ''
+                                                    (this.state.isTaxSugar) ? "frmItems" + this.tabIndex : ''
                                                 }>
                                                     <RangeRule min={0.9999} message={this.t("validTaxSucre")} />
                                                 </Validator>
@@ -1708,10 +1698,7 @@ export default class itemCard extends React.PureComponent
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"TAX_SUGAR"}}
                                             onValueChanged={(e) => 
                                             {
-                                                this.setState({ isTaxSugarControlActive: e.value }, () => 
-                                                {
-                                                    this.taxSugarValidCheck();
-                                                });
+                                                this.taxSugarValidCheck();
                                             }}
                                             param={this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE})}/>
                                         </div>
