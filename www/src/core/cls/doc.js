@@ -1152,6 +1152,9 @@ export class docOffersCls
             UNIT_SHORT : '',
             QUANTITY : 1,
             COMP_QUANTITY : 0,
+            SUB_QUANTITY : 1,
+            SUB_FACTOR : 1,
+            SUB_SYMBOL : '',
             PRICE : 0,
             DISCOUNT : 0,
             DISCOUNT_1 : 0,
@@ -1186,8 +1189,13 @@ export class docOffersCls
         let tmpDt = new datatable('DOC_OFFERS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_OFFERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
+            query : "SELECT *, " +
+            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
+            "FROM [dbo].[DOC_OFFERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|10']
         }
         tmpDt.insertCmd = 
         {
@@ -1325,6 +1333,7 @@ export class docOffersCls
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
+                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
             this.ds.get('DOC_OFFERS').selectCmd.value = Object.values(tmpPrm);

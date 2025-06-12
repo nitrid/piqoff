@@ -27,6 +27,7 @@ const tkf_02_002 =
     validDesign : "Lütfen Dizayn seçiniz.",
     validMail : "Lütfen Boş Geçmeyin.",
     cmbPricingList : "Fiyat Listesi",
+    LINE_NO : "Sıra No",
     isMsgSave :
     {  
         title: "Dikkat",
@@ -99,7 +100,9 @@ const tkf_02_002 =
         clmDescription :"Açıklama",
         clmCuser :"Kullanıcı",
         clmBarcode :"Barkodu",
-        clmVatRate : "KDV %"
+        clmVatRate : "KDV %",
+        clmSubFactor : "Birim Katsayısı",
+        clmSubQuantity : "Birim Miktarı",
     },
     popDiscount : 
     {

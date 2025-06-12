@@ -27,6 +27,7 @@ const tkf_02_002 =
     validDesign : "Veuillez sélectionner le design.",  
     validMail : "Veuillez ne pas laisser le champs vide.",
     cmbPricingList : "Liste de prix",
+    LINE_NO : "Numéro de ligne",
     isMsgSave :
     {
         title: "Attention",
@@ -99,7 +100,9 @@ const tkf_02_002 =
         clmDescription : "Motif",
         clmCuser :"Utilisateur",
         clmBarcode :"Code Barre",
-        clmVatRate : "TVA %"
+        clmVatRate : "TVA %",
+        clmSubFactor : "Coefficient unitaire",
+        clmSubQuantity : "Quantité unitaire",
     },
     popDiscount : 
     {

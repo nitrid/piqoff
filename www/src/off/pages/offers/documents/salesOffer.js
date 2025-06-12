@@ -12,7 +12,7 @@ import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -34,6 +34,8 @@ export default class salesOffer extends DocBase
         this.docLocked = false;        
         this.combineControl = true
         this.combineNew = false
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     async componentDidMount()
     {
@@ -394,6 +396,17 @@ export default class salesOffer extends DocBase
             )
         }
     }
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
     addItem(pData,pIndex,pQuantity,pPrice)
     {
         return new Promise(async resolve =>{
@@ -412,6 +425,11 @@ export default class salesOffer extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                {
+                    tmpMergDt[0].SUB_QUANTITY = Math.ceil(tmpMergDt[0].SUB_QUANTITY)
+                    tmpMergDt[0].QUANTITY = tmpMergDt[0].SUB_QUANTITY * tmpMergDt[0].SUB_FACTOR
+                }
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -432,7 +450,7 @@ export default class salesOffer extends DocBase
                 App.instance.setState({isExecute:false})
                 resolve()
                 return
-            }
+            }            
             //******************************************************************************************************************/
             if(pIndex == null)
             {
@@ -449,7 +467,36 @@ export default class salesOffer extends DocBase
                 this.docObj.docOffers.addEmpty(tmpDocOffers)
                 pIndex = this.docObj.docOffers.dt().length - 1
             }
-            
+            let tmpGrpQuery = 
+            {
+                query : "SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+                param : ['GUID:string|50','ID:string|20'],
+                value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            }
+            let tmpGrpData = await this.core.sql.execute(tmpGrpQuery)
+            if(tmpGrpData.result.recordset.length > 0)
+            {
+                this.docObj.docOffers.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+                this.docObj.docOffers.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+                this.docObj.docOffers.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+                this.docObj.docOffers.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+                
+            }
+            if(typeof pData.ITEM_TYPE == 'undefined')
+            {
+                let tmpTypeQuery = 
+                {
+                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.GUID]
+                }
+                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                if(tmpType.result.recordset.length > 0)
+                {
+                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                }
+            }
             this.docObj.docOffers.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docOffers.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docOffers.dt()[pIndex].VAT_RATE = pData.VAT
@@ -459,6 +506,18 @@ export default class salesOffer extends DocBase
             this.docObj.docOffers.dt()[pIndex].DISCOUNT = 0
             this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
+            this.docObj.docOffers.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docOffers.dt()[pIndex].SUB_FACTOR
+            if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.docObj.docOffers.dt()[pIndex].SUB_QUANTITY = Math.ceil(this.docObj.docOffers.dt()[pIndex].SUB_QUANTITY)
+                this.docObj.docOffers.dt()[pIndex].QUANTITY = this.docObj.docOffers.dt()[pIndex].SUB_QUANTITY * this.docObj.docOffers.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docOffers.dt()[pIndex].QUANTITY
+            }
+            if(this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+            {
+                this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docOffers.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docOffers.dt()[pIndex].QUANTITY
+            }
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
 
@@ -1150,8 +1209,14 @@ export default class salesOffer extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
+                                <Item>
+                                    <Label text={this.t("btnFacture")} alignment="right" />
+                                    <NdButton text={this.t("btnFacture")} type="normal" stylingMode="contained" width={'100%'} 
+                                    onClick={async (e)=>
+                                    {
+                                       
+                                    }}/>
+                                </Item>
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
@@ -1274,7 +1339,30 @@ export default class salesOffer extends DocBase
                                     </NdDatePicker>
                                 </Item>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <Item>
+                                    <Label text={this.t("btnBL")} alignment="right" />
+                                    <NdButton text={this.t("btnBL")} type="normal" stylingMode="contained" width={'100%'} 
+                                    onClick={async (e)=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO ",
+                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+                                        {
+                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                            mywindow.onload = function() 
+                                            {
+                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                            } 
+                                        });
+                                    }}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1453,6 +1541,15 @@ export default class salesOffer extends DocBase
                                     {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
+                                            if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                                            {
+                                                e.key.SUB_QUANTITY = Math.ceil(e.data.QUANTITY / e.key.SUB_FACTOR)
+                                                e.key.QUANTITY = Number(e.key.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
+                                            }
+                                            else
+                                            {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                            }
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
@@ -1466,6 +1563,14 @@ export default class salesOffer extends DocBase
                                                 
                                                 this.calculateTotal()
                                             }
+                                        }
+                                        if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                        {
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_FACTOR != 'undefined')
+                                        {
+                                            e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
@@ -1560,9 +1665,10 @@ export default class salesOffer extends DocBase
                                         await this["grdSlsOffer"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOffer"}/>
+                                        <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menuOff.sip_02_002")} enabled={true} allowExportSelectedData={true} />
@@ -1573,6 +1679,8 @@ export default class salesOffer extends DocBase
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOffer.clmBarcode")} width={110} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOffer.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOffer.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}} />
                                         <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>

@@ -494,6 +494,11 @@ export default class salesInvoice extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
+                if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                {
+                    tmpMergDt[0].SUB_QUANTITY = Math.ceil(tmpMergDt[0].SUB_QUANTITY)
+                    tmpMergDt[0].QUANTITY = tmpMergDt[0].SUB_QUANTITY * tmpMergDt[0].SUB_FACTOR
+                }
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -545,11 +550,8 @@ export default class salesInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-                if(this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
-                {
-                    this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-                    pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
-                }
+                
+               
             }
             if(typeof pData.ITEM_TYPE == 'undefined')
             {
@@ -574,8 +576,20 @@ export default class salesInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
             this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-            this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
+            if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = Math.ceil(this.docObj.docItems.dt()[pIndex].SUB_QUANTITY)
+                this.docObj.docItems.dt()[pIndex].QUANTITY = this.docObj.docItems.dt()[pIndex].SUB_QUANTITY * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+            }
+            if(this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+            {
+                this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+            }
+           
         
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
@@ -1898,7 +1912,15 @@ export default class salesInvoice extends DocBase
                                         {
                                             if(typeof e.data.QUANTITY != 'undefined')
                                             {
-                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                                                {
+                                                    e.key.SUB_QUANTITY = Math.ceil(e.data.QUANTITY / e.key.SUB_FACTOR)
+                                                    e.key.QUANTITY = Number(e.key.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
+                                                }
+                                                else
+                                                {
+                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                }
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
@@ -1915,7 +1937,9 @@ export default class salesInvoice extends DocBase
                                             }
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                                {
+                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                                }
                                             }
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
@@ -2025,7 +2049,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForColis',USERS:this.user.CODE}).getValue() == true ? false : true}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true ? false : true}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>

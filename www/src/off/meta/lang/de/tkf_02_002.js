@@ -26,6 +26,7 @@ const tkf_02_002 =
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
     cmbPricingList : "Preisliste",
+    LINE_NO : "Reihenfolge",
     isMsgSave :
     {
         title: "Achtung",
@@ -88,7 +89,9 @@ const tkf_02_002 =
         clmDescription: "Beschreibung",
         clmCuser: "Benutzer",
         clmBarcode: "Barcode",
-        clmVatRate: "MwSt.-Satz %"
+        clmVatRate: "MwSt.-Satz %",
+        clmSubFactor : "Einheitsfaktor",
+        clmSubQuantity : "Einheitsmenge",
     },
     popDiscount: 
     {

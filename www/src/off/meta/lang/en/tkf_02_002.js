@@ -27,6 +27,7 @@ const tkf_02_002 =
     validDesign : "Please select the design.",
     validMail : "Please do not leave blank.",
     cmbPricingList : "Pricing List",
+    LINE_NO : "Line No",
     isMsgSave :
     {  
         title: "Attention",
@@ -99,7 +100,9 @@ const tkf_02_002 =
         clmDescription :"DESCRIPTION",
         clmCuser :"USER",
         clmBarcode :"BARCODE",
-        clmVatRate : "VAT %"
+        clmVatRate : "VAT %",
+        clmSubFactor : "Unit Factor",
+        clmSubQuantity : "Unit Quantity",
     },
     popDiscount : 
     {

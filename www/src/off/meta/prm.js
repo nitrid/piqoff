@@ -468,7 +468,7 @@ export const prm =
     //Sabit Birim icin Koli Kullan
     {
         TYPE : 0,
-        ID :"fixedUnitForColis",
+        ID :"fixedUnitForCondition",
         VALUE :false,
         SPECIAL : "",
         PAGE : "",
@@ -478,7 +478,23 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Sabit Birim icin Colis Kullan"
+            CAPTION : "Zorunlu Üst Birim Kullan"
+        }
+    },
+    //Sabit Birimi uste yuvarla
+    {
+        TYPE : 0,
+        ID :"ceilingUnitForWeight",
+        VALUE :false,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim icin Uste Yuvarla"
         }
     },
     //Terazi Fiyat Çarpanı

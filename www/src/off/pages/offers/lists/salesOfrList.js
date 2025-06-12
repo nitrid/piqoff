@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,Editing,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
@@ -20,28 +20,12 @@ export default class salesOfrList extends React.PureComponent
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
-        }
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsOfrList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsOfrList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsOfrList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsOfrList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsOfrList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsOfrList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsOfrList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsOfrList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsOfrList.clmTotal")},
-        ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -59,67 +43,16 @@ export default class salesOfrList extends React.PureComponent
         this.grdSlsOfrList.devGrid.clearSorting()
         this.grdSlsOfrList.devGrid.clearFilter('row')
     }
-    _columnListBox(e)
+    loadState() 
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsOfrList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsOfrList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsOfrList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsOfrList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                {
-                    columnListValue : e.value
-                }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async _btnGetClick()
     {
@@ -306,13 +239,7 @@ export default class salesOfrList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                          
                         </div>
                         <div className="col-3">
                             
@@ -346,9 +273,12 @@ export default class salesOfrList extends React.PureComponent
                                 })
                             }}
                             >                            
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOffer"}/>
+                                <ColumnChooser enabled={true} />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                <Scrolling mode="standart" />
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOfrList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOfrList.clmRefNo")} visible={true} width={100}/> 
