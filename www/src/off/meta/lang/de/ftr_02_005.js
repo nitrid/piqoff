@@ -104,6 +104,7 @@ const ftr_02_005 =
         clmSubQuantity : "Untereinheit",
         clmSubPrice : "Preis pro Untereinheit",
         clmSubFactor : "Faktor",
+        clmPartiLot : "Chargennummer",
     },
     pg_partiLot : 
     {

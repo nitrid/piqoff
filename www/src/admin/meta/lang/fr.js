@@ -229,7 +229,7 @@ export const langFr =
         tkf_01_001: "Liste proposition achat",
         tkf_01_002: "Liste proposition vente",
         tkf_02_001: "Saisie Proposition d'Achat",
-        tkf_02_002: "Saisie Proposition de Vente",
+        tkf_02_002: "DEVIS",
         tkf_02_003 : "Demande de Différence de Prix",
         purchase : "Processus d'achat",
         purcoffer : "Proposition",

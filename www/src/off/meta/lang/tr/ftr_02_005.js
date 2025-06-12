@@ -107,6 +107,7 @@ const ftr_02_005 =
         clmSubQuantity : "Alt Birim",
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
+        clmPartiLot : "Lot Kodu",
     },
     pg_partiLot : 
     {
