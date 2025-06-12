@@ -982,9 +982,6 @@ export default class Sale extends React.PureComponent
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%",backgroundColor:'#2ecc71',color:'#fff',border:'none'}}
                             onClick={async()=>
                             {
-                                this.docObj.dt()[0].INPUT = "";
-                                this.docObj.dt()[0].INPUT_NAME = "";
-                                this.docObj.dt()[0].INPUT_CODE = "";
                                 for (let i = 0; i < this.docLines.length; i++) 
                                 {
                                     this.docLines[i].DISCOUNT_RATE =  Number(this.docLines[i].QUANTITY * this.docLines[i].PRICE).rate2Num(this.docLines[i].DISCOUNT,3)
@@ -1106,6 +1103,8 @@ export default class Sale extends React.PureComponent
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",background:"#69F0AE"}}
                                                     onClick={async()=>
                                                     {
+                                                        console.log(this.docLines)
+                                                        console.log(this.docObj.dt())
                                                         if(this.docLines.length == 0)
                                                         {
                                                             let tmpConfObj = 
