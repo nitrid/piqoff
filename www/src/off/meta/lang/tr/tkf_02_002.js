@@ -28,6 +28,42 @@ const tkf_02_002 =
     validMail : "Lütfen Boş Geçmeyin.",
     cmbPricingList : "Fiyat Listesi",
     LINE_NO : "Sıra No",
+    btnSelectDispatch : "İrsaliyeye Çevir",
+    btnSelectInvoice : "Faturaya Çevir",
+    msgTransform :
+    {
+        title : "Evrak Dönüştürme",
+        btnDispatch : "İrsaliye",
+        btnInvoice : "Fatura",
+        msg : "Bu teklifi dönüştürmek istediğinize emin misiniz?"
+    },
+    msgTransformConfirm :
+    {
+        title : "Evrak Dönüştürme Onayı",
+        msgDispatch : "Bu teklifi irsaliyeye çevirmek istediğinize emin misiniz?",
+        msgInvoice : "Bu teklifi faturaya çevirmek istediğinize emin misiniz?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
+
+    msgFactureConfirm:
+    {
+        title: "Fatura Onayı",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msg: "Bu teklifi faturaya çevirmek istediğinize emin misiniz?"
+    },
+    msgBLConfirm:
+    {
+        title: "İrsaliye Onayı",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msg: "Bu teklifi irsaliyeye çevirmek istediğinize emin misiniz?"
+    },
+    popTransformSelect :
+    {
+        title : "Dönüştürme Seçimi",
+    },
     isMsgSave :
     {  
         title: "Dikkat",
@@ -359,21 +395,6 @@ const tkf_02_002 =
         title: "Dikkat",
         btn01: "Evrağa Git",
         msg: "Evrak Bulundu"
-    },
-    popMailSend : 
-    {
-        title :"E-Mail Gönder",
-        txtMailSubject : "E-Mail Başlığı",
-        txtSendMail : "E-Mail Adresi",
-        btnSend : "Gönder",
-        cmbMailAddress : "Gönderilecek E-Mail Adresi"
-    },
-    msgMailSendResult:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msgSuccess: "Mail gönderimi başarılı !",
-        msgFailed: "Mail gönderimi başarısız !"
     },
     txtDiscount1 : "1. İndirim Tutarı",
     txtDiscount2 : "2. İndirim Tutarı",

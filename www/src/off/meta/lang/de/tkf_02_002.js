@@ -27,11 +27,27 @@ const tkf_02_002 =
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
     cmbPricingList : "Preisliste",
     LINE_NO : "Reihenfolge",
-    isMsgSave :
+    btnSelectDispatch : "Lieferschein konvertieren",
+    btnSelectInvoice : "Rechnung konvertieren",
+    msgTransform :
     {
-        title: "Achtung",
+        title : "Dokument konvertieren",
+        btnDispatch : "Lieferschein",
+        btnInvoice : "Rechnung",
+        msg : "Wollen Sie das Dokument wirklich in einen Lieferschein oder eine Rechnung konvertieren?"
+    },
+    msgTransformConfirm :
+    {
+        title: "Dokument konvertieren",
+        msgInvoice : "Wollen Sie das Dokument wirklich in eine Rechnung konvertieren?",
+        msgDispatch : "Wollen Sie das Dokument wirklich in einen Lieferschein konvertieren?",
         btn01: "OK",
+        btn02: "Abbrechen",
         msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+    },
+    popTransformSelect :
+    {
+        title : "Dokument konvertieren",
     },
     msgMailSendResult:
     {

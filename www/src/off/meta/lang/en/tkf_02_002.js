@@ -28,6 +28,27 @@ const tkf_02_002 =
     validMail : "Please do not leave blank.",
     cmbPricingList : "Pricing List",
     LINE_NO : "Line No",
+    btnSelectDispatch : "Convert to Dispatch",
+    btnSelectInvoice : "Convert to Invoice",
+    msgTransform :
+    {
+        title : "Convert Document",
+        btnDispatch : "Dispatch",
+        btnInvoice : "Invoice",
+        msg : "Do you want to convert the document to a dispatch or invoice ?"
+    },
+    msgTransformConfirm :
+    {
+        title : "Convert Document",
+        msgDispatch : "Do you want to convert the document to a dispatch ?",
+        msgInvoice : "Do you want to convert the document to an invoice ?",
+        btn01 : "Yes",
+        btn02 : "No"
+    },
+    popTransformSelect :
+    {
+        title : "Convert Document",
+    },
     isMsgSave :
     {  
         title: "Attention",

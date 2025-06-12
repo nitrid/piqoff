@@ -49,7 +49,14 @@ export default class salesDispatch extends DocBase
         if(typeof this.pagePrm != 'undefined')
         {
             setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',-1)
+                if(typeof this.pagePrm.offerGuid != 'undefined')
+                {
+                    this.buildOffer(this.pagePrm.offerGuid)
+                }
+                else if(typeof this.pagePrm.GUID != 'undefined')
+                {
+                    this.getDoc(this.pagePrm.GUID,'',-1)
+                }
             }, 1000);
         }
     }
@@ -590,6 +597,11 @@ export default class salesDispatch extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
+                 if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                {
+                    tmpMergDt[0].SUB_QUANTITY = Math.ceil(tmpMergDt[0].SUB_QUANTITY)
+                    tmpMergDt[0].QUANTITY = tmpMergDt[0].SUB_QUANTITY * tmpMergDt[0].SUB_FACTOR
+                }
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -643,11 +655,7 @@ export default class salesDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-                if(this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
-                {
-                    this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-                    pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
-                }
+
             }
             if(typeof pData.ITEM_TYPE == 'undefined')
             {
@@ -675,6 +683,17 @@ export default class salesDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+            {
+                this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = Math.ceil(this.docObj.docItems.dt()[pIndex].SUB_QUANTITY)
+                this.docObj.docItems.dt()[pIndex].QUANTITY = this.docObj.docItems.dt()[pIndex].SUB_QUANTITY * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+            }
+            if(this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
+            {
+                this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+            }
     
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
@@ -780,8 +799,13 @@ export default class salesDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)",
-            param : ['INPUT:string|50'],
+            query : "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)",
+            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
             value : [this.docObj.dt()[0].INPUT]
         }
         super.getOffers(tmpQuery)
@@ -1851,7 +1875,15 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
-                                            e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                            if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
+                                            {
+                                                e.key.SUB_QUANTITY = Math.ceil(e.data.QUANTITY / e.key.SUB_FACTOR)
+                                                e.key.QUANTITY = Number(e.key.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
+                                            }
+                                            else
+                                            {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                            }
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
@@ -1867,7 +1899,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                            e.key.QUANTITY = Number(e.data.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
                                         }
                                         if(typeof e.data.SUB_FACTOR != 'undefined')
                                         {

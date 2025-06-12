@@ -930,6 +930,25 @@ export default class salesOffer extends DocBase
                                         this.txtDetailMargin.value = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);
                                     }}/>
                                 </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnTransform" parent={this} icon="pulldown" type="normal" elementAttr={{ style: "background-color: orange; color: white;" }}
+                                    onClick={async()=>
+                                    {
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+
+                                        await this.popTransformSelect.show()
+                                    }}/>
+                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -1208,15 +1227,8 @@ export default class salesOffer extends DocBase
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
-                                <Item>
-                                    <Label text={this.t("btnFacture")} alignment="right" />
-                                    <NdButton text={this.t("btnFacture")} type="normal" stylingMode="contained" width={'100%'} 
-                                    onClick={async (e)=>
-                                    {
-                                       
-                                    }}/>
                                 </Item>
+                                <EmptyItem />
                                 {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
@@ -1339,30 +1351,7 @@ export default class salesOffer extends DocBase
                                     </NdDatePicker>
                                 </Item>
                                 {/* Boş */}
-                                <Item>
-                                    <Label text={this.t("btnBL")} alignment="right" />
-                                    <NdButton text={this.t("btnBL")} type="normal" stylingMode="contained" width={'100%'} 
-                                    onClick={async (e)=>
-                                    {
-                                        let tmpQuery = 
-                                        {
-                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO ",
-                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-
-                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-                                        {
-                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
-                                            mywindow.onload = function() 
-                                            {
-                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                            } 
-                                        });
-                                    }}/>
-                                </Item>
+                                <EmptyItem />
                             </Form>
                         </div>
                     </div>
@@ -2186,6 +2175,129 @@ export default class salesOffer extends DocBase
                                     </div>
                                 </Item>
                             </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* Transform Selection PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popTransformSelect"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popTransformSelect.title")}
+                        container={"#root"} 
+                        width={'400'}
+                        height={'350'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <div className="row" style={{padding: '20px'}}>
+                                <div className="col-6 text-center">
+                                    <div 
+                                        style={{
+                                            display: 'flex', 
+                                            flexDirection: 'column', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            width: '100%',
+                                            height: '150px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#fff',
+                                            padding: '10px',
+                                            gap: '8px',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = '#f5f5f5';
+                                            e.target.style.borderColor = '#0078d4';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = '#fff';
+                                            e.target.style.borderColor = '#ccc';
+                                        }}
+                                        onClick={async()=>
+                                        {
+                                            this.popTransformSelect.hide()
+                                            
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgTransformConfirm',showTitle:true,title:this.t("msgTransformConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgTransformConfirm.btn01"),location:'before'},{id:"btn02",caption:this.t("msgTransformConfirm.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTransformConfirm.msgDispatch")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.menuClick(
+                                                {
+                                                    id: 'irs_02_002',
+                                                    text: 'Satış İrsaliyesi',
+                                                    path: 'dispatch/documents/salesDispatch.js',
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID}
+                                                })
+                                            }
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-shipping-fast" style={{fontSize: '36px', color: '#0078d4'}}></i>
+                                        <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectDispatch")}</span>
+                                    </div>
+                                </div>
+                                <div className="col-6 text-center">
+                                    <div 
+                                        style={{
+                                            display: 'flex', 
+                                            flexDirection: 'column', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            width: '100%',
+                                            height: '150px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#fff',
+                                            padding: '10px',
+                                            gap: '8px',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = '#f5f5f5';
+                                            e.target.style.borderColor = '#0078d4';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = '#fff';
+                                            e.target.style.borderColor = '#ccc';
+                                        }}
+                                        onClick={async()=>
+                                        {
+                                            this.popTransformSelect.hide()
+                                            
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgTransformConfirm',showTitle:true,title:this.t("msgTransformConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgTransformConfirm.btn01"),location:'before'},{id:"btn02",caption:this.t("msgTransformConfirm.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTransformConfirm.msgInvoice")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.menuClick(
+                                                {
+                                                    id: 'ftr_02_002',
+                                                    text: 'Satış Faturası',
+                                                    path: 'invoices/documents/salesInvoice.js',
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID}
+                                                })
+                                            }
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-receipt" style={{fontSize: '36px', color: '#0078d4'}}></i>
+                                        <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectInvoice")}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </NdPopUp>
                     </div>
                     <div>{super.render()}</div>

@@ -590,13 +590,16 @@ export default class DocBase extends React.PureComponent
     {
         let tmpTotalCost = 0
 
-        for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
+        if(typeof this.docObj.dt()[0] != 'undefined')
         {
-            tmpTotalCost += this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY
+            for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
+                {
+                    tmpTotalCost += this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY
+                }
+                let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
+                let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
+                this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
-        let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
-        let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
-        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
     }
     async calculateMargin()
     {
@@ -713,78 +716,8 @@ export default class DocBase extends React.PureComponent
 
         this.pg_dispatchGrid.onClick = async(data) =>
         {   
-            this.grid.devGrid.beginUpdate()
-            App.instance.setState({isExecute:true})
-            for (let i = 0; i < data.length; i++) 
-            {
-                let tmpDocItems = {...this.docDetailObj.empty}
-                tmpDocItems.GUID = data[i].GUID
-                tmpDocItems.DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.TYPE = data[i].TYPE
-                tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
-                tmpDocItems.REBATE = data[i].REBATE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = data[i].REF
-                tmpDocItems.REF_NO = data[i].REF_NO
-                tmpDocItems.DOC_DATE = data[i].DOC_DATE
-                tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
-                tmpDocItems.INPUT = data[i].INPUT
-                tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
-                tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
-                tmpDocItems.OUTPUT = data[i].OUTPUT
-                tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.TOTALHT = data[i].TOTALHT
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.INVOICE_LINE_GUID = data[i].GUID
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-                tmpDocItems.ORDER_LINE_GUID = data[i].ORDER_LINE_GUID
-                tmpDocItems.ORDER_DOC_GUID = data[i].ORDER_DOC_GUID
-                tmpDocItems.OLD_VAT = data[i].VAT_RATE
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
-                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
-                tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
-                tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
-                tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
-                tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
-                tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
-                tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
-                tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
-                tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
-                tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-                tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
-                tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
-                tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
-                tmpDocItems.DISCOUNT = data[i].DISCOUNT
-                tmpDocItems.UNIT = data[i].UNIT
-                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
-                tmpDocItems.DIFF_PRICE = data[i].DIFF_PRICE
-                tmpDocItems.COST_PRICE = data[i].COST_PRICE
-
-                await this.docDetailObj.addEmpty(tmpDocItems,false)
-                await this.core.util.waitUntil(100)
-                this.docDetailObj.dt()[this.docDetailObj.dt().length - 1].stat = 'edit'
-            }
-            this.grid.devGrid.endUpdate()
-            this.docDetailObj.dt().emit('onRefresh')
-            this.calculateTotal()
-            App.instance.setState({isExecute:false})
-            setTimeout(() => 
-            {
-                this.btnSave.setState({disabled:false});
-            }, 500);
+            await this.convertDocDispatch(data)
+          
         }
     }
     async getOrders() 
@@ -806,63 +739,7 @@ export default class DocBase extends React.PureComponent
         this.pg_ordersGrid.onClick = async(data) =>
         {
             App.instance.setState({isExecute:true})
-            this.grid.devGrid.beginUpdate()
-            for (let i = 0; i < data.length; i++) 
-            {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].PEND_QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.TOTALHT = data[i].TOTALHT
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.ORDER_LINE_GUID = data[i].GUID
-                tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.OLD_VAT = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
-                tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
-                tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
-                tmpDocItems.DISCOUNT = data[i].DISCOUNT
-                tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
-                tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
-                tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
-                tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
-                tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
-                tmpDocItems.COST_PRICE = data[i].COST_PRICE
-                tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
-                tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
-                tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
-                tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
-                tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
-
-                await this.docObj.docItems.addEmpty(tmpDocItems)
-                await this.core.util.waitUntil(100)
-            }
-            this.grid.devGrid.endUpdate()
-            this.calculateTotal()
+            await this.convertDocOrders(data)
             App.instance.setState({isExecute:false})
         }
     }
@@ -885,104 +762,7 @@ export default class DocBase extends React.PureComponent
         this.pg_offersGrid.onClick = async(data) =>
         {
             App.instance.setState({isExecute:true})
-            for (let i = 0; i < data.length; i++) 
-            {
-                if(this.docType == 60)
-                {
-                    let tmpDocItems = {...this.docObj.docOrders.empty}
-                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocItems.LINE_NO = data[i].LINE_NO
-                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                    tmpDocItems.ITEM = data[i].ITEM
-                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                    tmpDocItems.PRICE = data[i].PRICE
-                    tmpDocItems.QUANTITY = data[i].QUANTITY
-                    tmpDocItems.VAT = data[i].VAT
-                    tmpDocItems.AMOUNT = data[i].AMOUNT
-                    tmpDocItems.TOTAL = data[i].TOTAL
-                    tmpDocItems.TOTALHT = data[i].TOTALHT
-                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
-                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
-                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
-                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
-                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
-                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
-                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
-                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
-                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
-                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
-                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
-                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
-                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
-                    await this.docObj.docOrders.addEmpty(tmpDocItems)
-                    await this.core.util.waitUntil(100)
-                }
-                else
-                {
-                    let tmpDocItems = {...this.docObj.docItems.empty}
-                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocItems.LINE_NO = data[i].LINE_NO
-                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                    tmpDocItems.ITEM = data[i].ITEM
-                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                    tmpDocItems.PRICE = data[i].PRICE
-                    tmpDocItems.QUANTITY = data[i].QUANTITY
-                    tmpDocItems.VAT = data[i].VAT
-                    tmpDocItems.AMOUNT = data[i].AMOUNT
-                    tmpDocItems.TOTAL = data[i].TOTAL
-                    tmpDocItems.TOTALHT = data[i].TOTALHT
-                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
-                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
-                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
-                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
-                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
-                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
-                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
-                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
-                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
-                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
-                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
-                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
-                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
-                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
-                    await this.docObj.docItems.addEmpty(tmpDocItems)
-                    await this.core.util.waitUntil(100)
-                }
-            }
-            this.calculateTotal()
+            await this.convertDocOffers(data)
             App.instance.setState({isExecute:false})
         }
     }
@@ -1263,6 +1043,289 @@ export default class DocBase extends React.PureComponent
         
             this.calculateTotal()
         }
+    }
+    async convertDocOffers(data)
+    {
+        for (let i = 0; i < data.length; i++) 
+            {
+                if(this.docType == 60)
+                {
+                    let tmpDocItems = {...this.docObj.docOrders.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+                    await this.docObj.docOrders.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                else
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+                    tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+                    tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+                    tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+            }
+            this.calculateTotal()
+    }
+    async convertDocOrders(data)
+    {
+        this.grid.devGrid.beginUpdate()
+        for (let i = 0; i < data.length; i++) 
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.LINE_NO = data[i].LINE_NO
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+            tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+            tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+            tmpDocItems.ITEM = data[i].ITEM
+            tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+            tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+            tmpDocItems.PRICE = data[i].PRICE
+            tmpDocItems.QUANTITY = data[i].PEND_QUANTITY
+            tmpDocItems.VAT = data[i].VAT
+            tmpDocItems.AMOUNT = data[i].AMOUNT
+            tmpDocItems.TOTAL = data[i].TOTAL
+            tmpDocItems.TOTALHT = data[i].TOTALHT
+            tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+            tmpDocItems.VAT_RATE = data[i].VAT_RATE
+            tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+            tmpDocItems.ORDER_LINE_GUID = data[i].GUID
+            tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
+            tmpDocItems.VAT_RATE = data[i].VAT_RATE
+            tmpDocItems.OLD_VAT = data[i].VAT_RATE
+            tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+            tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+            tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+            tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+            tmpDocItems.DISCOUNT = data[i].DISCOUNT
+            tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+            tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+            tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+            tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
+            tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+            tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
+            tmpDocItems.COST_PRICE = data[i].COST_PRICE
+            tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+            tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+            tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+            tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+            tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+
+            await this.docObj.docItems.addEmpty(tmpDocItems)
+            await this.core.util.waitUntil(100)
+        }
+        this.grid.devGrid.endUpdate()   
+        this.calculateTotal()
+    }
+    async convertDocDispatch(data)
+    {
+        this.grid.devGrid.beginUpdate()
+        App.instance.setState({isExecute:true})
+        for (let i = 0; i < data.length; i++) 
+        {
+            let tmpDocItems = {...this.docDetailObj.empty}
+            tmpDocItems.GUID = data[i].GUID
+            tmpDocItems.DOC_GUID = data[i].DOC_GUID
+            tmpDocItems.TYPE = data[i].TYPE
+            tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
+            tmpDocItems.REBATE = data[i].REBATE
+            tmpDocItems.LINE_NO = data[i].LINE_NO
+            tmpDocItems.REF = data[i].REF
+            tmpDocItems.REF_NO = data[i].REF_NO
+            tmpDocItems.DOC_DATE = data[i].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+            tmpDocItems.INPUT = data[i].INPUT
+            tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+            tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+            tmpDocItems.OUTPUT = data[i].OUTPUT
+            tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+            tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+            tmpDocItems.ITEM = data[i].ITEM
+            tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+            tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+            tmpDocItems.PRICE = data[i].PRICE
+            tmpDocItems.QUANTITY = data[i].QUANTITY
+            tmpDocItems.VAT = data[i].VAT
+            tmpDocItems.AMOUNT = data[i].AMOUNT
+            tmpDocItems.TOTAL = data[i].TOTAL
+            tmpDocItems.TOTALHT = data[i].TOTALHT
+            tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+            tmpDocItems.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.INVOICE_LINE_GUID = data[i].GUID
+            tmpDocItems.VAT_RATE = data[i].VAT_RATE
+            tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+            tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+            tmpDocItems.ORDER_LINE_GUID = data[i].ORDER_LINE_GUID
+            tmpDocItems.ORDER_DOC_GUID = data[i].ORDER_DOC_GUID
+            tmpDocItems.OLD_VAT = data[i].VAT_RATE
+            tmpDocItems.VAT_RATE = data[i].VAT_RATE
+            tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
+            tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+            tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+            tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+            tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+            tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+            tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+            tmpDocItems.DOC_DISCOUNT_1 = data[i].DOC_DISCOUNT_1
+            tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
+            tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
+            tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
+            tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+            tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+            tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+            tmpDocItems.DISCOUNT = data[i].DISCOUNT
+            tmpDocItems.UNIT = data[i].UNIT
+            tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+            tmpDocItems.DIFF_PRICE = data[i].DIFF_PRICE
+            tmpDocItems.COST_PRICE = data[i].COST_PRICE
+
+            await this.docDetailObj.addEmpty(tmpDocItems,false)
+            await this.core.util.waitUntil(100)
+            this.docDetailObj.dt()[this.docDetailObj.dt().length - 1].stat = 'edit'
+        }
+        this.grid.devGrid.endUpdate()
+        this.docDetailObj.dt().emit('onRefresh')
+        this.calculateTotal()
+        App.instance.setState({isExecute:false})
+        setTimeout(() => 
+        {
+            this.btnSave.setState({disabled:false});
+        }, 500);
+    }
+    async buildOffer(pGuid)
+    {
+       let tmpQuery =
+       {
+        query : "SELECT * FROM DOC_VW_01 WHERE GUID = @GUID",
+        param : ['GUID:string|50'],
+        value : [pGuid]
+       }
+       let tmpData = await this.core.sql.execute(tmpQuery)
+       if(tmpData.result.recordset.length > 0)
+       {
+            this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
+            this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
+            this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
+            this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT
+            this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].OUTPUT_CODE
+            this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].OUTPUT_NAME
+            this.docObj.dt()[0].PRICE_LIST_NO = tmpData.result.recordset[0].PRICE_LIST_NO
+            if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() != 'undefined' && this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue().value ==  true)
+            {
+                this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
+            }
+            if(this.docType != 20)
+            {
+                this.txtRef.props.onChange()
+            }
+
+            let tmpOfferQuery = 
+            {
+                query : "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE DOC_GUID = @GUID",
+                param : ['GUID:string|50','SUB_FACTOR:string|10'],
+                value : [pGuid,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            }
+            let tmpOfferData = await this.core.sql.execute(tmpOfferQuery)
+            if(tmpOfferData.result.recordset.length > 0)
+            {
+                await this.convertDocOffers(tmpOfferData.result.recordset)
+            }
+            this.frmDocItems.option('disabled',false)
+            
+       }
     }
     render()
     {

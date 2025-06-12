@@ -59,7 +59,14 @@ export default class salesInvoice extends DocBase
         if(typeof this.pagePrm != 'undefined')
         {
             setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',-1)
+                if(typeof this.pagePrm.offerGuid != 'undefined')
+                {
+                    this.buildOffer(this.pagePrm.offerGuid)
+                }
+                else if(typeof this.pagePrm.GUID != 'undefined')
+                {
+                    this.getDoc(this.pagePrm.GUID,'',-1)
+                }
             }, 1000);
         }
     }
@@ -188,10 +195,11 @@ export default class salesInvoice extends DocBase
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
     }
-    calculateTotal()
+    async calculateTotal()
     {
-        super.calculateTotal();
+        await super.calculateTotal();
         
+
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.dt()[0].INTERFEL = this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).sum("TOTALHT",2)
         this.calculateTotalMargin()
@@ -700,9 +708,14 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)",
-            param : ['INPUT:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
+            query : "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
+                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)",
+            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         super.getOffers(tmpQuery)
     }
@@ -1938,7 +1951,7 @@ export default class salesInvoice extends DocBase
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
                                                 {
-                                                    e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
+                                                    e.key.QUANTITY = Number(e.data.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
                                                 }
                                             }
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
