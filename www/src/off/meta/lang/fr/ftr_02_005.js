@@ -109,6 +109,7 @@ const ftr_02_005 =
         clmSubQuantity : "Quantité unitaire",   
         clmSubPrice : "Prix unitaire",  
         clmSubFactor : "Coefficient", 
+        clmPartiLot : "Code Lot",
     },
     pg_partiLot : 
     {

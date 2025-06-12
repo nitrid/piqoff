@@ -334,8 +334,8 @@ export class docItemsCls
             ITEM_BARCODE : '',
             ORIGIN : '',
             INVOICE_REF : '',
-            PARTILOT_GUID : '00000000-0000-0000-0000-000000000000'
-
+            PARTILOT_GUID : '00000000-0000-0000-0000-000000000000',
+            LOT_CODE : ''
         }
 
         this._initDs();
