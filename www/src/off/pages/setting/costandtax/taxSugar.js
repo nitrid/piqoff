@@ -344,6 +344,7 @@ export default class taxSugar extends React.PureComponent
                                                 tmpDocItems.PRICE =this.price.value
                                                 tmpDocItems.START_DATE = this.dtDate.startDate.format("YYYY-MM-DD")
                                                 tmpDocItems.END_DATE = this.dtDate.endDate.format("YYYY-MM-DD")
+                                                tmpDocItems.DATE = this.dtDate.startDate.format("YYYY-MM-DD") +'/' + this.dtDate.endDate.format("YYYY-MM-DD")
 
                                                 this.taxSugarObj.addEmpty(tmpDocItems)
                                                 this.popTaxSugar.hide();  

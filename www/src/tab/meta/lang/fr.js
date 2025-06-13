@@ -67,7 +67,8 @@ export const langFr =
         btnGet : "Rechercher",
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
-        popFactNonSolde : "Facture non solde",  
+        popFactNonSolde : "Facture non solde",
+        btnMailSend : "Envoyer Mail",
         msgPriceZeroUnit : 
         {
             title : "Attention",

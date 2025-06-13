@@ -67,6 +67,7 @@ export const langTr =
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
         popFactNonSolde : "Ödenmemiş Fatura",
+        btnMailSend : "Mail Gönder",
         popCustomerExtre : 
         {
             title : "Müşteri Ekstresi",
