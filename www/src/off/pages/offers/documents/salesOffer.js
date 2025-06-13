@@ -1197,7 +1197,7 @@ export default class salesOffer extends DocBase
                                                                 this.txtRef.props.onChange()
                                                                 this.checkRow()
                                                             }
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
