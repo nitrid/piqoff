@@ -728,7 +728,7 @@ export default class salesOrdList extends React.PureComponent
                                     value={-1}
                                     data={{source:[{ID:-1,VALUE:this.t("cmbPayType.all")},{ID:0,VALUE:this.t("cmbPayType.esc")},{ID:1,VALUE:this.t("cmbPayType.cb")},{ID:2,VALUE:this.t("cmbPayType.check")},
                                     {ID:3,VALUE:this.t("cmbPayType.ticket")},{ID:4,VALUE:this.t("cmbPayType.bonD")},{ID:5,VALUE:this.t("cmbPayType.avoir")},{ID:6,VALUE:this.t("cmbPayType.virment")},
-                                    {ID:7,VALUE:this.t("cmbPayType.prlv")}]}}
+                                    {ID:7,VALUE:this.t("cmbPayType.prlv")},{ID:9,VALUE:this.t("cmbPayType.cbRest")}]}}
                                     param={this.param.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
                                     />

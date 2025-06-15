@@ -72,6 +72,7 @@ const pos_02_001 =
         virment: "Überweisung",
         prlv: "Abbuchung/Lastschrift",
         all: "Alle",
+        cbRest: "CB T.Resto"
     },
     payChangeNote: "Änderungen am Dokument sollten ausnahmsweise vorgenommen und Fehler korrigiert werden dürfen!",
     payChangeNote2: "Änderungsverlauf wird gespeichert!",

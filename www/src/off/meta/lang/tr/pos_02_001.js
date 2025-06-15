@@ -75,6 +75,7 @@ const pos_02_001 =
         virment : "Havale",
         prlv :"Oto. Ödeme",
         all :"Tümü",
+        cbRest : "T.Rest Kart",
     },
     payChangeNote : "Fiş üzerinde yapılan değişiklikler istisnai olarak yapılmalı ve hataların düzeltilmesine izin verilmelidir!",
     payChangeNote2 : "Değişikliklerin geçmişi kaydedilir!",

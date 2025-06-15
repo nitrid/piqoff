@@ -75,7 +75,8 @@ const pos_02_001 =
         avoir : "Avoir",
         virment : "Virement",
         prlv :"Prélèvement ",
-        all :"Tout"
+        all :"Tout",
+        cbRest : "CB T.Resto"
     },
     payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
     payChangeNote2 : "Un historique des modifications est enregistré !",

@@ -75,6 +75,7 @@ const pos_02_001 =
         virment : "Transfer",
         prlv :"Auto Payment",
         all :"All",
+        cbRest : "T.Rest Card"
     },
     payChangeNote : "Ticket changes are special and should be made with permission!",
     payChangeNote2 : "Changes are recorded in the history!",
