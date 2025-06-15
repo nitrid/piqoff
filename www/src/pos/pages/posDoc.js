@@ -1098,7 +1098,7 @@ export default class posDoc extends React.PureComponent
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{Number(tmpInfoPrice).round(2) + " " + Number.money.sign}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
+                    this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
                     this.loading.current.instance.hide()
                     return;
                 }
@@ -4904,11 +4904,11 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.btnInfo.lock)
                                         {
-                                            this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"50px",width:"100%"})
+                                            this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
                                         }
                                         else
                                         {
-                                            this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"50px",width:"100%"})
+                                            this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
                                         }
                                     }}>
                                         <i className="text-white fa-solid fa-circle-info" style={{fontSize: "1.6rem"}} />
@@ -5240,11 +5240,11 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.btnItemSearch.lock)
                                         {
-                                            this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%"})
+                                            this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
                                         }
                                         else
                                         {
-                                            this.btnItemSearch.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%"})
+                                            this.btnItemSearch.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
                                         }
                                     }}>
                                         <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "1.6rem"}} />
