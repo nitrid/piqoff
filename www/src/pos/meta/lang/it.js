@@ -956,7 +956,7 @@ export const langIt =
     lblTicketCount : "Cliente :",
     btnList :
     {
-        btnCheqpay : "Assegno",
+        btnCheqpay : "T.R.Assegno",
         btnInfo : "Info",
         btnDelete : "Elimina Scontrino",
         btnLineDelete : "Elimina Riga",
@@ -976,7 +976,7 @@ export const langIt =
         btnPark : "Metti in Attesa",
         btnTicketList : "Lista Scontrini",
         btnLastPrint : "Stampa",
-        btnTotal : "Totale",
+        btnTotal : "Tipi di Pagamento",
         btnSubtotal : "Subtotale",
         btnCardTicket : "Carta T.R",
         btnDiscount : "Sconto",

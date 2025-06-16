@@ -1049,7 +1049,7 @@ export const langTr =
         btnPark : "Park",
         btnTicketList : "Ticket Listesi",
         btnLastPrint : "Son Yazdırma",
-        btnTotal : "Toplam",
+        btnTotal : "Ödeme Tipleri",
         btnSubtotal : "Ara T.",
         btnCardTicket : "T.R Kart",
         btnDiscount : "İndirim",
