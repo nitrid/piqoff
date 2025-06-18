@@ -37,6 +37,12 @@ const irs_02_002 =
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
     clmPartiLot : "Parti Lot",
+    msgControlOfFacture:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu satış teklifi daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünde yeni bir irsaliye oluşturunuz."
+    },
     pg_partiLot :
     {
         title : "Parti Lot Seçimi",

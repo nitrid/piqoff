@@ -142,6 +142,12 @@ const  ftr_02_002 =
         clmSubFactor : "Coefficient",
         clmPartiLot : "Numéro de lot",
     },
+    msgControlOfDispatch: 
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce devis a déjà été converti en bon de livraison. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures de vente."
+    },
     pg_partiLot : 
     {
         title : "Sélection de lot",

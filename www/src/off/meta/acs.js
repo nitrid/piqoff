@@ -1362,6 +1362,32 @@ export const acs =
             }
         }
     },
+    {
+        TYPE : 2,
+        ID :"grdSlsOfferState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "tkf_02_002",
+        ELEMENT : "grdSlsOfferState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Satış Teklifleri",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
     //grdContractsState
     {
         TYPE : 2,
