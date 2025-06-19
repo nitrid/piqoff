@@ -20,6 +20,7 @@ const fns_02_002 =
     invoiceSelect : "Invoice Selection",
     installmentSelect : "Installment Selection",
     ValidCash : "Please enter an amount greater than 0",
+    checkDate : "Check Date",
     cmbPayType : {
         title : "Payment Type",
         cash : "Cash",

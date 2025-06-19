@@ -49,8 +49,9 @@ const fns_04_005 =
     txtTotalAmount: "Total montants",
     chkRowTotal: "Total lignes",
     FACT_TYPE_NAME: "Type opération",
-    explanation: "Encaissement total - Total factures",
-
+    explanation: "Solde restant",
+    factTotal: "Total factures",
+    factPayment: "Paiements",
     
 
 }

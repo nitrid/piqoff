@@ -20,6 +20,7 @@ const fns_02_002 =
     invoiceSelect : "Fatura Seçimi",
     installmentSelect : "Taksit Seçimi",
     ValidCash : "0'dan büyük bir tutar giriniz",
+    checkDate : "Çek Tarihi",
     cmbPayType : {
         title : "Ödeme Tipi",
         cash : "Nakit",

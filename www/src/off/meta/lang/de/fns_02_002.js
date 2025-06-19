@@ -19,6 +19,7 @@ const fns_02_002 =
     btnCash: "Bargeld-Eingabe",
     invoiceSelect: "Rechnungsauswahl",
     ValidCash: "Bitte geben Sie einen Betrag größer als 0 ein",
+    checkDate: "Scheckdatum",
     cmbPayType: {
         title: "Zahlungsart",
         cash: "Bargeld",

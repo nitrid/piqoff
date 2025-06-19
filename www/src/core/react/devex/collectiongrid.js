@@ -20,6 +20,7 @@ export default class NdCollectionGrid extends Base {
 
   renderDetailGrid = (e) => {
     let facturas = e.data?.data?.FACTURAS ?? [];
+    const tahsilatAmount = e.data?.data?.AMOUNT || 0;
 
     if (facturas.length === 0) {
       return (
@@ -30,37 +31,72 @@ export default class NdCollectionGrid extends Base {
     }
 
     return (
-      <DataGrid
-        dataSource={facturas}
-        showBorders={true}
-        columnAutoWidth={true}
-        rowAlternationEnabled={true}
-        height="auto"
-      >
-        <Column dataField="FACT_DATE" caption={this.t("FACT_DATE")} dataType="date" format="dd.MM.yyyy" />
-        <Column dataField="CUSTOMER_NAME" caption={this.t("CUSTOMER_NAME")} />
-        <Column dataField="FACT_REF" caption={this.t("FACT_REF")} />
-        <Column dataField="FACT_REF_NO" caption={this.t("FACT_REF_NO")} />
-        <Column dataField="FACT_TYPE_NAME" caption={this.t("FACT_TYPE_NAME")} />
-        <Column dataField="FACT_AMOUNT" caption={this.t("FACT_AMOUNT")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
-        <Column dataField="FACT_TOTAL" caption={this.t("FACT_TOTAL")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
-        <Summary>
-          <TotalItem
-            column="FACT_TOTAL"
-            summaryType="sum"
-            valueFormat={{ type: 'fixedPoint', precision: 2 }}
-            displayFormat="Toplam: {0}"
-            alignment="right"
-            showInColumn="FACT_TOTAL"
-            customizeText={(data) => {
-              const factTotal = data.value || 0;
-              const amount = e.data?.data?.AMOUNT || 0;
-              const difference = amount - factTotal;  
-              return `${this.t("explanation")}:   ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(difference)}`;
-            }}
-          />  
-        </Summary>
-      </DataGrid>
+      <div>
+        <style>{`
+          .collection-summary-positive { color: green !important; }
+          .collection-summary-negative { color: red !important; }
+          .collection-summary-neutral { color: black !important; }
+        `}</style>
+        <DataGrid
+          dataSource={facturas}
+          showBorders={true}
+          columnAutoWidth={true}
+          rowAlternationEnabled={true}
+          height="auto"
+          onContentReady={(gridEvent) => {
+            // Summary satırını renklendir
+            setTimeout(() => {
+              const summaryItems = gridEvent.component.element().querySelectorAll('.dx-datagrid-summary-item');
+              summaryItems.forEach(item => {
+                const text = item.textContent || '';
+                if (text.includes(this.t("explanation"))) {
+                  // Doğru tahsilat miktarını al
+                  const amount = tahsilatAmount;
+                  const factTotal = facturas.reduce((sum, item) => sum + (item.FACT_TOTAL || 0), 0);
+                  const difference = amount - factTotal;
+                  
+                  if (Math.abs(difference) < 0.01) {
+                    item.className += ' collection-summary-neutral';
+                  } else if (difference < 0) {
+                    item.className += ' collection-summary-positive';
+                  } else {
+                    item.className += ' collection-summary-negative';
+                  }
+                }
+              });
+            }, 100);
+          }}
+        >
+          <Column dataField="FACT_DATE" caption={this.t("FACT_DATE")} dataType="date" format="dd.MM.yyyy" />
+          <Column dataField="CUSTOMER_NAME" caption={this.t("CUSTOMER_NAME")} />
+          <Column dataField="FACT_REF" caption={this.t("FACT_REF")} />
+          <Column dataField="FACT_REF_NO" caption={this.t("FACT_REF_NO")} />
+          <Column dataField="FACT_TYPE_NAME" caption={this.t("FACT_TYPE_NAME")} />
+          <Column dataField="FACT_AMOUNT" caption={this.t("FACT_AMOUNT")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
+          <Column dataField="FACT_TOTAL" caption={this.t("FACT_TOTAL")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
+          <Summary>
+            <TotalItem
+              column="FACT_TOTAL"
+              summaryType="sum"
+              valueFormat={{ type: 'fixedPoint', precision: 2 }}
+              alignment="right"
+              showInColumn="FACT_TOTAL"
+              customizeText={(data) => {
+                const factTotal = data.value || 0;
+                const amount = tahsilatAmount;
+                const difference = factTotal - amount;
+                
+                // Formatları düzelt
+                const factTotalFormatted = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(factTotal);
+                const tahsilatFormatted = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(amount);
+                const formattedDifference = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(difference);
+                
+                return `${this.t("factTotal")}: ${factTotalFormatted} | ${this.t("factPayment")}: ${tahsilatFormatted} | ${this.t("explanation")}: ${formattedDifference}`;
+              }}
+            />  
+          </Summary>
+        </DataGrid>
+      </div>
     );
   };
 

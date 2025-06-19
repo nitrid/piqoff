@@ -16,7 +16,7 @@ const fns_02_002 =
     cash : "Total",
     description :"Motif",
     checkReference : "Référence",
-    checkDate : "Date",
+    checkDate : "Date du chèque",
     btnCash : "Saisie Réglement",
     invoiceSelect : "Sélectionner Facture",
     installmentSelect : "Sélectionner l'échéance",
