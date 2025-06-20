@@ -143,7 +143,7 @@ const fns_02_001 =
     },
     popCash : 
     {
-        title: "Cash Entry",
+        title: "Collection Entry",
         btnApprove : "Add"
     },
     popCheck : 

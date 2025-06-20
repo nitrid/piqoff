@@ -127,7 +127,7 @@ const fns_02_002 =
     },
     popCash : 
     {
-        title: "Bargeld Einzahlung",
+        title: "Einzahlung Bargeld",
         btnApprove : "Hinzufügen"
     },
     popCheck : 

@@ -143,7 +143,7 @@ const fns_02_001 =
     },
     popCash : 
     {
-        title: "Nakit Girişi",
+        title: "Tahsilat Girişi",
         btnApprove : "Ekle"
     },
     popCheck : 

@@ -142,7 +142,7 @@ const fns_02_001 =
     },
     popCash : 
     {
-        title: "Saisie Espèce ",
+        title: "Saisie Reglement",
         btnApprove : "Ajouter"
     },
     popCheck : 
