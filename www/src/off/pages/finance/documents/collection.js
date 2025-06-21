@@ -140,7 +140,6 @@ export default class collection extends React.PureComponent
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
-        console.log("this.docObj.dt()",this.docObj.dt()[0])
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.dt()[0].GUID,PAYING_DOC:this.docObj.dt()[0].GUID})
         
         // Ödemelerle eşleşen fatura bilgilerini al

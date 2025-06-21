@@ -423,6 +423,24 @@ export default class App extends React.PureComponent
                 }
             }
         ]})
+        
+        // Navigation hazır olduktan sonra main sayfasını aç
+        setTimeout(() => {
+            if(this.navigation && this.navigation.state && this.navigation.state.favMenu) {
+                this.menuClick({
+                    text: "PiqSoft",
+                    path: 'main.js',
+                    pagePrm: this.navigation.state.favMenu
+                });
+            } else {
+                // FavMenu yoksa boş array ile aç
+                this.menuClick({
+                    text: "PiqSoft", 
+                    path: 'main.js',
+                    pagePrm: []
+                });
+            }
+        }, 1000);
     }
     async timeoutControl()
     {
@@ -579,7 +597,8 @@ export default class App extends React.PureComponent
                     <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>
                 <div>
-                    <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation}>
+                    <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} 
+                        component={(props) => <Navigation {...props} ref={(ref) => { this.navigation = ref; }} />}>
                         <Panel/>
                     </Drawer>
                 </div>

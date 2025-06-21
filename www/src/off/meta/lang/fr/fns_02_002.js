@@ -21,6 +21,14 @@ const fns_02_002 =
     invoiceSelect : "Sélectionner Facture",
     installmentSelect : "Sélectionner l'échéance",
     ValidCash : "Veuillez saisir un montant supérieur à 0", 
+    extraAmount : " Montant excédentaire",
+    msgClearGrid : 
+    {
+        title : "Attention",
+        btn01 : "Oui, Effacer",
+        btn02 : "Annuler",
+        msg : "Vous avez déjà sélectionné des factures. Voulez-vous vraiment effacer les nouvelles factures ?"
+    },
     cmbPayType : 
     {
         title : "Mode de paiement",
