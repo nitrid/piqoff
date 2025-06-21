@@ -281,6 +281,7 @@ export default class collectionReport extends React.PureComponent
                                 group={groupCollection}
                                 childField="FACTURAS"  
                                 onReady={(grid) => this.pvtData = grid}
+                                scrolling={{mode: 'virtual'}}
                             />
                         </div>
                     </div>

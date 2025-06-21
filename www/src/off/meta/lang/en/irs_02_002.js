@@ -36,6 +36,12 @@ const irs_02_002 =
     btnMailsend : "Send Mail",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description in your mail.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This offer has already been converted to a facture. If you want to create a dispatch, please create a new dispatch in the dispatch module."
+    },
     pg_partiLot :
     {
         title : "Parti Lot Selection",

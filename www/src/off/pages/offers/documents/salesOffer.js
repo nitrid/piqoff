@@ -2,7 +2,8 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
 import moment from 'moment';
-
+import { access } from '../../../../core/core.js';
+import { acs } from '../../../meta/acs.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
@@ -1660,7 +1661,7 @@ export default class salesOffer extends DocBase
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menuOff.sip_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.tkf_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={90} allowEditing={false}/>
@@ -2228,6 +2229,7 @@ export default class salesOffer extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.menuClick(
@@ -2235,7 +2237,7 @@ export default class salesOffer extends DocBase
                                                     id: 'irs_02_002',
                                                     text: 'Satış İrsaliyesi',
                                                     path: 'dispatch/documents/salesDispatch.js',
-                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID}
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 40}
                                                 })
                                             }
                                         }}
@@ -2288,7 +2290,7 @@ export default class salesOffer extends DocBase
                                                     id: 'ftr_02_002',
                                                     text: 'Satış Faturası',
                                                     path: 'invoices/documents/salesInvoice.js',
-                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID}
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 20}
                                                 })
                                             }
                                         }}

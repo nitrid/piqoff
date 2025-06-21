@@ -20,6 +20,15 @@ const fns_02_002 =
     invoiceSelect : "Fatura Seçimi",
     installmentSelect : "Taksit Seçimi",
     ValidCash : "0'dan büyük bir tutar giriniz",
+    checkDate : "Çek Tarihi",
+    extraAmount : " Fazla Tutar",
+    msgClearGrid : 
+    {
+        title : "Uyarı",
+        btn01 : "Evet, Temizle",
+        btn02 : "Vazgeç",
+        msg : "Önceden seçilmiş faturalarınız var. Yeni fatura girişleri için sayfanız temizlensin mi?"
+    },
     cmbPayType : {
         title : "Ödeme Tipi",
         cash : "Nakit",
@@ -141,7 +150,7 @@ const fns_02_002 =
     },
     popCash : 
     {
-        title: "Nakit Girişi",
+        title: "Tahsilat Girişi",
         btnApprove : "Ekle"
     },
     popCheck : 

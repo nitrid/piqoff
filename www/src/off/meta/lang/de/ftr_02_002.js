@@ -56,6 +56,12 @@ const  ftr_02_002 =
     btnMailsend : "E-Mail senden",
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+    msgControlOfDispatch: 
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Diese Bestellung wurde bereits in eine Lieferschein umgewandelt. Wenn Sie einen Lieferschein erstellen möchten, erstellen Sie einen neuen Lieferschein im Bestellungssystem."
+    },
     isMsgSave :
     {
         title: "Achtung",

@@ -19,6 +19,8 @@ const fns_02_002 =
     btnCash: "Bargeld-Eingabe",
     invoiceSelect: "Rechnungsauswahl",
     ValidCash: "Bitte geben Sie einen Betrag größer als 0 ein",
+    checkDate: "Scheckdatum",
+    extraAmount: " Zusätzlicher Betrag",
     cmbPayType: {
         title: "Zahlungsart",
         cash: "Bargeld",
@@ -27,6 +29,13 @@ const fns_02_002 =
         otoTransfer: "Automatische Zahlung",
         foodTicket: "Essensgutschein",
         bill: "Wechsel",
+    },
+    msgClearGrid : 
+    {
+        title : "Achtung",
+        btn01 : "Ja, Löschen",
+        btn02 : "Abbrechen",
+        msg : "Sie haben bereits Rechnungen ausgewählt. Möchten Sie die Seite für neue Rechnungseingaben neu starten?"
     },
     pg_Docs:
     {
@@ -126,7 +135,7 @@ const fns_02_002 =
     },
     popCash : 
     {
-        title: "Bargeld Einzahlung",
+        title: "Einzahlung Bargeld",
         btnApprove : "Hinzufügen"
     },
     popCheck : 

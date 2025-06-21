@@ -1026,7 +1026,7 @@ export const langFr =
     },
     btnList :
     {
-        btnCheqpay : "Cheque",
+        btnCheqpay : "T.R.Cheque",
         btnInfo : "Info",
         btnDelete : "Sup. Ticket",
         btnLineDelete : "Sup. Ligne",
@@ -1046,7 +1046,7 @@ export const langFr =
         btnPark : "Mettre Att.",
         btnTicketList : "Ticket List",
         btnLastPrint : "Imprimer",
-        btnTotal : "Total",
+        btnTotal : "Paiement Types",
         btnSubtotal : "Sous Total",
         btnCardTicket : "T.R Carte",
         btnDiscount : "Remise",

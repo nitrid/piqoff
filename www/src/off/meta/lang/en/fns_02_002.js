@@ -20,6 +20,15 @@ const fns_02_002 =
     invoiceSelect : "Invoice Selection",
     installmentSelect : "Installment Selection",
     ValidCash : "Please enter an amount greater than 0",
+    checkDate : "Check Date",
+    extraAmount : " Extra Amount",
+    msgClearGrid : 
+    {
+        title : "Attention",
+        btn01 : "Yes, Clear",
+        btn02 : "Cancel",
+        msg : "You have already selected invoices. Do you want to clear the page for new invoice entries?"
+    },
     cmbPayType : {
         title : "Payment Type",
         cash : "Cash",
@@ -141,7 +150,7 @@ const fns_02_002 =
     },
     popCash : 
     {
-        title: "Cash Entry",
+        title: "Collection Entry",
         btnApprove : "Add"
     },
     popCheck : 

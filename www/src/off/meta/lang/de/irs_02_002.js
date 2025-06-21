@@ -39,6 +39,12 @@ const irs_02_002 =
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
     clmPartiLot : "Chargennummer",
+    msgControlOfFacture:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Diese Bestellung wurde bereits in eine Rechnung umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie eine neue Rechnung im Rechnungssystem."
+    },
     pg_partiLot :
     {
         title : "Parti Lot Auswahl",

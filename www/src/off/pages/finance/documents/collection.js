@@ -140,15 +140,14 @@ export default class collection extends React.PureComponent
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
-        console.log("this.docObj.dt()",this.docObj.dt()[0])
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.dt()[0].GUID,PAYING_DOC:this.docObj.dt()[0].GUID})
         
         // Ödemelerle eşleşen fatura bilgilerini al
         let tmpQuery = 
         {
             query : "SELECT " +
-                    "(SELECT REF FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF, " +
-                    "(SELECT REF_NO FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF_NO, " +
+                    "(SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF, " +
+                    "(SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF_NO, " +
                     "DC.GUID " +
                     "FROM DOC_CUSTOMER AS DC " +
                     "WHERE DC.DOC_GUID = @DOC_GUID",

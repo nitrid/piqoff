@@ -51,7 +51,7 @@ export default class salesDispatch extends DocBase
             setTimeout(() => {
                 if(typeof this.pagePrm.offerGuid != 'undefined')
                 {
-                    this.buildOffer(this.pagePrm.offerGuid)
+                    this.buildOffer(this.pagePrm.offerGuid,this.pagePrm.type)
                 }
                 else if(typeof this.pagePrm.GUID != 'undefined')
                 {
@@ -182,8 +182,7 @@ export default class salesDispatch extends DocBase
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
-            console.log(this.docObj.docItems.dt()[i])
-            console.log(tmpMargin)
+
         }
     }
     async multiItemAdd()
@@ -826,7 +825,6 @@ export default class salesDispatch extends DocBase
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    console.log(tmpData.result.recordset[0])
                     if(tmpData.result.recordset[0].INTERFEL == true)
                     {
                         tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
@@ -1117,8 +1115,7 @@ export default class salesDispatch extends DocBase
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
-                                    {
-                                        console.log(this.docObj.isSaved)                             
+                                    {                          
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1522,7 +1519,6 @@ export default class salesDispatch extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async(e)=>
                                     {
-                                        console.log(e)
                                         this.checkRow()
                                     }).bind(this)}
                                     >
@@ -1899,7 +1895,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = Number(e.data.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.SUB_FACTOR != 'undefined')
                                         {
@@ -2121,9 +2117,6 @@ export default class salesDispatch extends DocBase
                                                 onClick:async()  =>
                                                 {
                                                     await this.popDocDiscount.show()
-                                                    console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                    console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                    console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                     {
                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)

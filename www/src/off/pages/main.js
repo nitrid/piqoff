@@ -6,6 +6,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+import Sortable from 'devextreme-react/sortable';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
 import NdNumberBox from '../../core/react/devex/numberbox.js';
@@ -31,8 +32,17 @@ export default class mainPage extends React.PureComponent
         this.tmpLastMenu = []
         this.state = {
             tmpLastMenu:[],
-            iconIndex: 0
+            iconIndex: 0,
+            draggedItem: null,
+            draggedIndex: null
         }
+        
+        // Drag & Drop için method bind
+        this.onDragStart = this.onDragStart.bind(this);
+        this.onDragOver = this.onDragOver.bind(this);
+        this.onDragLeave = this.onDragLeave.bind(this);
+        this.onDrop = this.onDrop.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
         
         // 5 farklı yıldız temalı icon
         this.favoriteIcons = [
@@ -56,7 +66,20 @@ export default class mainPage extends React.PureComponent
             { id: 'irs_02_002', icon: 'fa-solid fa-shipping-fast', color: '#fd7e14', path:'dispatch/documents/salesDispatch' },
             { id: 'ftr_02_002', icon: 'fa-solid fa-receipt', color: '#6c757d', path:'invoices/documents/salesInvoice' },
             { id: 'piqx_02_001', icon: 'fa-solid fa-file-import', color: '#343a40', path:'piqx/invoices/piqXPurcFactList'},
-            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' }
+            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' },
+            { id: 'fns_02_002', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'finance/documents/collection' },
+            { id: 'ftr_02_003', icon: 'fa-solid fa-file-invoice-dollar', color: '#17a2b8', path:'invoices/documents/rebateInvoice' },
+            { id: 'ftr_02_004', icon: 'fa-solid fa-file-contract', color: '#6f42c1', path:'invoices/documents/branchPurcInvoice' },
+            { id: 'irs_02_004', icon: 'fa-solid fa-undo', color: '#dc3545', path:'dispatch/documents/rebateDispatch' },
+            { id: 'stk_02_001', icon: 'fa-solid fa-boxes', color: '#28a745', path:'items/cards/itemGroupCard' },
+            { id: 'stk_04_001', icon: 'fa-solid fa-warehouse', color: '#28a745', path:'items/reports/itemMoveReport' },
+            { id: 'fns_02_003', icon: 'fa-solid fa-credit-card', color: '#ffc107', path:'finance/documents/payment' },
+            { id: 'fns_02_004', icon: 'fa-solid fa-exchange-alt', color: '#17a2b8', path:'finance/lists/collectionList' },
+            { id: 'fns_02_005', icon: 'fa-solid fa-chart-line', color: '#6f42c1', path:'finance/reports/collectionReport' },
+            { id: 'slsRpt_01_009', icon: 'fa-solid fa-chart-bar', color: '#dc3545', path:'invoices/reports/openInvoiceSalesReport' },
+            { id: 'slsRpt_01_012', icon: 'fa-solid fa-chart-pie', color: '#fd7e14', path:'invoices/reports/productProfitReport' },
+            { id: 'slsRpt_01_013', icon: 'fa-solid fa-user-chart', color: '#6f42c1', path:'invoices/reports/customerProfitReport' },
+
         ];
 
     }
@@ -66,14 +89,45 @@ export default class mainPage extends React.PureComponent
         {
             this.init(this.pagePrm)
         }
-
+        else
+        {
+            this.init([]);
+        }
     }
     async init(pMenu)
     {
-
         if(pMenu.length == 0)
         {
-            this.setState({tmpLastMenu:this.menuItems.slice(0,4)})
+            // localStorage'dan kaydedilmiş sıralamayı kontrol et
+            try {
+                const savedOrder = localStorage.getItem('userMenuOrder');
+                if(savedOrder) {
+                    const parsedOrder = JSON.parse(savedOrder);
+                    
+                    // Kaydedilmiş sıralamaya göre menü öğelerini sırala
+                    const orderedMenu = [];
+                    parsedOrder.forEach(savedItem => {
+                        const menuItem = this.menuItems.find(item => item.id === savedItem.id);
+                        if(menuItem) {
+                            orderedMenu.push(menuItem);
+                        }
+                    });
+                    
+                    // Eğer kaydedilmiş sıralamada olmayan yeni öğeler varsa, onları da ekle
+                    this.menuItems.slice(0, 4).forEach(item => {
+                        if(!orderedMenu.find(ordered => ordered.id === item.id)) {
+                            orderedMenu.push(item);
+                        }
+                    });
+                    
+                    this.setState({tmpLastMenu: orderedMenu.slice(0, 4)});
+                } else {
+                    // Kaydedilmiş sıralama yoksa varsayılan ilk 4 öğeyi göster
+                    this.setState({tmpLastMenu:this.menuItems.slice(0,4)});
+                }
+            } catch (error) {
+                this.setState({tmpLastMenu:this.menuItems.slice(0,4)});
+            }
         }
         else
         {
@@ -82,36 +136,6 @@ export default class mainPage extends React.PureComponent
                 this.setState({tmpLastMenu:this.tmpLastMenu})
             }, 500);
         }
-      
-        // let tmpQuery = 
-        // {
-        //     query : "SELECT * FROM " +
-        //             "(SELECT *, " +
-        //             "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
-        //             "FROM [ITEM_EXPDATE_VW_01] WHERE  " +
-        //             " (dbo.GETDATE()+15 >  EXP_DATE) AND (EXP_DATE >= dbo.GETDATE())) AS TMP WHERE QUANTITY - DIFF > 0",
-        // }
-        // let tmpData = await this.core.sql.execute(tmpQuery) 
-        // if(tmpData.result.recordset.length > 0)
-        // {
-        //     let tmpConfObj =
-        //     {
-        //         id:'msgExpUpcoming',showTitle:true,title:this.lang.t("msgExpUpcoming.title"),showCloseButton:true,width:'500px',height:'200px',
-        //         button:[{id:"btn01",caption:this.lang.t("msgExpUpcoming.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgExpUpcoming.btn02"),location:'after'}],
-        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgExpUpcoming.msg")}</div>)
-        //     }
-        //     let pResult = await dialog(tmpConfObj);
-        //     if(pResult == 'btn02')
-        //     {
-        //         App.instance.menuClick(
-        //         {
-        //             id: 'stk_04_004',
-        //             text: this.lang.t('menuOff.stk_04_004'),
-        //             path: 'items/operations/expdateOperations',
-        //         })
-        //     }
-           
-        // }
     }
     getNextFavoriteIcon() {
         const currentIndex = this.state.iconIndex;
@@ -121,7 +145,6 @@ export default class mainPage extends React.PureComponent
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
-        console.log("tmpMenu",tmpMenu)
         return new Promise(async resolve => 
         {
             tmpMenu.forEach(async function (element,index,object)
@@ -147,33 +170,206 @@ export default class mainPage extends React.PureComponent
             resolve(this.tmpLastMenu)
         });
     }
-
+    onDragStart(e) {
+        const index = parseInt(e.currentTarget.dataset.index);
+        const item = this.state.tmpLastMenu[index];
+        
+        e.dataTransfer.setData('text/plain', JSON.stringify(item));
+        e.dataTransfer.setData('text/index', index.toString());
+        e.dataTransfer.effectAllowed = 'move';
+        
+        this.setState({ draggedItem: item, draggedIndex: index });
+        
+        // Drag görünümü için
+        e.currentTarget.style.opacity = '0.5';
+    }
+    
+    onDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        // Drop zone görsel feedback
+        if(e.currentTarget.classList.contains('sortable-item')) {
+            e.currentTarget.style.borderLeft = '3px solid #007bff';
+        }
+    }
+    
+    onDragLeave(e) {
+        // Drop zone görsel feedback temizle
+        if(e.currentTarget.classList.contains('sortable-item')) {
+            e.currentTarget.style.borderLeft = '';
+        }
+    }
+    
+    onDrop(e) {
+        e.preventDefault();
+        
+        const dropIndex = parseInt(e.currentTarget.dataset.index);
+        const dragIndex = this.state.draggedIndex;
+        
+        if(dragIndex !== dropIndex && dragIndex !== null) {
+            const reorderedMenu = [...this.state.tmpLastMenu];
+            const [movedItem] = reorderedMenu.splice(dragIndex, 1);
+            reorderedMenu.splice(dropIndex, 0, movedItem);
+            
+            this.setState({ tmpLastMenu: reorderedMenu });
+            
+            // localStorage'a kaydet
+            try {
+                const menuOrder = reorderedMenu.map(item => ({ id: item.id, path: item.path }));
+                localStorage.setItem('userMenuOrder', JSON.stringify(menuOrder));
+            } catch (error) {
+                // Hata durumunda sessizce devam et
+            }
+            
+            // favMenu sıralamasını da güncelle
+            this.updateFavMenuOrder(reorderedMenu);
+        }
+        
+        // Görsel feedback temizle
+        e.currentTarget.style.borderLeft = '';
+    }
+    
+    async updateFavMenuOrder(reorderedMenu) {
+        try {
+            // Tam menu objelerini oluştur (sadece id/path değil)
+            const fullMenuItems = reorderedMenu.map(item => {
+                return {
+                    id: item.id,
+                    text: this.lang.t(`menuOff.${item.id}`), // Text bilgisini ekle
+                    icon: item.icon,
+                    color: item.color,
+                    path: item.path,
+                    visible: true // Görünürlük ekle
+                };
+            });
+            
+            // Navigation component'ine erişim için App instance kullan
+            if(App.instance.navigation && App.instance.navigation.favMenuObj) {
+                const favMenuObj = App.instance.navigation.favMenuObj;
+                
+                if(favMenuObj.dt().length > 0) {
+                    // Mevcut favMenu'yu güncelle
+                    favMenuObj.dt()[0].VALUE = JSON.stringify(fullMenuItems);
+                    await favMenuObj.save();
+                    
+                    // Navigation state'ini de güncelle
+                    if(App.instance.navigation.setState) {
+                        App.instance.navigation.setState({ favMenu: fullMenuItems });
+                    }
+                } else {
+                    // Yeni favMenu kaydı oluştur
+                    let tmpEmpty = {...favMenuObj.empty};
+                    tmpEmpty.TYPE = 0;
+                    tmpEmpty.ID = "favMenu";
+                    tmpEmpty.VALUE = JSON.stringify(fullMenuItems);
+                    tmpEmpty.USERS = this.core.auth.data.CODE;
+                    tmpEmpty.APP = "OFF";
+                    
+                    favMenuObj.addEmpty(tmpEmpty);
+                    await favMenuObj.save();
+                    
+                    // Navigation state'ini de güncelle
+                    if(App.instance.navigation.setState) {
+                        App.instance.navigation.setState({ favMenu: fullMenuItems });
+                    }
+                }
+            }
+        } catch (error) {
+            // Hata durumunda sessizce devam et
+        }
+    }
+    
+    onDragEnd(e) {
+        // Opacity'yi geri getir
+        e.currentTarget.style.opacity = '1';
+        
+        // State temizle
+        this.setState({ draggedItem: null, draggedIndex: null });
+        
+        // Tüm görsel feedback'leri temizle
+        document.querySelectorAll('.sortable-item').forEach(item => {
+            item.style.borderLeft = '';
+        });
+    }
     render()
     {
         return(
             <ScrollView>
+                <style>{`
+                    .sortable-item {
+                        transition: all 0.2s ease;
+                    }
+                    .sortable-item:hover {
+                        z-index: 10;
+                    }
+                    .sortable-item[draggable="true"] {
+                        cursor: grab;
+                    }
+                    .sortable-item[draggable="true"]:active {
+                        cursor: grabbing;
+                    }
+                `}</style>
                 <div>
-                    <div className='row pt-3' style={{paddingBottom:"20px"}}>
+                    <div className='row pt-3' style={{
+                        paddingBottom:"20px",
+                        minHeight: "200px",
+                        position: "relative",
+                        overflow: "visible"
+                    }}>
                         {this.state.tmpLastMenu.map((function(object, i)
                         {
                             return (
-                                <div className="col-3 mb-4" key={object.id}>
+                                <div className="col-3 mb-4 sortable-item" key={object.id} data-id={object.id} data-index={i}>
                                     <div className="card text-center shadow-sm" 
+                                        draggable={true}
+                                        onDragStart={this.onDragStart}
+                                        onDragOver={this.onDragOver}
+                                        onDragLeave={this.onDragLeave}
+                                        onDrop={this.onDrop}
+                                        onDragEnd={this.onDragEnd}
+                                        data-index={i}
                                         style={{
-                                            cursor:'pointer', 
+                                            cursor:'grab', 
                                             height:'180px', 
                                             borderRadius:'10px', 
                                             background:'#f8f9fa', 
-                                            border:'1px solid #dee2e6'
+                                            border:'1px solid #dee2e6',
+                                            transition: 'all 0.2s ease',
+                                            userSelect: 'none',
+                                            position: 'relative',
+                                            touchAction: 'none'
                                         }} 
-                                        onClick={() => {
-                                            App.instance.menuClick({
-                                                id: object.id,
-                                                text: this.lang.t(`menuOff.${object.id}`),
-                                                path: object.path,
-                                            })
+                                        onMouseDown={(e) => {
+                                            e.currentTarget.style.cursor = 'grabbing';
+                                        }}
+                                        onMouseUp={(e) => {
+                                            e.currentTarget.style.cursor = 'grab';
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if(!this.state.draggedItem) {
+                                                e.currentTarget.style.transform = 'translateY(-3px)';
+                                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if(!this.state.draggedItem) {
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                                e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                                                e.currentTarget.style.cursor = 'grab';
+                                            }
+                                        }}
+                                        onClick={(e) => {
+                                            // Sadece drag işlemi değilse click eventi çalıştır
+                                            if(!this.state.draggedItem) {
+                                                App.instance.menuClick({
+                                                    id: object.id,
+                                                    text: this.lang.t(`menuOff.${object.id}`),
+                                                    path: object.path,
+                                                });
+                                            }
                                         }}>
-                                        <div className="card-body d-flex flex-column justify-content-center">
+                                        <div className="card-body d-flex flex-column justify-content-center" style={{pointerEvents: 'none'}}>
                                             <i className={object.icon + " mb-3"} 
                                                 style={{fontSize:'50px', color:object.color}}></i>
                                             <h5 className="card-title" 
@@ -183,11 +379,11 @@ export default class mainPage extends React.PureComponent
                                         </div>
                                     </div>
                                 </div>
-                                )
-                    }).bind(this))}                
-                </div>    
-            </div>
-        </ScrollView>
+                            )
+                        }).bind(this))}                
+                    </div>
+                </div>
+            </ScrollView>
         )
     }
 }

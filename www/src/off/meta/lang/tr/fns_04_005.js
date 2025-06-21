@@ -27,7 +27,9 @@ const fns_04_005 =
         design : "Dizayn",
         title : "Yazdırma"
     },
-    explanation: "Tahsilat Toplamı - Fatura Toplamı",
+    explanation: "Kalan Bakiye",
+    factTotal: "Fatura Toplamı",
+    factPayment: "Tahsilat",
     FACT_DATE: "Fatura Tarihi",
     FACT_REF: "Fatura Referansı",
     FACT_REF_NO: "Fatura Referans No",

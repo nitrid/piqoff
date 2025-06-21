@@ -347,7 +347,6 @@ export default class DocBase extends React.PureComponent
         {
             this.docObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
-            
             this.searchSameItems()
             if(this.docObj.dt().length == 0)
             {
@@ -928,7 +927,6 @@ export default class DocBase extends React.PureComponent
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
             if(tmpMergeDt.length > 0)
             {
-                console.log(this.combineControl)
                 if(this.combineControl == true)
                 {
                     this.msgCombineItem.setTitle(tmpMergeDt[0].ITEM_NAME)
@@ -1280,17 +1278,69 @@ export default class DocBase extends React.PureComponent
             this.btnSave.setState({disabled:false});
         }, 500);
     }
-    async buildOffer(pGuid)
+    async buildOffer(pGuid,pType)
     {
-       let tmpQuery =
-       {
-        query : "SELECT * FROM DOC_VW_01 WHERE GUID = @GUID",
-        param : ['GUID:string|50'],
-        value : [pGuid]
-       }
-       let tmpData = await this.core.sql.execute(tmpQuery)
-       if(tmpData.result.recordset.length > 0)
-       {
+        let tmpControlQuery =
+        {
+            query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }       
+
+        let tmpControlData = await this.core.sql.execute(tmpControlQuery)
+        console.log('tmpControlData.result.recordset[0]',tmpControlData.result.recordset[0])
+        if(tmpControlData.result.recordset.length > 0 )
+        {
+            //Bu devis daha once IRSALIYEYE cevrilmistir
+            if(tmpControlData.result.recordset[0].TYPE_TO == 40 && pType == 20)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+
+
+            }
+            //Bu devis daha once FATURAYA cevrilmistir
+            else if (tmpControlData.result.recordset[0].TYPE_TO == 20 && pType == 40)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+ 
+            }
+            else
+            {
+                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
+                return
+            }
+        }
+
+        let tmpQuery =
+        {
+            query : "SELECT * FROM DOC_VW_01 WHERE GUID = @GUID",
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        console.log('tmpData.result.recordset[0]',tmpData.result.recordset[0])
+        if(tmpData.result.recordset.length > 0)
+        {
             this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
             this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
             this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
@@ -3092,7 +3142,6 @@ export default class DocBase extends React.PureComponent
                                                 this.pg_transportSelect.show()
                                                 this.pg_transportSelect.onClick = async(data) =>
                                                 {
-                                                    console.log(data[0].NAME)
                                                     this.txtSenderName.value = data[0].NAME
                                                     this.txtSenderAdress.value = data[0].ADRESS
                                                     this.txtSenderCity.value = data[0].CITY
@@ -3130,7 +3179,6 @@ export default class DocBase extends React.PureComponent
                                                 this.pg_transportSelect.show()
                                                 this.pg_transportSelect.onClick = async(data) =>
                                                 {
-                                                    console.log(data[0].NAME)
                                                     this.txtRecieverName.value = data[0].NAME
                                                     this.txtRecieverAdress.value = data[0].ADRESS
                                                     this.txtRecieverCity.value = data[0].CITY

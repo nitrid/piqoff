@@ -61,7 +61,7 @@ export default class salesInvoice extends DocBase
             setTimeout(() => {
                 if(typeof this.pagePrm.offerGuid != 'undefined')
                 {
-                    this.buildOffer(this.pagePrm.offerGuid)
+                    this.buildOffer(this.pagePrm.offerGuid,this.pagePrm.type)
                 }
                 else if(typeof this.pagePrm.GUID != 'undefined')
                 {
@@ -115,22 +115,22 @@ export default class salesInvoice extends DocBase
                 START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
                 FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
             })
-
             setTimeout(async() => {
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
                 }
-                let tmpData = await this.core.sql.execute(tmpQuery) 
-                if(tmpData.result.recordset.length > 0)
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                if(this.txtRefno.value == 0)
                 {
-                    if(this.txtRefno.value == 0)
-                    {
                         this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                         this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                    }
                 }
-            }, 1000);
+                }
+            }, 500);
+
 
             this.pg_txtItemsCode.on('showing',()=>
             {

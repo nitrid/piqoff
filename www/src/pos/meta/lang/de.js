@@ -984,7 +984,7 @@ export const langDe =
         btnPark : "Parken",
         btnTicketList : "Ticketliste",
         btnLastPrint : "Drucken",
-        btnTotal : "Gesamt",
+        btnTotal : "Zahlungstypen",
         btnSubtotal : "Zwischensumme",
         btnCardTicket : "T.R. Karte",
         btnDiscount : "Rabatt",

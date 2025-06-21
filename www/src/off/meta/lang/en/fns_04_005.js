@@ -27,7 +27,9 @@ const fns_04_005 =
         design : "Design",
         title : "Print"
     },
-    explanation: "Collection Total - Invoice Total",
+    explanation: "Remaining Balance",
+    factTotal: "Invoice Total",
+    factPayment: "Payments",
     FACT_DATE: "Invoice Date",
     FACT_REF: "Invoice Reference",
     FACT_REF_NO: "Invoice Reference No",

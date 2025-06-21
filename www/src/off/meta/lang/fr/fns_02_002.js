@@ -16,11 +16,19 @@ const fns_02_002 =
     cash : "Total",
     description :"Motif",
     checkReference : "Référence",
-    checkDate : "Date",
+    checkDate : "Date du chèque",
     btnCash : "Saisie Réglement",
     invoiceSelect : "Sélectionner Facture",
     installmentSelect : "Sélectionner l'échéance",
     ValidCash : "Veuillez saisir un montant supérieur à 0", 
+    extraAmount : " Montant excédentaire",
+    msgClearGrid : 
+    {
+        title : "Attention",
+        btn01 : "Oui, Effacer",
+        btn02 : "Annuler",
+        msg : "Vous avez déjà sélectionné des factures. Voulez-vous vraiment effacer les nouvelles factures ?"
+    },
     cmbPayType : 
     {
         title : "Mode de paiement",
@@ -131,7 +139,7 @@ const fns_02_002 =
     },
     popCash : 
     {
-        title: "Saisi Espèce",
+        title: "Saisie Réglement",
         btnApprove : "Ajouter"
     },
     popCheck : 

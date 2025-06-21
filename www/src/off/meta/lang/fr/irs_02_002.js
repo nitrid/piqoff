@@ -36,6 +36,12 @@ const irs_02_002 =
     btnMailsend : "Envoyer un courriel",
     validMail : "Veuillez ne pas laisser ce champ vide.",
     placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce devis a déjà été converti en facture. Si vous souhaitez créer une bon de livraison, veuillez créer une nouvelle bone de livraison dans le module des bon de livraison de vente."
+    },
     pg_partiLot :
     {
         title : "Sélection Parti Lot",
