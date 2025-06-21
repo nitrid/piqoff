@@ -227,7 +227,10 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -286,9 +289,9 @@ class pricerApi
                         "DISCOUNT_FLAG":"0",
                         "STRIKE_FLAG":"",
                         "VAT":tmpResult[0].VAT,
-                        "VARIETY":"",
+                        "VARIETY":tmpResult[0].VARIETY,
                         "SIZE":"",
-                        "CATEGORY":"",
+                        "CATEGORY":tmpResult[0].CATEGORY,
                         "ORIGIN":tmpResult[0].ORGINS_NAME,
                         "TRAITEMENT" : "",
                         "STOCK":"",
@@ -329,7 +332,10 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID AND UNIT_ID = @UNIT_ID",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID AND UNIT_ID = @UNIT_ID",
             param : ['GUID:string|50','UNIT_ID:string|50'],
             value : [pGuid,pUnitId]
         }
@@ -372,9 +378,9 @@ class pricerApi
                         "DISCOUNT_FLAG":"0",
                         "STRIKE_FLAG":"",
                         "VAT":tmpResult[0].VAT,
-                        "VARIETY":"",
+                        "VARIETY": tmpResult[0].VARIETY,
                         "SIZE":"",
-                        "CATEGORY":"",
+                        "CATEGORY": tmpResult[0].CATEGORY,
                         "ORIGIN":tmpResult[0].ORGINS_NAME,
                         "TRAITEMENT" : "",
                         "STOCK":"",
@@ -500,7 +506,10 @@ class pricerApi
     {
         let tmpQuery = 
         {
-            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
+            query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
         }
@@ -539,9 +548,9 @@ class pricerApi
                         "DISCOUNT_FLAG":"1",
                         "STRIKE_PRICE":Math.round(tmpResult[0].CENTIM_PRICE),
                         "VAT":tmpResult[0].VAT,
-                        "VARIETY":"",
+                        "VARIETY":tmpResult[0].VARIETY,
                         "SIZE":"",
-                        "CATEGORY":"",
+                        "CATEGORY":tmpResult[0].CATEGORY,
                         "ORIGIN":tmpResult[0].ORGINS_NAME,
                         "TRAITEMENT" : "",
                         "STOCK":"",

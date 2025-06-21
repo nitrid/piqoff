@@ -391,5 +391,23 @@ const stk_01_001 =
         title : "Sub Group Selection",
         clmName : "Name",
     },
+    grdProperty : 
+    {
+        clmProperty : "Property",
+        clmValue : "Value",
+    },
+    propertyPopup : 
+    {
+        title : "Add Property", 
+        property : "Property",
+        value : "Value",
+        add : "Add",
+    },
+    btnProperty : "Add Property",
+    grdProperty : 
+    {
+        clmProperty : "Property",
+        clmValue : "Value",
+    },
 }
 export default stk_01_001

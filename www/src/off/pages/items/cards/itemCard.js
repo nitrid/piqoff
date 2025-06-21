@@ -541,6 +541,7 @@ export default class itemCard extends React.PureComponent
         else if(e.itemData.title == this.t("tabTitleDetail"))
         {
             await this.grdSubGrp.dataRefresh({source:this.itemsObj.itemSubGrp.dt()});
+            await this.grdProperty.dataRefresh({source:this.itemsObj.itemProperty.dt()})
         }
     }
     underPrice()
@@ -2300,8 +2301,8 @@ export default class itemCard extends React.PureComponent
                                 </Item> 
                                 <Item title={this.t("tabTitleDetail")} text={"tbDetail"}>
                                     <div className='row px-2 py-2'>
-                                        <div className='col-9'>
-                                            <Form colCount={3} >
+                                        <div className='col-6'>
+                                            <Form colCount={2} >
                                                 {/* txtGenus */}
                                                 <Item>                                    
                                                     <Label text={this.t("txtGenus")} alignment="right" />
@@ -2407,7 +2408,6 @@ export default class itemCard extends React.PureComponent
                                                         <Column dataField="NAME" caption={this.t("pg_customsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                     </NdPopGrid>
                                                 </Item>
-                                                <EmptyItem/>
                                                 {/* chkPartiLot */}
                                                 <Item>
                                                         <Label text ={this.t("chkPartiLot")} alignment="right"/>
@@ -2415,6 +2415,83 @@ export default class itemCard extends React.PureComponent
                                                         param={this.param.filter({ELEMENT:'chkPartiLot',USERS:this.user.CODE})}/>
                                                 </Item>
                                             </Form>
+                                        </div>
+                                        <div className='col-3'>
+                                            <div className='row'>
+                                                <div className='col-12 ps-0'>
+                                                    <NdGrid parent={this} id={"grdProperty"} 
+                                                    showBorders={true} 
+                                                    columnsAutoWidth={true} 
+                                                    allowColumnReordering={true} 
+                                                    allowColumnResizing={true} 
+                                                    height={'280px'} 
+                                                    width={'100%'}
+                                                    dbApply={false}
+                                                    >
+                                                        <Editing mode="cell" allowDeleting={true}/>
+                                                        <Column dataField="PROPERTY_NAME" caption={this.t("grdProperty.clmProperty")}/>
+                                                        <Column dataField="VALUE" caption={this.t("grdProperty.clmValue")}/>
+                                                        <Column type="buttons" width={"50"}>
+                                                            <GrdButton name="delete" icon="trash"/>
+                                                        </Column>
+                                                    </NdGrid>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col-12 ps-0'>
+                                                        <NdButton text={this.t("btnProperty")} type="normal" stylingMode="contained" width={'100%'}
+                                                        onClick={async()=>
+                                                        {
+                                                            await this.propertyPopup.show()
+                                                        }}/>
+                                                        <NdPopUp id={"propertyPopup"} parent={this} 
+                                                        visible={false}
+                                                        showTitle={true}
+                                                        title={this.t("propertyPopup.title")}
+                                                        container={"#root"}
+                                                        width={'500'}
+                                                        height={'400'}
+                                                        showCloseButton={true}
+                                                        position={{of:'#root'}}>
+                                                            <Form colCount={1} height={'fit-content'}>
+                                                                <Item>
+                                                                    <Label text={this.t("propertyPopup.property")} alignment="right"/>
+                                                                    <NdSelectBox id="cmbProperty" parent={this} 
+                                                                    simple={true}
+                                                                    height='fit-content' 
+                                                                    displayExpr="NAME"                       
+                                                                    valueExpr="GUID"
+                                                                    data={{source:{select:{query:"SELECT * FROM PROPERTY_VW_01"},sql:this.core.sql}}}/>
+                                                                </Item>
+                                                                <Item>
+                                                                    <Label text={this.t("propertyPopup.value")} alignment="right"/>
+                                                                    <NdTextBox id="txtPropertyValue" parent={this} simple={true} height='fit-content'/>
+                                                                </Item>
+                                                                <Item>
+                                                                    <NdButton text={this.t("propertyPopup.add")} type="normal" stylingMode="contained" width={'100%'}
+                                                                    onClick={async()=>
+                                                                    {
+                                                                        if(this.cmbProperty.value != '' && this.txtPropertyValue.value != '')
+                                                                        {
+                                                                            let tmpObj = 
+                                                                            {
+                                                                                ITEM:this.itemsObj.dt()[0].GUID,
+                                                                                PROPERTY:this.cmbProperty.value,
+                                                                                PROPERTY_NAME:this.cmbProperty.displayValue,
+                                                                                VALUE:this.txtPropertyValue.value
+                                                                            }
+                                                                            this.itemsObj.itemProperty.addEmpty(tmpObj)
+                                                                            await this.grdProperty.dataRefresh({source:this.itemsObj.itemProperty.dt()})
+                                                                            this.propertyPopup.hide()
+                                                                            this.cmbProperty.value = ''
+                                                                            this.txtPropertyValue.value = ''
+                                                                        }
+                                                                    }}/>
+                                                                </Item>
+                                                            </Form>
+                                                        </NdPopUp>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className='col-3'>
                                             <div className='row'>

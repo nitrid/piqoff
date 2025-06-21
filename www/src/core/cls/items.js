@@ -52,6 +52,7 @@ export class itemsCls
         this.itemMultiCode = new itemMultiCodeCls();
         this.itemImage = new itemImageCls();
         this.itemSubGrp = new itemSubGrpCls();
+        this.itemProperty = new itemPropertyCls();
 
         this._initDs();
     }    
@@ -242,6 +243,7 @@ export class itemsCls
         this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
         this.ds.add(this.itemLang.dt('ITEM_LANG'))
         this.ds.add(this.itemSubGrp.dt('ITEMS_SUB_GRP'))
+        this.ds.add(this.itemProperty.dt('ITEM_PROPERTY'))
 
         this.ds.get('ITEMS').noColumnEdit = ['GROSS_MARGIN','SNAME','CUSER','MAIN_GRP_NAME','VAT_EXT','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
     }
@@ -309,6 +311,7 @@ export class itemsCls
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemLang.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemSubGrp.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemProperty.load({ITEM:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -3245,3 +3248,146 @@ export class itemPartiLotCls
         });
     }
 }
+export class itemPropertyCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            ITEM : '00000000-0000-0000-0000-000000000000',
+            PROPERTY : '00000000-0000-0000-0000-000000000000',
+            PROPERTY_NAME : '',
+            PROPERTY_CODE : '',
+            VALUE : '',
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_PROPERTY');
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_PROPERTY_VW_01] WHERE ((ITEM = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000'))",
+            param : ['ITEM:string|50']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PROPERTY_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@PROPERTY = @PPROPERTY, " + 
+                    "@VALUE = @PVALUE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PPROPERTY:string|50','PVALUE:string|50'],
+            dataprm : ['GUID','CUSER','ITEM','PROPERTY','VALUE']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PROPERTY_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@PROPERTY = @PPROPERTY, " + 
+                    "@VALUE = @PVALUE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PPROPERTY:string|50','PVALUE:string|50'],
+            dataprm : ['GUID','CUSER','ITEM','PROPERTY','VALUE']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PROPERTY_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ",
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+        return this.ds.get(0)
+    }   
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_PROPERTY') == 'undefined')
+        {
+            return;
+        }
+    }   
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+        return this.ds.get(0) 
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_PROPERTY') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_PROPERTY').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM : '00000000-0000-0000-0000-000000000000'
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM = typeof arguments[0].ITEM == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM;
+            }
+            this.ds.get('ITEM_PROPERTY').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('ITEM_PROPERTY').refresh();
+            resolve(this.ds.get('ITEM_PROPERTY'));    
+        });
+    }
+    }

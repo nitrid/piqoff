@@ -214,6 +214,7 @@ export const langEn =
         stk_01_015: "Price List Definition",
         stk_01_016: "Product Recipe Definition",
         stk_01_017: "Product Lot Number Definition",
+        stk_01_018: "Property Definitions",
         stk_02_001: "Count Document",
         stk_02_002: "Depot/Store Inter-Selling",
         stk_02_003: "Lost Product Exit",

@@ -3039,7 +3039,7 @@ export default class posDoc extends React.PureComponent
                         AMOUNT AS AMOUNT,
                         DISCOUNT AS DISCOUNT,
                         LOYALTY AS LOYALTY,
-                        VAT AS VAT,
+                        VAT_RATE AS VAT_RATE,
                         PROMO_TYPE AS PROMO_TYPE
                         FROM 
                         (SELECT 
@@ -3051,7 +3051,7 @@ export default class posDoc extends React.PureComponent
                         AMOUNT,
                         DISCOUNT,
                         LOYALTY,
-                        VAT,
+                        VAT_RATE,
                         PROMO_TYPE
                         FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID  
                         UNION ALL 
@@ -3064,11 +3064,11 @@ export default class posDoc extends React.PureComponent
                         AMOUNT,
                         DISCOUNT,
                         LOYALTY,
-                        VAT,
+                        VAT_RATE,
                         PROMO_TYPE
                         FROM POS_SALE_VW_01 WHERE POS_GUID IN (SELECT GUID FROM POS_VW_01 WHERE TICKET = @GUID)
                         ) AS TMP 
-                        GROUP BY ITEM_CODE,PRICE,TOTAL,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT,PROMO_TYPE`,
+                        GROUP BY ITEM_CODE,PRICE,TOTAL,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT_RATE,PROMO_TYPE`,
                 param : ['GUID:string|50'], 
                 value : [pTicket] 
             }
@@ -3114,7 +3114,7 @@ export default class posDoc extends React.PureComponent
                         console.log(tmpItem)
                         this.posObj.posSale.dt()[i].PRICE = tmpItem[0].PRICE
                         this.posObj.posSale.dt()[i].DISCOUNT = ((tmpItem[0].DISCOUNT / tmpItem[0].QUANTITY) * this.posObj.posSale.dt()[i].QUANTITY).round(2)
-                        let tmpCalc = this.calcSaleTotal(tmpItem[0].PRICE,this.posObj.posSale.dt()[i].QUANTITY,this.posObj.posSale.dt()[i].DISCOUNT,0,tmpItem[0].VAT)
+                        let tmpCalc = this.calcSaleTotal(tmpItem[0].PRICE,this.posObj.posSale.dt()[i].QUANTITY,this.posObj.posSale.dt()[i].DISCOUNT,0,tmpItem[0].VAT_RATE)
 
                         this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
                         this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT

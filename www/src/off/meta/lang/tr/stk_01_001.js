@@ -392,5 +392,23 @@ const stk_01_001 =
         title : "Alt Grup Seçim",
         clmName : "Adı",
     },
+    grdProperty : 
+    {
+        clmProperty : "Özellik",
+        clmValue : "Değer",
+    },
+    propertyPopup : 
+    {
+        title : "Özellik Ekle",
+        property : "Özellik",
+        value : "Değer",
+        add : "Ekle",
+    },
+    btnProperty : "Özellik Ekle",
+    grdProperty : 
+    {
+        clmProperty : "Özellik",
+        clmValue : "Değer",
+    },
 }
 export default stk_01_001

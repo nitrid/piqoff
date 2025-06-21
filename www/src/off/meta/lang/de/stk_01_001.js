@@ -403,5 +403,23 @@ const stk_01_001 =
         title: "Untergruppenauswahl",
         clmName: "Name",
     },
+    grdProperty : 
+    {
+        clmProperty : "Eigenschaft",
+        clmValue : "Wert",
+    },
+    propertyPopup : 
+    {
+        title : "Eigenschaft hinzufügen",
+        property : "Eigenschaft", 
+        value : "Wert",
+        add : "Hinzufügen",
+    },
+    btnProperty : "Eigenschaft hinzufügen",
+    grdProperty : 
+    {
+        clmProperty : "Eigenschaft",
+        clmValue : "Wert",
+    },
 }
 export default stk_01_001
