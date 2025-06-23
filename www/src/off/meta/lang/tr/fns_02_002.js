@@ -22,6 +22,9 @@ const fns_02_002 =
     ValidCash : "0'dan büyük bir tutar giriniz",
     checkDate : "Çek Tarihi",
     extraAmount : " Fazla Tutar",
+    matchedDocs : "Eşleşen Belgeler",
+    invoices : "Faturalar",
+    payments : "Tahsilatlar",
     msgClearGrid : 
     {
         title : "Uyarı",

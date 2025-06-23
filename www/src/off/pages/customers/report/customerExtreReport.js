@@ -367,6 +367,27 @@ export default class customerExtreReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            onCellPrepared={(e) => 
+                            {
+                                if (e.rowType === "data" && (e.column.dataField === "BALANCE")) 
+                                {
+                                    if (e.value > 0) 
+                                    {
+                                        e.cellElement.style.color = "green"
+                                        e.cellElement.style.fontWeight = "bold"
+                                    }
+                                    else if (e.value < 0) 
+                                    {
+                                        e.cellElement.style.color = "red"
+                                        e.cellElement.style.fontWeight = "bold"
+                                    } 
+                                    else 
+                                    {
+                                        e.cellElement.style.color = ""
+                                        e.cellElement.style.fontWeight = ""
+                                    }
+                                }
+                            }}
                             onRowDblClick={async(e)=>
                             {
                                 console.log("e.data",e.data)

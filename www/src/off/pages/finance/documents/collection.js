@@ -70,7 +70,6 @@ export default class collection extends React.PureComponent
             {
                 this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
@@ -83,7 +82,7 @@ export default class collection extends React.PureComponent
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
+                this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -250,76 +249,221 @@ export default class collection extends React.PureComponent
     {
         if(pAmount > 0)
         {
-            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocCustomer.REF = this.docObj.dt()[0].REF
-            tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
-            
-            if(pType == 0)
+            // Grid'de fazla para satırı var mı kontrol et
+            let hasExtraAmount = this.docObj.docCustomer.dt().some(row => row._EXTRA_AMOUNT === true);
+            if(hasExtraAmount) 
             {
-                tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpDocCustomer.PAY_TYPE = 0
-                tmpDocCustomer.AMOUNT = pAmount
-                tmpDocCustomer.DESCRIPTION = this.cashDescription.value
+                let tmpConfObj =
+                {
+                    id:'msgClearGrid',showTitle:true,title:this.t("msgClearGrid.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgClearGrid.btn01"),location:'before'},{id:"btn02",caption:this.t("msgClearGrid.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgClearGrid.msg")}</div>)
+                }
+                
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01') {
+                    // Grid'i temizle
+                    this.docObj.docCustomer.dt().removeAll();
+                    this._calculateTotal();
+                } else {
+                    // İptal edildi, işlemi durdur
+                    return;
+                }
             }
-            else if (pType == 1)
+            
+            // ÇOKLU FATURA İŞLEMİ - Seçilen faturalar varsa tutarı dağıt
+            let selectedInvoices = this.deptCreditMatchingObj.popUpList.filter(x => x.REMAINDER != 0 && x.TYPE == 1);
+            
+            if(selectedInvoices.length > 0)
             {
-                tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpDocCustomer.DOC_DATE = this.checkDate.value
-                tmpDocCustomer.PAY_TYPE = 1
-                tmpDocCustomer.AMOUNT = pAmount
-                tmpDocCustomer.DESCRIPTION = this.cashDescription.value
+                let remainingAmount = pAmount;
+                
+                // Her seçilen faturaya sırasıyla tutar dağıt
+                for(let i = 0; i < selectedInvoices.length && remainingAmount > 0; i++)
+                {
+                    let invoice = selectedInvoices[i];
+                    let paymentAmount = 0;
+                    
+                    // AKİLLİ GİRİŞ - Pozitif/Negatif fatura ayrımı
+                    if(invoice.REMAINDER > 0) {
+                        // Pozitif bakiye (borçlu fatura): Normal dağıtım
+                        paymentAmount = Math.min(remainingAmount, invoice.REMAINDER);
+                    } else {
+                        // Negatif bakiye (alacaklı fatura): Kullanılabilir alacak tutarı
+                        paymentAmount = Math.min(remainingAmount, Math.abs(invoice.REMAINDER));
+                    }
+                    
+                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
+                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    
+                    if(pType == 0)
+                    {
+                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                        tmpDocCustomer.PAY_TYPE = 0
+                        tmpDocCustomer.AMOUNT = paymentAmount
+                        tmpDocCustomer.DESCRIPTION =  this.cashDescription.value
+                    }
+                    else if (pType == 1)
+                    {
+                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                        tmpDocCustomer.DOC_DATE = this.checkDate.value
+                        tmpDocCustomer.PAY_TYPE = 1
+                        tmpDocCustomer.AMOUNT = paymentAmount
+                        tmpDocCustomer.DESCRIPTION =  this.cashDescription.value
 
-                let tmpCheck = {...this.docObj.checkCls.empty}
-                tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpCheck.REF = this.checkReference.value
-                tmpCheck.DOC_DATE =  this.checkDate.value
-                tmpCheck.CHECK_DATE =  this.checkDate.value
-                tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
-                tmpCheck.AMOUNT =  pAmount
-                tmpCheck.SAFE =  this.cmbCashSafe.value
-                this.docObj.checkCls.addEmpty(tmpCheck)
+                        let tmpCheck = {...this.docObj.checkCls.empty}
+                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
+                        tmpCheck.REF = this.checkReference.value
+                        tmpCheck.DOC_DATE =  this.checkDate.value
+                        tmpCheck.CHECK_DATE =  this.checkDate.value
+                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
+                        tmpCheck.AMOUNT =  paymentAmount
+                        tmpCheck.SAFE =  this.cmbCashSafe.value
+                        this.docObj.checkCls.addEmpty(tmpCheck)
+                    }
+                    else
+                    {
+                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                        tmpDocCustomer.PAY_TYPE = pType
+                        tmpDocCustomer.AMOUNT = paymentAmount
+                        tmpDocCustomer.DESCRIPTION =  this.cashDescription.value
+                    }
+
+                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+                    
+                    // Eşleşen fatura bilgisini ekle
+                    let payingRow = this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1];
+                    payingRow.MATCHED_DOC = invoice.DOC_REF + "-" + invoice.DOC_REF_NO;
+                    
+                    // BORÇ ALACAK EŞLEŞMESİ - Her ödeme satırı için ayrı eşleştirme
+                    let tmpDeptCreditPaid = {...this.deptCreditMatchingObj.empty}
+                    tmpDeptCreditPaid.TYPE = 1  // Fatura tipi
+                    tmpDeptCreditPaid.DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDeptCreditPaid.CUSTOMER = this.docObj.dt()[0].OUTPUT
+                    tmpDeptCreditPaid.PAID_DOC = invoice.DOC  // Ödenen fatura GUID'i
+                    tmpDeptCreditPaid.PAYING_DOC = payingRow.GUID  // Ödeme satırı GUID'i
+                    tmpDeptCreditPaid.PAYING_DAY = 0
+                    tmpDeptCreditPaid.PAID_AMOUNT = paymentAmount
+                    tmpDeptCreditPaid.PAYING_AMOUNT = paymentAmount
+                    tmpDeptCreditPaid.PAY_PLAN_DOC_GUID = invoice.DOC
+                    
+                    this.deptCreditMatchingObj.addEmpty(tmpDeptCreditPaid)
+                    
+                    let tmpDeptCreditPaying = {...this.deptCreditMatchingObj.empty}
+                    tmpDeptCreditPaying.TYPE = 0  // Ödeme tipi
+                    tmpDeptCreditPaying.DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDeptCreditPaying.CUSTOMER = this.docObj.dt()[0].OUTPUT
+                    tmpDeptCreditPaying.PAID_DOC = payingRow.GUID  // Ödeme satırı GUID'i
+                    tmpDeptCreditPaying.PAYING_DOC = invoice.DOC  // Fatura GUID'i
+                    tmpDeptCreditPaying.PAYING_DAY = 0
+                    tmpDeptCreditPaying.PAID_AMOUNT = paymentAmount
+                    tmpDeptCreditPaying.PAYING_AMOUNT = paymentAmount
+                    
+                    this.deptCreditMatchingObj.addEmpty(tmpDeptCreditPaying)
+                    
+                    // PopUpList'teki faturanın bakiyesini güncelle
+                    if(invoice.REMAINDER > 0) 
+                    {
+                        invoice.REMAINDER -= paymentAmount;
+                        if(invoice.REMAINDER < 0.01) {
+                            invoice.REMAINDER = 0;
+                        }
+                    } 
+                    else 
+                    {
+                        invoice.REMAINDER += paymentAmount;
+                        if(Math.abs(invoice.REMAINDER) < 0.01) 
+                        {
+                            invoice.REMAINDER = 0;
+                        }
+                    }
+                    
+                    remainingAmount -= paymentAmount;
+                }
+                
+                // FAZLA PARA SATIRI (sadece görüntü için, SQL'e gitmesin)
+                if(remainingAmount > 0.01) 
+                {
+                    let tmpDocCustomerExtra = {...this.docObj.docCustomer.empty}
+                    tmpDocCustomerExtra.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocCustomerExtra.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocCustomerExtra.REF = this.docObj.dt()[0].REF
+                    tmpDocCustomerExtra.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocCustomerExtra.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocCustomerExtra.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocCustomerExtra.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocCustomerExtra.INPUT = this.cmbCashSafe.value
+                    tmpDocCustomerExtra.INPUT_NAME = this.cmbCashSafe.displayValue
+                    tmpDocCustomerExtra.PAY_TYPE = pType
+                    tmpDocCustomerExtra.AMOUNT = remainingAmount
+                    tmpDocCustomerExtra.DESCRIPTION = (this.cashDescription.value || "") + " " + this.t('extraAmount')
+                    tmpDocCustomerExtra.MATCHED_DOC = ""; // Fatura bağlantısı yok
+                    tmpDocCustomerExtra._EXTRA_AMOUNT = true; // Fazla para işareti (SQL'e gitmesin)
+                    
+                    this.docObj.docCustomer.addEmpty(tmpDocCustomerExtra)
+                }
             }
             else
             {
-                tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpDocCustomer.PAY_TYPE = pType
-                tmpDocCustomer.AMOUNT = pAmount
-                tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-            }
-
-            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-            // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
-            let tmpDCPaidDt = this.deptCreditMatchingObj.popUpList.where({REMAINDER: {'>' : 0}}).where({TYPE : 1})
-            if(tmpDCPaidDt.length > 0)
-            {
-                tmpDCPaidDt.push
-                (
-                    {
-                        LDATE : moment(new Date()),
-                        TYPE : tmpDocCustomer.TYPE,
-                        DOC_DATE : tmpDocCustomer.DOC_DATE,
-                        CUSTOMER_GUID : tmpDocCustomer.OUTPUT,
-                        DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
-                        REMAINDER : pAmount * -1,
-                    }
-                )
-                await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
-                if(this.deptCreditMatchingObj.popUpList.length > 0 )
+                // Fatura seçimi yoksa normal tek satır
+                let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+                tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocCustomer.REF = this.docObj.dt()[0].REF
+                tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+                
+                if(pType == 0)
                 {
-                    let payingRow = this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1];
-                    payingRow.MATCHED_DOC = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
+                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                    tmpDocCustomer.PAY_TYPE = 0
+                    tmpDocCustomer.AMOUNT = pAmount
+                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
                 }
-            }
-            /******************************************************************************/
+                else if (pType == 1)
+                {
+                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                    tmpDocCustomer.DOC_DATE = this.checkDate.value
+                    tmpDocCustomer.PAY_TYPE = 1
+                    tmpDocCustomer.AMOUNT = pAmount
+                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
 
+                    let tmpCheck = {...this.docObj.checkCls.empty}
+                    tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpCheck.REF = this.checkReference.value
+                    tmpCheck.DOC_DATE =  this.checkDate.value
+                    tmpCheck.CHECK_DATE =  this.checkDate.value
+                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
+                    tmpCheck.AMOUNT =  pAmount
+                    tmpCheck.SAFE =  this.cmbCashSafe.value
+                    this.docObj.checkCls.addEmpty(tmpCheck)
+                }
+                else
+                {
+                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
+                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
+                    tmpDocCustomer.PAY_TYPE = pType
+                    tmpDocCustomer.AMOUNT = pAmount
+                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
+                }
+
+                this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            }
+
+            // Taksit eşleştirmesi (eski mantık korundu)
             let tmpPayDCPaidDt = this.payPlanMatchingObj.popUpList.where({AMOUNT: {'>' : 0}})
             if(tmpPayDCPaidDt.length > 0)
             {
@@ -343,6 +487,7 @@ export default class collection extends React.PureComponent
             }
             /******************************************************************************/
             this._calculateTotal()
+            this.deptCreditMatchingObj.popUpList = [];
         }
     }
     async _btnCloseInvoice(pCustomer)
@@ -430,6 +575,25 @@ export default class collection extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
+                                                // Fazla para satırlarını DEPT_CREDIT_MATCHING'den çıkar
+                                                let extraAmountRowGuids = [];
+                                                for(let i = 0; i < this.docObj.docCustomer.dt().length; i++) {
+                                                    let row = this.docObj.docCustomer.dt()[i];
+                                                    if(row._EXTRA_AMOUNT === true) {
+                                                        extraAmountRowGuids.push(row.GUID);
+                                                    }
+                                                }
+                                                
+                                                // DEPT_CREDIT_MATCHING'den fazla para satırlarını çıkar
+                                                for(let i = this.deptCreditMatchingObj.dt().length - 1; i >= 0; i--) 
+                                                {
+                                                    let matchingRow = this.deptCreditMatchingObj.dt()[i];
+                                                    if(extraAmountRowGuids.includes(matchingRow.PAYING_DOC)) 
+                                                    {
+                                                        this.deptCreditMatchingObj.dt().removeAt(i);
+                                                    }
+                                                }
+                                                
                                                 let tmpConfObj1 =
                                                 {
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -439,6 +603,7 @@ export default class collection extends React.PureComponent
                                                 if((await this.docObj.save()) == 0)
                                                 {                       
                                                     await this.deptCreditMatchingObj.save()
+                                                    
                                                     await this.payPlanMatchingObj.save()  
                                                     if(this.deptCreditMatchingObj.dt().length > 0)
                                                     {
@@ -461,6 +626,7 @@ export default class collection extends React.PureComponent
                                                         }
                                                         await this.core.sql.execute(tmpQuery)
                                                     }
+                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -901,11 +1067,18 @@ export default class collection extends React.PureComponent
                                             
                                                 dialog(tmpConfObj);
                                                 e.component.cancelEditData()
-                                            }                                            
+                                            }
+                                            
+                                            // AMOUNT alanı için 2 ondalık basamağa yuvarlama
+                                            if(e.data && e.data.AMOUNT !== undefined) 
+                                            {
+                                                e.data.AMOUNT = Number(e.data.AMOUNT).round(2);
+                                            }
                                             
                                             this._calculateTotal()
                                         }}
-                                        onRowRemoved={async (e)=>{
+                                        onRowRemoved={async (e)=>
+                                        {
                                             this._calculateTotal()
                                             await this.docObj.save()
                                         }}
@@ -914,12 +1087,11 @@ export default class collection extends React.PureComponent
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="infinite" />
-                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} useIcons={true} />
                                             <Export fileName={this.lang.t("menuOff.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                             <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDocDate")}  dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
@@ -934,11 +1106,18 @@ export default class collection extends React.PureComponent
                                             <Column caption={this.t("grdDocPayments.clmMatchedDoc")} 
                                                 cellRender={(e) => 
                                                 {
+                                                    // Fazla para satırlarında hiçbir şey gösterme
+                                                    if(e.data._EXTRA_AMOUNT === true) 
+                                                    {
+                                                        return "";
+                                                    }
+                                                    
                                                     if(this.deptCreditMatchingObj.popUpList.length > 0)
                                                     {
                                                         let matchedDoc = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
 
-                                                        if (!e.data.MATCHED_DOC) {
+                                                        if (!e.data.MATCHED_DOC) 
+                                                        {
                                                             e.data.MATCHED_DOC = matchedDoc;
                                                         }
                                                         
@@ -951,6 +1130,8 @@ export default class collection extends React.PureComponent
                                                     return "";
                                                 }}
                                                 allowEditing={false}/>
+                                                <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                            
                                         </NdGrid>
                                         <ContextMenu
                                         dataSource={this.rightItems}
@@ -1098,8 +1279,10 @@ export default class collection extends React.PureComponent
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {   
+                                                this.deptCreditMatchingObj.popUpList = [];
                                                 await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
-                                                this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
+                                                let totalRemainder = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
+                                                this.numCash.value = totalRemainder
                                             }}/>
                                         </div>
                                         <div className='col-6'>

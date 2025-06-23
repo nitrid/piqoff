@@ -32,67 +32,27 @@ export default class NdCollectionGrid extends Base {
 
     return (
       <div>
-        <style>{`
-          .collection-summary-positive { color: green !important; }
-          .collection-summary-negative { color: red !important; }
-          .collection-summary-neutral { color: black !important; }
-        `}</style>
         <DataGrid
           dataSource={facturas}
           showBorders={true}
           columnAutoWidth={true}
           rowAlternationEnabled={true}
           height="auto"
-          onContentReady={(gridEvent) => {
-            // Summary satırını renklendir
-            setTimeout(() => {
-              const summaryItems = gridEvent.component.element().querySelectorAll('.dx-datagrid-summary-item');
-              summaryItems.forEach(item => {
-                const text = item.textContent || '';
-                if (text.includes(this.t("explanation"))) {
-                  // Doğru tahsilat miktarını al
-                  const amount = tahsilatAmount;
-                  const factTotal = facturas.reduce((sum, item) => sum + (item.FACT_TOTAL || 0), 0);
-                  const difference = amount - factTotal;
-                  
-                  if (Math.abs(difference) < 0.01) {
-                    item.className += ' collection-summary-neutral';
-                  } else if (difference < 0) {
-                    item.className += ' collection-summary-positive';
-                  } else {
-                    item.className += ' collection-summary-negative';
-                  }
-                }
-              });
-            }, 100);
-          }}
         >
           <Column dataField="FACT_DATE" caption={this.t("FACT_DATE")} dataType="date" format="dd.MM.yyyy" />
           <Column dataField="CUSTOMER_NAME" caption={this.t("CUSTOMER_NAME")} />
           <Column dataField="FACT_REF" caption={this.t("FACT_REF")} />
           <Column dataField="FACT_REF_NO" caption={this.t("FACT_REF_NO")} />
           <Column dataField="FACT_TYPE_NAME" caption={this.t("FACT_TYPE_NAME")} />
-          <Column dataField="FACT_AMOUNT" caption={this.t("FACT_AMOUNT")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
           <Column dataField="FACT_TOTAL" caption={this.t("FACT_TOTAL")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
+          <Column dataField="AMOUNT" caption={this.t("AMOUNT")} format={{ style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2  }} />
           <Summary>
             <TotalItem
-              column="FACT_TOTAL"
+              column="AMOUNT"
               summaryType="sum"
               valueFormat={{ type: 'fixedPoint', precision: 2 }}
               alignment="right"
-              showInColumn="FACT_TOTAL"
-              customizeText={(data) => {
-                const factTotal = data.value || 0;
-                const amount = tahsilatAmount;
-                const difference = factTotal - amount;
-                
-                // Formatları düzelt
-                const factTotalFormatted = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(factTotal);
-                const tahsilatFormatted = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(amount);
-                const formattedDifference = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR', useGrouping: true, minimumFractionDigits: 2 }).format(difference);
-                
-                return `${this.t("factTotal")}: ${factTotalFormatted} | ${this.t("factPayment")}: ${tahsilatFormatted} | ${this.t("explanation")}: ${formattedDifference}`;
-              }}
+              showInColumn="AMOUNT"
             />  
           </Summary>
         </DataGrid>
@@ -127,7 +87,7 @@ export function groupCollection(rows) {
   let map = new Map();
 
   for (let row of rows) {
-    let key = `${row.TAH_REF}|${row.TAH_REF_NO}|${new Date(row.TAH_DATE).toISOString().split('T')[0]}`;
+    let key = `${row.TAH_GUID}`;
     if (!map.has(key)) {
       map.set(key, {
         TAH_KEY: key,
@@ -150,7 +110,8 @@ export function groupCollection(rows) {
       FACT_TYPE_NAME: row.FACT_TYPE_NAME,
       FACT_VAT: row.FACT_VAT,
       FACT_TOTAL: row.FACT_TOTAL,
-      CUSTOMER_NAME: row.CUSTOMER_NAME
+      CUSTOMER_NAME: row.CUSTOMER_NAME,
+      AMOUNT: row.AMOUNT
     };
 
     map.get(key).FACTURAS.push(factura);

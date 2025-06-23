@@ -22,6 +22,9 @@ const fns_02_002 =
     installmentSelect : "Sélectionner l'échéance",
     ValidCash : "Veuillez saisir un montant supérieur à 0", 
     extraAmount : " Montant excédentaire",
+    matchedDocs : "Documents correspondants",
+    invoices : "Factures",
+    payments : "Paiements",
     msgClearGrid : 
     {
         title : "Attention",

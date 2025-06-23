@@ -49,6 +49,8 @@ export default class mainPage extends React.PureComponent
             { id: 'stk_03_001', icon: 'fa-solid fa-list', color: '#28a745', path:'items/lists/itemList' },
             { id: 'cri_01_001', icon: 'fa-solid fa-user-plus', color: '#28a745', path:'customers/cards/customerCard' },
             { id: 'cri_02_001', icon: 'fa-solid fa-users', color: '#28a745', path:'customers/lists/customerList' },
+            { id: 'cri_04_001', icon: 'fa-solid fa-file-lines', color: '#6c757d', path:'customers/report/customerExtreReport' },
+            { id: 'cri_04_002', icon: 'fa-solid fa-scale-balanced', color: '#6c757d', path:'customers/report/customerBalanceReport' },
             { id: 'tkf_02_002', icon: 'fa-solid fa-clipboard-list', color: '#ffc107', path:'offers/documents/salesOffer' },
             { id: 'irs_02_001', icon: 'fa-solid fa-truck-loading', color: '#6f42c1', path:'dispatch/documents/purchaseDispatch' },
             { id: 'irs_02_003', icon: 'fa-solid fa-exchange-alt', color: '#fd7e14', path:'dispatch/documents/rebatePurcDispatch' },
@@ -56,9 +58,16 @@ export default class mainPage extends React.PureComponent
             { id: 'irs_02_002', icon: 'fa-solid fa-shipping-fast', color: '#fd7e14', path:'dispatch/documents/salesDispatch' },
             { id: 'ftr_02_002', icon: 'fa-solid fa-receipt', color: '#6c757d', path:'invoices/documents/salesInvoice' },
             { id: 'piqx_02_001', icon: 'fa-solid fa-file-import', color: '#343a40', path:'piqx/invoices/piqXPurcFactList'},
-            { id: 'piqx_01_001', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' }
-        ];
-
+            { id: 'piqx_01_001', icon: 'fa-solid fa-truck-fast', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' },
+            { id: 'fns_02_002', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'finance/documents/collection' },
+            { id: 'fns_02_001', icon: 'fa-solid fa-money-bill-wave', color: '#28a745', path:'finance/documents/payment' },
+            { id: 'slsRpt_01_003', icon: 'fa-solid fa-chart-pie', color: '#17a2b8', path:'sales/report/salesInvoiceReport' },
+            { id: 'slsRpt_01_006', icon: 'fa-solid fa-chart-column', color: '#ffc107', path:'sales/report/customerBasedSaleAndReturnReport' },
+            { id: 'slsRpt_01_007', icon: 'fa-solid fa-percent', color: '#fd7e14', path:'sales/report/rebateInvoiceReport' },
+            { id: 'slsRpt_02_006', icon: 'fa-solid fa-folder-open', color: '#6f42c1', path:'purchase/report/openPurchaseInvoiceReport' },
+            { id: 'slsRpt_02_013', icon: 'fa-solid fa-sack-dollar', color: '#28a745', path:'purchase/report/customerProfitReport' },
+            { id: 'fns_04_005', icon: 'fa-solid fa-magnifying-glass-dollar', color: '#e83e8c', path:'finance/report/collectionReport' }
+        ]
     }
     componentDidMount()
     {

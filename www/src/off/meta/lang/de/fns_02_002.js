@@ -21,6 +21,9 @@ const fns_02_002 =
     ValidCash: "Bitte geben Sie einen Betrag größer als 0 ein",
     checkDate: "Scheckdatum",
     extraAmount: " Zusätzlicher Betrag",
+    matchedDocs: "Übereinstimmende Dokumente",
+    invoices: "Rechnungen",
+    payments: "Zahlungen",
     cmbPayType: {
         title: "Zahlungsart",
         cash: "Bargeld",

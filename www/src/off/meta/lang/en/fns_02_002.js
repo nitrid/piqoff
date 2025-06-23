@@ -22,6 +22,9 @@ const fns_02_002 =
     ValidCash : "Please enter an amount greater than 0",
     checkDate : "Check Date",
     extraAmount : " Extra Amount",
+    matchedDocs : "Matched Documents",
+    invoices : "Invoices",
+    payments : "Payments",  
     msgClearGrid : 
     {
         title : "Attention",
