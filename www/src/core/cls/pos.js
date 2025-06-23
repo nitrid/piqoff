@@ -2236,9 +2236,10 @@ export class posEnddayCls
                     "@CHECK = @PCHECK , " +
                     "@TICKET = @PTICKET , " +
                     "@ADVANCE = @PADVANCE , " +
-                    "@SAFE = @PSAFE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
-            dataprm : ['GUID','CUSER','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
+                    "@SAFE = @PSAFE, " +
+                    "@CDATE = @PCDATE   ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50','PCDATE:string|25'],
+            dataprm : ['GUID','CUSER','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE','CDATE']
           
         } 
 

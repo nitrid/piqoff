@@ -228,8 +228,8 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS CATEGORY " +
                     "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
@@ -333,8 +333,8 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS CATEGORY " +
                     "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID AND UNIT_ID = @UNIT_ID",
             param : ['GUID:string|50','UNIT_ID:string|50'],
             value : [pGuid,pUnitId]
@@ -507,8 +507,8 @@ class pricerApi
         let tmpQuery = 
         {
             query : "SELECT *, (ROUND(PRICE_SALE,2) * 100) AS CENTIM_PRICE, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS VARIETY, " +
-                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS CATEGORY " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '002') AS VARIETY, " +
+                    " (SELECT TOP 1 VALUE FROM ITEM_PROPERTY WHERE ITEM = GUID AND PROPERTY_CODE = '001') AS CATEGORY " +
                     "FROM ITEMS_BARCODE_MULTICODE_VW_02 WHERE GUID = @GUID ",
             param : ['GUID:string|50'],
             value : [pGuid]
