@@ -20,7 +20,6 @@ export default class Navigation extends React.PureComponent
         this.favMenuObj = new userMenu(menu(App.instance.lang))
         this.menuRef = undefined
         this.lang = App.instance.lang;
-        this._isMounted = false; // Component mount durumunu takip et
 
         this.state = 
         {
@@ -60,21 +59,6 @@ export default class Navigation extends React.PureComponent
         {
             tmpFavMenuData = []
         }
-        else
-        {
-            // FavMenu verilerini tam formata dönüştür (text bilgilerini ekle)
-            tmpFavMenuData = tmpFavMenuData.map(item => {
-                if(!item.text && item.id) {
-                    return {
-                        ...item,
-                        text: this.lang.t(`menuOff.${item.id}`), // Text bilgisini ekle
-                        visible: item.visible !== undefined ? item.visible : true
-                    };
-                }
-                return item;
-            });
-        }
-        
         let tmpMenu = await this.mergeMenu(tmpM,tmpMenuData)
 
         let tmpLicMenu = await App.instance.getLicence('OFF','MENU');
@@ -94,52 +78,28 @@ export default class Navigation extends React.PureComponent
             }
         }
         
-        if(this._isMounted) {
-            this.setState({menu:tmpMenu},()=>
-            {
-                if(this._isMounted) {
-                    this.menuRef.repaint()
-                    this.setState({loading:false})
-                }
-            })
-        }
-        if(this._isMounted) {
-            this.setState({favMenu:tmpFavMenuData},()=>
-            {
-                if(this._isMounted) {
-                    this.setState({loading:false})
-                    
-                    // Eğer favMenu'da text eksikse tekrar düzelt
-                    if(this.state.favMenu.length > 0) {
-                        const fixedFavMenu = this.state.favMenu.map(item => {
-                            if(!item.text && item.id) {
-                                return {
-                                    ...item,
-                                    text: this.lang.t(`menuOff.${item.id}`)
-                                };
-                            }
-                            return item;
-                        });
-                        
-                        if(JSON.stringify(fixedFavMenu) !== JSON.stringify(this.state.favMenu)) {
-                            if(this._isMounted) {
-                                this.setState({favMenu: fixedFavMenu});
-                            }
-                        }
-                    }
-                }
-            })
-        }
-        
+        this.setState({menu:tmpMenu},()=>
+        {
+            this.menuRef.repaint()
+            this.setState({loading:false})
+        })
+        this.setState({favMenu:tmpFavMenuData},()=>
+        {
+            this.setState({loading:false})
+        })
+        App.instance.menuClick(
+        {
+            text: "PiqSoft",
+            path: 'main.js',
+            pagePrm:tmpFavMenuData
+        })
         let tmpQuery = 
         {
             query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         this.firmName.value = tmpData.result.recordset[0].NAME
-        if(this._isMounted) {
-            this.setState({firmName:tmpData.result.recordset[0].NAME})
-        }
+        this.setState({firmName:tmpData.result.recordset[0].NAME})
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
@@ -216,12 +176,7 @@ export default class Navigation extends React.PureComponent
     }
     async componentDidMount()
     {
-        this._isMounted = true; // Component mount edildi
         await this.pluginMenu()
-    }
-    componentWillUnmount()
-    {
-        this._isMounted = false; // Component unmount edildi
     }
     async onTreeViewItemContextMenu(e)
     {
@@ -245,9 +200,7 @@ export default class Navigation extends React.PureComponent
         if(typeof tmpMerge == 'undefined')
         {
             tmpMenu.push(this.selectedItem)
-            if(this._isMounted) {
-                this.setState({loading:true})
-            }
+            this.setState({loading:true})
     
             if(this.favMenuObj.dt().length == 0)
             {
@@ -266,14 +219,10 @@ export default class Navigation extends React.PureComponent
                 this.favMenuObj.dt()[0].VALUE = JSON.stringify(tmpMenu)
                 this.favMenuObj.save()
             }
-            if(this._isMounted) {
-                this.setState({favMenu:[]},()=>
-                {
-                    if(this._isMounted) {
-                        this.setState({favMenu:tmpMenu,loading:false})
-                    }
-                })
-            }
+            this.setState({favMenu:[]},()=>
+            {
+                this.setState({favMenu:tmpMenu,loading:false})
+            })
         }
        
     }
@@ -287,21 +236,15 @@ export default class Navigation extends React.PureComponent
                 tmpMenu.splice(i, 1);
             }
         }
-        if(this._isMounted) {
-            this.setState({loading:true})
-        }
+        this.setState({loading:true})
     
         this.favMenuObj.dt()[0].VALUE = JSON.stringify(tmpMenu)
         this.favMenuObj.save()
         
-        if(this._isMounted) {
-            this.setState({favMenu:[]},()=>
-            {
-                if(this._isMounted) {
-                    this.setState({favMenu:tmpMenu,loading:false})
-                }
-            })
-        }
+        this.setState({favMenu:[]},()=>
+        {
+            this.setState({favMenu:tmpMenu,loading:false})
+        })
     }
     render()
     {
@@ -328,8 +271,6 @@ export default class Navigation extends React.PureComponent
                             searchMode={this.state.value}
                             searchEnabled={true}
                             onItemContextMenu= {this.onTreeViewItemContextMenu}
-                            displayExpr="text"
-                            keyExpr="id"
                             onInitialized={(e)=>
                             {
                                 this.menuRef = e.component
@@ -347,8 +288,6 @@ export default class Navigation extends React.PureComponent
                             searchMode={this.state.value}
                             searchEnabled={true}
                             onItemContextMenu= {this.onTreeViewItemContextMenu}
-                            displayExpr="text"
-                            keyExpr="id"
                             onInitialized={(e)=>
                             {
                                 this.menuRef2 = e.component
