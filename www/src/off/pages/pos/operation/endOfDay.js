@@ -494,7 +494,7 @@ export default class endOfDay extends React.PureComponent
         let tmpCodeSafe = tmpSafeData.result.recordset[0].GUID
         let tmpEndday = {...this.enddayObj.empty}
         tmpEndday.CASH = this.txtCash.value
-        tmpEndday.CDATE = this.dtDocDate.value
+        tmpEndday.CDATE = moment(this.dtDocDate.value).format("YYYY-MM-DD")
         tmpEndday.CREDIT = this.txtCreditCard.value
         tmpEndday.CHECK = this.txtCheck.value
         tmpEndday.TICKET = this.txtRestorant.value

@@ -238,7 +238,7 @@ export default class itemCard extends React.PureComponent
         this.itemsObj.dt()[0].GENRE = this.prmObj.filter({ID:'txtGenre'}).getValue().value
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
-        this.taxSugarValidCheck()  
+        this.taxSugarValidCheck()
         
         this.setState({isPromotion:false})     
         this.txtCostPrice.readOnly = this.sysParam.filter({ID:'costPriceReadOnly',USERS:this.user.CODE}).getValue()
@@ -329,6 +329,7 @@ export default class itemCard extends React.PureComponent
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
         this.itemGrpForOrginsValidCheck();   
+        this.extraCostCalculate()
     }
     async checkItem(pCode)
     {
@@ -659,7 +660,6 @@ export default class itemCard extends React.PureComponent
                 }
             }
         }
-        this.taxSugarCalculate()
     }
     async taxSugarCalculate()
     {
@@ -713,8 +713,10 @@ export default class itemCard extends React.PureComponent
                 this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
             }
         }
-        if(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue())
+        console.log(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue())
+        if(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue() && typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined')
         {
+            console.log(this.itemsObj.dt()[0].GUID)
             let tmpQuery = 
             {
                 query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND REBATE = 0 AND OUTPUT = @OUTPUT ORDER BY DOC_DATE DESC",
@@ -725,6 +727,7 @@ export default class itemCard extends React.PureComponent
             
             if(tmpData.result.recordset.length >0)
             {
+                console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
                     query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID)",
@@ -734,6 +737,7 @@ export default class itemCard extends React.PureComponent
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
                 if(tmpItemData.result.recordset.length >0)
                 {
+                    console.log(tmpItemData.result.recordset)
                     let tmpServices = []
                     for (let i = 0; i < tmpItemData.result.recordset.length; i++) 
                     {

@@ -309,7 +309,7 @@ export class priLabelObj
                     "@DESCRIPTION = @PDESCRIPTION, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PITEM:string|50','PNAME:string|50',
-                     'PQUANTITY:float','PPRICE:float','PPRICE_RATE:float','PDESCRIPTION:string|50','PSTATUS:int'],
+                     'PQUANTITY:float','PPRICE:float','PPRICE_RATE:float','PDESCRIPTION:string|max','PSTATUS:int'],
             dataprm : ['GUID','CUSER','CODE','ITEM','NAME','QUANTITY','PRICE','PRICE_RATE','DESCRIPTION','STATUS']
         } 
         tmpDt.updateCmd = 
