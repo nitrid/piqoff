@@ -287,7 +287,7 @@ export default class expdateOperations extends React.PureComponent
                     ]}
                     onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -296,13 +296,40 @@ export default class expdateOperations extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className="row px-2">
                             <div className="col-12">
-                                    {/* REF-REF NO */}
-                                    <div className="row pb-2">
-                                        <div className="col-3 d-flex justify-content-end align-items-center text-size-12">{this.t("lblRef")}</div>
-                                        <div className='col-9'>
+                                    <div className='card modern-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        
+                                        <div className='card-body' style={{padding: '0'}}>
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🔖 {this.t("lblRef")}
+                                                </label>
                                             <div className='row'>
                                                 <div className='col-4'>
+                                                        <div style={{position: 'relative'}}>
                                                 <NdTextBox id="txtRef" parent={this} simple={true} readOnly={false} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
                                                     onChange={(async(e)=>
                                                     {
                                                         try 
@@ -328,9 +355,17 @@ export default class expdateOperations extends React.PureComponent
                                                         
                                                     }).bind(this)}
                                                     />
+                                                        </div>
                                                 </div>
                                                 <div className='col-8'>
+                                                        <div style={{position: 'relative'}}>
                                                 <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={false} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
                                                     button=
                                                     {
                                                         [
@@ -391,18 +426,54 @@ export default class expdateOperations extends React.PureComponent
                                             </div>
                                         </div>
                                     </div>
-                                    {/* DATE */}
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
-                                        <div className='col-9'>
-                                            <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    📅 {this.t("lblDate")}
+                                                </label>
+                                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} 
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
                                         </div>
-                                    </div>
-                                    {/* SORTIE DEPOT */}
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot")}</div>
-                                        <div className='col-9'>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏭 {this.t("lblDepot")}
+                                                </label>
                                             <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
                                             dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DEPOT"}}  
                                             displayExpr="NAME"                       
                                             valueExpr="GUID"
@@ -416,38 +487,47 @@ export default class expdateOperations extends React.PureComponent
                                             </NdSelectBox>
                                         </div>
                                     </div>
-                                    {/* BARCODE - LINES SHORTCUT */}
+                                    </div>
                                     
-                                    <div className='row pb-2'>
+                                    {/* Action Buttons */}
+                                    <div className='row'>
                                         <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            <div className='card action-card mb-2' 
+                                            style={{
+                                                background: '#007bff',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
+                                                border: 'none',
+                                                height: '70px',
+                                                transition: 'all 0.3s ease'
+                                            }}
                                             onClick={this.onClickBarcodeShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-barcode"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                <div className='card-body text-center py-3' style={{padding: '16px'}}>
+                                                    <i className={"fa-solid fa-barcode"} style={{color:'#ffffff', fontSize:'24px', marginBottom:'8px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'12px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnBarcodeEntry")}
+                                                    </h6>
                                                     </div>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
                                         </div>
                                         <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            <div className='card action-card mb-2' 
+                                            style={{
+                                                background: '#28a745',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
+                                                border: 'none',
+                                                height: '70px',
+                                                transition: 'all 0.3s ease'
+                                            }}
                                             onClick={this.onClickProcessShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                <div className='card-body text-center py-3' style={{padding: '16px'}}>
+                                                    <i className={"fa-solid fa-file-lines"} style={{color:'#ffffff', fontSize:'24px', marginBottom:'8px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'12px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnProcessLines")}
+                                                    </h6>
                                                     </div>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
                                         </div>
                                     </div>
                                 </div>
@@ -460,9 +540,23 @@ export default class expdateOperations extends React.PureComponent
                             }}>
                                 <div className='row px-2'>
                                     <div className='col-12'>
-                                        <div className='row pb-2'>
-                                            <div className='col-12'>
+                                        {/* Barkod Giriş Kartı */}
+                                        <div className='card entry-card mb-2' style={{
+                                            background: '#ffffff',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                            border: '1px solid #e9ecef',
+                                            padding: '12px'
+                                        }}>
                                                 <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                            style={{
+                                                borderRadius: '6px',
+                                                border: '1px solid #ced4da',
+                                                fontSize: '14px',
+                                                padding: '10px',
+                                                backgroundColor: '#ffffff'
+                                            }}
+                                            placeholder={this.t("lblBarcode")}
                                                 onKeyUp={(async(e)=>
                                                 {
                                                     if(e.event.key == 'Enter')
@@ -548,26 +642,83 @@ export default class expdateOperations extends React.PureComponent
                                                     <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
                                                 </NdPopGrid>
                                             </div>
+
+                                        {/* Ürün Bilgileri */}
+                                        <div className='card mb-2' style={{
+                                            background: '#ffffff',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                            border: '1px solid #e9ecef',
+                                            padding: '12px'
+                                        }}>
+                                            <div style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                marginBottom: '8px'
+                                            }}>
+                                                <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                    📦 {this.t("lblItemName")}
+                                                </span>
+                                                <span style={{fontSize: '13px', color: '#6c757d'}}>
+                                                    {this.t("lblDepotQuantity")}: <strong><NbLabel id="lblDepotQuantity" parent={this} value={0}/></strong>
+                                                </span>
                                         </div>
-                                        <div className='row pb-2'>
-                                            <div className='col-12'>
-                                                <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
-                                                    <NbLabel id="lblItemName" parent={this} value={""}/>
-                                                </h6>
+                                            <div style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6',
+                                                textAlign: 'center',
+                                                minHeight: '40px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                <NbLabel id="lblItemName" parent={this} value={""} 
+                                                style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                             </div>
                                         </div>
-                                        <div className='row pb-2'>
-                                            <div className='col-6'>
-                                                <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                    <label className='text-purple-light'>{this.t("lblDepotQuantity")}</label>
-                                                    <NbLabel id="lblDepotQuantity" parent={this} value={0}/>
-                                                </div>
+
+                                        {/* SKT Bilgileri */}
+                                        <div className='card mb-2' style={{
+                                            background: '#ffffff',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                            border: '1px solid #e9ecef',
+                                            padding: '12px'
+                                        }}>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                marginBottom: '12px'
+                                            }}>
+                                                <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                    📅 {this.t("lblExpDateInfo")}
+                                                </span>
                                             </div>
-                                            <div className='col-6'>
-                                                <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                    <label className='text-purple-light'>{this.t("lblQuantity")}</label>
+                                            
+                                            {/* Miktar */}
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px'
+                                            }}>
+                                                <div className='row align-items-center'>
+                                                    <div className='col-4'>
+                                                        <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
+                                                            🔢 {this.t("lblQuantity")}
+                                                        </label>
                                                 </div>
+                                                    <div className='col-8'>
                                                     <NdNumberBox id="lblQuantity" parent={this} simple={true} maxLength={32}
+                                                        style={{
+                                                            borderRadius: '4px',
+                                                            border: '2px solid #007bff',
+                                                            fontSize: '13px',
+                                                            textAlign: 'center',
+                                                            backgroundColor: '#ffffff'
+                                                        }}
                                                     onValueChanged={(async()=>
                                                     {
 
@@ -575,13 +726,28 @@ export default class expdateOperations extends React.PureComponent
                                                     onEnterKey={this.addItem.bind(this)}/>
                                                 </div>
                                         </div>
-                                        <div className='row pb-2'>
-                                            <div className='col-6'>
                                             </div>
-                                            <div className='col-6'>
-                                                <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                        <label className='text-purple-light'>{this.t("lblExpDate")}</label>
+
+                                            {/* Son Kullanma Tarihi */}
+                                            <div className='form-group' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px'
+                                            }}>
+                                                <div className='row align-items-center'>
+                                                    <div className='col-4'>
+                                                        <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
+                                                            📅 {this.t("lblExpDate")}
+                                                        </label>
+                                                    </div>
+                                                    <div className='col-8'>
                                                         <NdDatePicker simple={true}  parent={this} id={"lblExpDate"}
+                                                        style={{
+                                                            borderRadius: '4px',
+                                                            border: '1px solid #ced4da',
+                                                            fontSize: '13px',
+                                                            backgroundColor: '#ffffff'
+                                                        }}
                                                         onValueChanged={(async()=>
                                                         {
 
@@ -593,12 +759,31 @@ export default class expdateOperations extends React.PureComponent
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='row pb-2'>
-                                            <div className='col-12'>
-                                                <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                                onClick={this.addItem.bind(this)}>{this.t("lblAdd")}
+                                        </div>
+
+                                        {/* Ekle Butonu */}
+                                        <div className='card action-button' style={{
+                                            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
+                                            border: 'none',
+                                            overflow: 'hidden'
+                                        }}>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
+                                                height:"60px",
+                                                width:"100%",
+                                                background:"transparent",
+                                                border:"none",
+                                                color:"#ffffff",
+                                                fontSize:"16px",
+                                                fontWeight:"600"
+                                            }} 
+                                            onClick={this.addItem.bind(this)}>
+                                                <div className='d-flex align-items-center justify-content-center'>
+                                                    <i className="fa-solid fa-plus" style={{marginRight: '8px', fontSize: '16px'}}></i>
+                                                    {this.t("lblAdd")}
+                                                </div>
                                                 </NbButton>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

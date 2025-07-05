@@ -48,6 +48,14 @@ export const langDe =
     dtLastYear: "Letztes Jahr",
     txtTotalTicket: "Gesamtzahl der Belege",
     txtTicketAvg: "Durchschnittlicher Belegbetrag",
+    loading: "Wird geladen!",
+    noData: "Keine Daten gefunden",
+    quantity: "Menge",
+    saleCount: "Verkaufszahl",
+    amount: "Betrag",
+    price: "Preis",
+    itemCount: "Artikelzahl",
+    saleCount: "Verkaufszahl",
     popUserList:
     {
         title: "Benutzerliste",
@@ -373,6 +381,8 @@ export const langDe =
         pos_02_017 : "Verkaufsbericht nach Zeitintervallen",
         pos_02_018 : "Bericht über Freie Rabatte",
         pos_02_019 : "Monatlicher Artikelgruppenverkaufsbericht",
+        pos_02_020 : "Benutzerbasierter Verkaufsbericht",
+        pos_02_021 : "POS-Verkaufsstatistikbericht",
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         pos_03_002: "Auslosung",
@@ -612,5 +622,148 @@ export const langDe =
         title : "Parti Lot Auswahl",
         clmLotCode : "Parti Kodu",
         clmSkt : "MHD",
-    }
+    },
+    device : "Kasse",
+    pieChart :
+    {
+        title : "Verkaufsverteilung nach Kasse",
+    },
+    barChart :
+    {
+        title : "Zahlungsmethodenverteilung",
+        cash : "Bar",
+        creditCard : "Kreditkarte",
+        giftCard : "Geschenkkarte",
+        ticketRest : "T.R",
+        check : "Scheck",
+        amount : "Betrag",
+        giftVoucher : "Geschenkkarte",
+        credit : "Kredit",
+        directDebit : "Direkte Lastschrift",
+        franc : "Frank",
+        creditCardTicket : "T.R Kart",
+        transfer : "Überweisung",
+    },
+    bestDays : "Beste Tage",
+    worstDays : "Schlechteste Tage",
+    comparison : "Vergleich",
+    distribution : "Verteilung",
+    trend : "Trend",
+    
+    // Alt Analiz Seçenekleri
+    topDay : "Höchster Verkaufs Tag",
+    worstDay : "Niedrigster Verkaufs Tag",
+    top5Days : "Beste 5 Tage",
+    worst5Days : "Schlechteste 5 Tage",
+    top10Days : "Beste 10 Tage",
+    worst10Days : "Schlechteste 10 Tage",
+    top15Days : "Beste 15 Tage",
+    worst15Days : "Schlechteste 15 Tage",
+    top20Days : "Beste 20 Tage",
+    worst20Days : "Schlechteste 20 Tage",
+    
+    // Gün Bazlı Analizler
+    bestMonday : "Beste Montage",
+    bestTuesday : "Beste Dienstag",
+    bestWednesday : "Beste Mittwoch",
+    bestThursday : "Beste Donnerstag",
+    bestFriday : "Beste Freitag",
+    bestSaturday : "Beste Samstag",
+    bestSunday : "Beste Sonntag",
+    
+    worstMonday : "Schlechteste Montag",
+    worstTuesday : "Schlechteste Dienstag",
+    worstWednesday : "Schlechteste Mittwoch",
+    worstThursday : "Schlechteste Donnerstag",
+    worstFriday : "Schlechteste Freitag",
+    worstSaturday : "Schlechteste Samstag",
+    worstSunday : "Schlechteste Sonntag",
+    
+    // Karşılaştırma Analizleri
+    aboveAverage : "Überdurchschnittlich",
+    belowAverage : "Unterdurchschnittlich",
+    weekday : "Wochentag",
+    weekend : "Wochenende",
+    weekdayVsWeekend : "Wochenende vs Wochentag",
+    firstWeekVsLastWeek : "Erste Woche vs Letzte Woche",
+    
+    // Dağılım Analizleri
+    monthlyDistribution : "Monatliche Verteilung",
+    weeklyDistribution : "Wöchentliche Verteilung",
+    dayOfWeekDistribution : "Tagesverteilung",
+    
+    // Trend Analizleri
+    growthTrend : "Wachstumstrend",
+    weeklyTrend : "Wöchentlicher Trend",
+    monthlyTrend : "Monatlicher Trend",
+    dailySalesChart :
+    {
+        title : "Tagesverkäufe",
+        totalSales : "Gesamtverkäufe",
+    },
+    analysisChart :
+    {
+        title : "Analyse-Diagramm",
+        name : "Verkaufsbetrag",
+        amount : "Betrag",
+    },
+    popAnalysis :
+    {
+        title : "Analyse",  
+        btnAnalysis : "Detaillierte Analyse",
+        selectAnalysis : "Analyse auswählen",
+    },
+    topDay : "Top-Tag",
+    worstDay : "Schlechtester Tag",
+    top10Days : "Top 10 Tage",
+    worst10Days : "Schlechteste 10 Tage",
+    aboveAverage : "Überdurchschnittlich",          
+    weekday : "Wochentag",
+    weekend : "Wochenende",
+    weekdayVsWeekend : "Wochenende vs Wochentag",
+    monthlyDistribution : "Monatliche Verteilung",
+    growthTrend : "Wachstumstrend",
+    firstHalf : "Erste Hälfte",
+    secondHalf : "Zweite Hälfte",
+    btnAnalysis : "Detaillierte Analyse",
+    firstHalf : "Erste Hälfte",
+    secondHalf : "Zweite Hälfte",
+    growthTrend : "Wachstumstrend (Erste Hälfte vs Zweite Hälfte)",
+    productAnalysis :
+    {
+        title : "Produktanalyse",
+        amount : "Betrag (€)",
+    },
+    products : "Produkte und Produktgruppen",
+    topProducts : "Beste Produkte",
+    worstProducts : "Schlechteste Produkte",
+    topProductGroups : "Produktgruppen",
+    selectProductGroup : "Produktgruppe auswählen",
+    topSellingProductsInGroup : "Top 20 Produkte in Gruppe",
+    chartType : "Diagrammtyp",
+    barChartPop : "Balkendiagramm",
+    pieChartPop : "Kreisdiagramm",
+    lineChart : "Liniendiagramm",
+    productAnalysis : {
+        topSellingProducts : "Beste Produkte",
+        worstSellingProducts : "Schlechteste Produkte",
+        topSellingProductGroups : "Beste Produktgruppen",
+        topSellingProductsInGroup : "Top 20 Produkte in Gruppe",
+    },
+    paretoChart : {
+        title : "Pareto-Diagramm",
+        cumulative : "Kumulierter %",
+    },
+    barChart : {
+        title : "Balkendiagramm",
+    },
+    pieChart : {
+        title : "Kreisdiagramm",
+    },
+    
+    productSalesByDay : "Produktverkäufe nach Tag",
+    productGroupSalesByDay : "Produktgruppenverkäufe nach Tag",
+    firstWeek : "Erste Woche",
+    lastWeek : "Letzte Woche",
+
 }

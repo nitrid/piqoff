@@ -50,6 +50,14 @@ export const langEn =
     dtLastYear : "Last Year",
     txtTotalTicket : "Total Ticket Count",
     txtTicketAvg : "Average Ticket Amount",
+    loading : "Loading",
+    noData : "No data found",
+    quantity : "Quantity",
+    saleCount : "Sale Count",
+    amount : "Amount",
+    price : "Price",
+    itemCount : "Item Count",
+    saleCount : "Sale Count",
     passChange : "Password Change",
     popUserList :
     {
@@ -409,6 +417,7 @@ export const langEn =
         pos_02_018 : "Free Discounts Report",
         pos_02_019 : "Monthly Product Group Sales Report",
         pos_02_020 : "User Sales Report",
+        pos_02_021 : "Pos Sales Statistical Report",
         pos_03 :"Operations",
         pos_03_001 : "End of Day",
         pos_03_002 : "Draw",
@@ -653,5 +662,149 @@ export const langEn =
         title : "Parti Lot Selection",
         clmLotCode : "Lot Code",
         clmSkt : "EXP",
-    }
+    },
+    device : "Cash Register",
+    pieChart :
+    {
+        title : "Sales Distribution by Cash Register",
+    },
+    barChart :
+    {
+        title : "Payment Method Distribution",
+        cash : "Cash",
+        creditCard : "Credit Card",
+        creditCardTicket : "T.R Card",
+        giftCard : "Gift Card",
+        giftVoucher : "Gift Voucher",
+        credit : "Credit",
+        ticketRest : "T.R",
+        directDebit : "Direct Debit",
+        franc : "Franc",
+        check : "Check",
+        amount : "Amount",
+        transfer : "Transfer",
+    },
+    dailySalesChart :
+    {
+        title : "Daily Sales",
+        totalSales : "Total Sales",
+        amount : "Amount",
+    },
+    analysisChart :
+    {
+        title : "Analysis Chart",
+        name : "Sales Amount",
+        amount : "Amount",
+    },
+    productAnalysis :
+    {
+        title : "Product Analysis",
+        amount : "Amount (€)",
+    },
+    popAnalysis :
+    {
+        title : "Detailed Sales Analysis",
+        description : "Analyze your sales data from different perspectives and evaluate your performance",
+        btnAnalysis : "Analysis",
+        selectAnalysis : "Analysis Category",
+        selectSubOption : "Analysis Detail",
+    },
+    // Main Analysis Categories
+    bestDays : "Best Days",
+    worstDays : "Worst Days",
+    comparison : "Comparisons",
+    distribution : "Distributions",
+    trend : "Trends",
+    products : "Products and Product Groups",
+    
+    // Detailed Analysis Options
+    topDay : "Top Day",
+    worstDay : "Worst Day",
+    top5Days : "Top 5 Days",
+    worst5Days : "Worst 5 Days",
+    top10Days : "Top 10 Days",
+    worst10Days : "Worst 10 Days",
+    top15Days : "Top 15 Days",
+    worst15Days : "Worst 15 Days",
+    top20Days : "Top 20 Days",
+    worst20Days : "Worst 20 Days",
+    
+    // Day-based Analysis
+    bestMonday : "Best Mondays",
+    bestTuesday : "Best Tuesdays",
+    bestWednesday : "Best Wednesdays",
+    bestThursday : "Best Thursdays",
+    bestFriday : "Best Fridays",
+    bestSaturday : "Best Saturdays",
+    bestSunday : "Best Sundays",
+    
+    worstMonday : "Worst Mondays",
+    worstTuesday : "Worst Tuesdays",
+    worstWednesday : "Worst Wednesdays",
+    worstThursday : "Worst Thursdays",
+    worstFriday : "Worst Fridays",
+    worstSaturday : "Worst Saturdays",
+    worstSunday : "Worst Sundays",
+    
+    // Comparison Analysis
+    aboveAverage : "Above Average",
+    belowAverage : "Below Average",
+    weekday : "Weekday",
+    weekend : "Weekend",
+    weekdayVsWeekend : "Weekday vs Weekend",
+    firstWeekVsLastWeek : "First Week vs Last Week",
+    
+    // Distribution Analysis
+    monthlyDistribution : "Monthly Distribution",
+    weeklyDistribution : "Weekly Distribution",
+    dayOfWeekDistribution : "Day of Week Distribution",
+    
+    // Trend Analysis
+    growthTrend : "Growth Trend",
+    weeklyTrend : "Weekly Trend",
+    monthlyTrend : "Monthly Trend",
+    
+    // Product Analysis
+    topProducts : "Top Products",
+    worstProducts : "Worst Products",
+    topProductGroups : "Product Groups",
+    selectProductGroup : "Select Product Group",
+    topSellingProductsInGroup : "Top 20 Products in Group",
+    chartType : "Chart Type",
+    barChartPop : "Bar Chart",
+    pieChartPop : "Pie Chart",
+    lineChart : "Line Chart",
+    productAnalysis : {
+        topSellingProducts : "Top Selling Products",
+        worstSellingProducts : "Worst Selling Products",
+        topSellingProductGroups : "Top Selling Product Groups",
+        topSellingProductsInGroup : "Top 20 Products in Group",
+    },
+    paretoChart : {
+        title : "Pareto Chart",
+        cumulative : "Cumulative %",
+    },
+    barChart : {
+        title : "Bar Chart",
+    },
+    pieChart : {
+        title : "Pie Chart",
+    },
+    
+    productSalesByDay : "Product Sales by Day",
+    productGroupSalesByDay : "Product Group Sales by Day",
+    
+    firstHalf : "First Half",
+    secondHalf : "Second Half",
+    firstWeek : "First Week",
+    lastWeek : "Last Week",
+    // Day names
+    sunday : "Sunday",
+    monday : "Monday",
+    tuesday : "Tuesday",
+    wednesday : "Wednesday",
+    thursday : "Thursday",
+    friday : "Friday",
+    saturday : "Saturday",
+    btnAnalysis : "Detailed Analysis",
 }

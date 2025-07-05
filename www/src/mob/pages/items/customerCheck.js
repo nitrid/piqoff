@@ -107,7 +107,7 @@ export default class customerCheck extends React.PureComponent
                 ]}
                 onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'35px',height:'calc(100vh - 35px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {

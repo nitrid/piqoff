@@ -438,7 +438,7 @@ export default class rebateTrasfer extends React.PureComponent
                     ]}
                     onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -447,150 +447,251 @@ export default class rebateTrasfer extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblRef")}</div>
-                                        <div className='col-9'>
-                                            <div className='row'>
-                                                <div className='col-4'>
-                                                    <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
-                                                    onChange={(async(e)=>
-                                                    {
-                                                        try 
-                                                        {
-                                                            let tmpQuery = 
+                                    <div className='card modern-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        
+                                        <div className='card-body' style={{padding: '0'}}>
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🔖 {this.t("lblRef")}
+                                                </label>
+                                                <div className='row'>
+                                                    <div className='col-4'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
+                                                            onChange={(async(e)=>
                                                             {
-                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
-                                                                param : ['REF:string|25'],
-                                                                value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
-                                                            }
-
-                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-                                                            if(tmpData.result.recordset.length > 0)
-                                                            {
-                                                                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
-                                                            }
-                                                        }
-                                                        catch (error) 
-                                                        {
-                                                            console.log("Hata oluştu: ", error);
-                                                        }
-                                                        
-                                                    }).bind(this)}
-                                                    />
-                                                </div>
-                                                <div className='col-8'>
-                                                    <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                                    button=
-                                                    {
-                                                        [
-                                                            {
-                                                                id:'01',
-                                                                icon:'more',
-                                                                onClick:async()=>
+                                                                try 
                                                                 {
-                                                                    this.popDoc.show()
-                                                                    this.popDoc.onClick = (data) =>
+                                                                    let tmpQuery = 
                                                                     {
-                                                                        if(data.length > 0)
-                                                                        {
-                                                                            this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                        }
+                                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
+                                                                        param : ['REF:string|25'],
+                                                                        value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
+                                                                    }
+
+                                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                                                    if(tmpData.result.recordset.length > 0)
+                                                                    {
+                                                                        this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
                                                                     }
                                                                 }
-                                                            },
-                                                            {
-                                                                id:'02',
-                                                                icon:'arrowdown',
-                                                                onClick:()=>
+                                                                catch (error) 
                                                                 {
-                                                                    this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    console.log("Hata oluştu: ", error);
                                                                 }
-                                                            }
-                                                        ]
-                                                    }/>
-                                                    {/*EVRAK SEÇİM */}
-                                                    <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
-                                                    selection={{mode:"single"}}
-                                                    visible={false}
-                                                    position={{of:'#root'}} 
-                                                    showTitle={true} 
-                                                    showBorders={true}
-                                                    width={'100%'}
-                                                    height={'100%'}
-                                                    title={this.t("popDoc.title")} 
-                                                    data = 
-                                                    {{
-                                                        source:
-                                                        {
-                                                            select:
+                                                                
+                                                            }).bind(this)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-8'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
+                                                            button=
                                                             {
-                                                                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1 ORDER BY DOC_DATE DESC"
-                                                            },
-                                                            sql:this.core.sql
-                                                        }
-                                                    }}
-                                                    >
-                                                        <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
-                                                        <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
-                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
-                                                        <Column dataField="INPUT_NAME" caption={this.t("popDoc.clmInputName")} width={200}  />
-                                                        <Column dataField="INPUT_CODE" caption={this.t("popDoc.clmInputCode")} width={150}  />
-                                                    </NdPopGrid>
+                                                                [
+                                                                    {
+                                                                        id:'01',
+                                                                        icon:'more',
+                                                                        onClick:async()=>
+                                                                        {
+                                                                            this.popDoc.show()
+                                                                            this.popDoc.onClick = (data) =>
+                                                                            {
+                                                                                if(data.length > 0)
+                                                                                {
+                                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        id:'02',
+                                                                        icon:'arrowdown',
+                                                                        onClick:()=>
+                                                                        {
+                                                                            this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }/>
+                                                            {/*EVRAK SEÇİM */}
+                                                            <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
+                                                            selection={{mode:"single"}}
+                                                            visible={false}
+                                                            position={{of:'#root'}} 
+                                                            showTitle={true} 
+                                                            showBorders={true}
+                                                            width={'100%'}
+                                                            height={'100%'}
+                                                            title={this.t("popDoc.title")} 
+                                                            data = 
+                                                            {{
+                                                                source:
+                                                                {
+                                                                    select:
+                                                                    {
+                                                                        query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1 ORDER BY DOC_DATE DESC"
+                                                                    },
+                                                                    sql:this.core.sql
+                                                                }
+                                                            }}
+                                                            >
+                                                                <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
+                                                                <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
+                                                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
+                                                                <Column dataField="INPUT_NAME" caption={this.t("popDoc.clmInputName")} width={200}  />
+                                                                <Column dataField="INPUT_CODE" caption={this.t("popDoc.clmInputCode")} width={150}  />
+                                                            </NdPopGrid>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏭 {this.t("lblDepot1")}
+                                                </label>
+                                                <NdSelectBox simple={true} parent={this} id="cmbOutDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏪 {this.t("lblDepot2")}
+                                                </label>
+                                                <NdSelectBox simple={true} parent={this} id="cmbInDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}/>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    📅 {this.t("lblDate")}
+                                                </label>
+                                                <NdDatePicker simple={true} parent={this} id={"dtDocDate"} pickerType={"rollers"} 
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot1")}</div>
-                                        <div className='col-9'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbOutDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                            dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot2")}</div>
-                                        <div className='col-9'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbInDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                            dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
-                                        <div className='col-9'>
-                                            <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
+                                    
+                                    {/* Action Buttons */}
+                                    <div className='row'>
                                         <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            <div className='card action-card' style={{
+                                                    background: '#007bff',
+                                                    borderRadius: '8px',
+                                                    boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
+                                                    border: 'none',
+                                                    height: '70px',
+                                                    transition: 'all 0.3s ease'
+                                            }}
                                             onClick={this.onClickBarcodeShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-barcode"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
-                                                    </div>
+                                                <div className='card-body text-center py-3' style={{padding: '16px'}}>
+                                                    <i className={"fa-solid fa-barcode"} style={{color:'#ffffff', fontSize:'24px', marginBottom:'8px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'12px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnBarcodeEntry")}
+                                                    </h6>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
+                                            </div>
                                         </div>
                                         <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            <div className='card action-card mb-2' style={{
+                                                    background: '#28a745',
+                                                    borderRadius: '8px',
+                                                    boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
+                                                    border: 'none',
+                                                    height: '70px',
+                                                    transition: 'all 0.3s ease'
+                                            }}
                                             onClick={this.onClickProcessShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
-                                                    </div>
+                                                <div className='card-body text-center py-3' style={{padding: '16px'}}>
+                                                    <i className={"fa-solid fa-file-lines"} style={{color:'#ffffff', fontSize:'24px', marginBottom:'8px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'12px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnProcessLines")}
+                                                    </h6>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

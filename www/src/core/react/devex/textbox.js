@@ -169,7 +169,8 @@ export default class NdTextBox extends Base
         }
     }
     _txtView()
-    {                        
+    {           
+        console.log(this.props.id)             
         return (
             <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'
                 mask={this.props.mask}

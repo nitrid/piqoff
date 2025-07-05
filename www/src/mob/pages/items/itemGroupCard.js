@@ -124,7 +124,7 @@ export default class itemGroupCard extends React.PureComponent
                 ]}
                 onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'5px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -133,9 +133,36 @@ export default class itemGroupCard extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
+                                    <div className='card modern-card mb-3' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '16px'
+                                    }}>
+                                        <div className='form-group mb-3' style={{
+                                            background: '#f8f9fa',
+                                            padding: '12px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #dee2e6'
+                                        }}>
+                                            <label className='form-label' style={{
+                                                fontSize: '12px',
+                                                fontWeight: '500',
+                                                color: '#6c757d',
+                                                marginBottom: '6px',
+                                                display: 'block'
+                                            }}>
+                                                📦 {this.t("lblBarcode")} 
+                                            </label>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                            style={{
+                                                borderRadius: '4px',
+                                                border: '1px solid #ced4da',
+                                                fontSize: '14px',
+                                                padding: '8px',
+                                                backgroundColor: '#ffffff'
+                                            }}
                                             onKeyUp={(async(e)=>
                                             {
                                                 if(e.event.key == 'Enter')
@@ -253,13 +280,29 @@ export default class itemGroupCard extends React.PureComponent
                                     </div>
                                     <div className="row p-1">
                                         <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            <div className='card action-button' style={{
+                                            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
+                                            border: 'none',
+                                            overflow: 'hidden'
+                                        }}>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" 
+                                                style={{  
+                                                    height:"60px",
+                                                    width:"100%",
+                                                    background:"transparent",
+                                                    border:"none",
+                                                    color:"#ffffff",
+                                                    fontSize:"16px",
+                                                    fontWeight:"600"}} 
                                                 onClick={(() =>
                                                 {
                                                     this.grpSave()
                                                 }).bind(this)
-                                            }>{this.t("lblSave")}
-                                            </NbButton>
+                                                }>{this.t("lblSave")}
+                                                </NbButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

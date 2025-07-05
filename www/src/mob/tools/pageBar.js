@@ -48,7 +48,13 @@ export class PageBar extends NbBase
         if(tmpContent.isBack)
         {
             tmpLeftBar = (
-                <NbButton className="btn btn-outline-light d-flex justify-content-start" style={{height:"40px",paddingTop:'10px'}}
+                <NbButton className="btn btn-block back-button-corporate" style={{
+                    height:"40px",
+                    background:"transparent",
+                    border:"none",
+                    padding: '8px',
+                    borderRadius: '0'
+                }}
                 onClick={()=>
                 {
                     if(typeof this.props.onBackClick != 'undefined')
@@ -56,14 +62,35 @@ export class PageBar extends NbBase
                         this.props.onBackClick()
                     }
                 }}>
-                    <i className={"bi bi-align-center fa-solid fa-arrow-left fa-lg"} style={{color:'#858585'}}></i>
+                    <div className='d-flex align-items-center justify-content-center h-100'>
+                        <i className={"fa-solid fa-arrow-left"} style={{
+                            color:'#495057',
+                            fontSize:'16px'
+                        }}></i>
+                    </div>
                 </NbButton>
             )
         }
         
         if(tmpContent.isTitle)
         {
-            tmpCenterBar = (<h5 className='overflow-hidden d-flex justify-content-center align-items-center' style={{color:'#858585',height:'40px',fontSize:'16px'}}>{this.props.title}</h5>)
+            tmpCenterBar = (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '40px'
+                }}>
+                    <h5 className='overflow-hidden' style={{
+                        color:'#343a40',
+                        margin: '0',
+                        fontSize:'16px',
+                        fontWeight: '600'
+                    }}>
+                        {this.props.title}
+                    </h5>
+                </div>
+            )
         }
         else if(typeof tmpContent.shortcuts != 'undefined' && Array.isArray(tmpContent.shortcuts))
         {
@@ -72,7 +99,15 @@ export class PageBar extends NbBase
             tmpContent.shortcuts.map((item) =>
             {
                 tmpShortcuts.push(
-                    <NbButton key={tmpKey} className="btn btn-outline-light d-flex justify-content-center mx-2" style={{height:"40px",paddingTop:'10px'}}
+                    <NbButton key={tmpKey} className="btn btn-block shortcut-button-corporate" style={{
+                        height:"40px",
+                        background:"transparent",
+                        border:"none",
+                        borderRadius: '0',
+                        padding: '8px',
+                        marginLeft: '8px',
+                        marginRight: '8px'
+                    }}
                     onClick={()=>
                     {
                         if(typeof item.onClick != 'undefined')
@@ -80,19 +115,34 @@ export class PageBar extends NbBase
                             item.onClick()
                         }
                     }}>
-                        <FontAwesomeIcon icon={["fa",item.icon]} size="lg" style={{color:'#858585'}}/>
+                        <div className='d-flex align-items-center justify-content-center h-100'>
+                            <FontAwesomeIcon icon={["fa",item.icon]} style={{
+                                color:'#495057',
+                                fontSize:'16px'
+                            }}/>
+                        </div>
                     </NbButton>
                 )
                 tmpKey++
             })
 
-            tmpCenterBar = (<div className='d-flex justify-content-center'>{tmpShortcuts}</div>)
+            tmpCenterBar = (
+                <div className='d-flex justify-content-center align-items-center' style={{height:'40px'}}>
+                    {tmpShortcuts}
+                </div>
+            )
         }
 
         if(typeof tmpContent.menu != 'undefined' && Array.isArray(tmpContent.menu))
         {
             tmpRightBar = (
-                <NbButton className="btn btn-outline-light d-flex justify-content-end" style={{height:"40   px",paddingTop:'10px'}}
+                <NbButton className="btn btn-block menu-button-corporate" style={{
+                    height:"40px",
+                    background:"transparent",
+                    border:"none",
+                    borderRadius: '0',
+                    padding: '8px'
+                }}
                 onClick={()=>
                 {
                     if(this.state.rightSide)
@@ -104,7 +154,12 @@ export class PageBar extends NbBase
                         this.setState({rightSide:true})
                     }                    
                 }}>
-                    <i className={"bi bi-align-center fa-solid fa-bars-staggered fa-lg"} style={{color:'#858585'}}></i>
+                    <div className='d-flex align-items-center justify-content-center h-100'>
+                        <i className={"fa-solid fa-bars"} style={{
+                            color:'#495057',
+                            fontSize:'16px'
+                        }}></i>
+                    </div>
                 </NbButton>
             )
 
@@ -113,13 +168,33 @@ export class PageBar extends NbBase
             tmpContent?.menu?.map(item =>
             {
                 tmpMenuArr.push(
-                    <li className="nav-item" key={tmpKey}>
-                        <a href="#" className="nav-link" aria-current="page" onClick={item.onClick}>
+                    <div key={tmpKey} style={{
+                        background: '#ffffff',
+                        borderRadius: '8px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                        border: '1px solid #e9ecef',
+                        marginBottom: '8px',
+                        transition: 'all 0.2s ease'
+                    }}>
+                        <a href="#" className="menu-item-corporate" style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '12px 16px',
+                            textDecoration: 'none',
+                            color: '#495057',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            borderRadius: '8px'
+                        }} onClick={item.onClick}>
                             {(()=>
                             {
                                 if(typeof item.icon != 'undefined')
                                 {
-                                    return <FontAwesomeIcon icon={["fa",item.icon]} size="lg" style={{paddingRight:"10px"}}/>
+                                    return <FontAwesomeIcon icon={["fa",item.icon]} style={{
+                                        marginRight:"12px",
+                                        color: '#6c757d',
+                                        fontSize: '14px'
+                                    }}/>
                                 }
                                 else
                                 {
@@ -128,16 +203,41 @@ export class PageBar extends NbBase
                             })()}
                             {item.text}
                         </a>
-                    </li>
+                    </div>
                 )
                 tmpKey++                                        
             })
             
             tmpSideBar = (
-            <div className="d-flex flex-column flex-shrink-0 p-3" style={{width: '280px'}}>
-                <ul className="nav nav-pills flex-column mb-auto">
+            <div className="d-flex flex-column flex-shrink-0 p-3" style={{
+                width: '250px',
+                background: '#f8f9fa',
+                borderRadius: '12px',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                border: '1px solid #e9ecef',
+                margin: '8px'
+            }}>
+                <div style={{
+                    marginBottom: '16px',
+                    paddingBottom: '12px',
+                    borderBottom: '2px solid #dee2e6',
+                    textAlign: 'center'
+                }}>
+                    <h6 style={{
+                        color: '#343a40',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        margin: '0'
+                    }}>
+                        {this.t("lblMenu")}
+                    </h6>
+                </div>
+                <div className="menu-container-corporate" style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
                     {tmpMenuArr}
-                </ul>
+                </div>
             </div>)
         }
 
@@ -156,8 +256,16 @@ export class PageBar extends NbBase
         
         return(
             <div>
-                <div className='pageBar'>
-                    <div className='row'>
+                <div className='pageBar' style={{
+                    background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                    border: '1px solid #e1e5e9',
+                    margin: '4px',
+                    padding: '0',
+                    overflow: 'hidden'
+                }}>
+                    <div className='row' style={{margin: '0'}}>
                         {tmpMain}
                     </div>
                 </div>
@@ -181,6 +289,47 @@ export class PageBar extends NbBase
                 }}>
                     {tmpSideBar}
                 </div>
+                
+                <style>{`
+                    /* Corporate PageBar Styles */
+                    .back-button-corporate:hover {
+                        background: rgba(73,80,87,0.08) !important;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .shortcut-button-corporate:hover {
+                        background: rgba(73,80,87,0.08) !important;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .menu-button-corporate:hover {
+                        background: rgba(73,80,87,0.08) !important;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .menu-item-corporate:hover {
+                        background: #f8f9fa !important;
+                        color: #343a40 !important;
+                        text-decoration: none;
+                        transform: translateX(2px);
+                        transition: all 0.2s ease;
+                    }
+                    
+                    /* Unified bar styling */
+                    .pageBar {
+                        position: relative;
+                    }
+                    
+                    .pageBar::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 1px;
+                        background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+                    }
+                `}</style>
             </div>
         )
     }

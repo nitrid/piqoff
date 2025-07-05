@@ -50,6 +50,14 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
+    loading : "Yükleniyor",
+    noData : "Veri bulunamadı",
+    quantity : "Miktar",
+    saleCount : "Satış Sayısı",
+    amount : "Tutar",
+    price : "Fiyat",
+    itemCount : "Ürün Sayısı",
+    saleCount : "Satış Sayısı",
     passChange : "Şifre Değiştir",
     popUserList :
     {
@@ -409,6 +417,7 @@ export const langTr =
         pos_02_018 : "Serbest İndirimler Raporu",
         pos_02_019 : "Aylık Ürün Grup Satış Raporu",
         pos_02_020 : "Kullanıcı Bazlı Satış Raporu",
+        pos_02_021 : "Pos Satış İstatistik Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",
@@ -653,5 +662,166 @@ export const langTr =
         title : "Parti Lot Seçimi",
         clmLotCode : "Parti Kodu",
         clmSkt : "SKT",
-    }
-}
+    },
+    device : "Kasa",
+    pieChart :
+    {
+        title : "Kasa Kasa Toplam Satış Dağılımı",
+    },
+    barChart :
+    {
+        title : "Kasa Kasa Ödeme Yöntemleri Dağılımı",
+        cash : "Nakit",
+        creditCard : "Kredi Kartı",
+        creditCardTicket : "T.R Kartı",
+        giftCard : "Hediye Kartı",
+        giftVoucher : "Hediye Çeki",
+        credit : "Kredi",
+        ticketRest : "T.R",
+        directDebit : "Otomatik Ödeme",
+        franc : "Frank",
+        check : "Çek",
+        amount : "Tutar",
+        transfer : "Havale/EFT",
+    },
+    dailySalesChart :
+    {
+        title : "Günlük Satışlar",
+        totalSales : "Toplam Satış",
+    },
+    // Ana Analiz Kategorileri
+    bestDays : "En İyi Günler",
+    worstDays : "En Kötü Günler",
+    comparison : "Karşılaştırmalar",
+    distribution : "Dağılımlar",
+    trend : "Trendler",
+    products : "Ürün ve Ürün Grupları",
+    
+    // Alt Analiz Seçenekleri
+    topDay : "En Yüksek Satış Günü",
+    worstDay : "En Düşük Satış Günü",
+    top5Days : "En İyi 5 Gün",
+    worst5Days : "En Kötü 5 Gün",
+    top10Days : "En İyi 10 Gün",
+    worst10Days : "En Kötü 10 Gün",
+    top15Days : "En İyi 15 Gün",
+    worst15Days : "En Kötü 15 Gün",
+    top20Days : "En İyi 20 Gün",
+    worst20Days : "En Kötü 20 Gün",
+    
+    // Gün Bazlı Analizler
+    bestMonday : "En İyi Pazartesi Günleri",
+    bestTuesday : "En İyi Salı Günleri",
+    bestWednesday : "En İyi Çarşamba Günleri",
+    bestThursday : "En İyi Perşembe Günleri",
+    bestFriday : "En İyi Cuma Günleri",
+    bestSaturday : "En İyi Cumartesi Günleri",
+    bestSunday : "En İyi Pazar Günleri",
+    
+    worstMonday : "En Kötü Pazartesi Günleri",
+    worstTuesday : "En Kötü Salı Günleri",
+    worstWednesday : "En Kötü Çarşamba Günleri",
+    worstThursday : "En Kötü Perşembe Günleri",
+    worstFriday : "En Kötü Cuma Günleri",
+    worstSaturday : "En Kötü Cumartesi Günleri",
+    worstSunday : "En Kötü Pazar Günleri",
+    
+    // Karşılaştırma Analizleri
+    aboveAverage : "Ortalama Üstü Günler",
+    belowAverage : "Ortalama Altı Günler",
+    weekday : "Hafta İçi",
+    weekend : "Hafta Sonu",
+    weekdayVsWeekend : "Hafta İçi vs Hafta Sonu",
+    firstWeekVsLastWeek : "İlk Hafta vs Son Hafta",
+    
+    // Dağılım Analizleri
+    monthlyDistribution : "Aylık Satış Dağılımı",
+    weeklyDistribution : "Haftalık Satış Dağılımı",
+    dayOfWeekDistribution : "Günlük Satış Dağılımı",
+    
+    // Trend Analizleri
+    growthTrend : "Büyüme Trendi",
+    weeklyTrend : "Haftalık Trend",
+    monthlyTrend : "Aylık Trend",
+    
+    // Ürün Analizleri
+    topProducts : "En İyi Ürünler",
+    worstProducts : "En Kötü Ürünler",
+    topProductGroups : "Ürün Grupları",
+    selectProductGroup : "Ürün Grubu Seçin",
+    topSellingProductsInGroup : "Gruptaki En Çok Satan 20 Ürün",
+    chartType : "Grafik Türü",
+    barChartPop : "Çubuk Grafik",
+    pieChartPop : "Pasta Grafik",
+    lineChart : "Çizgi Grafik",
+    areaChart : "Alan Grafik",
+    financialChart : "Finansal Grafik",
+    scatterChart : "Dağılım Grafik",
+    rangeBarChart : "Aralık Çubuk Grafik",
+    paretoChart : {
+        title : "Pareto Grafik",
+        cumulative : "Kümülatif %",
+    },
+    barChart : {
+        title : "Çubuk Grafik",
+    },
+    pieChart : {
+        title : "Pasta Grafik",
+    },
+    
+    productSalesByDay : "Günlük Ürün Satışları",
+    productGroupSalesByDay : "Günlük Ürün Grubu Satışları",
+    
+    btnAnalysis : "Detaylı Analiz",
+    analysisChart :
+    {
+        title : "Analiz Grafiği",
+        name : "Satış Tutarı",
+        amount : "Tutar (€)",
+    },
+    productAnalysis :
+    {
+        title : "Ürün Analizi",
+        amount : "Tutar (€)",
+    },
+    popAnalysis :
+    {
+        title : "Detaylı Satış Analizi",
+        description : "Satış verilerinizi farklı açılardan analiz edin ve performansınızı değerlendirin",
+        btnAnalysis : "Analiz",
+        selectAnalysis : "Analiz Kategorisi",
+        selectSubOption : "Analiz Detayı",
+    },
+    firstHalf : "İlk Yarı",
+    secondHalf : "Son Yarı",
+    firstWeek : "İlk Hafta",
+    lastWeek : "Son Hafta",
+    growthTrend : "Büyüme Trendi (İlk Yarı vs Son Yarı)",
+    // Gün isimleri
+    sunday : "Pazar",
+    monday : "Pazartesi",
+    tuesday : "Salı",
+    wednesday : "Çarşamba",
+    thursday : "Perşembe",
+    friday : "Cuma",
+    saturday : "Cumartesi",
+    pieChart: {
+        title: "Kasa Kasa Toplam Satış Dağılımı"
+    },
+    barChart: {
+        title: "Kasa Kasa Ödeme Yöntemleri Dağılımı",
+        cash: "Nakit",
+        creditCard: "Kredi Kartı",
+        giftCard: "Hediye Kartı",
+        transfer: "Havale/EFT",
+        check: "Çek",
+        amount: "Tutar"
+    },
+    dailySalesChart: {
+        title: "Günlük Satış Trendi",
+        totalSales: "Toplam Satış",
+        amount: "Tutar"
+    },
+    device: "Kasa",
+ 
+ }

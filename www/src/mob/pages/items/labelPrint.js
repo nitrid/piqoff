@@ -368,7 +368,7 @@ export default class labelPrint extends React.PureComponent
                 ]}
                 onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -377,12 +377,40 @@ export default class labelPrint extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblRef")}</div>
-                                        <div className='col-9'>
+                                    <div className='card modern-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '6x'
+                                    }}>
+                                        
+                                        <div className='card-body' style={{padding: '0'}}>
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    🔖 {this.t("lblRef")}
+                                                </label>
                                             <div className='row'>
                                                 <div className='col-4'>
+                                                        <div style={{position: 'relative'}}>
                                                     <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.mainLblObj.dt(),field:"REF"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '4px'
+                                                            }}
                                                     onChange={(async(e)=>
                                                     {
                                                         try 
@@ -408,9 +436,17 @@ export default class labelPrint extends React.PureComponent
                                                         
                                                     }).bind(this)}
                                                     />
+                                                        </div>
                                                 </div>
                                                 <div className='col-8'>
+                                                        <div style={{position: 'relative'}}>
                                                     <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.mainLblObj.dt(),field:"REF_NO"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '4px'
+                                                            }}
                                                     button=
                                                     {
                                                         [
@@ -465,10 +501,29 @@ export default class labelPrint extends React.PureComponent
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDesing")}</div>
-                                        <div className='col-9'>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    🎨 {this.t("lblDesing")}
+                                                </label>
                                             <NdSelectBox simple={true} parent={this} id="cmbDesing" notRefresh = {true} displayExpr="DESIGN_NAME" valueExpr="TAG" value="" searchEnabled={false}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '4px'
+                                                }}
                                             dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
                                             onValueChanged={(async(e)=>
                                                 {
@@ -483,55 +538,125 @@ export default class labelPrint extends React.PureComponent
                                                 }).bind(this)}
                                             />
                                         </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    📄 {this.t("lblPageCount")}
+                                                </label>
+                                                <NdTextBox id="txtPageCount" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '4px',
+                                                    backgroundColor: '#e9ecef'
+                                                }}/>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblPageCount")}</div>
-                                        <div className='col-9'>
-                                            <NdTextBox id="txtPageCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏷️ {this.t("lblFreeLabel")}
+                                                </label>
+                                                <NdTextBox id="txtFreeLabel" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '4px',
+                                                    backgroundColor: '#e9ecef'
+                                                }}/>
+                                        </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    📏 {this.t("lblLine")}
+                                                </label>
+                                                <NdTextBox id="txtLine" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '4px',
+                                                    backgroundColor: '#e9ecef'
+                                                }}/>
+                                    </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblFreeLabel")}</div>
-                                        <div className='col-9'>
-                                            <NdTextBox id="txtFreeLabel" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblLine")}</div>
-                                        <div className='col-9'>
-                                            <NdTextBox id="txtLine" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                    
+                                    {/* Action Buttons */}
+                                    <div className='row'>
+                                        <div className='col-6 pe-1'>
+                                            <div className='card action-card mb-2' 
+                                            style={{
+                                                background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 4px 12px rgba(0,123,255,0.3)',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.3s ease',
+                                                height: '70px'
+                                            }}
                                             onClick={this.onClickBarcodeShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-barcode"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                <div className='card-body text-center d-flex flex-column justify-content-center align-items-center h-100' style={{padding: '12px'}}>
+                                                    <i className={"fa-solid fa-barcode"} style={{color:'#ffffff', fontSize:'20px', marginBottom:'4px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'11px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnBarcodeEntry")}
+                                                    </h6>
                                                     </div>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
                                         </div>
-                                        <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                        <div className='col-6 ps-1'>
+                                            <div className='card action-card mb-2' 
+                                            style={{
+                                                background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.3s ease',
+                                                height: '70px'
+                                            }}
                                             onClick={this.onClickProcessShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                <div className='card-body text-center d-flex flex-column justify-content-center align-items-center h-100' style={{padding: '12px'}}>
+                                                    <i className={"fa-solid fa-file-lines"} style={{color:'#ffffff', fontSize:'20px', marginBottom:'4px'}}></i>
+                                                    <h6 className='text-white mb-0' style={{fontSize:'11px', fontWeight:'600'}}>
+                                                        {this.lang.t("btnProcessLines")}
+                                                    </h6>
                                                     </div>
                                                 </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
                                         </div>
                                     </div>
                                 </div>
@@ -543,9 +668,48 @@ export default class labelPrint extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
+                                    <div className='card modern-card mb-3' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <div className='card-header' style={{
+                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                            borderRadius: '6px',
+                                            padding: '12px',
+                                            marginBottom: '6px',
+                                            border: 'none'
+                                        }}>
+                                            <h6 className='text-white mb-0' style={{fontSize:'14px', fontWeight:'600'}}>
+                                                🏷️ {this.t("lblPrintInfo")}
+                                            </h6>
+                                        </div>
+                                        
+                                        <div className='form-group mb-3' style={{
+                                            background: '#f8f9fa',
+                                            padding: '12px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #dee2e6'
+                                        }}>
+                                            <label className='form-label' style={{
+                                                fontSize: '12px',
+                                                fontWeight: '500',
+                                                color: '#6c757d',
+                                                marginBottom: '2px',
+                                                display: 'block'
+                                            }}>
+                                                📦 {this.t("lblBarcode")}
+                                            </label>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                            style={{
+                                                borderRadius: '4px',
+                                                border: '1px solid #ced4da',
+                                                fontSize: '14px',
+                                                padding: '4px',
+                                                backgroundColor: '#ffffff'
+                                            }}
                                             onKeyUp={(async(e)=>
                                             {
                                                 if(e.event.key == 'Enter')
@@ -631,37 +795,100 @@ export default class labelPrint extends React.PureComponent
                                                 <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
                                             </NdPopGrid>
                                         </div>
-                                    </div>
-                                    <div className='row pb-1'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                                                                     
+                                        
+                                        <div className='form-group mb-2' style={{
+                                            background: '#f8f9fa',
+                                            padding: '4px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #dee2e6'
+                                        }}>
+                                            <div className='row align-items-center'>
+                                                <div className='col-8'>
+                                                    <span style={{fontSize: '12px', color: '#6c757d'}}>⚡ Otomatik Ekleme</span>
                                         </div>
-                                        <div className='col-4'>
+                                                <div className='col-4 text-end'>
                                             <NdCheckBox id="chkAutoAdd" text={this.t("lblAutoAdd")} parent={this} value={true} defaultValue={true} />
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
-                                                <NbLabel id="lblItemName" parent={this} value={""}/>
-                                            </h6>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
+                                    {/* Ürün Bilgileri */}
+                                    <div className='card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            marginBottom: '8px'
+                                        }}>
+                                            <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                🏷️ {this.t("lblItemName")}
+                                            </span>
                                         </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} 
-                                            onEnterKey={this.addItem.bind(this)}/>
+                                        <div style={{
+                                            background: '#f8f9fa',
+                                            padding: '6px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #dee2e6',
+                                            textAlign: 'center',
+                                            minHeight: '40px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} 
+                                            style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.addItem.bind(this)}>{this.t("lblAdd")}
-                                            </NbButton>
+
+                                    {/* Fiyat */}
+                                    <div className='card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '6px'
+                                    }}>
+                                        <div className='row mb-2'>
+                                            <div className='col-4'>
+                                                <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblPrice")}</label>
+                                            </div>
+                                            <div className='col-8'>
+                                                <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} 
+                                                style={{borderRadius: '6px', border: '2px solid #007bff', fontSize: '13px', textAlign: 'center'}}
+                                                onEnterKey={this.addItem.bind(this)}/>
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    {/* Ekle Butonu */}
+                                    <div className='card action-button' style={{
+                                        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
+                                        border: 'none',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
+                                            height:"60px",
+                                            width:"100%",
+                                            background:"transparent",
+                                            border:"none",
+                                            color:"#ffffff",
+                                            fontSize:"16px",
+                                            fontWeight:"600"
+                                        }} 
+                                        onClick={this.addItem.bind(this)}>
+                                            <div className='d-flex align-items-center justify-content-center'>
+                                                <i className="fa-solid fa-plus" style={{marginRight: '8px', fontSize: '16px'}}></i>
+                                                {this.t("lblAdd")}
+                                            </div>
+                                        </NbButton>
                                     </div>
                                 </div>
                             </div>
