@@ -801,8 +801,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
 
-                                console.log('tmpData.result.recordset',tmpData.result.recordset)
-
                                 App.instance.setState({isExecute:false})
                                 let tmpPayType = 
                                 {
@@ -946,7 +944,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             <div className="col-12">
                                 {
                                     this.state.dailySalesData && this.state.dailySalesData.length > 0 ?
-                                    <div style={{height: '400px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '400px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <Chart
                                             id="dailySalesChart"
                                             title={this.lang.t("dailySalesChart.title")}
@@ -1014,7 +1012,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         </Chart>
                                     </div>
                                     :
-                                    <div style={{height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <span>{this.lang.t("noData")}</span>
                                     </div>
                                 }
@@ -1034,7 +1032,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             <div className="col-6">
                                 {
                                     this.state.chartData && this.state.chartData.length > 0 ?
-                                    <div style={{height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <PieChart
                                             id="pieChart"
                                             type="doughnut"
@@ -1073,7 +1071,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         </PieChart>
                                     </div>
                                     :
-                                    <div style={{height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <span>{this.lang.t("noData")}</span>
                                     </div>
                                 }
@@ -1083,7 +1081,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             <div className="col-6">
                                 {
                                     this.state.chartData && this.state.chartData.length > 0 ?
-                                    <div style={{height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <Chart
                                             id="deviceChart"
                                             title={this.lang.t("barChart.title")}
@@ -1151,7 +1149,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         </Chart>
                                     </div>
                                     :
-                                    <div style={{height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                    <div style={{minHeight: '400px', height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <span>{this.lang.t("noData")}</span>
                                     </div>
                                 }
@@ -1529,13 +1527,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 palette="Bright"
                                                 visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
                                                 onPointClick={async (e) => {
-                                                    console.log('Nokta tıklandı:', e.target.data);
                                                     
                                                     // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
                                                     if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
                                                     {
-                                                        console.log('Ürün grubu seçildi:', e.target.data.groupCode);
-                                                        
                                                         // Önce state'i güncelle
                                                         this.setState({ 
                                                             selectedProductGroup: e.target.data.groupCode,
