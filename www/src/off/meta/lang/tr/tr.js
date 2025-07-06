@@ -764,6 +764,19 @@ export const langTr =
     },
     barChart : {
         title : "Çubuk Grafik",
+        cash : "Nakit",
+        creditCard : "Kredi Kartı",
+        creditCardTicket : "T.R Kartı",
+        giftCard : "Hediye Kartı",
+        giftVoucher : "Hediye Çeki",
+        credit : "Kredi",
+        ticketRest : "T.R",
+        directDebit : "Otomatik Ödeme",
+        franc : "Frank",
+        check : "Çek",
+        amount : "Tutar",
+        transfer : "Havale/EFT",
+
     },
     pieChart : {
         title : "Pasta Grafik",

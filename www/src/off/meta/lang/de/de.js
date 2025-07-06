@@ -756,6 +756,18 @@ export const langDe =
     },
     barChart : {
         title : "Balkendiagramm",
+        cash : "Bar",
+        creditCard : "Kreditkarte",
+        giftCard : "Geschenkkarte",
+        ticketRest : "T.R",
+        check : "Scheck",
+        amount : "Betrag",
+        giftVoucher : "Geschenkkarte",
+        credit : "Kredit",
+        directDebit : "Direkte Lastschrift",
+        franc : "Frank",
+        creditCardTicket : "T.R Kart",
+        transfer : "Überweisung",
     },
     pieChart : {
         title : "Kreisdiagramm",

@@ -786,6 +786,18 @@ export const langEn =
     },
     barChart : {
         title : "Bar Chart",
+        cash : "Cash",
+        creditCard : "Credit Card",
+        creditCardTicket : "T.R Card",
+        giftCard : "Gift Card",
+        giftVoucher : "Gift Voucher",
+        credit : "Credit",
+        ticketRest : "T.R", 
+        directDebit : "Direct Debit",
+        franc : "Franc",
+        check : "Check",
+        amount : "Amount",
+        transfer : "Transfer",
     },
     pieChart : {
         title : "Pie Chart",

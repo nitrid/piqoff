@@ -763,6 +763,18 @@ export const langFr =
     },
     barChart : {
         title : "Graphique en Barres",
+        cash : "Espèces",
+        creditCard : "Carte de crédit",
+        creditCardTicket : "T.R Carte",
+        giftCard : "Bon d'avoir",
+        giftVoucher : "Bon cadeau",
+        credit : "Crédit",
+        ticketRest : "T.R",
+        directDebit : "Prélèvement",
+        franc : "Franc",
+        check : "Chèque",
+        amount : "Montant",
+        transfer : "Virement",
     },
     pieChart : {
         title : "Graphique Circulaire",
