@@ -210,6 +210,8 @@ export const langEn =
     dailyAnalysis: "Daily Analysis",
     weeklyAnalysis: "Weekly Analysis",
     monthlyAnalysis: "Monthly Analysis",
+    yearlyAnalysis: "Yearly Analysis",
+    topSellingProductsInGroupNote: "You can click on a product to view detailed product sales graphs.",
     dayOfWeekAnalysis: "Day of Week Analysis",
     chartType: "Chart Type",
     barChartPop: "Bar Chart",

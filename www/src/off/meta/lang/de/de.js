@@ -798,6 +798,8 @@ export const langDe =
     firstHalf : "Erste Hälfte",
     secondHalf : "Zweite Hälfte",
     growthTrend : "Wachstumstrend (Erste Hälfte vs Zweite Hälfte)",
+    yearlyAnalysis : "Jährliche Analyse",
+    topSellingProductsInGroupNote: "Sie können auf ein Produkt klicken, um detaillierte Produktverkaufsgraphen anzuzeigen.",
     productAnalysis :
     {
         title : "Produktanalyse",

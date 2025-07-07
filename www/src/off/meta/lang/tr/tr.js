@@ -210,6 +210,8 @@ export const langTr =
     dailyAnalysis: "Günlük Analiz",
     weeklyAnalysis: "Haftalık Analiz",
     monthlyAnalysis: "Aylık Analiz",
+    yearlyAnalysis: "Yıllık Analiz",
+    topSellingProductsInGroupNote: "Herhangi bir ürün üzerine tıklayarak ayrıntılı ürün satış grafikleri görüntüleyebilirsiniz.",
     dayOfWeekAnalysis: "Haftanın Günleri Analizi",
     chartType: "Grafik Türü",
     barChartPop: "Bar Grafik",

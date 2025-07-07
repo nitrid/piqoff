@@ -211,6 +211,8 @@ export const langFr =
     dailyAnalysis: "Analyse quotidienne",
     weeklyAnalysis: "Analyse hebdomadaire",
     monthlyAnalysis: "Analyse mensuelle",
+    yearlyAnalysis: "Analyse annuelle",
+    topSellingProductsInGroupNote: "Vous pouvez cliquer sur un produit pour afficher les graphiques de ventes détaillés.",
     dayOfWeekAnalysis: "Analyse par jour de la semaine",
     chartType: "Type de graphique",
     barChartPop: "Graphique en barres",

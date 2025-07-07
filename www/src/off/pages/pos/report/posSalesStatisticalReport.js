@@ -1408,8 +1408,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         </div>
                     </React.Suspense>
                     
-                         {/* Analiz PopUp */}
-                        <NdPopUp parent={this} id={"popAnalysis"} 
+                        {/* Analiz PopUp */}
+                    <NdPopUp parent={this} id={"popAnalysis"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
@@ -1618,45 +1618,60 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
-                                            <NdSelectBox key={this.state.popAnalysisResetKey}
-                                                id="selProductGroup" 
-                                                parent={this} 
-                                                dataSource={this.state.productGroups}
-                                                displayExpr="name"
-                                                valueExpr="id"
-                                                width="100%"
-                                                placeholder={this.lang.t("selectProductGroup")}
-                                                onValueChanged={async (e) => 
-                                                {
-                                                    if (e.value) 
+                                            <div style={{position: 'relative'}}>
+                                                <NdSelectBox key={this.state.popAnalysisResetKey}
+                                                    id="selProductGroup" 
+                                                    parent={this} 
+                                                    dataSource={this.state.productGroups}
+                                                    displayExpr="name"
+                                                    valueExpr="id"
+                                                    width="100%"
+                                                    placeholder={this.lang.t("selectProductGroup")}
+                                                    onValueChanged={async (e) => 
                                                     {
-                                                        App.instance.setState({isExecute:true})
-                                                        
-                                                        try 
+                                                        if (e.value) 
                                                         {
-                                                            // selectedProductGroup'u güncelle
-                                                            this.selectedProductGroup = e.value
+                                                            App.instance.setState({isExecute:true})
                                                             
-                                                            // Veriyi yükle
-                                                            let productData = await this.calculateProductAnalysisData('topSellingProductsInGroup')
-                                                            this.setState({ 
-                                                                selectedProductGroup: e.value,
-                                                                selectedAnalysis: 'topSellingProductsInGroup',
-                                                                productAnalysisData: productData
-                                                            }, async () => 
+                                                            try 
                                                             {
-                                                                // Sonra veriyi yükle
-                                                                let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
-                                                                this.setState({ productAnalysisData: productAnalysisData });
-                                                            });
-                                                        } 
-                                                        catch (error) 
-                                                        {
-                                                            console.error('Error loading products in group:', error)
+                                                                // selectedProductGroup'u güncelle
+                                                                this.selectedProductGroup = e.value
+                                                                
+                                                                // Veriyi yükle
+                                                                let productData = await this.calculateProductAnalysisData('topSellingProductsInGroup')
+                                                                this.setState({ 
+                                                                    selectedProductGroup: e.value,
+                                                                    selectedAnalysis: 'topSellingProductsInGroup',
+                                                                    productAnalysisData: productData
+                                                                }, async () => 
+                                                                {
+                                                                    // Sonra veriyi yükle
+                                                                    let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                                    this.setState({ productAnalysisData: productAnalysisData });
+                                                                });
+                                                            } 
+                                                            catch (error) 
+                                                            {
+                                                                console.error('Error loading products in group:', error)
+                                                            }
                                                         }
-                                                    }
-                                                }}
-                                            />
+                                                    }}
+                                                />
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    left: 0,
+                                                    right: 0,
+                                                    top: '100%',
+                                                    marginTop: 4,
+                                                    marginBottom: 10,
+                                                    zIndex: 10
+                                                }}>
+                                                    <div className="alert alert-info" role="alert" style={{fontSize: '13px', padding: '8px 12px'}}>
+                                                        {this.lang.t("topSellingProductsInGroupNote")}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                     </div>
