@@ -65,12 +65,14 @@ export default class App extends React.PureComponent
             splash : 
             {
                 type : 0,
-                headers : 'Warning',
-                title : 'Sunucu ile bağlantı kuruluyor.',
+                headers : this.lang.t("splash.headers"),
+                title : this.lang.t("splash.title")
             },
             page:'empty.js',
             pageId: 'kar_02'
         }
+
+        this.pageHistory = []; // Sayfa geçmişi için array
 
         if(window.origin.substring(0,4) == 'http')
         {
@@ -146,6 +148,11 @@ export default class App extends React.PureComponent
             }
         })
     }
+    menuClick(data)
+    {
+        this.setState({page:data.path, pageId:data.id})
+    }
+
     render() 
     {
         const { logined,connected,splash } = this.state;
@@ -154,13 +161,69 @@ export default class App extends React.PureComponent
         {
             //LİSANS KONTROLÜ YAPILDIKTAN SONRA BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
             return(
-                <div style={this.style.splash_body}>
-                    <div className="card" style={this.style.splash_box}>
-                        <div className="card-header">{"Licence"}</div>
-                        <div className="card-body">
+                <div style={{
+                    height: '100vh',
+                    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '5px'
+                }}>
+                    <div className="card" style={{
+                        position: 'relative',
+                        width: '90%',
+                        maxWidth: '350px',
+                        background: 'linear-gradient(135deg, #2c3e50 0%, #3a4b5c 100%)',
+                        borderRadius: '16px',
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.3)',
+                        border: '1px solid rgba(79, 172, 254, 0.2)'
+                    }}>
+                        <div className="card-header" style={{
+                            background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+                            color: '#ffffff',
+                            padding: '8px 10px',
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            border: 'none',
+                            textAlign: 'center'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <span style={{
+                                    marginRight: '8px',
+                                    fontSize: '18px',
+                                    fontFamily: 'Font Awesome 6 Free',
+                                    fontWeight: '900'
+                                }}>🔑</span>
+                                Licence
+                            </div>
+                        </div>
+                        <div className="card-body" style={{
+                            padding: '12px 10px',
+                            textAlign: 'center'
+                        }}>
                             <div className="row">
                                 <div className="col-12 pb-2">
-                                    <h5 className="text-center">{this.state.licenceMsg}</h5>
+                                    <div style={{
+                                        background: 'rgba(79, 172, 254, 0.1)',
+                                        borderRadius: '12px',
+                                        padding: '8px',
+                                        border: '1px solid rgba(79, 172, 254, 0.2)',
+                                        marginBottom: '16px'
+                                    }}>
+                                        <h5 style={{
+                                            color: '#ffffff',
+                                            fontSize: '16px',
+                                            fontWeight: '500',
+                                            lineHeight: '1.4',
+                                            margin: '0'
+                                        }}>
+                                            {this.state.licenceMsg}
+                                        </h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>                        
@@ -176,13 +239,83 @@ export default class App extends React.PureComponent
             {
                 //BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
                 return(
-                    <div style={this.style.splash_body}>
-                        <div className="card" style={this.style.splash_box}>
-                            <div className="card-header">{splash.headers}</div>
-                            <div className="card-body">
+                    <div style={{
+                        height: '100vh',
+                        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '10px'
+                    }}>
+                        <div className="card" style={{
+                            position: 'relative',
+                            width: '90%',
+                            maxWidth: '350px',
+                            background: 'linear-gradient(135deg, #2c3e50 0%, #3a4b5c 100%)',
+                            borderRadius: '16px',
+                            boxShadow: '0 8px 25px rgba(0,0,0,0.3)',
+                            border: '1px solid rgba(79, 172, 254, 0.2)'
+                        }}>
+                            <div className="card-header" style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: '#ffffff',
+                                padding: '8px 10px',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                border: 'none',
+                                textAlign: 'center'
+                            }}>
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <span style={{
+                                        marginRight: '8px',
+                                        fontSize: '18px',
+                                        fontFamily: 'Font Awesome 6 Free',
+                                        fontWeight: '900'
+                                    }}>📶</span>
+                                    {splash.headers}
+                                </div>
+                            </div>
+                            <div className="card-body" style={{
+                                padding: '12px 10px',
+                                textAlign: 'center'
+                            }}>
                                 <div className="row">
                                     <div className="col-12 pb-2">
-                                        <h5 className="text-center">{splash.title}</h5>
+                                        <div style={{
+                                            background: 'rgba(79, 172, 254, 0.1)',
+                                            borderRadius: '12px',
+                                            padding: '8px',
+                                            border: '1px solid rgba(79, 172, 254, 0.2)',
+                                            marginBottom: '16px'
+                                        }}>
+                                        <div style={{
+                                                 marginBottom: '8px',
+                                                 display: 'flex',
+                                                 justifyContent: 'center'
+                                             }}>
+                                                 <div style={{
+                                                     width: '32px',
+                                                     height: '32px',
+                                                     border: '3px solid rgba(79, 172, 254, 0.3)',
+                                                     borderTop: '3px solid rgb(18, 41, 61)',
+                                                     borderRadius: '50%',
+                                                     animation: 'spin 1s linear infinite'
+                                                 }}></div>
+                                             </div>
+                                            <h5 style={{
+                                                color: '#ffffff',
+                                                fontSize: '16px',
+                                                fontWeight: '500',
+                                                lineHeight: '1.2',
+                                                margin: '0'
+                                            }}>
+                                                {splash.title}
+                                            </h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>                        
@@ -251,13 +384,44 @@ export default class App extends React.PureComponent
         }));
 
         return (
-            <div style={{overflow:'hidden'}}>
-                <div className="top-bar row" style={{backgroundColor: '#5f27cd',height:"55px",borderBottom:'2px solid #9670df'}}>
-                    <div className="col-4" style={{paddingLeft:"25px",paddingTop:"8px"}}>
-                        <img src="./css/img/logo.png" width="40px" height="40px"/>
+            <div style={{
+                height: '100vh',
+                background: '#f5f5f5'
+            }}>
+                <div className="top-bar" style={{
+                    background: 'linear-gradient(to right, #4a148c, #7b1fa2, #9c27b0, #ba68c8)',
+                    height: "60px",
+                    borderBottom: '1px solid rgba(255,255,255,0.2)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 10px',
+                    zIndex: 1000,
+                    position: 'relative',
+                    borderRadius: '10px'
+                }}>
+                    {/* Logo */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}>
+                        <img src="./css/img/logo.png" width="40px" height="40px" style={{
+                            borderRadius: '8px'
+                        }}/>
                     </div>
-                    <div className="col-4" style={{paddingTop:"5px"}} align="center">
-                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"45px"}}
+
+                    {/* Hamburger Menu */}
+                    <NbButton className="form-group btn btn-menu" style={{
+                        height: "45px",
+                        width: "45px",
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                         onClick={()=>
                         {
                             if(!this.popMenu.isShowed)
@@ -269,31 +433,105 @@ export default class App extends React.PureComponent
                                 this.popMenu.hide()
                             }
                         }}>
-                            <i className="fa-solid fa-bars fa-2x"></i>
+                    <span style={{
+                        color: '#ffffff',
+                        fontSize: '36px',
+                        fontFamily: 'Font Awesome 6 Free',
+                        fontWeight: '900'
+                    }}>☰</span>
                         </NbButton>
-                    </div>
-                    <div className="col-4" style={{paddingTop:"5px"}} align="right">
-                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"45px"}}
+
+                    {/* Çıkış Butonu */}
+                    <NbButton className="form-group btn btn-logout" style={{
+                        height: "45px",
+                        width: "45px",
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                         onClick={()=>
                         {
                             this.core.auth.logout()
                             window.location.reload()
                         }}>
-                            <i className="fa-solid fa-arrow-right-from-bracket fa-2x"></i>
+                    <i className="fa-solid fa-door-open" style={{
+                        color: '#ffffff',
+                        fontSize: '28px'
+                    }}></i>
                         </NbButton>
-                    </div>
                 </div>
-                <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
-                    <div style={{position:'relative',top:'55px',height:'100%'}}>
+                <div style={{position:'relative',top:'0px',height:'calc(100vh - 60px)'}}>
+                    <React.Suspense fallback={
+                        <div style={{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            textAlign: 'center',
+                            background: '#ffffff',
+                            borderRadius: '12px',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                            padding: '15px'
+                        }}>
+                            <div style={{
+                                background: '#2196F3',
+                                borderRadius: '50%',
+                                width: '50px',
+                                height: '50px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                margin: '0 auto 10px auto'
+                            }}>
+                                <div style={{
+                                    width: '25px',
+                                    height: '25px',
+                                    border: '3px solid rgba(255,255,255,0.3)',
+                                    borderTop: '3px solid #ffffff',
+                                    borderRadius: '50%',
+                                    animation: 'spin 1s linear infinite'
+                                }}></div>
+                            </div>
+                            <div style={{
+                                color: '#333333',
+                                fontSize: '14px',
+                                fontWeight: '500'
+                            }}>
+                                {this.lang.t("loading")}
+                            </div>
+                        </div>
+                    }>
                         <Page/>
+                    </React.Suspense>
                     </div>
-                </React.Suspense>
                 <div>
                     <MenuView id={"popMenu"} parent={this} lang={this.lang} onMenuClick={(e)=>
                     {
                         this.setState({page:e.path,pageId:e.id})
                     }}/>
                 </div>
+                
+                <style>
+                {`
+                    .btn-menu:hover, .btn-logout:hover {
+                        background: rgba(255,255,255,0.1) !important;
+                        transform: scale(1.1);
+                    }
+                    
+                    .btn-menu:active, .btn-logout:active {
+                        background: rgba(255,255,255,0.2) !important;
+                        transform: scale(1.0);
+                    }
+                    
+                     @keyframes spin {
+                         0% { transform: rotate(0deg); }
+                         100% { transform: rotate(360deg); }
+                     }
+                `}
+                </style>
             </div>
         )
     }

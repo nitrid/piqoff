@@ -22,18 +22,22 @@ export default class Login extends React.PureComponent
         {
             body : 
             {
-                backgroundColor: '#5f27cd',
-                height : '100%',
-                paddingTop : '100px' 
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                minHeight : '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px'
             },
             login_box :
             {
-                position : 'inherit',
-                margin :'auto',
-                top : '50%',
-                width : '350px',
-                height : 'fit-content',
-                backgroundColor : '#f8f9fa',  
+                width : '100%',
+                maxWidth: '400px',
+                background: '#ffffff',
+                borderRadius: '16px',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                border: 'none',
+                overflow: 'hidden'
             }
         }  
         this.state = 
@@ -125,102 +129,228 @@ export default class Login extends React.PureComponent
         return (
             <div style={this.style.body}>
                 <div className="card" style={this.style.login_box}>
-                   <div className="card-header">Login</div>
-                   <div className="card-body">
-                        <div className="row">
-                            <div className="col-12">
-                                <h6 className="text-center" style={{color:'#ff7675'}}>{this.state.alert}</h6>
+                   {/* Header */}
+                   <div style={{
+                       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                       padding: '10px 10px',
+                       textAlign: 'center',
+                       color: '#ffffff'
+                   }}>
+                       <div style={{
+                           fontSize: '24px',
+                           fontWeight: '700',
+                           marginBottom: '4px'
+                       }}>
+                           🔐 PiqMob
+                       </div>
+                       <div style={{
+                           fontSize: '13px',
+                           opacity: '0.9'
+                       }}>
+                            {this.lang.t("lblLogin")}
+                       </div>
+                   </div>
+
+                   <div style={{padding: '10px 10px'}}>
+                        {/* Alert Message */}
+                        {this.state.alert && (
+                            <div style={{
+                                 background: '#fee2e2',
+                                 border: '1px solid #fecaca',
+                                 borderRadius: '8px',
+                                 padding: '5px',
+                                 marginBottom: '8px',
+                                 textAlign: 'center'
+                            }}>
+                                <span style={{color: '#dc2626', fontSize: '14px', fontWeight: '500'}}>
+                                    ⚠️ {this.state.alert}
+                                </span>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-10 pb-2">
-                            
-                            </div>
-                            <div className="col-2 pb-2">
-                                <Button icon="preferences" visible={App.instance.device}
+                        )}
+
+                        {/* Settings Button */}
+                        <div style={{
+                             display: 'flex',
+                             justifyContent: 'flex-end',
+                             marginBottom: '8px'
+                         }}>
+                            <Button 
+                                icon="preferences" 
+                                visible={App.instance.device}
                                 onClick={()=>window.location="../mob/appUpdate.html"}
-                                />
-                            </div>
+                                style={{
+                                    background: '#f3f4f6',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    padding: '4px'
+                                }}
+                            />
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
-                            <div className="dx-field-value">
-                                <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
-                                displayExpr="text"                       
-                                valueExpr="id"
-                                value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
-                                onValueChanged={(async(args)=>
-                                {
-                                    localStorage.setItem('lang',args.value)
-                                    i18n.changeLanguage(args.value)
-                                    locale(args.value)
-                                    window.location.reload()
-                                }).bind(this)}
-                                />
-                            </div>
+
+                        {/* Language Selection */}
+                        <div style={{
+                             background: '#f8f9fa',
+                             padding: '8px',
+                             borderRadius: '10px',
+                             marginBottom: '8px'
+                         }}>
+                            <label style={{
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: '#374151',
+                                marginBottom: '4px',
+                                display: 'block'
+                            }}>
+                                🌐 {this.lang.t("txtLangSelect")}
+                            </label>
+                            <NdSelectBox simple={true} parent={this} id="cmbType" height='40px'
+                            style={{
+                                borderRadius: '8px',
+                                border: '1px solid #d1d5db',
+                                fontSize: '14px'
+                            }}
+                            displayExpr="text"                       
+                            valueExpr="id"
+                            value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
+                            data={{source:[{id:"en",text:"🇺🇸 English"},{id:"fr",text:"🇫🇷 Français"},{id:"tr",text:"🇹🇷 Türkçe"},{id:"de",text:"🇩🇪 Deutsch"}]}}
+                            onValueChanged={(async(args)=>
+                            {
+                                localStorage.setItem('lang',args.value)
+                                i18n.changeLanguage(args.value)
+                                locale(args.value)
+                                window.location.reload()
+                            }).bind(this)}
+                            />
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtUser")}</div>
-                            <div className="dx-field-value">
-                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}  
-                                placeholder={this.lang.t("txtUser")}/>
-                            </div>
+
+                        {/* User Input */}
+                         <div style={{
+                             background: '#f8f9fa',
+                             padding: '8px',
+                             borderRadius: '10px',
+                             marginBottom: '4px'
+                         }}>
+                            <label style={{
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: '#374151',
+                                marginBottom: '4px',
+                                display: 'block'
+                            }}>
+                                👤 {this.lang.t("txtUser")}
+                            </label>
+                            <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='45px' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}  
+                            style={{
+                                borderRadius: '8px',
+                                border: '2px solid #e5e7eb',
+                                fontSize: '14px',
+                                transition: 'border-color 0.2s ease'
+                            }}
+                            placeholder={this.lang.t("txtUser")}/>
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtPass")}</div>
-                            <div className="dx-field-value">
-                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
-                                onEnterKey={this.onLoginClick}
-                                placeholder={this.lang.t("txtPass")}
-                                />
-                            </div>
+
+                        {/* Password Input */}
+                         <div style={{
+                             background: '#f8f9fa',
+                             padding: '8px',
+                             borderRadius: '10px',
+                             marginBottom: '4px'
+                         }}>
+                            <label style={{
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: '#374151',
+                                marginBottom: '8px',
+                                display: 'block'
+                            }}>
+                                🔒 {this.lang.t("txtPass")}
+                            </label>
+                            <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='45px' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
+                            style={{
+                                borderRadius: '8px',
+                                border: '2px solid #e5e7eb',
+                                fontSize: '14px',
+                                transition: 'border-color 0.2s ease'
+                            }}
+                            onEnterKey={this.onLoginClick}
+                            placeholder={this.lang.t("txtPass")}
+                            />
                         </div>
-                         <div className="dx-field">
-                            <div className="dx-field-value">
-                            <NdCheckBox  text={this.lang.t("chkRememberMe")}id="chkRememberMe" parent={this} defaultValue={false} />
-                            </div>
+
+                        {/* Remember Me */}
+                         <div style={{
+                             marginBottom: '8px',
+                             padding: '4px 0'
+                         }}>
+                            <NdCheckBox text={this.lang.t("chkRememberMe")} id="chkRememberMe" parent={this} defaultValue={false} 
+                            style={{
+                                fontSize: '14px',
+                                color: '#6b7280'
+                            }}/>
                         </div>
-                        <div className="row py-1">
-                            <div className="col-12">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnUserSelect")}
-                                    type="success"
-                                    stylingMode="contained"
-                                    onClick={this.getUserList}
-                                    />
-                                </div>
-                            </div>
+
+                          {/* User Select Button */}
+                         <div style={{marginBottom: '8px'}}>
+                            <Button
+                             width={'100%'}
+                             height='35px'
+                             text={`👥 ${this.lang.t("btnUserSelect")}`}
+                            style={{
+                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                border: 'none',
+                                borderRadius: '12px',
+                                color: '#ffffff',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                boxShadow: '0 4px 12px rgba(16,185,129,0.3)',
+                                transition: 'all 0.2s ease'
+                            }}
+                            onClick={this.getUserList}
+                            />
                         </div>
-                        <div className="row py-1">
-                            <div className="col-6">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnLogin")}
-                                    type="default"
-                                    stylingMode="contained"
-                                    onClick={this.onLoginClick}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-6">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnLogout")}
-                                    type="danger"
-                                    stylingMode="contained"
-                                    onClick={this.closePage}
-                                    />
-                                </div>
-                            </div>
+
+                        {/* Action Buttons */}
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '8px'
+                        }}>
+                            <Button
+                                width={'100%'}
+                                height='35px'
+                                text={`🚀 ${this.lang.t("btnLogin")}`}
+                                style=
+                                {{
+                                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#ffffff',
+                                    fontSize: '15px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 4px 12px rgba(59,130,246,0.3)',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            onClick={this.onLoginClick}
+                            />
+                            <Button
+                                width={'100%'}
+                                height='35px'
+                                text={`🚪 ${this.lang.t("btnLogout")}`}
+                                style=
+                                {{
+                                    background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#ffffff',
+                                    fontSize: '15px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 4px 12px rgba(239,68,68,0.3)',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            onClick={this.closePage}
+                            />
                         </div>
+
                         <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
@@ -236,7 +366,6 @@ export default class Login extends React.PureComponent
                         </NdPopGrid>
                    </div>
                 </div>
-                <div className="p-2"></div>
             </div>
         )
     }

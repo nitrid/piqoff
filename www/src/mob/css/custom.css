@@ -1,3 +1,21 @@
+/* Global Scroll Engelleme */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+#root {
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 .top-bar
 {
     position: fixed;

@@ -207,7 +207,7 @@ export default class barcodeCard extends React.PureComponent
                 ]}
                 onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -216,9 +216,33 @@ export default class barcodeCard extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
+                                    {/* Barkod Arama Kartı */}
+                                    <div className='card entry-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '4px'
+                                    }}>
+                                        <div className='card-header' style={{
+                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                            borderRadius: '6px 6px 0 0',
+                                            padding: '2px 4px',
+                                            marginBottom: '2px',
+                                            color: '#ffffff'
+                                        }}>
+                                            <h6 className='mb-0' style={{fontSize: '14px', fontWeight: '600'}}>
+                                                🔍 {this.t("popItem.title")}
+                                            </h6>
+                                        </div>
+                                        <div className='card-body' style={{padding: '0'}}>
                                             <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                            style={{
+                                                borderRadius: '6px',
+                                                border: '2px solid #e9ecef',
+                                                fontSize: '14px',
+                                                padding: '4px'
+                                            }}
                                             onKeyUp={(async(e)=>
                                             {
                                                 if(e.event.key == 'Enter')
@@ -305,18 +329,76 @@ export default class barcodeCard extends React.PureComponent
                                             </NdPopGrid>
                                         </div>
                                     </div>
-                                    <div className='row pb-1'>
-                                        <div className='col-12'>
-                                            <h6 style={{height:'40px',textAlign:"center",overflow:"hidden"}}>
-                                                <NbLabel id="lblItemName" parent={this} value={""}/>
+                                    
+                                    {/* Ürün Bilgi Kartı */}
+                                    <div className='card product-info-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '4px'
+                                    }}>
+                                        <div className='card-header' style={{
+                                            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                            borderRadius: '6px',
+                                            padding: '2px 4px',
+                                            marginBottom: '2px',
+                                            color: '#ffffff'
+                                        }}>
+                                            <h6 className='mb-0' style={{fontSize: '14px', fontWeight: '600'}}>
+                                                📦 {this.t("lblItemInfo")}
                                             </h6>
                                         </div>
+                                        <div className='product-name' style={{
+                                            background: '#f8f9fa',
+                                            borderRadius: '6px',
+                                            padding: '4px',
+                                            textAlign: 'center',
+                                            minHeight: '20px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} style={{
+                                                fontSize: '14px',
+                                                fontWeight: '500',
+                                                color: '#495057'
+                                            }}/>
+                                        </div>
                                     </div>
-                                    <div className='row pb-3'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblBarcode")}</div>
-                                        <div className='col-9'>
-                                            <NdTextBox id="txtNewBarcode" parent={this} simple={true}  maxLength={32}
-                                             onValueChanged={(e)=>
+                                    
+                                    {/* Barkod Form Kartı */}
+                                    <div className='card form-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '2px'
+                                    }}>
+                                        <div className='card-body' style={{padding: '0'}}>
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '2px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏷️ {this.t("lblBarcode")}
+                                                </label>
+                                                <NdTextBox id="txtNewBarcode" parent={this} simple={true} maxLength={32}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '2px'
+                                                }}
+                                                onValueChanged={(e)=>
                                                 {
                                                     if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
                                                     {
@@ -348,49 +430,115 @@ export default class barcodeCard extends React.PureComponent
                                                         return
                                                     }
                                                 }).bind(this)} />
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblType")}</div>
-                                        <div className='col-9'>
-                                        <NdSelectBox simple={true} parent={this} id="cmbPopBarType" displayExpr="VALUE"                       
-                                            valueExpr="ID" value="0" data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblUnit")}</div>
-                                        <div className='col-9'>
-                                        <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                             dt={{data:this.orderDt,field:"UNIT"}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null && e.value != "")
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '2px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    🔢 {this.t("lblType")}
+                                                </label>
+                                                <NdSelectBox simple={true} parent={this} id="cmbPopBarType" displayExpr="VALUE"                       
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '2px'
+                                                }}
+                                                valueExpr="ID" value="0" data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}/>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '2px 4px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    📏 {this.t("lblUnit")}
+                                                </label>
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '2px'
+                                                }}
+                                                dt={{data:this.orderDt,field:"UNIT"}}
+                                                onValueChanged={(e)=>
                                                 {
-                                                    let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                    if(tmpFactor.length > 0)
+                                                    if(e.value != null && e.value != "")
                                                     {
-                                                        this.txtBarUnitFactor.value = tmpFactor[0].FACTOR
+                                                        let tmpFactor = this.unitDt.where({GUID:e.value});
+                                                        if(tmpFactor.length > 0)
+                                                        {
+                                                            this.txtBarUnitFactor.value = tmpFactor[0].FACTOR
+                                                        }
                                                     }
-                                                }
-                                            }}/>
+                                                }}/>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '2px 4px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '2px',
+                                                    display: 'block'
+                                                }}>
+                                                    ⚖️ {this.t("lblFactor")}
+                                                </label>
+                                                <NdTextBox simple={true} parent={this} id="txtBarUnitFactor" readOnly={true}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '2px',
+                                                    backgroundColor: '#e9ecef'
+                                                }}
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblFactor")}</div>
-                                        <div className='col-9'>
-                                        <NdTextBox simple={true} parent={this} id="txtBarUnitFactor" readOnly={true}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
-                                        </div>
-                                    </div>
-                                    <div className="row p-1">
-                                        <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                                onClick={(() =>
-                                                {
-                                                    this.barcodeSave()
-                                                }).bind(this)
-                                            }>{this.t("lblSave")}
-                                            </NbButton>
+                                    
+                                    {/* Kaydet Butonu */}
+                                    <div className='card action-card' style={{
+                                        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        transition: 'transform 0.2s ease'
+                                    }}
+                                    onClick={(() =>
+                                    {
+                                        this.barcodeSave()
+                                    }).bind(this)}>
+                                        <div className='card-body text-center py-3' style={{padding: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px'}}>
+                                            <i className={"fa-solid fa-save"} style={{color:'#ffffff', fontSize:'24px'}}></i>
+                                            <h6 className='text-white mb-0' style={{fontSize:'18px', fontWeight:'600', marginBottom: 0}}>
+                                                {this.t("lblSave")}
+                                            </h6>
                                         </div>
                                     </div>
                                 </div>

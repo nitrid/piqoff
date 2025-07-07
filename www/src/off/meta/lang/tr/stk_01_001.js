@@ -59,6 +59,7 @@ const stk_01_001 =
     cmbAnlysType : "Tip",
     txtCustoms : "Gümrük Kodu",
     txtGenus : "Ürün Cinsi",
+    txtRayon : "Rayon",
     chkTaxSugarControl : "Şeker Vergisi",
     cmbAnlysTypeData : 
     {
@@ -369,6 +370,12 @@ const stk_01_001 =
     pg_txtGenre : 
     {
         title : "Ürün Cinsi",   
+        clmCode : "KODU",   
+        clmName : "ADI"   
+    },
+    pg_rayonCode : 
+    {
+        title : "Rayon Seçimi",   
         clmCode : "KODU",   
         clmName : "ADI"   
     },

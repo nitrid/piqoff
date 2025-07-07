@@ -103,6 +103,11 @@ export const menu = (e) =>
                             id: 'stk_01_018',
                             text: e.t('menuOff.stk_01_018'),//'Özellik Tanımları',
                             path: 'items/cards/propertyCard'
+                        },
+                        {
+                            id: 'stk_01_019',
+                            text: e.t('menuOff.stk_01_019'),//'Rayon Tanımları',
+                            path: 'items/cards/rayonCard'
                         }
                     ]
                 },
@@ -1464,6 +1469,12 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_003'),
                             path: 'pos/report/posSalesReport'
                         },
+                        //Pos Satış İstatistik Raporu
+                        {
+                            id: 'pos_02_021',
+                            text: e.t('menuOff.pos_02_021'),
+                            path: 'pos/report/posSalesStatisticalReport'
+                        },
                         //Kullanici bazli Pos Satış Raporu
                         {
                             id: 'pos_02_020',
@@ -1565,7 +1576,7 @@ export const menu = (e) =>
                             id: 'pos_02_019',
                             text: e.t('menuOff.pos_02_019'),
                             path: 'pos/report/itemGrpDateReport'
-                        }
+                        },
                     ]
                 },
             ]

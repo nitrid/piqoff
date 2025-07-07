@@ -335,7 +335,7 @@ export default class itemCount extends React.PureComponent
                 ]}
                 onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
-                <div style={{position:'relative',top:'50px',height:'100%'}}>
+                <div style={{position:'relative',top:'5px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
                     <PageView id={"pageView"} parent={this} 
                     onActivePage={(e)=>
                     {
@@ -344,144 +344,231 @@ export default class itemCount extends React.PureComponent
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblRef")}</div>
-                                        <div className='col-9'>
-                                            <div className='row'>
-                                                <div className='col-4'>
-                                                    <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF"}}
-                                                    onChange={(async(e)=>
-                                                    {
-                                                        try 
-                                                        {
-                                                            let tmpQuery = 
+                                    <div className='card modern-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        
+                                        <div className='card-body' style={{padding: '0'}}>
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🔖 {this.t("lblRef")}
+                                                </label>
+                                                <div className='row'>
+                                                    <div className='col-4'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
+                                                            onChange={(async(e)=>
                                                             {
-                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT WHERE REF = @REF ",
-                                                                param : ['REF:string|25'],
-                                                                value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
-                                                            }
-
-                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-                                                            if(tmpData.result.recordset.length > 0)
-                                                            {
-                                                                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
-                                                            }
-                                                        }
-                                                        catch (error) 
-                                                        {
-                                                            console.log("Hata oluştu: ", error);
-                                                        }
-                                                        
-                                                    }).bind(this)}
-                                                    />
-                                                </div>
-                                                <div className='col-8'>
-                                                    <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF_NO"}}
-                                                    button=
-                                                    {
-                                                        [
-                                                            {
-                                                                id:'01',
-                                                                icon:'more',
-                                                                onClick:async()=>
+                                                                try 
                                                                 {
-                                                                    this.popDoc.show()
-                                                                    this.popDoc.onClick = (data) =>
+                                                                    let tmpQuery = 
                                                                     {
-                                                                        if(data.length > 0)
-                                                                        {
-                                                                            this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                        }
+                                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT WHERE REF = @REF ",
+                                                                        param : ['REF:string|25'],
+                                                                        value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
+                                                                    }
+
+                                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                                                    if(tmpData.result.recordset.length > 0)
+                                                                    {
+                                                                        this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
                                                                     }
                                                                 }
-                                                            },
-                                                            {
-                                                                id:'02',
-                                                                icon:'arrowdown',
-                                                                onClick:()=>
+                                                                catch (error) 
                                                                 {
-                                                                    this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    console.log("Hata oluştu: ", error);
                                                                 }
-                                                            }
-                                                        ]
-                                                    }/>
-                                                    {/*EVRAK SEÇİM */}
-                                                    <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
-                                                    selection={{mode:"single"}}
-                                                    visible={false}
-                                                    position={{of:'#root'}} 
-                                                    showTitle={true} 
-                                                    showBorders={true}
-                                                    width={'100%'}
-                                                    height={'100%'}
-                                                    title={this.t("popDoc.title")} 
-                                                    data = 
-                                                    {{
-                                                        source:
-                                                        {
-                                                            select:
+                                                                
+                                                            }).bind(this)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-8'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF_NO"}}
+                                                            style={{
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ced4da',
+                                                                fontSize: '12px',
+                                                                padding: '6px'
+                                                            }}
+                                                            button=
                                                             {
-                                                                query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE  FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME ORDER BY DOC_DATE DESC"
-                                                            },
-                                                            sql:this.core.sql
-                                                        }
-                                                    }}
-                                                    >
-                                                        <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
-                                                        <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
-                                                        <Column dataField="DEPOT_NAME" caption={this.t("popDoc.clmDepotName")} width={100}  />
-                                                        <Column dataField="DOC_DATE" caption={this.t("popDoc.clmDocDate")} width={200}  />
-                                                        <Column dataField="TOTAL_LINE" caption={this.t("popDoc.clmTotalLine")} width={200}  />
-                                                        <Column dataField="QUANTITY" caption={this.t("popDoc.clmQuantity")} width={200}  />
-                                                    </NdPopGrid>
+                                                                [
+                                                                    {
+                                                                        id:'01',
+                                                                        icon:'more',
+                                                                        onClick:async()=>
+                                                                        {
+                                                                            this.popDoc.show()
+                                                                            this.popDoc.onClick = (data) =>
+                                                                            {
+                                                                                if(data.length > 0)
+                                                                                {
+                                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        id:'02',
+                                                                        icon:'arrowdown',
+                                                                        onClick:()=>
+                                                                        {
+                                                                            this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }/>
+                                                            {/*EVRAK SEÇİM */}
+                                                            <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
+                                                            selection={{mode:"single"}}
+                                                            visible={false}
+                                                            position={{of:'#root'}} 
+                                                            showTitle={true} 
+                                                            showBorders={true}
+                                                            width={'100%'}
+                                                            height={'100%'}
+                                                            title={this.t("popDoc.title")} 
+                                                            data = 
+                                                            {{
+                                                                source:
+                                                                {
+                                                                    select:
+                                                                    {
+                                                                        query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE  FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME ORDER BY DOC_DATE DESC"
+                                                                    },
+                                                                    sql:this.core.sql
+                                                                }
+                                                            }}
+                                                            >
+                                                                <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
+                                                                <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
+                                                                <Column dataField="DEPOT_NAME" caption={this.t("popDoc.clmDepotName")} width={100}  />
+                                                                <Column dataField="DOC_DATE" caption={this.t("popDoc.clmDocDate")} width={200}  />
+                                                                <Column dataField="TOTAL_LINE" caption={this.t("popDoc.clmTotalLine")} width={200}  />
+                                                                <Column dataField="QUANTITY" caption={this.t("popDoc.clmQuantity")} width={200}  />
+                                                            </NdPopGrid>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    🏭 {this.t("lblDepot")}
+                                                </label>
+                                                <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DEPOT"}}/>
+                                            </div>
+                                            
+                                            <div className='form-group mb-2' style={{
+                                                background: '#f8f9fa',
+                                                padding: '10px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #dee2e6'
+                                            }}>
+                                                <label className='form-label' style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    color: '#6c757d',
+                                                    marginBottom: '4px',
+                                                    display: 'block'
+                                                }}>
+                                                    📅 {this.t("lblDate")}
+                                                </label>
+                                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} 
+                                                style={{
+                                                    borderRadius: '4px',
+                                                    border: '1px solid #ced4da',
+                                                    fontSize: '12px',
+                                                    padding: '6px'
+                                                }}
+                                                dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DOC_DATE"}}/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot")}</div>
-                                        <div className='col-9'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
-                                            dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DEPOT"}}/>
+                                    
+                                    {/* Action Buttons */}
+                                    <div className='row pb-1'>
+                                        <div className='col-6 pe-1'>
+                                            <div className='card action-card' style={{
+                                                background: '#007bff',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 2px 8px rgba(0,123,255,0.2)',
+                                                border: 'none',
+                                                height: '70px',
+                                                transition: 'all 0.3s ease'
+                                            }}>
+                                                <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
+                                                onClick={this.onClickBarcodeShortcut.bind(this)}>
+                                                    <div className='d-flex align-items-center justify-content-center h-100'>
+                                                        <div className='text-center'>
+                                                            <i className={"fa-solid fa-barcode"} style={{color:'#ffffff',fontSize:'18px',marginBottom:'4px'}}></i>
+                                                            <div style={{color:'#ffffff',fontSize:'12px',fontWeight:'600'}}>{this.lang.t("btnBarcodeEntry")}</div>
+                                                        </div>
+                                                    </div>
+                                                </NbButton>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
-                                        <div className='col-9'>
-                                            <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DOC_DATE"}}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.onClickBarcodeShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-barcode"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                        <div className='col-6 ps-1'>
+                                            <div className='card action-card' style={{
+                                                background: '#28a745',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
+                                                border: 'none',
+                                                height: '70px',
+                                                transition: 'all 0.3s ease'
+                                            }}>
+                                                <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
+                                                onClick={this.onClickProcessShortcut.bind(this)}>
+                                                    <div className='d-flex align-items-center justify-content-center h-100'>
+                                                        <div className='text-center'>
+                                                            <i className={"fa-solid fa-file-lines"} style={{color:'#ffffff',fontSize:'18px',marginBottom:'4px'}}></i>
+                                                            <div style={{color:'#ffffff',fontSize:'12px',fontWeight:'600'}}>{this.lang.t("btnProcessLines")}</div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.onClickProcessShortcut.bind(this)}>
-                                                <div className='row py-2'>
-                                                    <div className='col-12'>
-                                                        <i className={"fa-solid fa-file-lines"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
-                                                    </div>
-                                                </div>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
-                                                    </div>
-                                                </div>
-                                            </NbButton>
+                                                </NbButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -493,153 +580,222 @@ export default class itemCount extends React.PureComponent
                         }}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
-                                            onKeyUp={(async(e)=>
+                                    {/* Barkod Giriş Kartı */}
+                                    <div className='card entry-card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                        style={{
+                                            borderRadius: '6px',
+                                            border: '1px solid #ced4da',
+                                            fontSize: '14px',
+                                            padding: '10px',
+                                            backgroundColor: '#ffffff'
+                                        }}
+                                        placeholder={this.t("lblBarcode")}
+                                        onKeyUp={(async(e)=>
+                                        {
+                                            if(e.event.key == 'Enter')
                                             {
-                                                if(e.event.key == 'Enter')
+                                                await this.getItem(this.txtBarcode.value)
+                                            }
+                                        }).bind(this)}
+                                        button=
+                                        {
+                                            [
                                                 {
-                                                    await this.getItem(this.txtBarcode.value)
-                                                }
-                                            }).bind(this)}
-                                            button=
-                                            {
-                                                [
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:async()=>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:async()=>
+                                                        this.popItem.show()
+                                                        this.popItem.onClick = (data) =>
                                                         {
-                                                            this.popItem.show()
-                                                            this.popItem.onClick = (data) =>
+                                                            if(data.length > 0)
                                                             {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getItem(data[0].CODE)
-                                                                }
+                                                                this.getItem(data[0].CODE)
                                                             }
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'photo',
-                                                        onClick:()=>
-                                                        {
-                                                            if(typeof cordova == "undefined")
-                                                            {
-                                                                return;
-                                                            }
-                                                            cordova.plugins.barcodeScanner.scan(
-                                                                async function (result) 
-                                                                {
-                                                                    if(result.cancelled == false)
-                                                                    {
-                                                                        this.txtBarcode.value = result.text;
-                                                                        this.getItem(result.text)
-                                                                    }
-                                                                }.bind(this),
-                                                                function (error) 
-                                                                {
-                                                                    
-                                                                },
-                                                                {
-                                                                  prompt : "Scan",
-                                                                  orientation : "portrait"
-                                                                }
-                                                            );
                                                         }
                                                     }
-                                                ]
-                                            }>
-                                            </NdTextBox>
-                                            {/*STOK SEÇİM */}
-                                            <NdPopGrid id={"popItem"} parent={this} container={"#root"}
-                                            selection={{mode:"single"}}
-                                            visible={false}
-                                            position={{of:'#root'}} 
-                                            showTitle={true} 
-                                            showBorders={true}
-                                            width={'100%'}
-                                            height={'100%'}
-                                            search={true}
-                                            title={this.lang.t("popItem.title")} 
-                                            data = 
-                                            {{
-                                                source:
+                                                },
                                                 {
-                                                    select:
+                                                    id:'02',
+                                                    icon:'photo',
+                                                    onClick:()=>
                                                     {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
-                                                        param : ['VAL:string|50']
-                                                    },
-                                                    sql:this.core.sql
+                                                        if(typeof cordova == "undefined")
+                                                        {
+                                                            return;
+                                                        }
+                                                        cordova.plugins.barcodeScanner.scan(
+                                                            async function (result) 
+                                                            {
+                                                                if(result.cancelled == false)
+                                                                {
+                                                                    this.txtBarcode.value = result.text;
+                                                                    this.getItem(result.text)
+                                                                }
+                                                            }.bind(this),
+                                                            function (error) 
+                                                            {
+                                                                
+                                                            },
+                                                            {
+                                                              prompt : "Scan",
+                                                              orientation : "portrait"
+                                                            }
+                                                        );
+                                                    }
                                                 }
-                                            }}
-                                            >
-                                                <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
-                                                <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
-                                            </NdPopGrid>
+                                            ]
+                                        }>
+                                        </NdTextBox>
+                                        {/*STOK SEÇİM */}
+                                        <NdPopGrid id={"popItem"} parent={this} container={"#root"}
+                                        selection={{mode:"single"}}
+                                        visible={false}
+                                        position={{of:'#root'}} 
+                                        showTitle={true} 
+                                        showBorders={true}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        search={true}
+                                        title={this.lang.t("popItem.title")} 
+                                        data = 
+                                        {{
+                                            source:
+                                            {
+                                                select:
+                                                {
+                                                    query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                    param : ['VAL:string|50']
+                                                },
+                                                sql:this.core.sql
+                                            }
+                                        }}
+                                        >
+                                            <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
+                                            <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
+                                        </NdPopGrid>
+                                    </div>
+
+                                    {/* Ürün Bilgileri */}
+                                    <div className='card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            marginBottom: '8px'
+                                        }}>
+                                            <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                📦 {this.t("lblItemName")}
+                                            </span>
+                                            <span style={{fontSize: '13px', color: '#6c757d'}}>
+                                                {this.t("lblDepotQuantity")}: <strong><NbLabel id="lblDepotQuantity" parent={this} value={0}/></strong>
+                                            </span>
+                                        </div>
+                                        <div style={{
+                                            background: '#f8f9fa',
+                                            padding: '10px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #dee2e6',
+                                            textAlign: 'center',
+                                            minHeight: '40px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} 
+                                            style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
-                                                <NbLabel id="lblItemName" parent={this} value={""}/>
-                                            </h6>
+
+                                    {/* Miktar ve Birim */}
+                                    <div className='card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        {/* Birim */}
+                                        <div className='row mb-2'>
+                                            <div className='col-4'>
+                                                <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblUnit")}</label>
+                                            </div>
+                                            <div className='col-8'>
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                style={{borderRadius: '6px', border: '1px solid #ced4da', fontSize: '13px'}}
+                                                dt={{data:this.countDt,field:"UNIT"}}
+                                                onValueChanged={(e)=>
+                                                {
+                                                    if(e.value != null && e.value != "")
+                                                    {
+                                                        let tmpFactor = this.unitDt.where({GUID:e.value});
+                                                        if(tmpFactor.length > 0)
+                                                        {
+                                                            this.txtFactor.value = tmpFactor[0].FACTOR
+                                                            this.txtFactor.props.onValueChanged()
+                                                        }
+                                                    }
+                                                }}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-6'>
-                                            <div style={{fontSize:'14px',fontWeight:'bold'}}>
-                                                <label className='text-purple-light'>{this.t("lblDepotQuantity")}</label>
-                                                <NbLabel id="lblDepotQuantity" parent={this} value={0}/>
+                                        
+                                        {/* Miktar */}
+                                        <div className='row mb-2'>
+                                            <div className='col-4'>
+                                                <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblQuantity")}</label>
+                                            </div>
+                                            <div className='col-3'>
+                                                <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.countDt,field:"FACTOR"}}
+                                                style={{borderRadius: '6px', border: '1px solid #ced4da', textAlign: 'center', fontSize: '13px'}}
+                                                onEnterKey={this.addItem.bind(this)}/>
+                                            </div>
+                                            <div className='col-2 d-flex align-items-center justify-content-center'>
+                                                <span style={{fontSize: '14px', fontWeight: 'bold', color: '#6c757d'}}>×</span>
+                                            </div>
+                                            <div className='col-3'>
+                                                <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.countDt,field:"QUANTITY"}}
+                                                style={{borderRadius: '6px', border: '2px solid #007bff', textAlign: 'center', fontSize: '13px'}}
+                                                onEnterKey={this.addItem.bind(this)}/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblUnit")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                             dt={{data:this.countDt,field:"UNIT"}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null && e.value != "")
-                                                {
-                                                    let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                    if(tmpFactor.length > 0)
-                                                    {
-                                                        this.txtFactor.value = tmpFactor[0].FACTOR
-                                                        this.txtFactor.props.onValueChanged()
-                                                    }
-                                                }
-                                            }}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-3 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblQuantity")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.countDt,field:"FACTOR"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                        <div className='col-1 d-flex align-items-center justify-content-center'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.countDt,field:"QUANTITY"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.addItem.bind(this)}>{this.t("lblAdd")}
-                                            </NbButton>
-                                        </div>
+
+                                    {/* Ekle Butonu */}
+                                    <div className='card action-button' style={{
+                                        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
+                                        border: 'none',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
+                                            height:"60px",
+                                            width:"100%",
+                                            background:"transparent",
+                                            border:"none",
+                                            color:"#ffffff",
+                                            fontSize:"16px",
+                                            fontWeight:"600"
+                                        }} 
+                                        onClick={this.addItem.bind(this)}>
+                                            <div className='d-flex align-items-center justify-content-center'>
+                                                <i className="fa-solid fa-plus" style={{marginRight: '8px', fontSize: '16px'}}></i>
+                                                {this.t("lblAdd")}
+                                            </div>
+                                        </NbButton>
                                     </div>
                                 </div>
                             </div>
@@ -647,68 +803,139 @@ export default class itemCount extends React.PureComponent
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='row pb-2'>
-                                        <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdList"} 
-                                            showBorders={true} 
-                                            columnsAutoWidth={true} 
-                                            allowColumnReordering={true} 
-                                            allowColumnResizing={true} 
-                                            headerFilter = {{visible:false}}
-                                            height={'350'} 
-                                            width={'100%'}
-                                            dbApply={false}
-                                            onRowRemoved={async (e)=>
+                                    {/* Sayım Listesi */}
+                                    <div className='card mb-2' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            marginBottom: '12px'
+                                        }}>
+                                            <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                📋 {this.t("grdList.title")}
+                                            </span>
+                                        </div>
+                                        <NdGrid parent={this} id={"grdList"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter = {{visible:false}}
+                                        height={'350'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        style={{
+                                            borderRadius: '6px',
+                                            overflow: 'hidden',
+                                            border: '1px solid #dee2e6'
+                                        }}
+                                        onRowRemoved={async (e)=>
+                                        {
+                                            if(this.countObj.dt().length == 0)
                                             {
-                                                if(this.countObj.dt().length == 0)
-                                                {
-                                                    this.deleteAll()
-                                                }
-                                                else
-                                                {
-                                                    await this.save()
-                                                }
-                                                
-                                            }}
-                                            onRowUpdating={async (e)=>
-                                            {
-                                                if(e.key.LOCKED != 0)
-                                                {
-                                                    e.cancel = true
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    e.component.cancelEditData()
-                                                }
-                                            }}
-                                            onRowUpdated={async(e)=>
+                                                this.deleteAll()
+                                            }
+                                            else
                                             {
                                                 await this.save()
-                                            }}
-                                            >
-                                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                                <Scrolling mode="standart" />
-                                                <Paging defaultPageSize={10} />
-                                                {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
-                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
-                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                            </NdGrid>
-                                        </div>
+                                            }
+                                            
+                                        }}
+                                        onRowUpdating={async (e)=>
+                                        {
+                                            if(e.key.LOCKED != 0)
+                                            {
+                                                e.cancel = true
+                                                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
+                                                await dialog(this.alertContent);
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
+                                        onRowUpdated={async(e)=>
+                                        {
+                                            await this.save()
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                            <Scrolling mode="standart" />
+                                            <Paging defaultPageSize={10} />
+                                            {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                            <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                        </NdGrid>
                                     </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblTotalLine")}</label>                                            
+
+                                    {/* Toplam Bilgileri */}
+                                    <div className='card' style={{
+                                        background: '#ffffff',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                                        border: '1px solid #e9ecef',
+                                        padding: '12px'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            marginBottom: '12px'
+                                        }}>
+                                            <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
+                                                📊 Toplam Bilgileri
+                                            </span>
                                         </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtTotalLine" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                        
+                                        <div className='form-group' style={{
+                                            background: '#f8f9fa',
+                                            padding: '10px',
+                                            borderRadius: '6px',
+                                            marginBottom: '8px'
+                                        }}>
+                                            <div className='row align-items-center'>
+                                                <div className='col-8'>
+                                                    <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
+                                                        📝 {this.t("lblTotalLine")}
+                                                    </label>
+                                                </div>
+                                                <div className='col-4'>
+                                                    <NdTextBox id="txtTotalLine" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                    style={{
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #ced4da',
+                                                        fontSize: '12px',
+                                                        textAlign: 'center',
+                                                        backgroundColor: '#ffffff'
+                                                    }}/>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblTotalCount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
+
+                                        <div className='form-group' style={{
+                                            background: '#f8f9fa',
+                                            padding: '10px',
+                                            borderRadius: '6px'
+                                        }}>
+                                            <div className='row align-items-center'>
+                                                <div className='col-8'>
+                                                    <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
+                                                        🔢 {this.t("lblTotalCount")}
+                                                    </label>
+                                                </div>
+                                                <div className='col-4'>
+                                                    <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                    style={{
+                                                        borderRadius: '4px',
+                                                        border: '1px solid #ced4da',
+                                                        fontSize: '12px',
+                                                        textAlign: 'center',
+                                                        backgroundColor: '#ffffff'
+                                                    }}/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -65,8 +65,11 @@ export default class mainPage extends React.PureComponent
             { id: 'slsRpt_01_006', icon: 'fa-solid fa-chart-column', color: '#ffc107', path:'sales/report/customerBasedSaleAndReturnReport' },
             { id: 'slsRpt_01_007', icon: 'fa-solid fa-percent', color: '#fd7e14', path:'sales/report/rebateInvoiceReport' },
             { id: 'slsRpt_02_006', icon: 'fa-solid fa-folder-open', color: '#6f42c1', path:'purchase/report/openPurchaseInvoiceReport' },
-            { id: 'slsRpt_02_013', icon: 'fa-solid fa-sack-dollar', color: '#28a745', path:'purchase/report/customerProfitReport' },
-            { id: 'fns_04_005', icon: 'fa-solid fa-magnifying-glass-dollar', color: '#e83e8c', path:'finance/report/collectionReport' }
+            { id: 'slsRpt_01_013', icon: 'fa-solid fa-sack-dollar', color: '#28a745', path:'purchase/report/customerProfitReport' },
+            { id: 'fns_04_005', icon: 'fa-solid fa-magnifying-glass-dollar', color: '#e83e8c', path:'finance/report/collectionReport' },
+            { id: 'pos_02_021', icon: 'fa-solid fa-chart-line', color: '#17a2b8', path:'pos/report/posSalesStatisticalReport' },
+            { id: 'pos_02_003', icon: 'fa-solid fa-clipboard-list', color: '#e83e8c', path:'pos/report/posSalesReport' },
+            { id:'pos_02_002',icon:'fa-solid fa-gift',color:'#28a745',path:'pos/report/customerPointReport'}
         ]
     }
     componentDidMount()

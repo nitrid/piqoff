@@ -51,6 +51,14 @@ export const langFr =
     dtLastYear : "Année Dernière",
     txtTotalTicket : "Total des tickets de caisses",   
     txtTicketAvg : "Montant moyen des tickets de caisses", 
+    loading : "Chargement",
+    noData : "Aucune donnée trouvée",
+    quantity : "Quantité",
+    saleCount : "Nombre de ventes",
+    amount : "Montant",
+    price : "Prix",
+    itemCount : "Nombre de produits",
+    saleCount : "Nombre de ventes",
     popUserList:
     {
         title: "Liste des utilisateurs",
@@ -190,6 +198,77 @@ export const langFr =
         btn02 : "Non",
         msg : "Voulez-vous mettre à jour les prix ?"
     },
+    // Nouvelles chaînes pour le popup d'analyse
+    popAnalysis: {
+        title: "Analyse des ventes",
+        description: "Analyse comparative des ventes pour la période et le groupe de produits sélectionnés.",
+        selectAnalysis: "Sélectionnez le type d'analyse",
+        selectSubOption: "Sélectionnez une sous-option"
+    },
+    productDetailAnalysis: "Analyse détaillée du produit",
+    productDetailDescription: "Analyse détaillée des ventes pour le produit sélectionné.",
+    selectAnalysisType: "Type d'analyse",
+    dailyAnalysis: "Analyse quotidienne",
+    weeklyAnalysis: "Analyse hebdomadaire",
+    monthlyAnalysis: "Analyse mensuelle",
+    yearlyAnalysis: "Analyse annuelle",
+    topSellingProductsInGroupNote: "Vous pouvez cliquer sur un produit pour afficher les graphiques de ventes détaillés.",
+    dayOfWeekAnalysis: "Analyse par jour de la semaine",
+    chartType: "Type de graphique",
+    barChartPop: "Graphique en barres",
+    pieChartPop: "Graphique circulaire",
+    lineChart: "Graphique linéaire",
+    selectProductGroup: "Sélectionner le groupe de produits",
+    bestDays: "Meilleurs jours",
+    worstDays: "Pires jours",
+    comparison: "Comparaison",
+    distribution: "Distribution",
+    trend: "Tendance",
+    products: "Produits",
+    topProducts: "Produits les plus vendus",
+    worstProducts: "Produits les moins vendus",
+    topProductGroups: "Groupes de produits les plus vendus",
+    topSellingProductsInGroup: "Produits les plus vendus dans le groupe",
+    btnAnalysis: "Analyse",
+    dailySales: "Ventes quotidiennes",
+    weeklySales: "Ventes hebdomadaires",
+    monthlySales: "Ventes mensuelles",
+    dayOfWeekDistribution: "Distribution par jour de la semaine",
+    week: "Semaine",
+    analysisChart: {
+        title: "Graphique d'analyse",
+        amount: "Montant"
+    },
+    productAnalysis: {
+        title: "Analyse des produits",
+        amount: "Montant",
+        topSellingProducts: "Produits les plus vendus",
+        worstSellingProducts: "Produits les moins vendus",
+        topSellingProductGroups: "Groupes de produits les plus vendus",
+        topSellingProductsInGroup: "Produits les plus vendus dans le groupe"
+    },
+    dailySalesChart: {
+        title: "Graphique des ventes quotidiennes",
+        totalSales: "Ventes totales"
+    },
+    pieChart: {
+        title: "Distribution des caisses"
+    },
+    barChart: {
+        title: "Méthodes de paiement",
+        amount: "Montant",
+        cash: "Espèces",
+        creditCard: "Carte de crédit",
+        creditCardTicket: "Ticket carte de crédit",
+        check: "Chèque",
+        giftVoucher: "Bon d'achat",
+        giftCard: "Carte cadeau",
+        credit: "Crédit",
+        transfer: "Virement",
+        directDebit: "Prélèvement automatique",
+        franc: "Franc",
+        ticketRest: "Ticket rest"
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -216,6 +295,7 @@ export const langFr =
         stk_01_016: "Définition de la recette du produit", //BAK
         stk_01_017: "Définition du numéro de lot ",
         stk_01_018: "Définitions des propriétés",
+        stk_01_019: "Définitions des rayons",
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",
@@ -409,6 +489,7 @@ export const langFr =
         pos_02_018 : "Rapport des Remises",
         pos_02_019 : "Rapport de ventes par groupe de produits par mois",
         pos_02_020 : "Rapport de ventes par utilisateur",
+        pos_02_021 : "Rapport de ventes statistiques",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
@@ -649,5 +730,163 @@ export const langFr =
         title : "Sélection de lot",
         clmLotCode : "Lot Code",
         clmSkt : "DLC",
+    },
+    device : "Caisse",
+    pieChart :
+    {
+        title : "Répartition des ventes par caisse",
+    },
+    barChart :
+    {
+        title : "Répartition des paiements par méthode de paiement",
+        cash : "Espèces",
+        creditCard : "Carte de crédit",
+        creditCardTicket : "T.R Carte",
+        giftCard : "Bon d'avoir",
+        giftVoucher : "Bon cadeau",
+        credit : "Crédit",
+        ticketRest : "T.R",
+        directDebit : "Prélèvement",
+        franc : "Franc",
+        check : "Chèque",
+        amount : "Montant",
+        transfer : "Virement",
+    },
+    dailySalesChart :
+    {
+        title : "Répartition des ventes par jour",
+        totalSales : "Total des ventes",
+        amount : "Montant",
+    },
+    // Catégories d'analyse principales
+    bestDays : "Meilleurs Jours",
+    worstDays : "Pires Jours",
+    comparison : "Comparaisons",
+    distribution : "Distributions",
+    trend : "Tendances",
+    products : "Produits et Groupes de Produits",
+    
+    // Options d'analyse détaillées
+    topDay : "Jour avec le plus de ventes",
+    worstDay : "Jour avec le moins de ventes",
+    top5Days : "5 meilleurs jours",
+    worst5Days : "5 pires jours",
+    top10Days : "10 meilleurs jours",
+    worst10Days : "10 pires jours",
+    top15Days : "15 meilleurs jours",
+    worst15Days : "15 pires jours",
+    top20Days : "20 meilleurs jours",
+    worst20Days : "20 pires jours",
+    
+    // Analyses par jour de la semaine
+    bestMonday : "Meilleurs Lundis",
+    bestTuesday : "Meilleurs Mardis",
+    bestWednesday : "Meilleurs Mercredis",
+    bestThursday : "Meilleurs Jeudis",
+    bestFriday : "Meilleurs Vendredis",
+    bestSaturday : "Meilleurs Samedis",
+    bestSunday : "Meilleurs Dimanches",
+    
+    worstMonday : "Pires Lundis",
+    worstTuesday : "Pires Mardis",
+    worstWednesday : "Pires Mercredis",
+    worstThursday : "Pires Jeudis",
+    worstFriday : "Pires Vendredis",
+    worstSaturday : "Pires Samedis",
+    worstSunday : "Pires Dimanches",
+    
+    // Analyses de comparaison
+    aboveAverage : "Jours au-dessus de la moyenne",
+    belowAverage : "Jours en-dessous de la moyenne",
+    weekday : "Semaine",
+    weekend : "Week-end",
+    weekdayVsWeekend : "Semaine vs Week-end",
+    firstWeekVsLastWeek : "Première semaine vs Dernière semaine",
+    
+    // Analyses de distribution
+    monthlyDistribution : "Répartition des ventes par mois",
+    weeklyDistribution : "Répartition des ventes par semaine",
+    dayOfWeekDistribution : "Répartition par jour de la semaine",
+    
+    // Analyses de tendance
+    growthTrend : "Tendance de croissance",
+    weeklyTrend : "Tendance hebdomadaire",
+    monthlyTrend : "Tendance mensuelle",
+    
+    // Analyses de produits
+    topProducts : "Meilleurs Produits",
+    worstProducts : "Pires Produits",
+    topProductGroups : "Groupes de Produits",
+    selectProductGroup : "Sélectionner un Groupe de Produits",
+    topSellingProductsInGroup : "Top 20 Produits du Groupe",
+    chartType : "Type de Graphique",
+    barChartPop : "Graphique en Barres",
+    pieChartPop :  "Graphique Circulaire",
+    lineChart : "Graphique en Ligne",
+    productAnalysis : {
+        topSellingProducts : "Meilleurs Produits",
+        worstSellingProducts : "Pires Produits",
+        topSellingProductGroups : "Groupes de Produits",
+        topSellingProductsInGroup : "Top 20 Produits du Groupe",
+    },
+    paretoChart : {
+        title : "Graphique de Pareto",
+        cumulative : "Kümülatif %",
+    },
+    barChart : {
+        title : "Graphique en Barres",
+        cash : "Espèces",
+        creditCard : "Carte de crédit",
+        creditCardTicket : "T.R Carte",
+        giftCard : "Bon d'avoir",
+        giftVoucher : "Bon cadeau",
+        credit : "Crédit",
+        ticketRest : "T.R",
+        directDebit : "Prélèvement",
+        franc : "Franc",
+        check : "Chèque",
+        amount : "Montant",
+        transfer : "Virement",
+    },
+    pieChart : {
+        title : "Graphique Circulaire",
+    },
+    
+    productSalesByDay : "Ventes de Produits par Jour",
+    productGroupSalesByDay : "Ventes de Groupes de Produits par Jour",
+    
+    btnAnalysis : "Analyse Détaillée",
+    firstHalf : "Première moitié",
+    secondHalf : "Deuxième moitié",
+    firstWeek : "Première semaine",
+    lastWeek : "Dernière semaine",
+    growthTrend : "Tendance de croissance (Première moitié vs Deuxième moitié)",
+    // Noms des jours
+    sunday : "Dimanche",
+    monday : "Lundi",
+    tuesday : "Mardi",
+    wednesday : "Mercredi",
+    thursday : "Jeudi",
+    friday : "Vendredi",
+    saturday : "Samedi",
+    analysisChart :
+    {
+        title : "Analyse Graphique",
+        name : "Montant des ventes",
+        amount : "Montant (€)",
+    },
+    productAnalysis :
+    {
+        title : "Analyse de Produits",
+        amount : "Montant (€)",
+    },
+    popAnalysis :
+    {
+        title : "Analyse Détaillée des Ventes",
+        description : "Analysez vos données de vente sous différents angles et évaluez vos performances",
+        btnAnalysis : "Analyse",
+        selectAnalysis : "Catégorie d'Analyse",
+        selectSubOption : "Détail d'Analyse",
     }
-}
+     
+ }
