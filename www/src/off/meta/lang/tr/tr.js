@@ -197,6 +197,77 @@ export const langTr =
         btn02 : "Hayır",
         msg : "Fiyatlar güncellensin mi ?"
     },
+    // Analiz popup'ı için yeni stringler
+    popAnalysis: {
+        title: "Satış Analizleri",
+        description: "Seçili tarih aralığı ve ürün grubu için karşılaştırmalı satış analizleri.",
+        selectAnalysis: "Analiz Tipi Seçiniz",
+        selectSubOption: "Alt Seçenek Seçiniz"
+    },
+    productDetailAnalysis: "Ürün Detay Analizi",
+    productDetailDescription: "Seçili ürün için detaylı satış analizleri.",
+    selectAnalysisType: "Analiz Tipi",
+    dailyAnalysis: "Günlük Analiz",
+    weeklyAnalysis: "Haftalık Analiz",
+    monthlyAnalysis: "Aylık Analiz",
+    yearlyAnalysis: "Yıllık Analiz",
+    topSellingProductsInGroupNote: "Herhangi bir ürün üzerine tıklayarak ayrıntılı ürün satış grafikleri görüntüleyebilirsiniz.",
+    dayOfWeekAnalysis: "Haftanın Günleri Analizi",
+    chartType: "Grafik Türü",
+    barChartPop: "Bar Grafik",
+    pieChartPop: "Pasta Grafik",
+    lineChart: "Çizgi Grafik",
+    selectProductGroup: "Ürün Grubu Seçiniz",
+    bestDays: "En İyi Günler",
+    worstDays: "En Kötü Günler",
+    comparison: "Karşılaştırma",
+    distribution: "Dağılım",
+    trend: "Trend",
+    products: "Ürünler",
+    topProducts: "En Çok Satan Ürünler",
+    worstProducts: "En Az Satan Ürünler",
+    topProductGroups: "En Çok Satan Ürün Grupları",
+    topSellingProductsInGroup: "Gruptaki En Çok Satan Ürünler",
+    btnAnalysis: "Analiz",
+    dailySales: "Günlük Satışlar",
+    weeklySales: "Haftalık Satışlar",
+    monthlySales: "Aylık Satışlar",
+    dayOfWeekDistribution: "Haftanın Günleri Dağılımı",
+    week: "Hafta",
+    analysisChart: {
+        title: "Analiz Grafiği",
+        amount: "Tutar"
+    },
+    productAnalysis: {
+        title: "Ürün Analizi",
+        amount: "Tutar",
+        topSellingProducts: "En Çok Satan Ürünler",
+        worstSellingProducts: "En Az Satan Ürünler",
+        topSellingProductGroups: "En Çok Satan Ürün Grupları",
+        topSellingProductsInGroup: "Gruptaki En Çok Satan Ürünler"
+    },
+    dailySalesChart: {
+        title: "Günlük Satış Grafiği",
+        totalSales: "Toplam Satış"
+    },
+    pieChart: {
+        title: "Kasa Dağılımı"
+    },
+    barChart: {
+        title: "Ödeme Yöntemleri",
+        amount: "Tutar",
+        cash: "Nakit",
+        creditCard: "Kredi Kartı",
+        creditCardTicket: "Kredi Kartı Bilet",
+        check: "Çek",
+        giftVoucher: "Hediye Çeki",
+        giftCard: "Hediye Kartı",
+        credit: "Kredi",
+        transfer: "Havale",
+        directDebit: "Otomatik Ödeme",
+        franc: "Frank",
+        ticketRest: "Bilet Rest"
+    },
     menuOff:
     {
         stk: "Ürün",                
@@ -765,6 +836,19 @@ export const langTr =
     },
     barChart : {
         title : "Çubuk Grafik",
+        cash : "Nakit",
+        creditCard : "Kredi Kartı",
+        creditCardTicket : "T.R Kartı",
+        giftCard : "Hediye Kartı",
+        giftVoucher : "Hediye Çeki",
+        credit : "Kredi",
+        ticketRest : "T.R",
+        directDebit : "Otomatik Ödeme",
+        franc : "Frank",
+        check : "Çek",
+        amount : "Tutar",
+        transfer : "Havale/EFT",
+
     },
     pieChart : {
         title : "Pasta Grafik",

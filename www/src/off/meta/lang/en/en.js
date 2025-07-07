@@ -197,6 +197,77 @@ export const langEn =
         btn02 : "No",
         msg : "Do you want to update the prices ?"
     },
+    // Analysis popup new strings
+    popAnalysis: {
+        title: "Sales Analysis",
+        description: "Comparative sales analysis for the selected date range and product group.",
+        selectAnalysis: "Select Analysis Type",
+        selectSubOption: "Select Sub Option"
+    },
+    productDetailAnalysis: "Product Detail Analysis",
+    productDetailDescription: "Detailed sales analysis for the selected product.",
+    selectAnalysisType: "Analysis Type",
+    dailyAnalysis: "Daily Analysis",
+    weeklyAnalysis: "Weekly Analysis",
+    monthlyAnalysis: "Monthly Analysis",
+    yearlyAnalysis: "Yearly Analysis",
+    topSellingProductsInGroupNote: "You can click on a product to view detailed product sales graphs.",
+    dayOfWeekAnalysis: "Day of Week Analysis",
+    chartType: "Chart Type",
+    barChartPop: "Bar Chart",
+    pieChartPop: "Pie Chart",
+    lineChart: "Line Chart",
+    selectProductGroup: "Select Product Group",
+    bestDays: "Best Days",
+    worstDays: "Worst Days",
+    comparison: "Comparison",
+    distribution: "Distribution",
+    trend: "Trend",
+    products: "Products",
+    topProducts: "Top Selling Products",
+    worstProducts: "Worst Selling Products",
+    topProductGroups: "Top Selling Product Groups",
+    topSellingProductsInGroup: "Top Selling Products in Group",
+    btnAnalysis: "Analysis",
+    dailySales: "Daily Sales",
+    weeklySales: "Weekly Sales",
+    monthlySales: "Monthly Sales",
+    dayOfWeekDistribution: "Day of Week Distribution",
+    week: "Week",
+    analysisChart: {
+        title: "Analysis Chart",
+        amount: "Amount"
+    },
+    productAnalysis: {
+        title: "Product Analysis",
+        amount: "Amount",
+        topSellingProducts: "Top Selling Products",
+        worstSellingProducts: "Worst Selling Products",
+        topSellingProductGroups: "Top Selling Product Groups",
+        topSellingProductsInGroup: "Top Selling Products in Group"
+    },
+    dailySalesChart: {
+        title: "Daily Sales Chart",
+        totalSales: "Total Sales"
+    },
+    pieChart: {
+        title: "Cash Register Distribution"
+    },
+    barChart: {
+        title: "Payment Methods",
+        amount: "Amount",
+        cash: "Cash",
+        creditCard: "Credit Card",
+        creditCardTicket: "Credit Card Ticket",
+        check: "Check",
+        giftVoucher: "Gift Voucher",
+        giftCard: "Gift Card",
+        credit: "Credit",
+        transfer: "Transfer",
+        directDebit: "Direct Debit",
+        franc: "Franc",
+        ticketRest: "Ticket Rest"
+    },
     menuOff:
     {
         stk: "Product",                
@@ -786,6 +857,18 @@ export const langEn =
     },
     barChart : {
         title : "Bar Chart",
+        cash : "Cash",
+        creditCard : "Credit Card",
+        creditCardTicket : "T.R Card",
+        giftCard : "Gift Card",
+        giftVoucher : "Gift Voucher",
+        credit : "Credit",
+        ticketRest : "T.R", 
+        directDebit : "Direct Debit",
+        franc : "Franc",
+        check : "Check",
+        amount : "Amount",
+        transfer : "Transfer",
     },
     pieChart : {
         title : "Pie Chart",

@@ -198,6 +198,77 @@ export const langFr =
         btn02 : "Non",
         msg : "Voulez-vous mettre à jour les prix ?"
     },
+    // Nouvelles chaînes pour le popup d'analyse
+    popAnalysis: {
+        title: "Analyse des ventes",
+        description: "Analyse comparative des ventes pour la période et le groupe de produits sélectionnés.",
+        selectAnalysis: "Sélectionnez le type d'analyse",
+        selectSubOption: "Sélectionnez une sous-option"
+    },
+    productDetailAnalysis: "Analyse détaillée du produit",
+    productDetailDescription: "Analyse détaillée des ventes pour le produit sélectionné.",
+    selectAnalysisType: "Type d'analyse",
+    dailyAnalysis: "Analyse quotidienne",
+    weeklyAnalysis: "Analyse hebdomadaire",
+    monthlyAnalysis: "Analyse mensuelle",
+    yearlyAnalysis: "Analyse annuelle",
+    topSellingProductsInGroupNote: "Vous pouvez cliquer sur un produit pour afficher les graphiques de ventes détaillés.",
+    dayOfWeekAnalysis: "Analyse par jour de la semaine",
+    chartType: "Type de graphique",
+    barChartPop: "Graphique en barres",
+    pieChartPop: "Graphique circulaire",
+    lineChart: "Graphique linéaire",
+    selectProductGroup: "Sélectionner le groupe de produits",
+    bestDays: "Meilleurs jours",
+    worstDays: "Pires jours",
+    comparison: "Comparaison",
+    distribution: "Distribution",
+    trend: "Tendance",
+    products: "Produits",
+    topProducts: "Produits les plus vendus",
+    worstProducts: "Produits les moins vendus",
+    topProductGroups: "Groupes de produits les plus vendus",
+    topSellingProductsInGroup: "Produits les plus vendus dans le groupe",
+    btnAnalysis: "Analyse",
+    dailySales: "Ventes quotidiennes",
+    weeklySales: "Ventes hebdomadaires",
+    monthlySales: "Ventes mensuelles",
+    dayOfWeekDistribution: "Distribution par jour de la semaine",
+    week: "Semaine",
+    analysisChart: {
+        title: "Graphique d'analyse",
+        amount: "Montant"
+    },
+    productAnalysis: {
+        title: "Analyse des produits",
+        amount: "Montant",
+        topSellingProducts: "Produits les plus vendus",
+        worstSellingProducts: "Produits les moins vendus",
+        topSellingProductGroups: "Groupes de produits les plus vendus",
+        topSellingProductsInGroup: "Produits les plus vendus dans le groupe"
+    },
+    dailySalesChart: {
+        title: "Graphique des ventes quotidiennes",
+        totalSales: "Ventes totales"
+    },
+    pieChart: {
+        title: "Distribution des caisses"
+    },
+    barChart: {
+        title: "Méthodes de paiement",
+        amount: "Montant",
+        cash: "Espèces",
+        creditCard: "Carte de crédit",
+        creditCardTicket: "Ticket carte de crédit",
+        check: "Chèque",
+        giftVoucher: "Bon d'achat",
+        giftCard: "Carte cadeau",
+        credit: "Crédit",
+        transfer: "Virement",
+        directDebit: "Prélèvement automatique",
+        franc: "Franc",
+        ticketRest: "Ticket rest"
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -764,6 +835,18 @@ export const langFr =
     },
     barChart : {
         title : "Graphique en Barres",
+        cash : "Espèces",
+        creditCard : "Carte de crédit",
+        creditCardTicket : "T.R Carte",
+        giftCard : "Bon d'avoir",
+        giftVoucher : "Bon cadeau",
+        credit : "Crédit",
+        ticketRest : "T.R",
+        directDebit : "Prélèvement",
+        franc : "Franc",
+        check : "Chèque",
+        amount : "Montant",
+        transfer : "Virement",
     },
     pieChart : {
         title : "Graphique Circulaire",

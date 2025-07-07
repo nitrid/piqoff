@@ -190,6 +190,75 @@ export const langDe =
         btn02 : "Nein",
         msg : "Sind Sie sich sicher, dass Sie die Preise aktualisieren möchten?"
     },
+    // Neue Strings für Analyse-Popup
+    popAnalysis: {
+        title: "Verkaufsanalyse",
+        description: "Vergleichende Verkaufsanalyse für den ausgewählten Zeitraum und die Produktgruppe.",
+        selectAnalysis: "Analysentyp auswählen",
+        selectSubOption: "Unteroption auswählen"
+    },
+    productDetailAnalysis: "Produktdetailanalyse",
+    productDetailDescription: "Detaillierte Verkaufsanalyse für das ausgewählte Produkt.",
+    selectAnalysisType: "Analysentyp",
+    dailyAnalysis: "Tagesanalyse",
+    weeklyAnalysis: "Wochenanalyse",
+    monthlyAnalysis: "Monatsanalyse",
+    dayOfWeekAnalysis: "Wochentaganalyse",
+    chartType: "Diagrammtyp",
+    barChartPop: "Balkendiagramm",
+    pieChartPop: "Kreisdiagramm",
+    lineChart: "Liniendiagramm",
+    selectProductGroup: "Produktgruppe auswählen",
+    bestDays: "Beste Tage",
+    worstDays: "Schlechteste Tage",
+    comparison: "Vergleich",
+    distribution: "Verteilung",
+    trend: "Trend",
+    products: "Produkte",
+    topProducts: "Bestseller",
+    worstProducts: "Schlechtverkäufer",
+    topProductGroups: "Beste Produktgruppen",
+    topSellingProductsInGroup: "Bestseller in der Gruppe",
+    btnAnalysis: "Analyse",
+    dailySales: "Tagesverkäufe",
+    weeklySales: "Wochenverkäufe",
+    monthlySales: "Monatsverkäufe",
+    dayOfWeekDistribution: "Wochentagsverteilung",
+    week: "Woche",
+    analysisChart: {
+        title: "Analyse-Diagramm",
+        amount: "Betrag"
+    },
+    productAnalysis: {
+        title: "Produktanalyse",
+        amount: "Betrag",
+        topSellingProducts: "Bestseller",
+        worstSellingProducts: "Schlechtverkäufer",
+        topSellingProductGroups: "Beste Produktgruppen",
+        topSellingProductsInGroup: "Bestseller in der Gruppe"
+    },
+    dailySalesChart: {
+        title: "Tagesverkaufs-Diagramm",
+        totalSales: "Gesamtverkäufe"
+    },
+    pieChart: {
+        title: "Kassenverteilung"
+    },
+    barChart: {
+        title: "Zahlungsmethoden",
+        amount: "Betrag",
+        cash: "Bargeld",
+        creditCard: "Kreditkarte",
+        creditCardTicket: "Kreditkarten-Ticket",
+        check: "Scheck",
+        giftVoucher: "Geschenkgutschein",
+        giftCard: "Geschenkkarte",
+        credit: "Kredit",
+        transfer: "Überweisung",
+        directDebit: "Lastschrift",
+        franc: "Franken",
+        ticketRest: "Ticket-Rest"
+    },
     menuOff:
     {
         stk: "Artikel",
@@ -729,6 +798,8 @@ export const langDe =
     firstHalf : "Erste Hälfte",
     secondHalf : "Zweite Hälfte",
     growthTrend : "Wachstumstrend (Erste Hälfte vs Zweite Hälfte)",
+    yearlyAnalysis : "Jährliche Analyse",
+    topSellingProductsInGroupNote: "Sie können auf ein Produkt klicken, um detaillierte Produktverkaufsgraphen anzuzeigen.",
     productAnalysis :
     {
         title : "Produktanalyse",
@@ -756,6 +827,18 @@ export const langDe =
     },
     barChart : {
         title : "Balkendiagramm",
+        cash : "Bar",
+        creditCard : "Kreditkarte",
+        giftCard : "Geschenkkarte",
+        ticketRest : "T.R",
+        check : "Scheck",
+        amount : "Betrag",
+        giftVoucher : "Geschenkkarte",
+        credit : "Kredit",
+        directDebit : "Direkte Lastschrift",
+        franc : "Frank",
+        creditCardTicket : "T.R Kart",
+        transfer : "Überweisung",
     },
     pieChart : {
         title : "Kreisdiagramm",
