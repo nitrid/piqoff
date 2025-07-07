@@ -83,7 +83,7 @@ export default class transferCls
                         SUB_GRP TEXT,
                         ORGINS TEXT,
                         ORGINS_NAME TEXT,
-                        RAYON TEXT,
+                        RAYON_GUID TEXT,
                         SHELF TEXT,
                         SECTOR TEXT,
                         SALE_JOIN_LINE INTEGER,
@@ -151,7 +151,7 @@ export default class transferCls
                         ORGINS TEXT,
                         ITEMS_GRP_GUID TEXT,
                         ORGINS_NAME TEXT,
-                        RAYON TEXT,
+                        RAYON_GUID TEXT,
                         SHELF TEXT,
                         SECTOR TEXT,
                         SALE_JOIN_LINE INTEGER,
@@ -688,12 +688,12 @@ export default class transferCls
                     type : "insert",
                     query : `INSERT OR REPLACE INTO ITEMS_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, SPECIAL, CODE, 
                             NAME, SNAME, VAT, COST_PRICE, MIN_PRICE, MAX_PRICE, STATUS, SUGAR_RATE, MAIN_GRP, MAIN_GRP_NAME, SUB_GRP, ORGINS, 
-                            ORGINS_NAME, RAYON, SHELF, SECTOR, SALE_JOIN_LINE, TICKET_REST, WEIGHING, PRICE) 
+                            ORGINS_NAME, RAYON_GUID, SHELF, SECTOR, SALE_JOIN_LINE, TICKET_REST, WEIGHING, PRICE) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
                     MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},SUGAR_RATE : {map:'SUGAR_RATE'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},
-                    SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
+                    SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON_GUID : {map:'RAYON_GUID'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
                     TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},PRICE : {map:'PRICE'}}]
                 },
             },
@@ -733,13 +733,13 @@ export default class transferCls
                     type : "insert",
                     query : `INSERT OR REPLACE INTO ITEMS_BARCODE_MULTICODE_VW_01 (
                             GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, SPECIAL, CODE, NAME, SNAME, VAT, COST_PRICE, MIN_PRICE, MAX_PRICE, STATUS, MAIN_GRP,
-                            MAIN_GRP_NAME, SUB_GRP, ORGINS, ITEMS_GRP_GUID, ORGINS_NAME, RAYON, SHELF, SECTOR, SALE_JOIN_LINE, TICKET_REST, WEIGHING, BARCODE, BARCODE_GUID, UNIT_ID,
+                            MAIN_GRP_NAME, SUB_GRP, ORGINS, ITEMS_GRP_GUID, ORGINS_NAME, RAYON_GUID, SHELF, SECTOR, SALE_JOIN_LINE, TICKET_REST, WEIGHING, BARCODE, BARCODE_GUID, UNIT_ID,
                             UNIT_NAME, UNIT_FACTOR, MULTICODE, CUSTOMER_GUID, CUSTOMER_CODE, CUSTOMER_NAME, CUSTOMER_PRICE, CUSTOMER_PRICE_GUID, PRICE_SALE, PRICE_SALE_GUID) 
                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
                     MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
-                    ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
+                    ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON_GUID : {map:'RAYON_GUID'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
                     SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_ID : {map:'UNIT_ID'},
                     UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MULTICODE : {map:'MULTICODE'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
                     CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_PRICE : {map:'CUSTOMER_PRICE'},CUSTOMER_PRICE_GUID : {map:'CUSTOMER_PRICE_GUID'},PRICE_SALE : {map:'PRICE_SALE'},PRICE_SALE_GUID : {map:'PRICE_SALE_GUID'}}]
