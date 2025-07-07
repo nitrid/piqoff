@@ -224,6 +224,7 @@ export const langFr =
         stk_01_016: "Définition de la recette du produit", //BAK
         stk_01_017: "Définition du numéro de lot ",
         stk_01_018: "Définitions des propriétés",
+        stk_01_019: "Définitions des rayons",
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",

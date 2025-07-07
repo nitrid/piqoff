@@ -103,6 +103,11 @@ export const menu = (e) =>
                             id: 'stk_01_018',
                             text: e.t('menuOff.stk_01_018'),//'Özellik Tanımları',
                             path: 'items/cards/propertyCard'
+                        },
+                        {
+                            id: 'stk_01_019',
+                            text: e.t('menuOff.stk_01_019'),//'Rayon Tanımları',
+                            path: 'items/cards/rayonCard'
                         }
                     ]
                 },

@@ -223,6 +223,7 @@ export const langTr =
         stk_01_016: "Ürün Recete Tanımlama",
         stk_01_017: "Ürün Parti Lot Tanımlama",
         stk_01_018: "Özellik Tanımları",
+        stk_01_019: "Rayon Tanımları",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",

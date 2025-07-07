@@ -22,7 +22,6 @@ class pricerApi
         }
         
         this.processRun()
-        this.processPromoClear()
     }
     async connEvt(pSocket)
     {
@@ -450,6 +449,7 @@ class pricerApi
     {
         if(this.active == true)
         {
+            this.processPromoClear()
             cron.schedule('0 3 * * *', async () => 
             {
                 await this.processPromoSend()
