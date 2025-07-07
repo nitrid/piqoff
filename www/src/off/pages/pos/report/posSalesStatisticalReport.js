@@ -38,7 +38,15 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData: {},
             productAnalysisData: {},
             productGroups: [],
-            isPopupVisible: false
+            isPopupVisible: false,
+            // Ürün detay popup için yeni state'ler
+            selectedProduct: null,
+            productDetailData: {},
+            isProductDetailPopupVisible: false,
+            productDetailAnalysisType: 'daily',
+            productDetailChartType: 'line',
+            selectBoxResetKey: Date.now(),
+            popAnalysisResetKey: Date.now()
         }
 
         this.dtDate = new Date();
@@ -521,6 +529,242 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
     }
 
+    // Ürün detay analizi için yeni fonksiyon
+    async calculateProductDetailData(productCode, productName, analysisType = 'daily') 
+    {
+        // Loading başlat
+        App.instance.setState({isExecute:true})
+        
+        try {
+            let productDetailData = {}
+            
+            if (analysisType === 'daily') 
+            {
+                // Günlük satış verileri
+                let tmpQuery = 
+                {
+                    query: `SELECT 
+                                POS.DOC_DATE,
+                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            WHERE POS.STATUS = 1 
+                            AND POS.DOC_DATE >= @FIRST_DATE 
+                            AND POS.DOC_DATE <= @LAST_DATE
+                            AND POS.DEVICE <> '9999'
+                            AND POS.TOTAL > 0
+                            AND POS.TYPE = 0
+                            AND POS.ITEM_CODE = @ITEM_CODE
+                            GROUP BY POS.DOC_DATE
+                            ORDER BY POS.DOC_DATE`,
+                    param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
+                    value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if (tmpData?.result?.recordset?.length > 0) 
+                {
+                    productDetailData.daily = tmpData.result.recordset.map((item) => 
+                    ({
+                        category: moment(item.DOC_DATE).format('DD/MM/YYYY'),
+                        value: parseFloat(item.TOTAL_AMOUNT) || 0,
+                        quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
+                        saleCount: parseInt(item.SALE_COUNT) || 0,
+                        date: item.DOC_DATE,
+                        title: `${productName} - ${this.lang.t("dailySales")}`
+                    }))
+                } else {
+                    productDetailData.daily = []
+                }
+            }
+            
+            if (analysisType === 'weekly') 
+            {
+                // Haftalık satış verileri
+                let tmpQuery = 
+                {
+                    query: `SELECT 
+                                DATEPART(WEEK, POS.DOC_DATE) AS WEEK_NUMBER,
+                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
+                                MIN(POS.DOC_DATE) AS WEEK_START,
+                                MAX(POS.DOC_DATE) AS WEEK_END,
+                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            WHERE POS.STATUS = 1 
+                            AND POS.DOC_DATE >= @FIRST_DATE 
+                            AND POS.DOC_DATE <= @LAST_DATE
+                            AND POS.DEVICE <> '9999'
+                            AND POS.TOTAL > 0
+                            AND POS.TYPE = 0
+                            AND POS.ITEM_CODE = @ITEM_CODE
+                            GROUP BY DATEPART(WEEK, POS.DOC_DATE), DATEPART(YEAR, POS.DOC_DATE)
+                            ORDER BY YEAR_NUMBER, WEEK_NUMBER`,
+                    param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
+                    value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if (tmpData?.result?.recordset?.length > 0) 
+                {
+                    productDetailData.weekly = tmpData.result.recordset.map((item) => 
+                    ({
+                        category: `${this.lang.t("week")} ${item.WEEK_NUMBER} (${moment(item.WEEK_START).format('DD/MM')} - ${moment(item.WEEK_END).format('DD/MM')})`,
+                        value: parseFloat(item.TOTAL_AMOUNT) || 0,
+                        quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
+                        saleCount: parseInt(item.SALE_COUNT) || 0,
+                        weekNumber: item.WEEK_NUMBER,
+                        yearNumber: item.YEAR_NUMBER,
+                        title: `${productName} - ${this.lang.t("weeklySales")}`
+                    }))
+                } else {
+                    productDetailData.weekly = []
+                }
+            }
+            
+            if (analysisType === 'monthly') 
+            {
+                // Aylık satış verileri
+                let tmpQuery = 
+                {
+                    query: `SELECT 
+                                DATEPART(MONTH, POS.DOC_DATE) AS MONTH_NUMBER,
+                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
+                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            WHERE POS.STATUS = 1 
+                            AND POS.DOC_DATE >= @FIRST_DATE 
+                            AND POS.DOC_DATE <= @LAST_DATE
+                            AND POS.DEVICE <> '9999'
+                            AND POS.TOTAL > 0
+                            AND POS.TYPE = 0
+                            AND POS.ITEM_CODE = @ITEM_CODE
+                            GROUP BY DATEPART(MONTH, POS.DOC_DATE), DATEPART(YEAR, POS.DOC_DATE)
+                            ORDER BY YEAR_NUMBER, MONTH_NUMBER`,
+                    param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
+                    value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if (tmpData?.result?.recordset?.length > 0) 
+                {
+                    productDetailData.monthly = tmpData.result.recordset.map((item) => 
+                    ({
+                        category: moment(`${item.YEAR_NUMBER}-${item.MONTH_NUMBER}-01`).format('MMMM YYYY'),
+                        value: parseFloat(item.TOTAL_AMOUNT) || 0,
+                        quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
+                        saleCount: parseInt(item.SALE_COUNT) || 0,
+                        monthNumber: item.MONTH_NUMBER,
+                        yearNumber: item.YEAR_NUMBER,
+                        title: `${productName} - ${this.lang.t("monthlySales")}`
+                    }))
+                } else {
+                    productDetailData.monthly = []
+                }
+            }
+            
+            if (analysisType === 'dayOfWeek') 
+            {
+                // Haftanın günlerine göre satış verileri
+                let tmpQuery = 
+                {
+                    query: `SELECT 
+                                DATEPART(WEEKDAY, POS.DOC_DATE) AS DAY_OF_WEEK,
+                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            WHERE POS.STATUS = 1 
+                            AND POS.DOC_DATE >= @FIRST_DATE 
+                            AND POS.DOC_DATE <= @LAST_DATE
+                            AND POS.DEVICE <> '9999'
+                            AND POS.TOTAL > 0
+                            AND POS.TYPE = 0
+                            AND POS.ITEM_CODE = @ITEM_CODE
+                            GROUP BY DATEPART(WEEKDAY, POS.DOC_DATE)
+                            ORDER BY DAY_OF_WEEK`,
+                    param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
+                    value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if (tmpData?.result?.recordset?.length > 0) 
+                {
+                    let dayNames = ['', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+                    productDetailData.dayOfWeek = tmpData.result.recordset.map((item) => 
+                    ({
+                        category: this.lang.t(dayNames[item.DAY_OF_WEEK]),
+                        value: parseFloat(item.TOTAL_AMOUNT) || 0,
+                        quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
+                        saleCount: parseInt(item.SALE_COUNT) || 0,
+                        dayOfWeek: item.DAY_OF_WEEK,
+                        title: `${productName} - ${this.lang.t("dayOfWeekDistribution")}`
+                    }))
+                } else {
+                    productDetailData.dayOfWeek = []
+                }
+            }
+            
+            if (analysisType === 'yearly') 
+            {
+                let tmpQuery = {
+                    query: `SELECT 
+                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
+                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            WHERE POS.STATUS = 1 
+                            AND POS.DOC_DATE >= @FIRST_DATE 
+                            AND POS.DOC_DATE <= @LAST_DATE
+                            AND POS.DEVICE <> '9999'
+                            AND POS.TOTAL > 0
+                            AND POS.TYPE = 0
+                            AND POS.ITEM_CODE = @ITEM_CODE
+                            GROUP BY DATEPART(YEAR, POS.DOC_DATE)
+                            ORDER BY YEAR_NUMBER`,
+                    param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
+                    value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                if (tmpData?.result?.recordset?.length > 0) 
+                {
+                    productDetailData.yearly = tmpData.result.recordset.map((item) => 
+                    ({
+                        category: item.YEAR_NUMBER ? item.YEAR_NUMBER.toString() : '',
+                        value: parseFloat(item.TOTAL_AMOUNT) || 0,
+                        quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
+                        saleCount: parseInt(item.SALE_COUNT) || 0,
+                        yearNumber: item.YEAR_NUMBER,
+                        title: `${productName} - ${this.lang.t("yearlySales")}`
+                    }))
+                } else {
+                    productDetailData.yearly = []
+                }
+            }
+            
+            return productDetailData
+        }
+        catch (err) 
+        {
+            console.error('Error in calculateProductDetailData:', err)
+            return {}
+        }
+        finally 
+        {
+            // Loading bitir
+            App.instance.setState({isExecute:false})
+        }
+    }
+
     async calculateProductAnalysisData(analysisType) 
     {
         // Loading başlat
@@ -562,7 +806,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         value: parseFloat(item.TOTAL_AMOUNT) || 0,
                         quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
                         rank: index + 1,
-                        title: this.t("productAnalysis.topSellingProducts")
+                        title: this.t("productAnalysis.topSellingProducts"),
+                        itemCode: item.ITEM_CODE,
+                        itemName: item.ITEM_NAME
                     }))
                 } else {
                     productAnalysisData.topSellingProducts = []
@@ -601,7 +847,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         value: parseFloat(item.TOTAL_AMOUNT) || 0,
                         quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
                         rank: index + 1,
-                        title: this.t("productAnalysis.worstSellingProducts")
+                        title: this.t("productAnalysis.worstSellingProducts"),
+                        itemCode: item.ITEM_CODE,
+                        itemName: item.ITEM_NAME
                     }))
                 } else {
                     productAnalysisData.worstSellingProducts = []
@@ -643,7 +891,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         value: parseFloat(item.TOTAL_AMOUNT) || 0,
                         quantity: parseFloat(item.TOTAL_QUANTITY) || 0,
                         rank: index + 1,
-                        title: this.t("productAnalysis.topSellingProductsInGroup")
+                        title: this.t("productAnalysis.topSellingProductsInGroup"),
+                        itemCode: item.ITEM_CODE,
+                        itemName: item.ITEM_NAME
                     }))
                 } else {
                     productAnalysisData.topSellingProductsInGroup = []
@@ -1084,6 +1334,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     <div style={{minHeight: '400px', height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
                                         <Chart
                                             id="deviceChart"
+                                            style={{minHeight: '400px'}}
                                             title={this.lang.t("barChart.title")}
                                             dataSource={this.state.chartData}
                                         >
@@ -1157,17 +1408,39 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         </div>
                     </React.Suspense>
                     
-                    {/* Analiz PopUp */}
-                    <NdPopUp parent={this} id={"popAnalysis"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.lang.t("popAnalysis.title")}
-                    container={"#root"} 
-                    width={'1200'}
-                    height={'800'}
-                    position={{of:'#root'}}
-                    >
+                         {/* Analiz PopUp */}
+                        <NdPopUp parent={this} id={"popAnalysis"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("popAnalysis.title")}
+                        container={"#root"} 
+                        width={'1200'}
+                        height={'800'}
+                        position={{of:'#root'}}
+                        ref={(el) => { this.popAnalysis = el }}
+                        onHiding={async () => {
+                            await new Promise(resolve => this.setState({
+                                selectedProduct: null,
+                                productDetailData: {},
+                                productDetailAnalysisType: 'daily',
+                                productDetailChartType: 'line'
+                            }, resolve));
+                            App.instance.setState({isExecute:false});
+                        }}
+                        onShowing={async () => {
+                            const newKey = Date.now();
+                            await new Promise(resolve => this.setState({
+                                selectedAnalysisType: 'best',
+                                selectedSubOption: 'topDay',
+                                selectedAnalysis: 'topDay',
+                                chartType: 'bar',
+                                selectedProductGroup: null,
+                                productAnalysisData: {},
+                                popAnalysisResetKey: newKey
+                            }, resolve));
+                        }}
+                        >
                         <div className="row p-4">
                             {/* Başlık ve Açıklama */}
                             <div className="col-12 mb-4 text-center">
@@ -1196,7 +1469,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
-                                            <NdSelectBox 
+                                            <NdSelectBox key={this.state.popAnalysisResetKey}
                                                 id="selAnalysisType" 
                                                 parent={this} 
                                                 dataSource={[
@@ -1246,7 +1519,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
-                                            <NdSelectBox 
+                                            <NdSelectBox key={this.state.popAnalysisResetKey}
                                                 id="selSubOption" 
                                                 parent={this} 
                                                 dataSource={this.getSubOptions()}
@@ -1275,7 +1548,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                                     selectedAnalysis: e.value,
                                                                     productGroups: productGroups,
                                                                     productAnalysisData: {} // Boş bırak, ürün grubu seçilince doldurulacak
-                                                                })
+                                                                }, async () => 
+                                                                {
+                                                                    // Sonra veriyi yükle
+                                                                    let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                                    this.setState({ productAnalysisData: productAnalysisData });
+                                                                });
                                                             } 
                                                             else 
                                                             {
@@ -1284,7 +1562,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                                 this.setState({ 
                                                                     selectedAnalysis: e.value,
                                                                     productAnalysisData: productData
-                                                                })
+                                                                }, async () => 
+                                                                {
+                                                                    // Sonra veriyi yükle
+                                                                    let productAnalysisData = await this.calculateProductAnalysisData(e.value);
+                                                                    this.setState({ productAnalysisData: productAnalysisData });
+                                                                });
                                                             }
                                                         } 
                                                         catch (error) 
@@ -1307,7 +1590,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
-                                            <NdSelectBox 
+                                            <NdSelectBox key={this.state.popAnalysisResetKey}
                                                 id="selChartType" 
                                                 parent={this} 
                                                 dataSource={[
@@ -1335,7 +1618,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
-                                            <NdSelectBox 
+                                            <NdSelectBox key={this.state.popAnalysisResetKey}
                                                 id="selProductGroup" 
                                                 parent={this} 
                                                 dataSource={this.state.productGroups}
@@ -1360,7 +1643,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                                 selectedProductGroup: e.value,
                                                                 selectedAnalysis: 'topSellingProductsInGroup',
                                                                 productAnalysisData: productData
-                                                            })
+                                                            }, async () => 
+                                                            {
+                                                                // Sonra veriyi yükle
+                                                                let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                                this.setState({ productAnalysisData: productAnalysisData });
+                                                            });
                                                         } 
                                                         catch (error) 
                                                         {
@@ -1396,6 +1684,62 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 palette="Bright"
                                                 dataSource={this.state.productAnalysisData[this.state.selectedAnalysis] || []}
                                                 visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
+                                                onPointClick={async (e) => {
+                                                    // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
+                                                    if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
+                                                    {
+                                                        // Önce state'i güncelle
+                                                        this.setState({ 
+                                                            selectedProductGroup: e.target.data.groupCode,
+                                                            selectedAnalysis: 'topSellingProductsInGroup'
+                                                        }, async () => 
+                                                        {
+                                                            // Sonra veriyi yükle
+                                                            let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                            this.setState({ productAnalysisData: productAnalysisData });
+                                                        });
+                                                    }
+                                                    // Eğer ürün detay grafiğindeyse ve bir ürüne tıklandıysa
+                                                    else if ((this.state.selectedAnalysis === 'topSellingProductsInGroup' || 
+                                                             this.state.selectedAnalysis === 'topSellingProducts' || 
+                                                             this.state.selectedAnalysis === 'worstSellingProducts') && 
+                                                             e.target.data.itemCode)
+                                                    {
+                                                        // Ürün detay popup'ını aç
+                                                        this.setState({ 
+                                                            selectedProduct: {
+                                                                code: e.target.data.itemCode,
+                                                                name: e.target.data.itemName
+                                                            },
+                                                            productDetailData: {}, // Veriyi temizle
+                                                            productDetailAnalysisType: 'daily',
+                                                            productDetailChartType: 'line'
+                                                        },  async () => 
+                                                        {
+                                                            // Ürün detay verilerini yükle
+                                                            App.instance.setState({isExecute:true})
+                                                            
+                                                            try 
+                                                            {
+                                                                let productDetailData = this.calculateProductDetailData(
+                                                                    e.target.data.itemCode, 
+                                                                    e.target.data.itemName, 
+                                                                    'daily'
+                                                                )
+                                                                this.setState({ 
+                                                                    productDetailData
+                                                                })
+                                                                
+                                                                // Popup'ı aç
+                                                                this.popProductDetail.show()
+                                                            } 
+                                                            catch (error) 
+                                                            {
+                                                                console.error('Error loading product detail:', error)
+                                                            }
+                                                        });
+                                                    }
+                                                }}
                                             >
                                                 <PieSeries 
                                                     argumentField="category"
@@ -1419,7 +1763,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     enabled={true}
                                                     customizeTooltip={(arg) => {
                                                         if (!arg || !arg.argumentText || !arg.valueText) {
-                                                            return { text: 'Veri yok' };
+                                                            return { text: this.lang.t("noData") };
                                                         }
                                                         
                                                         let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
@@ -1455,7 +1799,64 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 title={this.state.productAnalysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("productAnalysis.title")}
                                                 dataSource={this.state.productAnalysisData[this.state.selectedAnalysis] || []}
                                                 palette="Bright"
+                                                style={{minHeight: '400px'}}
                                                 visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
+                                                onPointClick={async (e) => {
+                                                    // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
+                                                    if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
+                                                    {
+                                                        // Önce state'i güncelle
+                                                        this.setState({ 
+                                                            selectedProductGroup: e.target.data.groupCode,
+                                                            selectedAnalysis: 'topSellingProductsInGroup'
+                                                        }, async () => 
+                                                        {
+                                                            // Sonra veriyi yükle
+                                                            let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                            this.setState({ productAnalysisData: productAnalysisData });
+                                                        });
+                                                    }
+                                                    // Eğer ürün detay grafiğindeyse ve bir ürüne tıklandıysa
+                                                    else if ((this.state.selectedAnalysis === 'topSellingProductsInGroup' || 
+                                                             this.state.selectedAnalysis === 'topSellingProducts' || 
+                                                             this.state.selectedAnalysis === 'worstSellingProducts') && 
+                                                             e.target.data.itemCode)
+                                                    {
+                                                        // Ürün detay popup'ını aç
+                                                        this.setState({ 
+                                                            selectedProduct: {
+                                                                code: e.target.data.itemCode,
+                                                                name: e.target.data.itemName
+                                                            },
+                                                            productDetailData: {}, // Veriyi temizle
+                                                            productDetailAnalysisType: 'daily',
+                                                            productDetailChartType: 'line'
+                                                        },  async () => 
+                                                        {
+                                                            // Ürün detay verilerini yükle
+                                                            App.instance.setState({isExecute:true})
+                                                            
+                                                            try 
+                                                            {
+                                                                let productDetailData = this.calculateProductDetailData(
+                                                                    e.target.data.itemCode, 
+                                                                    e.target.data.itemName, 
+                                                                    'daily'
+                                                                )
+                                                                this.setState({ 
+                                                                    productDetailData
+                                                                })
+                                                                
+                                                                // Popup'ı aç
+                                                                this.popProductDetail.show()
+                                                            } 
+                                                            catch (error) 
+                                                            {
+                                                                console.error('Error loading product detail:', error)
+                                                            }
+                                                        });
+                                                    }
+                                                }}
                                             >
                                                 <CommonSeriesSettings 
                                                     argumentField="category" 
@@ -1491,7 +1892,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     customizeTooltip={(arg) => {
                                                         if (!arg || !arg.argumentText || !arg.valueText) 
                                                         {
-                                                            return { text: 'Veri yok' };
+                                                            return { text: this.lang.t("noData") };
                                                         }
                                                         
                                                         let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
@@ -1525,9 +1926,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 title={this.state.productAnalysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                                 dataSource={this.state.productAnalysisData[this.state.selectedAnalysis] || []}
                                                 palette="Bright"
+                                                style={{minHeight: '400px'}}
                                                 visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
                                                 onPointClick={async (e) => {
-                                                    
                                                     // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
                                                     if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
                                                     {
@@ -1540,6 +1941,45 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             // Sonra veriyi yükle
                                                             let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
                                                             this.setState({ productAnalysisData: productAnalysisData });
+                                                        });
+                                                    }
+                                                    // Eğer ürün detay grafiğindeyse ve bir ürüne tıklandıysa
+                                                    else if ((this.state.selectedAnalysis === 'topSellingProductsInGroup' || 
+                                                             this.state.selectedAnalysis === 'topSellingProducts' || 
+                                                             this.state.selectedAnalysis === 'worstSellingProducts') && 
+                                                             e.target.data.itemCode)
+                                                    {
+                                                        // Ürün detay popup'ını aç
+                                                        this.setState({ 
+                                                            selectedProduct: {
+                                                                code: e.target.data.itemCode,
+                                                                name: e.target.data.itemName
+                                                            },
+                                                            productDetailChartType: 'line',
+                                                            productDetailAnalysisType: 'daily'
+                                                        }, () => 
+                                                        {
+                                                            // Ürün detay verilerini yükle
+                                                            App.instance.setState({isExecute:true})
+                                                            
+                                                            try 
+                                                            {
+                                                                let productDetailData = this.calculateProductDetailData(
+                                                                    e.target.data.itemCode, 
+                                                                    e.target.data.itemName, 
+                                                                    'daily'
+                                                                )
+                                                                this.setState({ 
+                                                                    productDetailData
+                                                                })
+                                                                
+                                                                // Popup'ı aç
+                                                                this.popProductDetail.show()
+                                                            } 
+                                                            catch (error) 
+                                                            {
+                                                                console.error('Error loading product detail:', error)
+                                                            }
                                                         });
                                                     }
                                                 }}
@@ -1585,7 +2025,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     customizeTooltip={(arg) => {
                                                         if (!arg || !arg.argumentText || !arg.valueText)
                                                         {
-                                                            return { text: 'Veri yok' };
+                                                            return { text: this.lang.t("noData") };
                                                         }
                                                         
                                                         let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
@@ -1594,10 +2034,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         )
                                                         
                                                         if (dataItem) {
-                                                            if (dataItem.rank) {
+                                                            if (dataItem.rank) 
+                                                            {
                                                                 tooltipText = `${dataItem.rank}. ${tooltipText}`
                                                             }
-                                                            if (dataItem.quantity) {
+                                                            if (dataItem.quantity) 
+                                                            {    
                                                                 tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
                                                             }
                                                             if (dataItem.saleCount) {
@@ -1695,6 +2137,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                             dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
                                             palette="Bright"
+                                            style={{minHeight: '400px'}}
                                             visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                         >
                                             <CommonSeriesSettings 
@@ -1749,6 +2192,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                             dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
                                             palette="Bright"
+                                            style={{minHeight: '400px'}}
                                             visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                             onPointClick={async (e) => {
                                                 
@@ -1835,6 +2279,442 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         </Chart>
                                     )}
                                 
+                                </div>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                    
+                    {/* Ürün Detay PopUp */}
+                    <NdPopUp parent={this} id={"popProductDetail"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.state.selectedProduct ? `${this.state.selectedProduct.name} - ${this.lang.t("productDetailAnalysis")}` : this.lang.t("productDetailAnalysis")}
+                    container={"#root"} 
+                    width={'1400'}
+                    height={'900'}
+                    position={{of:'#root'}}
+                    ref={(el) => { this.popProductDetail = el }}
+                    onHiding={async () => {
+                        await new Promise(resolve => this.setState({
+                            selectedProduct: null,
+                            productDetailData: {},
+                            productDetailAnalysisType: 'daily',
+                            productDetailChartType: 'line'
+                        }, resolve));
+                        App.instance.setState({isExecute:false});
+                    }}
+                    onShowing={async () => {
+                        const newKey = Date.now();
+                        await new Promise(resolve => this.setState({
+                            productDetailAnalysisType: 'daily',
+                            productDetailChartType: 'line',
+                            productDetailData: {},
+                            selectBoxResetKey: newKey
+                        }, resolve));
+                        if (this.state.selectedProduct) {
+                            App.instance.setState({isExecute:true})
+                            try {
+                                let productDetailData = await this.calculateProductDetailData(
+                                    this.state.selectedProduct.code,
+                                    this.state.selectedProduct.name,
+                                    'daily'
+                                )
+                                this.setState({ productDetailData })
+                            } catch (err) {
+                                this.setState({ productDetailData: {} })
+                            } finally {
+                                App.instance.setState({isExecute:false})
+                            }
+                        } else {
+                            this.setState({ productDetailData: {} })
+                        }
+                    }}
+                    >
+                        <div className="row p-4">
+                            {/* Başlık ve Açıklama */}
+                            <div className="col-12 mb-4 text-center">
+                                <h4 style={{color: '#2c3e50', marginBottom: '10px'}}>
+                                    {this.state.selectedProduct ? this.state.selectedProduct.name : this.lang.t("productDetailAnalysis")}
+                                </h4>
+                                <p style={{color: '#7f8c8d', fontSize: '14px'}}>
+                                    {this.lang.t("productDetailDescription")}
+                                </p>
+                            </div>
+                            
+                            {/* Analiz Seçim Paneli */}
+                            <div className="col-12 mb-4">
+                                <div style={{
+                                    borderRadius: '12px',
+                                    padding: '25px',
+                                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                                }}>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div style={{marginBottom: '15px'}}>
+                                                <Label 
+                                                    text={this.lang.t("selectAnalysisType")} 
+                                                    alignment="center"
+                                                    style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
+                                                />
+                                            </div>
+                                            <NdSelectBox key={this.state.selectBoxResetKey}
+                                                id="selProductDetailAnalysisType" 
+                                                parent={this} 
+                                                dataSource={[
+                                                    { id: 'daily', name: '📅 ' + this.lang.t("dailyAnalysis") },
+                                                    { id: 'weekly', name: '📊 ' + this.lang.t("weeklyAnalysis") },
+                                                    { id: 'monthly', name: '📈 ' + this.lang.t("monthlyAnalysis") },
+                                                    { id: 'dayOfWeek', name: '🗓️ ' + this.lang.t("dayOfWeekAnalysis") },
+                                                    { id: 'yearly', name: '📆 ' + this.lang.t("yearlyAnalysis") }
+                                                ]}
+                                                displayExpr="name"
+                                                valueExpr="id"
+                                                value={this.state.productDetailAnalysisType}
+                                                width="100%"
+                                                onValueChanged={async (e) => 
+                                                {
+                                                    if (this.state.selectedProduct) 
+                                                    {
+                                                        this.setState({ productDetailAnalysisType: e.value })
+                                                        App.instance.setState({isExecute:true})
+                                                        try 
+                                                        {
+                                                            let productDetailData = await this.calculateProductDetailData(
+                                                                this.state.selectedProduct.code, 
+                                                                this.state.selectedProduct.name, 
+                                                                e.value
+                                                            )
+                                                            this.setState({ productDetailData })
+                                                        } 
+                                                        catch (error) 
+                                                        {
+                                                            console.error('Error loading product detail data:', error)
+                                                        }
+                                                        finally
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div style={{marginBottom: '15px'}}>
+                                                <Label 
+                                                    text={this.lang.t("chartType")} 
+                                                    alignment="center"
+                                                    style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
+                                                />
+                                            </div>
+                                            <NdSelectBox key={this.state.selectBoxResetKey}
+                                                id="selProductDetailChartType" 
+                                                parent={this} 
+                                                dataSource={[
+                                                    { id: 'line', name: '📈 ' + this.lang.t("lineChart") },
+                                                    { id: 'bar', name: '📊 ' + this.lang.t("barChartPop") }
+                                                ]}
+                                                displayExpr="name"
+                                                valueExpr="id"
+                                                value={this.state.productDetailChartType}
+                                                width="100%"
+                                                onValueChanged={e => {
+                                                    this.setState({ productDetailChartType: e.value });
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Grafik Alanı */}
+                            <div className="col-12">
+                                <div style={{
+                                    minHeight: '600px',
+                                    border: '2px solid #e2e8f0', 
+                                    borderRadius: '12px', 
+                                    padding: '25px', 
+                                    position: 'relative',
+                                    background: 'white',
+                                    boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+                                }}>
+                                    {/* Ürün detay grafiği render kısmı */}
+                                    {this.state.productDetailData && this.state.productDetailData[this.state.productDetailAnalysisType] ? (
+                                        this.state.productDetailChartType === 'pie' ? (
+                                            <PieChart
+                                            key={this.state.popProductDetailResetKey}
+                                                id="productDetailPieChart"
+                                                type="doughnut"
+                                                title={this.state.productDetailData[this.state.productDetailAnalysisType]?.[0]?.title || this.lang.t("productDetailAnalysis")}
+                                                palette="Bright"
+                                                dataSource={this.state.productDetailData[this.state.productDetailAnalysisType] || []}
+                                                visible={this.state.productDetailData[this.state.productDetailAnalysisType]?.length > 0}
+                                            >
+                                                <PieSeries 
+                                                    argumentField="category"
+                                                    valueField="value"
+                                                >
+                                                    <PieLabel visible={true} customizeText={(arg) => 
+                                                    {
+                                                        let total = (this.state.productDetailData[this.state.productDetailAnalysisType] || []).reduce((sum, item) => sum + item.value, 0)
+                                                        let percentage = ((arg.value / total) * 100).toFixed(1)
+                                                        return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
+                                                    }}>
+                                                        <PieConnector visible={true} /> 
+                                                    </PieLabel>
+                                                </PieSeries>
+                                                <PieLegend 
+                                                    margin={0} 
+                                                    horizontalAlignment="center" 
+                                                    verticalAlignment="bottom" 
+                                                />
+                                                <PieTooltip 
+                                                    enabled={true}
+                                                    customizeTooltip={(arg) => {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                            return { text: this.lang.t("noData") };
+                                                        }
+                                                        
+                                                        let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                        let dataItem = this.state.productDetailData[this.state.productDetailAnalysisType]?.find(item => 
+                                                            item.category === arg.argumentText
+                                                        )
+                                                        
+                                                        if (dataItem) 
+                                                        {
+                                                            if (dataItem.quantity) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
+                                                            }
+                                                            if (dataItem.saleCount) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                            }
+                                                        }
+                                                        
+                                                        return {
+                                                            text: tooltipText
+                                                        };
+                                                    }}
+                                                />
+                                            </PieChart>
+                                        ) : this.state.productDetailChartType === 'line' ? (
+                                            <Chart
+                                                key={this.state.popProductDetailResetKey}
+                                                id="productDetailLineChart"
+                                                title={this.state.productDetailData[this.state.productDetailAnalysisType]?.[0]?.title || this.lang.t("productDetailAnalysis")}
+                                                dataSource={this.state.productDetailData[this.state.productDetailAnalysisType] || []}
+                                                palette="Bright"
+                                                style={{minHeight: '400px'}}
+                                                visible={this.state.productDetailData[this.state.productDetailAnalysisType]?.length > 0}
+                                            >
+                                                <CommonSeriesSettings 
+                                                    argumentField="category" 
+                                                    type="spline"
+                                                />
+                                                <Series
+                                                    valueField="value"
+                                                    name={this.lang.t("amount")}
+                                                    hoverMode="allArgumentPoints"
+                                                    point={{
+                                                        hoverMode: "allArgumentPoints"
+                                                    }}
+                                                />
+                                                <ArgumentAxis
+                                                    allowDecimals={false}
+                                                    axisDivisionFactor={1}
+                                                    discreteAxisDivisionMode="crossLabels"
+                                                >
+                                                    <ChartLabel rotationAngle={45} />
+                                                </ArgumentAxis>
+                                                <ValueAxis>
+                                                    <Title text={this.lang.t("amount")} />
+                                                </ValueAxis>
+                                                <Legend 
+                                                    position="outside"
+                                                    horizontalAlignment="center"
+                                                    verticalAlignment="bottom"
+                                                    orientation="horizontal"
+                                                />
+                                                <Tooltip 
+                                                    enabled={true}
+                                                    zIndex={9999}
+                                                    customizeTooltip={(arg) => {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                            return { text: this.lang.t("noData") };
+                                                        }
+                                                        
+                                                        let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                        let dataItem = this.state.productDetailData[this.state.productDetailAnalysisType]?.find(item => 
+                                                            item.category === arg.argumentText
+                                                        )
+                                                        
+                                                        if (dataItem) 
+                                                        {
+                                                            if (dataItem.quantity) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
+                                                            }
+                                                            if (dataItem.saleCount) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                            }
+                                                        }
+                                                        
+                                                        return { text: tooltipText };
+                                                    }}
+                                                />
+                                            </Chart>
+                                        ) : this.state.productDetailChartType === 'bar' ? (
+                                            <Chart
+                                                key={this.state.popProductDetailResetKey}
+                                                id="productDetailBarChart"
+                                                title={this.state.productDetailData[this.state.productDetailAnalysisType]?.[0]?.title || this.lang.t("productDetailAnalysis")}
+                                                dataSource={this.state.productDetailData[this.state.productDetailAnalysisType] || []}
+                                                palette="Bright"
+                                                style={{minHeight: '400px'}}
+                                                visible={this.state.productDetailData[this.state.productDetailAnalysisType]?.length > 0}
+                                            >
+                                                <CommonSeriesSettings 
+                                                    argumentField="category" 
+                                                    type="bar"
+                                                    barPadding={0.1}
+                                                    minBarSize={3}
+                                                />
+                                                <Series
+                                                    valueField="value"
+                                                    name={this.lang.t("amount")}
+                                                    hoverMode="allArgumentPoints"
+                                                    point={{
+                                                        visible: true,
+                                                        hoverMode: "allArgumentPoints",
+                                                        color: "#1db2f5"
+                                                    }}
+                                                />
+                                                <ArgumentAxis
+                                                    allowDecimals={false}
+                                                    axisDivisionFactor={1}
+                                                    discreteAxisDivisionMode="crossLabels"
+                                                >
+                                                    <ChartLabel rotationAngle={45} wordWrap="none" textOverflow="ellipsis" />
+                                                    <Grid visible={true} />
+                                                </ArgumentAxis>
+                                                <ValueAxis>
+                                                    <Title text={this.lang.t("amount")} />
+                                                    <Grid visible={true} />
+                                                </ValueAxis>
+                                                <Legend 
+                                                    visible={true}
+                                                    position="outside"
+                                                    horizontalAlignment="center"
+                                                    verticalAlignment="bottom"
+                                                    orientation="horizontal"
+                                                />
+                                                <Tooltip 
+                                                    enabled={true}
+                                                    zIndex={9999}
+                                                    customizeTooltip={(arg) => {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                            return { text: this.lang.t("noData") };
+                                                        }
+                                                        
+                                                        let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                        let dataItem = this.state.productDetailData[this.state.productDetailAnalysisType]?.find(item => 
+                                                            item.category === arg.argumentText
+                                                        )
+                                                        
+                                                        if (dataItem) 
+                                                        {
+                                                            if (dataItem.quantity) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
+                                                            }
+                                                            if (dataItem.saleCount) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                            }
+                                                        }
+                                                        
+                                                        return {
+                                                            text: tooltipText
+                                                        };
+                                                    }}
+                                                />
+                                            </Chart>
+                                        ) : (
+                                            // Default line chart
+                                            <Chart
+                                                key={this.state.popProductDetailResetKey}
+                                                id="productDetailLineChart"
+                                                title={this.state.productDetailData[this.state.productDetailAnalysisType]?.[0]?.title || this.lang.t("productDetailAnalysis")}
+                                                dataSource={this.state.productDetailData[this.state.productDetailAnalysisType] || []}
+                                                palette="Bright"
+                                                style={{minHeight: '400px'}}
+                                                visible={this.state.productDetailData[this.state.productDetailAnalysisType]?.length > 0}
+                                            >
+                                                <CommonSeriesSettings 
+                                                    argumentField="category" 
+                                                    type="spline"
+                                                />
+                                                <Series
+                                                    valueField="value"
+                                                    name={this.lang.t("amount")}
+                                                    hoverMode="allArgumentPoints"
+                                                    point={{
+                                                        hoverMode: "allArgumentPoints"
+                                                    }}
+                                                />
+                                                <ArgumentAxis
+                                                    allowDecimals={false}
+                                                    axisDivisionFactor={1}
+                                                    discreteAxisDivisionMode="crossLabels"
+                                                >
+                                                    <ChartLabel rotationAngle={45} />
+                                                </ArgumentAxis>
+                                                <ValueAxis>
+                                                    <Title text={this.lang.t("amount")} />
+                                                </ValueAxis>
+                                                <Legend 
+                                                    position="outside"
+                                                    horizontalAlignment="center"
+                                                    verticalAlignment="bottom"
+                                                    orientation="horizontal"
+                                                />
+                                                <Tooltip 
+                                                    enabled={true}
+                                                    zIndex={9999}
+                                                    customizeTooltip={(arg) => {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                            return { text: this.lang.t("noData") };
+                                                        }
+                                                        
+                                                        let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                        let dataItem = this.state.productDetailData[this.state.productDetailAnalysisType]?.find(item => 
+                                                            item.category === arg.argumentText
+                                                        )
+                                                        
+                                                        if (dataItem) 
+                                                        {
+                                                            if (dataItem.quantity) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
+                                                            }
+                                                            if (dataItem.saleCount) 
+                                                            {
+                                                                tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                            }
+                                                        }
+                                                        
+                                                        return { text: tooltipText };
+                                                    }}
+                                                />
+                                            </Chart>
+                                        )
+                                    ) : (
+                                        <div style={{minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                            <span>{this.lang.t("noData")}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
