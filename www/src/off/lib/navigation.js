@@ -261,7 +261,7 @@ export default class Navigation extends React.PureComponent
                 />
                 <div>
                 <React.Fragment>
-                    <TabPanel id="tabPanel" width={300}>
+                    <TabPanel id="tabPanel" width={300} height={'100%'}>
                         <Item title={this.lang.t("menu")} icon="menu">
                             <TreeView id="Menu1" style={this.style.treeview}
                             items = {this.state.menu}

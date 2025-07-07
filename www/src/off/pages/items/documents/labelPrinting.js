@@ -4,13 +4,10 @@ import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
+import Toolbar, {Item} from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -19,11 +16,8 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
-
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 export default class labelPrinting extends React.PureComponent
 {
     constructor(props)
@@ -70,7 +64,6 @@ export default class labelPrinting extends React.PureComponent
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -136,7 +129,6 @@ export default class labelPrinting extends React.PureComponent
         this.pg_Docs.show()
         this.pg_Docs.onClick = (data) =>
         {
-            console.log(data)
             if(data.length > 0)
             {
                 this.getDoc(data[0].GUID)
@@ -205,7 +197,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
+                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
@@ -216,7 +208,7 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
-            if(tmpData.result.recordset.length > 0)
+            if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
@@ -252,7 +244,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
+                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
@@ -265,7 +257,7 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
-            if(tmpData.result.recordset.length > 0)
+            if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
@@ -353,7 +345,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
+                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
@@ -367,7 +359,7 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
-            if(tmpData.result.recordset.length > 0)
+            if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
@@ -901,12 +893,12 @@ export default class labelPrinting extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmLabelQeueu">
+                            <NdForm colCount={3} id="frmLabelQeueu">
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-5 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -928,12 +920,12 @@ export default class labelPrinting extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
+                                                <Validator name="txtRef" validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
-                                            </Validator>
+                                                </Validator>
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-7 ps-0">
                                             <NdTextBox id="txtRefno"  parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -958,18 +950,10 @@ export default class labelPrinting extends React.PureComponent
                                                     }
                                                 ]
                                             }
-                                            onChange={(async()=>
-                                            {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                if(tmpResult == 3)
-                                                {
-                                                    this.txtRefno.value = "";
-                                                }
-                                            }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
+                                                <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -1005,10 +989,10 @@ export default class labelPrinting extends React.PureComponent
                                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={250} />
                                         <Column dataField="STATUS" caption={this.t("pg_Docs.clmPrint")} width={150} />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtPage */}
-                                <Item>
-                                    <Label text={this.t("txtPage")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtPage")} alignment="right" />
                                     <NdTextBox id="txtPage" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
@@ -1016,11 +1000,11 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* Boş */}
-                                <EmptyItem/>
-                                <Item>
-                                    <Label text={this.t("design")} alignment="right" />
+                                <NdEmptyItem/>
+                                <NdItem>
+                                    <NdLabel text={this.t("design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList"
                                     dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
                                     displayExpr="DESIGN_NAME"                       
@@ -1048,22 +1032,22 @@ export default class labelPrinting extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtFreeLabel */}
-                                <Item>
-                                    <Label text={this.t("txtFreeLabel")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtFreeLabel")} alignment="right" />
                                     <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* txtBarcode */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     button=
                                     {
@@ -1185,10 +1169,10 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtLineCount */}
-                                <Item>
-                                    <Label text={this.t("txtLineCount")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtLineCount")} alignment="right" />
                                     <NdTextBox id="txtLineCount" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
@@ -1196,15 +1180,15 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
-                            </Form>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
-                                <Item location="after">
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmLabelQeueu" + this.tabIndex}
                                     onClick={async (e)=>
@@ -1311,8 +1295,8 @@ export default class labelPrinting extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdGrid parent={this} id={"grdLabelQueue"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1345,10 +1329,8 @@ export default class labelPrinting extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standard" />
-                                        <Paging defaultPageSize={20}/>
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Scrolling mode="virtual" />
+                                        <Paging enabled={false}/>
                                         <Export fileName={this.lang.t("menuOff.stk_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdLabelQueue.clmCuser")} width={100} allowEditing={false}/>
@@ -1362,8 +1344,8 @@ export default class labelPrinting extends React.PureComponent
                                         <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={80} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
                                     </NdGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
@@ -1447,81 +1429,89 @@ export default class labelPrinting extends React.PureComponent
                         title={this.t("popWizard.title")}
                         container={"#root"} 
                         width={'50%'}
-                        height={'50%'}
+                        height={'45%'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={2} height={'fit-content'}>
-                                <Item  colSpan={2}>
-                                    <NdCheckBox id="chkLastChange" parent={this} defaultValue={true} 
-                                    param={this.param.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.chkPromotionItems.setState({value:false});
-                                        this.chkSelectChange.setState({value:false});
-                                        this.chkSelectPriceChange.setState({value:false});
-                                        this.chkGroup.setState({value:false});
-                                        this.chkCustomer.setState({value:false});
-                                        this.chkAllItems.setState({value:false});
-                                    }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkLastChange")} alignment="right" />
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkSelectChange" parent={this} defaultValue={false} 
-                                    param={this.param.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
+                            <NdForm colCount={2} height={'fit-content'}>
+                                <NdItem  colSpan={2}>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkLastChange")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkLastChange" parent={this} defaultValue={true} 
+                                        param={this.param.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
                                         {
                                             this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
                                             this.chkSelectPriceChange.setState({value:false});
                                             this.chkGroup.setState({value:false});
                                             this.chkCustomer.setState({value:false});
                                             this.chkAllItems.setState({value:false});
                                         }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkSelectChange")} alignment="right" />
-                                </Item>
-                                <Item>
-                                <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkSelectPriceChange" parent={this} defaultValue={false} 
-                                    param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkSelectChange")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkSelectChange" parent={this} defaultValue={false} 
+                                        param={this.param.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
+                                            {
+                                                this.chkPromotionItems.setState({value:false});
+                                                this.chkLastChange.setState({value:false});
+                                                this.chkSelectPriceChange.setState({value:false});
+                                                this.chkGroup.setState({value:false});
+                                                this.chkCustomer.setState({value:false});
+                                                this.chkAllItems.setState({value:false});
+                                            }).bind(this)}
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkSelectPriceChange")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkSelectPriceChange" parent={this} defaultValue={false} 
+                                        param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
+                                            {
+                                                this.chkPromotionItems.setState({value:false});
+                                                this.chkLastChange.setState({value:false});
+                                                this.chkSelectChange.setState({value:false});
+                                                this.chkGroup.setState({value:false});
+                                                this.chkCustomer.setState({value:false});
+                                                this.chkAllItems.setState({value:false});
+                                            }).bind(this)}
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtSelectPriceChange"} type={'datetime'}/>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkGroup")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 
+                                        param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
                                         {
                                             this.chkPromotionItems.setState({value:false});
                                             this.chkLastChange.setState({value:false});
                                             this.chkSelectChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
                                             this.chkCustomer.setState({value:false});
                                             this.chkAllItems.setState({value:false});
                                         }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkSelectPriceChange")} alignment="right" />
-                                </Item>
-                                <Item>
-                                <NdDatePicker simple={true}  parent={this} id={"dtSelectPriceChange"} type={'datetime'}/>
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 
-                                    param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.chkPromotionItems.setState({value:false});
-                                        this.chkLastChange.setState({value:false});
-                                        this.chkSelectChange.setState({value:false});
-                                        this.chkSelectPriceChange.setState({value:false});
-                                        this.chkCustomer.setState({value:false});
-                                        this.chkAllItems.setState({value:false});
-                                    }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkGroup")} alignment="right" />
-                                </Item>
-                                <Item>
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
                                     <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
@@ -1530,24 +1520,26 @@ export default class labelPrinting extends React.PureComponent
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkCustomer" parent={this} defaultValue={false} 
-                                    param={this.param.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.chkPromotionItems.setState({value:false});
-                                        this.chkLastChange.setState({value:false});
-                                        this.chkSelectChange.setState({value:false});
-                                        this.chkSelectPriceChange.setState({value:false});
-                                        this.chkGroup.setState({value:false});
-                                        this.chkAllItems.setState({value:false});
-                                    }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkCustomer")} alignment="right" />
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkCustomer")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkCustomer" parent={this} defaultValue={false} 
+                                        param={this.param.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
+                                        {
+                                            this.chkPromotionItems.setState({value:false});
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkAllItems.setState({value:false});
+                                        }).bind(this)}
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
                                     <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh = {true}
                                     displayExpr="TITLE"                       
                                     valueExpr="GUID"
@@ -1556,44 +1548,48 @@ export default class labelPrinting extends React.PureComponent
                                     data={{source:{select:{query : "SELECT GUID,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkPromotionItems" parent={this} defaultValue={false} 
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.chkLastChange.setState({value:false});
-                                        this.chkSelectChange.setState({value:false});
-                                        this.chkGroup.setState({value:false});
-                                        this.chkSelectPriceChange.setState({value:false});
-                                        this.chkCustomer.setState({value:false});
-                                        this.chkAllItems.setState({value:false});
-                                    }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkPromotionItems")} alignment="right" />
-                                </Item>
-                                <Item>
-                                <div className="col-12">
-                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                </div>
-                                </Item>
-                                <Item>
-                                    <NdCheckBox id="chkAllItems" parent={this} defaultValue={false} 
-                                    param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.chkPromotionItems.setState({value:false});
-                                        this.chkLastChange.setState({value:false});
-                                        this.chkSelectChange.setState({value:false});
-                                        this.chkSelectPriceChange.setState({value:false});
-                                        this.chkGroup.setState({value:false});
-                                        this.chkCustomer.setState({value:false});
-                                    }).bind(this)}
-                                    />
-                                    <Label text={this.t("chkAllItems")} alignment="right" />
-                                </Item>
-                                <EmptyItem></EmptyItem>
-                                <Item colSpan={2}>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkPromotionItems")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkPromotionItems" parent={this} defaultValue={false} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
+                                            this.chkCustomer.setState({value:false});
+                                            this.chkAllItems.setState({value:false});
+                                        }).bind(this)}
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <div className="col-12">
+                                        <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                        <NdLabel text={this.t("chkAllItems")} alignment="right" width="300px" />
+                                        <NdCheckBox id="chkAllItems" parent={this} defaultValue={false} 
+                                        param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
+                                        onValueChanged={(async()=>
+                                        {
+                                            this.chkPromotionItems.setState({value:false});
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkCustomer.setState({value:false});
+                                        }).bind(this)}
+                                        />
+                                    </div>
+                                </NdItem>
+                                <NdEmptyItem/>
+                                <NdItem colSpan={2}>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("AddItems")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1620,57 +1616,57 @@ export default class labelPrinting extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>  
                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtBarcode.title")} //
-                        search={true}
-                        data = 
-                        {{
-                            source:
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
                             {
-                                select:
-                                {
-                                    query : "SELECT  *, " +
-                                            "CASE WHEN UNDER_UNIT_VALUE = 0 " +
-                                            "THEN 0 " +
-                                            "ELSE " +
-                                            "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                                            "END AS UNDER_UNIT_PRICE " +
-                                            "FROM ( SELECT ITEMS.GUID, " +
-                                            "ITEM_BARCODE.CDATE, " +
-                                            "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
-                                            "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
-                                            "ITEMS.CODE, " +
-                                            "ITEMS.NAME, " +
-                                            "ITEM_BARCODE.BARCODE, " +
-                                            "ITEMS.MAIN_GRP AS ITEM_GRP, " +
-                                            "ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
-                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-                                            "(SELECT [dbo].[FN_PRICE](ITEMS.GUID,ITEM_BARCODE.UNIT_FACTOR,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
-                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
-                                            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
-                                            "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID  " +
-                                            "WHERE  ITEM_BARCODE.BARCODE LIKE '%' + @BARCODE AND ITEMS.STATUS = 1  " +
-                                            " ) AS TMP ORDER BY CDATE DESC " ,
-                                    param : ['BARCODE:string|50']
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
-                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
-                        </NdPopGrid>
+                                query : "SELECT  *, " +
+                                        "CASE WHEN UNDER_UNIT_VALUE = 0 " +
+                                        "THEN 0 " +
+                                        "ELSE " +
+                                        "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
+                                        "END AS UNDER_UNIT_PRICE " +
+                                        "FROM ( SELECT ITEMS.GUID, " +
+                                        "ITEM_BARCODE.CDATE, " +
+                                        "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
+                                        "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
+                                        "ITEMS.CODE, " +
+                                        "ITEMS.NAME, " +
+                                        "ITEM_BARCODE.BARCODE, " +
+                                        "ITEMS.MAIN_GRP AS ITEM_GRP, " +
+                                        "ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
+                                        "(SELECT [dbo].[FN_PRICE](ITEMS.GUID,ITEM_BARCODE.UNIT_FACTOR,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
+                                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
+                                        "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID  " +
+                                        "WHERE  ITEM_BARCODE.BARCODE LIKE '%' + @BARCODE AND ITEMS.STATUS = 1  " +
+                                        " ) AS TMP ORDER BY CDATE DESC " ,
+                                param : ['BARCODE:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
                 </ScrollView>                
             </div>
         )

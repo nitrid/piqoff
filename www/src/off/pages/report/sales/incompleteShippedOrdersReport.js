@@ -16,7 +16,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import Button from 'devextreme-react/button.js';
+import Button from 'devextreme-react/button';
 
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';

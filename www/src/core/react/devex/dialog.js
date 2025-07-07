@@ -179,7 +179,6 @@ export const dialog = function()
         let tmpJsx = 
         (
             <NdDialog ref={tmpObj} id={arguments[0].id} container={"#root"}
-            position={{of:typeof arguments[0].position == 'undefined' ? '#root' : arguments[0].position}} 
             showTitle={arguments[0].showTitle} 
             title={arguments[0].title} 
             showCloseButton={arguments[0].showCloseButton}

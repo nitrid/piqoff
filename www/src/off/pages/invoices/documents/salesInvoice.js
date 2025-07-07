@@ -22,6 +22,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 import { LoadPanel } from 'devextreme-react/load-panel';
 
 export default class salesInvoice extends DocBase
@@ -89,9 +90,7 @@ export default class salesInvoice extends DocBase
 
             this.docObj.dt()[0].TYPE_NAME = 'FAC'
             this.grid = this["grdSlsInv"+this.tabIndex]
-            this.grid.devGrid.clearFilter("row")
-            this.dtDocDate.value = moment(new Date())
-            this.dtShipDate.value = moment(new Date())
+            this.grid.devGrid.clearFilter("row")            
             
             this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
@@ -102,6 +101,9 @@ export default class salesInvoice extends DocBase
             tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
             tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+
+            this.dtDocDate.value = moment(new Date())
+            this.dtShipDate.value = moment(new Date())
 
             this.txtRef.readOnly = false
             this.txtRefno.readOnly = true
@@ -115,22 +117,22 @@ export default class salesInvoice extends DocBase
                 START_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"), 
                 FINISH_DATE : moment(this.dtDocDate.value).format("YYYY-MM-DD"),
             })
-            setTimeout(async() => {
+            setTimeout(async() => 
+            {
                 let tmpQuery = 
                 {
                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
                 }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                if(this.txtRefno.value == 0)
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
                 {
+                    if(this.txtRefno.value == 0)
+                    {
                         this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                         this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                }
+                    }
                 }
             }, 500);
-
 
             this.pg_txtItemsCode.on('showing',()=>
             {
@@ -1153,10 +1155,10 @@ export default class salesInvoice extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmDoc">
+                            <NdForm colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
@@ -1230,10 +1232,10 @@ export default class salesInvoice extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
@@ -1257,10 +1259,10 @@ export default class salesInvoice extends DocBase
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <Item>
-                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtDocNo")} alignment="right" />
                                     <NdTextBox id="txtDocNo" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
@@ -1271,10 +1273,10 @@ export default class salesInvoice extends DocBase
                                     }}
                                     > 
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
@@ -1425,10 +1427,10 @@ export default class salesInvoice extends DocBase
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
@@ -1436,10 +1438,10 @@ export default class salesInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     />
-                                </Item> 
+                                </NdItem> 
                                 {/* cmbPricingList */}
-                                <Item>
-                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbPricingList")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
                                     displayExpr="NAME"
                                     valueExpr="NO"
@@ -1455,10 +1457,10 @@ export default class salesInvoice extends DocBase
                                     }).bind(this)}
                                     >
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
@@ -1471,10 +1473,10 @@ export default class salesInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtShipDate */}
-                                <Item>
-                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
@@ -1486,10 +1488,10 @@ export default class salesInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                  {/* öEDEME TİPİ */}
-                                <Item>
-                                    <Label text={this.t("cmbExpiryType")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbExpiryType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbExpiryType" height='fit-content' dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -1499,10 +1501,10 @@ export default class salesInvoice extends DocBase
                                        
                                     }).bind(this)}
                                     />
-                                </Item>
+                                </NdItem>
                                 {/* txtBarcode */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -1614,10 +1616,10 @@ export default class salesInvoice extends DocBase
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* Vade Tarih */}
-                                <Item>
-                                    <Label text={this.t("dtExpDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
                                     >
@@ -1625,9 +1627,9 @@ export default class salesInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
-                                <EmptyItem/>                                
-                            </Form>
+                                </NdItem>
+                                <NdEmptyItem/>                                
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
@@ -1642,6 +1644,7 @@ export default class salesInvoice extends DocBase
                                     validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(e.validationGroup)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             if(typeof this.docObj.docItems.dt()[0] != 'undefined')

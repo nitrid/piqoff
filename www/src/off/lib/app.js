@@ -732,7 +732,7 @@ export default class App extends React.PureComponent
                     </NdPopUp>
                 </div> 
                 <div>
-                    <NdDialog parent={this} id={"msgConnection"} visible={false} showCloseButton={false} container={"#root"} width={'500'} height={'70'} position={{of:'#root'}}>
+                    <NdDialog parent={this} id={"msgConnection"} visible={false} showCloseButton={false} container={"#root"} width={'500'} height={'70'}>
                         <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnection.msg")}</div>
                     </NdDialog>
                 </div>
