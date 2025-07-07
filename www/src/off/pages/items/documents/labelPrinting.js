@@ -1225,7 +1225,7 @@ export default class labelPrinting extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    filterRow={{visible:true}} 
+                                    filterRow={{visible:true}}
                                     paging={{enabled:false}}
                                     height={'600'} 
                                     width={'100%'}
@@ -1253,6 +1253,7 @@ export default class labelPrinting extends React.PureComponent
                                         this.calculateCount()
                                     }}
                                     >
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="virtual" />
                                         <Paging enabled={false}/>
@@ -1262,8 +1263,8 @@ export default class labelPrinting extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
                                         <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={450} />
-                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")} allowEditing={false}  width={180}/>
-                                        <Column dataField="ORGINS" caption={this.t("grdLabelQueue.clmOrgins")}   width={180}/>
+                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")} allowEditing={false} width={180}/>
+                                        <Column dataField="ORGINS" caption={this.t("grdLabelQueue.clmOrgins")} width={180}/>
                                         <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
                                         <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
                                         <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={80} />
@@ -1288,14 +1289,14 @@ export default class labelPrinting extends React.PureComponent
                         {
                             select:
                             {
-                                query : `SELECT  *, 
+                                query : `SELECT *, 
                                         CASE WHEN UNDER_UNIT_VALUE =0 
                                         THEN 0 
                                         ELSE 
                                         ROUND((PRICE / UNDER_UNIT_VALUE),2) 
                                         END AS UNDER_UNIT_PRICE 
-                                        FROM  (  SELECT GUID,  
-                                        CODE,   " +
+                                        FROM (SELECT GUID,  
+                                        CODE, 
                                         NAME,  
                                         ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  
                                         ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,  

@@ -115,3 +115,15 @@
 {
     height: fit-content;
 }
+.dx-menu-base .dx-menu-item 
+{
+    height: auto !important;
+}
+.dx-menu-base .dx-menu-item .dx-menu-item-content 
+{
+    height: auto !important;
+}
+.dx-menu-base .dx-menu-item-wrapper
+{
+    height: auto !important;
+}
