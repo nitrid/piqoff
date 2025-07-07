@@ -117,7 +117,10 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
+            query : `SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,
+                    CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,
+                    ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT 
+                    FROM LABEL_QUEUE WHERE STATUS IN(${pType}) AND REF <> 'SPECIAL' ` 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -140,7 +143,10 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
+            query : `SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,
+                    CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,
+                    ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT 
+                    FROM LABEL_QUEUE WHERE STATUS IN(${pType}) AND REF <> 'SPECIAL' ` 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -162,7 +168,7 @@ export default class labelPrinting extends React.PureComponent
                     await lblCombineObj.load({GUID:data[i].GUID});
                     let updateQuery = 
                     {
-                        query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+                        query:  `UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID`,
                         param:  ['GUID:string|50'],
                         value:  [data[i].GUID]
                     }
@@ -186,25 +192,25 @@ export default class labelPrinting extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                "FROM ITEMS_VW_01  " +
-                "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR  (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP   " ,
+                query : `SELECT *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP AS ITEM_GRP,   
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,   
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                        FROM ITEMS_VW_01  
+                        WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP`,
             }
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -220,38 +226,32 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkSelectChange.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                "FROM ITEMS_VW_01  " +
-                "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR @DATE < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP ", 
+                query : `SELECT  *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP AS ITEM_GRP,   
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,   
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                        FROM ITEMS_VW_01  
+                        WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR @DATE < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP`, 
                 param : ['DATE:datetime'],
                 value : [this.dtSelectChange.value]
             }
@@ -269,47 +269,40 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkSelectPriceChange.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL, " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                "FROM ITEMS_VW_01  " +
-                "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) AND STATUS = 1) AS TMP ", 
+                query : `SELECT  *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, 
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP AS ITEM_GRP,  
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,  
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                        FROM ITEMS_VW_01  
+                        WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) AND STATUS = 1) AS TMP`, 
                 param : ['DATE:datetime'],
                 value : [this.dtSelectPriceChange.value]
             }
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
-            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -321,39 +314,33 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkGroup.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, " +
-                "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL " +
-                "FROM ITEMS_VW_01  " +
-                "WHERE  MAIN_GRP = @GROUP AND STATUS = 1) AS TMP ", 
+                query : `SELECT  *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP AS ITEM_GRP,  
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,  
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL 
+                        FROM ITEMS_VW_01  
+                        WHERE MAIN_GRP = @GROUP AND STATUS = 1) AS TMP`, 
                 param : ['GROUP:string|25'],
                 value : [this.cmbGroup.value]
             }
@@ -371,38 +358,32 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkCustomer.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                "FROM ITEMS_VW_01  " +
-                "WHERE  ISNULL((SELECT TOP 1 [CODE] FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = @CUSTOMER),'') <> '' AND STATUS = 1) AS TMP ", 
+                query : `SELECT  *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        MAIN_GRP AS ITEM_GRP,   
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,  
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                        FROM ITEMS_VW_01  
+                        WHERE  ISNULL((SELECT TOP 1 [CODE] FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = @CUSTOMER),'') <> '' AND STATUS = 1) AS TMP`, 
                 param : ['CUSTOMER:string|50'],
                 value : [this.cmbCustomer.value]
             }
@@ -420,38 +401,32 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkPromotionItems.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT *,  " +
-                "CASE WHEN UNDER_UNIT_VALUE =0    " +
-                "THEN 0   " +
-                "ELSE   " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) END AS UNDER_UNIT_PRICE FROM   " +
-                "(SELECT   " +
-                "COND_ITEM_GUID AS GUID,  " +
-                "CDATE AS CDATE,  " +
-                "COND_ITEM_CODE AS CODE,  " +
-                "COND_ITEM_NAME AS NAME,  " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY LDATE DESC),COND_ITEM_CODE) AS MULTICODE,    " +
-                "ISNULL((SELECT MAIN_GRP FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP,  " +
-                "ISNULL((SELECT MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP_NAME,  " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = (SELECT ORGINS FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID)),'') AS ORGINS,  " +
-                "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = [PROMO_COND_APP_VW_01].COND_ITEM_GUID),'') AS UNDER_UNIT_SYMBOL, " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID),0) AS UNDER_UNIT_VALUE,  " +
-                "CASE APP_TYPE WHEN 5 THEN APP_AMOUNT WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE " +
-                "FROM [dbo].[PROMO_COND_APP_VW_01]  WHERE COND_TYPE = 0 AND APP_TYPE IN(0,5) AND START_DATE >= @FIRST_DATE AND FINISH_DATE <= @LAST_DATE) AS TMP",
+                query : `SELECT *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) END AS UNDER_UNIT_PRICE FROM 
+                        (SELECT 
+                        COND_ITEM_GUID AS GUID, 
+                        CDATE AS CDATE, 
+                        COND_ITEM_CODE AS CODE, 
+                        COND_ITEM_NAME AS NAME, 
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY CDATE DESC),'') AS BARCODE, 
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY LDATE DESC),COND_ITEM_CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 MAIN_GRP FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP, 
+                        ISNULL((SELECT TOP 1 MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP_NAME, 
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = (SELECT TOP 1 ORGINS FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID)),'') AS ORGINS, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = [PROMO_COND_APP_VW_01].COND_ITEM_GUID),'') AS UNDER_UNIT_SYMBOL,
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID),0) AS UNDER_UNIT_VALUE, 
+                        CASE APP_TYPE WHEN 5 THEN APP_AMOUNT WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) - (SELECT [dbo].[FN_PRICE](COND_ITEM_GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ((APP_AMOUNT / 100)),2) END AS PRICE
+                        FROM [dbo].[PROMO_COND_APP_VW_01]  WHERE COND_TYPE = 0 AND APP_TYPE IN(0,5) AND START_DATE >= @FIRST_DATE AND FINISH_DATE <= @LAST_DATE) AS TMP`,
                 param : ['FIRST_DATE:date','LAST_DATE:date'],
                 value : [this.dtDate.startDate,this.dtDate.endDate]
             }
@@ -469,38 +444,31 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }   
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
         else if(this.chkAllItems.value == true)
         {
             let tmpQuery = 
             {
-                query :"SELECT  *, " + 
-                "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                "THEN 0 " +
-                "ELSE " +
-                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                "END AS UNDER_UNIT_PRICE " +
-                "FROM  (  SELECT GUID,   " +
-                "CDATE, " +
-                "CODE,   " +
-                "NAME,   " +
-                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                "MAIN_GRP AS ITEM_GRP,   " +
-                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                "FROM ITEMS_VW_01  WHERE STATUS = 1" +
-                " ) AS TMP ", 
+                query : `SELECT  *, 
+                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                        THEN 0 
+                        ELSE 
+                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                        END AS UNDER_UNIT_PRICE 
+                        FROM (SELECT GUID,   
+                        CDATE, 
+                        CODE,   
+                        NAME,   
+                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   
+                        ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                        MAIN_GRP AS ITEM_GRP,  
+                        MAIN_GRP_NAME AS ITEM_GRP_NAME,  
+                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                        FROM ITEMS_VW_01  WHERE STATUS = 1) AS TMP`, 
             }
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -516,13 +484,7 @@ export default class labelPrinting extends React.PureComponent
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
             }
         }
     }
@@ -535,85 +497,78 @@ export default class labelPrinting extends React.PureComponent
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        await this.pg_txtItemsCode.setVal(e.value)
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            await this.pg_txtItemsCode.setVal(e.value)
-                            this.pg_txtItemsCode.onClick = async(data) =>
+                            if(data.length == 1)
                             {
-                                if(data.length == 1)
+                                this.addItem(data[0],e.rowIndex)
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    this.addItem(data[0],e.rowIndex)
-                                }
-                                else if(data.length > 1)
-                                {
-                                    for (let i = 0; i < data.length; i++) 
+                                    if(i == 0)
                                     {
-                                        if(i == 0)
-                                        {
-                                            this.addItem(data[i],e.rowIndex)
-                                        }
-                                        else
-                                        {
-                                            let tmpDocItems = {...this.lblObj.empty}
-                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                            this.lblObj.addEmpty(tmpDocItems)
-                                            this.addItem(data[i],this.lblObj.dt().length - 1)
-                                        }
+                                        this.addItem(data[i],e.rowIndex)
+                                    }
+                                    else
+                                    {
+                                        let tmpDocItems = {...this.lblObj.empty}
+                                        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                        this.lblObj.addEmpty(tmpDocItems)
+                                        this.addItem(data[i],this.lblObj.dt().length - 1)
                                     }
                                 }
                             }
                         }
-                    }}
-                    onValueChanged={(v)=>
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
+                onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
                     {
-                        e.value = v.value
-                    }}
-                    onChange={(async(r)=>
-                    {
-                        if(typeof r.event.isTrusted == 'undefined')
+                        let tmpQuery = 
                         {
-                            let tmpQuery = 
-                            {
-                                query :"SELECT  *, " +
-                                "CASE WHEN UNDER_UNIT_VALUE =0 " +
-                                "THEN 0 " +
-                                "ELSE " +
-                                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                                "END AS UNDER_UNIT_PRICE " +
-                                "FROM (  SELECT GUID,  " +
-                                "CODE,  " +
-                                "NAME,  " +
-                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
-                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                                "MAIN_GRP AS ITEM_GRP,  " +
-                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
-                                "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  ," +
-                                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE CODE = @CODE  ",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                
-                                this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj);
-                            }
+                            query : `SELECT  *, 
+                                    CASE WHEN UNDER_UNIT_VALUE =0 
+                                    THEN 0 
+                                    ELSE 
+                                    ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                                    END AS UNDER_UNIT_PRICE 
+                                    FROM (  SELECT GUID, 
+                                    CODE, 
+                                    NAME, 
+                                    ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE, 
+                                    ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,  
+                                    ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, 
+                                    MAIN_GRP AS ITEM_GRP, 
+                                    MAIN_GRP_NAME AS ITEM_GRP_NAME, 
+                                    (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE,
+                                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
+                                    FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE CODE = @CODE`,
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
                         }
-                    }).bind(this)}
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
+                        }
+                    }
+                }).bind(this)}
                 button=
                 {
                     [
@@ -668,7 +623,7 @@ export default class labelPrinting extends React.PureComponent
                 App.instance.setState({isExecute:false})
                 let tmpConfObj = 
                 {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'240px',
                     button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
                 }
@@ -752,17 +707,17 @@ export default class labelPrinting extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnWizard" parent={this} icon="tips" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.popWizard.show()
-                                        }}/>
+                                    onClick={()=>
+                                    {
+                                        this.popWizard.show()
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.lblObj.dt()[0].GUID)
-                                        }}/>
+                                    onClick={()=>
+                                    {
+                                        this.getDoc(this.lblObj.dt()[0].GUID)
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
@@ -782,7 +737,7 @@ export default class labelPrinting extends React.PureComponent
 
                                         let tmpConfObj =
                                         {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'220px',
                                             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                         }
@@ -791,24 +746,16 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             let Data = {data:this.lblObj.dt().toArray()}
                                             this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
-
-                                            let tmpConfObj1 =
-                                            {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                            }
                                             
                                             if((await this.mainLblObj.save()) == 0)
-                                            {                       
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                            {
+                                                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success'})
                                                 this.btnSave.setState({disabled:true});
                                                 this.btnNew.setState({disabled:false});
                                             }
                                             else
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({message:this.t("msgSaveResult.msgFailed"),type:'error'})
                                             }
                                         }
                                     }}/>
@@ -821,9 +768,9 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query:  "SELECT *, " +
-                                                        "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                        "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
+                                                query:  `SELECT *, 
+                                                        ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+                                                        FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID = @GUID`,
                                                 param:  ['GUID:string|50','DESIGN:string|25'],
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
@@ -846,7 +793,7 @@ export default class labelPrinting extends React.PureComponent
                                             });
                                             let updateQuery = 
                                             {
-                                                query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+                                                query:  `UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID`,
                                                 param:  ['GUID:string|50'],
                                                 value:  [this.mainLblObj.dt()[0].GUID]
                                             }
@@ -854,13 +801,7 @@ export default class labelPrinting extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning'})
                                         }
                                     }}/>
                                 </Item>
@@ -876,7 +817,7 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'220px',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }                                      
@@ -908,7 +849,7 @@ export default class labelPrinting extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF`,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -1114,28 +1055,28 @@ export default class labelPrinting extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT  *, " +
-                                            "CASE WHEN UNDER_UNIT_VALUE =0 " +
-                                            "THEN 0 " +
-                                            "ELSE " +
-                                            "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                                            "END AS UNDER_UNIT_PRICE " +
-                                            "FROM ( SELECT ITEMS.GUID, " +
-                                            "ITEM_BARCODE.CDATE, " +
-                                            "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
-                                            "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
-                                            "ITEMS.CODE, " +
-                                            "ITEMS.NAME, " +
-                                            "ITEM_BARCODE.BARCODE, " +
-                                            "ITEMS.MAIN_GRP AS ITEM_GRP, " +
-                                            "ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
-                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-                                            "(SELECT [dbo].[FN_PRICE](ITEMS.GUID,ISNULL(ITEM_BARCODE.UNIT_FACTOR,1),dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
-                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
-                                            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
-                                            "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID  " +
-                                            "WHERE ((ITEMS.CODE = @CODE) OR (ITEM_BARCODE.BARCODE = @CODE)) AND ITEMS.STATUS = 1 " +
-                                            " ) AS TMP ORDER BY CDATE DESC " ,
+                                            query : `SELECT *, 
+                                                    CASE WHEN UNDER_UNIT_VALUE =0 
+                                                    THEN 0 
+                                                    ELSE 
+                                                    ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                                                    END AS UNDER_UNIT_PRICE 
+                                                    FROM (SELECT ITEMS.GUID, 
+                                                    ITEM_BARCODE.CDATE, 
+                                                    ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,  
+                                                    ISNULL((SELECT TOP 1 NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, 
+                                                    ITEMS.CODE, 
+                                                    ITEMS.NAME, 
+                                                    ITEM_BARCODE.BARCODE, 
+                                                    ITEMS.MAIN_GRP AS ITEM_GRP, 
+                                                    ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, 
+                                                    ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, 
+                                                    (SELECT [dbo].[FN_PRICE](ITEMS.GUID,ISNULL(ITEM_BARCODE.UNIT_FACTOR,1),dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE, 
+                                                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, 
+                                                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL 
+                                                    FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID 
+                                                    WHERE ((ITEMS.CODE = @CODE) OR (ITEM_BARCODE.BARCODE = @CODE)) AND ITEMS.STATUS = 1 
+                                                    ) AS TMP ORDER BY CDATE DESC `,
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -1156,13 +1097,7 @@ export default class labelPrinting extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                            }                               
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
                                         }
                                         
                                     }).bind(this)}
@@ -1267,15 +1202,7 @@ export default class labelPrinting extends React.PureComponent
                                         }
                                         else
                                         {
-                                            // let tmpConfObj =
-                                            // {
-                                            //     id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            //     button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                            //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            // }
-                                            
-                                            // await dialog(tmpConfObj);
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'error',displayTime:1000})
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
                                         }
                                     }}/>
                                     <Button text={this.t("btnLabelCombine")}
@@ -1288,13 +1215,7 @@ export default class labelPrinting extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
                                         }
                                     }}/>
                                 </NdItem>
@@ -1310,7 +1231,8 @@ export default class labelPrinting extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
-                                    onRowUpdated={async(e)=>{
+                                    onRowUpdated={async(e)=>
+                                    {
                                         if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
                                         {
                                             e.key.UNDER_UNIT_PRICE = parseFloat(((Number(e.key.PRICE) / Number(e.key.UNDER_UNIT_VALUE )) ).toFixed(3))
@@ -1326,7 +1248,8 @@ export default class labelPrinting extends React.PureComponent
                                             this.mainLblObj.save()
                                         }, 500);
                                     }}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={(e)=>
+                                    {
                                         this.calculateCount()
                                     }}
                                     >
@@ -1365,26 +1288,26 @@ export default class labelPrinting extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT  *,  " +
-                                        "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                                        "THEN 0 " +
-                                        "ELSE " +
-                                        "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                                        "END AS UNDER_UNIT_PRICE " +
-                                        "FROM  (  SELECT GUID,   " +
-                                        "CODE,   " +
-                                        "NAME,   " +
-                                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                                        "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
-                                        "MAIN_GRP AS ITEM_GRP,   " +
-                                        "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS_VW_01.ORGINS),'') AS ORGINS, " +
-                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
-                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
-                                        "(SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE  , " +
-                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, " +
-                                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL " +
-                                        "FROM ITEMS_VW_01 WHERE  STATUS = 1) AS TMP " +
-                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : `SELECT  *, 
+                                        CASE WHEN UNDER_UNIT_VALUE =0 
+                                        THEN 0 
+                                        ELSE 
+                                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                                        END AS UNDER_UNIT_PRICE 
+                                        FROM  (  SELECT GUID,  
+                                        CODE,   " +
+                                        NAME,  
+                                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  
+                                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,  
+                                        MAIN_GRP AS ITEM_GRP,  
+                                        ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS_VW_01.ORGINS),'') AS ORGINS, 
+                                        MAIN_GRP_NAME AS ITEM_GRP_NAME, 
+                                        ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, 
+                                        (SELECT [dbo].[FN_PRICE](GUID,1,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE, 
+                                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, 
+                                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL 
+                                        FROM ITEMS_VW_01 WHERE  STATUS = 1) AS TMP 
+                                        WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)`,
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -1460,14 +1383,14 @@ export default class labelPrinting extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
                                         onValueChanged={(async()=>
-                                            {
-                                                this.chkPromotionItems.setState({value:false});
-                                                this.chkLastChange.setState({value:false});
-                                                this.chkSelectPriceChange.setState({value:false});
-                                                this.chkGroup.setState({value:false});
-                                                this.chkCustomer.setState({value:false});
-                                                this.chkAllItems.setState({value:false});
-                                            }).bind(this)}
+                                        {
+                                            this.chkPromotionItems.setState({value:false});
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkCustomer.setState({value:false});
+                                            this.chkAllItems.setState({value:false});
+                                        }).bind(this)}
                                         />
                                     </div>
                                 </NdItem>
@@ -1481,14 +1404,14 @@ export default class labelPrinting extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
                                         onValueChanged={(async()=>
-                                            {
-                                                this.chkPromotionItems.setState({value:false});
-                                                this.chkLastChange.setState({value:false});
-                                                this.chkSelectChange.setState({value:false});
-                                                this.chkGroup.setState({value:false});
-                                                this.chkCustomer.setState({value:false});
-                                                this.chkAllItems.setState({value:false});
-                                            }).bind(this)}
+                                        {
+                                            this.chkPromotionItems.setState({value:false});
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkCustomer.setState({value:false});
+                                            this.chkAllItems.setState({value:false});
+                                        }).bind(this)}
                                         />
                                     </div>
                                 </NdItem>
@@ -1514,7 +1437,7 @@ export default class labelPrinting extends React.PureComponent
                                     </div>
                                 </NdItem>
                                 <NdItem>
-                                    <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh={true}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value=""
@@ -1542,7 +1465,7 @@ export default class labelPrinting extends React.PureComponent
                                     </div>
                                 </NdItem>
                                 <NdItem>
-                                    <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh={true}
                                     displayExpr="TITLE"                       
                                     valueExpr="GUID"
                                     value=""
@@ -1599,7 +1522,7 @@ export default class labelPrinting extends React.PureComponent
                                             {       
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'240px',
                                                     button:[{id:"btn01",caption:this.t("msgAddItems.btn01"),location:'before'},{id:"btn02",caption:this.t("msgAddItems.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItems.msg")}</div>)
                                                 }
@@ -1629,7 +1552,7 @@ export default class labelPrinting extends React.PureComponent
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
-                    title={this.t("pg_txtBarcode.title")} //
+                    title={this.t("pg_txtBarcode.title")}
                     search={true}
                     data = 
                     {{
@@ -1637,28 +1560,27 @@ export default class labelPrinting extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT  *, " +
-                                        "CASE WHEN UNDER_UNIT_VALUE = 0 " +
-                                        "THEN 0 " +
-                                        "ELSE " +
-                                        "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                                        "END AS UNDER_UNIT_PRICE " +
-                                        "FROM ( SELECT ITEMS.GUID, " +
-                                        "ITEM_BARCODE.CDATE, " +
-                                        "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
-                                        "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
-                                        "ITEMS.CODE, " +
-                                        "ITEMS.NAME, " +
-                                        "ITEM_BARCODE.BARCODE, " +
-                                        "ITEMS.MAIN_GRP AS ITEM_GRP, " +
-                                        "ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
-                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-                                        "(SELECT [dbo].[FN_PRICE](ITEMS.GUID,ITEM_BARCODE.UNIT_FACTOR,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
-                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
-                                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
-                                        "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID  " +
-                                        "WHERE  ITEM_BARCODE.BARCODE LIKE '%' + @BARCODE AND ITEMS.STATUS = 1  " +
-                                        " ) AS TMP ORDER BY CDATE DESC " ,
+                                query : `SELECT *, 
+                                        CASE WHEN UNDER_UNIT_VALUE = 0 
+                                        THEN 0 
+                                        ELSE 
+                                        ROUND((PRICE / UNDER_UNIT_VALUE),2) 
+                                        END AS UNDER_UNIT_PRICE 
+                                        FROM ( SELECT ITEMS.GUID, 
+                                        ITEM_BARCODE.CDATE, 
+                                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE, 
+                                        ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, 
+                                        ITEMS.CODE, 
+                                        ITEMS.NAME, 
+                                        ITEM_BARCODE.BARCODE, 
+                                        ITEMS.MAIN_GRP AS ITEM_GRP, 
+                                        ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, 
+                                        ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, 
+                                        (SELECT [dbo].[FN_PRICE](ITEMS.GUID,ITEM_BARCODE.UNIT_FACTOR,dbo.GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE, 
+                                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, 
+                                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL 
+                                        FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID 
+                                        WHERE ITEM_BARCODE.BARCODE LIKE '%' + @BARCODE AND ITEMS.STATUS = 1) AS TMP ORDER BY CDATE DESC`,
                                 param : ['BARCODE:string|50']
                             },
                             sql:this.core.sql
@@ -1669,7 +1591,7 @@ export default class labelPrinting extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>                
             </div>
         )
