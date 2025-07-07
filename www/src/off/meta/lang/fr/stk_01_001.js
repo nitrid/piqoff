@@ -59,6 +59,7 @@ const stk_01_001 =
     cmbAnlysType : "Type", 
     txtCustoms : "Code de la douane", 
     txtGenus : "Type de produit",
+    txtRayon : "Rayon",
     chkTaxSugarControl : "Taxe Sucre",
     cmbAnlysTypeData : 
     {
@@ -371,6 +372,12 @@ const stk_01_001 =
     pg_txtGenre : 
     {
         title : "Type de produit",  
+        clmCode : "Code", 
+        clmName : "Nom"  
+    },
+    pg_rayonCode : 
+    {
+        title : "Sélection du rayon",  
         clmCode : "Code", 
         clmName : "Nom"  
     },

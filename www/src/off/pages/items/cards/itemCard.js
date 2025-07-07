@@ -2412,6 +2412,60 @@ export default class itemCard extends React.PureComponent
                                                         <Column dataField="NAME" caption={this.t("pg_customsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                     </NdPopGrid>
                                                 </Item>
+                                                 {/* txtRayon */}
+                                                 <Item>                                    
+                                                    <Label text={this.t("txtRayon")} alignment="right" />
+                                                    <NdTextBox id="txtRayon" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"RAYON_NAME"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                                                    onValueChanged={async (e)=>
+                                                    {
+                                                        let tmpControl = this.stringControle(e.event.key)
+                                                        if(tmpControl)
+                                                        {
+                                                            this.txtRayon.value = e.previousValue
+                                                        }
+                                                    }}
+                                                    button=
+                                                    {
+                                                        [
+                                                            {
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
+                                                                {
+                                                                    this.pg_rayonCode.show()
+                                                                    this.pg_rayonCode.onClick = (data) =>
+                                                                    {
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.itemsObj.dt()[0].RAYON_GUID = data[0].GUID
+                                                                            this.itemsObj.dt()[0].RAYON_CODE = data[0].CODE
+                                                                            this.itemsObj.dt()[0].RAYON_NAME = data[0].NAME
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                        ]
+                                                    }
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*RAYON KODU POPUP */}
+                                                    <NdPopGrid id={"pg_rayonCode"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_rayonCode.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM RAYON WHERE DELETED = 0"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_rayonCode.clmCode")} width={'30%'} />
+                                                        <Column dataField="NAME" caption={this.t("pg_rayonCode.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
                                                 {/* chkPartiLot */}
                                                 <Item>
                                                         <Label text ={this.t("chkPartiLot")} alignment="right"/>

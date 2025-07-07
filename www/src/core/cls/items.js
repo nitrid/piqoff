@@ -42,7 +42,10 @@ export class itemsCls
             FAVORI : false, 
             CATALOG : false,
             PARTILOT : false,
-            TAX_SUGAR : false
+            TAX_SUGAR : false,
+            RAYON_GUID : '00000000-0000-0000-0000-000000000000',
+            RAYON_CODE : '',
+            RAYON_NAME : ''
         }
 
         this.itemLang = new itemLangCls()
@@ -90,7 +93,7 @@ export class itemsCls
                     "@SUB = @PSUB, " + 
                     "@ORGINS = @PORGINS, " + 
                     "@SECTOR = @PSECTOR, " + 
-                    "@RAYON = @PRAYON, " + 
+                    "@RAYON_GUID = @PRAYON_GUID, " + 
                     "@SHELF = @PSHELF, " +                    
                     "@WEIGHING = @PWEIGHING, " +
                     "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
@@ -107,9 +110,9 @@ export class itemsCls
                     "@TAX_SUGAR = @PTAX_SUGAR " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON_GUID:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
                      'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit','PPARTILOT:bit','PTAX_SUGAR:bit'],
-            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
+            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON_GUID',
                        'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG','PARTILOT','TAX_SUGAR'],
             local : 
             {
@@ -134,7 +137,7 @@ export class itemsCls
                         SUB_GRP : {map:'SUB_GRP'},
                         ORGINS : {map:'ORGINS'},
                         SECTOR : {map:'SECTOR'},
-                        RAYON : {map:'RAYON'},
+                        RAYON_GUID : {map:'RAYON_GUID'},
                         SHELF : {map:'SHELF'},
                         WEIGHING : {map:'WEIGHING'},
                         SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
@@ -165,7 +168,7 @@ export class itemsCls
                     "@SUB = @PSUB, " + 
                     "@ORGINS = @PORGINS, " + 
                     "@SECTOR = @PSECTOR, " + 
-                    "@RAYON = @PRAYON, " + 
+                    "@RAYON_GUID = @PRAYON_GUID, " + 
                     "@SHELF = @PSHELF, " +                    
                     "@WEIGHING = @PWEIGHING, " +
                     "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
@@ -182,9 +185,9 @@ export class itemsCls
                     "@TAX_SUGAR = @PTAX_SUGAR " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON_GUID:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit',
                      'PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50','PGENRE:string|25','PPIQPOID:bit','PFAVORI:bit','PCATALOG:bit','PPARTILOT:bit','PTAX_SUGAR:bit'],
-            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
+            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON_GUID',
                        'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE','GENRE','PIQPOID','FAVORI','CATALOG','PARTILOT','TAX_SUGAR'],
             local : 
             {
@@ -207,7 +210,7 @@ export class itemsCls
                     SUB : {map:'SUB'},
                     ORGINS : {map:'ORGINS'},
                     SECTOR : {map:'SECTOR'},
-                    RAYON : {map:'RAYON'},
+                    RAYON_GUID : {map:'RAYON_GUID'},
                     SHELF : {map:'SHELF'},
                     WEIGHING : {map:'WEIGHING'},
                     SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
