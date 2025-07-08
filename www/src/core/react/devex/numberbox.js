@@ -190,8 +190,10 @@ export default class NdNumberBox extends Base
                 }
             }
         }
-        
-        this.setState({value:e})        
+        if(!this.isUnmounted)
+        {
+            this.setState({value:e})        
+        }
     } 
     get readOnly()
     {
@@ -199,7 +201,10 @@ export default class NdNumberBox extends Base
     }
     set readOnly(e)
     {
-        this.setState({readOnly:e})
+        if(!this.isUnmounted)
+        {
+            this.setState({readOnly:e})
+        }
     }
     focus()
     {

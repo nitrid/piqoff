@@ -59,17 +59,26 @@ export default class NdBase extends React.PureComponent
                         {
                             if(this.constructor.name == 'NdTextBox')
                             {
-                                this.setState({displayValue:e.rowData[this.props.dt.display]})
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({displayValue:e.rowData[this.props.dt.display]})
+                                }
                             }
                         }
 
                         if(this.constructor.name == 'NdImageUpload')
                         {
-                            this.setState({textVisible: false,isDropZoneActive: false,imageSource: e.data[Object.keys(e.data)[0]]});
+                            if(!this.isUnmounted)
+                            {
+                                this.setState({textVisible: false,isDropZoneActive: false,imageSource: e.data[Object.keys(e.data)[0]]});
+                            }
                         }
                         else
                         {
-                            this.setState({value:e.data[Object.keys(e.data)[0]]})
+                            if(!this.isUnmounted)
+                            {
+                                this.setState({value:e.data[Object.keys(e.data)[0]]})
+                            }
                         }
                         this.props.dt.row = e.rowData;
                     }   
@@ -93,17 +102,26 @@ export default class NdBase extends React.PureComponent
                             {
                                 if(this.constructor.name == 'NdTextBox')
                                 {
-                                    this.setState({displayValue:tmpD[this.props.dt.display]})
+                                    if(!this.isUnmounted)
+                                    {
+                                        this.setState({displayValue:tmpD[this.props.dt.display]})
+                                    }
                                 }
                             }
 
                             if(this.constructor.name == 'NdImageUpload')
                             {
-                                this.setState({textVisible: false,isDropZoneActive: false,imageSource: tmpD[this.props.dt.field]});
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({textVisible: false,isDropZoneActive: false,imageSource: tmpD[this.props.dt.field]});
+                                }
                             }
                             else
                             {
-                                this.setState({value:tmpD[this.props.dt.field]})
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({value:tmpD[this.props.dt.field]})
+                                }
                             }
                             
                             this.props.dt.row = tmpD;
@@ -123,16 +141,25 @@ export default class NdBase extends React.PureComponent
                         {
                             if(this.constructor.name == 'NdTextBox')
                             {
-                                this.setState({displayValue:e[this.props.dt.display]})
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({displayValue:e[this.props.dt.display]})
+                                }
                             }
                         }
                         if(this.constructor.name == 'NdImageUpload')
                         {
-                            this.setState({textVisible: true,isDropZoneActive: false,imageSource: e[this.props.dt.field]});
+                            if(!this.isUnmounted)
+                            {
+                                this.setState({textVisible: true,isDropZoneActive: false,imageSource: e[this.props.dt.field]});
+                            }
                         }
                         else
                         {
-                            this.setState({value:e[this.props.dt.field]})
+                            if(!this.isUnmounted)
+                            {
+                                this.setState({value:e[this.props.dt.field]})
+                            }
                         }
                         
                         this.props.dt.row = e;
@@ -157,16 +184,25 @@ export default class NdBase extends React.PureComponent
                             {
                                 if(this.constructor.name == 'NdTextBox')
                                 {
-                                    this.setState({displayValue:tmpD[this.props.dt.display]})
+                                    if(!this.isUnmounted)
+                                    {
+                                        this.setState({displayValue:tmpD[this.props.dt.display]})
+                                    }
                                 }
                             }
                             if(this.constructor.name == 'NdImageUpload')
                             {
-                                this.setState({textVisible: true,isDropZoneActive: false,imageSource: tmpD[this.props.dt.field]});
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({textVisible: true,isDropZoneActive: false,imageSource: tmpD[this.props.dt.field]});
+                                }
                             }
                             else
                             {
-                                this.setState({value:tmpD[this.props.dt.field]})
+                                if(!this.isUnmounted)
+                                {
+                                    this.setState({value:tmpD[this.props.dt.field]})
+                                }
                             }
                             
                             this.props.dt.row = tmpD;
@@ -269,16 +305,25 @@ export default class NdBase extends React.PureComponent
                 {
                     if(this.constructor.name == 'NdTextBox')
                     {
-                        this.setState({displayValue:this.props.dt.data[0][this.props.dt.display]})
+                        if(!this.isUnmounted)
+                        {
+                            this.setState({displayValue:this.props.dt.data[0][this.props.dt.display]})
+                        }
                     }                            
                 }
                 if(this.constructor.name == 'NdImageUpload')
                 {
-                    this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data[0][this.props.dt.field]});
+                    if(!this.isUnmounted)
+                    {
+                        this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data[0][this.props.dt.field]});
+                    }
                 }
                 else
                 {
-                    this.setState({value:this.props.dt.data[0][this.props.dt.field]})
+                    if(!this.isUnmounted)
+                    {
+                        this.setState({value:this.props.dt.data[0][this.props.dt.field]})
+                    }
                 }
                 
                 this.props.dt.row = this.props.dt.data[0];
@@ -292,16 +337,25 @@ export default class NdBase extends React.PureComponent
                     {
                         if(this.constructor.name == 'NdTextBox')
                         {
-                            this.setState({displayValue:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.display]})
+                            if(!this.isUnmounted)
+                            {
+                                this.setState({displayValue:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.display]})
+                            }
                         }
                     }
                     if(this.constructor.name == 'NdImageUpload')
                     {
-                        this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]});
+                        if(!this.isUnmounted)
+                        {
+                            this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]});
+                        }
                     }
                     else
                     {
-                        this.setState({value:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]})
+                        if(!this.isUnmounted)
+                        {
+                            this.setState({value:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]})
+                        }
                     }
                     
                     this.props.dt.row = this.props.dt.data.where(this.props.dt.filter)[0];
