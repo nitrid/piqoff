@@ -1418,11 +1418,11 @@ export const acs =
     //grdListesState
     {
         TYPE : 2,
-        ID :"grdListesState",
+        ID :"grdListeState",
         VALUE : {},
         SPECIAL : "",
         PAGE : "cnt_04_001",
-        ELEMENT : "grdListesState",
+        ELEMENT : "grdListeState",
         APP : "OFF",
         VIEW : 
         {
@@ -1558,6 +1558,58 @@ export const acs =
         SPECIAL : "",
         PAGE : "ftr_02_008",
         ELEMENT : "grdSlsInvState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    {
+        TYPE : 2,
+        ID :"grdListeState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "cri_04_001",
+        ELEMENT : "grdListeState",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "",
+            CAPTION : "",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
+                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
+                ]
+            }
+        }
+    },
+    {
+        TYPE : 2,
+        ID :"grdListeState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "cri_04_002",
+        ELEMENT : "grdListeState",
         APP : "OFF",
         VIEW : 
         {

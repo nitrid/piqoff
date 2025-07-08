@@ -3,6 +3,7 @@ const cri_04_001 =
 {
     txtCustomerCode : "Kunde",
     btnGet :"Suchen",
+    txtDate : "Datum",
     grdListe : 
     {
         clmDocDate: "Datum",

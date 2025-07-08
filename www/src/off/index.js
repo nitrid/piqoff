@@ -5,6 +5,17 @@ if (!Object.hasOwn) {
     };
 }
 
+// Array.at() polyfill for older browsers
+if (!Array.prototype.at) {
+    Array.prototype.at = function(index) {
+        // Convert negative indices to positive
+        if (index < 0) {
+            index = this.length + index;
+        }
+        return this[index];
+    };
+}
+
 import React from 'react';
 import App from './lib/app.js'
 import ReactDOM from 'react-dom';

@@ -6,6 +6,7 @@ const cri_01_002 =
     txtTitle : "Überschrift",
     txtCustomerName : "Name",
     tabTitleAdress : "Adresse",
+    codeFailedMsg : "Ein gültiger Kunde wurde nicht gefunden. Bitte geben Sie einen gültigen Kundenkode ein.",
     pg_txtCode : 
     {
         title : "Kunden auswählen",
@@ -54,7 +55,9 @@ const cri_01_002 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?",
+        msgFailed: "Datensatzlöschung fehlgeschlagen!",
+        msgSuccess: "Datensatzlöschung erfolgreich!"
     },
     msgCode : 
     {

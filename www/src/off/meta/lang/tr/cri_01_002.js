@@ -6,6 +6,7 @@ const cri_01_002 =
     txtTitle : "Ünvan",
     txtCustomerName : "Adı",
     tabTitleAdress : "Adres",
+    codeFailedMsg : "Geçerli bir müşteri bulunamadı. Lütfen doğru bir müşteri kodu giriniz.",
     pg_txtCode : 
     {
         title : "Müşteri Seçim",
@@ -54,7 +55,9 @@ const cri_01_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize eminmisiniz ?",
+        msgFailed: "Kayıt silme işleminiz başarısız !",
+        msgSuccess: "Kayıt silme işleminiz başarılı !"
     },
     msgCode : 
     {

@@ -164,7 +164,22 @@ export default class mainPage extends React.PureComponent
     {
         return(
             <ScrollView>
-                <div>
+                <div style={{
+                    backgroundImage: 'url(../css/img/logo.png)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center center',
+                    backgroundSize: '800px auto',
+                    backgroundAttachment: 'fixed',
+                    opacity: '0.10',
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: -1,
+                    pointerEvents: 'none'
+                }}></div>
+                <div style={{position: 'relative', zIndex: 1}}>
                     <div className='row pt-3' style={{paddingBottom:"20px"}}>
                         {this.state.tmpLastMenu.map((function(object, i)
                         {

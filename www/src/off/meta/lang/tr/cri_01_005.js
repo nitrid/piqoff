@@ -37,8 +37,10 @@ const cri_01_005 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
-    },
+        msg: "Kaydı silmek istediğinize eminmisiniz ?",
+        msgSuccess: "Kayıt silme işleminiz başarılı !",
+        msgFailed: "Kayıt silme işleminiz başarısız !"
+    },      
     msgCode : 
     {
         title: "Dikkat",

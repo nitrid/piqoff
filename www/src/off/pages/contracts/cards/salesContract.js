@@ -2,12 +2,10 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import {contractCls} from '../../../../core/cls/contract.js'
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
-
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -21,6 +19,8 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import { NdForm, NdItem, NdEmptyItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class salesContract extends React.PureComponent
 {
@@ -33,8 +33,8 @@ export default class salesContract extends React.PureComponent
         this.contractObj = new contractCls();
         this.tabIndex = props.data.tabkey
         
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getItems = this._getItems.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.getItems = this.getItems.bind(this)
         this.multiItemData = new datatable
     } 
     async componentDidMount()
@@ -107,9 +107,9 @@ export default class salesContract extends React.PureComponent
         await this.grdContracts.dataRefresh({source:this.contractObj.dt('ITEM_PRICE')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
 
-        this._getItems()        
+        this.getItems()        
     }
-    async _getItems()
+    async getItems()
     {
         let tmpSource =
         {
@@ -183,9 +183,9 @@ export default class salesContract extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
+                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
             }
 
             let pResult = await dialog(tmpConfObj);
@@ -249,23 +249,9 @@ export default class salesContract extends React.PureComponent
         }
         if(tmpMissCodes.length > 0)
         {
-            let tmpConfObj =
-            {
-                id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
-                button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
-            }
-        
-            await dialog(tmpConfObj);
+            this.toast.show({type:"warning",message:this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes})
         }
-        let tmpConfObj =
-        {
-            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
-        }
-    
-         await dialog(tmpConfObj);
+        this.toast.show({type:"warning",message:this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter})
 
     }
     async multiItemSave()
@@ -295,7 +281,7 @@ export default class salesContract extends React.PureComponent
             this.contractObj.dt()[i].SHIPMENT_DATE = this.contractObj.dt()[0].SHIPMENT_DATE
         }
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "UNIT_NAME")
         {
@@ -382,7 +368,7 @@ export default class salesContract extends React.PureComponent
                                     {
                                         await this.contractObj.load({CODE:this.txtCode.value,TYPE:1});
                                         this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
-                                        this._getItems()
+                                        this.getItems()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -400,7 +386,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -410,14 +396,13 @@ export default class salesContract extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.contractObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -432,7 +417,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -445,14 +430,7 @@ export default class salesContract extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
+                                       this.toast.show({type:"success",message:this.t("msgDelete.msg")})
                                         if(pResult == 'btn01')
                                         {
                                             this.contractObj.dt().removeAll()
@@ -482,7 +460,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -501,10 +479,10 @@ export default class salesContract extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmHeader">
+                            <NdForm colCount={3} id="frmHeader">
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"CODE"}}
                                     button=
                                     {
@@ -521,7 +499,7 @@ export default class salesContract extends React.PureComponent
                                                         {
                                                             await this.contractObj.load({CODE:data[0].CODE,TYPE:0});
                                                             this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
-                                                            this._getItems()
+                                                            this.getItems()
                                                         }
                                                     }
                                                             
@@ -569,10 +547,10 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
-                                </Item>
+                                    </NdItem>
                                 {/* txtName */}
-                                <Item>                                
-                                    <Label text={this.t("txtName")} alignment="right" />
+                                <NdItem>                                
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
@@ -580,10 +558,10 @@ export default class salesContract extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -598,10 +576,10 @@ export default class salesContract extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"CUSTOMER_CODE"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -617,7 +595,7 @@ export default class salesContract extends React.PureComponent
                                                 this.txtCustomerCode.value = data[0].CODE;
                                                 this.txtCustomerName.value = data[0].TITLE;
                                                 
-                                                this._getItems()
+                                                this.getItems()
                                             }
                                         }
                                     }).bind(this)}
@@ -638,7 +616,7 @@ export default class salesContract extends React.PureComponent
                                                             this.txtCustomerCode.value = data[0].CODE;
                                                             this.txtCustomerName.value = data[0].TITLE;
                                                             
-                                                            this._getItems()
+                                                            this.getItems()
                                                         }
                                                     }
                                                 }
@@ -689,10 +667,10 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                         
                                     </NdPopGrid>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"CUSTOMER_NAME"}}
@@ -701,20 +679,20 @@ export default class salesContract extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* docDate */}
-                                <Item>
-                                    <Label text={this.t("docDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("docDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.contractObj.dt('CONTRACT'),field:"DOC_DATE"}} 
                                      onValueChanged={(async()=>
                                         {
                                             this.checkRow()
                                         }).bind(this)}
                                     />
-                                </Item>
+                                </NdItem>
                                 {/* startDate */}
-                                <Item>
-                                    <Label text={this.t("startDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("startDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
                                     onValueChanged={(async()=>
@@ -726,10 +704,10 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validDate")} />
                                         </Validator>  
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* finishDate */}
-                                <Item>
-                                    <Label text={this.t("finishDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("finishDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"finishDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"FINISH_DATE"}}
                                     onValueChanged={(async()=>
@@ -741,10 +719,10 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validDate")} />
                                         </Validator>  
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* cmbVatType */}
-                                <Item>
-                                    <Label text={this.t("cmbVatType.title")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbVatType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbVatType" height='fit-content' dt={{data:this.contractObj.dt(),field:"VAT_TYPE"}}
                                     displayExpr="NAME"                       
                                     valueExpr="ID"
@@ -752,19 +730,19 @@ export default class salesContract extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
                                     />
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmPurcContract = e.component
                             }}>
-                                <Item location="after">
-                                    <Button icon="add"
+                                <NdItem location="after">
+                                    <NdButton icon="add"
                                     validationGroup={"frmPurcContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -800,7 +778,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgContractValid',showTitle:true,title:this.t("msgContractValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgContractValid',showTitle:true,title:this.t("msgContractValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgContractValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgContractValid.msg")}</div>)
                                             }
@@ -821,7 +799,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
@@ -829,8 +807,8 @@ export default class salesContract extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdGrid parent={this} id={"grdContracts"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -869,8 +847,8 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={100} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                     </NdGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* STOK POPUP */}
@@ -885,9 +863,9 @@ export default class salesContract extends React.PureComponent
                         height={'450'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popItems.txtPopItemsCode")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.txtPopItemsCode")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
@@ -932,33 +910,33 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validItemsCode")} />
                                     </Validator>                                 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popItems.txtPopItemsName")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.txtPopItemsName")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsPrice"} parent={this} simple={true} >
                                     <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validItemPrice")} />
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsQuantity"} parent={this} simple={true} />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popItems.dtPopStartDate")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.dtPopStartDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopStartDate"}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popItems.dtPopEndDate")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popItems.dtPopEndDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopEndDate"}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
@@ -973,7 +951,7 @@ export default class salesContract extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                                     }
@@ -991,8 +969,8 @@ export default class salesContract extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>  
                     {/* Stok Grid */}
@@ -1023,9 +1001,9 @@ export default class salesContract extends React.PureComponent
                         height={'280'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -1042,9 +1020,9 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -1055,8 +1033,8 @@ export default class salesContract extends React.PureComponent
                                         }).bind(this)}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     ></NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1117,8 +1095,8 @@ export default class salesContract extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>  
                     {/* Mail Send PopUp */}
@@ -1133,9 +1111,9 @@ export default class salesContract extends React.PureComponent
                         height={'600'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -1143,9 +1121,9 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -1153,11 +1131,11 @@ export default class salesContract extends React.PureComponent
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
@@ -1192,14 +1170,13 @@ export default class salesContract extends React.PureComponent
                                                         App.instance.setState({isExecute:false})
                                                         let tmpConfObj1 =
                                                         {
-                                                            id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                             button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
                                                         }
                                                         
                                                         if((pResult1) == 0)
                                                         {  
-                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                            await dialog(tmpConfObj1);
+                                                            this.toast.show({type:"success",message:this.t("msgMailSendResult.msgSuccess")})
                                                             this.htmlEditor.value = '',
                                                             this.txtMailSubject.value = '',
                                                             this.txtSendMail.value = ''
@@ -1208,8 +1185,7 @@ export default class salesContract extends React.PureComponent
                                                         }
                                                         else
                                                         {
-                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
-                                                            await dialog(tmpConfObj1);
+                                                            this.toast.show({type:"error",message:this.t("msgMailSendResult.msgFailed")})
                                                             this.popMailSend.hide(); 
                                                         }
                                                     });
@@ -1224,8 +1200,8 @@ export default class salesContract extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>   
                 </ScrollView>
@@ -1241,24 +1217,24 @@ export default class salesContract extends React.PureComponent
                     height={'700'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={2} height={'fit-content'}>
-                        <Item colSpan={2}>
-                            <Label  alignment="right" />
+                        <NdForm colCount={2} height={'fit-content'}>
+                        <NdItem colSpan={2}>
+                            <NdLabel  alignment="right" />
                                 <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
                                 />
-                        </Item>
-                        <EmptyItem />       
-                        <Item>
-                            <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                        </NdItem>
+                        <NdEmptyItem />       
+                        <NdItem>
+                            <NdLabel text={this.t("cmbMultiItemType.title")} alignment="right" />
                             <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
                             value={0}
                             data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
                             />
-                        </Item>   
-                        <EmptyItem />   
-                        <Item>
+                        </NdItem>   
+                        <NdEmptyItem />   
+                        <NdItem>
                             <div className='row'>
                                 <div className='col-6'>
                                     <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1275,8 +1251,8 @@ export default class salesContract extends React.PureComponent
                                     }}/>
                                 </div>
                             </div>
-                        </Item>
-                        <Item colSpan={2} >
+                        </NdItem>
+                        <NdItem colSpan={2} >
                         <NdGrid parent={this} id={"grdMultiItem"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -1300,9 +1276,9 @@ export default class salesContract extends React.PureComponent
                                     <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
                                     <Column dataField="PRICE" caption={this.t("grdMultiItem.clmPrice")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
                             </NdGrid>
-                        </Item>
-                        <EmptyItem />   
-                        <Item>
+                        </NdItem>
+                        <NdEmptyItem />   
+                        <NdItem>
                             <div className='row'>
                                 <div className='col-6'>
                                     
@@ -1315,8 +1291,8 @@ export default class salesContract extends React.PureComponent
                                     }}/>
                                 </div>
                             </div>
-                        </Item>
-                        </Form>
+                        </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div> 
                 {/* Birim PopUp */}
@@ -1332,8 +1308,8 @@ export default class salesContract extends React.PureComponent
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
                                 <NdSelectBox simple={true} parent={this} id="cmbUnit"
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
@@ -1346,17 +1322,17 @@ export default class salesContract extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitFactor")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtUnitFactor")} alignment="right" />
                                 <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
                                 readOnly={true}
                                 maxLength={32}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtUnitQuantity")} alignment="right" />
                                 <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async(e)=>
@@ -1365,16 +1341,16 @@ export default class salesContract extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtTotalQuantity")} alignment="right" />
                                 <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
                                 maxLength={32}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitPrice")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtUnitPrice")} alignment="right" />
                                 <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
                                 maxLength={32}
                                 onEnterKey={(async(e)=>
@@ -1383,10 +1359,11 @@ export default class salesContract extends React.PureComponent
                                     }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdDialog>
                 </div>
+                <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
             </div>
         )
     }

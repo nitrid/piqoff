@@ -1,43 +1,29 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring,Editing} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class customerBalanceReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['TITLE','NAME','BALANCE','UPDATE_DATE']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "TITLE",NAME : this.t("grdListe.clmCode")},                                   
-            {CODE : "NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "BALANCE",NAME : this.t("grdListe.clmBalance")},
-            {CODE : "UPDATE_DATE",NAME : this.t("grdListe.clmUpdate")},
-        ]
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
+
     }
     componentDidMount()
     {
@@ -46,65 +32,18 @@ export default class customerBalanceReport extends React.PureComponent
             this.txtCustomerCode.CODE = ''
         }, 1000);
     }
-    _columnListBox(e)
+    loadState() 
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'TITLE') != 'undefined')
-                {
-                    this.groupList.push('TITLE')
-                }
-                if(typeof e.value.find(x => x == 'BALANCE') != 'undefined')
-                {
-                    this.groupList.push('BALANCE')
-                }                
-                if(typeof e.value.find(x => x == 'CODE') != 'undefined')
-                {
-                    this.groupList.push('CODE')
-                }
-                if(typeof e.value.find(x => x == 'UPDATE_DATE') != 'undefined')
-                {
-                    this.groupList.push('UPDATE_DATE')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetirClick()
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetirClick()
     {
         if(this.chkZeroBalance.value == true)
         {
@@ -171,7 +110,7 @@ export default class customerBalanceReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -189,9 +128,9 @@ export default class customerBalanceReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                            <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
+                            <NdForm colCount={2} id="frmKriter">
+                            <NdItem>
+                                <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 onEnterKey={(async()=>
                                 {
@@ -278,28 +217,21 @@ export default class customerBalanceReport extends React.PureComponent
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                     <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                 </NdPopGrid>
-                                </Item> 
-                            </Form>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
-                        <NdCheckBox id="chkZeroBalance" parent={this} text={this.t("chkZeroBalance")}  value={false} ></NdCheckBox>
+                            <NdCheckBox id="chkZeroBalance" parent={this} text={this.t("chkZeroBalance")}  value={false} ></NdCheckBox>
                         </div>
                         <div className="col-3">
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -315,11 +247,13 @@ export default class customerBalanceReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
-                            >                            
+                            >
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <Export fileName={this.lang.t("menuOff.cri_04_002")} enabled={true} allowExportSelectedData={true} />
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
+                                <Export fileName={this.lang.t("menuOff.cri_04_002")} enabled={true} allowExportSelectedData={true} formats={['xlsx','pdf']} />
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
@@ -337,14 +271,15 @@ export default class customerBalanceReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <Form colCount={4}>
-                        <EmptyItem colSpan={3}></EmptyItem>
-                        <Item>
-                            <Label text={this.t("txtTotalBalance")} alignment="right" />
+                    <NdForm colCount={4}>
+                        <NdEmptyItem colSpan={3}></NdEmptyItem>
+                        <NdItem>
+                            <NdLabel text={this.t("txtTotalBalance")} alignment="right" />
                                 <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}
                                 />
-                        </Item>
-                    </Form>
+                        </NdItem>
+                    </NdForm>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

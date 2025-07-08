@@ -287,9 +287,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 let secondHalf = dailySalesData.slice(midPoint).reduce((sum, day) => sum + day.totalSales, 0)
                 
                 analysisData.growthTrend = [
-                { category: this.lang.t("firstHalf"), value: firstHalf, title: this.lang.t("growthTrend") },
-                { category: this.lang.t("secondHalf"), value: secondHalf, title: this.lang.t("growthTrend") }
-            ]
+                    { category: this.lang.t("firstHalf"), value: firstHalf, title: this.lang.t("growthTrend") },
+                    { category: this.lang.t("secondHalf"), value: secondHalf, title: this.lang.t("growthTrend") }
+                ]
             
             // Gün bazlı analizler
             let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -1146,7 +1146,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     // Toplam tutarları kontrol et
                                     let totalDailySales = dailySalesData.reduce((sum, item) => sum + item.totalSales, 0)
                                     let totalChartData = chartData.reduce((sum, item) => sum + item.total, 0)
-
+                                    
                                     this.calculateAnalysisData(dailySalesData)
                                     
                                     this.setState({ 
@@ -1342,9 +1342,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 argumentField="device" 
                                                 type="stackedbar"
                                             />
-                                            {
+                                                {
                                                 (this.payTypeList || [])
-                                                .filter(payType => 
+                                                    .filter(payType => 
                                                     (this.state.chartData || []).some(item => item[payType] && item[payType] > 0)
                                                 )
                                                 .map((payType, idx) => {
@@ -1375,7 +1375,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         />
                                                     );
                                                 })
-                                            }
+                                                }
                                             
                                             <ValueAxis>
                                                 <Title text={this.lang.t("barChart.amount")} />
@@ -1408,16 +1408,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         </div>
                     </React.Suspense>
                     
-                        {/* Analiz PopUp */}
+                    {/* Analiz PopUp */}
                     <NdPopUp parent={this} id={"popAnalysis"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.lang.t("popAnalysis.title")}
-                        container={"#root"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popAnalysis.title")}
+                    container={"#root"} 
                         width={'1200'}
                         height={'800'}
-                        position={{of:'#root'}}
+                    position={{of:'#root'}}
                         ref={(el) => { this.popAnalysis = el }}
                         onHiding={async () => {
                             await new Promise(resolve => this.setState({
@@ -1471,17 +1471,17 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             </div>
                                             <NdSelectBox key={this.state.popAnalysisResetKey}
                                                 id="selAnalysisType" 
-                                                parent={this} 
-                                                dataSource={[
+                                            parent={this} 
+                                            dataSource={[
                                                     { id: 'best', name: '🔝 ' + this.lang.t("bestDays") },
                                                     { id: 'worst', name: '🔻 ' + this.lang.t("worstDays") },
                                                     { id: 'comparison', name: '⚖️ ' + this.lang.t("comparison") },
                                                     { id: 'distribution', name: '📊 ' + this.lang.t("distribution") },
                                                     { id: 'trend', name: '📈 ' + this.lang.t("trend") },
                                                     { id: 'products', name: '📦 ' + this.lang.t("products") }
-                                                ]}
-                                                displayExpr="name"
-                                                valueExpr="id"
+                                            ]}
+                                            displayExpr="name"
+                                            valueExpr="id"
                                                 defaultValue="best"
                                                 width="100%"
                                                 onValueChanged={async (e) => 
@@ -1510,7 +1510,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }
                                                 }}
                                             />
-                                        </div>
+                            </div>
                                         <div className="col-md-6">
                                             <div style={{marginBottom: '15px'}}>
                                                 <Label 
@@ -1936,8 +1936,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             </Chart>
                                         ) : (
                                             // Default bar chart
-                                            <Chart
-                                                id="analysisChart"
+                                    <Chart
+                                        id="analysisChart"
                                                 title={this.state.productAnalysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                                 dataSource={this.state.productAnalysisData[this.state.selectedAnalysis] || []}
                                                 palette="Bright"
@@ -2073,9 +2073,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         <PieChart
                                             id="analysisPieChart"
                                             type="doughnut"
-                                            title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
+                                        title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                             palette="Bright"
-                                            dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
+                                        dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
                                             visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                         >
                                             <PieSeries 
@@ -2109,7 +2109,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             id="analysisPieChart"
                                             type="doughnut"
                                             title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
-                                            palette="Bright"
+                                        palette="Bright"
                                             dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
                                             visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                         >
@@ -2153,46 +2153,46 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
                                             palette="Bright"
                                             style={{minHeight: '400px'}}
-                                            visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                        >
-                                            <CommonSeriesSettings 
-                                                argumentField="category" 
+                                        visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
+                                    >
+                                        <CommonSeriesSettings 
+                                            argumentField="category" 
                                                 type="line"
-                                            />
-                                            <Series
-                                                valueField="value"
-                                                name={this.lang.t("analysisChart.title")}
+                                        />
+                                        <Series
+                                            valueField="value"
+                                            name={this.lang.t("analysisChart.title")}
                                                 hoverMode="allArgumentPoints"
                                                 point={{
                                                     hoverMode: "allArgumentPoints"
                                                 }}
-                                            />
-                                            <ArgumentAxis
-                                                allowDecimals={false}
-                                                axisDivisionFactor={1}
-                                                discreteAxisDivisionMode="crossLabels"
-                                            >
-                                                <ChartLabel rotationAngle={45} />
-                                            </ArgumentAxis>
-                                            <ValueAxis>
-                                                <Title text={this.lang.t("analysisChart.amount")} />
-                                            </ValueAxis>
-                                            <Legend 
-                                                position="outside"
-                                                horizontalAlignment="center"
-                                                verticalAlignment="bottom"
-                                                orientation="horizontal"
-                                            />
-                                            <Tooltip 
-                                                enabled={true}
+                                        />
+                                        <ArgumentAxis
+                                            allowDecimals={false}
+                                            axisDivisionFactor={1}
+                                            discreteAxisDivisionMode="crossLabels"
+                                        >
+                                            <ChartLabel rotationAngle={45} />
+                                        </ArgumentAxis>
+                                        <ValueAxis>
+                                            <Title text={this.lang.t("analysisChart.amount")} />
+                                        </ValueAxis>
+                                        <Legend 
+                                            position="outside"
+                                            horizontalAlignment="center"
+                                            verticalAlignment="bottom"
+                                            orientation="horizontal"
+                                        />
+                                        <Tooltip 
+                                            enabled={true}
                                                 zIndex={9999}
                                                 customizeTooltip={(arg) => {
-                                                    let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                    if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
+                                                let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
+                                                {
+                                                    let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => item.category === arg.argumentText)
+                                                    if (dataItem && dataItem.rank) 
                                                     {
-                                                        let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => item.category === arg.argumentText)
-                                                        if (dataItem && dataItem.rank) 
-                                                        {
                                                             tooltipText = `${dataItem.rank}. ${tooltipText}`
                                                         }
                                                     }
@@ -2283,15 +2283,15 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         if (dataItem.saleCount) 
                                                         {
                                                             tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
-                                                        }
                                                     }
-                                                    
-                                                    return {
-                                                        text: tooltipText
-                                                    };
-                                                }}
-                                            />
-                                        </Chart>
+                                                }
+                                                
+                                                return {
+                                                    text: tooltipText
+                                                };
+                                            }}
+                                        />
+                                    </Chart>
                                     )}
                                 
                                 </div>

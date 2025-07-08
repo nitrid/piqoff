@@ -10,7 +10,8 @@ export default class NdHtmlEditor extends Base
     {
         super(props)
         
-        this.state.value = typeof props.value == 'undefined' ? [] : props.value;
+        // Güvenli değer kontrolü - undefined/null durumunda boş string kullan
+        this.state.value = typeof props.value == 'undefined' || props.value === null ? '' : props.value;
         this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
 
         this._onValueChanged = this._onValueChanged.bind(this);
@@ -20,7 +21,8 @@ export default class NdHtmlEditor extends Base
     //#region Private
     _onValueChanged(e) 
     {
-        this.value = e.value;
+        // Güvenli değer kontrolü
+        this.value = e.value || '';
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
@@ -29,11 +31,12 @@ export default class NdHtmlEditor extends Base
     //#endregion
     get value()
     {
-        return this.state.value
+        return this.state.value || ''
     }
     set value(e)
     {
-        this.setState({value:e})
+        // Güvenli değer kontrolü
+        this.setState({value: e || ''})
     }
     async componentDidMount()
     {
@@ -46,7 +49,8 @@ export default class NdHtmlEditor extends Base
     {
         this.setState(
             {
-                value : pProps.value
+                // Güvenli değer kontrolü
+                value : pProps.value || ''
             }
         )
     } 
@@ -54,7 +58,7 @@ export default class NdHtmlEditor extends Base
     {
         return(
             <HtmlEditor
-            value={this.state.value}
+            value={this.state.value || ''}
             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
             onValueChanged={this._onValueChanged} 
             placeholder={this.state.placeholder}

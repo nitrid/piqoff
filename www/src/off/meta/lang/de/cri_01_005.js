@@ -37,7 +37,9 @@ const cri_01_005 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie löschen möchten?",
+        msgSuccess: "Löschen erfolgreich!",
+        msgFailed: "Löschen fehlgeschlagen!"
     },
     msgCode : 
     {

@@ -1,17 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class barcodeList extends React.PureComponent
@@ -38,18 +36,17 @@ export default class barcodeList extends React.PureComponent
             {CODE : "ZIPCODE",NAME : this.t("grdListe.clmZipcode")},    
         ]
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.columnListBox = this.columnListBox.bind(this)
         
     }
     componentDidMount()
     {
         setTimeout(async () => 
         {
-
         }, 1000);
     }
-    _columnListBox(e)
+    columnListBox(e)
     {
         let onOptionChanged = (e) =>
         {
@@ -124,7 +121,7 @@ export default class barcodeList extends React.PureComponent
             </NdListBox>
         )
     }
-    async _btnGetirClick()
+    async btnGetirClick()
     {
         
         let tmpSource =
@@ -134,7 +131,7 @@ export default class barcodeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
+                    query : "SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, ADRESS,CITY, COUNTRY, ZIPCODE, STATUS  FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
                             " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value]
@@ -186,7 +183,7 @@ export default class barcodeList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -204,23 +201,23 @@ export default class barcodeList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} placeholder={this.t("customerPlace")}
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
+                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} onEnterKey={this.btnGetirClick} placeholder={this.t("customerPlace")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cmbGenus")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbGenus")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value={-1}
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
-                                </Item>       
-                                <Item> </Item>
-                            </Form>
+                                </NdItem>       
+                                <NdItem> </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -230,7 +227,7 @@ export default class barcodeList extends React.PureComponent
                             displayExpr="NAME"                       
                             valueExpr="CODE"
                             data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
+                            contentRender={this.columnListBox}
                             />
                         </div>
                         <div className="col-3">
@@ -240,7 +237,7 @@ export default class barcodeList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -254,6 +251,16 @@ export default class barcodeList extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
+                                {
+                                    id: 'cri_01_001',
+                                    text: e.data.TITLE.substring(0,10),
+                                    path: 'customers/cards/customerCard.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}

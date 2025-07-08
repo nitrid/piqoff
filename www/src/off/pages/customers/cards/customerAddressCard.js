@@ -1,26 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
-
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import{ NdToast }from '../../../../core/react/devex/toast.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
 
 export default class customerAddressCard extends React.PureComponent
 {
@@ -34,7 +28,7 @@ export default class customerAddressCard extends React.PureComponent
         this.tabIndex = props.data.tabkey
         
 
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this.onItemRendered = this.onItemRendered.bind(this)
         
     }
     async componentDidMount()
@@ -121,7 +115,7 @@ export default class customerAddressCard extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -178,16 +172,23 @@ export default class customerAddressCard extends React.PureComponent
             }
         });
     }
-    async _onCustomerRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-    }
-    async _onItemRendered(e)
+    async onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitleAdress"))
         {        
             await this.grdAdress.dataRefresh({source:this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')});
+        }
+    }
+
+    async firedClick()
+    {
+        this.pg_txtCode.onClick = (data) =>
+        {
+            if(data.length > 0)
+            {
+                this.getCustomer(data[0].CODE)
+            }
         }
     }
     render()
@@ -221,9 +222,18 @@ export default class customerAddressCard extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            let customers = this.customerObj.dt('CUSTOMERS');
+                                            if (!customers || customers.length === 0 || !customers[0] || !customers[0].GUID) 
+                                            {
+                                                this.toast.show({
+                                                    type: "error",
+                                                    message: this.t("codeFailedMsg")
+                                                });
+                                                return;
+                                            }
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -233,34 +243,25 @@ export default class customerAddressCard extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
-                                                
                                                 if((await this.customerObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    await dialog(tmpConfObj1)
                                                 }
                                             }
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgSaveValid.msg")})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -271,7 +272,7 @@ export default class customerAddressCard extends React.PureComponent
                                         
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -279,9 +280,14 @@ export default class customerAddressCard extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
+                                            this.toast.show({type:"success",message:this.t("msgDelete.msgSuccess")})
                                             this.customerObj.dt('CUSTOMERS').removeAt(0)
                                             await this.customerObj.dt('CUSTOMERS').delete();
-                                            this.init(); 
+                                            this.init();
+                                        }
+                                        else
+                                        {
+                                            this.toast.show({type:"error",message:this.t("msgDelete.msgFailed")})
                                         }
                                         
                                     }}/>
@@ -305,7 +311,7 @@ export default class customerAddressCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -323,10 +329,10 @@ export default class customerAddressCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmCustomerAddress"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmCustomerAddress"  + this.tabIndex}>
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} placeholder={this.t("customerPlace")} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -338,13 +344,7 @@ export default class customerAddressCard extends React.PureComponent
                                                 onClick:()=>
                                                 {
                                                     this.pg_txtCode.show()
-                                                    this.pg_txtCode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.getCustomer(data[0].CODE)
-                                                        }
-                                                    }
+                                                    this.firedClick()
                                                 }
                                             },
                                             {
@@ -361,14 +361,9 @@ export default class customerAddressCard extends React.PureComponent
                                     {
                                         await this.pg_txtCode.setVal(this.txtCode.value)
                                         this.pg_txtCode.show()
-                                        this.pg_txtCode.onClick = (data) =>
-                                        {
-                                            if(data.length > 0)
-                                            {
-                                                this.getCustomer(data[0].CODE)
-                                            }
-                                        }
+                                        await this.firedClick()
                                     }).bind(this)}
+                                    
                                     onChange={(async()=>
                                     {
                                         let tmpResult = await this.checkCustomer(this.txtCode.value)
@@ -423,10 +418,10 @@ export default class customerAddressCard extends React.PureComponent
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                  {/* txtTitle */}
-                                 <Item>
-                                    <Label text={this.t("txtTitle")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
                                     onChange={(async()=>
                                     {
@@ -436,12 +431,12 @@ export default class customerAddressCard extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                         <div className='row px-2 pt-2'>
                             <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                                <TabPanel height="100%" onItemRendered={this.onItemRendered}>
                                     <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
@@ -498,13 +493,13 @@ export default class customerAddressCard extends React.PureComponent
                         height={'350'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.txtPopAdress")} alignment="right" />
                                     <NdTextBox id={"txtPopAdress"} parent={this} simple={true} />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopCountry")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
@@ -546,9 +541,9 @@ export default class customerAddressCard extends React.PureComponent
                                     }).bind(this)}
                                   
                                     />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
@@ -563,32 +558,37 @@ export default class customerAddressCard extends React.PureComponent
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
                                     {
-                                        if (!e.text) {
+                                        if (!e.text) 
+                                        {
                                             e.customItem = null;
                                             return;
                                         }
                                         
-                                        const { component, text } = e;
-                                        const currentItems = component.option('items');
+                                        let { component, text } = e;
+                                        let currentItems = component.option('items');
                                         
-                                        const newItem = {
+                                        let newItem = 
+                                        {
                                             ZIPNAME: text.trim(),
                                             ZIPCODE: text.trim(),
                                         };
                                         
-                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        let itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
                                         }
                                     }}
                                     />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopCity")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCity"
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"
@@ -599,31 +599,36 @@ export default class customerAddressCard extends React.PureComponent
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
                                     {
-                                        if (!e.text) {
+                                        if (!e.text) 
+                                        {
                                             e.customItem = null;
                                             return;
                                         }
                                         
-                                        const { component, text } = e;
-                                        const currentItems = component.option('items');
+                                        let { component, text } = e;
+                                        let currentItems = component.option('items');
                                         
-                                        const newItem = {
+                                        let newItem =   
+                                        {
                                             PLACE: text.trim(),
                                             PLACE: text.trim(),
                                         };
                                         
-                                        const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        let itemInDataSource = currentItems.find((item) => item.text === newItem.text)
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
                                         }
                                     }}
                                     />
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
@@ -631,13 +636,13 @@ export default class customerAddressCard extends React.PureComponent
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};
                                                
-                                                
+
                                                 tmpEmpty.ADRESS_NO = this.customerObj.customerAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
                                                 tmpEmpty.CITY = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
-                                                tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+                                                tmpEmpty.CUSTOMER = this.customerObj.dt()[0] ? this.customerObj.dt()[0].GUID : '00000000-0000-0000-0000-000000000000'
 
                                                 this.customerObj.customerAdress.addEmpty(tmpEmpty);    
                                                 this.popAdress.hide(); 
@@ -652,9 +657,10 @@ export default class customerAddressCard extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div> 
                 </ScrollView>
             </div>

@@ -1,47 +1,28 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring,Editing} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class customerExtreReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['DOC_DATE','TYPE_NAME','REF','REF_NO','DEBIT','RECEIVE','BALANCE']
-        }
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},                                   
-            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmTypeName")},
-            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "DEBIT",NAME : this.t("grdListe.clmDebit")},
-            {CODE : "RECEIVE",NAME : this.t("grdListe.clmReceive")},
-            {CODE : "BALANCE",NAME : this.t("grdListe.clmBalance")},
-        ]
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
     }
@@ -54,78 +35,17 @@ export default class customerExtreReport extends React.PureComponent
     }
     loadState() 
     {
-        let tmpLoad = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListesState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         tmpSave.setValue(e)
         tmpSave.save()
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TYPE_NAME') != 'undefined')
-                {
-                    this.groupList.push('TYPE_NAME')
-                }                
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }
-                if(typeof e.value.find(x => x == 'BALANCE') != 'undefined')
-                {
-                    this.groupList.push('BALANCE')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
 
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetirClick()
+    async btnGetirClick()
     {
         if(this.txtCustomerCode.GUID != '')
         {
@@ -182,8 +102,7 @@ export default class customerExtreReport extends React.PureComponent
             {
                 tmpLineBalance += this.grdListe.data.datatable[i].BALANCE;
                 this.grdListe.data.datatable[i].BALANCE = tmpLineBalance.toFixed(2);
-                console.log(this.grdListe.data.datatable[i].BALANCE)
-                console.log(tmpLineBalance)
+                
             }
             await this.grdListe.dataRefresh(this.grdListe.data.datatable)
         }
@@ -191,7 +110,7 @@ export default class customerExtreReport extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
             }
@@ -220,7 +139,7 @@ export default class customerExtreReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -238,9 +157,9 @@ export default class customerExtreReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                            <NdForm colCount={3} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     onEnterKey={(async()=>
                                     {
@@ -327,22 +246,16 @@ export default class customerExtreReport extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                         <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                     </NdPopGrid>
-                                </Item> 
-                                <Item>
+                                </NdItem> 
+                                <NdItem>
+                                    <NdLabel text={this.t("txtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                                value={this.state.columnListValue}
-                                displayExpr="NAME"                       
-                                valueExpr="CODE"
-                                data={{source: this.columnListData}}
-                                contentRender={this._columnListBox}
-                                />
                         </div>
                         <div className="col-3">
 
@@ -351,12 +264,12 @@ export default class customerExtreReport extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdListe" parent={this} 
+                            <NdGrid id={"grdListe"} parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
@@ -390,7 +303,6 @@ export default class customerExtreReport extends React.PureComponent
                             }}
                             onRowDblClick={async(e)=>
                             {
-                                console.log("e.data",e.data)
                                 if(e.data.DOC_GUID != '00000000-0000-0000-0000-000000000000')
                                 {
                                     if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)    
@@ -442,12 +354,12 @@ export default class customerExtreReport extends React.PureComponent
                                
                             }}
                             >
-                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
-                                <ColumnChooser enabled={true} />
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <Export fileName={this.lang.t("menuOff.cri_04_001")} enabled={true} allowExportSelectedData={true} />
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
+                                <Export fileName={this.lang.t("menuOff.cri_04_001")} enabled={true} allowExportSelectedData={true} formats={['xlsx','pdf']} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" width={100}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
@@ -456,7 +368,6 @@ export default class customerExtreReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true} width={100}/> 
@@ -484,14 +395,15 @@ export default class customerExtreReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <Form colCount={4}>
-                        <EmptyItem colSpan={3}></EmptyItem>
-                        <Item>
-                            <Label text={this.t("txtTotalBalance")} alignment="right" />
+                    <NdForm colCount={4}>
+                        <NdEmptyItem colSpan={3}></NdEmptyItem>
+                        <NdItem>
+                            <NdLabel text={this.t("txtTotalBalance")} alignment="right" />
                                 <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}
                                 />
-                        </Item>
-                    </Form>
+                        </NdItem>
+                    </NdForm>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
