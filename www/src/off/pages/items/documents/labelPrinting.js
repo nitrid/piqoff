@@ -623,7 +623,7 @@ export default class labelPrinting extends React.PureComponent
                 App.instance.setState({isExecute:false})
                 let tmpConfObj = 
                 {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'240px',
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
                 }
@@ -737,7 +737,7 @@ export default class labelPrinting extends React.PureComponent
 
                                         let tmpConfObj =
                                         {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'220px',
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                         }
@@ -755,7 +755,13 @@ export default class labelPrinting extends React.PureComponent
                                             }
                                             else
                                             {
-                                                this.toast.show({message:this.t("msgSaveResult.msgFailed"),type:'error'})
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                }
+                                                await dialog(tmpConfObj1);
                                             }
                                         }
                                     }}/>
@@ -817,7 +823,7 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'220px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }                                      
@@ -1523,7 +1529,7 @@ export default class labelPrinting extends React.PureComponent
                                             {       
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'240px',
+                                                    id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgAddItems.btn01"),location:'before'},{id:"btn02",caption:this.t("msgAddItems.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItems.msg")}</div>)
                                                 }
