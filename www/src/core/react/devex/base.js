@@ -3,6 +3,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { datatable } from '../../core.js';
 import { core } from '../../core.js';
 import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
+import validationEngine from 'devextreme/ui/validation_engine';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdBase extends React.PureComponent
@@ -229,6 +230,26 @@ export default class NdBase extends React.PureComponent
     componentWillUnmount() 
     {
         this.isUnmounted = true;
+        
+        // Validator parametresi varsa validationEngine'den manuel olarak kaldır
+        if(this.props.param && typeof this.props.param.getValue() == 'object' && typeof this.props.param.getValue().validation != 'undefined') 
+        {
+            const tmpValid = this.props.param.getValue().validation;
+            const validationGroupName = tmpValid.grp + (typeof this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex);
+            const groupConfig = validationEngine.getGroupConfig(validationGroupName);
+            if(groupConfig && groupConfig.validators && this.props.id) 
+            {
+                
+                for(let i = groupConfig.validators.length - 1; i >= 0; i--) 
+                {
+                    const v = groupConfig.validators[i];
+                    if(v._$element && v._$element[0] && v._$element[0].id === this.props.id) 
+                    {
+                        groupConfig.validators.splice(i, 1);
+                    }
+                }
+            }
+        }
     }
     get data()
     {
@@ -528,6 +549,7 @@ export default class NdBase extends React.PureComponent
     }
     validationView()
     {
+        //console.log(validationEngine)
         let tmpValid = null;
         if(typeof this.props.param != 'undefined')
         {   
@@ -555,7 +577,7 @@ export default class NdBase extends React.PureComponent
                 }
             }
             return (
-                <Validator validationGroup={tmpValid.grp + (typeof this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex)}>
+                <Validator name={tmpValid.name} validationGroup={tmpValid.grp + (typeof this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex)}>
                     {tmp}        
                 </Validator>
             )
