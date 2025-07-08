@@ -62,6 +62,7 @@ export default class NdListBox extends Base
     {
         return(
             <List
+            id={this.props.id}
             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
             allowItemDeleting={this.props.allowItemDeleting}
             itemDeleteMode={this.props.itemDeleteMode}

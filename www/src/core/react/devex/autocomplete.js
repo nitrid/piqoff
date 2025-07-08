@@ -42,7 +42,7 @@ export default class NdAutoComplete extends Base
     render()
     {
         return(
-            <Autocomplete dataSource={this.state.suggestions} value={this.state.value}
+            <Autocomplete id={this.props.id} dataSource={this.state.suggestions} value={this.state.value}
             onValueChange={this._onValueChange}
             showClearButton={true}
             minSearchLength={3}

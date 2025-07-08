@@ -52,6 +52,7 @@ export class NdToast extends Base
     {
         return (
             <Toast visible={this.state.isVisible} 
+            id={this.props.id}
             message={this.state.message} 
             type={this.state.type} 
             displayTime={this.state.displayTime}

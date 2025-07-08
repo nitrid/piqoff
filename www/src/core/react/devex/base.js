@@ -230,7 +230,6 @@ export default class NdBase extends React.PureComponent
     componentWillUnmount() 
     {
         this.isUnmounted = true;
-        
         // Validator parametresi varsa validationEngine'den manuel olarak kaldır
         if(this.props.param && typeof this.props.param.getValue() == 'object' && typeof this.props.param.getValue().validation != 'undefined') 
         {
@@ -239,7 +238,6 @@ export default class NdBase extends React.PureComponent
             const groupConfig = validationEngine.getGroupConfig(validationGroupName);
             if(groupConfig && groupConfig.validators && this.props.id) 
             {
-                
                 for(let i = groupConfig.validators.length - 1; i >= 0; i--) 
                 {
                     const v = groupConfig.validators[i];

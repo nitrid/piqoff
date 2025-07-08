@@ -129,7 +129,7 @@ export default class NdNumberBox extends Base
     _txtView()
     {
         return (
-            <NumberBox showClearButton={this.state.showClearButton} height='fit-content' 
+            <NumberBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
                 elementAttr={this.props.elementAttr}
                 style={this.props.style}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 

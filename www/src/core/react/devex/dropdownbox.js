@@ -26,6 +26,7 @@ export default class NdDropDownBox extends Base
     {
         return(
             <DropDownBox
+            id={this.props.id}
             value={this.state.value}
             valueExpr={this.props.valueExpr}
             displayExpr={this.props.displayExpr} 
