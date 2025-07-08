@@ -22,6 +22,9 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,C
 import NbPopDescboard from "./popdescboard.js";
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdTagBox from '../../core/react/devex/tagbox.js';
+import {NdToast} from '../../core/react/devex/toast.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../core/react/devex/form.js';
+
 import * as xlsx from 'xlsx'
 
 export default class DocBase extends React.PureComponent
@@ -303,7 +306,8 @@ export default class DocBase extends React.PureComponent
             resolve()
         })
     }
-    async searchSameItems() {
+    async searchSameItems() 
+    {
         let itemCodes = [];
         let duplicateItems = [];
         
@@ -356,13 +360,7 @@ export default class DocBase extends React.PureComponent
             if(this.docObj.dt()[0].LOCKED != 0)
             {
                 this.docLocked = true
-                let tmpConfObj =
-                {
-                    id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgGetLocked.msg"),type:'warning',displayTime:2000})
             }
             else
             {
@@ -1473,22 +1471,16 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDiscount.Percent1")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Percent1")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPercent1" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent1.value = 0;
                                         this.txtDiscountPrice1.value = 0;
                                         return
@@ -1497,23 +1489,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDiscountPrice1.value =  Number(this.docObj.dt()[0].AMOUNT).rateInc(this.txtDiscountPercent1.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.Price1")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Price1")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPrice1" parent={this} simple={true}
                                     maxLength={32}
                                     onValueChanged={(async()=>
                                     {
                                         if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent1.value = 0;
                                             this.txtDiscountPrice1.value = 0;
                                             return
@@ -1522,23 +1507,16 @@ export default class DocBase extends React.PureComponent
                                         this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
                                     }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.Percent2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Percent2")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPercent2" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent2.value = 0;
                                         this.txtDiscountPrice2.value = 0;
                                         return
@@ -1546,23 +1524,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDiscountPrice2.value =  Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rateInc(this.txtDiscountPercent2.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.Price2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Price2")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPrice2" parent={this} simple={true}
                                     maxLength={32}
                                     onValueChanged={(async()=>
                                     {
                                         if( this.txtDiscountPrice2.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent2.value = 0;
                                             this.txtDiscountPrice2.value = 0;
                                             return
@@ -1570,23 +1541,16 @@ export default class DocBase extends React.PureComponent
                                         this.txtDiscountPercent2.value = Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rate2Num(this.txtDiscountPrice2.value)
                                     }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.Percent3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Percent3")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPercent3" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent3.value = 0;
                                         this.txtDiscountPrice3.value = 0;
                                         return
@@ -1594,23 +1558,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDiscountPrice3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rateInc(this.txtDiscountPercent3.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.Price3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.Price3")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPrice3" parent={this} simple={true}
                                     maxLength={32}
                                     onValueChanged={(async()=>
                                     {
                                         if( this.txtDiscountPrice3.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent3.value = 0;
                                             this.txtDiscountPrice3.value = 0;
                                             return
@@ -1618,12 +1575,12 @@ export default class DocBase extends React.PureComponent
                                         this.txtDiscountPercent3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rate2Num(this.txtDiscountPrice3.value)
                                     }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
                                 <NdCheckBox id="chkFirstDiscount" parent={this} simple={true} value ={false}/>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1670,8 +1627,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Evrak İndirim PopUp */}
@@ -1687,23 +1644,16 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Percent1")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Percent1")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPercent1" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent1.value = 0;
                                         this.txtDocDiscountPrice1.value = 0;
                                         return
@@ -1712,23 +1662,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPrice1.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent1.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Price1")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Price1")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPrice1" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPrice1.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent1.value = 0;
                                         this.txtDocDiscountPrice1.value = 0;
                                         return
@@ -1737,23 +1680,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPercent1.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice1.value)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Percent2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Percent2")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPercent2" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent2.value = 0;
                                         this.txtDocDiscountPrice2.value = 0;
                                         return
@@ -1761,23 +1697,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPrice2.value =  Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rateInc(this.txtDocDiscountPercent2.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Price2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Price2")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPrice2" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPrice2.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent2.value = 0;
                                         this.txtDocDiscountPrice2.value = 0;
                                         return
@@ -1785,23 +1714,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPercent2.value = Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rate2Num(this.txtDocDiscountPrice2.value)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Percent3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Percent3")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPercent3" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent3.value = 0;
                                         this.txtDocDiscountPrice3.value = 0;
                                         return
@@ -1809,23 +1731,16 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPrice3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rateInc(this.txtDocDiscountPercent3.value,2)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDocDiscount.Price3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDocDiscount.Price3")} alignment="right" />
                                 <NdNumberBox id="txtDocDiscountPrice3" parent={this} simple={true}
                                 maxLength={32}
                                 onValueChanged={(async()=>
                                 {
                                     if( this.txtDocDiscountPrice3.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent3.value = 0;
                                         this.txtDocDiscountPrice3.value = 0;
                                         return
@@ -1833,8 +1748,8 @@ export default class DocBase extends React.PureComponent
                                     this.txtDocDiscountPercent3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rate2Num(this.txtDocDiscountPrice3.value)
                                 }).bind(this)}
                                 ></NdNumberBox>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1877,8 +1792,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div> 
                 {/* Yönetici PopUp */}
@@ -1894,12 +1809,12 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popPassword.Password")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popPassword.Password")} alignment="right" />
                                 <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}></NdTextBox>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1917,14 +1832,7 @@ export default class DocBase extends React.PureComponent
                                             {
                                                 this.docObj.dt()[0].LOCKED = 0
                                                 this.docLocked = false
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success',displayTime:2000})
                                                 this.popPassword.hide();  
 
                                                 if(typeof this.popPassword.onStatus != 'undefined')
@@ -1958,8 +1866,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div> 
                 {/* İrsaliye Grid */}
@@ -2080,23 +1988,23 @@ export default class DocBase extends React.PureComponent
                         }
                     }}
                     >
-                        <Form colCount={2} height={'fit-content'}>
-                            <Item colSpan={2}>
-                                <Label  alignment="right" />
+                        <NdForm colCount={2} height={'fit-content'}>
+                            <NdItem colSpan={2}>
+                                <NdLabel  alignment="right" />
                                 <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}/>
-                            </Item>
-                            <EmptyItem />       
-                            <Item>
-                                <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                            </NdItem>
+                            <NdEmptyItem />       
+                            <NdItem>
+                                <NdLabel text={this.t("cmbMultiItemType.title")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
                                 displayExpr="VALUE"                       
                                 valueExpr="ID"
                                 value={0}
                                 data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
                                 />
-                            </Item>   
-                            <EmptyItem />   
-                            <Item>
+                            </NdItem>   
+                            <NdEmptyItem />   
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -2113,8 +2021,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                            <Item colSpan={2} >
+                            </NdItem>
+                            <NdItem colSpan={2} >
                                 <NdGrid parent={this} id={"grdMultiItem"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -2134,9 +2042,9 @@ export default class DocBase extends React.PureComponent
                                     <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
                                     <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
                                 </NdGrid>
-                            </Item>
-                            <EmptyItem />   
-                            <Item>
+                            </NdItem>
+                            <NdEmptyItem />   
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                     
@@ -2149,8 +2057,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>                   
                 {/* Birim Detay PopUp */}
@@ -2166,8 +2074,8 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
                                 <NdGrid parent={this} id={"grdUnit2"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -2183,8 +2091,8 @@ export default class DocBase extends React.PureComponent
                                     <Column dataField="NAME" caption={this.t("grdUnit2.clmName")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
                                     <Column dataField="UNIT_FACTOR" caption={this.t("grdUnit2.clmQuantity")} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                 </NdGrid>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* KDV PopUp */}
@@ -2200,8 +2108,8 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item >
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem >
                                 <NdGrid parent={this} id={"grdVatRate"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -2221,8 +2129,8 @@ export default class DocBase extends React.PureComponent
                                     <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                     <Column dataField="TOTALHT" caption={this.lang.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                 </NdGrid>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
@@ -2258,8 +2166,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnVatReCalculate")} type="normal" stylingMode="contained" width={'100%'} 
@@ -2297,8 +2205,8 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* notCustomer Dialog  */}
@@ -2318,13 +2226,13 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("checkAll")} alignment="right" />
                                         <NdCheckBox id="checkCustomer" parent={this} simple={true} value ={false}/>
-                                    </Item>
-                                </Form>
+                                        </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>
@@ -2346,13 +2254,13 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("checkAll")} alignment="right" />
                                         <NdCheckBox id="checkCombine" parent={this} simple={true} value ={false}/>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>  
@@ -2374,9 +2282,9 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* grdNewPrice */}
-                                    <Item>
+                                    <NdItem>
                                         <NdGrid parent={this} id={"grdNewPrice"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
@@ -2414,8 +2322,8 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="NET_MARGIN" caption={this.t("grdNewPrice.clmNetMargin")}width={80} allowEditing={false}/>
                                             <Column dataField="MARGIN" caption={this.t("grdNewPrice.clmMarge")} width={80} format={"##0.00"} allowEditing={false}/>
                                         </NdGrid>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>
@@ -2437,9 +2345,9 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPriceDate.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* grdNewPriceDate */}
-                                    <Item>
+                                    <NdItem>
                                         <NdGrid parent={this} id={"grdNewPriceDate"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
@@ -2475,8 +2383,8 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="NET_MARGIN" caption={this.t("grdNewPriceDate.clmNetMargin")}width={100} allowEditing={false}/>
                                             <Column dataField="MARGIN" caption={this.t("grdNewPrice.clmMarge")} width={80} format={"##0.00"} allowEditing={false}/>
                                         </NdGrid>
-                                    </Item>
-                                </Form>
+                                        </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>  
@@ -2498,9 +2406,9 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewVat.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* grdNewVat */}
-                                    <Item>
+                                    <NdItem>
                                         <NdGrid parent={this} id={"grdNewVat"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
@@ -2521,8 +2429,8 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="OLD_VAT" caption={this.t("grdNewVat.clmVat")} width={130}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdNewVat.clmVat2")} dataType={'number'} width={80}/>
                                         </NdGrid>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>  
@@ -2544,8 +2452,8 @@ export default class DocBase extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgQuantity.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
-                                    <Item>
+                                <NdForm>
+                                    <NdItem>
                                         <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
                                         displayExpr="NAME"                       
                                         valueExpr="GUID"
@@ -2565,9 +2473,9 @@ export default class DocBase extends React.PureComponent
                                         }).bind(this)}
                                         >
                                         </NdSelectBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
                                         onEnterKey={(async(e)=>
                                         {
@@ -2585,39 +2493,39 @@ export default class DocBase extends React.PureComponent
                                             };
                                         }).bind(this)}
                                         />
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
                                         </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}>
                                         </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtUnitPrice")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtUnitPrice")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitPrice" parent={this} simple={true} maxLength={32}
                                         onEnterKey={(async(e)=>
                                         {
                                             this.msgQuantity._onClick()
                                         }).bind(this)}
                                         />
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtPopQteDepotQty")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtPopQteDepotQty")} alignment="right" />
                                         <NdNumberBox id="txtPopQteDepotQty" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtPopQteReservQty")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtPopQteReservQty")} alignment="right" />
                                         <NdNumberBox id="txtPopQteReservQty" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtPopQteInputQty")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtPopQteInputQty")} alignment="right" />
                                         <NdNumberBox id="txtPopQteInputQty" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>   
@@ -2722,58 +2630,58 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmItemCode")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmItemCode")} alignment="right" />
                                 <NdTextBox id="txtPopExcelCode" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmQuantity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmQuantity")} alignment="right" />
                                 <NdTextBox id="txtPopExcelQty" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmPrice")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmPrice")} alignment="right" />
                                 <NdTextBox id="txtPopExcelPrice" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmDiscount")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmDiscount")} alignment="right" />
                                 <NdTextBox id="txtPopExcelDisc" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmDiscountRate")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmDiscountRate")} alignment="right" />
                                 <NdTextBox id="txtPopExcelDiscRate" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmVat")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmVat")} alignment="right" />
                                 <NdTextBox id="txtPopExcelVat" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                        </Form>
-                        <Form colCount={2}>
-                            <Item>
+                            </NdItem>
+                        </NdForm>
+                        <NdForm colCount={2}>
+                            <NdItem>
                                 <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
                                 {
                                     e.preventDefault();
@@ -2793,8 +2701,8 @@ export default class DocBase extends React.PureComponent
                                         reader.readAsArrayBuffer(e.target.files[0]);
                                     }
                                 }}/>    
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <NdButton id="btnShemaSave" parent={this} text={this.t('shemaSave')} type="default"
                                 onClick={async()=>
                                 {
@@ -2802,8 +2710,8 @@ export default class DocBase extends React.PureComponent
                                     this.prmObj.add({ID:'excelFormat',VALUE:shemaJson,USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:this.props.data.id})
                                     await this.prmObj.save()
                                 }}/>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Adres Seçim PopUp */}
@@ -2838,8 +2746,8 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
                                 <NdSelectBox simple={true} parent={this} id="cmbUnit"
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
@@ -2866,14 +2774,14 @@ export default class DocBase extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Form colCount={1}>
-                                    <Item>
-                                        <Label text={this.t("txtUnitFactor")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdForm colCount={1}>
+                                    <NdItem>
+                                        <NdLabel text={this.t("txtUnitFactor")} alignment="right" />
                                         <NdNumberBox id="txtUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
                                         </NdNumberBox>
-                                    </Item>
+                                    </NdItem>
                                     {/* <Item>
                                         <NdButton id="btnFactorSave" parent={this} text={this.t("msgUnit.btnFactorSave")} type="default"
                                         onClick={async()=>
@@ -2897,10 +2805,10 @@ export default class DocBase extends React.PureComponent
                                             }
                                         }}/>
                                     </Item> */}
-                                </Form>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                </NdForm>
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtUnitQuantity")} alignment="right" />
                                 <NdNumberBox id="txtUnitQuantity" parent={this} simple={true} maxLength={32}
                                 onValueChanged={(async(e)=>
                                 {
@@ -2915,9 +2823,9 @@ export default class DocBase extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtTotalQuantity")} alignment="right" />
                                 <NdNumberBox id="txtTotalQuantity" parent={this} simple={true} maxLength={32} readOnly={true}
                                 // onValueChanged={(async(e)=>
                                 // {
@@ -2932,12 +2840,12 @@ export default class DocBase extends React.PureComponent
                                 // }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitPrice")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtUnitPrice")} alignment="right" />
                                 <NdNumberBox id="txtUnitPrice" parent={this} simple={true} maxLength={32}/>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdDialog>
                 </div>  
                 {/* Satır İndirim PopUp */}
@@ -2954,9 +2862,9 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("txtDiscount1")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscount1")} alignment="right" />
                                 <NdNumberBox id="txtDiscount1" parent={this} simple={true} maxLength={32}
                                 onValueChanged={(async(e)=>
                                 {
@@ -2964,9 +2872,9 @@ export default class DocBase extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtDiscount2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscount2")} alignment="right" />
                                 <NdNumberBox id="txtDiscount2" parent={this} simple={true} maxLength={32}
                                 onValueChanged={(async(e)=>
                                 {
@@ -2974,9 +2882,9 @@ export default class DocBase extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtDiscount3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscount3")} alignment="right" />
                                 <NdNumberBox id="txtDiscount3" parent={this} simple={true} maxLength={32}
                                 onValueChanged={(async(e)=>
                                 {
@@ -2984,13 +2892,13 @@ export default class DocBase extends React.PureComponent
                                 }).bind(this)}
                                 >
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtTotalDiscount")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtTotalDiscount")} alignment="right" />
                                 <NdNumberBox id="txtTotalDiscount" parent={this} simple={true} readOnly={true} maxLength={32}>
                                 </NdNumberBox>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdDialog>
                 </div> 
                 {/* Satır İndirim Yüzde PopUp */}
@@ -3007,23 +2915,23 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("txtDiscountPer1")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscountPer1")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPer1" parent={this} simple={true} maxLength={32}>
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtDiscountPer2")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscountPer2")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPer2" parent={this} simple={true} maxLength={32}>
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtDiscountPer3")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtDiscountPer3")} alignment="right" />
                                 <NdNumberBox id="txtDiscountPer3" parent={this} simple={true} maxLength={32}>
                                 </NdNumberBox>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdDialog>
                 </div> 
                 {/* Proforma Grid */}
@@ -3061,9 +2969,9 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("cmbOrigin")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("cmbOrigin")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbOrigin"
                                 displayExpr="NAME"                       
                                 valueExpr="CODE"
@@ -3074,8 +2982,8 @@ export default class DocBase extends React.PureComponent
                                 data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                 >
                                 </NdSelectBox>                                    
-                            </Item>                    
-                        </Form>
+                            </NdItem>                    
+                        </NdForm>
                     </NdDialog>
                 </div> 
                 {/* Delete Description Popup */} 
@@ -3108,17 +3016,17 @@ export default class DocBase extends React.PureComponent
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={2} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderDate")} alignment="right" />
+                        <NdForm colCount={2} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderDate")} alignment="right" />
                                 <NdDatePicker simple={true}  parent={this} id={"dtSenderDate"}dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_DATE"}}/>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverDate")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverDate")} alignment="right" />
                                 <NdDatePicker simple={true}  parent={this} id={"dtRecieverDate"}dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_DATE"}}/>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderName")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderName")} alignment="right" />
                                 <NdTextBox id="txtSenderName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 button=
                                 {
@@ -3153,9 +3061,9 @@ export default class DocBase extends React.PureComponent
                                     ]
                                 }>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverName")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverName")} alignment="right" />
                                 <NdTextBox id="txtRecieverName" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NAME"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 button=
                                 {
@@ -3190,39 +3098,39 @@ export default class DocBase extends React.PureComponent
                                     ]
                                 }>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderAdress")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderAdress")} alignment="right" />
                                 <NdTextBox id="txtSenderAdress" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ADRESS"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverAdress")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverAdress")} alignment="right" />
                                 <NdTextBox id="txtRecieverAdress" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ADRESS"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderCity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderCity")} alignment="right" />
                                 <NdTextBox id="txtSenderCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_CITY"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverCity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverCity")} alignment="right" />
                                 <NdTextBox id="txtRecieverCity" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_CITY"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderZipCode")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderZipCode")} alignment="right" />
                                 <NdTextBox id="txtSenderZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverZipCode")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverZipCode")} alignment="right" />
                                 <NdTextBox id="txtRecieverZipCode" parent={this} simple={true} notRefresh={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_ZIPCODE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.cmbSenderCountry")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.cmbSenderCountry")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbSenderCountry"
                                 displayExpr="NAME"                       
                                 valueExpr="NAME"
@@ -3233,9 +3141,9 @@ export default class DocBase extends React.PureComponent
                                 data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                 >
                                 </NdSelectBox>     
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.cmbRecieverCountry")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.cmbRecieverCountry")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbRecieverCountry"
                                 displayExpr="NAME"                       
                                 valueExpr="NAME"
@@ -3246,60 +3154,60 @@ export default class DocBase extends React.PureComponent
                                 data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                 >
                                 </NdSelectBox>     
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
                                 <NdTextBox id="txtSenderNote" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtRecieverNote")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtRecieverNote")} alignment="right" />
                                 <NdTextBox id="txtRecieverNote" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_NOTE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <EmptyItem/>
-                            <EmptyItem/>
-                            <EmptyItem/>
-                            <EmptyItem/>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtTransporter")} alignment="right" />
+                            </NdItem>
+                            <NdEmptyItem/>
+                            <NdEmptyItem/>
+                            <NdEmptyItem/>
+                            <NdEmptyItem/>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtTransporter")} alignment="right" />
                                 <NdTextBox id="txtTransporter" parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtTransporterPlate")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtTransporterPlate")} alignment="right" />
                                 <NdTextBox id="txtTransporterPlate" parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"TRANSPORTER_PLATE"}} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtPalletQuntity")} alignment="right" />
                                 <NdTextBox id="txtPalletQuntity" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"PALLET_QUANTITY"}}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtColis")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtColis")} alignment="right" />
                                 <NdTextBox id="txtColis" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"COLIS"}} >
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtMetter")} alignment="right"/>
                                 <NdTextBox id="txtMetter" mode={'number'} parent={this} simple={true}  dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"METTER"}}>
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.lang.t("popTransport.txtHeight")} alignment="right"/>
                                 <NdTextBox id="txtHeight" mode={'number'} parent={this} simple={true} dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"WEIGHT"}} >  
                                 </NdTextBox>
-                            </Item>
-                            <EmptyItem/>
-                            <Item>
+                            </NdItem>
+                            <NdEmptyItem/>
+                            <NdItem>
                                 <NdButton id="btnShemaSave" parent={this} text={this.lang.t('popTransport.btnSave')} type="default"
                                 onClick={async()=>
                                 {
                                     this.popTransport.hide()
                                 }}/>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>   
                  {/* Cari Seçim PopUp */}
@@ -3340,7 +3248,8 @@ export default class DocBase extends React.PureComponent
                             {/* <Column dataField="QUANTITY" caption={this.lang.t("pg_partiLot.clmQuantity")} width={300} defaultSortOrder="asc" /> */}
                             <Column dataField="SKT" caption={this.lang.t("pg_partiLot.clmSkt")} width={300} dataType={"date"} format={"dd/MM/yyyy"} defaultSortOrder="asc" />
                     </NdPopGrid>
-                </div>           
+                </div>  
+                <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>         
             </div>
         )
     }
