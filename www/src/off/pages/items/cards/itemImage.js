@@ -1,20 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import {itemImageCls} from '../../../../core/cls/items.js'
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
+import { Item } from 'devextreme-react/form';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
+import { Column } from '../../../../core/react/devex/grid.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 import NbLabel from '../../../../core/react/bootstrap/label';
-import { datatable } from '../../../../core/core.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class itemImage extends React.PureComponent
 {
@@ -95,7 +95,7 @@ export default class itemImage extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
             }
@@ -119,10 +119,7 @@ export default class itemImage extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmItems" + this.tabIndex}
@@ -130,7 +127,7 @@ export default class itemImage extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                         }
@@ -138,20 +135,18 @@ export default class itemImage extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            let tmpConfObj1 =
-                                            {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                            }
-                                            
                                             if((await this.itemImageObj.save()) == 0)
-                                            {         
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                            {
+                                                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success'})
                                             }
                                             else
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                }
                                                 await dialog(tmpConfObj1);
                                             }
                                         }
@@ -163,7 +158,7 @@ export default class itemImage extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -190,7 +185,7 @@ export default class itemImage extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -208,10 +203,10 @@ export default class itemImage extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">                        
                         <div className="col-12">
-                            <Form colCount={2} id={"frmItemImage" + this.tabIndex}>
+                            <NdForm colCount={2} id={"frmItemImage" + this.tabIndex}>
                                 {/* txtRef */}
-                                <Item>                                    
-                                    <Label text={this.t("txtRef")} alignment="right" />
+                                <NdItem>                                    
+                                    <NdLabel text={this.t("txtRef")} alignment="right" />
                                     <NdTextBox id="txtRef" parent={this} simple={true} tabIndex={this.tabIndex}
                                     button=
                                     {
@@ -260,7 +255,7 @@ export default class itemImage extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -271,12 +266,12 @@ export default class itemImage extends React.PureComponent
                                         <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
                                         <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* Name */}
-                                <Item> 
+                                <NdItem> 
                                     <NbLabel id="lblName" parent={this} value={""}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>                        
                     </div>
                     <div className="row px-2 pt-2">
@@ -414,6 +409,7 @@ export default class itemImage extends React.PureComponent
                         </div>
                     </div>
                 </ScrollView>
+                <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
             </React.Fragment>
         )
     }

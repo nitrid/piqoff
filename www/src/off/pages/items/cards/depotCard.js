@@ -5,23 +5,17 @@ import { depotCls} from '../../../../core/cls/items.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import { Item } from 'devextreme-react/toolbar';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import { Column } from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class DepotCard extends React.PureComponent
 {
     constructor(props)
@@ -103,7 +97,7 @@ export default class DepotCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM DEPOT_VW_01 WHERE CODE = @CODE",
+                    query : `SELECT TOP 1 CODE FROM DEPOT_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -118,7 +112,7 @@ export default class DepotCard extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -167,7 +161,6 @@ export default class DepotCard extends React.PureComponent
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        console.log(132)
                                         this.init(); 
                                     }}/>
                                 </Item>
@@ -179,7 +172,7 @@ export default class DepotCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -187,36 +180,27 @@ export default class DepotCard extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 if((await this.depotObj.save()) == 0)
                                                 {                                      
                                                     this.btnNew.setState({disabled:false});
                                                     this.btnSave.setState({disabled:true});              
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success'})
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    }
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning'})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -226,26 +210,19 @@ export default class DepotCard extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query :"select top 1 GUID FROM DOC_VW_01 WHERE ((INPUT = @DEPOT) OR (OUTPUT = @DEPOT))",
+                                            query : `SELECT TOP 1 GUID FROM DOC_VW_01 WHERE ((INPUT = @DEPOT) OR (OUTPUT = @DEPOT))`,
                                             param : ['DEPOT:string|50'],
                                             value : [this.depotObj.dt()[0].GUID]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotDeleted',showTitle:true,title:this.t("msgNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgNotDeleted.btn01"),location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotDeleted.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgNotDeleted.msg"),type:'warning'})
                                             return
                                         }
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -272,7 +249,7 @@ export default class DepotCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -290,10 +267,10 @@ export default class DepotCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmDepot">
+                            <NdForm colCount={3} id="frmDepot">
                                  {/* txtCode */}
-                                 <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -339,7 +316,7 @@ export default class DepotCard extends React.PureComponent
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*KASA SECIMI POPUP */}
+                                    {/*DEPO SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
                                     visible={false}
                                     position={{of:'#root'}} 
@@ -348,61 +325,42 @@ export default class DepotCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM DEPOT_VW_01`},sql:this.core.sql}}}
+                                    button={{id:'01',icon:'more',onClick:()=>{}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtTitle */}
-                                <Item>
-                                    <Label text={this.t("txtName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <EmptyItem />
+                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}/>
+                                </NdItem>
+                                <NdEmptyItem />
                                 {/* cmbType */}
-                                <Item>
-                                    <Label text={this.t("cmbType")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.depotObj.dt('DEPOT'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.normal")},{ID:1,VALUE:this.t("cmbTypeData.rebate")},{ID:2,VALUE:this.t("cmbTypeData.shop")},{ID:3,VALUE:this.t("cmbTypeData.outage")}]}}
-                                    onValueChanged={(async()=>
-                                            {
-                                               
-                                        }).bind(this)}
                                     />
-                                </Item>    
+                                </NdItem>    
                                  {/* chkActive */}
-                                 <Item>
-                                    <Label text={this.t("chkActive")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("chkActive")} alignment="right" />
                                     <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.depotObj.dt('DEPOT'),field:"STATUS"}}
                                     param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
-                                </Item>      
-                            </Form>
+                                </NdItem>      
+                            </NdForm>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
