@@ -3745,7 +3745,7 @@ export default class posDoc extends React.PureComponent
                     { 
                         let tmpQuery = 
                         {
-                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                            query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                             param:  ['GUID:string|50'],
                             value:  [pPosDt[0].CUSTOMER_GUID]
                         }
@@ -7351,7 +7351,7 @@ export default class posDoc extends React.PureComponent
                                                 { 
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                         param:  ['GUID:string|50'],
                                                         value:  [tmpLastPos[0].CUSTOMER_GUID]
                                                     }
@@ -7587,7 +7587,7 @@ export default class posDoc extends React.PureComponent
                                                     { 
                                                         let tmpQuery = 
                                                         {
-                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                             param:  ['GUID:string|50'],
                                                             value:  [this.posObj.dt()[0].CUSTOMER_GUID]
                                                         }

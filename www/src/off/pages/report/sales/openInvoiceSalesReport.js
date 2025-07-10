@@ -635,7 +635,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                         await this.popMailSend.show()
                                                         let tmpQuery = 
                                                         {
-                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                             param:  ['GUID:string|50'],
                                                             value:  [tmpLines[0].INPUT]
                                                         }

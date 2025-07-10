@@ -18,6 +18,8 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class priceDiffDemand extends DocBase
 {
@@ -202,7 +204,7 @@ export default class priceDiffDemand extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -271,13 +273,7 @@ export default class priceDiffDemand extends DocBase
                         }
                         else
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                            }
-                            await dialog(tmpConfObj);
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:2000})
                         }
                     }
                 }).bind(this)}
@@ -475,57 +471,6 @@ export default class priceDiffDemand extends DocBase
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
                                 e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                 this.calculateTotal()
-                            }
-                        },
-                    ]
-                }
-                >  
-                </NdTextBox>
-            )
-        }
-        if(e.column.dataField == "ORIGIN")
-        {
-            return (
-                <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
-                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                value={e.value}
-                button=
-                {
-                    [
-                        {
-                            id:'01',
-                            icon:'more',
-                            onClick:async ()  =>
-                            {
-                                this.msgGrdOrigins.onShowed = async ()=>
-                                {
-                                    this.cmbOrigin.value = e.data.ORIGIN
-                                }
-                                await this.msgGrdOrigins.show().then(async () =>
-                                {
-                                    e.data.ORIGIN = this.cmbOrigin.value 
-                                    let tmpQuery = 
-                                    {
-                                        query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
-                                        param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
-                                        value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(typeof tmpData.result.err == 'undefined')
-                                    {
-                                        
-                                    }
-                                    else
-                                    {
-                                        let tmpConfObj1 =
-                                        {
-                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                        }
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                        await dialog(tmpConfObj1);
-                                    }
-                                });  
                             }
                         },
                     ]
@@ -739,7 +684,7 @@ export default class priceDiffDemand extends DocBase
         {
             let tmpConfObj =
             {
-                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
             }
@@ -814,7 +759,7 @@ export default class priceDiffDemand extends DocBase
         }
         let tmpConfObj =
         {
-            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
@@ -848,26 +793,12 @@ export default class priceDiffDemand extends DocBase
                                 {
                                     if(this.docLocked == true)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDocLocked.msg"),type:'warning',displayTime:2000})
                                         return
                                     }
                                     if(typeof this.docObj.docDemand.dt()[0] == 'undefined')
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                        }
-
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgNotRow.msg"),type:'warning',displayTime:2000})
                                         this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                         return
                                     }
@@ -879,7 +810,7 @@ export default class priceDiffDemand extends DocBase
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                         }
@@ -889,14 +820,13 @@ export default class priceDiffDemand extends DocBase
                                         {
                                             let tmpConfObj1 =
                                             {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                             }
                                             
                                             if((await this.docObj.save()) == 0)
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success',displayTime:2000})
                                                 this.btnSave.setState({disabled:true});
                                                 this.btnNew.setState({disabled:false});
                                             }
@@ -909,14 +839,7 @@ export default class priceDiffDemand extends DocBase
                                     }
                                     else
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning',displayTime:2000})
                                     }           
                                 }}/>
                             </Item>
@@ -927,19 +850,12 @@ export default class priceDiffDemand extends DocBase
                                     if(this.docObj.dt()[0].LOCKED != 0)
                                     {
                                         this.docLocked = true
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgGetLocked.msg"),type:'warning',displayTime:2000})
                                         return
                                     }
                                     let tmpConfObj =
                                     {
-                                        id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                     }
@@ -966,14 +882,7 @@ export default class priceDiffDemand extends DocBase
                                 {
                                     if(typeof this.docObj.docDemand.dt()[0] == 'undefined')
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                        }
-
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgNotRow.msg"),type:'warning',displayTime:2000})
                                         this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                         return
                                     }
@@ -992,14 +901,7 @@ export default class priceDiffDemand extends DocBase
                                         this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                                         if((await this.docObj.save()) == 0)
                                         {                                                    
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgLocked.msg"),type:'success',displayTime:2000})
                                             this.frmDocItems.option('disabled',true)
                                         }
                                         else
@@ -1021,13 +923,7 @@ export default class priceDiffDemand extends DocBase
                                     {       
                                         if(this.docObj.isSaved == false)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("isMsgSave.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
                                         else
@@ -1048,7 +944,7 @@ export default class priceDiffDemand extends DocBase
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                         }
@@ -1123,7 +1019,7 @@ export default class priceDiffDemand extends DocBase
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                     }
@@ -1168,7 +1064,7 @@ export default class priceDiffDemand extends DocBase
                                         this.frmDocItems.option('disabled',false)
                                     }
                                 }).bind(this)}
-                                data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                 >
@@ -1200,14 +1096,7 @@ export default class priceDiffDemand extends DocBase
                                 {
                                     if(this.docObj.docDemand.dt().length > 0)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgCustomerLock.msg"),type:'warning',displayTime:2000})
                                         return;
                                     }
                                     await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -1235,7 +1124,7 @@ export default class priceDiffDemand extends DocBase
                                             }
                                             let tmpQuery = 
                                             {
-                                                query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                query : "SELECT ADRESS_NO,ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                 param : ['CUSTOMER:string|50'],
                                                 value : [ data[0].GUID]
                                             }
@@ -1248,8 +1137,6 @@ export default class priceDiffDemand extends DocBase
                                                     {
                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
-                                                        this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
-
                                                     }
                                                 }
                                                 await this.pg_adress.show()
@@ -1268,14 +1155,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 if(this.docObj.docDemand.dt().length > 0)
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                    }
-                                                    
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgCustomerLock.msg"),type:'warning',displayTime:2000})
                                                     return;
                                                 }
                                                 this.pg_txtCustomerCode.show()
@@ -1303,7 +1183,7 @@ export default class priceDiffDemand extends DocBase
                                                         }
                                                         let tmpQuery = 
                                                         {
-                                                            query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                            query : "SELECT ADRESS_NO,ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                             param : ['CUSTOMER:string|50'],
                                                             value : [ data[0].GUID]
                                                         }
@@ -1396,14 +1276,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                                    }
-                                                    
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                                     this.txtBarcode.value = ''
                                                     return
                                                 }
@@ -1434,14 +1307,7 @@ export default class priceDiffDemand extends DocBase
                                 {
                                     if(this.cmbDepot.value == '')
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         this.txtBarcode.value = ''
                                         return
                                     }
@@ -1544,14 +1410,7 @@ export default class priceDiffDemand extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                 }}/>
                                 <Button icon="add" text={this.t("serviceAdd")}
@@ -1595,14 +1454,7 @@ export default class priceDiffDemand extends DocBase
                                     }
                                     else
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                     }
                                 }}/>
                                 <Button icon="add" text={this.lang.t("collectiveItemAdd")}
@@ -1620,14 +1472,7 @@ export default class priceDiffDemand extends DocBase
                                     }
                                     else
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                     }
                                 }}/> 
                             </Item>
@@ -1675,7 +1520,7 @@ export default class priceDiffDemand extends DocBase
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
@@ -1930,9 +1775,9 @@ export default class priceDiffDemand extends DocBase
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDesign.design")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                 displayExpr="DESIGN_NAME"                       
                                 valueExpr="TAG"
@@ -1946,9 +1791,9 @@ export default class priceDiffDemand extends DocBase
                                         <RequiredRule message={this.t("validDesign")} />
                                     </Validator> 
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                 displayExpr="VALUE"                       
                                 valueExpr="ID"
@@ -1957,8 +1802,8 @@ export default class priceDiffDemand extends DocBase
                                 data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                 >
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
@@ -2017,7 +1862,7 @@ export default class priceDiffDemand extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                    query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                     param:  ['GUID:string|50'],
                                                     value:  [this.docObj.dt()[0].INPUT]
                                                 }
@@ -2035,8 +1880,8 @@ export default class priceDiffDemand extends DocBase
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Mail Send PopUp */}
@@ -2052,23 +1897,23 @@ export default class priceDiffDemand extends DocBase
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
                                 displayExpr="MAIL_ADDRESS"                       
                                 valueExpr="GUID"
                                 value=""
                                 searchEnabled={true}
-                                data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT MAIL_ADDRESS,GUID FROM MAIL_SETTINGS "},sql:this.core.sql}}}
                                 >
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                         <RequiredRule message={this.t("validMail")} />
                                     </Validator> 
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                 <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                 maxLength={32}
                                 >
@@ -2076,9 +1921,9 @@ export default class priceDiffDemand extends DocBase
                                         <RequiredRule message={this.t("validMail")} />
                                     </Validator> 
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                            <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                            <NdLabel text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                 <NdTextBox id="txtSendMail" parent={this} simple={true}
                                 maxLength={32}
                                 >
@@ -2086,12 +1931,12 @@ export default class priceDiffDemand extends DocBase
                                         <RequiredRule message={this.t("validMail")} />
                                     </Validator> 
                                 </NdTextBox>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
                                 </NdHtmlEditor>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
@@ -2127,7 +1972,7 @@ export default class priceDiffDemand extends DocBase
                                                         App.instance.setState({isExecute:false})
                                                         let tmpConfObj1 =
                                                         {
-                                                            id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                             button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
                                                         }
                                                         
@@ -2160,11 +2005,12 @@ export default class priceDiffDemand extends DocBase
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>
                 <div>{super.render()}</div>
+                <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
             </ScrollView>
         )
     }
