@@ -3,6 +3,12 @@ const cnt_01_002 =
 {
     txtCustomerCode : "Müşteri",
     menu : "Satış Anlaşması",
+    cmbVatType :
+    {
+        title : "Vergi Tipi",
+        vatInc : "İç",
+        vatExt : "Dış"
+    },
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -12,7 +18,7 @@ const cnt_01_002 =
         clmGenusName : "CİNSİ"
     },
     btnGet : "Getir",
-    grdPurcContList: 
+    grdSlsContList: 
     {
         clmCreateDate: "Kayıt Tarihi",
         clmCode: "Ürün Kodu",

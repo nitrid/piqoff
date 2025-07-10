@@ -2,7 +2,13 @@
 const cnt_01_002 =
 {
     txtCustomerCode: "Kunde",
-    menu: "Verkaufsvereinbarungen",
+    menu: "Verkaufsvereinbarung",
+    cmbVatType :
+    {
+        title : "Steuerart",
+        vatInc : "Inklusive",
+        vatExt : "Exklusive"
+    },
     pg_txtCustomerCode: 
     {
         title: "Kundenauswahl",
@@ -12,7 +18,7 @@ const cnt_01_002 =
         clmGenusName: "Art"
     },
     btnGet: "Suchen",
-    grdPurcContList: 
+    grdSlsContList: 
     {
         clmCreateDate: "Erstellungsdatum",
         clmCode: "Artikelcode",

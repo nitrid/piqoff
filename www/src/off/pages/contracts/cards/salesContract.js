@@ -100,10 +100,8 @@ export default class salesContract extends React.PureComponent
         this.txtName.value = ''
         this.txtCode.readOnly = false
         this.txtName.readOnly = false
-
-        this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
-        this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
-        this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
+        this.startDate.value = ''
+        this.finishDate.value = ''
         await this.grdContracts.dataRefresh({source:this.contractObj.dt('ITEM_PRICE')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
 
@@ -171,7 +169,7 @@ export default class salesContract extends React.PureComponent
         }
         
         this.contractObj.itemPrice.addEmpty(tmpEmpty);
-        this._calculateMargin()
+        this.calculateMargin()
         App.instance.setState({isExecute:false})
         this.btnSave.setState({disabled:false});
     }
@@ -262,7 +260,7 @@ export default class salesContract extends React.PureComponent
         }
         this.popMultiItem.hide()
     }
-    async _calculateMargin()
+    async calculateMargin()
     {
         for(let  i= 0; i < this.contractObj.dt().length; i++)
         {
@@ -678,6 +676,9 @@ export default class salesContract extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
+                                        <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCustomerName")} />
+                                        </Validator>
                                     </NdTextBox>
                                 </NdItem> 
                                 {/* docDate */}
@@ -776,14 +777,7 @@ export default class salesContract extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgContractValid',showTitle:true,title:this.t("msgContractValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgContractValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgContractValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgContractValid.msg")})
                                         }
                                     }}/>
                                       <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
@@ -797,14 +791,7 @@ export default class salesContract extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgDocValid.msg")})
                                         }
                                     }}/>
                                 </NdItem>
@@ -829,17 +816,17 @@ export default class salesContract extends React.PureComponent
                                         {
                                             e.key.PRICE = (e.key.PRICE_VAT_EXT + ((e.key.PRICE_VAT_EXT * e.key.VAT_RATE) / 100))
                                         }
-                                        this._calculateMargin()
+                                        this.calculateMargin()
                                     }}
                                     onRowPrepared={async (e)=>
                                     {
-                                        this._calculateMargin()
+                                        this.calculateMargin()
                                     }}
                                     >
                                         <ColumnChooser enabled={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Paging defaultPageSize={10} />
+                                        <Paging defaultPageSize={20} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menuOff.cnt_04_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={250} allowEditing={false}/>
@@ -919,8 +906,8 @@ export default class salesContract extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsPrice"} parent={this} simple={true} >
-                                    <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
-                                                <RequiredRule message={this.t("validItemPrice")} />
+                                        <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validItemPrice")} />
                                         </Validator>
                                     </NdTextBox>
                                 </NdItem>
@@ -1185,7 +1172,8 @@ export default class salesContract extends React.PureComponent
                                                         }
                                                         else
                                                         {
-                                                            this.toast.show({type:"error",message:this.t("msgMailSendResult.msgFailed")})
+                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                            await dialog(tmpConfObj1);
                                                             this.popMailSend.hide(); 
                                                         }
                                                     });

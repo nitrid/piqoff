@@ -64,7 +64,9 @@ const cnt_02_002 =
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Please fill in the required fields !"
+        msg: "Please fill in the required fields !",
+        msgSuccess: "Your record has been successfully saved !",
+        msgFailed: "Your record has been failed to save !"
     },
     msgDelete:
     {

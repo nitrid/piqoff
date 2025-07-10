@@ -64,7 +64,9 @@ const cnt_02_002 =
     {
         title: "Dikkat",
         btn01: "Tamam",
-        msg: "Lütfen gerekli alanları doldurunuz !"
+        msg: "Lütfen gerekli alanları doldurunuz !",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
     },
     msgDelete:
     {

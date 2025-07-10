@@ -2,7 +2,6 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import {contractCls} from '../../../../core/cls/contract.js'
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
@@ -12,15 +11,14 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
-export default class salesContract extends React.PureComponent
+export default class multipleSaleContract extends React.PureComponent
 {
     constructor(props)
     {
@@ -81,32 +79,32 @@ export default class salesContract extends React.PureComponent
             tmpContDt.selectCmd = 
             {
                 query : "SELECT " +
-                        "GUID AS GUID," +
-                        "DOC_DATE AS DOC_DATE," +
-                        "CODE AS CODE," +
-                        "NAME AS NAME," +
-                        "START_DATE AS START_DATE," +
-                        "FINISH_DATE AS FINISH_DATE," +
-                        "CUSTOMER AS CUSTOMER," +
-                        "DEPOT AS DEPOT," +
-                        "ITEM AS ITEM," +
-                        "ITEM_CODE AS ITEM_CODE," +
-                        "ITEM_NAME AS ITEM_NAME," +
-                        "VAT_RATE AS VAT_RATE," +
-                        "ORGINS_NAME AS ORGINS_NAME," +
-                        "QUANTITY AS QUANTITY," +
-                        "PRICE AS PRICE," +
-                        "PRICE_VAT_EXT AS PRICE_VAT_EXT," +
-                        "MAIN_GRP_NAME AS MAIN_GRP_NAME," +
-                        "UNIT AS UNIT," +
-                        "UNIT_NAME AS UNIT_NAME," +
-                        "UNIT_FACTOR AS UNIT_FACTOR," +
-                        "UNIT_PRICE AS UNIT_PRICE," +
-                        "UNIT_SYMBOL AS UNIT_SYMBOL, " +
-                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = CONTRACT_VW_01.ITEM AND TYPE = 1),1) AS UNDER_UNIT_FACTOR, " +
-                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = CONTRACT_VW_01.ITEM AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL " +
-                        "FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE = 1" +
-                        "ORDER BY ITEM_CODE ASC" ,
+                        "C.GUID AS GUID," +
+                        "C.DOC_DATE AS DOC_DATE," +
+                        "C.CODE AS CODE," +
+                        "C.NAME AS NAME," +
+                        "C.START_DATE AS START_DATE," +
+                        "C.FINISH_DATE AS FINISH_DATE," +
+                        "C.CUSTOMER AS CUSTOMER," +
+                        "C.DEPOT AS DEPOT," +
+                        "M.GUID AS ITEM," +
+                        "M.CODE AS ITEM_CODE," +
+                        "M.NAME AS ITEM_NAME," +
+                        "M.VAT AS VAT_RATE," +
+                        "M.ORGINS_NAME AS ORGINS_NAME," +
+                        "C.QUANTITY AS QUANTITY," +
+                        "C.PRICE AS PRICE," +
+                        "M.PRICE_SALE_VAT_EXT AS PRICE_VAT_EXT," +
+                        "M.MAIN_GRP_NAME AS MAIN_GRP_NAME," +
+                        "M.UNIT_NAME AS UNIT_NAME," +
+                        "M.UNIT_FACTOR AS UNIT_FACTOR," +
+                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 0),'') AS UNIT_SYMBOL, " +
+                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_FACTOR, " +
+                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL " +
+                        "FROM CONTRACT_VW_01 C " +
+                        "INNER JOIN ITEMS_BARCODE_MULTICODE_VW_01 M ON C.ITEM_CODE = M.CODE " +
+                        "WHERE C.CODE = @CODE AND C.TYPE = 1 " +
+                        "ORDER BY M.CODE ASC" ,
                 param : ['CODE:string|50'],
                 value : [this.txtCode.code.split(',')[i]]
             } 
@@ -229,14 +227,8 @@ export default class salesContract extends React.PureComponent
         } 
 
         App.instance.setState({isExecute:false})
-
-        let tmpConfObj1 =
-        {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
-            content : (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-        }
-        await dialog(tmpConfObj1);        
+  
+            this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
     }
     cellRoleRender(e)
     {
@@ -508,17 +500,11 @@ export default class salesContract extends React.PureComponent
                                         <Export fileName={this.lang.t("menuOff.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
-                                        <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")} width={110} allowEditing={false}/>
-                                        <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
-                                        <Column dataField="P0" caption={this.t("grdContracts.clmPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
-                                        <Column dataField="PA0" caption={this.t("grdContracts.clmUnderPrice1")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}
-                                        cellRender={(e)=>{return Number.money.sign + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}
-                                        />
-                                        <Column dataField="P1" caption={this.t("grdContracts.clmPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
-                                        <Column dataField="PA1" caption={this.t("grdContracts.clmUnderPrice2")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}
-                                        cellRender={(e)=>{return  Number.money.sign + e.value + " / " + e.data.UNDER_UNIT_SYMBOL}}/>
-                                        <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this.cellRoleRender}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")}  allowEditing={false}/>
+                                        <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")}  allowEditing={false}/>
+                                        <Column dataField="P0" caption={this.t("grdContracts.clmPrice1")} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                        <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} editCellRender={this.cellRoleRender}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -600,6 +586,7 @@ export default class salesContract extends React.PureComponent
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={200} defaultSortOrder="asc" />
                     <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_txtPopItemsCode.clmGrpName")} width={100} />
                 </NdPopGrid>
+                <NdToast id={"toast"} parent={this} displayTime={3000} position={{at:"top center",offset:'0px 110px'}}/>
             </div>
         )
     }

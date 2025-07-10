@@ -3,7 +3,7 @@ const cnt_01_002 =
 {
     txtCustomerCode : "Fournisseur",
     txtCode : "Code",
-    menu : "Accord d'achat",
+    menu : "Accord de vente",
     startDate :"Date Début",    
     validDate : "Sélection Date.",
     txtName : "Nom",
@@ -13,6 +13,12 @@ const cnt_01_002 =
     txtCustomerName : "Nom Client",
     docDate : "Date", 
     cmbDepot: "Dépôt",
+    cmbVatType :
+    {
+        title : "Type de TVA",
+        vatInc : "Inclusif",
+        vatExt : "Exclusif"
+    },
     validDocDate : "Vous devez choisir une date",
     validCustomerCode : "Le code fournisseur-client ne peut être vide",
     validDesign : "Veuillez sélectionner le design.", 
@@ -92,7 +98,7 @@ const cnt_01_002 =
         clmOrgins : "Origine",
     },
     btnGet : "Rechercher",
-    grdPurcContList: 
+    grdSlsContList: 
     {
         clmCreateDate: "Date d'Enregistrement",
         clmCode: "Référence Produit",

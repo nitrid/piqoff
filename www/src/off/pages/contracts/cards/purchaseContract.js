@@ -4,9 +4,9 @@ import {contractCls} from '../../../../core/cls/contract.js'
 import moment from 'moment';
 import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 import {NdToast} from '../../../../core/react/devex/toast.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
+import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -28,23 +28,26 @@ export default class purchaseContract extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.contractObj = new contractCls();
         this.tabIndex = props.data.tabkey
+        this.isUnmounted = false; // Unmount durumunu takip etmek iç
 
         //this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getItems = this._getItems.bind(this)
+        this.getItems = this.getItems.bind(this)
         this.multiItemData = new datatable
+        this.checkboxReset = this.checkboxReset.bind(this)
     } 
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init();
     }
+    
     async init()
     {
         this.contractObj.clearAll();
              
         this.contractObj.ds.on('onAddRow',(pTblName,pData) =>
         {
-            if(pData.stat == 'new')
+            if(pData.stat == 'new' )
             {
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:false});
@@ -66,17 +69,21 @@ export default class purchaseContract extends React.PureComponent
         })
         this.contractObj.ds.on('onRefresh',(pTblName) =>
         {
+            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
+            
         })
         this.contractObj.ds.on('onDelete',(pTblName) =>
         {
+            
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
+        
         })
 
         let tmpEmpty = {...this.contractObj.empty};
@@ -93,16 +100,15 @@ export default class purchaseContract extends React.PureComponent
         this.txtCustomerName.value = ''
         this.txtCode.value = ''
         this.txtName.value = ''
-        
-        this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
-        this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
-        this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
+
+        this.startDate.value = ''
+        this.finishDate.value = ''
         await this.grdContracts.dataRefresh({source:this.contractObj.dt('ITEM_PRICE')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
 
-        this._getItems()
+        this.getItems()
     }
-    async _getItems()
+    async getItems()
     {
         let tmpSource =
         {
@@ -122,7 +128,8 @@ export default class purchaseContract extends React.PureComponent
     }
     async addItem(pData)
     {
-       
+        App.instance.setState({isExecute:true})
+        
         let tmpEmpty = {...this.contractObj.itemPrice.empty};
         
         tmpEmpty.TYPE = 1,
@@ -146,9 +153,9 @@ export default class purchaseContract extends React.PureComponent
 
         let tmpCheckQuery = 
         {
-            query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,dbo.GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-            value : [pData.CODE,this.txtCustomerCode.GUID,1]
+            query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER",
+            param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
+            value : [pData.GUID,this.txtCustomerCode.GUID,1]
         }
 
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
@@ -171,7 +178,24 @@ export default class purchaseContract extends React.PureComponent
             }
         }
         
-        this.contractObj.itemPrice.addEmpty(tmpEmpty);
+        // Eğer bileşen hala mount durumundaysa ekle
+        if(!this.isUnmounted)
+        {
+            this.contractObj.itemPrice.addEmpty(tmpEmpty);
+        }
+    }
+    async checkboxReset()
+    {
+        if(typeof this.customerControl != 'undefined')
+        {
+            this.customerControl = true
+            this.customerClear = false
+        }
+        if(typeof this.combineControl != 'undefined')
+        {
+            this.combineControl = true
+            this.combineNew = false 
+        }
     }
     async multiItemAdd()
     {
@@ -252,10 +276,16 @@ export default class purchaseContract extends React.PureComponent
     }
     async multiItemSave()
     {
+        this.checkboxReset()
+        
+        // Sıralı olarak ekle - await kullanarak her birini beklet
         for (let i = 0; i < this.multiItemData.length; i++) 
         {                        
-            this.addItem(this.multiItemData[i])
+            await this.addItem(this.multiItemData[i])
+            // Her ekleme arasında kısa bir bekleme
+            await this.core.util.waitUntil(50)
         }
+        
         this.popMultiItem.hide()
     }
     render()
@@ -273,7 +303,7 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                         await this.contractObj.load({CODE:this.txtCode.value,TYPE:0});
                                         this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
-                                        this._getItems()
+                                        this.getItems()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -405,7 +435,7 @@ export default class purchaseContract extends React.PureComponent
                                                         {
                                                             await this.contractObj.load({CODE:data[0].CODE,TYPE:1});
                                                             this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
-                                                            this._getItems()
+                                                            this.getItems()
                                                         }
                                                     }
                                                             
@@ -423,11 +453,11 @@ export default class purchaseContract extends React.PureComponent
                                     }
                                     onChange={(async()=>
                                     {
-                                        let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
-                                        if(tmpResult == 3)
-                                        {
-                                            this.txtCode.value = "";
-                                        }
+                                        // let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
+                                        // if(tmpResult == 3)
+                                        // {
+                                        //     this.txtCode.value = "";
+                                        // }
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
@@ -455,6 +485,7 @@ export default class purchaseContract extends React.PureComponent
                                 </NdItem>
                                 {/* txtName */}
                                 <NdItem>
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
@@ -495,7 +526,7 @@ export default class purchaseContract extends React.PureComponent
                                                     this.txtCustomerCode.value = data[0].CODE;
                                                     this.txtCustomerName.value = data[0].TITLE;
                                                     
-                                                    this._getItems()
+                                                    this.getItems()
                                                 }
                                             }
                                         }).bind(this)}
@@ -516,7 +547,7 @@ export default class purchaseContract extends React.PureComponent
                                                             this.txtCustomerCode.value = data[0].CODE;
                                                             this.txtCustomerName.value = data[0].TITLE;
                                                             
-                                                            this._getItems()
+                                                            this.getItems()
                                                         }
                                                     }
                                                 }
@@ -594,8 +625,7 @@ export default class purchaseContract extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
                                     onValueChanged={(async(e)=>
-                                        {
-                                            console.log(e)
+                                    {
                                     }).bind(this)}
                                     >
                                     <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
@@ -645,43 +675,43 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                                this.pg_txtPopItemsCode.show()
-                                                this.pg_txtPopItemsCode.onClick = async(data) =>
+                                            this.pg_txtPopItemsCode.show()
+                                            this.pg_txtPopItemsCode.onClick = async(data) =>
+                                            {
+                                                this.checkboxReset()
+                                                if(data.length == 1)
                                                 {
-                                                    if(data.length == 1)
+                                                    await this.addItem(data[0])
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    let tmpCounter = 0
+                                                    for (let i = 0; i < data.length; i++) 
                                                     {
-                                                        await this.addItem(data[0])
+                                                        if(i == 0)
+                                                        {
+                                                            await this.addItem(data[i])
+                                                        }
+                                                        else
+                                                        {
+                                                            this.txtCode.readOnly = true
+                                                            this.txtName.readOnly = true
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i])
+                                                        }
+
+                                                        if(data[i].MULTICODE == '')
+                                                        {
+                                                            tmpCounter = tmpCounter +1
+                                                        }
                                                     }
-                                                    else if(data.length > 1)
+
+                                                    if(tmpCounter > 0)
                                                     {
-                                                        let tmpCounter = 0
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i])
-                                                            }
-                                                            else
-                                                            {
-                                                                this.txtCode.readOnly = true
-                                                                this.txtName.readOnly = true
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i])
-                                                            }
-
-                                                            if(data[i].MULTICODE == '')
-                                                            {
-                                                                tmpCounter = tmpCounter +1
-                                                            }
-                                                        }
-
-                                                        if(tmpCounter > 0)
-                                                        {
-                                                            this.toast.show({type:"warning",message:tmpCounter + this.t("msgNotCustomerCount.msg")})
-                                                        }
+                                                        this.toast.show({type:"warning",message:tmpCounter + this.t("msgNotCustomerCount.msg")})
                                                     }
                                                 }
-                                                
+                                            }
                                         }
                                         else
                                         {
@@ -730,7 +760,7 @@ export default class purchaseContract extends React.PureComponent
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Paging defaultPageSize={10} />
+                                        <Paging defaultPageSize={20} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menuOff.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={250} allowEditing={false}/>
@@ -835,7 +865,7 @@ export default class purchaseContract extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                   await this.addItem()
+                                                    await this.addItem()
                                                     this.popItems.hide();
                                                     this.toast.show({type:"success",message:this.t("msgSaveValid.msgSuccess")})
                                                 }                              
@@ -886,9 +916,9 @@ export default class purchaseContract extends React.PureComponent
                         height={'250'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                         displayExpr="DESIGN_NAME"                       
                                         valueExpr="TAG"
@@ -905,9 +935,9 @@ export default class purchaseContract extends React.PureComponent
                                                 <RequiredRule message={this.t("validDesign")} />
                                             </Validator> 
                                         </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                             displayExpr="VALUE"                       
                                             valueExpr="ID"
@@ -919,8 +949,8 @@ export default class purchaseContract extends React.PureComponent
                                            data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                             
                                         ></NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
@@ -933,7 +963,6 @@ export default class purchaseContract extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].CODE,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(JSON.stringify(tmpData.result.recordset)) //BAK
                                                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
@@ -959,8 +988,8 @@ export default class purchaseContract extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>    
                 </ScrollView>
@@ -1053,6 +1082,7 @@ export default class purchaseContract extends React.PureComponent
                         </NdItem>
                         </NdForm>
                     </NdPopUp>
+                    <NdToast id={"toast"} parent={this} displayTime={3000} position={{at:"top center",offset:'0px 110px'}}/>
                 </div> 
             </div>
         )

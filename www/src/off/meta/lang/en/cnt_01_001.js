@@ -2,7 +2,13 @@
 const cnt_01_001 =
 {
     txtCustomerCode : "Customer",
-    menu : "Purchase Agreement",
+    menu : "Accord d'achat",
+    cmbVatType :
+    {
+        title : "VAT Type",
+        vatInc : "Inclusive",
+        vatExt : "Exclusive"
+    },
     pg_txtCustomerCode : 
     {
         title : "Customer Selection",

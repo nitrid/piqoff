@@ -2,7 +2,13 @@
 const cnt_01_001 =
 {
     txtCustomerCode: "Kunde",
-    menu: "Einkaufsvereinbarungen",
+    menu: "Einkaufsvereinbarung",
+    cmbVatType :
+    {
+        title : "Steuerart",
+        vatInc : "Inklusive",
+        vatExt : "Exklusive"
+    },
     pg_txtCustomerCode: 
     {
         title: "Kundenauswahl",

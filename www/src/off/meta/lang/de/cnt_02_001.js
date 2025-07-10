@@ -120,6 +120,27 @@ const cnt_02_001 =
         btn01: "OK",
         msg: "Fehlende Codes:"
     },
+    msgSaveValid:
+    {
+        title: "Achtung",
+        btn01: "OK  ",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+    },
+    msgNotCustomerCount:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Die Artikelmenge ist diesem Lieferanten nicht zugeordnet!"
+    },
+    msgDelete:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+    },
     msgMultiCodeCount:
     {
         title: "Achtung",

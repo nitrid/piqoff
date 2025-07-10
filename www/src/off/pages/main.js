@@ -170,7 +170,7 @@ export default class mainPage extends React.PureComponent
                     backgroundPosition: 'center center',
                     backgroundSize: '800px auto',
                     backgroundAttachment: 'fixed',
-                    opacity: '0.10',
+                    opacity: '0.2',
                     position: 'fixed',
                     top: 0,
                     left: 0,
@@ -178,6 +178,20 @@ export default class mainPage extends React.PureComponent
                     height: '100%',
                     zIndex: -1,
                     pointerEvents: 'none'
+                }}></div>
+                <div style={{
+                    backgroundImage: 'url(../css/img/logoClient.jpg)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'bottom right',
+                    backgroundSize: '300px auto',
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    width: '300px',
+                    height: '300px',
+                    zIndex: 0,
+                    pointerEvents: 'none',
+                    opacity: '0.10'
                 }}></div>
                 <div style={{position: 'relative', zIndex: 1}}>
                     <div className='row pt-3' style={{paddingBottom:"20px"}}>

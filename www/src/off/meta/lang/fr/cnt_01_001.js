@@ -3,6 +3,12 @@ const cnt_01_001 =
 {
     txtCustomerCode : "Fournisseur",
     txtCode : "Code",
+    cmbVatType :
+    {
+        title : "Type de TVA",
+        vatInc : "Inclusif",
+        vatExt : "Exclusif"
+    },
     menu : "Accord d'achat",
     txtName : "Nom",
     startDate :"Date Début",    

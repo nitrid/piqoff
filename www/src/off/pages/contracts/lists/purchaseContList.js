@@ -1,50 +1,27 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,Export, StateStoring, ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+import { NdForm,NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 
 export default class purchaseContList extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['CDATE_FORMAT','LUSER_NAME','ITEM_CODE','ITEM_NAME','CUSTOMER_NAME','PRICE','QUANTITY']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "CDATE_FORMAT",NAME : this.t("grdPurcContList.clmCreateDate")},
-            {CODE : "LUSER_NAME",NAME : this.t("grdPurcContList.clmUser")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdPurcContList.clmCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdPurcContList.clmName")}, 
-            {CODE : "CUSTOMER_NAME",NAME : this.t("grdPurcContList.clmCustomerName")},                                   
-            {CODE : "PRICE",NAME : this.t("grdPurcContList.clmPrıce")},
-            {CODE : "QUANTITY",NAME : this.t("grdPurcContList.clmQuantity")},
-            {CODE : "START_DATE",NAME : this.t("grdPurcContList.clmStartDate")},
-            {CODE : "FINISH_DATE",NAME : this.t("grdPurcContList.clmFinishDate")},
-            {CODE : "DEPOT_NAME",NAME : this.t("grdPurcContList.clmDepotName")},
-        ]
+
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
 
     }
     componentDidMount()
@@ -58,77 +35,18 @@ export default class purchaseContList extends React.PureComponent
     {
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
+    loadState() 
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'CDATE_FORMAT') != 'undefined')
-                {
-                    this.groupList.push('CDATE_FORMAT')
-                }
-                if(typeof e.value.find(x => x == 'LUSER_NAME') != 'undefined')
-                {
-                    this.groupList.push('LUSER_NAME')
-                }
-                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
-                {
-                    this.groupList.push('ITEM_CODE')
-                }                
-                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
-                {
-                    this.groupList.push('ITEM_NAME')
-                }
-                if(typeof e.value.find(x => x == 'CUSTOMER_NAME') != 'undefined')
-                {
-                    this.groupList.push('CUSTOMER_NAME')
-                }
-                if(typeof e.value.find(x => x == 'PRICE') != 'undefined')
-                {
-                    this.groupList.push('PRICE')
-                }
-                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
-                {
-                    this.groupList.push('QUANTITY')
-                }
-                
-                for (let i = 0; i < this.grdPurcContList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdPurcContList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdPurcContList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdPurcContList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetClick()
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetClick()
     {
         
         let tmpSource =
@@ -138,9 +56,9 @@ export default class purchaseContList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM ITEM_PRICE_VW_01 " +
+                    query : "SELECT CDATE_FORMAT,LUSER_NAME,ITEM_CODE,ITEM_NAME,CUSTOMER_NAME,PRICE,QUANTITY,START_DATE FROM ITEM_PRICE_VW_01 " +
                             "WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND "+ 
-                            " TYPE = 1 ORDER BY CUSTOMER_CODE,ITEM_CODE",
+                            " TYPE = 1  AND CONTRACT_GUID <> '00000000-0000-0000-0000-000000000000' ORDER BY CUSTOMER_CODE,ITEM_CODE",
                     param : ['CUSTOMER_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE]
                 },
@@ -208,9 +126,9 @@ export default class purchaseContList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
-                            <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
+                            <NdForm colCount={2} id="frmCriter">
+                            <NdItem>
+                                <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 onEnterKey={(async()=>
@@ -289,19 +207,12 @@ export default class purchaseContList extends React.PureComponent
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                     
                                 </NdPopGrid>
-                            </Item> 
-                            </Form>
+                            </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             
@@ -310,12 +221,13 @@ export default class purchaseContList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdPurcContList" parent={this} 
+                            <NdGrid id="grdPurcContList"
+                            parent={this} 
                             selection={{mode:"multiple"}} 
                             height={600}
                             showBorders={true}
@@ -328,14 +240,16 @@ export default class purchaseContList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcContList"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.cnt_01_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcContList.clmCreateDate")} visible={true} width={200}/> 
-                                <Column dataField="LUSER_NAME" caption={this.t("grdPurcContList.clmUser")} visible={true} width={200}/> 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdPurcContList.clmCode")} visible={true} width={200}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdPurcContList.clmName")} visible={true}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPurcContList.clmCustomerName")} visible={true}/> 
+                                <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcContList.clmCreateDate")} visible={true} width={130}/> 
+                                <Column dataField="LUSER_NAME" caption={this.t("grdPurcContList.clmUser")} visible={true} width={100}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdPurcContList.clmCode")} visible={true} width={140}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdPurcContList.clmName")} visible={true} width={300}/> 
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPurcContList.clmCustomerName")} visible={true} width={200}/> 
                                 <Column dataField="PRICE" caption={this.t("grdPurcContList.clmPrıce")} visible={true} format={{ style: "currency", currency:Number.money.code,precision: 2}} width={150}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdPurcContList.clmQuantity")} visible={true} width={150}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdPurcContList.clmQuantity")} visible={true} width={80}/> 
                                 <Column dataField="START_DATE" caption={this.t("grdPurcContList.clmStartDate")} visible={false} 
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
@@ -361,7 +275,8 @@ export default class purchaseContList extends React.PureComponent
                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPurcContList.clmDepotName")} visible={false} />              
                             </NdGrid>
                         </div>
-                    </div>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
+                    </div> 
                 </ScrollView>
             </div>
         )
